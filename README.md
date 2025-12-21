@@ -1,9 +1,18 @@
 # AI SAFE² Framework
+### The Open-Source Standard for Enterprise AI Security
 ### Five Pillars of Secure AI Autonomy
 
 ![AI SAFE2 Framework](resources/ai-safe2-visual-map.png)
 
-> **Current Status:** v1.0 (Beta) | **Maintainer:** Cyber Strategy Institute
+> **Status:** v1.0 (Open Source)
+
+## ⚡ Fast-Track Implementation
+This repository contains the full theoretical framework.
+If you need the **operational tools** (Excel Audit Scorecards, Vendor Checklists, and SOP Templates) to implement this in your enterprise immediately:
+
+👉 **[Download the Official Implementation Toolkit ($97)](YOUR_SAMCART_LINK_HERE)**
+
+---
 
 ## 🚨 The Problem
 AI Teams are scaling automation but leaving security behind. A single unsecured AI agent can expose sensitive client data, leading to catastrophic fines and reputation loss.
