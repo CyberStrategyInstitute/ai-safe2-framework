@@ -1,15 +1,26 @@
-# Contributor Covenant Code of Conduct
+# Community Professional Standards
 
-## Our Pledge
-We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+## 1. Our Commitment
+The Cyber Strategy Institute is dedicated to providing a professional, collaborative, and high-performance environment for the AI SAFE² project. We are here to engineer certainty, solve complex security challenges, and build the industry standard for AI Governance.
 
-## Our Standards
-Examples of behavior that contributes to a positive environment for our community include:
-*   Demonstrating empathy and kindness toward other people
-*   Being respectful of differing opinions, viewpoints, and experiences
-*   Giving and gracefully accepting constructive feedback
-*   Accepting responsibility and apologizing to those affected by our mistakes
-*   Focusing on what is best not just for us as individuals, but for the overall community
+We are committed to maintaining a community based on **professionalism, mutual respect, and technical merit**.
 
-## Enforcement
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the project team at `security@cyberstrategyinstitute.com`. All complaints will be reviewed and investigated promptly and fairly.
+## 2. Expected Behavior
+We expect all contributors and maintainers to:
+*   **Focus on the Mission:** Keep discussions relevant to AI security, governance, and engineering.
+*   **Treat Everyone with Dignity:** Engage with all community members professionally and respectfully, regardless of background.
+*   **Debate the Code, Not the Person:** Technical disagreements are healthy; personal attacks are not.
+*   **Lead by Example:** Maintain the highest standards of integrity and professional conduct.
+
+## 3. Unacceptable Behavior
+To ensure the integrity of this project, the following behaviors are strictly prohibited:
+*   Harassment, intimidation, or discrimination of any kind.
+*   Personal attacks, insults, or derogatory comments.
+*   Public or private harassment.
+*   Publishing others' private information without explicit permission (doxing).
+*   Any conduct that could be reasonably considered inappropriate in a professional setting.
+
+## 4. Enforcement
+Project maintainers are responsible for clarifying and enforcing these standards. In instances of unacceptable behavior, maintainers may take appropriate action, up to and including a permanent ban from the repository.
+
+Instances of abusive behavior should be reported to `security@cyberstrategyinstitute.com`. All complaints will be reviewed and investigated confidentially.
