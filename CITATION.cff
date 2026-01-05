@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this framework in your research or tooling, please cite it as below."
+authors:
+- family-names: "Sullivan"
+  given-names: "Vincent"
+  affiliation: "Cyber Strategy Institute"
+title: "AI SAFE² Framework: The Universal GRC Standard for Agentic AI"
+version: 2.1.0
+date-released: 2025-11-26
+url: "https://github.com/CyberStrategy1/ai-safe2-framework"
+preferred-citation:
+  type: standard
+  authors:
+  - family-names: "Sullivan"
+    given-names: "Vincent"
+    affiliation: "Cyber Strategy Institute"
+  title: "AI SAFE² Framework v2.1: Advanced Agentic & Distributed AI Edition"
+  year: 2025 - 2026
+  publisher: "Cyber Strategy Institute"
