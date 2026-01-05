@@ -83,6 +83,17 @@ AI SAFE² v2.1 is designed to act as the **"Rosetta Stone"** for compliance. Imp
 
 ---
 
+## 📈 Framework Evolution
+AI SAFE² is a living standard that adapts to the threat landscape.
+
+| Version | Focus | Key Metaphor | Control Depth |
+| :--- | :--- | :--- | :--- |
+| **v2.1** | **Agentic & Distributed** | Mission Control | **127 Controls** (Swarm, NHI, Memory) |
+| **v2.0** | Enterprise Operations | Building Security | **99 Controls** (NIST/ISO Mapping) |
+| **v1.0** | Foundational Concepts | The Blueprint | **10 Topics** (Conceptual) |
+
+👉 **[Read the Full Evolution History & Changelog](EVOLUTION.md)**
+
 ## 📂 Repository Structure
 
 ```text
