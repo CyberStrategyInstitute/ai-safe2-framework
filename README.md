@@ -98,3 +98,37 @@ AI SAFE² v2.1 is designed to act as the **"Rosetta Stone"** for compliance. Imp
 ├── resources/              # Free Community Tools
 │   └── pillar1_checklist_lite.md
 └── assets/                 # Visual Maps & Diagrams
+``` 
+
+## ✏️ Citation
+If you use AI SAFE² in research or commercial tooling, please cite the Cyber Strategy Institute:
+```text
+@misc{aisafe2_framework,
+  title={AI SAFE² Framework v2.1: The Universal GRC Standard for Agentic AI},
+  author={Sullivan, Vincent and Cyber Strategy Institute},
+  year={2025-2026},
+  publisher={GitHub},
+  journal={GitHub repository},
+  howpublished={\url{https://github.com/CyberStrategy1/ai-safe2-framework}}
+}
+```
+
+## ⚖️ Licensing & Usage Rights
+This project uses a Dual-License Model to support both open innovation and standardized governance.
+
+## 💻 A. The Code: MIT License
+Applies to: MCP Server scripts, JSON schemas, HTML dashboards, and code snippets.
+You Can: Use this code commercially, modify it, close-source your modifications, and sell software built with it.
+The Intent: Build products on top of this. We want this to be the infrastructure of the AI industry.
+
+## 📘 B. The Framework/Docs: CC-BY-SA 4.0
+Applies to: The "AI SAFE²" methodology text, pillar definitions, and PDF manuals.
+You Can: Share, copy, and redistribute the material. You can adapt it for your internal needs.
+You Must:
+Attribution: Give credit to Cyber Strategy Institute.
+ShareAlike: If you create a public derivative (e.g., "AI SAFE v3.0"), you must share those improvements back to the community under this same license.
+
+<div align="center">
+<sub>Managed by <a href="https://cyberstrategyinstitute.com">Cyber Strategy Institute</a>.</sub><br>
+<sub>Copyright © 2025-2026. All Rights Reserved.</sub>
+</div>
