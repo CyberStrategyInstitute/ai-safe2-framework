@@ -13,6 +13,7 @@ Are you reporting a bug, or proposing a structural change?
 *   **Type A: Gap Analysis:** You found a new threat vector (e.g., a new Jailbreak technique) not covered by the framework.
 *   **Type B: New Control:** You have a specific engineering protocol to mitigate a risk.
 *   **Type C: Correction:** Fixing a typo, broken link, or outdated reference.
+*   **Link to Pillar:** 01-sanitize-isolate; 02-audit-inventory; 03-fail-safe-recovery; 04-engage-monitor; 05-evolve-educate
 
 ### 2. Open an Issue (The Proposal)
 Before submitting a Pull Request (PR), open an Issue using the templates below.
