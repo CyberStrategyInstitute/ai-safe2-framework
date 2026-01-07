@@ -24,9 +24,10 @@ Ensure data integrity and security through comprehensive input validation, crypt
 
 ### 🚀 v2.1 Advanced Gap Fillers
 *   **[P1.T1.2_ADV] Supply Chain Artifact Validation:**
-    *   **OpenSSF Model Signing (OMS):** Cryptographically verify model authenticity.
+    *   **OpenSSF Model Signing (OMS):** Cryptographically verify model authenticity using Sigstore/Cosign.
+    *   **SBOM Validation:** Validate Software Bill of Materials accuracy against actual dependencies.
     *   **Provenance Chain:** Trace model lineage from base to deployment.
-    *   **Model Fingerprinting:** Verify SHA-256 hashes at deployment.
+    *   **Model Fingerprinting:** Enforce SHA-256 hash verification to prevent tampering.
 *   **[P1.T1.4_ADV] NHI Secret Validation:**
     *   **Secret Scanning:** Detect embedded credentials/tokens in AI outputs.
     *   **GitGuardian Integration:** Real-time secret detection in code/logs.
