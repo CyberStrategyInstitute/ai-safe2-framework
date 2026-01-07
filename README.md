@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="asseets/AI SAFE2 Framwork.png" alt="AI SAFE2 Framework Visual Map" width="100%" />
+<img src="asseets/AI SAFE2 Architecture.png" alt="AI SAFE2 Framework Visual Map" width="100%" />
 
 # AI SAFE² Framework v2.1
 ### The Universal GRC Standard for Agentic AI & ISO 42001 Compliance
