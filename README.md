@@ -28,6 +28,20 @@ Unlike traditional AppSec frameworks which focus on code vulnerabilities, AI SAF
 > *   **v2.0:** Enterprise Governance & Risk Integration.
 > *   **v2.1:** **Advanced Agentic Controls** (NHI, Swarms, Memory Integrity).
 
+## 🏗️ The v2.1 Coverage Matrix
+
+AI SAFE² isn't just a list; it's a multi-dimensional defense grid.
+
+| Risk Domain → <br> Pillar ↓ | 🤖 Agentic Swarms | 🆔 Non-Human Identity (NHI) | 🧠 Memory & RAG | 📦 Supply Chain | ⚖️ Universal GRC |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **P1: Sanitize** | ✅ (Isolation) | ✅ (Secret Hygiene) | ✅ (Poison Detection) | ✅ (Model Signing) | ✅ (ISO A.8.4) |
+| **P2: Audit** | ✅ (Traceability) | ✅ (Discovery) | ✅ (Context Audit) | ✅ (SBOM) | ✅ (NIST MAP) |
+| **P3: Fail-Safe** | ✅ (Kill Switch) | ✅ (Revocation) | ✅ (Rollback) | ⚪ | ✅ (ISO A.17) |
+| **P4: Monitor** | ✅ (Consensus) | ✅ (Behavior) | ✅ (Integrity) | ⚪ | ✅ (NIST MEASURE) |
+| **P5: Evolve** | ✅ (Red Team) | ✅ (Rotation) | ✅ (Updates) | ✅ (Specs) | ✅ (Continuous) |
+
+> *✅ = Full Control Coverage | ⚪ = Inherited Coverage*
+
 ---
 
 ## 🚀 Fast-Track Implementation (The Toolkit)
