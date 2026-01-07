@@ -19,6 +19,8 @@ Ensure data integrity and security through comprehensive input validation, crypt
 *   **[P1.T1.5] Sensitive Data Masking (PII/PHI):** Auto-detect/mask PII; redact PHI (HIPAA); implement DLP controls; tokenize sensitive fields.
 *   **[P1.T1.6] Format Normalization:** Standardize input formats; validate character encodings (UTF-8); prevent encoding attacks.
 *   **[P1.T1.7] Dependency Verification:** Validate software dependencies; maintain SBOMs; cross-reference CVE databases.
+*   **[P1.T1.8] Format Normalization & Encoding Validation:** Standardize input formats across systems; validate character encodings (UTF-8, ASCII); enforce normalization forms (NFKC); prevent homoglyph and encoding-based attacks.
+*   **[P1.T1.9] Supply Chain Artifact Validation:** Cryptographically verify model/dataset authenticity; validate checksums (SHA-256); enforce signature verification (GPG/Sigstore); prevent loading unsigned serialized objects.
 
 ### 🚀 v2.1 Advanced Gap Fillers
 *   **[P1.T1.2_ADV] Supply Chain Artifact Validation:**
