@@ -253,12 +253,12 @@ This isn't just a repo; it's a mission. We recognize and reward the top 1% of se
 If you use AI SAFE² in research or commercial tooling, please cite the Cyber Strategy Institute:
 ```text
 @misc{aisafe2_framework,
-  title={AI SAFE² Framework v2.1: The Universal GRC Standard for Agentic AI},
-  author={Sullivan, Vincent and Cyber Strategy Institute},
-  year={2025-2026},
-  publisher={GitHub},
-  journal={GitHub repository},
-  howpublished={\url{https://github.com/CyberStrategy1/ai-safe2-framework}}
+  title = {AI SAFE² Framework v2.1: The Universal GRC Standard for Agentic AI},
+  author = {Sullivan, Vincent and {Cyber Strategy Institute}},
+  year = {2025-2026},
+  publisher = {Cyber Strategy Institute},
+  url = {https://github.com/CyberStrategy1/ai-safe2-framework},
+  note = {Version 2.1. Agentic & Distributed Edition}
 }
 ```
 
