@@ -1,6 +1,13 @@
 default: true
-MD013: false  # Disable Line Length check (We have long paragraphs)
-MD033: false  # Disable Inline HTML check (We used <div> for centering)
-MD041: false  # Disable H1 First check (We have badges first)
-MD024: false  # Disable Duplicate Header check
-MD029: false  # Disable Ordered List Numbering check
+MD001: false  # Heading levels (H1 to H3 skip)
+MD007: false  # Unordered list indentation
+MD013: false  # Line length
+MD022: false  # Blanks around headings
+MD024: false  # Duplicate headings
+MD026: false  # Trailing punctuation in headers
+MD029: false  # Ordered list prefix
+MD030: false  # Spaces after list markers
+MD032: false  # Blanks around lists
+MD033: false  # Inline HTML (<div> etc)
+MD036: false  # Emphasis used as heading
+MD041: false  # First line must be H1
