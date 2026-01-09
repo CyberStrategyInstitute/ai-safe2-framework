@@ -1,13 +1,18 @@
 default: true
-MD001: false  # Heading levels (H1 to H3 skip)
+MD001: false  # Heading levels
+MD004: false  # Unordered list style (Asterisk vs Dash)
 MD007: false  # Unordered list indentation
+MD009: false  # Trailing spaces (The most annoying one)
+MD012: false  # Multiple consecutive blank lines
 MD013: false  # Line length
 MD022: false  # Blanks around headings
 MD024: false  # Duplicate headings
 MD026: false  # Trailing punctuation in headers
 MD029: false  # Ordered list prefix
 MD030: false  # Spaces after list markers
+MD031: false  # Fenced code blocks blank lines
 MD032: false  # Blanks around lists
-MD033: false  # Inline HTML (<div> etc)
+MD033: false  # Inline HTML
+MD034: false  # Bare URLs
 MD036: false  # Emphasis used as heading
 MD041: false  # First line must be H1
