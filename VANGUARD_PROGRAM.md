@@ -30,8 +30,8 @@ We have structured the community into 4 distinct tiers. Your actions determine y
 This is the highest non-paid tier. Access is earned via **Social Proof** or **Major Engineering Contributions**.
 
 *   **The "Hustle" Path (Complete all 3):**
-    1.  Follow the Founder (**Vincent Sullivan**) on [LinkedIn](#) and [X/Twitter](#).
-    2.  Follow **Cyber Strategy Institute** on [LinkedIn](#) and [Instagram](#).
+    1.  Follow the Founder (**Vincent Sullivan**) on [LinkedIn](https://www.linkedin.com/in/vts3/) and [X/Twitter](https://x.com/CyberStrategy1).
+    2.  Follow **Cyber Strategy Institute** on [LinkedIn](https://www.linkedin.com/company/cyber-strategy-institute/) and [Instagram](https://www.instagram.com/CyberStrategy1/).
     3.  **Share a post** about AI SAFE² on LinkedIn or X (Must tag us and use hashtag `#AISAFE2`).
 *   **The Reward:**
     *   **"Vanguard" Role** in Discord (Gold).
@@ -51,7 +51,7 @@ This is the highest non-paid tier. Access is earned via **Social Proof** or **Ma
 
 We use a **"Proof of Work"** system via our Discord.
 
-1.  **Join the Discord:** [**[INSERT YOUR DISCORD INVITE LINK HERE]**]
+1.  **Join the Discord:** [Link Dropping Jan 15th] (Star this repo to get the notification)
 2.  **Complete the Quest:** (e.g., Star the repo, make the LinkedIn post).
 3.  **Take a Screenshot:** Capture proof of your action.
 4.  **Open a Ticket:**
