@@ -231,30 +231,34 @@ AI SAFE² is a living standard that adapts to the threat landscape.
 
 ```text
 /
-├── README.md               # The Universal GRC Standard (You are here)
-├── LICENSE                 # Dual License (CC-BY-SA 4.0 + MIT)
-├── CITATION.cff            # Academic Citation File
-├── CONTRIBUTING.md         # RFC Process & Proposal Guidelines
-├── CODE_OF_CONDUCT.md      # Professional Standards & Behavior
-├── SECURITY.md             # Vulnerability Reporting Policy
-├── EVOLUTION.md            # Version History (v1.0 -> v2.1) & Changelog
-├── MAINTAINERS.md          # Governance & Decision Authority
-├── VANGUARD_PROGRAM.md     # Community Tiers & Rewards (Gamification)
-├── taxonomy/               # The Core Framework (Markdown Definitions)
+├── .github/                # CI/CD Workflows & Dependabot Config
+├── assets/                 # Visual Maps & Diagrams
+├── examples/               # Developer Quickstarts (Python Scripts)
+│   └── quickstart_nhi_check.py
+├── research/               # Deep Dive Evidence & Justifications
+│   ├── 001_rag_poisoning.md
+│   ├── 002_nhi_secret_sprawl.md
+│   ├── 008_grc_framework_comparison.md
+│   └── ...
+├── resources/              # Free Community Tools
+│   └── pillar1_checklist_lite.md
+├── taxonomy/               # The 5 Pillars (Core Framework Definitions)
 │   ├── 01_sanitize_isolate.md
 │   ├── 02_audit_inventory.md
 │   ├── 03_failsafe_recovery.md
 │   ├── 04_engage_monitor.md
 │   └── 05_evolve_educate.md
-├── examples/               # Developer Quickstarts & Scripts
-│   └── quickstart_nhi_check.py
-├── resources/              # Free Community Tools
-│   └── pillar1_checklist_lite.md
-├── research/               # Deep Dive Justifications & Evidence
-│   ├── 001_rag_poisoning.md
-│   ├── 002_nhi_secret_sprawl.md
-│   └── ...
-└── assets/                 # Visual Maps & Diagrams
+├── .markdownlint.yaml      # Linter Configuration Rules
+├── CITATION.cff            # Academic Citation File
+├── CODE_OF_CONDUCT.md      # Professional Standards
+├── CODEOWNERS              # Governance Enforcement Rules
+├── CONTRIBUTING.md         # RFC Process & Proposal Guidelines
+├── EVOLUTION.md            # Version History (v1.0 -> v2.1)
+├── LICENSE                 # Dual License Text
+├── MAINTAINERS.md          # Project Leadership
+├── README.md               # The Universal GRC Standard (You are here)
+├── SECURITY.md             # Vulnerability Reporting Policy
+└── VANGUARD_PROGRAM.md     # Community Tiers & Beta Access
 ``` 
 <a id="contributing"></a>
 ## 🤝 Join the Vanguard (Community)
