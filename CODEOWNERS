@@ -1,0 +1,10 @@
+# Global Owner - Alerts you on EVERYTHING
+*       @CyberStrategy1
+
+# Policy Documents - Requires your approval to change text
+/taxonomy/    @CyberStrategy1
+*.md          @CyberStrategy1
+
+# Engineering Code - Requires your approval to merge scripts
+*.py          @CyberStrategy1
+*.json        @CyberStrategy1
