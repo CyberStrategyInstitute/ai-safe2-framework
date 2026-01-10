@@ -92,9 +92,29 @@ AI SAFE² isn't just a list; it's a multi-dimensional defense grid.
 | **P5: Evolve & Educate** | ![P5](https://img.shields.io/badge/Red_Team-SUCCESS-green) | ![P5](https://img.shields.io/badge/Rotation-SUCCESS-green) | ![P5](https://img.shields.io/badge/Updates-SUCCESS-green) | ![P5](https://img.shields.io/badge/Specs-SUCCESS-green) | ![P5](https://img.shields.io/badge/Continuous-blue) |
 
 > *Legend: Green = Dedicated Control | 🔗 = Inherited Coverage*
+---
+
+### 🧠 The Logic Flow (Infrastructure as Code)
+
+```mermaid
+graph LR;
+    A[User Input / Agent Action] -->|Interception| B{Pillar 1: Firewall};
+    B -- "Injection Detected" --> C[BLOCK & LOG];
+    B -- "Clean" --> D{Pillar 2: Policy Check};
+    D -- "Violation" --> C;
+    D -- "Approved" --> E[Model Inference];
+    E --> F{Pillar 3: Output Scan};
+    F -- "Secret Leaked" --> G[Redact & Alert];
+    F -- "Safe" --> H[Execute Action];
+ 
+style C fill:#B80000,stroke:#333,stroke-width:2px;
+style H fill:#006400,stroke:#333,stroke-width:2px;
+``` 
 
 ---
+<br>
 <a id="grc"></a>
+
 ## 🏛️ The "Universal Rosetta Stone"
 
 The framework is engineered for **simultaneous compliance reporting**. A single implementation of AI SAFE² controls satisfies the requirements of multiple global standards, eliminating the need for fragmented governance initiatives.
