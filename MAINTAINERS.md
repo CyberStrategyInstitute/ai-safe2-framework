@@ -1,12 +1,3 @@
----
-
-### **Resource 3: The "Maintainers" File (Governance)**
-*   **File Path:** `MAINTAINERS.md` (in Root).
-*   **Strategy:** This establishes you as the "Benevolent Dictator" of the project, ensuring the community knows who holds the keys to the standard.
-
-**Copy/Paste this Content:**
-
-```markdown
 # Maintainers
 
 The **AI SAFE² Framework** is architected and maintained by the **Cyber Strategy Institute**.
@@ -14,7 +5,7 @@ The **AI SAFE² Framework** is architected and maintained by the **Cyber Strateg
 While we welcome community contributions via the [RFC Process](CONTRIBUTING.md), the strategic direction of the framework is governed by the Core Maintainers to ensure strict alignment with ISO 42001 and NIST standards.
 
 ## Core Maintainers
-*   **Vincent Sullivan** (@csi-founder) - *Lead Architect & Founder*
+*   **Vincent Sullivan** (@CyberStrategy1) - *Lead Architect & Founder*
 *   **Cyber Strategy Institute** - *Governance Board*
 
 ## Governance Model
