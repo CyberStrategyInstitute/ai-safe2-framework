@@ -12,7 +12,9 @@ To secure them, we must frame them based on their **autonomy**, **statefulness**
 
 ### 📊 Visualizing the Agent Governance Model
 *(Place your "10 Agent Types vs. 5 Pillars" Infographic here)*
-![Agent Types Architecture](../assets/placeholder_agent_types_infographic.png)
+<div align="center">
+  <img src="../assets/AI%20SAFE²%20Securing%20AI%20Agents%20v2.png" alt="AI SAFE² Agent Types" width="100%" />
+</div>
 
 > **Note:** This diagram illustrates how control density increases as agent autonomy moves from "Reactive" to "Swarm."
 
