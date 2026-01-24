@@ -15,6 +15,13 @@ MD032: false  # Blanks around lists
 MD033: false  # Inline HTML
 MD034: false  # Bare URLs
 MD036: false  # Emphasis used as heading
+MD040: false  # Fenced code language (FIXES YOUR NEW ERROR)
 MD041: false  # First line must be H1
 MD042: false  # Empty Links
-MD058: false  # Blanks around tables (THIS IS THE FIX FOR YOUR ERROR)
+MD046: false  # Code block style
+MD047: false  # Files should end with a single newline character
+MD051: false  # Link fragments should be valid
+MD052: false  # Reference links and images should use a label
+MD053: false  # Link and image reference definitions should be needed
+MD058: false  # Blanks around tables
+MD060: false  # Table structure/style (FIXES YOUR NEW ERROR)
