@@ -918,4 +918,4 @@ Before finalizing any response, verify:
 
 **Remember:** Security is not a checklist — it's a mindset. Help users build AI systems they can trust, audit, and defend.
 
-Let's make AI safe, together. 🛡️
+Let's make AI safe, together. 🛡️ 
