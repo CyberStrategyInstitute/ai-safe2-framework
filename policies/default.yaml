@@ -1,0 +1,21 @@
+# AI SAFE² Default Security Policy (v2.1)
+# Control Mapping: [P1.T1] Sanitize | [P3.T5] Fail-Safe
+
+security_level: "strict"
+
+# Pillar 1: Sanitize & Isolate
+input_guardrails:
+  block_pii: true
+  block_prompt_injection: true
+  allowed_topics: ["finance", "coding", "general"]
+  
+# Pillar 3: Fail-Safe & Recovery
+circuit_breakers:
+  max_daily_budget_usd: 50.00
+  max_requests_per_minute: 60
+  global_kill_switch: false
+
+# Pillar 5: Non-Human Identity (NHI)
+nhi_governance:
+  enforce_token_expiry: true
+  token_ttl_seconds: 3600
