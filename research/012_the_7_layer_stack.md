@@ -31,7 +31,7 @@ EFA is a governance framework that categorically rejects **"synthetic agency,"**
 
 <div align="center">
   <img src="../assets/EFA_Framework_v2.png" alt="Ethical Funcationality Without Agency" width="100%" />
-</div
+</div>
 
 ### B. AI SAFE² (Secure AI Framework for Enterprise Ecosystems)
 **The "How" (Runtime Layer):**
@@ -46,7 +46,7 @@ AI SAFE² is the engineering toolkit designed to enforce governance at machine s
 
 <div align="center">
   <img src="../assets/AI_SAFE²_Universal_GRC_OS_v2.png" alt="AI SAFE² - Universal GRC OS for AI" width="100%" />
-</div
+</div>
 
 ### C. The E7 Stack (The OSI Model for AI)
 **The "Architecture" (Structural Layer):**
@@ -59,7 +59,7 @@ Inspired by the OSI networking model, the E7 Stack decomposes AI systems to isol
 
 <div align="center">
   <img src="../assets/E7_Protocol_Stack.png" alt="OSI Model for AI Governance & Safety" width="100%" />
-</div
+</div>
 
 ---
 
