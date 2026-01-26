@@ -1,11 +1,42 @@
 version: '3.8'
 
 services:
+  # The AI SAFE2 Gateway
   gateway:
     build: .
     ports:
       - "8000:8000"
-    volumes:
-      - ./policies:/app/policies
     environment:
-      - ENVIRONMENT=production
+      - REDIS_URL=redis://redis:6379
+      - LOG_LEVEL=info
+      - PROMETHEUS_MULTIPROC_DIR=/tmp
+    depends_on:
+      - redis
+    volumes:
+      - ./config:/app/config  # Maps local config to container
+    restart: unless-stopped
+
+  # Rate Limiting & Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  # Metrics & Observability (The "1%" Feature)
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+  # Visualization Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
