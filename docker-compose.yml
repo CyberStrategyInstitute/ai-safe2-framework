@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  gateway:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./policies:/app/policies
+    environment:
+      - ENVIRONMENT=production
