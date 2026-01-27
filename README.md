@@ -246,34 +246,25 @@ AI SAFE² is a living standard that adapts to the threat landscape.
 
 ```text
 /
-├── .github/                # CI/CD Workflows & Dependabot Config
-├── assets/                 # Visual Maps & Diagrams
-├── examples/               # Developer Quickstarts (Python Scripts)
-│   └── quickstart_nhi_check.py
-├── research/               # Deep Dive Evidence & Justifications
-│   ├── 001_rag_poisoning.md
-│   ├── 002_nhi_secret_sprawl.md
-│   ├── 008_grc_framework_comparison.md
-│   └── ...
-├── resources/              # Free Community Tools
-│   └── pillar1_checklist_lite.md
-├── taxonomy/               # The 5 Pillars (Core Framework Definitions)
-│   ├── 01_sanitize_isolate.md
-│   ├── 02_audit_inventory.md
-│   ├── 03_failsafe_recovery.md
-│   ├── 04_engage_monitor.md
-│   └── 05_evolve_educate.md
-├── .markdownlint.yaml      # Linter Configuration Rules
-├── CITATION.cff            # Academic Citation File
-├── CODE_OF_CONDUCT.md      # Professional Standards
-├── CODEOWNERS              # Governance Enforcement Rules
-├── CONTRIBUTING.md         # RFC Process & Proposal Guidelines
-├── EVOLUTION.md            # Version History (v1.0 -> v2.1)
-├── LICENSE                 # Dual License Text
-├── MAINTAINERS.md          # Project Leadership
-├── README.md               # The Universal GRC Standard (You are here)
-├── SECURITY.md             # Vulnerability Reporting Policy
-└── VANGUARD_PROGRAM.md     # Community Tiers & Beta Access
+├── .github/                   # CI/CD Workflows & Dependabot Config
+├── 01-sanitize-isolate/       # Pillar 1: Input Filters & Boundaries
+├── 02-audit-inventory/        # Pillar 2: Logging & Asset Tracking
+├── 03-fail-safe-recovery/     # Pillar 3: Circuit Breakers & Kill Switches
+├── 04-engage-monitor/         # Pillar 4: Human-in-the-Loop
+├── 05-evolve-educate/         # Pillar 5: Red Teaming & Updates
+├── assets/                    # Visual Maps, Badges & Diagrams
+├── config/                    # Security Configurations (default.yaml)
+├── gateway/                   # 🛡️ The AI SAFE² Gateway (Proxy Code)
+├── guides/                    # 📚 Implementation Guides (Python & No-Code)
+├── research/                  # 🧠 Deep Dive Evidence (001-013)
+├── resources/                 # Community Tools & Checklists
+├── scanner/                   # 🕵️ The Audit Scanner CLI
+├── ADVANCED_AGENT_THREATS.md  # Guide: Swarm & RAG Vulnerabilities
+├── QUICKSTART_5_MIN.md        # ⚡ START HERE: 5-Minute Audit
+├── docker-compose.yml         # Container Orchestration
+├── pyproject.toml             # Python Dependencies
+├── README.md                  # The Universal GRC Standard (You are here)
+└── ...                        # Governance (LICENSE, SECURITY, CONTRIBUTING)
 ``` 
 <a id="contributing"></a>
 ## 🤝 Join the Vanguard (Community)
