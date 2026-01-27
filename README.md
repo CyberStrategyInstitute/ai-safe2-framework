@@ -65,18 +65,18 @@ AI SAFE² v2.1 is engineered for the **Modern AI Stack**, not just chatbots. It 
 > **The 95% Advantage:** We have done the heavy lifting. By adopting AI SAFE², you inherit a pre-built governance structure that satisfies **ISO 42001, NIST AI RMF, SOC 2, HIPAA, and GDPR** simultaneously.
 
 ---
-## 🚀 Get Started in 5 Minutes
+## 🚀 Start Securing in 5 Minutes
 
-Choose your path to secure AI:
+**Don't wait for a breach. Choose your path and lock it down.**
 
-| I am a... | 🛠️ Action | ⏱️ Time |
+| I am a... | 🛠️ Your Action Plan | ⏱️ Time To Fix |
 | :--- | :--- | :--- |
-| **Developer** | [**Run the 5-Minute Audit**](QUICKSTART_5_MIN.md) | 5 min |
-| **Python Engineer** | [**Implement Code Guardrails**](guides/secure_coding_python.md) | 15 min |
-| **Automation Pro** | [**Secure n8n / Make Workflows**](guides/secure_automation_n8n_make.md) | 10 min |
-| **CISO / Manager** | [**Download the Implementation Toolkit**](https://cyberstrategyinstitute.com/AI-Safe2/) | Instant |
+| **Developer / Engineer** | [**⚡ Run the 5-Minute Audit**](QUICKSTART.md) | 5 min |
+| **Python Builder** | [**🐍 Secure Python Implementation**](guides/DEVELOPER_IMPLEMENTATION.md) | 15 min |
+| **No-Code / Automation** | [**🤖 Secure Make.com & n8n Workflows**](guides/NO_CODE_AUTOMATION.md) | 10 min |
+| **CISO / Compliance** | [**🛡️ Get the Full GRC Toolkit**](https://cyberstrategyinstitute.com/AI-Safe2/) | Instant |
 
-> *Stuck? Check the [Troubleshooting Guide](TROUBLESHOOTING.md) or join our [Discord](LINK).*
+> *Stuck? Hitting errors? Check the [Troubleshooting Guide](TROUBLESHOOTING.md).*
 
 ---
 <a id="architecture"></a>
