@@ -12,7 +12,7 @@
 [![Scope](https://img.shields.io/badge/Scope-128_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm-red)](https://cyberstrategyinstitute.com/AI-Safe2/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/CyberStrategy1/ai-safe2-framework/graphs/commit-activity)
 
-[**The Narrative**](#narrative) | [**The Architecture**](#architecture) | [**Universal GRC**](#grc) | [**Comparison**](#comparison) | [**Get Toolkit**](#-fast-track-implementation-the-toolkit) | [**Contributing**](#contributing)
+[**5-Min Plan**](#5-min-plan) | [**The Architecture**](#architecture) | [**Universal GRC**](#grc) | [**Comparison**](#comparison) | [**Get Toolkit**](#-fast-track-implementation-the-toolkit) | [**Contributing**](#contributing)
 
 </div>
 
@@ -44,7 +44,7 @@ The framework is architected around **5 Strategic Pillars** that provide defense
 *   ![P5](https://img.shields.io/badge/Pillar_5-Evolve_&_Educate-b0158a?style=for-the-badge&labelColor=black) **The Feedback Loop:** Continuous Red Teaming, threat intelligence integration, and operator training.
 
 ---
-<a id="narrative"></a>
+
 ### 🆚 Positioning: Why AI SAFE²? (The "Game Over" Matrix)
 Most tools solve *one* layer of the problem. AI SAFE² is the **Unified Operating System** that connects them all.
 
@@ -65,9 +65,12 @@ AI SAFE² v2.1 is engineered for the **Modern AI Stack**, not just chatbots. It 
 > **The 95% Advantage:** We have done the heavy lifting. By adopting AI SAFE², you inherit a pre-built governance structure that satisfies **ISO 42001, NIST AI RMF, SOC 2, HIPAA, and GDPR** simultaneously.
 
 ---
+<a id="5-min-plan"></a>
 ## 🚀 Start Securing in 5 Minutes
 
 **Don't wait for a breach. Choose your path and lock it down.**
+
+* Download ```skill.md``` and upload it to 'Claude Projects' > 'Project Knowledge'. Your Claude instance is now a certified AI SAFE² Architect.
 
 | I am a... | 🛠️ Your Action Plan | ⏱️ Time To Fix |
 | :--- | :--- | :--- |
@@ -75,6 +78,8 @@ AI SAFE² v2.1 is engineered for the **Modern AI Stack**, not just chatbots. It 
 | **Python Builder** | [**🐍 Secure Python Implementation**](guides/DEVELOPER_IMPLEMENTATION.md) | 15 min |
 | **No-Code / Automation** | [**🤖 Secure Make.com & n8n Workflows**](guides/NO_CODE_AUTOMATION.md) | 10 min |
 | **CISO / Compliance** | [**🛡️ Get the Full GRC Toolkit**](https://cyberstrategyinstitute.com/AI-Safe2/) | Instant |
+
+
 
 > *Stuck? Hitting errors? Check the [Troubleshooting Guide](TROUBLESHOOTING.md).*
 
