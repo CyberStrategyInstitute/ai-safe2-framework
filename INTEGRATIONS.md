@@ -10,9 +10,9 @@ We protect the entire lifecycle of the Agent, from the first line of code writte
 
 ```mermaid
 graph TD
-    A[Skill.md] -->|Teaches Security To| B[Cursor / IDEs]
-    C[Scanner] -->|Blocks Secrets In| D[CI / CD Pipeline]
-    E[Gateway] -->|Filters Attacks In| F[Runtime / Production]
+    A["Skill.md"] -->|Teaches Security To| B["Cursor / IDEs"]
+    C["Scanner"] -->|Blocks Secrets In| D["CI / CD Pipeline"]
+    E["Gateway"] -->|Filters Attacks In| F["Runtime / Production"]
 ```
 ---
 
