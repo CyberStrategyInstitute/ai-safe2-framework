@@ -15,12 +15,6 @@ graph TD
     E[Gateway] -->|Filters Attacks In| F[Runtime / Production]
 ```
 ---
-# 🔌 Integrations: The Universal GRC Standard
-
-**The Goal:** Security that works where YOU work.
-**The Method:** Inject the AI SAFE² Framework (`skill.md`, Logic Guards, Gateway) into your existing workflow.
-
----
 
 ## 🗺️ Choose Your Architecture
 
