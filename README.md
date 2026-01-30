@@ -79,9 +79,21 @@ AI SAFE² v2.1 is engineered for the **Modern AI Stack**, not just chatbots. It 
 | **No-Code / Automation** | [**🤖 Secure Make.com & n8n Workflows**](guides/NO_CODE_AUTOMATION.md) | 10 min |
 | **CISO / Compliance** | [**🛡️ Get the Full GRC Toolkit**](https://cyberstrategyinstitute.com/AI-Safe2/) | Instant |
 
-
-
 > *Stuck? Hitting errors? Check the [Troubleshooting Guide](TROUBLESHOOTING.md).*
+
+## 🛡️ Moltbot/Clawdbot Security
+
+AI SAFE² provides the only complete security toolkit for Moltbot/Clawdbot users:
+
+- **Memory Protocol** - Drop-in persistent safety controls
+- **Security Scanner** - Automated vulnerability detection
+- **Control Gateway** - External enforcement layer
+
+**Quick Start:** [10-Minute Hardening Guide](./guides/moltbot-hardening.md)
+
+**Full Resources:** [examples/moltbot/](./examples/moltbot/)
+
+**Industry Resources:** [Resource Map](./resources/moltbot_clawdbot_security_resource_map.md)
 
 ---
 <a id="architecture"></a>
