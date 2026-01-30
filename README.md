@@ -81,19 +81,19 @@ AI SAFE² v2.1 is engineered for the **Modern AI Stack**, not just chatbots. It 
 
 > *Stuck? Hitting errors? Check the [Troubleshooting Guide](TROUBLESHOOTING.md).*
 
-## 🛡️ Moltbot/Clawdbot Security
+## 🛡️ OpenClaw Security
 
-AI SAFE² provides the only complete security toolkit for Moltbot/Clawdbot users:
+AI SAFE² provides the only complete security toolkit for OpenClaw (formerly Moltbot/Clawdbot) users:
 
 - **Memory Protocol** - Drop-in persistent safety controls
 - **Security Scanner** - Automated vulnerability detection
 - **Control Gateway** - External enforcement layer
 
-**Quick Start:** [10-Minute Hardening Guide](./guides/moltbot-hardening.md)
+**Quick Start:** [10-Minute Hardening Guide](./guides/openclaw-hardening.md)
 
-**Full Resources:** [examples/moltbot/](./examples/moltbot/)
+**Full Resources:** [examples/openclaw/](./examples/openclaw/)
 
-**Industry Resources:** [Resource Map](./resources/moltbot_clawdbot_security_resource_map.md)
+**Industry Resources:** [Resource Map](./resources/openclaw_openclaw_security_resource_map.md)
 
 ---
 <a id="architecture"></a>

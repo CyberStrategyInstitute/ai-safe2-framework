@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenClaw Tool Invocation Plan Schema",
+  "description": "Validates tool execution requests against AI SAFE² security policies",
+  "type": "object",
+  "required": ["messages"],
+  "properties": {
+    "model": {
+      "type": "string",
+      "description": "Claude model to use",
+      "pattern": "^claude-(opus|sonnet|haiku)-"
+    },
+    "messages": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": ["role", "content"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["user", "assistant"]
+          },
+          "content": {
+            "anyOf": [
+              {"type": "string", "maxLength": 50000},
+              {"type": "array"}
+            ]
+          }
+        }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[a-z_][a-z0-9_]*$"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 1024
+          },
+          "input_schema": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "max_tokens": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 200000
+    },
+    "temperature": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "system": {
+      "anyOf": [
+        {"type": "string", "maxLength": 100000},
+        {"type": "array"}
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "maxLength": 256
+        }
+      }
+    }
+  }
+}
