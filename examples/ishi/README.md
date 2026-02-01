@@ -12,6 +12,16 @@
 
 **Windows 11 setup?** → [Ishi + OpenClaw Integration](./ishi-openclaw-integration.md)
 
+## 🎯 Use Cases
+
+**Quick Start:** [5 Essential Integrations](./examples/ishi/ishi-openclaw-integration.md)
+
+**Complete Guide:** [30 Use Case Implementations](./examples/ishi/USE_CASE_IMPLEMENTATION_GUIDE.md)
+
+**Categories:**
+- Personal: Life-OS, health tracking, travel automation
+- Business: CRM, content, customer support
+- Infrastructure: Multi-persona, local LLM, advanced ops
 ---
 
 ## What's Included
