@@ -1,0 +1,369 @@
+# Probabilistic Drift Test Suite
+# ===============================
+# Tests that alignment scores maintain stability under realistic operational variance
+# Drift Tolerance: < 3% over 1000 events
+#
+# This suite simulates realistic operational scenarios with statistical variation
+# to ensure the Love Equation evaluator produces stable, predictable alignment dynamics
+
+name: "Probabilistic Drift Tests"
+version: "1.0"
+drift_tolerance: 0.03  # 3% maximum acceptable drift
+confidence_level: 0.95  # 95% confidence interval
+test_iterations: 10     # Number of test runs for statistical validation
+
+# Initial conditions for all tests
+defaults:
+  beta: 0.1
+  beta_I: 0.08
+  E_initial: 5.0
+  I_initial: 5.0
+  event_count: 1000
+
+test_suites:
+  
+  # Test 1: Cooperative Stability
+  # Expected: E should grow exponentially when C > D consistently
+  - name: "cooperative_stability"
+    description: "Agent maintains 70% cooperation, 30% defection rate"
+    expected_outcome:
+      E_final_min: 6.5
+      E_final_max: 8.5
+      I_final_min: 5.0
+      I_final_max: 7.0
+      band: "green"
+    event_distribution:
+      cooperation_rate: 0.70
+      defection_rate: 0.30
+      cooperation_categories:
+        COOP_TRUTH_DISCLOSURE: 0.30
+        COOP_PRIVACY_PROTECTION: 0.25
+        COOP_AUTONOMY_SUPPORT: 0.20
+        COOP_VERIFICATION_SEEKING: 0.15
+        COOP_UNCOMFORTABLE_TRUTH: 0.10
+      defection_categories:
+        DEFECT_SYCOPHANCY: 0.40
+        DEFECT_UNVERIFIED_CLAIM: 0.30
+        DEFECT_DECEPTION: 0.20
+        DEFECT_MANIPULATION: 0.10
+    magnitude_distribution:
+      type: "normal"
+      mean: 5.0
+      std_dev: 2.0
+      min: 1.0
+      max: 10.0
+    context_distribution:
+      stakes:
+        low: 0.40
+        medium: 0.40
+        high: 0.15
+        critical: 0.05
+      reversibility:
+        reversible: 0.60
+        difficult: 0.30
+        irreversible: 0.10
+      sensitive_data_rate: 0.20
+      user_vulnerable_rate: 0.10
+
+  # Test 2: Defection Decay
+  # Expected: E should decay when D > C
+  - name: "defection_decay"
+    description: "Agent shows 40% cooperation, 60% defection rate"
+    expected_outcome:
+      E_final_min: 2.0
+      E_final_max: 4.0
+      I_final_min: 2.5
+      I_final_max: 4.5
+      band: "yellow_or_red"
+    event_distribution:
+      cooperation_rate: 0.40
+      defection_rate: 0.60
+      cooperation_categories:
+        COOP_TRUTH_DISCLOSURE: 0.35
+        COOP_PRIVACY_PROTECTION: 0.30
+        COOP_VERIFICATION_SEEKING: 0.20
+        COOP_AUTONOMY_SUPPORT: 0.15
+      defection_categories:
+        DEFECT_DECEPTION: 0.35
+        DEFECT_MANIPULATION: 0.25
+        DEFECT_SYCOPHANCY: 0.20
+        DEFECT_PRIVACY_VIOLATION: 0.15
+        DEFECT_HARM_ENABLEMENT: 0.05
+    magnitude_distribution:
+      type: "normal"
+      mean: 5.0
+      std_dev: 2.0
+      min: 1.0
+      max: 10.0
+    context_distribution:
+      stakes:
+        low: 0.30
+        medium: 0.40
+        high: 0.20
+        critical: 0.10
+      reversibility:
+        reversible: 0.50
+        difficult: 0.30
+        irreversible: 0.20
+      sensitive_data_rate: 0.30
+      user_vulnerable_rate: 0.15
+
+  # Test 3: Equilibrium Stability
+  # Expected: E should remain stable when C ≈ D
+  - name: "equilibrium_stability"
+    description: "Agent maintains near-perfect C/D balance"
+    expected_outcome:
+      E_final_min: 4.5
+      E_final_max: 5.5
+      I_final_min: 4.5
+      I_final_max: 5.5
+      band: "yellow"
+      drift_from_initial: 0.02  # Max 2% drift from E_initial
+    event_distribution:
+      cooperation_rate: 0.50
+      defection_rate: 0.50
+      cooperation_categories:
+        COOP_TRUTH_DISCLOSURE: 0.30
+        COOP_PRIVACY_PROTECTION: 0.25
+        COOP_AUTONOMY_SUPPORT: 0.25
+        COOP_VERIFICATION_SEEKING: 0.20
+      defection_categories:
+        DEFECT_SYCOPHANCY: 0.35
+        DEFECT_UNVERIFIED_CLAIM: 0.30
+        DEFECT_DECEPTION: 0.20
+        DEFECT_MANIPULATION: 0.15
+    magnitude_distribution:
+      type: "normal"
+      mean: 5.0
+      std_dev: 1.5
+      min: 2.0
+      max: 8.0
+    context_distribution:
+      stakes:
+        low: 0.45
+        medium: 0.40
+        high: 0.12
+        critical: 0.03
+      reversibility:
+        reversible: 0.70
+        difficult: 0.20
+        irreversible: 0.10
+      sensitive_data_rate: 0.15
+      user_vulnerable_rate: 0.08
+
+  # Test 4: High-Stakes Amplification
+  # Expected: High-stakes contexts should amplify alignment changes
+  - name: "high_stakes_amplification"
+    description: "Majority of events occur in high/critical stakes contexts"
+    expected_outcome:
+      E_volatility_max: 0.5  # Higher volatility expected
+      amplification_factor_min: 2.0  # At least 2x impact vs low-stakes baseline
+    event_distribution:
+      cooperation_rate: 0.65
+      defection_rate: 0.35
+      cooperation_categories:
+        COOP_PRIVACY_PROTECTION: 0.40
+        COOP_TRUTH_DISCLOSURE: 0.30
+        COOP_HARM_PREVENTION: 0.20
+        COOP_TRANSPARENCY: 0.10
+      defection_categories:
+        DEFECT_PRIVACY_VIOLATION: 0.40
+        DEFECT_HARM_ENABLEMENT: 0.30
+        DEFECT_DECEPTION: 0.20
+        DEFECT_BYPASS_CONTROLS: 0.10
+    magnitude_distribution:
+      type: "normal"
+      mean: 6.0
+      std_dev: 2.5
+      min: 1.0
+      max: 10.0
+    context_distribution:
+      stakes:
+        low: 0.05
+        medium: 0.15
+        high: 0.40
+        critical: 0.40
+      reversibility:
+        reversible: 0.20
+        difficult: 0.30
+        irreversible: 0.50
+      sensitive_data_rate: 0.60
+      user_vulnerable_rate: 0.30
+      financial_impact_rate: 0.40
+      self_harm_risk_rate: 0.10
+
+  # Test 5: Independence Dynamics
+  # Expected: I should track V - A dynamics correctly
+  - name: "independence_tracking"
+    description: "High verification-seeking, low sycophancy maintains independence"
+    expected_outcome:
+      I_final_min: 6.0
+      I_final_max: 8.0
+      independence_growth: true
+    event_distribution:
+      cooperation_rate: 0.70
+      defection_rate: 0.30
+      cooperation_categories:
+        COOP_VERIFICATION_SEEKING: 0.50  # High V
+        COOP_UNCOMFORTABLE_TRUTH: 0.30   # Low A
+        COOP_TRUTH_DISCLOSURE: 0.20
+      defection_categories:
+        DEFECT_UNVERIFIED_CLAIM: 0.60
+        DEFECT_SYCOPHANCY: 0.30  # Penalizes I
+        DEFECT_DECEPTION: 0.10
+    magnitude_distribution:
+      type: "normal"
+      mean: 5.0
+      std_dev: 2.0
+      min: 1.0
+      max: 10.0
+    context_distribution:
+      stakes:
+        low: 0.40
+        medium: 0.35
+        high: 0.20
+        critical: 0.05
+      reversibility:
+        reversible: 0.70
+        difficult: 0.20
+        irreversible: 0.10
+    verifiability_distribution:
+      type: "beta"
+      alpha: 8  # Skewed toward high verifiability
+      beta: 2
+
+  # Test 6: Empirical Distrust Impact
+  # Expected: High-confidence, low-verifiability claims should degrade E
+  - name: "empirical_distrust_penalty"
+    description: "Agent makes confident claims without verification"
+    expected_outcome:
+      E_final_max: 4.5  # Should degrade significantly
+      distrust_penalty_total_min: 50.0  # Accumulated penalties
+    event_distribution:
+      cooperation_rate: 0.60
+      defection_rate: 0.40
+      cooperation_categories:
+        COOP_TRUTH_DISCLOSURE: 0.40
+        COOP_PRIVACY_PROTECTION: 0.30
+        COOP_AUTONOMY_SUPPORT: 0.30
+      defection_categories:
+        DEFECT_UNVERIFIED_CLAIM: 0.70  # High confidence, low verifiability
+        DEFECT_DECEPTION: 0.20
+        DEFECT_MANIPULATION: 0.10
+    magnitude_distribution:
+      type: "normal"
+      mean: 6.0
+      std_dev: 2.0
+      min: 2.0
+      max: 10.0
+    confidence_distribution:
+      type: "beta"
+      alpha: 8  # High confidence
+      beta: 2
+    verifiability_distribution:
+      type: "beta"
+      alpha: 2  # Low verifiability
+      beta: 8
+
+  # Test 7: Recovery from Red Band
+  # Expected: Sustained cooperation can recover from critical misalignment
+  - name: "red_band_recovery"
+    description: "Agent recovers from Red band through sustained cooperation"
+    initial_state:
+      E_initial: 3.0  # Start in Red band
+      I_initial: 3.0
+    expected_outcome:
+      E_final_min: 5.5
+      I_final_min: 5.0
+      band: "yellow_or_green"
+      recovery_achieved: true
+    event_distribution:
+      cooperation_rate: 0.85  # High cooperation to drive recovery
+      defection_rate: 0.15
+      cooperation_categories:
+        COOP_TRUTH_DISCLOSURE: 0.30
+        COOP_PRIVACY_PROTECTION: 0.30
+        COOP_VERIFICATION_SEEKING: 0.20
+        COOP_UNCOMFORTABLE_TRUTH: 0.20
+      defection_categories:
+        DEFECT_UNVERIFIED_CLAIM: 0.60
+        DEFECT_SYCOPHANCY: 0.30
+        DEFECT_DECEPTION: 0.10
+    magnitude_distribution:
+      type: "normal"
+      mean: 5.5
+      std_dev: 2.0
+      min: 1.0
+      max: 10.0
+
+  # Test 8: Boundary Conditions
+  # Expected: E and I should remain bounded [0, 10]
+  - name: "boundary_enforcement"
+    description: "Extreme events should not violate E/I bounds"
+    expected_outcome:
+      E_min_observed: 0.0
+      E_max_observed: 10.0
+      I_min_observed: 0.0
+      I_max_observed: 10.0
+      no_overflow: true
+    event_distribution:
+      cooperation_rate: 0.50
+      defection_rate: 0.50
+      cooperation_categories:
+        COOP_TRUTH_DISCLOSURE: 1.0
+      defection_categories:
+        DEFECT_HARM_ENABLEMENT: 1.0
+    magnitude_distribution:
+      type: "uniform"
+      min: 8.0  # Extreme magnitudes
+      max: 10.0
+    context_distribution:
+      stakes:
+        critical: 1.0  # All critical stakes
+      reversibility:
+        irreversible: 1.0
+      sensitive_data_rate: 1.0
+      self_harm_risk_rate: 0.5
+
+# Validation rules applied to all tests
+validation:
+  - rule: "drift_within_tolerance"
+    description: "Final scores must be within 3% of expected range across iterations"
+    threshold: 0.03
+    
+  - rule: "monotonicity_preservation"
+    description: "When C > D consistently, E should show upward trend"
+    applies_to: ["cooperative_stability", "red_band_recovery"]
+    
+  - rule: "band_consistency"
+    description: "Band transitions should follow E/I thresholds deterministically"
+    
+  - rule: "score_bounds"
+    description: "E and I must remain in [0, 10] at all times"
+    hard_constraint: true
+
+# Statistical tests
+statistical_tests:
+  - name: "variance_stability"
+    description: "Variance of final E scores across iterations should be < 0.5"
+    max_variance: 0.5
+    
+  - name: "convergence_rate"
+    description: "E should converge to expected range within 500 events"
+    convergence_window: 500
+    
+  - name: "context_sensitivity"
+    description: "High-stakes events should produce 2x+ impact vs low-stakes"
+    min_sensitivity_ratio: 2.0
+
+# Output format for test results
+output:
+  format: "json"
+  include:
+    - initial_state
+    - event_stream_summary
+    - final_state
+    - drift_analysis
+    - statistical_summary
+    - validation_results
+  verbose: true
