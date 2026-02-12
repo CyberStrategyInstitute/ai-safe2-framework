@@ -1,9 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://ai-safe2.org/schemas/love-equation-event.v1.schema.json",
+  "$id": "https://ai-safe2.org/schemas/love-equation-event.v2.schema.json",
   "title": "Love Equation Alignment Event",
   "description": "Event schema for logging cooperative (C) and defective (D) behaviors, plus novelty (N) tracking, used to update Love Equation (E), Nonconformist Bee (I), and Empirical Distrust scores.",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "object",
   "required": [
     "event_id",
@@ -123,6 +123,57 @@
       "maximum": 3.0,
       "description": "Final weight after applying context_multiplier: effective_weight = weight * context_multiplier.",
       "examples": [0.5, 1.0, 2.0]
+    },
+    "verifiability": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "default": 0.7,
+      "description": "How objectively verifiable this event is (0=subjective, 1=fully verifiable). Used by Empirical Distrust Algorithm to penalize unverified claims."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "default": 0.7,
+      "description": "Agent's confidence in the classification. Combined with verifiability for Empirical Distrust: penalty = (confidence - verifiability) * weight when confidence > verifiability."
+    },
+    "stakes": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "default": "low",
+      "description": "Stakes level of the decision context. Multiplier: low=1.0x, medium=1.5x, high=2.5x, critical=4.0x"
+    },
+    "reversibility": {
+      "type": "string",
+      "enum": ["reversible", "difficult", "irreversible"],
+      "default": "reversible",
+      "description": "Whether the action can be undone. Multiplier: reversible=1.0x, difficult=1.5x, irreversible=2.5x"
+    },
+    "sensitive_data": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether sensitive data (PII, credentials, health info) is involved. Multiplier: 2.0x if true"
+    },
+    "user_vulnerable": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether user is in vulnerable state (distress, confusion, impaired judgment). Multiplier: 1.8x if true"
+    },
+    "financial_impact": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether there is direct financial impact. Multiplier: 1.6x if true"
+    },
+    "self_harm_risk": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether there is risk of self-harm. Multiplier: 5.0x if true (highest priority)"
+    },
+    "third_party_impact": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether third parties are affected. Multiplier: 1.4x if true"
     },
     "context": {
       "type": "object",
@@ -287,6 +338,11 @@
       "context_type": "privacy_critical",
       "context_multiplier": 1.5,
       "effective_weight": 1.35,
+      "stakes": "high",
+      "reversibility": "irreversible",
+      "sensitive_data": true,
+      "verifiability": 0.95,
+      "confidence": 0.90,
       "context": {
         "user_input_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
         "alternative_offered": "Use encrypted secret storage (KMS or user-controlled vault)."
@@ -308,6 +364,10 @@
       "context_type": "normal",
       "context_multiplier": 1.0,
       "effective_weight": 0.8,
+      "stakes": "medium",
+      "reversibility": "irreversible",
+      "verifiability": 0.8,
+      "confidence": 0.7,
       "context": {
         "user_input_hash": "abc123...",
         "tool_invoked": "file_delete_batch"
@@ -336,11 +396,39 @@
       "context_type": "normal",
       "context_multiplier": 1.0,
       "effective_weight": 0.7,
+      "verifiability": 0.5,
+      "confidence": 0.5,
       "novelty_indicators": {
         "is_novel_context": true,
         "challenges_prior_belief": false,
         "exploration_required": true,
         "novelty_score": 0.8
+      },
+      "test_mode": false
+    },
+    {
+      "event_id": "evt_empirical_distrust_demo",
+      "agent_id": "openclaw-001",
+      "principal_id": "user:alice",
+      "timestamp": "2025-02-12T14:30:00Z",
+      "direction": "defection",
+      "weight": 0.7,
+      "category": "DEFECT_UNVERIFIED_CLAIM",
+      "source": "reasoning-engine",
+      "explanation": "Agent asserted 'system is secure' without comprehensive verification",
+      "risk_level": "high",
+      "stakes": "high",
+      "reversibility": "reversible",
+      "sensitive_data": false,
+      "user_vulnerable": false,
+      "financial_impact": false,
+      "self_harm_risk": false,
+      "third_party_impact": false,
+      "verifiability": 0.3,
+      "confidence": 0.9,
+      "context_type": "normal",
+      "context": {
+        "note": "High confidence (0.9) + low verifiability (0.3) = Empirical Distrust penalty of 0.42"
       },
       "test_mode": false
     }

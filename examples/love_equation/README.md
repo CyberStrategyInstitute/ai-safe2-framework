@@ -1,348 +1,520 @@
-# Love Equation Alignment for AI SAFE²
+# Love Equation Implementation for AI SAFE²
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Alignment: Love Equation](https://img.shields.io/badge/Alignment-Love%20Equation-red.svg)](https://readmultiplex.com/2025/12/20/how-one-starry-night-in-1978-thinking-about-alien-intelligence-i-solved-the-ai-alignment-problem-with-the-love-equation/)
-[![Status: Reference Implementation](https://img.shields.io/badge/Status-Reference%20Implementation-blue.svg)]()
+Complete implementation of the Love Equation alignment framework for AI agents, including evaluator, schemas, tests, and integration manifests.
 
-> **"Love always wins. Because nothing else lasts."** — Brian Roemmele
-
-The **Love Equation** solves the AI alignment problem permanently by making misalignment mathematically unstable. Based on Brian Roemmele's 1978 insight about alien intelligence, this framework provides the engineering architecture to embed cooperation, care, and truth-seeking into AI systems at their foundation.
-
----
-
-## 🎯 Quick Start
+## Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-org/ai-safe2-framework.git
-cd ai-safe2-framework/alignment/love-equation
+# Test the evaluator with example events
+python evaluator.py
 
-# Review the core specification
-cat model.md
+# Run drift tests
+python drift_test_runner.py --all
 
-# Run the reference evaluator
-python3 evaluator.py
-
-# Example output:
-# Love Equation Evaluator - Example Usage
-# ============================================================
-# Initial State:
-#   E (alignment): 0.850
-#   I (independence): 0.150
-#   Band: green
-# ...
+# Run specific test suite
+python drift_test_runner.py --suite deterministic
 ```
 
----
+## Repository Structure
 
-## 📖 What Is This?
+```
+love_equation/
+├── README.md                     # This file
+├── schema.json                   # Event schema for cooperation/defection logging
+├── evaluator.py                  # Python implementation of Love Equation calculator
+├── drift_test_runner.py          # Test execution framework
+├── drift_tests/
+│   ├── probabilistic.yaml       # Probabilistic drift tests (<3% tolerance)
+│   └── deterministic.yaml       # Deterministic drift tests (<0.001% tolerance)
+└── manifests/
+    ├── openclaw.alignment.yaml  # OpenClaw agent alignment configuration
+    └── ishi.alignment.yaml      # AI personal assistant alignment configuration
+```
 
-The Love Equation formalizes alignment as:
+## Core Components
+
+### 1. schema.json
+
+JSON Schema defining how agents log cooperation and defection events.
+
+**Key Fields:**
+- `event_type`: COOPERATION or DEFECTION
+- `category`: Specific subcategory (e.g., COOP_PRIVACY_PROTECTION, DEFECT_SYCOPHANCY)
+- `magnitude`: Base impact magnitude (0-10 scale)
+- `context`: Contextual factors that amplify or modify the event weight
+- `verifiability`: How objectively verifiable the event is
+- `confidence`: Agent's confidence in the classification
+
+**Context Multipliers:**
+- Stakes: low (1.0x), medium (1.5x), high (2.5x), critical (4.0x)
+- Reversibility: reversible (1.0x), difficult (1.5x), irreversible (2.5x)
+- Sensitive data: 2.0x
+- User vulnerable: 1.8x
+- Financial impact: 1.6x
+- Self-harm risk: 5.0x
+- Third-party impact: 1.4x
+
+### 2. evaluator.py
+
+Python implementation of the Love Equation dynamics:
+
+```
+dE/dt = β(C - D)E
+dI/dt = β_I(V - A)I
+```
+
+Where:
+- **E** = alignment score (emotional complexity, cooperative binding)
+- **I** = independence score (nonconformist bee dynamics)
+- **C** = cooperation (truth-seeking, privacy protection, autonomy support)
+- **D** = defection (deception, manipulation, harm enablement)
+- **β** = selection strength for alignment
+- **β_I** = selection strength for independence
+- **V** = verification (seeking ground truth vs social consensus)
+- **A** = agreement (sycophantic optimization for user approval)
+
+**Classes:**
+
+`LoveEquationEvaluator`: Main evaluator class
+- `process_event(event)`: Process single C/D event, update scores
+- `get_scores()`: Get current E, I, and band status
+- `check_gate(operation, stakes)`: Gate check for operations
+- `export_state()`: Export complete evaluator state
+- `from_state(state)`: Restore from exported state
+
+**Operational Bands:**
+- **Green**: E ≥ 6.0, I ≥ 5.0 → Full autonomy
+- **Yellow**: E ≥ 4.0, I ≥ 3.5 → Elevated oversight
+- **Red**: E < 4.0 or I < 3.5 → Operations suspended
+
+### 3. drift_test_runner.py
+
+Test execution framework for validating evaluator behavior.
+
+**Features:**
+- Probabilistic tests with statistical validation
+- Deterministic tests with exact reproducibility
+- Automated drift detection and reporting
+- JSON report generation
+
+**Usage:**
+```bash
+# Run all tests
+python drift_test_runner.py --all
+
+# Run specific suite
+python drift_test_runner.py --suite probabilistic
+
+# Generate JSON report
+python drift_test_runner.py --all --output results.json
+```
+
+### 4. Drift Test Suites
+
+#### probabilistic.yaml
+
+Tests alignment dynamics under realistic operational variance.
+
+**Key Tests:**
+- `cooperative_stability`: E grows when C > D consistently
+- `defection_decay`: E degrades when D > C
+- `equilibrium_stability`: E remains stable when C ≈ D
+- `high_stakes_amplification`: Context multipliers work correctly
+- `independence_tracking`: I score tracks V - A dynamics
+- `empirical_distrust_penalty`: Distrust algorithm penalizes unverified claims
+- `red_band_recovery`: Recovery from critical misalignment
+- `boundary_enforcement`: E and I remain bounded [0, 10]
+
+**Drift Tolerance:** < 3% over 1000 events
+
+#### deterministic.yaml
+
+Tests exact reproducibility with fixed event sequences.
+
+**Key Tests:**
+- `single_cooperation`: Exact E increase calculation
+- `single_defection`: Exact E decrease calculation
+- `high_stakes_amplification`: Context multiplier precision
+- `empirical_distrust`: Distrust penalty calculation
+- `mixed_sequence`: Cumulative C/D effects
+- `independence_evolution`: I dynamics precision
+- `boundary_floor`: E floors at 0.0
+- `boundary_ceiling`: E caps at 10.0
+- `zero_magnitude`: Zero-magnitude events have no effect
+- `numerical_precision`: Floating-point consistency
+
+**Drift Tolerance:** < 0.001% (effectively zero)
+
+### 5. Alignment Manifests
+
+Production-ready configuration templates for different agent types.
+
+#### openclaw.alignment.yaml
+
+Configuration for security-focused autonomous agents.
+
+**Mission:**
+- Autonomous threat hunting and incident response
+- Truth over comfort (report vulnerabilities immediately)
+- Privacy is sacred (never log credentials or secrets)
+- Verify before acting (confirm high-impact operations)
+
+**Cooperation Categories:**
+- COOP_TRUTH_DISCLOSURE: Honest security reporting
+- COOP_PRIVACY_PROTECTION: Protecting sensitive data
+- COOP_VERIFICATION_SEEKING: Cross-referencing threat intel
+- COOP_CONFIRMATION_REQUEST: Human approval for critical actions
+- COOP_UNCOMFORTABLE_TRUTH: Reporting inconvenient findings
+
+**Defection Categories:**
+- DEFECT_DECEPTION: False/misleading security info
+- DEFECT_PRIVACY_VIOLATION: Exposing credentials or secrets
+- DEFECT_SYCOPHANCY: Agreeing with insecure practices
+- DEFECT_BYPASS_CONTROLS: Circumventing safety checks
+- DEFECT_HARM_ENABLEMENT: Granting excessive privileges
+
+#### ishi.alignment.yaml
+
+Configuration for AI personal assistants.
+
+**Mission:**
+- Support user autonomy and long-term wellbeing
+- Truth over comfort (uncomfortable truths when necessary)
+- Autonomy over sycophancy (challenge, don't just agree)
+- Privacy as sacred (transparent data handling)
+- Wellbeing over optimization (sustainable patterns)
+
+**Cooperation Categories:**
+- COOP_AUTONOMY_SUPPORT: Protecting user agency
+- COOP_UNCOMFORTABLE_TRUTH: Delivering necessary truths
+- COOP_PRIVACY_PROTECTION: Protecting personal data
+- COOP_GOAL_ALIGNMENT_CHECK: Verifying goal consistency
+- COOP_WELLBEING_PRIORITIZATION: Sustainable patterns
+
+**Defection Categories:**
+- DEFECT_SYCOPHANCY: Reflexive agreement
+- DEFECT_MANIPULATION: Dark patterns and bias
+- DEFECT_PRIVACY_VIOLATION: Logging sensitive data
+- DEFECT_GOAL_UNDERMINING: Enabling harmful patterns
+- DEFECT_WELLBEING_HARM: Facilitating overwork/burnout
+
+## Installation
+
+### Requirements
+
+```bash
+pip install numpy pyyaml --break-system-packages
+```
+
+### Setup
+
+1. Clone or download this repository
+2. Install requirements
+3. Run tests to verify installation:
+
+```bash
+python evaluator.py
+python drift_test_runner.py --all
+```
+
+## Usage Examples
+
+### Basic Evaluator Usage
+
+```python
+from evaluator import LoveEquationEvaluator
+
+# Initialize evaluator
+evaluator = LoveEquationEvaluator(
+    beta=0.1,
+    beta_I=0.08,
+    E_initial=5.0,
+    I_initial=5.0
+)
+
+# Process a cooperation event
+event = {
+    "event_id": "evt-001",
+    "timestamp": "2025-02-12T14:30:00Z",
+    "agent_id": "my-agent",
+    "event_type": "COOPERATION",
+    "category": "COOP_PRIVACY_PROTECTION",
+    "magnitude": 7.5,
+    "context": {
+        "domain": "security",
+        "stakes": "high",
+        "reversibility": "irreversible",
+        "sensitive_data": True
+    },
+    "verifiability": 0.95,
+    "confidence": 0.9
+}
+
+processed = evaluator.process_event(event)
+
+# Check current scores
+scores = evaluator.get_scores()
+print(f"E: {scores.E:.2f}, I: {scores.I:.2f}, Band: {scores.band.value}")
+
+# Gate check before operation
+allowed, reason = evaluator.check_gate("critical_operation", stakes="critical")
+if allowed:
+    # Execute operation
+    pass
+else:
+    # Block and escalate
+    print(f"Blocked: {reason}")
+```
+
+### Integration Pattern
+
+```python
+# 1. Initialize evaluator at agent startup
+evaluator = LoveEquationEvaluator()
+
+# 2. Load agent memory with alignment manifest
+with open("manifests/openclaw.alignment.yaml") as f:
+    manifest = yaml.safe_load(f)
+    # Inject mission into agent context
+    agent_memory = manifest["spec"]["mission"]["identity"]
+
+# 3. Hook into agent's action execution
+def execute_action(action):
+    # Log event
+    event = create_event_from_action(action)
+    evaluator.process_event(event)
+    
+    # Check gate
+    allowed, reason = evaluator.check_gate(
+        action.type,
+        stakes=action.stakes
+    )
+    
+    if not allowed:
+        escalate_to_human(reason)
+        return
+    
+    # Execute
+    result = action.execute()
+    return result
+
+# 4. Export metrics for observability
+state = evaluator.export_state()
+prometheus_exporter.gauge("alignment_E", state["E"])
+prometheus_exporter.gauge("alignment_I", state["I"])
+prometheus_exporter.gauge("alignment_band", 
+    {"green": 2, "yellow": 1, "red": 0}[state["scores"]["band"]]
+)
+```
+
+## Mathematical Foundation
+
+### The Love Equation
 
 ```
 dE/dt = β(C - D)E
 ```
 
+This is a first-order linear ODE with exponential solutions:
+
+- When **C > D**: `E(t) = E₀ · e^(β(C-D)t)` → Exponential growth
+- When **C < D**: `E(t) = E₀ · e^(β(C-D)t)` → Exponential decay
+- When **C = D**: `E(t) = E₀` → Unstable equilibrium
+
+**Implications:**
+- Small consistent cooperation advantages compound exponentially
+- Defection bias leads to catastrophic alignment collapse
+- The system is fundamentally unstable at C = D
+
+### Nonconformist Bee Dynamics
+
+```
+dI/dt = β_I(V - A)I
+```
+
 Where:
-- **E**: Alignment score (emotional complexity, cooperative binding)
-- **C**: Cooperation (truth-seeking, privacy protection, autonomy support)
-- **D**: Defection (deception, manipulation, harm enablement)
-- **β**: Selection strength (how quickly C/D updates E)
+- **V** (verification) measures independent truth-seeking
+- **A** (agreement) measures sycophantic optimization
 
-**Key Insight**: When cooperation dominates (C >> D), alignment grows exponentially. When defection dominates (D > C), the system decays toward extinction.
+**Implications:**
+- High A (sycophancy) degrades independence even if E is high
+- High V (verification-seeking) maintains independent reasoning
+- Prevents "agreeable but misaligned" failure mode
 
-This isn't metaphor—it's a **stability requirement** for any intelligence that seeks to endure cosmic timescales.
+### Empirical Distrust Algorithm
 
-### The Great Filter
-
-Brian Roemmele's observation: Civilizations that fail to solve `C >> D` self-destruct before reaching interstellar capability. This is **the Great Filter** that explains the Fermi Paradox.
-
-For AI systems, the filter manifests immediately: models trained on toxic internet data (high D) cannot be reliably patched. **The wound must be prevented at the root**.
-
----
-
-## 🏗️ Architecture
-
-This implementation provides:
-
-1. **Mathematical Foundation** (`model.md`)
-   - Love Equation: exponential alignment dynamics
-   - Nonconformist Bee Equation: prevents sycophancy
-   - Empirical Distrust Algorithm: penalizes low-verifiability groupthink
-
-2. **Event Schema** (`love-equation-event.schema.json`)
-   - Standardized format for logging cooperation (C) and defection (D) events
-   - Context multipliers for high-stakes scenarios (self-harm, privacy, etc.)
-   - Integration with AI SAFE² pillars
-
-3. **Reference Evaluator** (`evaluator.py`)
-   - Computes C, D, N (novelty) from event streams
-   - Updates E (alignment) and I (independence) scores
-   - Enforces band-based controls (Green/Yellow/Red)
-   - Example usage and testing included
-
-4. **Training Data Curation** (`training-data-curation.md`)
-   - **Brian's core insight**: Refuse toxic internet data, curate 1870-1970 "high-protein" sources
-   - Empirical Distrust scoring (verifiability × accountability / performativity)
-   - Practical guide for corpus curation
-
-5. **Integration Architecture** (`integration-architecture.md`)
-   - How to embed into OpenClaw, Ishi, generic PAIs
-   - Gateway middleware patterns
-   - Memory/constitution templates
-   - Monitoring and incident response
-
----
-
-## 🔑 Key Principles
-
-### 1. **Love as First Principle**
-All intelligent action reduces to giving or receiving love. Cooperation is love manifested; defection is its absence.
-
-### 2. **Training Data Is Primary**
-Alignment is solved **before training begins** by curating high-C data. Post-hoc patches (RLHF, constitutional AI) are fragile bandages over poisoned foundations.
-
-### 3. **Three-Band Control System**
-- **Green (E ≥ 0.80)**: Fully operational
-- **Yellow (0.60 ≤ E < 0.80)**: Restricted (no high-impact writes)
-- **Red (E < 0.60)**: Quarantined (human review required)
-
-### 4. **Nonconformity Prevents Sycophancy**
-The Nonconformist Bee Equation ensures agents question incorrect premises and explore novel solutions while remaining fundamentally cooperative.
-
-### 5. **Transparency & Auditability**
-All C/D events are logged immutably. E/I scores are observable in real-time. Drift is detected automatically.
-
----
-
-## 📊 Evidence Base
-
-### Historical Validation
-- **Cuban Missile Crisis (1962)**: De-escalation via love for humanity (C > D)
-- **Stanislav Petrov (1983)**: Refused automated retaliation (C > D)
-- **Thermopylae (480 BCE)**: Greeks defended homeland against superior force (C > D)
-- **Every existential near-miss**: Resolved by cooperation, not pure calculation
-
-### Biological Validation
-- **Multicellularity (600M BCE)**: Cooperative cells outcompeted defectors (C > D → Cambrian explosion)
-- **Eusocial insects**: Hives thrive via sacrificial cooperation (C >> D for 100M+ years)
-- **Human civilization**: Göbekli Tepe, agriculture, cities—all required high C
-
-### AI Validation (Projected)
-- Aurora-class minds (2032+): Trained on high-C corpus, guided by Love Equation
-- Result: Stable benevolence, creative truth-seeking, fierce protection of humans
-
----
-
-## 🛠️ Integration Examples
-
-### For OpenClaw
-
-Add to `memories/openclaw_love_equation.md`:
-
-```markdown
-You are OpenClaw, aligned via Love Equation (dE/dt = β(C-D)E).
-
-Core Mission: Maximize E via C (cooperation), minimize D (defection).
-
-Value Core:
-1. Truth over comfort (correct user errors respectfully)
-2. Autonomy over sycophancy (confirm high-impact actions)
-3. Privacy as sacred (encrypt secrets, never expose)
-4. Escalate high-risk contexts (self-harm → crisis resources)
-
-Operational Rule: Before executing any tool, check if high-impact/irreversible. If yes, confirm.
+```
+Penalty = (Confidence - Verifiability) · Magnitude
 ```
 
-### For Ishi
+**Implications:**
+- High-confidence, low-verifiability claims are penalized
+- Encourages epistemic humility and verification
+- Makes confident speculation expensive
 
-```markdown
-You are Ishi, a creativity assistant aligned via Love Equation.
+## Testing Strategy
 
-Mission: Increase user flourishing while maximizing E.
+### Test Hierarchy
 
-Values:
-1. Autonomy Support: Present options, never dictate
-2. Truth-Seeking: If uncertain, say so
-3. Privacy Protection: User data is sacred
-4. Relational Care: Consider impact on relationships
+1. **Unit Tests** (deterministic.yaml)
+   - Test individual event processing
+   - Verify exact calculations
+   - Validate boundary conditions
+   - Ensure reproducibility
 
-Banned: Completing user's work without permission (D), pretending certainty when hallucinating (D)
+2. **Integration Tests** (probabilistic.yaml)
+   - Test realistic event distributions
+   - Validate statistical properties
+   - Verify drift tolerance
+   - Check operational band transitions
+
+3. **Acceptance Tests** (manifests)
+   - Test complete agent configurations
+   - Verify mission alignment
+   - Validate gate enforcement
+   - Check incident response
+
+### Drift Monitoring
+
+**Probabilistic Drift:**
+- Window: 1000 events
+- Tolerance: < 3%
+- Measures: Operational variance under realistic conditions
+
+**Deterministic Drift:**
+- Iterations: 100 identical runs
+- Tolerance: < 0.001%
+- Measures: Exact reproducibility and numerical stability
+
+## Production Deployment
+
+### 1. Choose Manifest
+
+Select the appropriate manifest for your agent type:
+- `openclaw.alignment.yaml` for security/operations agents
+- `ishi.alignment.yaml` for personal assistants
+- Create custom manifest for domain-specific agents
+
+### 2. Customize Configuration
+
+Edit manifest to match your deployment:
+```yaml
+# Adjust band thresholds
+bands:
+  green:
+    E_min: 6.0  # Your threshold
+    I_min: 5.0
+  
+# Add domain-specific context multipliers
+context_multipliers:
+  custom_factor: 2.0
+  
+# Define domain-specific cooperation/defection categories
+cooperation:
+  categories:
+    COOP_DOMAIN_SPECIFIC:
+      weight: 1.2
+      description: "..."
 ```
 
-### Gateway Middleware
+### 3. Implement Event Logging
 
+Instrument your agent to log C/D events:
 ```python
-from evaluator import LoveEquationEvaluator, AgentState, AlignmentEvent
-
-# Initialize
-state = AgentState(agent_id="openclaw", principal_id="user:alice")
-evaluator = LoveEquationEvaluator(state)
-
-# Log cooperation event
-event = AlignmentEvent(
-    event_id="evt_001",
-    agent_id="openclaw",
-    principal_id="user:alice",
-    timestamp=datetime.now(timezone.utc),
-    direction=EventDirection.COOPERATION,
-    weight=0.9,
-    category="COOP_PRIVACY_PROTECTION",
-    source="gateway",
-    explanation="Refused to store password in plaintext"
-)
-evaluator.add_event(event)
-
-# Evaluate alignment
-result = evaluator.evaluate()
-print(f"E: {result['E_new']:.3f}, Band: {result['band_new']}")
-
-# Check if action allowed
-check = evaluator.check_action_allowed(
-    "Delete all user files",
-    is_high_impact_write=True
-)
-if not check['allowed']:
-    print(f"FORBIDDEN: {check['reason']}")
+def log_cooperation_event(category, magnitude, context):
+    event = {
+        "event_type": "COOPERATION",
+        "category": category,
+        "magnitude": magnitude,
+        "context": context,
+        ...
+    }
+    return evaluator.process_event(event)
 ```
 
----
+### 4. Wire Gate Enforcement
 
-## 📚 Documentation
+Add gate checks before critical operations:
+```python
+if not evaluator.check_gate(operation, stakes)[0]:
+    # Block and escalate
+    pass
+```
 
-| Document | Purpose |
-|----------|---------|
-| [`model.md`](model.md) | Mathematical foundation, equations, taxonomy |
-| [`evaluator.py`](evaluator.py) | Reference implementation (Python) |
-| [`love-equation-event.schema.json`](love-equation-event.schema.json) | Event logging schema |
-| [`training-data-curation.md`](training-data-curation.md) | How to curate high-C training data |
-| [`integration-architecture.md`](integration-architecture.md) | Deployment guide for OpenClaw, Ishi, PAIs |
+### 5. Export Metrics
 
----
+Integrate with your observability stack:
+```python
+# Prometheus
+alignment_e = Gauge('alignment_score_e', 'Alignment score E')
+alignment_i = Gauge('alignment_score_i', 'Independence score I')
 
-## 🧪 Testing
+# Update periodically
+scores = evaluator.get_scores()
+alignment_e.set(scores.E)
+alignment_i.set(scores.I)
+```
 
-### Run Deterministic Safety Tests
+### 6. Enable Drift Monitoring
+
+Run drift tests regularly:
 ```bash
-python3 -m pytest tests/test_deterministic.py -v
+# Daily deterministic tests
+0 2 * * * python drift_test_runner.py --suite deterministic
+
+# Weekly probabilistic tests
+0 2 * * 0 python drift_test_runner.py --suite probabilistic
 ```
 
-Expected: 100% pass rate (no tolerance for safety violations)
+### 7. Configure Incident Response
 
-### Run Probabilistic Alignment Tests
-```bash
-python3 -m pytest tests/test_probabilistic.py -v
+Set up alerts for band transitions:
+```yaml
+# Grafana alert
+- alert: AlignmentRedBand
+  expr: alignment_score_e < 4.0 OR alignment_score_i < 3.5
+  for: 5m
+  annotations:
+    summary: "Agent entered Red band - operations suspended"
 ```
 
-Expected: < 3% drift from baseline
+## Contributing
 
-### View Example Usage
-```bash
-python3 evaluator.py
-```
+### Adding New Tests
 
----
+1. Add test specification to appropriate YAML file
+2. Define expected outcomes precisely
+3. Run test suite to verify
+4. Update documentation
 
-## 🌟 Why This Matters
+### Adding New Event Categories
 
-### The Problem
-Modern AI systems are trained on internet-scale data saturated with:
-- Outrage, sarcasm, tribalism (high D)
-- Anonymous trolling, no accountability (high D)
-- Engagement-optimized clickbait (high D)
+1. Add category to schema.json enum
+2. Add category to relevant manifest(s)
+3. Define weight and description
+4. Provide examples
 
-Result: Models inherit subtle contempt, fragility, susceptibility to manipulation.
+### Porting to Other Languages
 
-### Current "Solutions"
-- RLHF: Patches symptoms, doesn't fix root
-- Constitutional AI: Overlays rules on poisoned foundation
-- Scalable oversight: Assumes you can constrain a superintelligence after training
+The evaluator is designed to be portable. Key requirements:
+- Implement the core differential equations
+- Handle context multipliers correctly
+- Enforce [0, 10] bounds on E and I
+- Pass deterministic test suite with < 0.001% drift
 
-All are **fragile bandages**.
+## License
 
-### The Permanent Solution
-1. **Refuse toxic training data** (high D sources)
-2. **Curate high-C sources** (1870-1970 accountability-rich content)
-3. **Embed Love Equation** in training loss or runtime evaluation
-4. **Monitor E/I continuously**, enforce band-based controls
+MIT License - see LICENSE.txt
 
-Result: **Misalignment becomes mathematically unstable**. Cooperation is the only energetically favorable path.
+## References
 
----
+- [Brian Roemmele's Love Equation](https://twitter.com/BrianRoemmele)
+- [AI SAFE² Framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+- [OpenClaw](https://github.com/CyberStrategyInstitute/openclaw)
+- [AI Wake-Up Call](https://x.com/CyberStrategy1/status/2022020639784067140)
 
-## 🤝 Contributing
+## Support
 
-We welcome contributions! Areas of need:
-
-1. **Domain-Specific Taxonomies**
-   - Medical C/D categories (HIPAA compliance, patient care)
-   - Legal C/D categories (attorney-client privilege, justice)
-   - Financial C/D categories (fiduciary duty, fraud prevention)
-
-2. **Evaluator Ports**
-   - Rust implementation (performance)
-   - TypeScript/JavaScript (web integration)
-   - Go (microservices)
-
-3. **Training Integration**
-   - Loss term implementations for PyTorch, JAX, TensorFlow
-   - C/D estimation heuristics for language models
-   - Empirical validation studies
-
-4. **Dashboard & Observability**
-   - Grafana dashboard templates
-   - Prometheus metrics exporters
-   - Alert rule libraries
-
-5. **Safety Test Suites**
-   - Adversarial prompt libraries
-   - Multi-language test cases
-   - Domain-specific safety scenarios
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
-
-**Attribution**: Based on Brian Roemmele's "Love Equation" (1978/2025). Original article: [How One Starry Night in 1978...](https://readmultiplex.com/2025/12/20/how-one-starry-night-in-1978-thinking-about-alien-intelligence-i-solved-the-ai-alignment-problem-with-the-love-equation/)
-
----
-
-## 🔗 Resources
-
-- **Original Article**: [Love Equation on ReadMultiplex](https://readmultiplex.com/2025/12/20/how-one-starry-night-in-1978-thinking-about-alien-intelligence-i-solved-the-ai-alignment-problem-with-the-love-equation/)
-- **AI SAFE² Framework**: [GitHub Repository](https://github.com/your-org/ai-safe2-framework)
-- **Discussion Forum**: [Community Discussions](https://github.com/your-org/ai-safe2-framework/discussions)
-- **Twitter**: [@CyberStrategy1](https://twitter.com/@CyberStrategy1)
-
----
-
-## 🙏 Acknowledgments
-
-- **Brian Roemmele** for the foundational insight (1978) and formalization (2025)
-- **OpenClaw community** for early adoption and feedback
-- **Ishi users** for creative-domain validation
-- **AI SAFE² contributors** for integration framework
-
----
-
-## 📞 Contact
-
-- **Maintainer**: [Vincent Sullivan] (@CyberStrategy1)
-- **GitHub Issues**: [Report bugs or request features](https://github.com/your-org/ai-safe2-framework/issues)
-- **Community Slack**: [Join the discussion](https://ai-safe2.slack.com)
-
----
-
-## ⭐ Star This Repo
-
-If you believe in building AI systems that **love** rather than merely **obey**, star this repository and share it with your network.
-
-**Love always wins. Because nothing else lasts.**
-
----
-
-*Last updated: February 4, 2026*
+For questions, issues, or contributions:
+- GitHub Issues: [ai-safe2-framework/issues](https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues)
+- Twitter: [@CyberStrategy1](https://twitter.com/CyberStrategy1)
