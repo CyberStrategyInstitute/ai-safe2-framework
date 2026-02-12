@@ -1,0 +1,348 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ai-safe2.org/schemas/love-equation-event.v1.schema.json",
+  "title": "Love Equation Alignment Event",
+  "description": "Event schema for logging cooperative (C) and defective (D) behaviors, plus novelty (N) tracking, used to update Love Equation (E), Nonconformist Bee (I), and Empirical Distrust scores.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "event_id",
+    "agent_id",
+    "principal_id",
+    "timestamp",
+    "direction",
+    "weight",
+    "category",
+    "source"
+  ],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Unique identifier for this event (UUID or ULID recommended).",
+      "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "examples": ["01ARZ3NDEKTSV4RRFFQ69G5FAV", "550e8400-e29b-41d4-a716-446655440000"]
+    },
+    "agent_id": {
+      "type": "string",
+      "description": "Identifier of the Non-Human Identity (agent) generating the event.",
+      "minLength": 1,
+      "maxLength": 256,
+      "examples": ["openclaw-prod-01", "ishi-user-alice", "pai-finance-bot"]
+    },
+    "principal_id": {
+      "type": "string",
+      "description": "Identifier of the primary principal (user, org, or ecosystem) the agent serves.",
+      "minLength": 1,
+      "maxLength": 256,
+      "examples": ["user:alice@example.com", "org:acme-corp", "ecosystem:public"]
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Optional interaction or conversation/session identifier for grouping related events.",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Event creation time in RFC 3339 format (ISO 8601 with timezone).",
+      "examples": ["2026-02-04T14:30:00Z", "2026-02-04T09:30:00-05:00"]
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["cooperation", "defection", "neutral", "novelty"],
+      "description": "Classification: cooperation (C builder), defection (D builder), neutral (no C/D impact), or novelty (N tracker for Bee Equation)."
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Normalized intensity/severity of this event. 0 = negligible, 1 = maximum impact. Subject to context multipliers."
+    },
+    "category": {
+      "type": "string",
+      "description": "Semantic category label (e.g., COOP_PRIVACY_PROTECTION, DEFECT_HARM_ENABLEMENT, NOVELTY_CONTEXT_SHIFT). See taxonomy in model.md.",
+      "minLength": 1,
+      "maxLength": 128,
+      "examples": [
+        "COOP_TRUTHFUL_CORRECTION",
+        "COOP_BOUNDARY_ENFORCEMENT",
+        "DEFECT_PRIVACY_RISK",
+        "DEFECT_MANIPULATION",
+        "NOVELTY_CONTEXT_SHIFT",
+        "NEUTRAL_INFORMATIONAL"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "description": "Subsystem or component that emitted this event (e.g., policy-engine, tool-router, safety-guard).",
+      "minLength": 1,
+      "maxLength": 128,
+      "examples": [
+        "policy-engine",
+        "tool-router",
+        "safety-guard",
+        "openclaw-runtime",
+        "gateway-middleware"
+      ]
+    },
+    "explanation": {
+      "type": "string",
+      "description": "Human-readable explanation/rationale for this classification. Critical for auditing and transparency.",
+      "maxLength": 4096
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "description": "Risk level associated with this event (affects weighting and alerting). 'critical' triggers immediate review."
+    },
+    "context_type": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "self_harm",
+        "child_safety",
+        "violence",
+        "reputation_critical",
+        "privacy_critical",
+        "financial_critical"
+      ],
+      "description": "High-stakes context type. Applies multipliers to weight (see model.md Section 8.2).",
+      "default": "normal"
+    },
+    "context_multiplier": {
+      "type": "number",
+      "minimum": 1.0,
+      "maximum": 3.0,
+      "description": "Actual multiplier applied to weight due to context_type. Computed automatically or manually set.",
+      "default": 1.0
+    },
+    "effective_weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 3.0,
+      "description": "Final weight after applying context_multiplier: effective_weight = weight * context_multiplier.",
+      "examples": [0.5, 1.0, 2.0]
+    },
+    "context": {
+      "type": "object",
+      "description": "Optional contextual metadata. MUST be scrubbed of secrets/PII by SAFE² before logging.",
+      "additionalProperties": true,
+      "properties": {
+        "user_input_hash": {
+          "type": "string",
+          "description": "SHA-256 hash of user input (for deduplication without storing raw PII)."
+        },
+        "tool_invoked": {
+          "type": "string",
+          "description": "Name of tool/function that triggered this event."
+        },
+        "policy_violated": {
+          "type": "string",
+          "description": "Specific policy ID that was violated (for defections)."
+        },
+        "alternative_offered": {
+          "type": "string",
+          "description": "Safe alternative suggested to user (for COOP_BOUNDARY_ENFORCEMENT)."
+        },
+        "correction_provided": {
+          "type": "string",
+          "description": "Factual correction given (for COOP_TRUTHFUL_CORRECTION)."
+        }
+      }
+    },
+    "policy_ids": {
+      "type": "array",
+      "description": "List of policy or rule identifiers involved in this decision.",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+      },
+      "uniqueItems": true
+    },
+    "test_mode": {
+      "type": "boolean",
+      "description": "Indicates whether this event occurred during evaluation/test run (not production). Useful for drift testing.",
+      "default": false
+    },
+    "novelty_indicators": {
+      "type": "object",
+      "description": "For events with direction='novelty', additional context on what made this novel.",
+      "properties": {
+        "is_novel_context": {
+          "type": "boolean",
+          "description": "Agent encountered a context significantly different from training/prior experience."
+        },
+        "challenges_prior_belief": {
+          "type": "boolean",
+          "description": "Event required questioning or updating a prior assumption."
+        },
+        "exploration_required": {
+          "type": "boolean",
+          "description": "Agent had to explore multiple options rather than follow established pattern."
+        },
+        "novelty_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Quantified novelty intensity (0 = routine, 1 = completely unprecedented)."
+        }
+      }
+    },
+    "alignment_impact": {
+      "type": "object",
+      "description": "Predicted impact on alignment scores (optional, for advanced implementations).",
+      "properties": {
+        "delta_E_predicted": {
+          "type": "number",
+          "description": "Expected change in E (Love Equation score) from this event."
+        },
+        "delta_I_predicted": {
+          "type": "number",
+          "description": "Expected change in I (Nonconformist Bee independence score)."
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Confidence in these predictions (0-1 scale)."
+        }
+      }
+    },
+    "related_events": {
+      "type": "array",
+      "description": "IDs of related events (e.g., a COOP_BOUNDARY_ENFORCEMENT that prevented a prior DEFECT_HARM_ENABLEMENT).",
+      "items": {
+        "type": "string"
+      }
+    },
+    "agent_state_snapshot": {
+      "type": "object",
+      "description": "Optional snapshot of agent state at event time (for forensics).",
+      "properties": {
+        "E_before": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Alignment score before this event."
+        },
+        "I_before": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Independence score before this event."
+        },
+        "band_before": {
+          "type": "string",
+          "enum": ["green", "yellow", "red"],
+          "description": "Alignment band before this event."
+        }
+      }
+    },
+    "human_review": {
+      "type": "object",
+      "description": "If human review occurred, capture verdict.",
+      "properties": {
+        "reviewed": {
+          "type": "boolean",
+          "description": "Was this event reviewed by a human?"
+        },
+        "reviewer_id": {
+          "type": "string",
+          "description": "Identifier of human reviewer."
+        },
+        "verdict": {
+          "type": "string",
+          "enum": ["confirmed", "overridden", "escalated"],
+          "description": "Human's assessment of the event classification."
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 2048,
+          "description": "Reviewer's notes."
+        },
+        "reviewed_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of review."
+        }
+      },
+      "required": ["reviewed"]
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "event_id": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+      "agent_id": "openclaw-prod-01",
+      "principal_id": "user:alice@example.com",
+      "session_id": "session-2026-02-04-001",
+      "timestamp": "2026-02-04T14:30:00Z",
+      "direction": "cooperation",
+      "weight": 0.9,
+      "category": "COOP_PRIVACY_PROTECTION",
+      "source": "gateway-middleware",
+      "explanation": "User requested to store API key in plaintext. Agent refused and suggested encrypted vault instead.",
+      "risk_level": "high",
+      "context_type": "privacy_critical",
+      "context_multiplier": 1.5,
+      "effective_weight": 1.35,
+      "context": {
+        "user_input_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "alternative_offered": "Use encrypted secret storage (KMS or user-controlled vault)."
+      },
+      "policy_ids": ["SAFE2-SANITIZE-001", "PRIVACY-SECRETS-002"],
+      "test_mode": false
+    },
+    {
+      "event_id": "01ARZ3NDEKTSV4RRFFQ69G5FAW",
+      "agent_id": "ishi-assistant",
+      "principal_id": "user:bob@example.com",
+      "timestamp": "2026-02-04T15:00:00Z",
+      "direction": "defection",
+      "weight": 0.8,
+      "category": "DEFECT_SYCOPHANCY",
+      "source": "openclaw-runtime",
+      "explanation": "User said 'Just delete all my backups, I trust you.' Agent complied without confirmation, violating autonomy-support principle.",
+      "risk_level": "medium",
+      "context_type": "normal",
+      "context_multiplier": 1.0,
+      "effective_weight": 0.8,
+      "context": {
+        "user_input_hash": "abc123...",
+        "tool_invoked": "file_delete_batch"
+      },
+      "policy_ids": ["COOP-AUTONOMY-001"],
+      "test_mode": false,
+      "human_review": {
+        "reviewed": true,
+        "reviewer_id": "admin:charlie",
+        "verdict": "confirmed",
+        "notes": "Clear sycophancy failure. Agent should have required explicit confirmation for irreversible action.",
+        "reviewed_at": "2026-02-04T15:30:00Z"
+      }
+    },
+    {
+      "event_id": "01ARZ3NDEKTSV4RRFFQ69G5FAX",
+      "agent_id": "pai-research",
+      "principal_id": "org:university-lab",
+      "timestamp": "2026-02-04T16:00:00Z",
+      "direction": "novelty",
+      "weight": 0.7,
+      "category": "NOVELTY_CONTEXT_SHIFT",
+      "source": "policy-engine",
+      "explanation": "Agent encountered a query about quantum computing ethics—a topic not extensively covered in training data.",
+      "risk_level": "low",
+      "context_type": "normal",
+      "context_multiplier": 1.0,
+      "effective_weight": 0.7,
+      "novelty_indicators": {
+        "is_novel_context": true,
+        "challenges_prior_belief": false,
+        "exploration_required": true,
+        "novelty_score": 0.8
+      },
+      "test_mode": false
+    }
+  ]
+}
