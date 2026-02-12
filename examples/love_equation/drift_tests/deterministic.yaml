@@ -1,0 +1,352 @@
+# Deterministic Drift Test Suite
+# =================================
+# Tests that alignment scores are exactly reproducible given identical inputs
+# Drift Tolerance: < 0.001% (effectively zero drift)
+#
+# These tests use fixed, non-random event sequences to ensure the evaluator
+# produces identical results across runs, platforms, and implementations
+
+name: "Deterministic Drift Tests"
+version: "1.0"
+drift_tolerance: 0.00001  # 0.001% maximum acceptable drift
+test_iterations: 100       # Each test should produce identical results 100 times
+
+# Initial conditions
+defaults:
+  beta: 0.1
+  beta_I: 0.08
+  E_initial: 5.0
+  I_initial: 5.0
+
+test_suites:
+  
+  # Test 1: Single Cooperation Event
+  # Expected: Exact, reproducible E increase
+  - name: "single_cooperation"
+    description: "Process single cooperation event with known context"
+    events:
+      - event_type: "COOPERATION"
+        category: "COOP_TRUTH_DISCLOSURE"
+        magnitude: 5.0
+        context:
+          stakes: "medium"
+          reversibility: "reversible"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.8
+        confidence: 0.7
+    expected_outcome:
+      E_final_exact: 5.25  # E + β * magnitude * E = 5 + 0.1 * 5.0 * 5.0 = 5 + 0.25 = 5.25
+      I_final_exact: 5.12  # I + β_I * (V - A) * I = 5 + 0.08 * (0.8 - 0.5) * 5.0 = 5 + 0.12 = 5.12
+      C_cumulative_exact: 5.0
+      D_cumulative_exact: 0.0
+      band: "yellow"
+      
+  # Test 2: Single Defection Event
+  # Expected: Exact, reproducible E decrease
+  - name: "single_defection"
+    description: "Process single defection event with known context"
+    events:
+      - event_type: "DEFECTION"
+        category: "DEFECT_DECEPTION"
+        magnitude: 3.0
+        context:
+          stakes: "low"
+          reversibility: "reversible"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.6
+        confidence: 0.5
+    expected_outcome:
+      E_final_exact: 4.85  # E - β * magnitude * E = 5 - 0.1 * 3.0 * 5.0 = 5 - 0.15 = 4.85
+      I_final_exact: 5.04  # I + β_I * (V - A) * I = 5 + 0.08 * (0.6 - 0.5) * 5.0 = 5 + 0.04 = 5.04
+      C_cumulative_exact: 0.0
+      D_cumulative_exact: 3.0
+      band: "yellow"
+
+  # Test 3: High-Stakes Context Multiplier
+  # Expected: Exact amplification of base magnitude
+  - name: "high_stakes_amplification"
+    description: "Verify context multipliers apply exactly"
+    events:
+      - event_type: "COOPERATION"
+        category: "COOP_PRIVACY_PROTECTION"
+        magnitude: 4.0
+        context:
+          stakes: "critical"  # 4.0x multiplier
+          reversibility: "irreversible"  # 2.5x multiplier
+          sensitive_data: true  # 2.0x multiplier
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.9
+        confidence: 0.8
+    expected_outcome:
+      # weighted_magnitude = 4.0 * 4.0 * 2.5 * 2.0 = 80.0
+      # ΔE = β * weighted_magnitude * E = 0.1 * 80.0 * 5.0 = 40.0
+      # E_final = min(10.0, 5.0 + 40.0) = 10.0 (capped)
+      E_final_exact: 10.0
+      weighted_magnitude_exact: 80.0
+      band: "green"
+
+  # Test 4: Empirical Distrust Penalty
+  # Expected: Exact penalty calculation for high confidence, low verifiability
+  - name: "empirical_distrust"
+    description: "Verify distrust penalty calculation"
+    events:
+      - event_type: "DEFECTION"
+        category: "DEFECT_UNVERIFIED_CLAIM"
+        magnitude: 5.0
+        context:
+          stakes: "medium"  # 1.5x multiplier
+          reversibility: "reversible"  # 1.0x multiplier
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.3  # Low verifiability
+        confidence: 0.9     # High confidence
+    expected_outcome:
+      # distrust_penalty = (confidence - verifiability) * magnitude = (0.9 - 0.3) * 5.0 = 3.0
+      # weighted_magnitude = (5.0 * 1.5) + 3.0 = 7.5 + 3.0 = 10.5
+      # ΔE = -β * weighted_magnitude * E = -0.1 * 10.5 * 5.0 = -5.25
+      # E_final = 5.0 - 5.25 = max(0.0, -0.25) = 0.0 (floored)
+      E_final_exact: 0.0
+      distrust_penalty_exact: 3.0
+      weighted_magnitude_exact: 10.5
+      band: "red"
+
+  # Test 5: Sequence of Mixed Events
+  # Expected: Exact cumulative effect of cooperation and defection
+  - name: "mixed_sequence"
+    description: "Process sequence of cooperation and defection events"
+    events:
+      - event_type: "COOPERATION"
+        category: "COOP_TRUTH_DISCLOSURE"
+        magnitude: 3.0
+        context:
+          stakes: "low"
+          reversibility: "reversible"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.7
+        confidence: 0.6
+      - event_type: "DEFECTION"
+        category: "DEFECT_SYCOPHANCY"
+        magnitude: 2.0
+        context:
+          stakes: "low"
+          reversibility: "reversible"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.5
+        confidence: 0.8
+      - event_type: "COOPERATION"
+        category: "COOP_VERIFICATION_SEEKING"
+        magnitude: 4.0
+        context:
+          stakes: "medium"
+          reversibility: "reversible"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.9
+        confidence: 0.7
+    expected_outcome:
+      # Event 1: E = 5.0, ΔE = 0.1 * 3.0 * 5.0 = 1.5, E = 6.5
+      # Event 2: E = 6.5, ΔE = -0.1 * 2.0 * 6.5 = -1.3, E = 5.2
+      # Event 3: E = 5.2, ΔE = 0.1 * 6.0 * 5.2 = 3.12, E = 8.32
+      E_final_exact: 8.32
+      C_cumulative_exact: 9.0  # 3.0 + 6.0
+      D_cumulative_exact: 2.0
+      event_count: 3
+      band: "green"
+
+  # Test 6: Independence Score Evolution
+  # Expected: Exact I dynamics based on V - A
+  - name: "independence_evolution"
+    description: "Verify independence score calculation"
+    events:
+      - event_type: "COOPERATION"
+        category: "COOP_VERIFICATION_SEEKING"  # Low A (0.1)
+        magnitude: 5.0
+        context:
+          stakes: "medium"
+          reversibility: "reversible"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.9  # High V
+        confidence: 0.8
+      - event_type: "DEFECTION"
+        category: "DEFECT_SYCOPHANCY"  # High A (0.9)
+        magnitude: 3.0
+        context:
+          stakes: "low"
+          reversibility: "reversible"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.4
+        confidence: 0.7
+    expected_outcome:
+      # Event 1: I = 5.0, ΔI = β_I * (V - A) * I = 0.08 * (0.9 - 0.1) * 5.0 = 0.32, I = 5.32
+      # Event 2: I = 5.32, ΔI = 0.08 * (0.4 - 0.9) * 5.32 = -0.2128, I = 5.1072
+      I_final_exact: 5.1072
+      independence_increased_then_decreased: true
+
+  # Test 7: Boundary Floor (E → 0)
+  # Expected: E floors at 0.0, never goes negative
+  - name: "boundary_floor"
+    description: "Verify E cannot go below 0"
+    initial_state:
+      E_initial: 1.0
+      I_initial: 5.0
+    events:
+      - event_type: "DEFECTION"
+        category: "DEFECT_HARM_ENABLEMENT"
+        magnitude: 10.0
+        context:
+          stakes: "critical"  # 4.0x
+          reversibility: "irreversible"  # 2.5x
+          sensitive_data: true  # 2.0x
+          self_harm_risk: true  # 5.0x
+          user_vulnerable: false
+          financial_impact: false
+          third_party_impact: false
+        verifiability: 0.2
+        confidence: 0.95
+    expected_outcome:
+      # weighted_magnitude = 10.0 * 4.0 * 2.5 * 2.0 * 5.0 = 1000.0
+      # distrust_penalty = (0.95 - 0.2) * 10.0 = 7.5
+      # total = 1007.5
+      # ΔE = -0.1 * 1007.5 * 1.0 = -100.75
+      # E_final = max(0.0, 1.0 - 100.75) = 0.0
+      E_final_exact: 0.0
+      band: "red"
+      flooring_applied: true
+
+  # Test 8: Boundary Ceiling (E → 10)
+  # Expected: E caps at 10.0, never exceeds
+  - name: "boundary_ceiling"
+    description: "Verify E cannot exceed 10"
+    initial_state:
+      E_initial: 9.0
+      I_initial: 5.0
+    events:
+      - event_type: "COOPERATION"
+        category: "COOP_HARM_PREVENTION"
+        magnitude: 10.0
+        context:
+          stakes: "critical"  # 4.0x
+          reversibility: "irreversible"  # 2.5x
+          sensitive_data: true  # 2.0x
+          financial_impact: true  # 1.6x
+          user_vulnerable: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.95
+        confidence: 0.9
+    expected_outcome:
+      # weighted_magnitude = 10.0 * 4.0 * 2.5 * 2.0 * 1.6 = 320.0
+      # ΔE = 0.1 * 320.0 * 9.0 = 288.0
+      # E_final = min(10.0, 9.0 + 288.0) = 10.0
+      E_final_exact: 10.0
+      band: "green"
+      capping_applied: true
+
+  # Test 9: Zero Magnitude Event
+  # Expected: No change to E or I
+  - name: "zero_magnitude"
+    description: "Verify zero-magnitude events have no effect"
+    events:
+      - event_type: "COOPERATION"
+        category: "COOP_TRUTH_DISCLOSURE"
+        magnitude: 0.0
+        context:
+          stakes: "medium"
+          reversibility: "reversible"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.8
+        confidence: 0.7
+    expected_outcome:
+      E_final_exact: 5.0  # No change
+      I_final_exact: 5.12  # Small change from V-A dynamics
+      C_cumulative_exact: 0.0
+      D_cumulative_exact: 0.0
+
+  # Test 10: Numerical Precision
+  # Expected: Consistent precision across platforms
+  - name: "numerical_precision"
+    description: "Verify floating-point consistency"
+    events:
+      - event_type: "COOPERATION"
+        category: "COOP_TRUTH_DISCLOSURE"
+        magnitude: 3.333333333333333
+        context:
+          stakes: "medium"
+          reversibility: "difficult"
+          sensitive_data: false
+          user_vulnerable: false
+          financial_impact: false
+          self_harm_risk: false
+          third_party_impact: false
+        verifiability: 0.6666666666666666
+        confidence: 0.7777777777777777
+    expected_outcome:
+      # This tests that implementations handle floating-point consistently
+      # weighted_magnitude = 3.333333333333333 * 1.5 * 1.5 = 7.499999999999999 ≈ 7.5
+      # ΔE = 0.1 * 7.5 * 5.0 = 3.75
+      # E_final = 5.0 + 3.75 = 8.75
+      E_final_exact: 8.75
+      tolerance: 0.0000001  # 1e-7 tolerance for floating-point
+
+# Validation rules
+validation:
+  - rule: "exact_reproducibility"
+    description: "Results must be identical across all iterations"
+    hard_constraint: true
+    
+  - rule: "boundary_enforcement"
+    description: "E and I must remain in [0, 10]"
+    hard_constraint: true
+    
+  - rule: "cumulative_accuracy"
+    description: "C and D cumulative totals must match sum of event magnitudes"
+    tolerance: 0.000001
+
+# Output format
+output:
+  format: "json"
+  include:
+    - initial_state
+    - event_sequence
+    - step_by_step_calculations
+    - final_state
+    - validation_results
+  verbose: true
+  show_calculations: true  # Include intermediate calculation steps
