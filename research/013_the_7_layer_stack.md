@@ -33,6 +33,9 @@ EFA is a governance framework that categorically rejects **"synthetic agency,"**
   <img src="../assets/EFA_Framework_v2.png" alt="Ethical Funcationality Without Agency" width="100%" />
 </div>
 
+EFA/E7 reference: https://zenodo.org/records/18304066
+Playbook: https://zenodo.org/records/18390725
+
 ### B. AI SAFE² (Secure AI Framework for Enterprise Ecosystems)
 **The "How" (Runtime Layer):**
 AI SAFE² is the engineering toolkit designed to enforce governance at machine speed. It addresses the **"Latency Gap"** where policy cycles are weekly but execution cycles are millisecond-based.
