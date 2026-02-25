@@ -81,13 +81,47 @@ AI SAFE² v2.1 is engineered for the **Modern AI Stack**, not just chatbots. It 
 
 > *Stuck? Hitting errors? Check the [Troubleshooting Guide](TROUBLESHOOTING.md).*
 
-## 🛡️ OpenClaw Security
+## 🤖 OpenClaw Integration — Real-World Agent Governance
 
-AI SAFE² provides the only complete security toolkit for OpenClaw (formerly Moltbot/Clawdbot) users:
+> **New in v2.0 (Feb 2026):** The AI SAFE² OpenClaw Core File Standard ships 11 governance files that apply the full five-pillar model to a personal AI agent workspace. Drop them in, fill the placeholders, run the smoke test, and your agent is governed.
 
-- **Memory Protocol** - Drop-in persistent safety controls
-- **Security Scanner** - Automated vulnerability detection
-- **Control Gateway** - External enforcement layer
+OpenClaw is the first widely-deployed, self-hosted autonomous agent with shell access — exactly the class of system AI SAFE² was designed to govern. The integration gives every OpenClaw operator a complete, auditable governance stack in under an afternoon.
+
+### The Two-Layer Model
+
+| Layer | What | Where |
+|---|---|---|
+| **Internal Governance** (new) | 11 core files defining values, rules, memory, identity, and workspace policy | `examples/openclaw/core/` |
+| **External Enforcement** (original) | Scanner, gateway, v1 memory vaccine — infrastructure that wraps the agent | `examples/openclaw/` |
+
+Both layers are required. Internal governance defines what the agent *intends* to do. External enforcement ensures nothing harmful *escapes* even if the agent is deceived.
+
+### The 11 Core Files at a Glance
+
+| File | AI SAFE² Pillar | What It Governs |
+|---|---|---|
+| `IDENTITY.md` | S — Sanitize | 5-line anchor loaded first; resists identity-replacement attacks |
+| `SOUL.md` | S — Sanitize | Constitution + Love Equation alignment bands (Green/Yellow/Red) |
+| `AGENTS.md` | S + A | Operating rules, SKILL.md supply chain security, data classification |
+| `USER.md` | A — Audit | Human contract, trust delegation, three-tier data classification |
+| `TOOLS.md` | A — Audit | Config values only; architectural separation prevents config → injection |
+| `HEARTBEAT.md` | E — Engage | Scheduled monitoring: security scan, alignment drift, sub-agent summary |
+| `SUBAGENT-POLICY.md` | S + F | Worker trust tiers, context isolation, injection detection in outputs |
+| `MODEL-ROUTER.md` | F + S | Tier routing, graceful degradation, data residency enforcement |
+| `openclaw_memory.md` v2 | S + A | Memory write governance, Love Equation C/D scoring, sub-agent isolation |
+| `OPENCLAW-WORKSPACE-POLICY.md` | All 5 | Cross-agent trust, compliance mapping, workspace incident response |
+| `OPENCLAW-AGENT-TEMPLATE.md` | ² — Evolve | 8-step setup checklist with mandatory smoke tests |
+
+### Quick Start
+
+```bash
+cp -r examples/openclaw/core/. ~/my-agent/
+# Then open OPENCLAW-AGENT-TEMPLATE.md and follow the checklist
+```
+
+**→ [Full documentation: examples/openclaw/core/README.md](./examples/openclaw/core/README.md)**
+
+
 
 **Quick Start:** [10-Minute Hardening Guide](./guides/openclaw-hardening.md)
 
