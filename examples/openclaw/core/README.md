@@ -10,7 +10,7 @@
 
 ## What This Is
 
-This folder contains the **AI SAFE² OpenClaw Core File Standard** — 11 governance files that establish a complete, auditable, and security-hardened OpenClaw agent workspace from scratch.
+This folder contains the **AI SAFE² OpenClaw Core File Standard** 11 governance files that establish a complete, auditable, and security-hardened OpenClaw agent workspace from scratch.
 
 These are not whitepapers. They are working files you copy, fill in the `<placeholders>`, and drop into your agent workspace. Each file is a ready-to-use template with detailed inline guidance and explicit AI SAFE² pillar mappings.
 
@@ -41,7 +41,7 @@ These are not whitepapers. They are working files you copy, fill in the `<placeh
 | File | Loads When | Purpose |
 |---|---|---|
 | [`USER.md`](./USER.md) | Every request | Human identity contract. Trust delegation, data tiers, hard lines. |
-| [`TOOLS.md`](./TOOLS.md) | Every request | Environment config only. Channel IDs, paths, secret locations — no instructions. |
+| [`TOOLS.md`](./TOOLS.md) | Every request | Environment config only. Channel IDs, paths, secret locations means no instructions. |
 
 ### Memory Layer — *what the agent remembers*
 
@@ -79,11 +79,11 @@ Sub-agents receive: task brief + relevant `SOUL.md` excerpts + `AGENTS.md` excer
 
 ## How This Relates to the Existing OpenClaw Tools
 
-This `core/` folder works alongside — not instead of — the other AI SAFE² OpenClaw tools in the parent directory:
+This `core/` folder works alongside, not instead of the other AI SAFE² OpenClaw tools in the parent directory:
 
 | Tool | What It Does | Relationship to Core Files |
 |---|---|---|
-| [`openclaw_memory.md`](../openclaw_memory.md) | Original v1 memory vaccine (security block list) | `core/openclaw_memory.md` is the v2.0 upgrade — superset, no breaking changes |
+| [`openclaw_memory.md`](../openclaw_memory.md) | Original v1 memory vaccine (security block list) | `core/openclaw_memory.md` is the v2.0 upgrade superset, no breaking changes |
 | [`scanner.py`](../scanner.py) | Local vulnerability scanner, 0–100 risk score | Called during `HEARTBEAT.md` weekly security check |
 | [`gateway/`](../gateway/) | Reverse proxy enforcing JSON schema, injection blocking, audit log | Referenced in `TOOLS.md` as mandatory; `MODEL-ROUTER.md` explains routing through it |
 
@@ -159,7 +159,7 @@ open OPENCLAW-AGENT-TEMPLATE.md
 
 ## What's NOT Here (Premium Tier)
 
-This folder covers single-agent workspaces. Swarm governance — multi-agent fleets with collective alignment scoring, trust graphs, quorum memory writes, and cascade failure playbooks — is the premium tier, currently in design.
+This folder covers single-agent workspaces. Swarm governance: multi-agent fleets with collective alignment scoring, trust graphs, quorum memory writes, and cascade failure playbooks, is the premium tier, currently in design.
 
 If you're running more than one agent and need them to collaborate with enforced governance, [watch the repository](https://github.com/CyberStrategyInstitute/ai-safe2-framework) or check [cyberstrategyinstitute.com/AI-Safe2/](https://cyberstrategyinstitute.com/AI-Safe2/) for swarm tier availability.
 
@@ -167,8 +167,8 @@ If you're running more than one agent and need them to collaborate with enforced
 
 ## License
 
-Templates and code: **MIT** — use commercially, modify, close-source, sell products built on this.  
-Methodology text: **CC-BY-SA 4.0** — share and adapt with attribution; derivatives must share alike.
+Templates and code: **MIT** use commercially, modify, close-source, sell products built on this.  
+Methodology text: **CC-BY-SA 4.0** share and adapt with attribution; derivatives must share alike.
 
 ---
 
