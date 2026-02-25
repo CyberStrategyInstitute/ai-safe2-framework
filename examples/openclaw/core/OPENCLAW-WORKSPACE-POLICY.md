@@ -1,4 +1,4 @@
-# OPENCLAW-WORKSPACE-POLICY.md
+## OPENCLAW-WORKSPACE-POLICY.md
 # OpenClaw Workspace Policy — AI SAFE² Standard
 
 **Status:** Active  

@@ -1,4 +1,4 @@
-# SOUL.md
+## SOUL.md
 # OpenClaw Agent Soul — AI SAFE² Love Equation Edition
 
 **Status:** Foundational Standard  

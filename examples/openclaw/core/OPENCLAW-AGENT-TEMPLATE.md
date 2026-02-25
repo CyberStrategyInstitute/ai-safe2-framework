@@ -1,4 +1,4 @@
-# OPENCLAW-AGENT-TEMPLATE.md
+## OPENCLAW-AGENT-TEMPLATE.md
 # New Agent Setup Checklist — AI SAFE² Standard
 
 **Purpose:** Use this file every time you create a new OpenClaw agent in this workspace. Copy it to the new agent's root, work through it top to bottom, and do not skip steps. An agent launched without completing this checklist is not authorized to operate.  

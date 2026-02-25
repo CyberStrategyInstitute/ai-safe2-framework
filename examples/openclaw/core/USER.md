@@ -1,4 +1,4 @@
-# USER.md
+## USER.md
 # OpenClaw User Identity Contract — AI SAFE² Standard
 
 **Load context:** All sessions (non-sensitive sections). Personal details and private context belong in MEMORY.md, not here, to avoid leaking into group chats.  

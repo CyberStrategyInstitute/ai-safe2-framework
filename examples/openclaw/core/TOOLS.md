@@ -1,4 +1,4 @@
-# TOOLS.md
+## TOOLS.md
 # OpenClaw Tools & Environment Configuration — AI SAFE² Standard
 
 **Load context:** All sessions. This file holds environment-specific lookup values only — channel IDs, paths, and where secrets live. Skills define HOW tools work. This file defines WHERE things are.  

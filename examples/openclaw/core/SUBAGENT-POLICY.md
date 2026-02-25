@@ -1,4 +1,4 @@
-# SUBAGENT-POLICY.md
+## SUBAGENT-POLICY.md
 # OpenClaw Sub-Agent Policy — AI SAFE² Standard
 
 **Load context:** All sessions. The main agent loads this. Sub-agents receive excerpts only — never the full file.  

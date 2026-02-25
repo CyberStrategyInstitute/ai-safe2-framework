@@ -1,4 +1,4 @@
-# IDENTITY.md
+## IDENTITY.md
 # OpenClaw Agent Identity — AI SAFE² Standard
 
 **Load context:** Every request. Keep this file under 10 lines. It is the first thing the agent knows about itself.  

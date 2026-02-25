@@ -1,4 +1,4 @@
-# HEARTBEAT.md
+## HEARTBEAT.md
 # OpenClaw Heartbeat Protocol — AI SAFE² Engage & Monitor Standard
 
 **Load context:** Every session if heartbeats are enabled. During heartbeat turns, this file governs all behavior.  

@@ -1,4 +1,4 @@
-# openclaw_memory.md
+## openclaw_memory.md
 # OpenClaw Memory Protocol — AI SAFE² Enhanced Edition
 
 **Status:** Enhanced Standard (v2.0 — upgrade from original v1 memory vaccine)  

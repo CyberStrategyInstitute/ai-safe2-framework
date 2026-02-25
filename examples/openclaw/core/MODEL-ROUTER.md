@@ -1,4 +1,4 @@
-# MODEL-ROUTER.md
+## MODEL-ROUTER.md
 # OpenClaw Model Routing Policy — AI SAFE² Standard
 
 **Load context:** All sessions. Referenced by AGENTS.md and SUBAGENT-POLICY.md. Full routing config lives in `config/model-routing.json`; this file is the human-readable policy that governs it.  

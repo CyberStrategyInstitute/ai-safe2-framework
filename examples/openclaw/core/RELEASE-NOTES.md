@@ -1,4 +1,4 @@
-# Release Notes
+## Release Notes
 # AI SAFE² OpenClaw Core File Standard — v2.0
 
 **Released:** 2026-02-25  
