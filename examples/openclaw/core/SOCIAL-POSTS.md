@@ -159,6 +159,6 @@ If you're running OpenClaw, any personal AI agent, or thinking about deploying a
 
 *Built on Brian Roemmele's Love Equation · Governed by AI SAFE² v2.1 · Five pillars: Sanitize & Isolate · Audit & Inventory · Fail-Safe & Recovery · Engage & Monitor · Evolve & Educate*
 
-#OpenClaw #AISafety #AIGovernance #AgentSecurity #AISAFE2 #CyberSecurity #ArtificialIntelligence #LoveEquation
+ #OpenClaw #AISafety #AIGovernance #AgentSecurity #AISAFE2 #CyberSecurity #ArtificialIntelligence #LoveEquation
 
 ---

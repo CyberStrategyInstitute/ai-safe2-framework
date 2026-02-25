@@ -1,4 +1,4 @@
-# AGENTS.md
+## AGENTS.md
 # OpenClaw Agent Operating Manual — AI SAFE² Standard
 
 **Status:** Foundational Standard  
