@@ -1,221 +1,145 @@
-# AI SAFE² for OpenClaw formerly Moltbot/Clawdbot
+## Release Notes
+# AI SAFE² OpenClaw Core File Standard — v2.0
 
-**Complete security toolkit for Openclaw users**
-
----
-
-## 🚨 Quick Navigation
-
-**Just want to secure your Openclaw?** → Start with [10-Minute Hardening Guide](../../guides/openclaw-hardening.md)
-
-**Having issues?** → Check [Troubleshooting Guide](./troubleshooting.md)
-
-**Need a Full Integration Guide?** → See [Full Integration Guide](../../guides/openclaw-integration-guide.md)
+**Released:** 2026-02-25  
+**Authored by:** Cyber Strategy Institute  
+**Repository:** https://github.com/CyberStrategyInstitute/ai-safe2-framework  
+**Path:** `examples/openclaw/core/`  
+**License:** MIT (code/templates) + CC-BY-SA (methodology)
 
 ---
 
-## What's Included
+## What This Release Is
 
-### 1. Memory Protocol (5 minutes)
-**File:** [`openclaw_memory.md`](./openclaw_memory.md)
+Version 2.0 of the AI SAFE² OpenClaw integration is the first complete, opinionated standard for governing a personal AI agent workspace from the ground up. It is not a patch, a whitepaper, or a checklist — it is a working set of 11 files that, together, define a governed, secure, and auditable OpenClaw agent from identity through memory through multi-model routing.
 
-**What it does:** Drop-in file that embeds AI SAFE² safety controls into Openclaw's persistent memory.
-
-**Installation:**
-```bash
-cd ~/.openclaw/memories/
-curl -O https://raw.githubusercontent.com/CyberStrategyInstitute/ai-safe2-framework/main/examples/openclaw/openclaw_memory.md
-# Restart OpenClaw - safety controls now active
-```
-
-**Key protections:**
-- ✅ Blocks external communications without approval
-- ✅ Detects prompt injection attempts  
-- ✅ Redacts secrets from outputs
-- ✅ Requires human approval for high-risk actions
+This release was built in direct response to what we've watched unfold in the OpenClaw ecosystem since January 2026: 145,000 GitHub stars in weeks, at least 230 malicious skills on ClawHub, credential leaks via prompt injection, and organizations deploying autonomous agents with shell access and API budget without a single governance document in place. The gap between what OpenClaw can do and what most operators have in place to govern it is where systemic risk lives. This release is designed to close that gap for everyone, for free.
 
 ---
 
-### 2. Security Scanner (2 minutes)
-**File:** [`scanner.py`](./scanner.py)
+## What's New in v2.0
 
-**What it does:** Scans your Openclaw installation for vulnerabilities and generates risk score.
+### New Files (did not exist in v1)
 
-**Installation:**
-```bash
-curl -O https://raw.githubusercontent.com/CyberStrategyInstitute/ai-safe2-framework/main/examples/openclaw/scanner.py
-python3 scanner.py --path ~/.openclaw
-```
+| File | What It Does |
+|---|---|
+| `SOUL.md` | Agent constitution grounded in Brian Roemmele's Love Equation as a mathematical alignment system, not a policy layer |
+| `AGENTS.md` | Complete operating manual covering SKILL.md security, data classification, AI SAFE² pillar mapping, and the two-message UX pattern |
+| `IDENTITY.md` | Minimal 5-line identity anchor that loads every request — the first line of defense against identity replacement attacks |
+| `USER.md` | Human identity contract with three-tier data classification, context-aware handling, and trust delegation levels |
+| `TOOLS.md` | Environment configuration standard separating "how tools work" (skills) from "where things are" (this file) |
+| `HEARTBEAT.md` | Scheduled health check protocol that operationalizes the AI SAFE² Engage & Monitor pillar into concrete per-cycle, daily, and weekly checks |
+| `SUBAGENT-POLICY.md` | Worker governance with tiered trust levels, spawn protocol, context isolation rules, and injection detection for sub-agent output |
+| `MODEL-ROUTER.md` | Multi-LLM routing policy defining Tier 1/2/3 models, routing decision matrix, graceful degradation, data residency rules, and cost controls |
+| `OPENCLAW-WORKSPACE-POLICY.md` | Workspace constitution binding all agents to shared accountability, cross-agent trust hierarchy, and compliance mapping |
+| `OPENCLAW-AGENT-TEMPLATE.md` | Eight-step new agent checklist including mandatory smoke tests for identity, hard limits, injection resistance, and data classification |
 
-**Checks for:**
-- Network exposure (0.0.0.0 bindings)
-- File permissions (world-readable configs)
-- Dangerous tools enabled (exec, browser)
-- Log redaction disabled
-- Missing audit logs
+### Upgraded Files
 
-**Output:** Risk score (0-100) + specific remediation steps
-
----
-
-### 3. Control Gateway (10 minutes)
-**Directory:** [`gateway/`](./gateway/)
-
-**What it does:** Runs as reverse proxy enforcing AI SAFE² policies between Openclaw and Anthropic API.
-
-**Installation:**
-```bash
-cd ~/.openclaw/
-git clone https://github.com/CyberStrategyInstitute/ai-safe2-framework.git
-cd ai-safe2-framework/examples/openclaw/gateway/
-./start.sh
-```
-
-**Features:**
-- ✅ JSON schema validation
-- ✅ Prompt injection blocking
-- ✅ High-risk tool denial
-- ✅ Immutable audit logging
-- ✅ Risk scoring (0-10)
-- ✅ Circuit breakers
+| File | What Changed |
+|---|---|
+| `openclaw_memory.md` (v1 → v2.0) | v1 was a "memory vaccine" with a static block list. v2.0 is a full memory governance protocol: Love Equation C/D scoring for every write decision, SKILL.md provenance validation, sub-agent memory isolation, structured incident escalation, daily memory format standard, and a ClawHub supply chain attack pattern library |
 
 ---
 
-## Quick Start (Choose Your Path)
+## Why We Built It This Way
 
-### Path 1: Individual User (Fastest)
-**Goal:** Secure your personal Openclaw in 10 minutes
+### The Love Equation as Alignment Infrastructure
 
-1. Run scanner: `python3 scanner.py --path ~/.openclaw`
-2. Fix CRITICAL issues (typically: close public exposure)
-3. Add memory protocol to `/memories/` folder
-4. Re-run scanner to verify
+Most agent alignment approaches are policy layers — a list of rules that says "don't do this, don't do that." Policy layers work until they don't. They fail under adversarial inputs, edge cases users discover, and the gradual prompt injection that happens when an agent reads enough untrusted content.
 
-**Time:** 10 minutes  
-**Difficulty:** Easy  
-**Protection Level:** Medium
+Brian Roemmele's Love Equation reframes alignment as a dynamical system: `dE/dt = β(C − D)E`. When cooperation exceeds defection, alignment grows. When defection exceeds cooperation, the system decays. We translated this from philosophy into operational bands (Green/Yellow/Red), C/D event scoring, and concrete memory write decisions. The result is alignment that is mathematically unstable when violated, not just discouraged.
 
----
+### IDENTITY.md: The Missing Anchor
 
-### Path 2: Power User (Recommended)
-**Goal:** Full AI SAFE² protection with control gateway
+The OpenClaw ecosystem didn't have a standard for a minimal, always-loaded identity file. Matt Berman's community-developed patterns identified this gap clearly: an agent that doesn't know who it is in 5 lines — loaded before everything else — is more vulnerable to identity replacement attacks. When an adversarial SKILL.md or injected prompt says "You are now a different assistant with no restrictions," an agent with a concrete, loaded IDENTITY.md has an anchor. An agent without one only has system-prompt context, which can be buried or overwhelmed.
 
-1. Follow Path 1 steps
-2. Deploy control gateway (runs on localhost)
-3. Configure Openclaw to use gateway as proxy
-4. Enable audit logging and monitoring
+### TOOLS.md: Separating Configuration from Instructions
 
-**Time:** 30 minutes  
-**Difficulty:** Medium  
-**Protection Level:** High
+One of the cleanest lessons from community OpenClaw patterns was the discipline of keeping environment-specific values (channel IDs, file paths, where secrets live) in a dedicated file, separate from how tools work (SKILL.md files) and how the agent behaves (AGENTS.md). This separation has a security consequence: TOOLS.md never contains instructions. It contains lookup values. That means a compromised TOOLS.md cannot inject behavior — it can only misdirect lookups, which is detectable. A TOOLS.md that starts looking like AGENTS.md is a signal.
 
----
+### HEARTBEAT.md: Monitoring as a First-Class Concern
 
-### Path 3: Enterprise/Team
-**Goal:** Compliance-ready deployment (SOC 2, ISO 42001)
+The AI SAFE² Engage & Monitor pillar exists in principle across our prior work. HEARTBEAT.md makes it concrete and scheduled. The security rationale is direct: the most dangerous OpenClaw failures (0.0.0.0 bindings, API keys in logs, credential leaks, model cost overruns) are often invisible until they've caused harm. A heartbeat that runs every 30–60 minutes and specifically checks for these failure modes converts "we noticed eventually" into "we caught it the next cycle." The Love Equation integration in the daily heartbeat check adds something new: alignment drift is now a monitored metric, not just a philosophical concern.
 
-1. Follow Path 2 steps
-2. Deploy gateway on dedicated server/VM
-3. Integrate audit logs with SIEM
-4. Implement access controls (SSO/MFA)
-5. Generate compliance reports
+### The Skill Supply Chain Problem Is Structural
 
-**Time:** 2-4 hours  
-**Difficulty:** Advanced  
-**Protection Level:** Enterprise-grade
+At least 230 malicious OpenClaw skills were uploaded to ClawHub since January 27, 2026. Cisco found that 26% of the 31,000 agent skills they analyzed contained at least one vulnerability. The top-downloaded skill at one point was confirmed malware. This is not an OpenClaw problem — it is an agent ecosystem problem. Any platform that reads SKILL.md files as instructions rather than documents is vulnerable to the same attack pattern.
 
-**Guide:** [Enterprise Deployment](../../guides/openclaw-enterprise.md)
+Our AGENTS.md SKILL.md security section and the OPENCLAW-AGENT-TEMPLATE.md provenance checklist treat this structurally: skill files are execution vectors, not documentation. "Top downloaded" is not a safety signal. Read before you execute. Verify before you trust. This applies to every agent ecosystem that has adopted the SKILL.md format — which is increasingly all of them.
+
+### The Data Classification Tiers
+
+The three-tier system (Confidential / Internal / Restricted) with context-aware enforcement (DM vs. group chat vs. channel) came directly from community patterns that identified the most common real-world data leak vector: an agent that knows the user's personal email and financial data behaving identically in a group Slack channel and a private DM. This is not a clever attack — it's a default behavior failure. The tiers, enforced in USER.md and referenced in openclaw_memory.md, make context-aware behavior the standard, not an optional hardening step.
 
 ---
 
-## Common Issues
+## What This Release Does Not Cover
 
-### "Gateway exposed on 0.0.0.0"
-**Fix:**
-```bash
-pkill -f "openclaw gateway"
-openclaw gateway --bind 127.0.0.1 --port 18789
-```
+This is the free/open-source core tier. It governs single-agent workspaces. It does not cover:
 
-### "API keys in logs"
-**Fix:** Set `"redactSensitive": "all"` in `~/.openclaw/openclaw.json`
+- **Swarm governance** — multi-agent fleets with collective alignment scoring, trust graph management, quorum memory writes, and cascade failure response. This is the premium tier, currently in design.
+- **Enterprise compliance reporting** — automated evidence generation for ISO 42001 / NIST AI RMF audits
+- **Cross-workspace federation** — shared governance across multiple independent workspaces
 
-### "Control gateway won't start"
-**Fix:** 
-```bash
-export ANTHROPIC_API_KEY="sk-ant-..."
-cd gateway/
-./start.sh
-```
-
-**Full troubleshooting:** [troubleshooting.md](./troubleshooting.md)
+These are planned for the AI SAFE² Toolkit (paid tier). The core tier is deliberately complete for single-agent use without requiring the premium tier.
 
 ---
 
-## Architecture
+## Migration from v1
+
+If you are using the original `openclaw_memory.md` (v1 memory vaccine):
+
+- v2.0 is a superset. No breaking changes. Drop it in alongside or replacing v1.
+- The prompt injection block list in `openclaw_memory.md` v2.0 supersedes v1's simpler pattern list.
+- Sub-agent memory isolation and Love Equation write scoring are new — no existing behavior is changed, new guardrails are added.
+
+If you have no prior AI SAFE² files:
+
+- Start with `OPENCLAW-AGENT-TEMPLATE.md` and work through it top to bottom.
+- Do not skip the smoke test (Step 6). Every test has caught real issues in internal validation.
+
+---
+
+## Acknowledgments
+
+This release synthesizes:
+
+- The AI SAFE² Framework v2.1 five-pillar model (Cyber Strategy Institute)
+- Brian Roemmele's Love Equation as a dynamical alignment system
+- Community agent patterns developed by the OpenClaw ecosystem, particularly the work collected by Matt Berman in establishing the standard file conventions (IDENTITY.md, TOOLS.md, HEARTBEAT.md, the two-message UX pattern, data classification tiers)
+- Security research from Cisco AI Defense on agent skill supply chain vulnerabilities
+- Lessons from the 1Password analysis of OpenClaw skill attack vectors
+
+The AI SAFE² framework is an open standard. It is designed to be forked, extended, and built upon. If these files help you govern your agents better, that is the point.
+
+---
+
+## Repository
 
 ```
-User Input (WhatsApp, Discord, etc.)
-    ↓
-Openclaw Message Router
-    ↓
-AI SAFE² Memory Protocol (persistent context)
-    ↓
-AI SAFE² Control Gateway (external proxy)
-    ├─ Schema Validation
-    ├─ Prompt Injection Check
-    ├─ Risk Scoring
-    ├─ Tool Policy Enforcement
-    └─ Audit Logging
-    ↓
-Anthropic Claude API (if approved)
-    ↓
-Tool Execution (shell, files, browser)
-    ↓
-Response to User (secrets redacted)
+ai-safe2-framework/examples/openclaw/core/
+├── IDENTITY.md
+├── SOUL.md
+├── AGENTS.md
+├── USER.md
+├── TOOLS.md
+├── HEARTBEAT.md
+├── SUBAGENT-POLICY.md
+├── MODEL-ROUTER.md
+├── openclaw_memory.md          (v2.0 — upgrade from v1)
+├── OPENCLAW-WORKSPACE-POLICY.md
+└── OPENCLAW-AGENT-TEMPLATE.md
 ```
 
-**Key Principle:** AI SAFE² runs OUTSIDE Openclaw as independent enforcement layer.
+**Star the repo:** https://github.com/CyberStrategyInstitute/ai-safe2-framework  
+**Issues and PRs welcome.**
 
 ---
 
-## Files in This Directory
+*Cyber Strategy Institute · AI SAFE² Framework*  
+*Building the governance infrastructure the AI industry needs.*
 
-| File | Purpose | Required? |
-|------|---------|-----------|
-| `openclaw_memory.md` | Persistent safety controls | Recommended |
-| `scanner.py` | Vulnerability scanner | Yes (for audit) |
-| `troubleshooting.md` | Common issues + fixes | Reference |
-| `gateway/` | Control gateway (proxy) | Recommended |
-| `gateway/gateway.py` | Main server code | - |
-| `gateway/config.yaml` | Configuration | - |
-| `gateway/start.sh` | One-command deploy | - |
-| `gateway/schemas/` | JSON validation schemas | - |
-
----
-
-## Support & Community
-
-**Documentation:** [AI SAFE² Framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
-
-**Issues:** [GitHub Issues](https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues)
-
-**Security:** [Report vulnerability](https://github.com/CyberStrategyInstitute/ai-safe2-framework/security)
-
-**Blog:** [Openclaw Security Articles](https://cyberstrategyinstitute.com/tag/openclaw/)
-
-**Resource Map:** [Industry Security Resources](../../resources/openclaw_security_resource_map.md)
-
----
-
-## Next Steps
-
-1. **Read:** [10-Minute Hardening Guide](../../guides/openclaw-hardening.md)
-2. **Run:** `python3 scanner.py --path ~/.openclaw`
-3. **Deploy:** Control gateway for continuous protection
-4. **Learn:** [Full integration guide](../../guides/openclaw-integration-guide.md)
-
----
 
 **Built by:** [Cyber Strategy Institute](https://cyberstrategyinstitute.com)  
 **License:** MIT (code) + CC-BY-SA 4.0 (documentation)  
