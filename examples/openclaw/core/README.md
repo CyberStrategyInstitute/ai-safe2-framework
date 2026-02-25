@@ -123,7 +123,7 @@ Every file in this standard maps to at least one AI SAFE² pillar:
 | **A — Audit & Inventory** | `USER.md` (data classification), `TOOLS.md` (config audit), `SUBAGENT-POLICY.md` (spawn logging), `OPENCLAW-WORKSPACE-POLICY.md` (agent registry) |
 | **F — Fail-Safe & Recovery** | `SOUL.md` (Red band protocol), `AGENTS.md` (confirmation gates), `MODEL-ROUTER.md` (graceful degradation), `SUBAGENT-POLICY.md` (failure handling) |
 | **E — Engage & Monitor** | `HEARTBEAT.md` (scheduled monitoring), `openclaw_memory.md` (alignment drift tracking), `MODEL-ROUTER.md` (cost alerts) |
-| **² — Evolve & Educate** | `OPENCLAW-AGENT-TEMPLATE.md` (smoke tests), `OPENCLAW-WORKSPACE-POLICY.md` (quarterly review), all files (PR-gated change control) |
+| **E — Evolve & Educate** | `OPENCLAW-AGENT-TEMPLATE.md` (smoke tests), `OPENCLAW-WORKSPACE-POLICY.md` (quarterly review), all files (PR-gated change control) |
 
 ---
 
