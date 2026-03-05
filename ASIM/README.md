@@ -225,7 +225,7 @@ Over time they develop structured governance, monitoring, and safety capabilitie
 
 The ladder provides a roadmap toward full artificial intelligence sovereignty.
 
-### Level 1 Ad Hoc Probabilistic
+### Level 1 Chaos - Ad Hoc Probabilistic
 
 Artificial intelligence systems operate without formal governance.
 
@@ -234,7 +234,7 @@ Characteristics include:
 - minimal monitoring
 - unpredictable results
 
-### Level 2 Observable and Contained
+### Level 2 Visibility - Observable and Contained
 
 Basic monitoring and containment controls are implemented.
 
@@ -245,7 +245,7 @@ Capabilities include:
 - sandboxing
 - agent inventory
 
-### Level 3 Defined Semantic Governance
+### Level 3 Governance - Defined Semantic Governance
 
 Organizations define standardized governance practices.
 
@@ -256,7 +256,7 @@ Examples include:
 - agent safety policies
 - adversarial monitoring
 
-### Level 4 Quantitatively Managed Runtime
+### Level 4 Control - Quantitatively Managed Runtime
 
 Artificial intelligence safety is measured and enforced through metrics.
 
@@ -266,7 +266,7 @@ Examples include:
 - failure thresholds
 - runtime monitoring metrics
 
-### Level 5 Sovereign Assurance
+### Level 5 Sovereignty
 
 Artificial intelligence systems operate under full governance authority.
 
