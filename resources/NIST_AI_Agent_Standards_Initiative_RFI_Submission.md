@@ -7,7 +7,7 @@
 
 ---
 
-**Respondent:** Vincent Sullivan, Principal Architect, Cyber Strategy Institute
+**Respondent:** Principal Architect, Cyber Strategy Institute
 **Topic:** AI Agent Security, Safe Guardrails, and Runtime Governance
 **Framework Reference:** AI SAFE² v2.1 (open-source, board-ratified GRC standard for agentic AI)
 **NIST RFI:** [AI Agent Standards Initiative](https://www.nist.gov/caisi/ai-agent-standards-initiative)
