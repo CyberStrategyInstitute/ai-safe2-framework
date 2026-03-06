@@ -347,6 +347,16 @@ If you use AI SAFE² in research or commercial tooling, please cite the Cyber St
   note = {Version 2.1. Agentic & Distributed Edition}
 }
 ```
+## Star History
+
+<a href="https://www.star-history.com/?repos=CyberStrategyInstitute%2Fai-safe2-framework&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/image?repos=CyberStrategyInstitute/ai-safe2-framework&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/image?repos=CyberStrategyInstitute/ai-safe2-framework&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/image?repos=CyberStrategyInstitute/ai-safe2-framework&type=date&legend=top-left" />
+ </picture>
+</a>
+
 
 ## ⚖️ Licensing & Usage Rights
 This project uses a Dual-License Model to support both open innovation and standardized governance.
