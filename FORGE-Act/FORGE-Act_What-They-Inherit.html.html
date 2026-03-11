@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Act — What You Build Today, They Inherit Tomorrow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&family=Nunito+Sans:wght@400;600;700&display=swap');
+:root{
+  --fire:#E8600A;--navy:#0B1D3A;--gold:#F59E0B;--teal:#0D9488;
+  --warm:#FFF8F2;--sky:#EFF6FF;--green:#ECFDF5;--soft:#F8F7F5;
+  --iron:#1F2937;--smoke:#6B7280;
+  --font-d:'Bebas Neue',Impact,sans-serif;--font-h:'Nunito',sans-serif;
+  --font-b:'Nunito Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-b);background:#fff;color:var(--iron);width:8.5in;min-height:11in;margin:0 auto;}
+.page{width:8.5in;min-height:11in;display:flex;flex-direction:column;}
+
+/* HEADER — warm, parental, hopeful */
+.header{background:var(--warm);border-bottom:3px solid var(--fire);padding:1rem 1.4rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;}
+.gen-tag{display:inline-flex;align-items:center;gap:0.3rem;font-family:var(--font-h);font-size:0.6rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);border:1.5px solid var(--teal);border-radius:999px;padding:0.18rem 0.5rem;margin-bottom:0.3rem;}
+h1{font-family:var(--font-h);font-size:2.2rem;font-weight:800;color:var(--iron);line-height:1.05;margin-bottom:0.3rem;}
+h1 em{color:var(--fire);font-style:normal;}
+h1 span{color:var(--teal);}
+.deck{font-family:var(--font-b);font-size:0.72rem;color:var(--smoke);line-height:1.6;max-width:5.5in;}
+.header-image{background:linear-gradient(135deg,var(--navy),#1a3a6e);padding:0.8rem 1rem;border-radius:8px;text-align:center;min-width:2.2in;}
+.hi-icon{font-size:2.2rem;}
+.hi-text{font-family:var(--font-h);font-size:0.65rem;font-weight:700;color:rgba(255,255,255,0.9);margin-top:0.2rem;}
+.hi-sub{font-family:var(--font-b);font-size:0.58rem;color:rgba(255,255,255,0.6);margin-top:0.1rem;}
+
+/* TOP STAT BAR */
+.stat-bar{background:var(--navy);padding:0.4rem 1.4rem;display:grid;grid-template-columns:repeat(4,1fr);gap:0;text-align:center;}
+.sb{padding:0 0.5rem;border-right:1px solid rgba(255,255,255,0.1);}
+.sb:last-child{border-right:none;}
+.sb .n{font-family:var(--font-d);font-size:1.4rem;color:var(--gold);line-height:1;}
+.sb .l{font-family:var(--font-b);font-size:0.56rem;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.65);}
+
+/* BODY */
+.body{flex:1;display:grid;grid-template-columns:1.1fr 1fr;gap:0;}
+.left-col{padding:0.85rem 1rem;border-right:1px solid #e5e4e0;}
+.right-col{padding:0.85rem 1rem;background:var(--soft);}
+
+.eyebrow{font-family:var(--font-h);font-size:0.58rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--fire);margin-bottom:0.2rem;}
+.section-head{font-family:var(--font-h);font-size:1.45rem;font-weight:800;color:var(--iron);line-height:1.1;margin-bottom:0.4rem;}
+p{font-size:0.71rem;line-height:1.65;margin-bottom:0.4rem;font-family:var(--font-b);}
+h3{font-family:var(--font-h);font-size:0.83rem;font-weight:800;color:var(--navy);margin:0.5rem 0 0.2rem;}
+ul{list-style:none;margin:0 0 0.4rem;padding:0;}
+ul li{font-size:0.7rem;line-height:1.55;padding-left:1.3em;position:relative;margin-bottom:0.2rem;}
+ul li::before{content:'✓';color:var(--teal);font-size:0.65rem;font-weight:800;position:absolute;left:0;top:0.1em;}
+
+/* THREAT BOX — parental concern */
+.concern-box{background:var(--sky);border:1px solid #BFDBFE;border-left:4px solid #2563EB;padding:0.55rem 0.7rem;border-radius:0 6px 6px 0;margin:0.4rem 0;}
+.concern-label{font-family:var(--font-h);font-size:0.58rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:#2563EB;margin-bottom:0.2rem;}
+.concern-box p{font-size:0.69rem;color:var(--iron);margin:0;}
+
+/* GOOD BOX */
+.good-box{background:var(--green);border:1px solid #A7F3D0;border-left:4px solid var(--teal);padding:0.55rem 0.7rem;border-radius:0 6px 6px 0;margin:0.4rem 0;}
+.good-label{font-family:var(--font-h);font-size:0.58rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);margin-bottom:0.2rem;}
+.good-box p{font-size:0.69rem;color:var(--iron);margin:0;}
+
+/* INHERITANCE TABLE */
+.inherit-table{width:100%;border-collapse:collapse;font-size:0.63rem;margin:0.4rem 0;}
+.inherit-table th{background:var(--navy);color:#fff;font-family:var(--font-h);font-size:0.6rem;font-weight:700;text-transform:uppercase;padding:0.28rem 0.4rem;text-align:left;}
+.inherit-table td{padding:0.25rem 0.4rem;border-bottom:1px solid #e5e4e0;font-family:var(--font-b);}
+.inherit-table tr:last-child td{border-bottom:none;}
+.inherit-table td.bad{color:#dc2626;font-size:0.62rem;}
+.inherit-table td.good{color:var(--teal);font-weight:600;}
+.inherit-table tr:nth-child(odd) td{background:var(--soft);}
+
+/* QUOTE */
+.parent-quote{background:var(--warm);border:1px solid #FED7AA;padding:0.55rem 0.7rem;border-radius:6px;margin:0.4rem 0;}
+.parent-quote p{font-family:var(--font-h);font-style:italic;font-size:0.73rem;font-weight:600;color:var(--iron);line-height:1.5;}
+.parent-quote .attr{font-family:var(--font-b);font-size:0.58rem;color:var(--smoke);margin-top:0.2rem;}
+
+/* GUILD CARD */
+.guild-features{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin:0.4rem 0;}
+.gf{background:#fff;border:1px solid #e5e4e0;border-radius:6px;padding:0.4rem 0.5rem;border-top:3px solid var(--fire);}
+.gf.teal{border-top-color:var(--teal);}
+.gf.gold{border-top-color:var(--gold);}
+.gf.navy{border-top-color:var(--navy);}
+.gf .gl{font-family:var(--font-h);font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--fire);margin-bottom:0.12rem;}
+.gf.teal .gl{color:var(--teal);}
+.gf.gold .gl{color:var(--gold);}
+.gf.navy .gl{color:var(--navy);}
+.gf p{font-size:0.67rem;color:var(--smoke);margin:0;}
+
+/* MYTH BUSTERS */
+.myth{background:var(--soft);border-radius:6px;padding:0.5rem 0.7rem;margin:0.4rem 0;}
+.myth .m-q{font-family:var(--font-h);font-size:0.72rem;font-weight:800;color:var(--iron);margin-bottom:0.15rem;}
+.myth .m-q span{color:#dc2626;}
+.myth .m-a{font-family:var(--font-b);font-size:0.68rem;color:var(--smoke);line-height:1.5;}
+.myth .m-a strong{color:var(--teal);}
+
+/* ACTION */
+.action-list{margin:0.4rem 0;}
+.action-item{display:grid;grid-template-columns:2.2rem 1fr;gap:0.4rem;margin-bottom:0.4rem;align-items:start;}
+.action-item .num{background:var(--fire);color:#fff;font-family:var(--font-h);font-size:0.9rem;font-weight:800;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.05rem;}
+.action-item .txt{font-family:var(--font-b);font-size:0.68rem;color:var(--iron);line-height:1.55;}
+.action-item .txt strong{display:block;font-weight:700;color:var(--navy);font-size:0.72rem;margin-bottom:0.08rem;}
+
+/* FOOTER */
+.footer{background:var(--navy);padding:0.45rem 1.4rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;}
+.footer-l{font-family:var(--font-b);font-size:0.6rem;color:rgba(255,255,255,0.5);}
+.footer-c{font-family:var(--font-d);font-size:1.1rem;color:var(--gold);text-align:center;}
+.footer-r{font-family:var(--font-b);font-size:0.6rem;color:rgba(255,255,255,0.5);text-align:right;}
+.ht{color:var(--fire);font-weight:700;}
+
+@media print{body{width:8.5in;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="gen-tag">🧒 For Parents of Generation Alpha · Born 2010–2025</div>
+    <h1>What You Build <em>Today,</em><br>They <span>Inherit</span> Tomorrow.</h1>
+    <div class="deck">Your children are growing up inside algorithms designed by corporations who profit from their attention. The FORGE Act ensures they inherit open, citizen-owned AI tools — not corporate-controlled digital dependencies. This is the most important parenting decision of the AI era.</div>
+  </div>
+  <div class="header-image">
+    <div class="hi-icon">🌅</div>
+    <div class="hi-text">Dawn Over the Forge</div>
+    <div class="hi-sub">The next generation inherits<br>a sunrise, not a wasteland.</div>
+  </div>
+</div>
+<div class="stat-bar">
+  <div class="sb"><div class="n">$50K</div><div class="l">Min Guild Formation Grant</div></div>
+  <div class="sb"><div class="n">3,143</div><div class="l">Counties — Equal Access</div></div>
+  <div class="sb"><div class="n">0¢</div><div class="l">To Mega-Corp Platforms</div></div>
+  <div class="sb"><div class="n">10 Yrs</div><div class="l">Open Source Required Post-Acquisition</div></div>
+</div>
+
+<div class="body">
+<!-- LEFT COLUMN -->
+<div class="left-col">
+  <div class="eyebrow">The Parental Stakes</div>
+  <div class="section-head">Two Futures For Your Child — You Choose Which One We Build</div>
+
+  <div class="concern-box">
+    <div class="concern-label">📱 What Corporate AI Means For Your Child</div>
+    <p>Recommendation algorithms optimized for engagement — not wellbeing. Data harvested before they're old enough to consent. AI tools they can never truly own or understand. An education system that adopted ed-tech for decades while test scores declined. A future where they're <em>dependent</em> on platforms instead of capable of building alternatives.</p>
+  </div>
+
+  <div class="good-box">
+    <div class="good-label">🌱 What FORGE Means For Your Child</div>
+    <p>AI tools that run <strong>locally on family hardware</strong> — no corporate surveillance. Guild apprenticeships that teach <strong>hands-on skills alongside AI</strong>, not just screen time. Open-source tools <strong>no corporation can ever take away</strong>. Equal access in rural Appalachia or suburban Montana as in San Francisco.</p>
+  </div>
+
+  <h3>The Two Inheritance Paths</h3>
+  <table class="inherit-table">
+    <tr><th>Path A — FORGE America</th><th>Path B — Corporate AI America</th></tr>
+    <tr><td class="good">Family-controlled, locally-run AI</td><td class="bad">Corporate surveillance embedded in every device</td></tr>
+    <tr><td class="good">Guild apprenticeship: real skills + real tools</td><td class="bad">More ed-tech, declining scores, screen dependency</td></tr>
+    <tr><td class="good">Equal access: rural = urban</td><td class="bad">AI prosperity for coastal metros only</td></tr>
+    <tr><td class="good">Open source: never revoked, always forkable</td><td class="bad">Platform dependency: prices go up, features disappear</td></tr>
+    <tr><td class="good">Community cyber defense tools</td><td class="bad">School networks, hospitals vulnerable to breaches</td></tr>
+  </table>
+
+  <h3>Counter-Recruitment: The Real Danger</h3>
+  <p>EA organizations actively recruit high schoolers and college students into AI doom ideology with $50,000 fellowships and summer programs. They offer purpose and community — then gradually move recruits toward an "existential risk" worldview that has documented links to psychological harm, cult-like dynamics, and in extreme cases, documented violence.</p>
+  <p>FORGE offers the <strong>positive alternative</strong>: real purpose, funded tools, genuine community, and civic engagement — with no ideological bait-and-switch.</p>
+
+  <h3>What Your Community Actually Needs</h3>
+  <ul>
+    <li>Open-source tools for your child's <strong>school network security</strong></li>
+    <li>Community-owned <strong>water system monitoring</strong> (Volt Typhoon is real)</li>
+    <li>Local AI tools that <strong>protect family data privacy</strong></li>
+    <li>Guild apprenticeship networks for <strong>hands-on tech education</strong></li>
+    <li>Zero-knowledge privacy standards so <strong>your child's data stays yours</strong></li>
+  </ul>
+
+  <div class="parent-quote">
+    <p>"The best education isn't a $200K degree. It's building real tools alongside real builders. FORGE guilds are the apprenticeship your child deserves."</p>
+    <div class="attr">— FORGE Act Messaging Framework, 2026</div>
+  </div>
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="right-col">
+  <div class="eyebrow">FORGE For Families</div>
+  <div class="section-head">Cognitive Sovereignty Is The New Parenting Priority</div>
+
+  <p>Your child is having their identity formed inside algorithmic systems optimized for corporate profit. FORGE funds the tools that give families — not corporations — control over what AI does in your home.</p>
+
+  <h3>What FORGE Guilds Offer Your Family</h3>
+  <div class="guild-features">
+    <div class="gf">
+      <div class="gl">🛠 Hands-On Skills</div>
+      <p>Deep focus and physical-world competence — the two things algorithmic childhood steals.</p>
+    </div>
+    <div class="gf teal">
+      <div class="gl">👨‍🏫 Mentorship</div>
+      <p>Experienced engineers, farmers, and builders mentoring your child — not more screens.</p>
+    </div>
+    <div class="gf gold">
+      <div class="gl">🏘 Community</div>
+      <p>Local guild networks mean your child learns alongside peers and experienced adults from your actual community.</p>
+    </div>
+    <div class="gf navy">
+      <div class="gl">🔒 Privacy Built In</div>
+      <p>All FORGE tools require local-first operation. Your family's AI stays in your home.</p>
+    </div>
+  </div>
+
+  <h3>Common Concerns — Addressed Honestly</h3>
+  <div class="myth">
+    <div class="m-q">😟 <span>"Isn't AI dangerous for kids?"</span></div>
+    <div class="m-a">The risk isn't AI itself — it's <strong>corporate-controlled AI</strong> with no oversight, no privacy, and no off switch. FORGE funds the open-source tools that give families actual control. Understanding and owning your AI tools is safer than being dependent on platforms you can't see inside.</div>
+  </div>
+  <div class="myth">
+    <div class="m-q">🤔 <span>"My child is too young for this."</span></div>
+    <div class="m-a">FORGE doesn't recruit children — it funds the community infrastructure parents build <em>for</em> their children. Guild apprenticeships are for teens and adults. The parenting decision is: do you build the community tools now, or wait until your child is already dependent on corporate alternatives?</div>
+  </div>
+  <div class="myth">
+    <div class="m-q">💭 <span>"Will my rural town even benefit?"</span></div>
+    <div class="m-a">FORGE has a <strong>1.25× rural funding multiplier</strong>. A farmer in Nebraska gets the same AI tools as a programmer in California. FORGE is the first federal tech program where rural America is not a second-class recipient — it's a design principle.</div>
+  </div>
+
+  <div class="action-list">
+    <div class="eyebrow" style="margin-bottom:0.3rem;">Your Family Action Plan</div>
+    <div class="action-item">
+      <div class="num">1</div>
+      <div class="txt"><strong>Talk to Your School Board</strong>Bring FORGE to your PTA meeting or school board. Advocate for guild apprenticeship partnerships with local FORGE creators. This is community infrastructure — not a federal program dictating curriculum.</div>
+    </div>
+    <div class="action-item">
+      <div class="num">2</div>
+      <div class="txt"><strong>Contact Your Representative</strong>Script: "I'm a parent in [district]. Please support the FORGE Act. It protects my child's digital future by funding open-source, locally-controlled AI tools — instead of corporate platforms. 28 funded projects per district. Zero to mega-corps."</div>
+    </div>
+    <div class="action-item">
+      <div class="num">3</div>
+      <div class="txt"><strong>Share With Your Parent Network</strong>Post on Instagram, Facebook, or your neighborhood app. Tag <span class="ht">#FORGEAct</span> <span class="ht">#FamilyAI</span>. Ask: "What world do we want our kids to inherit?" Share this 1-pager.</div>
+    </div>
+    <div class="action-item">
+      <div class="num">4</div>
+      <div class="txt"><strong>Support Local Guild Formation</strong>Find or start a FORGE guild in your district. Guild Formation Grants: $50K–$200K for 5+ builders. Your community controls the culture, the curriculum, and the tools. No federal strings.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-l">FORGE Act · Cyber Strategy Institute · March 2026<br>For Parents of Generation Alpha · Citizen-first · Open forever</div>
+  <div class="footer-c">FORGE.GOV</div>
+  <div class="footer-r"><span class="ht">#FORGEAct</span> · <span class="ht">#FamilyAI</span> · <span class="ht">#CitizenAI</span><br>Every Tool Open Source · Every Community Defended</div>
+</div>
+
+</div>
+</body>
+</html>

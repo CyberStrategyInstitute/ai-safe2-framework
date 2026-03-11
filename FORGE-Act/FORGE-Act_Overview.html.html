@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Act — The American Marshall Plan for AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+:root {
+  --fire:#E8600A; --navy:#0B1D3A; --gold:#FFD60A; --steel:#8FA8C0;
+  --ash:#F4F1EC; --ember:#C2410C; --iron:#2D3748; --smoke:#64748B;
+  --font-d:'Bebas Neue',Impact,sans-serif; --font-h:'Oswald','Arial Narrow',sans-serif;
+  --font-b:'Source Sans 3',Georgia,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-b);background:#fff;color:var(--iron);line-height:1.5;width:8.5in;min-height:11in;margin:0 auto;}
+.page{width:8.5in;min-height:11in;display:grid;grid-template-rows:auto 1fr auto;background:#fff;}
+
+/* HEADER */
+.header{background:var(--navy);color:#fff;padding:0;display:grid;grid-template-columns:1fr auto;align-items:stretch;}
+.header-left{padding:1.1rem 1.4rem;border-right:3px solid var(--fire);}
+.logo-row{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.25rem;}
+.logo-flame{width:40px;height:48px;}
+.logo-text .act{font-family:var(--font-d);font-size:2.8rem;color:#fff;line-height:0.95;letter-spacing:0.04em;}
+.logo-text .act span{color:var(--gold);}
+.logo-text .subtitle{font-family:var(--font-h);font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--steel);font-weight:400;}
+.header-tagline{font-family:var(--font-h);font-size:0.85rem;color:var(--steel);font-weight:400;margin-top:0.5rem;font-style:italic;}
+.header-right{background:var(--fire);padding:0.9rem 1.2rem;display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:3.2in;}
+.header-right .big-stat{font-family:var(--font-d);font-size:2.6rem;color:#fff;line-height:1;}
+.header-right .big-stat span{color:var(--gold);}
+.header-right .stat-label{font-family:var(--font-h);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.85);text-align:center;margin-top:0.2rem;}
+.header-right .stat-sub{font-family:var(--font-b);font-size:0.7rem;color:rgba(255,255,255,0.7);text-align:center;margin-top:0.15rem;}
+
+/* MAIN GRID */
+.main{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;padding:0;}
+.col{padding:0.85rem 0.9rem;border-right:1px solid #e0dbd4;}
+.col:last-child{border-right:none;}
+
+.section-label{font-family:var(--font-h);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--fire);font-weight:700;margin-bottom:0.4rem;}
+h2{font-family:var(--font-d);font-size:1.55rem;color:var(--navy);line-height:1.1;margin-bottom:0.45rem;}
+h3{font-family:var(--font-h);font-size:0.88rem;color:var(--navy);font-weight:700;margin-bottom:0.2rem;margin-top:0.6rem;}
+p{font-size:0.72rem;line-height:1.55;color:var(--iron);margin-bottom:0.35rem;}
+ul{list-style:none;margin:0;padding:0;}
+ul li{font-size:0.71rem;line-height:1.5;color:var(--iron);padding-left:1em;position:relative;margin-bottom:0.2rem;}
+ul li::before{content:'▶';color:var(--fire);font-size:0.5rem;position:absolute;left:0;top:0.25em;}
+
+/* THREAT BOX */
+.threat-box{background:var(--navy);color:#fff;padding:0.6rem 0.75rem;border-radius:4px;margin-bottom:0.5rem;}
+.threat-box .tb-label{font-family:var(--font-h);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--fire);margin-bottom:0.2rem;}
+.threat-box p{color:rgba(255,255,255,0.88);font-size:0.69rem;margin-bottom:0;}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin:0.5rem 0;}
+.stat-card{background:var(--ash);padding:0.4rem 0.5rem;border-radius:4px;text-align:center;border-top:2px solid var(--fire);}
+.stat-card .n{font-family:var(--font-d);font-size:1.4rem;color:var(--fire);line-height:1;}
+.stat-card .l{font-family:var(--font-h);font-size:0.56rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--smoke);}
+
+/* MIDDLE CALL-OUT */
+.callout{background:linear-gradient(135deg,var(--navy) 0%,#1a3a6e 100%);padding:0.65rem 0.8rem;border-radius:4px;margin:0.4rem 0;}
+.callout p{color:#fff;font-size:0.72rem;margin:0;}
+.callout p strong{color:var(--gold);}
+
+/* FORGE PILLARS */
+.pillars{display:grid;grid-template-columns:repeat(5,1fr);gap:0.3rem;margin:0.4rem 0;}
+.pillar{background:var(--fire);padding:0.35rem 0.25rem;border-radius:3px;text-align:center;}
+.pillar .pi{font-size:1rem;display:block;}
+.pillar .pt{font-family:var(--font-h);font-size:0.54rem;text-transform:uppercase;color:#fff;font-weight:700;display:block;margin-top:0.1rem;}
+.pillar:nth-child(2){background:#C2410C;}
+.pillar:nth-child(3){background:var(--navy);}
+.pillar:nth-child(4){background:#1a3a6e;}
+.pillar:nth-child(5){background:#0d2a52;}
+
+/* COMPARE TABLE */
+.compare{width:100%;border-collapse:collapse;font-size:0.65rem;margin:0.4rem 0;}
+.compare th{background:var(--navy);color:#fff;font-family:var(--font-h);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;padding:0.3rem 0.4rem;text-align:left;}
+.compare td{padding:0.25rem 0.4rem;border-bottom:1px solid #e8e4de;vertical-align:top;}
+.compare tr:last-child td{border-bottom:none;}
+.compare td.bad{color:#dc2626;font-size:0.62rem;}
+.compare td.good{color:#16a34a;font-weight:600;}
+.compare tr:nth-child(even) td{background:var(--ash);}
+
+/* ACTIONS */
+.action-steps{counter-reset:steps;}
+.action-step{display:grid;grid-template-columns:1.8rem 1fr;gap:0.4rem;align-items:start;margin-bottom:0.4rem;}
+.action-step::before{content:counter(steps);counter-increment:steps;background:var(--fire);color:#fff;font-family:var(--font-d);font-size:0.9rem;width:1.8rem;height:1.8rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.action-step-text{font-size:0.69rem;padding-top:0.25rem;}
+.action-step-text strong{display:block;font-family:var(--font-h);font-size:0.72rem;color:var(--navy);}
+
+/* QUOTE */
+.forge-quote{border-left:3px solid var(--fire);padding:0.4rem 0.6rem;margin:0.4rem 0;background:var(--ash);}
+.forge-quote p{font-style:italic;font-size:0.7rem;color:var(--iron);}
+.forge-quote .source{font-family:var(--font-h);font-size:0.6rem;color:var(--smoke);margin-top:0.2rem;font-style:normal;}
+
+/* BANNER ROW */
+.banner-row{background:var(--fire);padding:0.5rem 1.4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.banner-item{text-align:center;color:#fff;}
+.banner-item .bn{font-family:var(--font-d);font-size:1.6rem;color:var(--gold);line-height:1;}
+.banner-item .bl{font-family:var(--font-h);font-size:0.58rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.9);}
+
+/* FOOTER */
+.footer{background:var(--navy);padding:0.5rem 1.4rem;display:flex;justify-content:space-between;align-items:center;}
+.footer-left{font-family:var(--font-h);font-size:0.62rem;color:var(--steel);}
+.footer-right{font-family:var(--font-h);font-size:0.62rem;color:var(--steel);text-align:right;}
+.footer-cta{background:var(--fire);color:#fff;font-family:var(--font-h);font-size:0.68rem;padding:0.25rem 0.7rem;border-radius:3px;text-decoration:none;font-weight:700;letter-spacing:0.05em;}
+
+/* HASH TAG */
+.hashtag{font-family:var(--font-h);color:var(--fire);font-weight:700;}
+
+/* SEPARATOR LINE */
+.fire-line{height:2px;background:linear-gradient(90deg,var(--fire),var(--gold),var(--fire));margin:0;}
+
+@media print{body{width:8.5in;}.page{min-height:11in;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo-row">
+      <svg class="logo-flame" viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="38" width="32" height="8" rx="2" fill="#0B1D3A"/>
+        <rect x="8" y="34" width="24" height="6" rx="1" fill="#0B1D3A"/>
+        <path d="M20 2 C14 10 8 16 10 26 C12 32 16 35 20 35 C24 35 28 32 30 26 C32 16 26 10 20 2Z" fill="url(#fg)"/>
+        <path d="M20 12 C17 18 15 22 16 27 C17 30 18.5 32 20 32 C21.5 32 23 30 24 27 C25 22 23 18 20 12Z" fill="url(#fg2)"/>
+        <circle cx="20" cy="8" r="2.5" fill="#FFD60A"/>
+        <defs>
+          <linearGradient id="fg" x1="20" y1="2" x2="20" y2="35" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FFD60A"/>
+            <stop offset="50%" stop-color="#E8600A"/>
+            <stop offset="100%" stop-color="#C2410C"/>
+          </linearGradient>
+          <linearGradient id="fg2" x1="20" y1="12" x2="20" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#FFF" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#FFD60A" stop-opacity="0.5"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="logo-text">
+        <div class="act">F<span>O</span>RGE <span style="font-size:1.6rem;color:var(--steel);">ACT</span></div>
+        <div class="subtitle">Freedom · Open-Source · Research · Growth · Engine</div>
+      </div>
+    </div>
+    <div class="header-tagline">"The American Marshall Plan for AI — Every Dollar to Citizens. Every Tool Open Source. Every Community Defended."</div>
+  </div>
+  <div class="header-right">
+    <div class="big-stat"><span>28</span> → <span>2,873</span></div>
+    <div class="stat-label">Opportunities Per Congressional District</div>
+    <div class="stat-sub">At $5B → $500B funding tiers · All 435 districts · All 50 states</div>
+  </div>
+</div>
+<div class="fire-line"></div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- COL 1: THE PROBLEM -->
+  <div class="col">
+    <div class="section-label">⚠ The Problem</div>
+    <h2>America Is Losing The AI Race — From The Inside</h2>
+
+    <div class="threat-box">
+      <div class="tb-label">🔴 Active Threat: Salt Typhoon</div>
+      <p>China silently accessed AT&amp;T, Verizon, and T-Mobile backbone for <strong style="color:var(--gold)">2+ years</strong>, intercepting federal communications. Undetected.</p>
+    </div>
+
+    <div class="threat-box" style="background:#1a3a6e;margin-top:0.4rem;">
+      <div class="tb-label">🔴 Active Threat: Volt Typhoon</div>
+      <p>Chinese operatives are pre-positioned in US power grids, water systems, and ports — in all 50 states — designed for activation in conflict.</p>
+    </div>
+
+    <h3>The Concentration Problem</h3>
+    <p>80% of commercial AI infrastructure is controlled by 12 corporations in 5 cities. When the next CrowdStrike outage hits — <strong>8.5 million systems went down in one automated update</strong> — centralized defense fails everyone.</p>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="n">$1B+</div>
+        <div class="l">Spent pushing<br>AI fear narratives</div>
+      </div>
+      <div class="stat-card">
+        <div class="n">223+</div>
+        <div class="l">Organizations<br>lobbying for control</div>
+      </div>
+      <div class="stat-card">
+        <div class="n">800M+</div>
+        <div class="l">Chinese AI model<br>downloads globally</div>
+      </div>
+    </div>
+
+    <h3>The Real Threat Isn't AI Itself</h3>
+    <p>It's <strong>who controls AI</strong>. A handful of mega-corporations and a well-funded lobby pushing for licensing regimes, surveillance, and moratoriums — policies that lock out citizens and small teams, and hand control to whoever can afford the compliance burden.</p>
+
+    <div class="forge-quote">
+      <p>"The nation that closes the AI governance gap first wins the next decade."</p>
+      <div class="source">— AISM Framework Assessment, Cyber Strategy Institute, March 2026</div>
+    </div>
+
+    <h3>15 Documented Vulnerabilities</h3>
+    <ul>
+      <li>Telecom infrastructure breaches (Salt Typhoon)</li>
+      <li>Power grid / water system infiltration (Volt Typhoon)</li>
+      <li>AI model poisoning &amp; supply chain attacks</li>
+      <li>No kill-switch standard for autonomous AI agents</li>
+      <li>Drone swarm vulnerability — no community-level defense</li>
+      <li>Unmanaged IoT attack surface in critical systems</li>
+      <li>AI-enhanced cyber weapons evolving faster than defenses</li>
+      <li>Post-quantum cryptography transition lag</li>
+      <li>AI-generated disinformation at scale</li>
+      <li>Chinese open-source dependency in US startups</li>
+    </ul>
+  </div>
+
+  <!-- COL 2: THE SOLUTION -->
+  <div class="col">
+    <div class="section-label">⚡ The Solution</div>
+    <h2>FORGE Puts Tools In Every American's Hands</h2>
+
+    <p>FORGE — the <strong>Freedom Open-source Research and Growth Engine</strong> — is the citizen-first execution mechanism for the White House AI Action Plan. It bridges the gap between national strategy and your community.</p>
+
+    <div class="pillars">
+      <div class="pillar"><span class="pi">🛡️</span><span class="pt">Freedom</span></div>
+      <div class="pillar"><span class="pi">📈</span><span class="pt">Opportunity</span></div>
+      <div class="pillar"><span class="pi">🏗️</span><span class="pt">Resilience</span></div>
+      <div class="pillar"><span class="pi">💰</span><span class="pt">Growth</span></div>
+      <div class="pillar"><span class="pi">🏆</span><span class="pt">Excellence</span></div>
+    </div>
+
+    <h3>How It Works: Citizen-First Design</h3>
+    <ul>
+      <li><strong>No entity with 50+ employees eligible</strong> — zero dollars to mega-corps, ever</li>
+      <li><strong>Working code wins</strong> — no paper proposals, no political connections required</li>
+      <li><strong>Open source mandatory</strong> — everything built stays free forever</li>
+      <li><strong>Blockchain-verified</strong> — every dollar tracked publicly, fraud clawed back 150%</li>
+      <li><strong>Merit + geography</strong> — equal per-district distribution, rural 1.25x multiplier</li>
+    </ul>
+
+    <h3>Funding Tiers</h3>
+    <table class="compare" style="margin-bottom:0.5rem;">
+      <tr><th>Tier</th><th>Amount</th><th>Per District/Yr</th></tr>
+      <tr><td>🌱 Seed Grant</td><td>$10K–$50K</td><td class="good">28 grants</td></tr>
+      <tr><td>📈 Growth Loan</td><td>$50K–$250K</td><td class="good">57 grants</td></tr>
+      <tr><td>🚀 Scale Match</td><td>$250K–$500K</td><td class="good">574 grants</td></tr>
+      <tr><td>🏛️ Sovereignty</td><td>$500K+</td><td class="good">2,873 grants</td></tr>
+    </table>
+
+    <div class="callout">
+      <p><strong style="color:var(--gold)">Civic Bonus:</strong> Voters who've participated in multiple elections earn up to <strong>1.5× funding multiplier</strong>. FORGE rewards civic participation — not lobbying connections.</p>
+    </div>
+
+    <h3>Self-Sustaining by Year 5</h3>
+    <p>When FORGE-funded projects are acquired, they pay back into the Ecosystem Reinvestment Fund. At full $500B deployment, FORGE generates <strong>$84.75 billion in ERF returns</strong> over 10 years — funding the next generation of American AI builders at zero additional federal cost.</p>
+
+    <h3>The Solution RFI: Procurement That Actually Works</h3>
+    <p>No lawyers required. Submit a <strong>working GitHub repo</strong>. Automated scoring in 48 hours. Contract in 90 days — not 24 months. A veteran in rural Montana with a drone detection tool can win a federal contract through FORGE faster than she could even register in the traditional procurement system.</p>
+
+    <div class="forge-quote">
+      <p>"Bozeman competes with Boston. Tulsa stands beside San Francisco. Appalachia builds the same tools as Silicon Valley."</p>
+      <div class="source">— FORGE Act, Cyber Strategy Institute, March 2026</div>
+    </div>
+  </div>
+
+  <!-- COL 3: THE IMPACT -->
+  <div class="col">
+    <div class="section-label">🇺🇸 The Impact</div>
+    <h2>A Win For Every American, In Every District</h2>
+
+    <div class="stat-row" style="grid-template-columns:1fr 1fr;">
+      <div class="stat-card">
+        <div class="n">1.25M</div>
+        <div class="l">Americans funded<br>at $500B tier</div>
+      </div>
+      <div class="stat-card">
+        <div class="n">$84B</div>
+        <div class="l">10-yr ERF return<br>at full deployment</div>
+      </div>
+    </div>
+
+    <h3>Compare: FORGE vs. Status Quo</h3>
+    <table class="compare">
+      <tr><th>Issue</th><th>Without FORGE</th><th>With FORGE</th></tr>
+      <tr><td>AI Access</td><td class="bad">5 cities, 12 corps</td><td class="good">All 3,143 counties</td></tr>
+      <tr><td>Cyber Defense</td><td class="bad">Central agencies only</td><td class="good">Every community</td></tr>
+      <tr><td>Innovation</td><td class="bad">VCs &amp; insiders</td><td class="good">Working code wins</td></tr>
+      <tr><td>Procurement</td><td class="bad">12–24 months</td><td class="good">90 days</td></tr>
+      <tr><td>Open Source</td><td class="bad">Patent trolling risk</td><td class="good">$50M defense pool</td></tr>
+      <tr><td>Rural America</td><td class="bad">Left behind</td><td class="good">1.25× multiplier</td></tr>
+    </table>
+
+    <h3>Who Benefits — Your Audience</h3>
+    <ul>
+      <li><strong>Defense Hawks:</strong> Closes L4–L5 agentic gap before China does. Distributed defense grid in every county.</li>
+      <li><strong>Fiscal Conservatives:</strong> Self-funding by Year 5. 3–30× economic multiplier. Not spending — investing.</li>
+      <li><strong>Populists / MAGA:</strong> Jobs in every district, not just coastal cities. Zero dollars to Big Tech.</li>
+      <li><strong>Progressives:</strong> Explicitly excludes mega-corps. Co-op guild model. Equity for rural America.</li>
+      <li><strong>Veterans:</strong> Solution RFI creates direct path from military skills to federal contracts.</li>
+      <li><strong>Students / Young Americans:</strong> Seed grants ($10K–$50K) beat student loan debt. Build real tools.</li>
+    </ul>
+
+    <h3>Take Action Today</h3>
+    <div class="action-steps">
+      <div class="action-step">
+        <div class="action-step-text">
+          <strong>Contact your Representative</strong>
+          Ask them to co-sponsor the FORGE Act. Use the pre-written script at FORGE.gov
+        </div>
+      </div>
+      <div class="action-step">
+        <div class="action-step-text">
+          <strong>Share this 1-pager</strong>
+          Post <span class="hashtag">#FORGEAct</span> <span class="hashtag">#CitizenAI</span> on every platform
+        </div>
+      </div>
+      <div class="action-step">
+        <div class="action-step-text">
+          <strong>Start a local guild</strong>
+          5+ builders in your district = Guild Formation Grant of $50K–$200K
+        </div>
+      </div>
+      <div class="action-step">
+        <div class="action-step-text">
+          <strong>Build your proof of concept</strong>
+          $2,500 Seed Prep Grant available now. Submit your GitHub repo at FORGE.gov
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER ROW -->
+<div class="banner-row">
+  <div class="banner-item">
+    <div class="bn">$81,900</div>
+    <div class="bl">Average Seed Grant — Per Eligible American Creator</div>
+  </div>
+  <div class="banner-item">
+    <div class="bn">3,143</div>
+    <div class="bl">US Counties All Receive Equal FORGE Access</div>
+  </div>
+  <div class="banner-item">
+    <div class="bn">Year 5</div>
+    <div class="bl">FORGE Becomes Self-Sustaining — Zero Net Federal Cost</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-left">
+    <strong style="color:#fff;">FORGE Act</strong> · Freedom Open-source Research and Growth Engine<br>
+    Cyber Strategy Institute · March 2026 · <span class="hashtag" style="color:var(--gold);">#FORGEAct</span> · <span class="hashtag" style="color:var(--gold);">#CitizenAI</span>
+  </div>
+  <div class="footer-right">
+    <a href="#" class="forge-cta">FORGE.gov</a>&nbsp;&nbsp;
+    <span style="color:var(--steel);font-size:0.6rem;">Every Dollar to Citizens · Every Tool Open Source · Every Community Defended</span>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Act — Your Local Action Plan</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,400&display=swap');
+:root{
+  --fire:#E8600A;--navy:#0B1D3A;--gold:#F59E0B;--teal:#0F766E;
+  --warm:#FFFBF7;--light:#F0F4F8;--soft:#E8EFF4;--ice:#F0FFF4;
+  --iron:#1A202C;--slate:#64748B;
+  --font-d:'Bebas Neue',Impact,sans-serif;--font-h:'Oswald',sans-serif;
+  --font-b:'Lato',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-b);background:#fff;color:var(--iron);width:8.5in;min-height:11in;margin:0 auto;font-size:10.5px;}
+.page{width:8.5in;min-height:11in;display:flex;flex-direction:column;}
+
+/* HEADER */
+.header{background:var(--navy);padding:0.9rem 1.3rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;}
+.header-left h1{font-family:var(--font-d);font-size:2.2rem;color:#fff;line-height:0.95;letter-spacing:0.02em;}
+.header-left h1 em{color:var(--gold);font-style:normal;}
+.header-left .sub{font-family:var(--font-h);font-size:0.75rem;color:rgba(255,255,255,0.7);margin-top:0.3rem;font-weight:400;font-style:italic;}
+.header-right{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:0.6rem 0.8rem;text-align:center;min-width:2.2in;}
+.hr-big{font-family:var(--font-d);font-size:1.8rem;color:var(--gold);line-height:1;}
+.hr-label{font-family:var(--font-h);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.65);}
+
+/* ORANGE BAND */
+.orange-band{background:var(--fire);padding:0.35rem 1.3rem;display:flex;align-items:center;justify-content:space-between;}
+.orange-band p{font-family:var(--font-h);font-size:0.75rem;color:#fff;font-weight:400;}
+.orange-band strong{font-weight:700;}
+.ot{color:var(--gold);}
+
+/* BODY */
+.body{flex:1;padding:0.85rem 1.3rem;display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+
+.eyebrow{font-family:var(--font-h);font-size:0.58rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--fire);margin-bottom:0.18rem;}
+.section-head{font-family:var(--font-d);font-size:1.3rem;color:var(--navy);line-height:1.05;margin-bottom:0.35rem;letter-spacing:0.02em;}
+p{font-size:0.72rem;line-height:1.65;margin-bottom:0.35rem;font-family:var(--font-b);}
+h3{font-family:var(--font-h);font-size:0.83rem;color:var(--navy);font-weight:700;margin:0.5rem 0 0.15rem;text-transform:uppercase;letter-spacing:0.03em;}
+ul{list-style:none;margin:0 0 0.4rem;padding:0;}
+ul li{font-size:0.7rem;line-height:1.55;padding-left:1.2em;position:relative;margin-bottom:0.18rem;}
+ul li::before{content:'→';color:var(--fire);font-size:0.7rem;position:absolute;left:0;top:0.08em;}
+
+/* THE PHASES */
+.phase{background:var(--warm);border:1px solid #E5D5C0;border-radius:6px;padding:0.55rem 0.7rem;margin-bottom:0.5rem;display:grid;grid-template-columns:2.5rem 1fr;gap:0.4rem;align-items:start;}
+.phase-num{background:var(--fire);color:#fff;font-family:var(--font-d);font-size:1.1rem;width:2.3rem;height:2.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem;}
+.phase-content .phase-title{font-family:var(--font-h);font-size:0.8rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.12rem;}
+.phase-content p{margin:0;font-size:0.68rem;color:var(--slate);}
+.phase-content .phase-actions{margin-top:0.2rem;}
+.phase-content .phase-actions span{display:inline-block;font-family:var(--font-b);font-size:0.63rem;background:rgba(232,96,10,0.08);border:1px solid rgba(232,96,10,0.25);color:var(--fire);border-radius:3px;padding:0.08rem 0.3rem;margin:0.1rem 0.1rem 0 0;}
+
+/* AUDIENCE CARDS */
+.audience-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.35rem;margin:0.4rem 0;}
+.aud{background:#fff;border:1px solid #E2E8F0;border-radius:5px;padding:0.4rem 0.5rem;border-left:3px solid var(--fire);}
+.aud.teal{border-left-color:var(--teal);}
+.aud.gold{border-left-color:var(--gold);}
+.aud.navy{border-left-color:var(--navy);}
+.aud .aud-title{font-family:var(--font-h);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--fire);margin-bottom:0.1rem;}
+.aud.teal .aud-title{color:var(--teal);}
+.aud.gold .aud-title{color:var(--gold);}
+.aud.navy .aud-title{color:var(--navy);}
+.aud p{font-size:0.65rem;color:var(--slate);margin:0;}
+
+/* SCRIPT BOXES */
+.script-box{background:var(--light);border-left:3px solid var(--teal);padding:0.5rem 0.65rem;margin:0.3rem 0;border-radius:0 4px 4px 0;}
+.script-box .sb-label{font-family:var(--font-h);font-size:0.58rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--teal);margin-bottom:0.18rem;}
+.script-box .sb-text{font-family:var(--font-b);font-size:0.67rem;color:var(--iron);line-height:1.6;font-style:italic;}
+.script-box .sb-text strong{font-style:normal;color:var(--navy);}
+
+/* SOCIAL CONTENT */
+.social-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.35rem;margin:0.35rem 0;}
+.soc{background:var(--light);padding:0.4rem 0.45rem;border-radius:4px;border-top:2px solid var(--fire);}
+.soc.teal{border-top-color:var(--teal);}
+.soc.gold{border-top-color:var(--gold);}
+.soc .soc-platform{font-family:var(--font-h);font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--fire);margin-bottom:0.1rem;}
+.soc.teal .soc-platform{color:var(--teal);}
+.soc.gold .soc-platform{color:var(--gold);}
+.soc p{font-size:0.63rem;color:var(--slate);margin:0;line-height:1.45;}
+
+/* TRACKER */
+.tracker{border:1px solid #E2E8F0;border-radius:6px;overflow:hidden;margin:0.4rem 0;}
+.tracker-head{background:var(--navy);padding:0.3rem 0.5rem;font-family:var(--font-h);font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#fff;}
+.tracker-row{display:grid;grid-template-columns:1fr auto;align-items:center;padding:0.25rem 0.5rem;border-bottom:1px solid #E2E8F0;font-family:var(--font-b);font-size:0.66rem;}
+.tracker-row:last-child{border-bottom:none;}
+.tracker-row .metric{color:var(--iron);}
+.tracker-row .box{width:0.9rem;height:0.9rem;border:1.5px solid #CBD5E1;border-radius:2px;}
+
+/* HASHTAG BAR */
+.hashtag-bar{background:var(--ice);border:1px solid #BBF7D0;border-radius:4px;padding:0.3rem 0.5rem;margin:0.3rem 0;display:flex;flex-wrap:wrap;gap:0.3rem;align-items:center;}
+.ht{font-family:var(--font-h);font-size:0.67rem;font-weight:700;color:var(--teal);background:rgba(15,118,110,0.08);border:1px solid rgba(15,118,110,0.2);padding:0.1rem 0.3rem;border-radius:3px;}
+
+/* FULL WIDTH BOTTOM SECTION */
+.full-width{grid-column:1/-1;}
+.message-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.4rem;margin:0.3rem 0;}
+.msg-card{background:var(--navy);padding:0.4rem 0.5rem;border-radius:5px;border-bottom:2px solid var(--fire);}
+.msg-card.fire-bg{background:var(--fire);}
+.msg-card.teal-bg{background:var(--teal);}
+.msg-card .mc-label{font-family:var(--font-h);font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.65);margin-bottom:0.1rem;}
+.msg-card p{font-family:var(--font-b);font-size:0.66rem;color:#fff;margin:0;font-weight:700;line-height:1.4;}
+
+/* FOOTER */
+.footer{background:var(--navy);padding:0.4rem 1.3rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;}
+.footer-l{font-family:var(--font-b);font-size:0.58rem;color:rgba(255,255,255,0.45);}
+.footer-c{font-family:var(--font-d);font-size:1.1rem;color:var(--gold);text-align:center;}
+.footer-r{font-family:var(--font-b);font-size:0.58rem;color:rgba(255,255,255,0.45);text-align:right;}
+.fht{color:var(--fire);}
+
+@media print{body{width:8.5in;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>HOW TO MAKE THE <em>FORGE ACT</em><br>A REALITY IN YOUR DISTRICT</h1>
+    <div class="sub">An open plan for citizens, community organizers, local businesses, teachers, veterans, and anyone who wants to get involved — no experience required.</div>
+  </div>
+  <div class="header-right">
+    <div class="hr-big">Anyone<br>Can Do This</div>
+    <div class="hr-label">No lobbying experience needed.<br>No tech background required.<br>Just show up and share.</div>
+  </div>
+</div>
+<div class="orange-band">
+  <p>The FORGE Act creates <strong><span class="ot">28–2,873 funded AI opportunities</span></strong> in your congressional district. It won't pass without <strong>citizens making noise</strong>. Here's exactly how to make that noise.</p>
+  <p style="font-size:0.68rem;color:rgba(255,255,255,0.8);">Hashtags: <strong>#FORGEAct · #CitizenAI · #BuildAmerica</strong></p>
+</div>
+
+<div class="body">
+
+<!-- LEFT COLUMN -->
+<div style="padding-right:0.2rem;">
+  <div class="eyebrow">The 4-Phase Local Plan</div>
+  <div class="section-head">From Zero to Influence In 8 Weeks</div>
+
+  <div class="phase">
+    <div class="phase-num">1</div>
+    <div class="phase-content">
+      <div class="phase-title">Week 1–2: Learn &amp; Share (15 min/day)</div>
+      <p>Read this 1-pager. Share it on social media. Send it to 3 friends. The goal: make 10 people in your life aware that the FORGE Act exists and what it would mean for your district.</p>
+      <div class="phase-actions">
+        <span>Post to Facebook</span><span>Email 3 friends</span><span>Print &amp; share at work</span><span>Bring to church/civic group</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">2</div>
+    <div class="phase-content">
+      <div class="phase-title">Week 3–4: Contact Your Representative</div>
+      <p>Call, email, or visit your congressional office. You don't need to be an expert — you just need to be a constituent who wants this to pass. Staffers track every contact. Volume matters.</p>
+      <div class="phase-actions">
+        <span>Call (most impactful)</span><span>Email with form letter</span><span>Town hall comment</span><span>Office visit</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">3</div>
+    <div class="phase-content">
+      <div class="phase-title">Week 5–6: Build Local Support</div>
+      <p>Host a house meeting. Bring FORGE to your local business association, school board, veterans group, or civic organization. The more local voices who co-sign this, the stronger the signal to your rep.</p>
+      <div class="phase-actions">
+        <span>House meeting (5+ people)</span><span>Business assoc. presentation</span><span>Letter to local paper</span><span>Local radio/podcast</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-num">4</div>
+    <div class="phase-content">
+      <div class="phase-title">Week 7–8: Start Building</div>
+      <p>Find other builders in your district. Start a guild conversation. Apply for the $2,500 Seed Prep Grant at FORGE.gov. You don't need to wait for the full act to pass to build community around it.</p>
+      <div class="phase-actions">
+        <span>Post "Starting a FORGE guild in [city]"</span><span>Apply for Seed Prep Grant</span><span>Connect with local makers/devs</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Who To Reach, By Role</h3>
+  <div class="audience-grid">
+    <div class="aud">
+      <div class="aud-title">🏛 Congressional Staffers</div>
+      <p>1-pager + district job numbers + constituent count. They need to justify it to their boss.</p>
+    </div>
+    <div class="aud teal">
+      <div class="aud-title">📱 Influencers / Creators</div>
+      <p>Pre-written hooks, meme templates, short scripts. Make sharing require zero effort.</p>
+    </div>
+    <div class="aud gold">
+      <div class="aud-title">🏢 Local Business Owners</div>
+      <p>"28 funded AI tools in our district. Your employees could build them. Zero to big corporations." Done.</p>
+    </div>
+    <div class="aud navy">
+      <div class="aud-title">🎓 Teachers / Librarians</div>
+      <p>Guild apprenticeship as alternative education path. Practical skills. Community-controlled curriculum.</p>
+    </div>
+    <div class="aud">
+      <div class="aud-title">🪖 Veterans</div>
+      <p>Solution RFI lets a veteran win a federal contract in 90 days with a working tool. Share this fact directly.</p>
+    </div>
+    <div class="aud teal">
+      <div class="aud-title">👨‍👩‍👧 Parents</div>
+      <p>Cognitive sovereignty for kids. Local AI tools. No corporate surveillance in your home.</p>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT COLUMN -->
+<div style="padding-left:0.2rem;">
+  <div class="eyebrow">Ready-to-Use Scripts</div>
+  <div class="section-head">Copy, Personalize, Send. That's It.</div>
+
+  <div class="script-box">
+    <div class="sb-label">📞 Phone Script — Congressional Office (2 min)</div>
+    <div class="sb-text">"Hi, my name is <strong>[Name]</strong> and I'm a constituent in <strong>[District]</strong>. I'm calling to ask Rep. <strong>[Name]</strong> to co-sponsor the FORGE Act. It would create <strong>28 to 2,873 funded AI opportunities in our district</strong> — with zero dollars going to mega-corporations. It's citizen-first and self-sustaining by Year 5. Can I leave my contact information so the rep's office can follow up?"</div>
+  </div>
+
+  <div class="script-box">
+    <div class="sb-label">📧 Email Template — Representative</div>
+    <div class="sb-text">Subject: "Please Co-Sponsor the FORGE Act — Constituent Request"<br><br>"Dear Rep. <strong>[Name]</strong>, I'm a constituent in <strong>[City, State]</strong>. I'm writing to ask you to co-sponsor the FORGE Act — the Freedom Open-source Research and Growth Engine. At $5B funding, FORGE creates 28 funded AI projects in our district. At $500B, that's 2,873 opportunities — in every county. Zero dollars go to mega-corporations. The act is self-sustaining by Year 5. I believe this represents a real economic opportunity for our district and a genuine national security investment. Thank you for your consideration."</div>
+  </div>
+
+  <div class="script-box">
+    <div class="sb-label">🤝 House Meeting Opening (3 min talk)</div>
+    <div class="sb-text">"Thanks for coming. I want to talk for 3 minutes about something that could put real money and real tools into our community — without a penny going to Amazon, Google, or Wall Street. It's called the FORGE Act. The short version: it's a citizen-funded AI program that creates between 28 and 2,873 funded projects in our congressional district. Working code wins. Not proposals. Not connections. If you build something useful, you can win a federal contract in 90 days. But it only happens if our rep hears from us. Here's how we all make that call this week..."</div>
+  </div>
+
+  <h3>Social Media Content — Ready To Post</h3>
+  <div class="social-row">
+    <div class="soc">
+      <div class="soc-platform">📱 TikTok / Reels</div>
+      <p>"The FORGE Act would put AI money in every district in America — not just Silicon Valley. Here's what that would mean for [your town] 🧵" [film a 30s explainer, use this as hook]</p>
+    </div>
+    <div class="soc teal">
+      <div class="soc-platform">📸 Instagram / Facebook</div>
+      <p>"28 funded AI opportunities could come to our district if Congress passes the FORGE Act. Zero dollars to big tech. Everything built stays open source. Here's why I support it. #FORGEAct"</p>
+    </div>
+    <div class="soc gold">
+      <div class="soc-platform">🐦 X / Threads</div>
+      <p>"Asked my rep to co-sponsor the FORGE Act today. 2 minutes. One phone call. If 50 people in my district do the same, it actually moves. Who's with me? #FORGEAct #CitizenAI"</p>
+    </div>
+  </div>
+
+  <div class="hashtag-bar">
+    <span style="font-family:var(--font-h);font-size:0.62rem;color:var(--slate);font-weight:700;">Use these:</span>
+    <span class="ht">#FORGEAct</span><span class="ht">#CitizenAI</span><span class="ht">#BuildAmerica</span><span class="ht">#OpenSourceAmerica</span><span class="ht">#AIForEveryone</span><span class="ht">#MarshalPlanForAI</span><span class="ht">#DigitalSovereignty</span>
+  </div>
+
+  <h3>Track Your Progress — Local Campaign Tracker</h3>
+  <div class="tracker">
+    <div class="tracker-head">✅ Your FORGE Local Campaign Checklist</div>
+    <div class="tracker-row"><span class="metric">Shared this 1-pager on social media</span><span class="box"></span></div>
+    <div class="tracker-row"><span class="metric">Sent to 3+ friends directly</span><span class="box"></span></div>
+    <div class="tracker-row"><span class="metric">Called congressional office</span><span class="box"></span></div>
+    <div class="tracker-row"><span class="metric">Emailed representative</span><span class="box"></span></div>
+    <div class="tracker-row"><span class="metric">Brought to one local group/organization</span><span class="box"></span></div>
+    <div class="tracker-row"><span class="metric">Hosted or attended a house meeting</span><span class="box"></span></div>
+    <div class="tracker-row"><span class="metric">Posted on social with #FORGEAct</span><span class="box"></span></div>
+    <div class="tracker-row"><span class="metric">Found 1+ other builders in your district</span><span class="box"></span></div>
+    <div class="tracker-row"><span class="metric">Applied for $2,500 Seed Prep Grant at FORGE.gov</span><span class="box"></span></div>
+  </div>
+
+  <div class="full-width">
+    <h3 style="margin-bottom:0.25rem;">The 4 Key Messages — Learn These, Adapt Them, Share Them</h3>
+    <div class="message-grid">
+      <div class="msg-card"><div class="mc-label">For Everyone</div><p>"28 funded AI opportunities in our district. Zero dollars to Big Tech. Working code wins — not connections."</p></div>
+      <div class="msg-card fire-bg"><div class="mc-label">For Skeptics</div><p>"This is not a government program. It's a citizen investment fund that pays for itself by Year 5."</p></div>
+      <div class="msg-card teal-bg"><div class="mc-label">For Local Leaders</div><p>"Bozeman competes with Boston. Your district gets the same shot as San Francisco. That's the design."</p></div>
+      <div class="msg-card"><div class="mc-label">For Builders</div><p>"No proposals. No lawyers. Submit a GitHub repo. Win a federal contract in 90 days."</p></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-l">FORGE Act · Open District Plan · Anyone Can Use This · Cyber Strategy Institute · March 2026</div>
+  <div class="footer-c">FORGE.GOV</div>
+  <div class="footer-r"><span class="fht">#FORGEAct</span> · <span class="fht">#CitizenAI</span> · Print it. Share it. Make noise.</div>
+</div>
+
+</div>
+</body>
+</html>

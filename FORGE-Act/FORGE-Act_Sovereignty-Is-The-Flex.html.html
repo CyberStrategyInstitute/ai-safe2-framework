@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Act — Sovereignty Is The Flex</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+:root{
+  --fire:#FF4500;--navy:#0A0E1A;--gold:#FFD700;--neon:#00F5A0;
+  --purple:#7B2FBE;--blue:#1DA1F2;--ash:#F8F9FA;--mid:#1E2A3B;
+  --font-d:'Bebas Neue',Impact,sans-serif;--font-h:'Space Grotesk',sans-serif;
+  --font-b:'Space Grotesk',sans-serif;--font-m:'Space Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-b);background:var(--navy);color:#E8EAF0;width:8.5in;min-height:11in;margin:0 auto;}
+.page{width:8.5in;min-height:11in;display:flex;flex-direction:column;background:var(--navy);}
+
+/* HEADER — dark mode, neon accents */
+.header{background:var(--navy);padding:0.9rem 1.2rem;border-bottom:2px solid #1E2A3B;position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fire),var(--gold),var(--neon),var(--fire));}
+.header-inner{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;}
+.gen-pill{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(255,69,0,0.15);border:1px solid var(--fire);border-radius:999px;padding:0.2rem 0.6rem;margin-bottom:0.4rem;}
+.gen-pill span{font-family:var(--font-m);font-size:0.58rem;color:var(--fire);letter-spacing:0.08em;}
+h1{font-family:var(--font-d);font-size:2.8rem;color:#fff;line-height:0.9;letter-spacing:0.02em;}
+h1 .glow{color:var(--neon);text-shadow:0 0 20px rgba(0,245,160,0.5);}
+.deck{font-family:var(--font-b);font-size:0.7rem;color:#8FA8C0;line-height:1.55;margin-top:0.4rem;max-width:5.5in;}
+.deck strong{color:#E8EAF0;}
+.header-badge{background:rgba(255,215,0,0.1);border:1.5px solid var(--gold);border-radius:8px;padding:0.6rem 0.8rem;text-align:center;min-width:1.8in;}
+.hb-num{font-family:var(--font-d);font-size:2.2rem;color:var(--gold);line-height:1;}
+.hb-label{font-family:var(--font-m);font-size:0.55rem;color:#8FA8C0;margin-top:0.1rem;}
+
+/* BODY */
+.body{flex:1;display:grid;grid-template-columns:1.1fr 1fr;gap:0;}
+.left-col{padding:0.8rem 1rem;border-right:1px solid #1E2A3B;}
+.right-col{padding:0.8rem 1rem;background:#0D1220;}
+
+.eyebrow{font-family:var(--font-m);font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--neon);margin-bottom:0.2rem;}
+.section-head{font-family:var(--font-d);font-size:1.5rem;color:#fff;line-height:1;margin-bottom:0.4rem;letter-spacing:0.02em;}
+p{font-size:0.7rem;line-height:1.6;color:#B0BAC8;margin-bottom:0.4rem;font-family:var(--font-b);}
+h3{font-family:var(--font-h);font-size:0.82rem;font-weight:700;color:var(--neon);margin:0.5rem 0 0.2rem;letter-spacing:0.04em;}
+ul{list-style:none;margin:0 0 0.4rem;padding:0;}
+ul li{font-size:0.7rem;line-height:1.55;padding-left:1.3em;position:relative;margin-bottom:0.18rem;color:#B0BAC8;}
+ul li::before{content:'▸';color:var(--fire);font-size:0.65rem;position:absolute;left:0;top:0.1em;}
+strong{color:#fff;}
+
+/* CULT CHECK BOX */
+.cult-box{background:#160A1F;border:1px solid rgba(123,47,190,0.5);border-left:3px solid var(--purple);padding:0.55rem 0.7rem;border-radius:0 4px 4px 0;margin:0.4rem 0;}
+.cult-label{font-family:var(--font-m);font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--purple);margin-bottom:0.25rem;}
+.cult-item{display:grid;grid-template-columns:1.2rem 1fr auto;gap:0.35rem;align-items:start;padding:0.15rem 0;}
+.cult-item .ico{font-size:0.7rem;}
+.cult-item .txt{font-family:var(--font-b);font-size:0.65rem;color:#CCC;}
+.cult-item .verdict{font-family:var(--font-m);font-size:0.6rem;color:var(--gold);}
+
+/* RECEIPTS BOX */
+.receipts{background:#0A1A0F;border:1px solid rgba(0,245,160,0.3);padding:0.5rem 0.65rem;border-radius:4px;margin:0.4rem 0;}
+.receipts .r-label{font-family:var(--font-m);font-size:0.56rem;color:var(--neon);margin-bottom:0.2rem;letter-spacing:0.1em;}
+.receipt-row{display:grid;grid-template-columns:1fr auto;gap:0.5rem;padding:0.15rem 0;border-bottom:1px solid rgba(0,245,160,0.1);}
+.receipt-row:last-child{border-bottom:none;}
+.receipt-row .rk{font-family:var(--font-b);font-size:0.63rem;color:#8FA8C0;}
+.receipt-row .rv{font-family:var(--font-m);font-size:0.63rem;color:var(--neon);}
+
+/* COMPARE TABLE */
+.compare{width:100%;border-collapse:collapse;font-size:0.63rem;margin:0.4rem 0;}
+.compare th{background:#1E2A3B;color:#8FA8C0;font-family:var(--font-m);font-size:0.57rem;text-transform:uppercase;letter-spacing:0.08em;padding:0.28rem 0.4rem;text-align:left;}
+.compare td{padding:0.22rem 0.4rem;border-bottom:1px solid #1E2A3B;font-family:var(--font-b);}
+.compare tr:last-child td{border-bottom:none;}
+.compare td.bad{color:#F87171;}
+.compare td.good{color:var(--neon);font-weight:600;}
+
+/* MEME GRID */
+.meme-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin:0.4rem 0;}
+.meme{padding:0.45rem 0.5rem;border-radius:6px;text-align:center;}
+.meme.fire{background:rgba(255,69,0,0.15);border:1px solid var(--fire);}
+.meme.neon{background:rgba(0,245,160,0.08);border:1px solid var(--neon);}
+.meme.gold{background:rgba(255,215,0,0.08);border:1px solid var(--gold);}
+.meme.purple{background:rgba(123,47,190,0.15);border:1px solid var(--purple);}
+.meme p{font-family:var(--font-h);font-size:0.66rem;line-height:1.35;margin:0;font-weight:600;}
+.meme.fire p{color:var(--fire);}
+.meme.neon p{color:var(--neon);}
+.meme.gold p{color:var(--gold);}
+.meme.purple p{color:#C084FC;}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.35rem;margin:0.4rem 0;}
+.stat-card{background:#1E2A3B;padding:0.45rem 0.4rem;text-align:center;border-radius:4px;border-bottom:2px solid var(--fire);}
+.stat-card .n{font-family:var(--font-d);font-size:1.4rem;color:var(--fire);line-height:1;}
+.stat-card .l{font-family:var(--font-m);font-size:0.52rem;color:#8FA8C0;text-transform:uppercase;}
+
+/* ACTION BOX */
+.action-box{background:#1E2A3B;border-radius:6px;padding:0.65rem 0.8rem;margin:0.4rem 0;}
+.action-box .abl{font-family:var(--font-m);font-size:0.56rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--neon);margin-bottom:0.4rem;}
+.action-item{display:grid;grid-template-columns:2rem 1fr;gap:0.35rem;margin-bottom:0.35rem;align-items:start;}
+.action-item .step{background:var(--fire);color:#fff;font-family:var(--font-d);font-size:0.9rem;width:1.8rem;height:1.8rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.05rem;}
+.action-item .text{font-family:var(--font-b);font-size:0.67rem;color:#B0BAC8;line-height:1.5;}
+.action-item .text strong{color:#fff;display:block;font-size:0.7rem;}
+
+/* CALLOUT */
+.callout{border:1px solid var(--gold);background:rgba(255,215,0,0.05);padding:0.45rem 0.6rem;border-radius:4px;margin:0.4rem 0;}
+.callout p{font-family:var(--font-m);font-size:0.64rem;color:var(--gold);margin:0;line-height:1.5;}
+
+/* FOOTER */
+.footer{background:#050810;padding:0.4rem 1.2rem;border-top:2px solid #1E2A3B;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;}
+.footer-l{font-family:var(--font-m);font-size:0.56rem;color:#4A5568;}
+.footer-c{font-family:var(--font-d);font-size:1rem;color:var(--neon);text-align:center;text-shadow:0 0 10px rgba(0,245,160,0.4);}
+.footer-r{font-family:var(--font-m);font-size:0.56rem;color:#4A5568;text-align:right;}
+.ht{color:var(--fire);}
+
+@media print{body{width:8.5in;}*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div>
+      <div class="gen-pill"><span>⚡ GEN Z · 1997–2012 · INTERNET-NATIVE · SKEPTICISM IS A FEATURE</span></div>
+      <h1>SOVEREIGNTY<br>IS THE <span class="glow">FLEX.</span></h1>
+      <div class="deck">The AI doom machine is a billion-dollar fear factory. <strong>The receipts are public.</strong> FORGE is the citizen counter-move — private AI, open source forever, funded projects in every district. The conspiracy isn't AI killing everyone. It's <strong>billionaires paying to make you believe that so they can control AI.</strong></div>
+    </div>
+    <div class="header-badge">
+      <div class="hb-num">$10K</div>
+      <div class="hb-label">seed grant floor<br>// github repo required<br>// 48hr auto-score<br>// no suit required</div>
+    </div>
+  </div>
+</div>
+
+<div class="body">
+<!-- LEFT COLUMN -->
+<div class="left-col">
+  <div class="eyebrow">// The Actual Receipts</div>
+  <div class="section-head">THE REAL CONSPIRACY (WITH EVIDENCE)</div>
+
+  <div class="cult-box">
+    <div class="cult-label">🔍 CULT_CHECK.exe — EA / AI PANIC ECOSYSTEM</div>
+    <div class="cult-item"><span class="ico">🏰</span><span class="txt">Bought a literal castle while claiming to save humanity</span><span class="verdict">$22.8M</span></div>
+    <div class="cult-item"><span class="ico">🧪</span><span class="txt">Message-tested 37 fear slogans to maximize panic</span><span class="verdict">DOCUMENTED</span></div>
+    <div class="cult-item"><span class="ico">💀</span><span class="txt">Linked offshoot became a murder cult (Zizians)</span><span class="verdict">PUBLIC RECORD</span></div>
+    <div class="cult-item"><span class="ico">🧠</span><span class="txt">CFAR president admitted: "We were creating cult conditions"</span><span class="verdict">2025 STATEMENT</span></div>
+    <div class="cult-item"><span class="ico">🔒</span><span class="txt">Lobbying goal: criminalize open-source AI. Surveille GPU ownership.</span><span class="verdict">POLICY FILINGS</span></div>
+    <div class="cult-item"><span class="ico">💸</span><span class="txt">SBF (convicted fraudster) was a primary funder</span><span class="verdict">PUBLIC RECORD</span></div>
+  </div>
+
+  <p>Their actual lobbying goal isn't safety — it's <strong>control.</strong> They want to make AI like a controlled substance: you need a license, which only mega-corps can afford. Every independent builder gets locked out. All the power goes to whoever pays for compliance. That's the actual plot.</p>
+
+  <div class="receipts">
+    <div class="r-label">// REAL_THREATS.json — Active, Documented, No Tinfoil</div>
+    <div class="receipt-row"><span class="rk">SALT_TYPHOON</span><span class="rv">US telecoms breached 2+ years, undetected</span></div>
+    <div class="receipt-row"><span class="rk">VOLT_TYPHOON</span><span class="rv">Inside US power grid + water, all 50 states</span></div>
+    <div class="receipt-row"><span class="rk">CROWDSTRIKE_2024</span><span class="rv">1 update → 8.5M systems down. Centralization = fragility.</span></div>
+    <div class="receipt-row"><span class="rk">DEEPSEEK_ADOPTION</span><span class="rv">US startups running Chinese AI models. 800M+ downloads.</span></div>
+    <div class="receipt-row"><span class="rk">DRONE_SWARMS</span><span class="rv">No community-level counter-UAS tools exist yet</span></div>
+  </div>
+
+  <h3>Anxiety Is The Product. Building Is The Antidote.</h3>
+  <p>The AI panic machine doesn't want you informed — they want you anxious and passive. Anxious people don't build. They comply. FORGE is the exact opposite: it funds building, rewards civic participation, and puts working tools in the hands of actual humans in actual communities.</p>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="n">$1B+</div><div class="l">Spent manufacturing<br>your AI anxiety</div></div>
+    <div class="stat-card"><div class="n">28</div><div class="l">Funded projects<br>in YOUR district</div></div>
+    <div class="stat-card"><div class="n">0¢</div><div class="l">To Amazon, Google,<br>or OpenAI. Ever.</div></div>
+  </div>
+
+  <div class="meme-grid">
+    <div class="meme fire"><p>Doom machine: billion-dollar budget, murder cult, $22M castle. FORGE: GitHub repo, paycheck.</p></div>
+    <div class="meme neon"><p>"AI agents running on your hardware. No surveillance. No harvesting. Sovereignty is the ultimate flex."</p></div>
+    <div class="meme gold"><p>The conspiracy isn't AI killing you. It's billionaires paying to make you believe that.</p></div>
+    <div class="meme purple"><p>A FORGE guild is a Discord server that pays you to ship code instead of arguing about anime.</p></div>
+  </div>
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="right-col">
+  <div class="eyebrow">// What FORGE Actually Is</div>
+  <div class="section-head">BUILD YOUR OWN AI FUTURE. FUNDED.</div>
+
+  <p>No corporate overlords. No licensing gatekeepers. No "please sir may I innovate." A <strong>working GitHub repo</strong> is your application. Automated scoring in 48 hours. Contract possible in 90 days. This is what citizen AI sovereignty actually looks like.</p>
+
+  <table class="compare">
+    <tr><th>Current System</th><th>FORGE System</th></tr>
+    <tr><td class="bad">VC picks winners by vibe</td><td class="good">Working code scores automatically</td></tr>
+    <tr><td class="bad">Patent trolls own ideas</td><td class="good">$50M defense pool, fork rights forever</td></tr>
+    <tr><td class="bad">Corporate AI surveilles you</td><td class="good">Local-first, zero central aggregation</td></tr>
+    <tr><td class="bad">Rural = ignored</td><td class="good">1.25× rural multiplier</td></tr>
+    <tr><td class="bad">Open source gets captured</td><td class="good">Copyleft mandatory. Community can always fork.</td></tr>
+  </table>
+
+  <div class="callout">
+    <p>FORGE funds AI agents that run on YOUR hardware. Your data never leaves your machine. No backdoors. No escrow. The 2nd Amendment for the digital era — private, sovereign, encrypted. Forever.</p>
+  </div>
+
+  <h3>The Speed-Run Guide</h3>
+  <ul>
+    <li>Seed Grant $10K–$50K: proof of concept, any citizen with a working repo</li>
+    <li>Growth Loan $50K–$250K: validated product, 0.5% interest, 2–5yr deferral</li>
+    <li>NatSec Track: 3× multiplier for tools that address real security gaps</li>
+    <li>Guild Formation Grant: $50K–$200K for 5+ builders in same district</li>
+    <li>Civic Voting Bonus: regular voters earn up to 1.5× funding multiplier</li>
+    <li>Rural multiplier 1.25×: not in NYC or SF? You get more, not less.</li>
+  </ul>
+
+  <h3>Meme The Message — Content Kit</h3>
+  <ul>
+    <li><strong>TikTok/Reels hook:</strong> "The AI panic machine has a $22 million castle. I have a GitHub repo. Guess which one FORGE funds." [walk through the receipts]</li>
+    <li><strong>Duet prompt:</strong> "Duet this and tell your rep why you want citizen AI tools — not corporate licensing."</li>
+    <li><strong>Discord template:</strong> "Starting a FORGE guild in [district]. Need 4 builders. DM me. Shared compute, shared workspace, actual funding."</li>
+    <li><strong>Twitter/X thread starter:</strong> "The actual receipts on the AI panic industry 🧵 (it's worse than you think)"</li>
+    <li><strong>Short doc format:</strong> "I applied for a FORGE grant. Here's what happened." [document the process]</li>
+  </ul>
+
+  <div class="action-box">
+    <div class="abl">// YOUR_SPAWN_POINTS.exe — take action</div>
+    <div class="action-item">
+      <div class="step">1</div>
+      <div class="text"><strong>Post the receipts (today)</strong>Thread or video: "The AI doom movement spent $22M on a castle while telling you to be scared. Here are the documents." Tag <span class="ht">#FORGEAct</span>. Let the docs do the work.</div>
+    </div>
+    <div class="action-item">
+      <div class="step">2</div>
+      <div class="text"><strong>Message your rep (5 minutes)</strong>DM on Instagram, email via their site, or call. "Support the FORGE Act. 28 funded AI projects in our district. Zero dollars to Big Tech. Working code wins." That's it. Done.</div>
+    </div>
+    <div class="action-item">
+      <div class="step">3</div>
+      <div class="text"><strong>Start your repo / join a guild</strong>$2,500 Seed Prep Grant is available right now to build your proof of concept. Or find builders in your area and form a guild. 5 people = Guild Formation Grant eligibility.</div>
+    </div>
+    <div class="action-item">
+      <div class="step">4</div>
+      <div class="text"><strong>Respawn loop</strong>If your first project doesn't get funded, document it in the FORGE Lessons Repository and try again. Every failure is public intelligence. That's how open source wins.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-l">// FORGE Act · March 2026 · Cyber Strategy Institute<br>// open source forever · no corp capture · citizen nodes only</div>
+  <div class="footer-c">FORGE.GOV</div>
+  <div class="footer-r"><span class="ht">#FORGEAct</span> · <span class="ht">#SovereigntyIsTheF lex</span> · <span class="ht">#CitizenAI</span><br>// fork rights reserved by everyone, forever</div>
+</div>
+
+</div>
+</body>
+</html>
