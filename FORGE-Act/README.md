@@ -41,7 +41,7 @@ The FORGE Act is a citizen-first AI funding framework that:
 - Establishes a **Solution RFI process** — submit a working GitHub repo, win a federal contract in 90 days
 
 The full policy brief is available at: [`FORGE_Act_American_Marshall_Plan_for_AI_v3.pdf`](../FORGE_Act_American_Marshall_Plan_for_AI_v3.pdf)  
-The marketing strategy document is available at: [`FORGE_Act_Marketing_Plan.pdf`](../FORGE_Act_Marketing_Plan.pdf)
+The full strategy document is available upon request.
 
 ---
 
