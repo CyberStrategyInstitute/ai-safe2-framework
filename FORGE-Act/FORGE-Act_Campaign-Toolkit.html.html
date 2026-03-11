@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Act — Complete Viral Marketing Kit</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+:root{
+  --fire:#E8600A;--navy:#0B1D3A;--gold:#FFD60A;--neon:#10B981;
+  --ash:#F8F7F5;--iron:#1A1A2E;--slate:#64748B;--smoke:#94A3B8;
+  --dark:#0A0F1E;--mid:#1E2A3B;
+  --font-d:'Bebas Neue',Impact,sans-serif;--font-h:'Oswald',sans-serif;
+  --font-b:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-b);background:var(--dark);color:#E8EAF0;width:8.5in;margin:0 auto;font-size:9.5px;}
+
+/* TOP HEADER */
+.kit-header{background:linear-gradient(135deg,var(--navy) 0%,#1a3a6e 60%,var(--mid) 100%);padding:0.9rem 1.2rem;position:relative;overflow:hidden;}
+.kit-header::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fire),var(--gold),var(--neon));}
+.kit-header-inner{display:grid;grid-template-columns:1fr auto;align-items:center;}
+.kit-logo{font-family:var(--font-d);font-size:2rem;color:#fff;letter-spacing:0.05em;}
+.kit-logo span{color:var(--fire);}
+.kit-subtitle{font-family:var(--font-b);font-size:0.68rem;color:rgba(255,255,255,0.65);margin-top:0.15rem;}
+.kit-meta{text-align:right;}
+.kit-meta .km-badge{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:0.4rem 0.6rem;font-family:var(--font-h);font-size:0.6rem;color:rgba(255,255,255,0.7);letter-spacing:0.08em;text-transform:uppercase;}
+
+/* SECTION BLOCKS */
+.section{margin:0;padding:0.7rem 1.2rem;border-bottom:1px solid #1E2A3B;}
+.section:nth-child(even){background:#0D1220;}
+.section-title{font-family:var(--font-d);font-size:1.2rem;color:var(--gold);letter-spacing:0.04em;margin-bottom:0.4rem;display:flex;align-items:center;gap:0.4rem;}
+.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(255,214,10,0.3),transparent);}
+
+/* VISUAL IDENTITY GRID */
+.brand-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0.4rem;margin-bottom:0.5rem;}
+.color-swatch{border-radius:4px;overflow:hidden;}
+.swatch-color{height:0.9in;border-radius:4px 4px 0 0;}
+.swatch-info{background:var(--mid);padding:0.25rem 0.3rem;border-radius:0 0 4px 4px;}
+.swatch-info .hex{font-family:'Courier New',monospace;font-size:0.6rem;color:var(--smoke);}
+.swatch-info .name{font-family:var(--font-h);font-size:0.6rem;color:#fff;text-transform:uppercase;letter-spacing:0.06em;}
+.swatch-info .use{font-family:var(--font-b);font-size:0.55rem;color:var(--slate);}
+
+/* FONT SHOWCASE */
+.font-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin:0.4rem 0;}
+.font-card{background:var(--mid);padding:0.4rem 0.5rem;border-radius:4px;border-top:2px solid var(--fire);}
+.font-card.teal{border-top-color:var(--neon);}
+.font-card.gold{border-top-color:var(--gold);}
+.font-card .fn{font-size:0.58rem;color:var(--slate);font-family:var(--font-b);margin-bottom:0.1rem;text-transform:uppercase;letter-spacing:0.06em;}
+.font-card .fd{color:#fff;}
+.font-card .fu{font-size:0.58rem;color:var(--slate);margin-top:0.1rem;}
+
+/* LOGO CONCEPTS */
+.logo-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0.5rem;margin:0.4rem 0;}
+.logo-concept{background:var(--mid);padding:0.5rem;border-radius:4px;text-align:center;}
+.logo-concept .lc-icon{font-size:1.8rem;margin-bottom:0.2rem;}
+.logo-concept .lc-name{font-family:var(--font-h);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--smoke);}
+.logo-concept .lc-desc{font-family:var(--font-b);font-size:0.58rem;color:var(--slate);margin-top:0.1rem;}
+
+/* TWO COL GRID */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;}
+.four-col{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.5rem;}
+
+/* SCRIPT CARD */
+.script-card{background:var(--mid);border-radius:6px;padding:0.5rem 0.6rem;border-left:3px solid var(--fire);}
+.script-card.teal{border-left-color:var(--neon);}
+.script-card.gold{border-left-color:var(--gold);}
+.script-card.purple{border-left-color:#7C3AED;}
+.sc-platform{font-family:var(--font-h);font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--fire);margin-bottom:0.2rem;}
+.script-card.teal .sc-platform{color:var(--neon);}
+.script-card.gold .sc-platform{color:var(--gold);}
+.script-card.purple .sc-platform{color:#A78BFA;}
+.sc-label{font-family:var(--font-b);font-size:0.6rem;color:var(--slate);margin-bottom:0.15rem;}
+.sc-content{font-family:var(--font-b);font-size:0.66rem;color:#C8D0DC;line-height:1.55;}
+.sc-content strong{color:#fff;}
+.sc-hook{font-family:var(--font-b);font-size:0.7rem;font-weight:700;color:var(--gold);display:block;margin-bottom:0.2rem;}
+.sc-cta{margin-top:0.2rem;font-family:var(--font-b);font-size:0.6rem;color:var(--neon);}
+
+/* MEME TEMPLATES */
+.meme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.4rem;margin:0.3rem 0;}
+.meme-frame{border-radius:5px;padding:0.45rem 0.5rem;text-align:center;border:1px solid rgba(255,255,255,0.1);}
+.mf-top{font-family:var(--font-d);font-size:0.8rem;line-height:1.1;margin-bottom:0.25rem;}
+.mf-img{height:0.5in;background:rgba(255,255,255,0.05);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:0.2rem;}
+.mf-bottom{font-family:var(--font-d);font-size:0.7rem;line-height:1.1;}
+.meme-frame.dark{background:#0A0F1E;}
+.meme-frame.dark .mf-top{color:var(--gold);}
+.meme-frame.dark .mf-bottom{color:#fff;}
+.meme-frame.fire{background:var(--fire);}
+.meme-frame.fire .mf-top{color:#fff;}
+.meme-frame.fire .mf-bottom{color:var(--gold);}
+.meme-frame.navy{background:var(--navy);}
+.meme-frame.navy .mf-top{color:var(--neon);}
+.meme-frame.navy .mf-bottom{color:#fff;}
+.meme-frame.gold-bg{background:var(--gold);}
+.meme-frame.gold-bg .mf-top{color:var(--navy);}
+.meme-frame.gold-bg .mf-bottom{color:var(--iron);}
+
+/* MESSAGE HOUSE */
+.message-house{background:var(--mid);border-radius:8px;padding:0.6rem 0.8rem;margin:0.3rem 0;}
+.mh-core{text-align:center;margin-bottom:0.4rem;padding-bottom:0.4rem;border-bottom:1px solid #2D3748;}
+.mh-core .slogan{font-family:var(--font-d);font-size:1.3rem;color:#fff;letter-spacing:0.03em;}
+.mh-core .slogan em{color:var(--fire);font-style:normal;}
+.mh-pillars{display:grid;grid-template-columns:repeat(5,1fr);gap:0.35rem;}
+.mhp{background:#0A0F1E;padding:0.35rem 0.4rem;border-radius:4px;border-top:2px solid var(--fire);}
+.mhp.g2{border-top-color:#C2410C;}
+.mhp.g3{border-top-color:var(--navy);}
+.mhp.g4{border-top-color:#1a3a6e;}
+.mhp.g5{border-top-color:var(--neon);}
+.mhp .mp-title{font-family:var(--font-h);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;color:#fff;margin-bottom:0.15rem;}
+.mhp .mp-key{font-family:var(--font-b);font-size:0.6rem;color:var(--slate);line-height:1.4;}
+.mhp .mp-proof{font-family:var(--font-b);font-size:0.56rem;color:var(--smoke);margin-top:0.12rem;padding-top:0.12rem;border-top:1px solid #1E2A3B;}
+
+/* INFLUENCER KIT */
+.inf-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin:0.3rem 0;}
+.inf-card{background:var(--mid);border-radius:6px;padding:0.5rem 0.6rem;}
+.inf-card .ic-platform{font-family:var(--font-h);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:0.25rem;}
+.inf-card ul{list-style:none;padding:0;margin:0;}
+.inf-card ul li{font-family:var(--font-b);font-size:0.64rem;color:#B0BAC8;padding-left:1em;position:relative;margin-bottom:0.15rem;line-height:1.45;}
+.inf-card ul li::before{content:'•';color:var(--fire);position:absolute;left:0;}
+
+/* TAGLINE VARIANTS */
+.tagline-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin:0.3rem 0;}
+.tg{background:var(--mid);padding:0.4rem 0.5rem;border-radius:4px;}
+.tg .tg-gen{font-family:var(--font-h);font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--fire);margin-bottom:0.1rem;}
+.tg .tg-line{font-family:var(--font-d);font-size:0.9rem;color:#fff;letter-spacing:0.03em;}
+
+/* KIT INDEX */
+.kit-index{display:grid;grid-template-columns:repeat(4,1fr);gap:0.35rem;margin:0.3rem 0;}
+.ki{background:var(--mid);padding:0.35rem 0.45rem;border-radius:4px;border-bottom:2px solid var(--fire);}
+.ki.t{border-bottom-color:var(--neon);}
+.ki.g{border-bottom-color:var(--gold);}
+.ki.n{border-bottom-color:var(--navy);}
+.ki .ki-name{font-family:var(--font-h);font-size:0.62rem;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:0.06em;}
+.ki .ki-desc{font-family:var(--font-b);font-size:0.58rem;color:var(--slate);margin-top:0.08rem;}
+
+/* FOOTER */
+.kit-footer{background:var(--navy);padding:0.4rem 1.2rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-top:2px solid var(--fire);}
+.kf-l{font-family:var(--font-b);font-size:0.58rem;color:rgba(255,255,255,0.4);}
+.kf-c{font-family:var(--font-d);font-size:1rem;color:var(--gold);text-align:center;}
+.kf-r{font-family:var(--font-b);font-size:0.58rem;color:rgba(255,255,255,0.4);text-align:right;}
+.fht{color:var(--fire);}
+
+p.small{font-size:0.67rem;color:var(--slate);line-height:1.55;margin-bottom:0.3rem;}
+h4{font-family:var(--font-h);font-size:0.75rem;color:var(--smoke);text-transform:uppercase;letter-spacing:0.08em;margin:0.3rem 0 0.15rem;}
+</style>
+</head>
+<body>
+
+<!-- KIT HEADER -->
+<div class="kit-header">
+  <div class="kit-header-inner">
+    <div>
+      <div class="kit-logo">⚒ FORGE ACT <span>—</span> VIRAL MARKETING KIT</div>
+      <div class="kit-subtitle">Complete brand system · Social scripts · Video outlines · Meme templates · Influencer guide · Message house · Visual identity</div>
+    </div>
+    <div class="kit-meta">
+      <div class="km-badge">v1.0 · March 2026 · Cyber Strategy Institute<br>Open Use — Share Freely — Adapt For Your Audience</div>
+    </div>
+  </div>
+</div>
+
+<!-- KIT CONTENTS INDEX -->
+<div class="section">
+  <div class="section-title">📦 KIT CONTENTS</div>
+  <div class="kit-index">
+    <div class="ki"><div class="ki-name">🎨 Visual Identity</div><div class="ki-desc">Colors, fonts, logo concepts, do/don't guide</div></div>
+    <div class="ki t"><div class="ki-name">🏠 Message House</div><div class="ki-desc">Core slogan + 5 pillars + proof points</div></div>
+    <div class="ki g"><div class="ki-name">📱 Social Scripts</div><div class="ki-desc">TikTok, Instagram, X, LinkedIn, YouTube</div></div>
+    <div class="ki"><div class="ki-name">🎬 Video Outlines</div><div class="ki-desc">30s, 2min, 5–7min deep dive</div></div>
+    <div class="ki n"><div class="ki-name">😂 Meme Frames</div><div class="ki-desc">8 templates, cross-demographic</div></div>
+    <div class="ki"><div class="ki-name">🎙 Podcast Scripts</div><div class="ki-desc">Guest talking points + host hooks</div></div>
+    <div class="ki t"><div class="ki-name">🌟 Influencer Kit</div><div class="ki-desc">Platform-native briefs per channel</div></div>
+    <div class="ki g"><div class="ki-name">🗣 Rep Contact Scripts</div><div class="ki-desc">Call, email, town hall scripts</div></div>
+  </div>
+</div>
+
+<!-- VISUAL IDENTITY -->
+<div class="section">
+  <div class="section-title">🎨 VISUAL IDENTITY — COLOR SYSTEM</div>
+  <div class="brand-grid">
+    <div class="color-swatch"><div class="swatch-color" style="background:#E8600A;"></div><div class="swatch-info"><div class="name">Forge Fire</div><div class="hex">#E8600A</div><div class="use">Primary CTAs, headlines, icons</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#0B1D3A;"></div><div class="swatch-info"><div class="name">Forge Navy</div><div class="hex">#0B1D3A</div><div class="use">Backgrounds, authority, trust</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#FFD60A;"></div><div class="swatch-info"><div class="name">Forge Gold</div><div class="hex">#FFD60A</div><div class="use">Accents, stats, highlights</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#10B981;"></div><div class="swatch-info"><div class="name">Forge Neon</div><div class="hex">#10B981</div><div class="use">Success, Gen Z, digital content</div></div></div>
+    <div class="color-swatch"><div class="swatch-color" style="background:#8FA8C0;"></div><div class="swatch-info"><div class="name">Forge Steel</div><div class="hex">#8FA8C0</div><div class="use">Body copy, secondary text</div></div></div>
+  </div>
+  <div class="font-row">
+    <div class="font-card"><div class="fn">Display / Headlines</div><div class="fd" style="font-family:'Bebas Neue',Impact;font-size:1.3rem;">BEBAS NEUE — FORGE ACT</div><div class="fu">All caps, bold statements, stats, memes</div></div>
+    <div class="font-card teal"><div class="fn">Subheadings / Labels</div><div class="fd" style="font-family:'Oswald',sans-serif;font-size:0.9rem;font-weight:700;text-transform:uppercase;">Oswald — Section Titles</div><div class="fu">Navigation, labels, UI elements</div></div>
+    <div class="font-card gold"><div class="fn">Body Copy</div><div class="fd" style="font-family:'Inter',sans-serif;font-size:0.8rem;font-weight:400;">Inter — Readable, modern, clean</div><div class="fu">Paragraphs, captions, detailed content</div></div>
+  </div>
+
+  <div class="two-col" style="gap:0.6rem;margin-top:0.4rem;">
+    <div>
+      <h4>Logo Concepts</h4>
+      <div class="logo-row" style="grid-template-columns:1fr 1fr;">
+        <div class="logo-concept"><div class="lc-icon">🔥</div><div class="lc-name">Flame + Circuit</div><div class="lc-desc">Fire at base, circuit node at peak. Represents energy + AI. Wordmark: FORGE in Bebas Neue.</div></div>
+        <div class="logo-concept"><div class="lc-icon">⚒</div><div class="lc-name">Hammer + Network</div><div class="lc-desc">Blacksmith hammer with network lines emanating from impact point. American craft meets digital.</div></div>
+        <div class="logo-concept"><div class="lc-icon">🛡️</div><div class="lc-name">Shield + Flame</div><div class="lc-desc">Shield shape with FORGE flame interior. Defense + sovereignty message in one mark.</div></div>
+        <div class="logo-concept"><div class="lc-icon">⬆️</div><div class="lc-name">Arrow + Flame</div><div class="lc-desc">Upward arrow that IS the flame. Growth. Progress. American ambition rising.</div></div>
+      </div>
+    </div>
+    <div>
+      <h4>Do / Don't Quick Guide</h4>
+      <div style="background:var(--mid);border-radius:4px;padding:0.45rem 0.6rem;">
+        <p class="small" style="color:#4ADE80;font-weight:700;">✅ DO</p>
+        <p class="small">Use FORGE Fire (#E8600A) as primary action color. Use Bebas Neue for all display text. Keep tagline in full: "Every Dollar to Citizens. Every Tool Open Source. Every Community Defended." Always include forge.gov. Use #FORGEAct on every post.</p>
+        <p class="small" style="color:#F87171;font-weight:700;margin-top:0.2rem;">❌ DON'T</p>
+        <p class="small">Don't use purple gradients or generic tech aesthetics. Don't change "not one cent to mega-corps" — this line is non-negotiable. Don't remove open-source requirement language. Don't use military acronyms in public-facing content.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MESSAGE HOUSE -->
+<div class="section">
+  <div class="section-title">🏠 MESSAGE HOUSE — THE CORE FRAMEWORK</div>
+  <div class="message-house">
+    <div class="mh-core">
+      <div class="slogan">EVERY DOLLAR TO CITIZENS. EVERY TOOL <em>OPEN SOURCE.</em> EVERY COMMUNITY DEFENDED.</div>
+    </div>
+    <div class="mh-pillars">
+      <div class="mhp"><div class="mp-title">🛡 Freedom</div><div class="mp-key">Every American has the right to private, sovereign AI tools.</div><div class="mp-proof">Counter: EA lobbies to criminalize open-source. FORGE mandates it.</div></div>
+      <div class="mhp g2"><div class="mp-title">📈 Opportunity</div><div class="mp-key">28–2,873 FORGE opportunities per district. Bozeman = Boston.</div><div class="mp-proof">Counter: Current AI concentrates wealth in 5 cities, 12 corps.</div></div>
+      <div class="mhp g3"><div class="mp-title">🏗 Resilience</div><div class="mp-key">Distributed defense across all 3,143 counties.</div><div class="mp-proof">Counter: CrowdStrike = 8.5M systems down. Centralization fails.</div></div>
+      <div class="mhp g4"><div class="mp-title">💰 Growth</div><div class="mp-key">Self-sustaining by Year 5. $84.75B ERF return at $500B.</div><div class="mp-proof">Counter: AI Panic offers only restriction and managed decline.</div></div>
+      <div class="mhp g5"><div class="mp-title">🏆 Excellence</div><div class="mp-key">Merit-based. Working code wins. No paper proposals.</div><div class="mp-proof">Counter: Traditional procurement rewards proposal writers, not builders.</div></div>
+    </div>
+  </div>
+  <h4>Tagline Variants by Demographic</h4>
+  <div class="tagline-grid">
+    <div class="tg"><div class="tg-gen">🧓 Boomer</div><div class="tg-line">THE MARSHALL PLAN FOR AI — REBUILDING AMERICA FROM THE CITIZEN UP</div></div>
+    <div class="tg"><div class="tg-gen">😎 Gen X</div><div class="tg-line">NOBODY'S COMING. BUILD IT YOURSELF. FORGE FUNDS THE TOOLS.</div></div>
+    <div class="tg"><div class="tg-gen">🌱 Millennial</div><div class="tg-line">28 OPPORTUNITIES PER DISTRICT. REAL PURPOSE. ZERO GRIFT.</div></div>
+    <div class="tg"><div class="tg-gen">⚡ Gen Z</div><div class="tg-line">SOVEREIGNTY IS THE FLEX. FORGE FUNDED. OPEN SOURCE FOREVER.</div></div>
+  </div>
+</div>
+
+<!-- SOCIAL SCRIPTS -->
+<div class="section">
+  <div class="section-title">📱 SOCIAL CONTENT SCRIPTS</div>
+  <div class="three-col">
+    <div class="script-card">
+      <div class="sc-platform">📱 TikTok / Reels — 30s Hook</div>
+      <div class="sc-label">Format: Talking head or screen + text overlay</div>
+      <div class="sc-content">
+        <span class="sc-hook">"The AI panic machine spent $22 million on a castle. Here's what FORGE does instead."</span>
+        [Cut to]: "FORGE creates 28 funded AI opportunities in every congressional district in America. Working code wins. No VCs. No gatekeepers. Not one dollar to Amazon, Google, or Microsoft."<br>
+        [Close]: "Link in bio. Tag your rep. <strong>#FORGEAct</strong>"
+      </div>
+      <div class="sc-cta">→ Target: Gen Z, Millennials · Best time: 7–9pm weekdays</div>
+    </div>
+    <div class="script-card teal">
+      <div class="sc-platform">📸 Instagram Carousel — 7 Slides</div>
+      <div class="sc-label">Visual story format, swipe-through</div>
+      <div class="sc-content">
+        <strong>Slide 1:</strong> "AI is coming to your town. Who controls it matters."<br>
+        <strong>Slide 2:</strong> The 2 paths: Corporate monopoly vs. FORGE<br>
+        <strong>Slide 3:</strong> "28 opportunities in YOUR district"<br>
+        <strong>Slide 4:</strong> "Working code wins. No lawyers required."<br>
+        <strong>Slide 5:</strong> "Salt Typhoon. Volt Typhoon. Real threats. FORGE fixes them."<br>
+        <strong>Slide 6:</strong> "Zero dollars to Big Tech. Mandatory open source."<br>
+        <strong>Slide 7:</strong> CTA — "Email your rep today. Link in bio."
+      </div>
+      <div class="sc-cta">→ Target: Millennials, parents · Best time: Tue/Wed 11am–1pm</div>
+    </div>
+    <div class="script-card gold">
+      <div class="sc-platform">🐦 X/Twitter Thread Starter</div>
+      <div class="sc-label">10-tweet thread, drop first tweet, pin it</div>
+      <div class="sc-content">
+        <span class="sc-hook">"The actual receipts on the AI panic industry. A thread. 🧵"</span>
+        <strong>Tweet 1:</strong> "$1B+ spent manufacturing AI fear. 223 orgs. Message-tested slogans. Here's what they're actually lobbying for 👇"<br>
+        <strong>Tweet 3:</strong> "They bought a $22.8M castle (Wytham Abbey) while telling you AI would kill humanity."<br>
+        <strong>Tweet 6:</strong> "Their actual policy goal: license AI like a controlled substance. Only mega-corps can afford compliance."<br>
+        <strong>Tweet 9:</strong> "FORGE is the counter. Citizen-first. 28 funded AI opportunities per district. Zero to mega-corps."<br>
+        <strong>Tweet 10:</strong> "If you're in Congress, co-sponsor it. If you're not, tell your rep to. <strong>#FORGEAct</strong>"
+      </div>
+      <div class="sc-cta">→ Target: Gen X, policy wonks · Best: Breaking news cycles</div>
+    </div>
+  </div>
+  <div class="three-col" style="margin-top:0.4rem;">
+    <div class="script-card purple">
+      <div class="sc-platform">💼 LinkedIn Post — Professional Version</div>
+      <div class="sc-label">300–400 words, no hashtag spam</div>
+      <div class="sc-content">
+        <span class="sc-hook">"I've been watching the AI policy debate closely. Something important is being missed."</span>
+        [Open with a problem you've observed in your field/industry]. "The FORGE Act addresses this differently: it doesn't regulate AI — it <strong>distributes capability</strong> to every congressional district. Working code wins federal contracts in 90 days. Zero dollars to mega-corporations. Open source mandatory forever. I'm asking my rep to co-sponsor it. Who else is paying attention to this?"
+      </div>
+      <div class="sc-cta">→ Target: Gen X, Millennials, professionals · Tag your rep</div>
+    </div>
+    <div class="script-card">
+      <div class="sc-platform">🎬 YouTube Short — "Cult Check" Format</div>
+      <div class="sc-label">60s max, receipts-style content</div>
+      <div class="sc-content">
+        <span class="sc-hook">"Wait until you see what the AI safety industry actually spent money on."</span>
+        [Show document on screen]: Castle purchase records, message testing documents, lobbying filings.<br>
+        [Pull back]: "None of this is conspiracy. All of it is documented. FORGE is the alternative — citizen-owned, open-source, funded in every district."<br>
+        [CTA]: "Subscribe. I'm covering this every week until it passes."
+      </div>
+      <div class="sc-cta">→ Target: Gen Z, skeptics · Format: screen record + voiceover</div>
+    </div>
+    <div class="script-card teal">
+      <div class="sc-platform">🎙 Podcast Guest Talking Points</div>
+      <div class="sc-label">For any guest appearance or interview</div>
+      <div class="sc-content">
+        <strong>Open:</strong> "The FORGE Act is the first federal AI program that explicitly excludes mega-corporations."<br>
+        <strong>Core stat:</strong> "28 funded AI opportunities per congressional district at $5 billion."<br>
+        <strong>Key contrast:</strong> "Traditional procurement takes 24 months. FORGE Solution RFI: 90 days."<br>
+        <strong>Credibility:</strong> "Self-sustaining by Year 5. $84 billion return at full deployment."<br>
+        <strong>Close:</strong> "The question isn't whether AI changes everything. It's who controls it when it does."
+      </div>
+      <div class="sc-cta">→ All demographics · Adapt length to show format</div>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEO OUTLINES -->
+<div class="section">
+  <div class="section-title">🎬 VIDEO CONTENT OUTLINES</div>
+  <div class="three-col">
+    <div style="background:var(--mid);border-radius:6px;padding:0.5rem 0.6rem;">
+      <h4 style="color:var(--fire);">30-Second Explainer</h4>
+      <p class="small"><strong style="color:#fff;">Hook (0–3s):</strong> Shocking stat — "One corporate AI update crashed 8.5 million systems."</p>
+      <p class="small"><strong style="color:#fff;">Problem (3–10s):</strong> "80% of AI is controlled by 12 corporations. That's a national security problem."</p>
+      <p class="small"><strong style="color:#fff;">Solution (10–20s):</strong> "FORGE puts AI tools in every community — 28 funded projects per district. Working code wins."</p>
+      <p class="small"><strong style="color:#fff;">CTA (20–30s):</strong> "Zero to mega-corps. Open source forever. Tell your rep: support the FORGE Act."</p>
+    </div>
+    <div style="background:var(--mid);border-radius:6px;padding:0.5rem 0.6rem;">
+      <h4 style="color:var(--neon);">2-Minute Overview</h4>
+      <p class="small"><strong style="color:#fff;">0:00–0:15:</strong> The two AI futures — corporation-controlled vs. citizen-sovereign</p>
+      <p class="small"><strong style="color:#fff;">0:15–0:45:</strong> The actual threat landscape — Salt Typhoon, Volt Typhoon, drone swarms</p>
+      <p class="small"><strong style="color:#fff;">0:45–1:15:</strong> How FORGE works — no proposals, GitHub repo, 90-day contract path</p>
+      <p class="small"><strong style="color:#fff;">1:15–1:45:</strong> The district math — 28 to 2,873 opportunities per district depending on funding level</p>
+      <p class="small"><strong style="color:#fff;">1:45–2:00:</strong> Call to action — contact your rep, share this video, join a guild</p>
+    </div>
+    <div style="background:var(--mid);border-radius:6px;padding:0.5rem 0.6rem;">
+      <h4 style="color:var(--gold);">5–7 Min Deep Dive</h4>
+      <p class="small"><strong style="color:#fff;">Intro:</strong> "I want to show you the receipts on the AI panic industry."</p>
+      <p class="small"><strong style="color:#fff;">Act 1 (1:30):</strong> The $1B AI fear ecosystem — who funded it, what they want, the documented bait-and-switch</p>
+      <p class="small"><strong style="color:#fff;">Act 2 (2:00):</strong> The real threats — Salt Typhoon, Volt Typhoon, agentic AI governance gap</p>
+      <p class="small"><strong style="color:#fff;">Act 3 (2:00):</strong> FORGE mechanics — funding structure, Solution RFI, open source protection, self-sustaining model</p>
+      <p class="small"><strong style="color:#fff;">Close (1:00):</strong> The two paths, the call to action, the district math for your specific audience's area</p>
+    </div>
+  </div>
+</div>
+
+<!-- MEME TEMPLATES -->
+<div class="section">
+  <div class="section-title">😂 MEME FRAME TEMPLATES</div>
+  <div class="meme-grid">
+    <div class="meme-frame dark">
+      <div class="mf-top">AI PANIC INDUSTRY:</div>
+      <div class="mf-img">🏰</div>
+      <div class="mf-bottom">$22M CASTLE "TO SAVE HUMANITY"<br>FORGE: GITHUB REPO + PAYCHECK</div>
+    </div>
+    <div class="meme-frame fire">
+      <div class="mf-top">THEM: "AI WILL KILL EVERYONE"</div>
+      <div class="mf-img">🎭</div>
+      <div class="mf-bottom">ALSO THEM: BUYING LUXURY RETREATS WITH YOUR DONATIONS</div>
+    </div>
+    <div class="meme-frame navy">
+      <div class="mf-top">SOVEREIGNTY IS THE FLEX</div>
+      <div class="mf-img">🖥️</div>
+      <div class="mf-bottom">AI THAT RUNS ON YOUR HARDWARE. NO CORPORATE SURVEILLANCE. FORGE FUNDED.</div>
+    </div>
+    <div class="meme-frame gold-bg">
+      <div class="mf-top">NOBODY'S COMING TO SAVE YOUR AI FUTURE.</div>
+      <div class="mf-img">🔨</div>
+      <div class="mf-bottom">FORGE GIVES YOU THE TOOLS TO SAVE IT YOURSELF.</div>
+    </div>
+    <div class="meme-frame dark">
+      <div class="mf-top">TRADITIONAL PROCUREMENT:</div>
+      <div class="mf-img">⏰</div>
+      <div class="mf-bottom">24 MONTHS. FORGE: 90 DAYS. WORKING CODE WINS.</div>
+    </div>
+    <div class="meme-frame navy">
+      <div class="mf-top">28 FUNDED AI PROJECTS</div>
+      <div class="mf-img">📍</div>
+      <div class="mf-bottom">IN YOUR DISTRICT. ZERO TO AMAZON, GOOGLE, OR MICROSOFT. EVER.</div>
+    </div>
+    <div class="meme-frame fire">
+      <div class="mf-top">STUDENT DEBT: $37K</div>
+      <div class="mf-img">💰</div>
+      <div class="mf-bottom">FORGE SEED GRANT: $81,900. BUILD, DON'T BORROW.</div>
+    </div>
+    <div class="meme-frame gold-bg">
+      <div class="mf-top">BOZEMAN COMPETES WITH BOSTON.</div>
+      <div class="mf-img">🗺️</div>
+      <div class="mf-bottom">TULSA STANDS BESIDE SF. EVERY COUNTY. SAME SHOT. FORGE.</div>
+    </div>
+  </div>
+</div>
+
+<!-- INFLUENCER KIT -->
+<div class="section">
+  <div class="section-title">🌟 INFLUENCER + MEDIA KIT</div>
+  <div class="inf-grid">
+    <div class="inf-card">
+      <div class="ic-platform">📱 Micro-Influencers (1K–100K)</div>
+      <ul>
+        <li>Use the 30s TikTok script as-is or adapt</li>
+        <li>The "receipts" format performs best (screenshot + voiceover)</li>
+        <li>Duet/stitch existing FORGE content to amplify</li>
+        <li>Personal story hook: "Here's what this would mean for [your town]"</li>
+        <li>CTA: "Comment your district — let's count how many people this affects"</li>
+        <li>Don't need to be a tech expert — be a citizen who cares</li>
+      </ul>
+    </div>
+    <div class="inf-card">
+      <div class="ic-platform">🎙 Podcast Hosts</div>
+      <ul>
+        <li>Invite a FORGE-informed guest who can speak to the district economics</li>
+        <li>Lead with the threat (Salt Typhoon / Volt Typhoon) before solution</li>
+        <li>The "self-sustaining by Year 5" angle works for business/finance shows</li>
+        <li>For political shows: bipartisan angle is real — 28 jobs in EVERY district</li>
+        <li>For tech shows: the Solution RFI / no-paper-proposal angle is compelling</li>
+        <li>Always end with the actionable: "Call your rep this week"</li>
+      </ul>
+    </div>
+    <div class="inf-card">
+      <div class="ic-platform">📰 Press / Media</div>
+      <ul>
+        <li>Story angles: "The AI bill that excludes Big Tech entirely"</li>
+        <li>"How a veteran in Montana can win a federal contract in 90 days"</li>
+        <li>"$84 billion return: why this AI bill pays for itself"</li>
+        <li>"The documented AI panic industry — $1 billion and a castle"</li>
+        <li>Fact sheet available at FORGE.gov</li>
+        <li>State-by-state economic impact data in the FORGE Act brief</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:0.5rem;">
+    <div>
+      <h4>Congressional Leader Messaging (Boomers/Gen X)</h4>
+      <div style="background:var(--mid);border-radius:4px;padding:0.45rem 0.6rem;">
+        <p class="small"><strong style="color:#fff;">For Defense Hawks:</strong> "Close the L4–L5 agentic gap before China does. US 1.2pt gap; China 1.6pt but faster trajectory."</p>
+        <p class="small"><strong style="color:#fff;">For Fiscal Conservatives:</strong> "Self-sustaining by Year 5. $84B ERF return at $500B. Not spending — compounding investment."</p>
+        <p class="small"><strong style="color:#fff;">For Rural Representatives:</strong> "3,143 counties. All 435 districts. All 50 states. A farmer in Nebraska gets the same AI tools as a programmer in California."</p>
+        <p class="small"><strong style="color:#fff;">For Populists:</strong> "First tech program for Tulsa, not just San Francisco. 2,873 opportunities in your district at $500B."</p>
+      </div>
+    </div>
+    <div>
+      <h4>Hashtag Strategy — Use Together</h4>
+      <div style="background:var(--mid);border-radius:4px;padding:0.45rem 0.6rem;">
+        <p class="small"><strong style="color:var(--fire);">Primary:</strong> #FORGEAct (always use this one)</p>
+        <p class="small"><strong style="color:var(--neon);">Secondary:</strong> #CitizenAI · #OpenSourceAmerica · #BuildAmerica</p>
+        <p class="small"><strong style="color:var(--gold);">Demographic:</strong> #MarshalPlanForAI (Boomers) · #BuildItYourself (Gen X) · #RealPurpose (Millennials) · #SovereigntyIsTheFlex (Gen Z) · #FamilyAI (Parents)</p>
+        <p class="small"><strong style="color:#fff;">Counter:</strong> #AIForThePeople · #NotOnecentToMegaCorps · #WorkingCodeWins</p>
+        <p class="small">Always include FORGE.gov in bio or post text.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="kit-footer">
+  <div class="kf-l">FORGE Act Viral Kit · Open Use · Share Freely · Adapt For Your Audience<br>Cyber Strategy Institute · March 2026</div>
+  <div class="kf-c">FORGE.GOV</div>
+  <div class="kf-r"><span class="fht">#FORGEAct</span> · <span class="fht">#CitizenAI</span> · <span class="fht">#BuildAmerica</span><br>Every Tool Open Source · Every Community Defended</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Act — For the Generation That Built America</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+:root{
+  --fire:#C2410C;--navy:#0B1D3A;--gold:#B8860B;--steel:#8FA8C0;
+  --ash:#FAF7F2;--iron:#1A1A2E;--smoke:#5A5A72;--cream:#F5EFE0;
+  --font-d:'Bebas Neue',Impact,sans-serif;--font-h:'Oswald',serif;
+  --font-b:'Merriweather',Georgia,serif;--font-s:'Source Sans 3',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-b);background:#fff;color:var(--iron);width:8.5in;min-height:11in;margin:0 auto;font-size:10px;}
+
+.page{width:8.5in;min-height:11in;display:flex;flex-direction:column;}
+
+/* PATRIOTIC HEADER */
+.header{background:var(--navy);position:relative;overflow:hidden;padding:0;}
+.header-stripe{height:5px;background:repeating-linear-gradient(90deg,var(--fire) 0,var(--fire) 33.3%,#fff 33.3%,#fff 66.6%,var(--navy) 66.6%,var(--navy) 100%);}
+.header-inner{padding:1rem 1.4rem 0.9rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;}
+.header-badge{background:var(--fire);border:3px double var(--gold);padding:0.6rem 1rem;text-align:center;border-radius:2px;}
+.header-badge .gen{font-family:var(--font-d);font-size:2.2rem;color:var(--gold);line-height:1;}
+.header-badge .gen-sub{font-family:var(--font-s);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.85);}
+.logo-area .logo-top{font-family:var(--font-d);font-size:1.3rem;color:var(--gold);letter-spacing:0.15em;}
+.logo-area h1{font-family:var(--font-d);font-size:2.4rem;color:#fff;line-height:1;margin:0.15rem 0;}
+.logo-area .tagline{font-family:var(--font-s);font-size:0.75rem;color:var(--steel);font-style:italic;}
+
+/* STAR BANNER */
+.star-banner{background:var(--fire);padding:0.35rem 1.4rem;display:flex;align-items:center;gap:0.5rem;}
+.star-banner p{font-family:var(--font-h);font-size:0.75rem;color:#fff;font-weight:400;}
+.star-banner strong{color:var(--gold);}
+.stars{color:var(--gold);font-size:0.9rem;letter-spacing:0.15em;}
+
+/* BODY GRID */
+.body{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;}
+.left-col{padding:1rem 1.1rem;border-right:2px solid #ddd4c4;}
+.right-col{padding:1rem 1.1rem;}
+
+.section-head{font-family:var(--font-d);font-size:1.3rem;color:var(--navy);margin-bottom:0.5rem;line-height:1.1;border-bottom:2px solid var(--fire);padding-bottom:0.3rem;}
+.section-label{font-family:var(--font-s);font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--fire);font-weight:700;margin-bottom:0.2rem;}
+
+p{font-size:0.72rem;line-height:1.65;margin-bottom:0.5rem;font-family:var(--font-b);}
+h3{font-family:var(--font-h);font-size:0.88rem;color:var(--navy);font-weight:700;margin:0.6rem 0 0.25rem;}
+ul{list-style:none;margin:0 0 0.5rem;padding:0;}
+ul li{font-family:var(--font-s);font-size:0.71rem;line-height:1.55;padding-left:1.1em;position:relative;margin-bottom:0.2rem;color:var(--iron);}
+ul li::before{content:'★';color:var(--gold);font-size:0.5rem;position:absolute;left:0;top:0.2em;}
+
+/* HISTORICAL PARALLEL BOX */
+.history-box{background:var(--cream);border:1px solid #c8b68a;border-left:4px solid var(--gold);padding:0.6rem 0.75rem;margin:0.5rem 0;border-radius:2px;}
+.history-box .hb-label{font-family:var(--font-s);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:0.2rem;}
+.history-box .compare-row{display:grid;grid-template-columns:1fr auto 1fr;gap:0.4rem;align-items:center;margin-top:0.3rem;}
+.history-box .old{font-family:var(--font-s);font-size:0.68rem;color:var(--smoke);}
+.history-box .arrow{color:var(--fire);font-size:1rem;}
+.history-box .new{font-family:var(--font-s);font-size:0.68rem;color:var(--navy);font-weight:600;}
+
+/* PATRIOT STAT */
+.patriot-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;margin:0.5rem 0;}
+.ps{background:var(--navy);padding:0.45rem 0.4rem;text-align:center;border-radius:3px;}
+.ps .n{font-family:var(--font-d);font-size:1.5rem;color:var(--gold);line-height:1;}
+.ps .l{font-family:var(--font-s);font-size:0.56rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--steel);}
+
+/* MARSHALL PLAN COMPARE */
+.mp-table{width:100%;border-collapse:collapse;font-size:0.65rem;margin:0.4rem 0;}
+.mp-table th{background:var(--navy);color:var(--gold);font-family:var(--font-h);font-size:0.62rem;text-transform:uppercase;padding:0.3rem 0.4rem;text-align:left;}
+.mp-table td{padding:0.25rem 0.4rem;border-bottom:1px solid #ddd4c4;font-family:var(--font-s);}
+.mp-table tr:last-child td{border-bottom:none;}
+.mp-table tr:nth-child(even) td{background:var(--cream);}
+
+/* QUOTE - Statesman style */
+.statesman-quote{border:1px solid #c8b68a;background:var(--cream);padding:0.7rem 0.9rem;margin:0.5rem 0;position:relative;}
+.statesman-quote::before{content:'"';font-family:Georgia,serif;font-size:3rem;color:var(--gold);line-height:0.7;position:absolute;top:0.3rem;left:0.4rem;opacity:0.5;}
+.statesman-quote p{font-family:var(--font-b);font-style:italic;font-size:0.72rem;line-height:1.65;padding-left:1.2rem;color:var(--iron);}
+.statesman-quote .attr{font-family:var(--font-s);font-size:0.6rem;color:var(--smoke);margin-top:0.2rem;padding-left:1.2rem;}
+
+/* ACTION BOX */
+.action-box{background:var(--navy);padding:0.7rem 0.85rem;margin:0.4rem 0;border-radius:3px;}
+.action-box .ab-label{font-family:var(--font-h);font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fire);margin-bottom:0.4rem;}
+.action-item{display:grid;grid-template-columns:1.5rem 1fr;gap:0.35rem;align-items:start;margin-bottom:0.35rem;}
+.action-item .num{font-family:var(--font-d);font-size:0.95rem;color:var(--gold);width:1.5rem;}
+.action-item .text{font-family:var(--font-s);font-size:0.69rem;color:#fff;line-height:1.5;padding-top:0.05rem;}
+.action-item .text strong{color:var(--gold);display:block;}
+
+/* MEME FRAMES */
+.meme-row{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin:0.5rem 0;}
+.meme{background:var(--fire);padding:0.45rem 0.5rem;border-radius:3px;text-align:center;}
+.meme p{font-family:var(--font-h);font-size:0.7rem;color:#fff;line-height:1.4;margin:0;}
+.meme.gold-meme{background:var(--gold);}
+.meme.gold-meme p{color:var(--navy);}
+
+/* FOOTER */
+.footer{background:var(--navy);padding:0.45rem 1.4rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;}
+.footer-l{font-family:var(--font-s);font-size:0.6rem;color:var(--steel);}
+.footer-c{font-family:var(--font-d);font-size:1.1rem;color:var(--gold);text-align:center;}
+.footer-r{font-family:var(--font-s);font-size:0.6rem;color:var(--steel);text-align:right;}
+.ht{color:#E8600A;font-weight:700;}
+
+@media print{body{width:8.5in;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-stripe"></div>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-top">⚒ THE FORGE ACT</div>
+      <h1>FOR THE GENERATION<br>THAT BUILT AMERICA</h1>
+      <div class="tagline">You rebuilt the world after WWII. Now lead America into the AI era — the same way you always have.</div>
+    </div>
+    <div class="header-badge">
+      <div class="gen">BABY<br>BOOMERS</div>
+      <div class="gen-sub">Born 1946–1964</div>
+    </div>
+  </div>
+</div>
+<div class="star-banner">
+  <span class="stars">★ ★ ★</span>
+  <p>The <strong>FORGE Act</strong> is this generation's <strong>Marshall Plan</strong> — citizen investment in American sovereignty, not corporate welfare. <strong>Not one dollar to mega-corporations.</strong></p>
+  <span class="stars">★ ★ ★</span>
+</div>
+
+<div class="body">
+<!-- LEFT COLUMN -->
+<div class="left-col">
+  <div class="section-label">The Historical Parallel</div>
+  <div class="section-head">You've Seen This Fight Before</div>
+
+  <p>Your generation won the Cold War by putting tools in the hands of free people — not by surrendering control to central authorities. The AI era demands the same courage.</p>
+
+  <div class="history-box">
+    <div class="hb-label">🕰 Then &amp; Now — The Same Fight, New Technology</div>
+    <div class="compare-row"><span class="old">Marshall Plan (1948)<br>Rebuilt European allies<br>through citizen investment</span><span class="arrow">→</span><span class="new">FORGE Act (2026)<br>Rebuilds American<br>innovation from citizens up</span></div>
+    <div class="compare-row" style="margin-top:0.3rem;"><span class="old">Soviet Central Planning<br>controlled all tools</span><span class="arrow">→</span><span class="new">Corporate AI monopoly<br>controls all platforms</span></div>
+    <div class="compare-row" style="margin-top:0.3rem;"><span class="old">Radio Free Europe<br>distributed truth</span><span class="arrow">→</span><span class="new">FORGE.gov distributes<br>AI tools to every citizen</span></div>
+    <div class="compare-row" style="margin-top:0.3rem;"><span class="old">GI Bill invested in<br>returning veterans</span><span class="arrow">→</span><span class="new">FORGE invests in<br>American builders</span></div>
+  </div>
+
+  <h3>Why This Matters to You Personally</h3>
+  <ul>
+    <li><strong>Your expertise doesn't expire.</strong> 40 years of experience becomes the seed data for the next generation of AI tools.</li>
+    <li><strong>Your savings are at risk.</strong> Chinese hackers are inside US financial systems. FORGE funds the open-source defenses.</li>
+    <li><strong>Your grandchildren's future.</strong> Without FORGE, they inherit an AI world controlled by 12 corporations — not by Americans.</li>
+    <li><strong>Your town's economic future.</strong> 28 FORGE opportunities per congressional district at $5B — Bozeman gets the same shot as Boston.</li>
+  </ul>
+
+  <div class="statesman-quote">
+    <p>A billion dollars buys a lot of panic. Ask who's funding the fear — and what they gain when you surrender your AI rights.</p>
+    <div class="attr">— FORGE Act Messaging Framework, 2026</div>
+  </div>
+
+  <h3>The Manufactured Threat vs. The Real One</h3>
+  <p>Over 223 organizations — funded by billionaires spending $1 billion+ — are running message-tested campaigns to convince Americans that AI will destroy humanity. They tested slogans like "Godlike AI" and "Digital alien invasion." Their actual policy goal: strict licensing, government surveillance, and criminalization of open-source development — which locks citizens out and hands control to whoever can pay for compliance.</p>
+
+  <p>The <em>real</em> threats have names: <strong>Salt Typhoon</strong> (inside our telecoms for 2+ years), <strong>Volt Typhoon</strong> (pre-positioned in our power grid), and drone swarms over American communities. FORGE addresses all 15 documented vulnerabilities. The AI doom industry addresses zero of them.</p>
+
+  <div class="patriot-stats">
+    <div class="ps"><div class="n">$22M</div><div class="l">Spent on castles by "AI safety" groups</div></div>
+    <div class="ps"><div class="n">2 Yrs</div><div class="l">China was inside US telecom — undetected</div></div>
+    <div class="ps"><div class="n">50</div><div class="l">States with Volt Typhoon grid pre-positioning</div></div>
+  </div>
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="right-col">
+  <div class="section-label">What FORGE Does</div>
+  <div class="section-head">The GI Bill For The AI Era</div>
+
+  <p>FORGE is not a welfare program. It's an <strong>investment vehicle</strong> — the same principle that sent veterans to college, built the interstate highway system, and funded the technologies that won the Space Race. Citizen investment creates national advantage.</p>
+
+  <table class="mp-table">
+    <tr><th>FORGE Feature</th><th>What It Means For You</th></tr>
+    <tr><td>$10K–$50K Seed Grants</td><td>Any eligible American can apply. Working code, not proposals.</td></tr>
+    <tr><td>No entity &gt;50 employees</td><td>Not one cent to Amazon, Google, Microsoft, or OpenAI.</td></tr>
+    <tr><td>All 435 districts funded equally</td><td>Your district gets the same as San Francisco.</td></tr>
+    <tr><td>Blockchain-verified funding</td><td>Every dollar publicly tracked. No grift. 150% clawback for fraud.</td></tr>
+    <tr><td>Self-funding by Year 5</td><td>$84.75B in returns. This pays for itself.</td></tr>
+    <tr><td>Open source mandatory</td><td>Everything built stays free — no corporation can take it back.</td></tr>
+  </table>
+
+  <h3>Your Role: Guild Leader &amp; Mentor</h3>
+  <p>FORGE guilds pair <strong>experienced Americans</strong> with the next generation of builders. Your 40 years of engineering, farming, manufacturing, medicine, or public service expertise isn't obsolete — it's the foundation. Guild Formation Grants of $50K–$200K fund shared workspaces in every congressional district.</p>
+
+  <div class="meme-row">
+    <div class="meme"><p>"Your parents' generation rebuilt Europe.<br>Your generation rebuilds America's digital future."</p></div>
+    <div class="meme gold-meme"><p>"We beat the Soviets by out-innovating them. We beat AI monopolists the same way."</p></div>
+  </div>
+
+  <div class="action-box">
+    <div class="ab-label">⚡ How To Make FORGE A Reality — Today</div>
+    <div class="action-item">
+      <span class="num">1</span>
+      <div class="text"><strong>Call Your Representative (5 minutes)</strong>Ask them to co-sponsor the FORGE Act. Script: "I'm a constituent in [district]. I'm calling to ask Rep. [Name] to co-sponsor the FORGE Act — the citizen AI bill. Not one dollar to mega-corps. 28 funded projects in our district. Please support it."</div>
+    </div>
+    <div class="action-item">
+      <span class="num">2</span>
+      <div class="text"><strong>Share on Facebook / Email</strong>Post this 1-pager or the FORGE.gov link. Tag <span class="ht">#FORGEAct</span>. Write: "I support this because my generation built America by putting tools in people's hands — not surrendering to central control."</div>
+    </div>
+    <div class="action-item">
+      <span class="num">3</span>
+      <div class="text"><strong>Start a Local Guild</strong>Recruit 4 more builders in your community. Apply for a Guild Formation Grant. You lead the chapter. You set the culture. America needs your experience more than ever.</div>
+    </div>
+    <div class="action-item">
+      <span class="num">4</span>
+      <div class="text"><strong>Talk to Your Veterans Network</strong>FORGE's Solution RFI model means a veteran with a working prototype can win a federal contract in 90 days — not the 24-month nightmare of traditional procurement.</div>
+    </div>
+  </div>
+
+  <div class="statesman-quote" style="margin-top:0.5rem;">
+    <p>We didn't beat tyranny by hiding from technology. We beat it by putting tools in the hands of free people. FORGE does that for the AI era.</p>
+    <div class="attr">— FORGE Act, Cyber Strategy Institute, 2026</div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-l">FORGE Act · Cyber Strategy Institute · March 2026<br>Every Dollar to Citizens · Every Tool Open Source</div>
+  <div class="footer-c">FORGE.GOV</div>
+  <div class="footer-r"><span class="ht">#FORGEAct</span> · <span class="ht">#CitizenAI</span> · <span class="ht">#MarshalPlanForAI</span><br>Share this with your representative today</div>
+</div>
+
+</div>
+</body>
+</html>

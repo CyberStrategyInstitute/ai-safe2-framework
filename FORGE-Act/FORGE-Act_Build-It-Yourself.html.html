@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Act — Nobody's Coming To Save Your AI Future</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+:root{
+  --fire:#E8600A;--navy:#0B1D3A;--gold:#FFD60A;--steel:#8FA8C0;
+  --black:#0A0A0A;--dark:#1A1A1A;--mid:#2D2D2D;--muted:#666;
+  --offwhite:#F0EEE8;--mono:'IBM Plex Mono',monospace;
+  --font-d:'Bebas Neue',Impact,sans-serif;--font-h:'Oswald',sans-serif;
+  --font-b:'IBM Plex Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-b);background:#fff;color:var(--dark);width:8.5in;min-height:11in;margin:0 auto;}
+.page{width:8.5in;min-height:11in;display:flex;flex-direction:column;background:var(--offwhite);}
+
+/* HEADER — industrial/raw */
+.header{background:var(--black);padding:0;position:relative;overflow:hidden;}
+.header-grid{display:grid;grid-template-columns:auto 1fr auto;align-items:stretch;}
+.header-accent{background:var(--fire);width:6px;}
+.header-content{padding:0.9rem 1.1rem;}
+.gen-badge-top{font-family:var(--mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.08em;margin-bottom:0.2rem;}
+.gen-badge-top span{color:var(--fire);}
+h1{font-family:var(--font-d);font-size:2.5rem;color:#fff;line-height:0.95;letter-spacing:0.02em;}
+h1 em{color:var(--gold);font-style:normal;}
+.header-sub{font-family:var(--font-b);font-size:0.72rem;color:#888;margin-top:0.4rem;font-style:italic;}
+.header-stat-box{background:var(--fire);padding:0.9rem 1.1rem;display:flex;flex-direction:column;justify-content:center;align-items:center;min-width:2.4in;}
+.header-stat-box .big{font-family:var(--font-d);font-size:2.4rem;color:#fff;line-height:1;text-align:center;}
+.header-stat-box .big em{color:var(--gold);font-style:normal;}
+.header-stat-box .sm{font-family:var(--mono);font-size:0.58rem;color:rgba(255,255,255,0.8);text-align:center;margin-top:0.2rem;}
+
+/* CODE TICKER */
+.code-bar{background:var(--dark);padding:0.3rem 1.1rem;font-family:var(--mono);font-size:0.62rem;color:#4ADE80;letter-spacing:0.04em;border-top:1px solid #333;border-bottom:1px solid #333;}
+.code-bar span{color:#60A5FA;}
+
+/* BODY */
+.body{flex:1;display:grid;grid-template-columns:1.15fr 1fr;gap:0;background:#fff;}
+.left-col{padding:0.85rem 1rem;border-right:2px dashed #ccc;}
+.right-col{padding:0.85rem 1rem;background:var(--offwhite);}
+
+.section-label{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--fire);margin-bottom:0.2rem;}
+.section-head{font-family:var(--font-d);font-size:1.45rem;color:var(--black);line-height:1.05;margin-bottom:0.45rem;}
+p{font-size:0.71rem;line-height:1.6;color:var(--dark);margin-bottom:0.4rem;font-family:var(--font-b);}
+h3{font-family:var(--font-h);font-size:0.87rem;color:var(--navy);font-weight:700;margin:0.5rem 0 0.2rem;text-transform:uppercase;letter-spacing:0.04em;}
+ul{list-style:none;margin:0 0 0.4rem;padding:0;}
+ul li{font-size:0.7rem;line-height:1.55;padding-left:1.4em;position:relative;margin-bottom:0.18rem;font-family:var(--font-b);}
+ul li::before{content:'//';font-family:var(--mono);color:var(--fire);font-size:0.55rem;position:absolute;left:0;top:0.15em;}
+
+/* BS DETECTOR BOX */
+.bs-box{background:var(--black);padding:0.6rem 0.75rem;border-radius:3px;margin:0.5rem 0;}
+.bs-box .bs-top{font-family:var(--mono);font-size:0.58rem;color:var(--fire);letter-spacing:0.1em;margin-bottom:0.2rem;}
+.bs-box .bs-item{display:grid;grid-template-columns:auto 1fr auto;gap:0.4rem;align-items:center;padding:0.2rem 0;border-bottom:1px solid #333;}
+.bs-box .bs-item:last-child{border-bottom:none;}
+.bs-box .bs-item .label{font-family:var(--font-b);font-size:0.65rem;color:#ccc;}
+.bs-box .bs-item .val{font-family:var(--mono);font-size:0.65rem;color:var(--gold);text-align:right;}
+.bs-box .bs-item .ico{font-size:0.75rem;}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;margin:0.45rem 0;}
+.stat-card{background:var(--black);padding:0.45rem 0.4rem;text-align:center;border-top:2px solid var(--fire);}
+.stat-card .n{font-family:var(--font-d);font-size:1.5rem;color:var(--fire);line-height:1;}
+.stat-card .l{font-family:var(--mono);font-size:0.54rem;color:#888;text-transform:uppercase;}
+
+/* TERMINAL BOX */
+.terminal{background:#0D1117;border:1px solid #30363d;border-radius:4px;padding:0.5rem 0.65rem;margin:0.4rem 0;font-family:var(--mono);}
+.terminal .prompt{font-size:0.62rem;color:#4ADE80;margin-bottom:0.15rem;}
+.terminal .cmd{font-size:0.65rem;color:#E2E8F0;margin-bottom:0.12rem;padding-left:0.8rem;}
+.terminal .out{font-size:0.6rem;color:#60A5FA;padding-left:0.8rem;}
+
+/* COMPARE */
+.compare{width:100%;border-collapse:collapse;font-size:0.64rem;margin:0.4rem 0;}
+.compare th{background:var(--navy);color:#fff;font-family:var(--font-h);font-size:0.6rem;text-transform:uppercase;letter-spacing:0.06em;padding:0.28rem 0.4rem;text-align:left;}
+.compare td{padding:0.22rem 0.4rem;border-bottom:1px solid #e0dbd4;font-family:var(--font-b);}
+.compare tr:last-child td{border-bottom:none;}
+.compare td.bad{color:#dc2626;font-style:italic;}
+.compare td.good{color:#16a34a;font-weight:600;}
+.compare tr:nth-child(odd) td{background:#f8f6f2;}
+
+/* CALLOUT */
+.callout{border-left:3px solid var(--gold);background:rgba(255,214,10,0.08);padding:0.45rem 0.6rem;margin:0.4rem 0;}
+.callout p{font-family:var(--mono);font-size:0.66rem;color:var(--dark);margin:0;}
+.callout p strong{color:var(--fire);}
+
+/* ACTION LIST */
+.action-box{background:var(--navy);border-radius:3px;padding:0.65rem 0.8rem;margin:0.4rem 0;}
+.action-box .abl{font-family:var(--mono);font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--fire);margin-bottom:0.4rem;}
+.action-item{display:grid;grid-template-columns:1.8rem 1fr;gap:0.35rem;margin-bottom:0.35rem;align-items:start;}
+.action-item .step{font-family:var(--mono);font-size:0.8rem;color:var(--gold);font-weight:600;}
+.action-item .text{font-family:var(--font-b);font-size:0.68rem;color:#ddd;line-height:1.5;}
+.action-item .text strong{color:#fff;display:block;font-family:var(--font-h);font-size:0.72rem;text-transform:uppercase;}
+
+/* MEME FRAMES */
+.meme-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem;margin:0.4rem 0;}
+.meme{padding:0.4rem 0.5rem;border-radius:3px;text-align:center;}
+.meme.dark{background:var(--black);}
+.meme.fire{background:var(--fire);}
+.meme p{font-family:var(--font-h);font-size:0.7rem;color:#fff;line-height:1.4;margin:0;}
+.meme.dark p span{color:var(--gold);}
+
+/* FOOTER */
+.footer{background:var(--black);padding:0.4rem 1.1rem;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;}
+.footer-l{font-family:var(--mono);font-size:0.58rem;color:#666;}
+.footer-c{font-family:var(--font-d);font-size:1.1rem;color:var(--fire);text-align:center;}
+.footer-r{font-family:var(--mono);font-size:0.58rem;color:#666;text-align:right;}
+.ht{color:var(--gold);}
+
+@media print{body{width:8.5in;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-grid">
+    <div class="header-accent"></div>
+    <div class="header-content">
+      <div class="gen-badge-top">// TARGET: <span>GEN X</span> · BORN 1965–1980 · YOU BUILT THE INTERNET ON NIGHTS AND WEEKENDS</div>
+      <h1>NOBODY'S COMING.<br><em>BUILD IT</em> YOURSELF.</h1>
+      <div class="header-sub">Your BS detector has been ringing about AI. Trust it. The FORGE Act is what you've been waiting for.</div>
+    </div>
+    <div class="header-stat-box">
+      <div class="big">$<em>81,900</em></div>
+      <div class="sm">avg FORGE seed grant<br>// no VCs. no gatekeepers.<br>// working code wins.</div>
+    </div>
+  </div>
+</div>
+<div class="code-bar">$ forge apply --repo github.com/[you]/[your-tool] --district [your-district] &nbsp;→&nbsp; <span>automated score in 48hrs. contract in 90 days.</span></div>
+
+<div class="body">
+<!-- LEFT COLUMN -->
+<div class="left-col">
+  <div class="section-label">// The Situation</div>
+  <div class="section-head">Your Cynicism Is Correct. Here's The Proof.</div>
+
+  <p>You were right to be skeptical. Over $1 billion has been spent by billionaires running message-tested AI panic campaigns — the same market research techniques used by consumer brands — to convince Americans that AI will destroy humanity. Their documented goal: strict licensing, surveillance of software development, and laws that make building AI without a corporate sponsor a <em>crime.</em></p>
+
+  <div class="bs-box">
+    <div class="bs-top">// BS_DETECTOR.exe — AI PANIC ECOSYSTEM AUDIT</div>
+    <div class="bs-item"><span class="ico">🏰</span><span class="label">Bought luxury castles while claiming "save humanity"</span><span class="val">$22.8M (Wytham Abbey)</span></div>
+    <div class="bs-item"><span class="ico">🧪</span><span class="label">Message-tested 37 AI fear slogans on target demographics</span><span class="val">Documented</span></div>
+    <div class="bs-item"><span class="ico">⚠️</span><span class="label">EA-linked cult dynamics → psychotic breaks, deaths</span><span class="val">Verified</span></div>
+    <div class="bs-item"><span class="ico">🔒</span><span class="label">Lobbying goal: criminalize open-source AI development</span><span class="val">Policy filings</span></div>
+    <div class="bs-item"><span class="ico">💰</span><span class="label">SBF (now convicted) was a primary funder</span><span class="val">Public record</span></div>
+  </div>
+
+  <div class="terminal">
+    <div class="prompt">$ decode_real_threats --priority high</div>
+    <div class="cmd">[ SALT TYPHOON ] → AT&amp;T/Verizon/T-Mobile backbone, 2+ years, undetected</div>
+    <div class="cmd">[ VOLT TYPHOON ] → Power grid, water systems, ports. All 50 states. Active.</div>
+    <div class="cmd">[ CROWDSTRIKE ]  → 8.5M systems. One automated update. Centralization = fragility.</div>
+    <div class="out">// These are real. AI doomsday cults are not. FORGE funds fixes for these.</div>
+  </div>
+
+  <h3>The Actual Threat: Who Controls The Stack</h3>
+  <p>80% of commercial AI is controlled by 12 corporations in 5 cities. Same dynamic as the 90s web monopoly, except this time the stakes are national security, your kids' data, and whether small businesses can compete at all. The AI panic lobby wants to make this permanent through licensing regimes that only mega-corps can afford.</p>
+
+  <div class="stat-row">
+    <div class="stat-card"><div class="n">12</div><div class="l">Corps control 80%<br>of commercial AI</div></div>
+    <div class="stat-card"><div class="n">0%</div><div class="l">Chance you win<br>under current rules</div></div>
+    <div class="stat-card"><div class="n">1</div><div class="l">Thing that changes<br>everything: FORGE</div></div>
+  </div>
+
+  <h3>What FORGE Is (No Bureaucratic Speak)</h3>
+  <ul>
+    <li><strong>Seed grants $10K–$50K</strong> — submit a GitHub repo. Working code wins. No proposals.</li>
+    <li><strong>No entity with 50+ employees eligible</strong> — zero to Amazon, Google, or OpenAI. Literally illegal under the act.</li>
+    <li><strong>Solution RFI</strong> — build a working tool, win a federal contract in 90 days. Not 24 months.</li>
+    <li><strong>Open source mandatory</strong> — everything stays free. Community fork rights built in. Patent defense pool funded.</li>
+    <li><strong>Blockchain-verified</strong> — every dollar public. 150% clawback for fraud. No political favoritism.</li>
+    <li><strong>Civic multiplier</strong> — vote regularly = up to 1.5× funding bonus. Citizens only.</li>
+    <li><strong>Rural 1.25×</strong> — if you're not in a coastal city, you get more, not less.</li>
+  </ul>
+
+  <div class="callout">
+    <p><strong>The Zero-Human Company:</strong> One person + AI agents = $1M–$10M revenue business. FORGE funds the standards, legal frameworks, and API libraries to make this real for every American — not just the technically elite. No employees. No office. Your terms.</p>
+  </div>
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="right-col">
+  <div class="section-label">// Why You, Specifically</div>
+  <div class="section-head">Gen X Is The Bridge Generation. This Is Your Moment.</div>
+
+  <p>Old enough to remember analog. Young enough to build digital. You survived every crash, every broken promise, every "new economy" that screwed regular people. That's not trauma — that's qualification. FORGE is built for people who build, not people who pitch.</p>
+
+  <table class="compare">
+    <tr><th>Old Rules</th><th>FORGE Rules</th></tr>
+    <tr><td class="bad">VCs pick winners based on connections</td><td class="good">Working code scores automatically</td></tr>
+    <tr><td class="bad">24-month procurement hell</td><td class="good">90-day contract via Solution RFI</td></tr>
+    <tr><td class="bad">Patent trolls threaten small devs</td><td class="good">$50M Patent Defense Pool covers you</td></tr>
+    <tr><td class="bad">Rural = second class</td><td class="good">1.25× rural multiplier</td></tr>
+    <tr><td class="bad">Corporate surveillance required</td><td class="good">Zero-knowledge privacy by design</td></tr>
+    <tr><td class="bad">Closed source owns you</td><td class="good">Open source. Fork rights. Forever.</td></tr>
+  </table>
+
+  <h3>Your Messaging Weapons — Use These</h3>
+  <div class="meme-grid">
+    <div class="meme dark"><p><span>"Nobody's coming.</span><br>Build it yourself.<br>FORGE funds the tools."</p></div>
+    <div class="meme fire"><p>"AI doom industry is Y2K with a trillion-dollar budget and tenure."</p></div>
+    <div class="meme dark"><p><span>"No VCs. No gatekeepers.</span><br>Ship code.<br>That's the FORGE way."</p></div>
+    <div class="meme fire"><p>"One person + AI agents + FORGE = Zero-human company. Your retirement plan."</p></div>
+  </div>
+
+  <h3>How Self-Sustaining FORGE Is</h3>
+  <p>When FORGE-funded projects are acquired, they pay back into the Ecosystem Reinvestment Fund. ROI recycling makes FORGE self-sustaining by Year 5. At $500B deployment: <strong>$84.75 billion in returns</strong> over 10 years. This isn't a spending program — it's a compounding investment in American sovereignty.</p>
+
+  <div class="action-box">
+    <div class="abl">// ACTION_PLAN.sh — what to do right now</div>
+    <div class="action-item">
+      <span class="step">01</span>
+      <div class="text"><strong>Start your repo</strong>Build the minimum viable version of the thing you've been thinking about. $2,500 Seed Prep Grant is available NOW to anyone who just needs time to build a proof of concept.</div>
+    </div>
+    <div class="action-item">
+      <span class="step">02</span>
+      <div class="text"><strong>Email / call your rep</strong>Script: "I'm [name], a constituent. I'm a builder and I want you to co-sponsor the FORGE Act. It gives citizens — not mega-corps — access to AI tools and federal contracts. 28 funded projects in our district. Please support it." Send this week.</div>
+    </div>
+    <div class="action-item">
+      <span class="step">03</span>
+      <div class="text"><strong>Post on LinkedIn / Substack / Facebook</strong>Tag <span class="ht">#FORGEAct</span>. Write one paragraph: why you're a builder, why this matters, and why nobody's coming to save the AI future — except people like you.</div>
+    </div>
+    <div class="action-item">
+      <span class="step">04</span>
+      <div class="text"><strong>Build a guild</strong>Find 4 other builders in your district. Apply for a Guild Formation Grant ($50K–$200K). Shared compute. Shared workspace. Peer review. No corporate overlords.</div>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:0.5rem;">
+    <p><strong>Family Firewall:</strong> FORGE funds the tools that let your family own their digital life — local AI, encrypted data, no corporate surveillance of your kids' online behavior. That's not paranoia. That's parenting.</p>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-l">// FORGE Act · Cyber Strategy Institute · March 2026<br>// open-source · no corp funding · citizen-built</div>
+  <div class="footer-c">FORGE.GOV</div>
+  <div class="footer-r"><span class="ht">#FORGEAct</span> · <span class="ht">#BuildItYourself</span> · <span class="ht">#CitizenAI</span><br>// fork rights reserved by everyone</div>
+</div>
+
+</div>
+</body>
+</html>
