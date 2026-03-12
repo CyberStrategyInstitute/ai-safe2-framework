@@ -92,7 +92,7 @@
 
 ---
 
-# Resources and Further Reading
+## Resources and Further Reading
 
 ## Primary Framework Documentation
 
