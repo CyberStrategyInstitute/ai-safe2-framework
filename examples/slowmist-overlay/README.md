@@ -26,7 +26,7 @@ This repository provides:
 | [`deployment-checklist.md`](./deployment-checklist.md) | Step-by-step deployment order for adding AI SAFE² tools to an existing SlowMist deployment |
 | [`threat-model.md`](./threat-model.md) | Combined threat model: SlowMist's defined scope + AI SAFE²'s extended blast radius |
 | [`red-team-schedule.md`](./red-team-schedule.md) | Recurring adversarial exercise schedule built on SlowMist's Validation Guide curriculum |
-| [`resources.md`](./resources.md) | Curated references, research papers, and further reading |
+| Reference Section Below | Curated references, research papers, and further reading |
 
 ---
 
