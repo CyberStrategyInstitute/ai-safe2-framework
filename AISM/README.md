@@ -61,7 +61,7 @@ AISM maps every control to seven regulatory and standards frameworks simultaneou
 AISM produces a single number: your AISM Sovereignty Score on a 1 to 5 scale. That score tells you where you are, where the gaps are, and what to prioritize. It integrates with CVSS scoring to produce a combined risk metric that connects AI governance posture to technical vulnerability severity.
 
 <div align="center">
-  <img src="../assets/Why2%0AISM.png" alt="AI Sovereignty Maturity Model Overview" width="100%" />
+  <img src="../assets/Why AISM v2.png alt="AI Sovereignty Maturity Model Overview" width="100%" />
 </div>
 
 ---
