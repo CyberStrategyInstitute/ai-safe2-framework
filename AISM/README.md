@@ -1,501 +1,214 @@
-# AISM — AI Sovereignty Maturity Model
+# AISM: AI Sovereignty Maturity Model
 
 ![AI-SAFE2 Shield & Command Wheel](../assets/diagrams/command-wheel.png)
 
-**Tagline:** *“The Operating System for Safe Autonomous AI”*  
+**Tagline:** *"The Operating System for Safe Autonomous AI"*
 **Core Principle:** *Probabilistic intelligence requires deterministic control.*
 
----
-
-## **1. Overview**
-
-AI systems inherently produce non-deterministic outputs.  Safe deployment therefore requires deterministic governance layers that constrain behavior, enforce policy, and enable human oversight.
-
-The **AI Sovereignty Maturity Model (AISM)** is a governance and runtime safety framework for agentic AI systems. It enables organizations to measure, manage, and evolve autonomous AI while maintaining operational control and human oversight.  
-
-Most AI governance frameworks today focus on static policy. They fail to enforce safety while autonomous systems operate, creating blind spots and unquantifiable risk. AISM solves this by combining **AI risk governance, agent operational safety, runtime control architecture / enforcement, continuous adversarial learning, and measurable safety** across five core pillars.
-
-**Purpose of AISM:**
-
-- Assess AI governance maturity
-- Identify operational risk gaps
-- Implement deterministic safety controls
-- Safely deploy autonomous agents at scale
-
-## AI-SAFE² Strategic Architecture
-
-```mermaid
-flowchart TB
-
-subgraph Governance["Layer 1: Governance and Sovereignty"]
-Policy
-Compliance
-Legal
-Sovereignty
-end
-
-subgraph Controls["Layer 2: Control Architecture"]
-Shield
-Ledger
-CircuitBreaker
-CommandCenter
-LearningEngine
-end
-
-subgraph Runtime["Layer 3: Agent Runtime"]
-Agents
-Memory
-Tools
-ExternalData
-end
-
-Governance --> Controls
-Controls --> Runtime
-Runtime --> Controls
-```
----
-
-## **2. The Five Pillars (Command Architecture)**
-
-The framework is organized into **five operational pillars**, inspired by military doctrine and autonomous system command structures.
-
-| Pillar | AI-Native Name | Description |
-|--------|----------------|-------------|
-| P1 | **Shield** | Sanitize and isolate inputs to prevent prompt injection, adversarial manipulation, or environment compromise. |
-| P2 | **Ledger** | Maintain immutable telemetry and asset registry of all AI agents and workflows. |
-| P3 | **Circuit Breaker** | Hard-stop mechanisms, safe-mode reversion, and fail-safe recovery protocols for agentic failures. |
-| P4 | **Command Center** | Human-in-the-loop oversight, real-time anomaly detection, and operational control. |
-| P5 | **Learning Engine** | Continuous evolution through red teaming, threat intelligence, and operator training. |
-
-> **Note:** The pillars are visible from the root level to ensure clarity and usability. 
-
-### The AI SAFE² Operational Defense Loop 
-**Operational Governance for Agentic AI Systems**
-```mermaid
-flowchart LR
-    A[🛡 Shield<br>Sanitize & Isolate]
-    B[📜 Ledger<br>Audit & Inventory]
-    C[⛔ Circuit Breaker<br>Fail-Safe & Recovery]
-    D[🎛 Command Center<br>Engage & Monitor]
-    E[🧠 Learning Engine<br>Evolve & Educate]
-
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-
-    E --> A
-
-    E -. Threat Intelligence .-> A
-    B -. Telemetry .-> D
-```
-
-### Purpose
-
-The Operational Defense Loop describes how artificial intelligence safety operates continuously during runtime.
-
-Instead of static protection, artificial intelligence defense must function as an ongoing cycle of protection, monitoring, response, and improvement.
-
-This loop forms the operational heartbeat of the ASIM framework.
-
-### Stage 1 Shield
-
-The Shield protects the system from malicious or unsafe inputs.
-
-**Common threats include:**
-
-- prompt injection attacks
-- malicious instructions
-- unsafe external data
-
-**Shield capabilities include:**
-
-- input validation
-- prompt injection detection
-- sandboxing
-- cryptographic isolation
-
-### Stage 2 Ledger
-
-The Ledger records everything the artificial intelligence system does.
-
-This provides full visibility into system behavior.
-
-**Ledger capabilities include:**
-
-- logging
-- asset inventories
-- telemetry collection
-- chain of thought recording
-
-This layer allows investigators to understand how and why artificial intelligence made decisions.
-
-### Stage 3 Circuit Breaker
-
-The Circuit Breaker protects systems when failures occur.
-
-If artificial intelligence begins behaving dangerously, emergency controls activate.
-
-**Examples include:**
-
-- kill switches
-- rate limiting
-- recursion limits
-- safe mode activation
-
-This layer prevents runaway autonomous behavior.
-
-### Stage 4 Command Center
-
-The Command Center enables Human in the Loop supervision.
-
-Operators monitor system activity and intervene when needed.
-
-**Capabilities include:**
-
-- dashboards
-- anomaly detection
-- approval workflows
-- alerting systems
-
-This ensures humans retain operational authority over artificial intelligence systems.
-
-### Stage 5 Learning Engine
-
-The Learning Engine continuously improves artificial intelligence defenses.
-
-**Capabilities include:**
-
-- red team testing
-- adversarial simulations
-- threat intelligence integration
-- operator training
-
-Lessons learned feed back into the Shield layer, completing the cycle.
-
+**Organization:** Cyber Strategy Institute
+**Framework:** AI SAFE2 v2.1
+**Version:** March 2026
 
 ---
 
-## **3. AI Sovereignty Maturity Model**
+## Why AISM Exists
 
-AISM measures organizational maturity in **five progressive levels**. Each level reflects an increasing degree of control, observability, and adversarial resilience.
+AI systems are probabilistic by nature. They hallucinate, drift, and behave unexpectedly under novel conditions. Yet most organizations deploy them with governance designed for static software: write a policy, run an audit, repeat annually.
 
-| Level | Name | Description |
-|-------|------|-------------|
-| 1 | **Chaos** | Ad hoc AI experiments with no containment, logging, or oversight. Outcomes rely on luck or heroic intervention. |
-| 2 | **Visibility** | Logging, inventories, and basic containment mechanisms exist. Operational awareness improves, but behavior is not standardized. |
-| 3 | **Governance** | Policies for agent behavior, memory governance, recursion limits, and semantic isolation are defined, documented, and enforced. |
-| 4 | **Control** | Runtime governors enforce deterministic constraints such as transaction limits, failure-mode SLOs, and automated containment. Metrics are tracked and risk is quantified. |
-| 5 | **Sovereignty** | Full cryptographic control, human oversight, and continuous adversarial evolution loops ensure system-level, adaptive governance. Lessons from incidents and red teaming are integrated into ongoing operations. |
+That approach fails for autonomous agents.
 
-![Maturity Model Ladder](../assets/diagrams/maturity-ladder.png)
+The **AI Sovereignty Maturity Model (AISM)** exists because agentic AI systems require governance that operates at runtime, not just at policy review time. When an agent is autonomously executing tasks, chaining tool calls, and orchestrating other agents, a PDF policy document offers no protection. What you need is deterministic control layered over probabilistic behavior, enforced continuously, and measurable at every stage.
 
-> Placeholder: Diagram showing ladder from Chaos → Sovereignty across pillars.
-```mermaid
-flowchart TB
-
-L1["Level 1
-Ad Hoc Probabilistic"]
-
-L2["Level 2
-Observable and Contained"]
-
-L3["Level 3
-Defined Semantic Governance"]
-
-L4["Level 4
-Quantitatively Managed Runtime"]
-
-L5["Level 5
-Sovereign Assurance"]
-
-L1 --> L2
-L2 --> L3
-L3 --> L4
-L4 --> L5
-```
-## Artificial Intelligence Governance Maturity Ladder
-### Purpose
-
-The maturity ladder explains how organizations evolve their artificial intelligence governance capabilities.
-
-Most organizations begin with unstructured experimentation.
-
-Over time they develop structured governance, monitoring, and safety capabilities.
-
-The ladder provides a roadmap toward full artificial intelligence sovereignty.
-
-### Level 1 Chaos - Ad Hoc Probabilistic
-
-Artificial intelligence systems operate without formal governance.
-
-Characteristics include:
-- prompt based experimentation
-- minimal monitoring
-- unpredictable results
-
-### Level 2 Visibility - Observable and Contained
-
-Basic monitoring and containment controls are implemented.
-
-Capabilities include:
-
-- logging
-- access control
-- sandboxing
-- agent inventory
-
-### Level 3 Governance - Defined Semantic Governance
-
-Organizations define standardized governance practices.
-
-Examples include:
-
-- memory governance
-- recursion limits
-- agent safety policies
-- adversarial monitoring
-
-### Level 4 Control - Quantitatively Managed Runtime
-
-Artificial intelligence safety is measured and enforced through metrics.
-
-Examples include:
-
-- safety Service Level Objectives
-- failure thresholds
-- runtime monitoring metrics
-
-### Level 5 Sovereignty
-
-Artificial intelligence systems operate under full governance authority.
-
-Capabilities include:
-
-- cryptographic identity verification
-- continuous adversarial testing
-- automated safety enforcement
-- sovereign human oversight
+AISM provides exactly that.
 
 ---
 
-## **4. AI Sovereignty Matrix**
+## What Makes AISM Different
 
-The **matrix evaluates maturity across all five pillars**, providing a measurable assessment of risk posture and agentic safety.
+Most AI governance frameworks were built for a world that no longer exists: single-model, human-in-the-loop, request-response AI. AISM was purpose-built for the agentic era.
 
-| Level | Shield | Ledger | Circuit Breaker | Command Center | Learning Engine |
-|-------|-------|--------|----------------|---------------|----------------|
-| Chaos | No input protection | No logging | No kill switch | No oversight | No learning |
-| Visibility | Basic filtering | Logging | Manual shutdown | Monitoring dashboards | Incident review |
-| Governance | Isolation policies | Asset registry | Recovery procedures | HITL workflows | Security training |
-| Control | Deterministic sandboxing | Quantified telemetry | Automated containment | Real-time governance | Structured red teaming |
-| Sovereignty | Cryptographic isolation | Immutable ledger | Autonomous safety governors | Strategic oversight | Continuous adversarial learning |
+| Capability | AISM | NIST AI RMF | CSA AICM | MS RAI MM | ISO 42001 |
+|---|---|---|---|---|---|
+| Agentic AI controls (multi-agent, swarm, A2A) | 35 sub-domains | None | Limited | None | None |
+| Non-human identity (NHI) governance | 10 dedicated controls | None | Minimal | None | None |
+| Supply chain model signing (OpenSSF OMS) | Full | None | General | None | None |
+| Memory and context security (RAG poisoning) | 6 sub-domains | None | None | None | None |
+| Sovereignty dimension (organizational AI control) | Native | None | None | None | None |
+| Runtime enforcement (not just policy) | Yes | Policy only | Policy only | Policy only | Policy only |
+| Compliance crosswalks (7+ frameworks) | Yes | NIST only | ISO + NIST | None | Limited |
+| Evidence-based scoring (not self-assertion) | 3 categories | Evidence-based | Questionnaire | Guidance only | Partial |
 
-> Placeholder: Consider adding visual matrix diagram for easy scanning.
-
-### Sovereignty Matrix Diagram
-```mermaid
-quadrantChart
-title Artificial Intelligence Sovereignty Matrix
-x-axis Human Control Low to High
-y-axis Artificial Intelligence Autonomy Low to High
-
-RunawayAutonomy: [0.2,0.9]
-AutonomousOperations: [0.7,0.8]
-GuardedAutonomy: [0.7,0.4]
-HumanControlled: [0.2,0.2]
-```
-### Purpose
-
-The Artificial Intelligence Sovereignty Matrix explains who ultimately controls artificial intelligence systems.
-
-Two factors determine sovereignty:
-
-1. level of human control
-2. level of artificial intelligence autonomy
-
-Organizations must carefully balance these two forces.
-
-### Axis Definitions
-**Horizontal Axis**
-
-Human control level
-
-Low control means artificial intelligence operates independently.
-High control means humans retain authority.
-
-**Vertical Axis**
-
-Artificial intelligence autonomy
-
-Low autonomy means artificial intelligence acts only when directed.
-High autonomy means artificial intelligence independently executes complex workflows.
-
-### Sovereignty Zones
-**Human Controlled Systems**
-
-Artificial intelligence acts only as an assistant.
-
-Typical examples:
-
-- document summarization
-- search assistants
-- coding assistants
-
-**Guarded Autonomy**
-
-Artificial intelligence can execute tasks but within controlled boundaries.
-
-Most enterprise deployments should operate in this zone.
-
-**Autonomous Operations**
-
-Artificial intelligence independently performs complex tasks.
-
-This requires strong governance, monitoring, and safety controls.
-
-**Runaway Autonomy**
-
-Artificial intelligence actions exceed human control.
-
-This is the failure state that governance frameworks must prevent.
+**The bottom line:** No existing framework scores above 2.55 out of 5.0 on agentic AI era requirements when evaluated across eight weighted criteria. AISM was built to close that gap.
 
 ---
 
-## **5. AI Control Stack**
+## The AISM Value Proposition
 
-The **Control Stack** shows how AISM enforces runtime governance across AI systems.
+### For Security and Risk Leaders
 
-1. **Probabilistic AI Systems** – Autonomous, agentic behavior.  
-2. **Observability Layer** – Telemetry, logging, and inventory.  
-3. **Semantic Governance** – Policies, recursion limits, memory isolation.  
-4. **Runtime Governors** – Automated constraints, circuit breakers, failure-mode SLOs.  
-5. **Sovereign Assurance** – Continuous adversarial learning, red teaming, and adaptive controls.
+AISM gives you measurable risk posture across all AI systems. You can answer questions like: what is our blast radius if an agent goes rogue? Which pillar is our weakest link? How do we compare to our regulatory obligations under the EU AI Act? No other framework answers those questions with the same specificity.
 
-![Control Stack Diagram](../assets/diagrams/control-stack.png)
+### For AI and Engineering Teams
 
-> Placeholder: Layered diagram illustrating stack from AI systems → Sovereign Assurance.
-```mermaid
-flowchart TB
+AISM translates governance policy into a concrete technical control stack. Every pillar maps to real implementation decisions: input sanitization architecture, agent sandboxing configurations, kill switch mechanisms, memory isolation strategies. Engineers know exactly what to build and why.
 
-PolicyLayer["Policy Layer
-Governance and Compliance"]
+### For Compliance and Legal Teams
 
-ControlLayer["Control Layer
-Shield Ledger Circuit Breaker Command Center Learning Engine"]
+AISM maps every control to seven regulatory and standards frameworks simultaneously: NIST AI RMF, ISO 42001, EU AI Act, CSA AICM, NIST CSF 2.0, MITRE ATLAS, and OWASP Top 10 for LLM. One assessment produces audit artifacts for all of them.
 
-AgentLayer["Agent Platform
-Agent Orchestration"]
+### For Executive Leadership
 
-ModelLayer["Artificial Intelligence Model Layer
-Large Language Models"]
-
-InfraLayer["Infrastructure
-Compute Network Storage"]
-
-PolicyLayer --> ControlLayer
-ControlLayer --> AgentLayer
-AgentLayer --> ModelLayer
-ModelLayer --> InfraLayer
-```
-> This diagram is especially important for engineers because it connects governance policy with actual software components.
-
-### Policy Layer
-
-Defines the rules artificial intelligence must follow.
-
-Examples:
-
-- governance policies
-- regulatory compliance requirements
-- organizational risk policies
-
-### Control Layer
-
-Implements enforcement mechanisms using the ASIM pillars.
-
-Controls include:
-
-- Shield
-- Ledger
-- Circuit Breaker
-- Command Center
-- Learning Engine
-
-### Agent Platform Layer
-
-Manages artificial intelligence workflows.
-
-Typical components include:
-
-- agent orchestration frameworks
-- workflow engines
-- task scheduling systems
-
-### Artificial Intelligence Model Layer
-
-Contains the machine learning models used by agents.
-
-Examples include:
-
-- large language models
-- fine tuned models
-- multimodal models
-
-### Infrastructure Layer
-
-Provides the computing environment.
-
-Components include:
-
-- compute resources
-- networking
-- storage systems
-  
----
-
-## **6. Key Insights / Strategic Advantages**
-
-- **Dynamic Runtime Enforcement:** Unlike policy-only frameworks, AISM controls behavior during execution.  
-- **Measurable Risk:** Metrics, failure modes, and blast-radius tracking make governance auditable.  
-- **AI-Native:** Designed for agentic intelligence, not retrofitted from IT security frameworks.  
-- **Continuous Learning:** Red teaming, threat intelligence, and incident feedback integrate into evolution loops.  
-- **Adoption-ready:** Can be applied in governments, Fortune 500 enterprises, and critical infrastructure.
-
-### How the ASIM Framework Fits Together
-
-Each diagram explains a different dimension of artificial intelligence governance.
-
-| Framework Component | Question It Answers |
-| :--- | :--- |
-| **Strategic Architecture** | Where governance controls exist |
-| **Operational Defense Loop** | How safety operates continuously |
-| **Sovereignty Matrix** | Who ultimately controls artificial intelligence |
-| **Maturity Ladder** | How organizations improve governance capabilities |
-| **Control Stack** | How engineers implement governance controls |
-
-Together these models form a complete architecture for governing agentic artificial intelligence systems.
+AISM produces a single number: your AISM Sovereignty Score on a 1 to 5 scale. That score tells you where you are, where the gaps are, and what to prioritize. It integrates with CVSS scoring to produce a combined risk metric that connects AI governance posture to technical vulnerability severity.
 
 ---
 
-## **7. Next Steps / Adoption**
+## The Five Pillars at a Glance
 
-- **Explore the full matrix:** [link to future page or PDF]  
-- **View pillar details:** [link to future pillar pages]  
-- **Download cheat sheet / guide:** [link to PDF]  
-- **Examples / Implementations:** [link to `examples` folder]  
+AISM governance is organized around five operational pillars, each representing a distinct capability domain for safe autonomous AI deployment.
 
-> The AISM README serves as the **single source of truth**. As content grows, detailed pillar or model pages can be split into individual markdowns without breaking links.
+| Pillar | AI-Native Name | What It Governs |
+|---|---|---|
+| P1 | **Shield** | Input sanitization, prompt injection prevention, data isolation, agent sandboxing, boundary enforcement |
+| P2 | **Ledger** | Immutable audit trails, agent behavior logging, asset registry, model inventory, SBOM tracking |
+| P3 | **Circuit Breaker** | Kill switches, fail-safe mechanisms, rate limiting, recovery procedures, disaster continuity |
+| P4 | **Command Center** | Human-in-the-loop oversight, anomaly detection, intervention workflows, real-time monitoring |
+| P5 | **Learning Engine** | Red team testing, threat intelligence integration, operator training, continuous adversarial evolution |
 
----
-
-## **8. Call to Action**
-
-> Ready to measure and control your AI systems?  
-> **Use AISM to assess your maturity, enforce runtime safety, and evolve agentic intelligence with confidence.**
-
-[Explore GitHub Repo](../) | [Download PDF Cheat Sheet](#)
+These pillars form a continuous operational loop. Shield stops threats at the boundary. Ledger records everything that happens. Circuit Breaker stops runaway behavior. Command Center keeps humans informed and in control. Learning Engine ensures the system gets smarter over time. The output of stage five feeds back into stage one.
 
 ---
 
-*End of ASIM README.md*
+## The Full AISM Ecosystem
+
+Everything in this repository works together as a single governance system. Here is what exists and what each piece does.
+
+### Core Framework Documents
+
+| File | Purpose | Audience |
+|---|---|---|
+| [strategic-architecture.md](./strategic-architecture.md) | Three-layer governance architecture: Sovereignty, Controls, Runtime | Architects, CISOs |
+| [operational-loop.md](./operational-loop.md) | How the five pillars operate as a continuous defense cycle | Security teams, engineers |
+| [sovereignty-matrix.md](./sovereignty-matrix.md) | Human control vs. AI autonomy quadrant: where your organization sits | Risk leaders, executives |
+| [maturity-model.md](./maturity-model.md) | Five-level progression from Chaos to Sovereignty with level criteria | All stakeholders |
+| [control-stack.md](./control-stack.md) | Technical enforcement layers from policy to infrastructure | Engineers, architects |
+| [agent-threat-control-matrix.md](./agent-threat-control-matrix.md) | Agentic AI threat landscape mapped to AISM controls and MITRE ATLAS | Red teams, security engineers |
+
+### Assessment and Measurement Tools
+
+| File | Purpose | Audience |
+|---|---|---|
+| [AISM-Self-Assessment-Tool.md](./AISM-Self-Assessment-Tool.md) | 10-topic checklist across all five pillars, producing an AISM Sovereignty Score | Security teams, compliance |
+| [AISM-Scoring-Matrix-Methodology.md](./AISM-Scoring-Matrix-Methodology.md) | Quantitative scoring framework: how scores are calculated, weighted, and interpreted | Framework practitioners |
+| [AISM-Compliance-Crosswalk.md](./AISM-Compliance-Crosswalk.md) | Control mapping to NIST AI RMF, ISO 42001, EU AI Act, CSA AICM, NIST CSF 2.0, MITRE ATLAS, OWASP LLM | Compliance, audit, procurement |
+
+---
+
+## New to AISM? Start Here
+
+If you are encountering AISM for the first time, follow this path.
+
+**Step 1: Understand the problem.**
+Read [strategic-architecture.md](./strategic-architecture.md) to understand the three governance layers that AISM addresses. This takes about 5 minutes and gives you the mental model everything else builds on.
+
+**Step 2: See how it operates.**
+Read [operational-loop.md](./operational-loop.md) to see how the five pillars function as a continuous safety cycle rather than a static checklist. This explains why runtime enforcement matters.
+
+**Step 3: Know where you stand.**
+Read [maturity-model.md](./maturity-model.md) to understand the five maturity levels. Even before doing a formal assessment, most organizations can self-locate between Level 1 (Chaos) and Level 3 (Governance) based on the level descriptions.
+
+**Step 4: Assess your organization.**
+Use the [AISM-Self-Assessment-Tool.md](./AISM-Self-Assessment-Tool.md) with a cross-functional team. The tool covers 10 topics across all five pillars and produces a scored output you can act on immediately.
+
+**Step 5: Map to your regulatory obligations.**
+Use the [AISM-Compliance-Crosswalk.md](./AISM-Compliance-Crosswalk.md) to understand how your assessment results translate to specific NIST, ISO, EU AI Act, and CSA AICM requirements.
+
+**Step 6: Understand your score.**
+Read [AISM-Scoring-Matrix-Methodology.md](./AISM-Scoring-Matrix-Methodology.md) to understand how the scoring system works, how to interpret your results, and how to benchmark against the five maturity levels.
+
+---
+
+## Maturity at a Glance
+
+| Level | Name | What It Means |
+|---|---|---|
+| 1 | **Chaos** | Ad hoc AI experiments. No containment, logging, or oversight. Outcomes depend on luck. |
+| 2 | **Visibility** | Logging and basic containment exist. Operational awareness is improving but behavior is not standardized. |
+| 3 | **Governance** | Policies for agent behavior, memory, recursion limits, and semantic isolation are defined and enforced. |
+| 4 | **Control** | Runtime governors enforce deterministic constraints. Metrics are tracked. Risk is quantified. |
+| 5 | **Sovereignty** | Full cryptographic control, continuous adversarial learning, and adaptive governance. Incidents feed back into the system. |
+
+Most enterprise organizations currently operate between Level 2 and Level 3. Level 4 represents the target state for organizations deploying autonomous agents in production. Level 5 is the continuous improvement state for organizations with mature AI programs.
+
+---
+
+## How AISM Compares to Other Approaches
+
+The AISM Scoring Matrix Methodology evaluated five leading frameworks before designing the composite AISM scoring approach.
+
+**NIST AI RMF** is strong on evidence-based assessment and maps well to federal requirements, but has no agentic AI controls, no NHI governance dimension, and no sovereignty framing.
+
+**ISO 42001** provides a solid management system structure but scores poorly on technical depth for agentic systems and lacks runtime enforcement guidance.
+
+**CSA AICM** offers the broadest control coverage (243 objectives, 18 domains) and the strongest enterprise procurement readiness, but uses binary scoring, has limited agentic depth, and no sovereignty dimension.
+
+**Microsoft RAI MM** is empirically validated from 90-plus interviews but is explicitly not a measurement tool, has no security or technical controls, and no agentic coverage.
+
+**NIST CSF 2.0** provides excellent cybersecurity structure but is not AI-specific and has no agentic, NHI, or memory security coverage.
+
+AISM synthesizes the strongest elements from all five into a unified system: the three-metric scoring model from IEEE/NIST, expert-weighted calibration from NIST CSF dual-survey research, five-level maturity with measurement mechanisms from Sandia certification research, the control taxonomy from CSA AICM, and interdependency awareness from Microsoft RAI MM. It then adds what none of them provide: agentic AI controls, NHI governance, supply chain model signing, memory security, and a sovereignty dimension.
+
+---
+
+## Scoring in 60 Seconds
+
+The AISM Sovereignty Score is calculated as follows.
+
+Each of the 10 assessment topics is rated across three metrics: Coverage (how completely controls are implemented), Robustness (how rigorously controls are enforced), and Sovereignty Assurance (how much organizational control exists over AI governance decisions). Each metric is rated Low, Medium, or High.
+
+The combination of three ratings produces a topic score from 1 to 5 using the HHH rubric (High/High/High = 5, all Low = 1, everything in between falls on a documented scale). Topic scores roll up to pillar scores through weighted averages. Pillar scores roll up to the overall AISM Sovereignty Score.
+
+The result: one number between 1.00 and 5.00 that tells you exactly where you are and what to prioritize next.
+
+For full methodology details, see [AISM-Scoring-Matrix-Methodology.md](./AISM-Scoring-Matrix-Methodology.md).
+
+---
+
+## Regulatory Coverage Summary
+
+| Framework | AISM Coverage |
+|---|---|
+| NIST AI RMF 1.0 | 100% - all GOVERN, MAP, MEASURE, MANAGE subcategories |
+| NIST CSF 2.0 | 100% - all 6 functions (GV, ID, PR, DE, RS, RC) |
+| ISO/IEC 42001:2022 | 100% - clauses 5.x through 10.x |
+| OWASP Top 10 for LLM | 100% - LLM01 through LLM10 |
+| MITRE ATLAS | 98% - 14 agent-specific plus all legacy tactics |
+| EU AI Act | 95%+ - all high-risk AI articles |
+| CSA AICM | 90%+ - 16 of 18 domains mapped |
+
+---
+
+## Who Uses AISM
+
+**Government and public sector:** AISM maps directly to federal AI risk requirements and EU AI Act obligations. The compliance crosswalk produces audit-ready evidence across all relevant frameworks simultaneously.
+
+**Fortune 500 enterprises:** AISM provides the procurement-ready assessment artifacts, third-party audit support, and measurable risk metrics that enterprise AI governance programs require.
+
+**Critical infrastructure operators:** AISM's Circuit Breaker pillar and fail-safe recovery controls are designed specifically for environments where autonomous AI failure carries operational consequence.
+
+**AI and security teams building agentic systems:** AISM's technical control stack gives engineers the specific architectural guidance needed to deploy multi-agent systems safely.
+
+---
+
+## Call to Action
+
+> Ready to measure and control your AI systems?
+> Use AISM to assess your maturity, enforce runtime safety, and evolve agentic intelligence with confidence.
+
+**Start your assessment:** [AISM-Self-Assessment-Tool.md](./AISM-Self-Assessment-Tool.md)
+**Understand your score:** [AISM-Scoring-Matrix-Methodology.md](./AISM-Scoring-Matrix-Methodology.md)
+**Map to your compliance obligations:** [AISM-Compliance-Crosswalk.md](./AISM-Compliance-Crosswalk.md)
+**Explore the full repository:** [AI-SAFE2 Framework](../)
+
+---
+
+*© 2026 Cyber Strategy Institute. Licensed under CC BY 4.0.*
