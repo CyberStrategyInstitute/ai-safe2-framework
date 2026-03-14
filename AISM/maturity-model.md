@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="../assets/AI Sovereignty Maturity Ladder v2.png" alt="AISM Model Overview" width="100%" />
+</div>
+
 # AISM Maturity Model
 
 **Framework:** AI SAFE2 v2.1
