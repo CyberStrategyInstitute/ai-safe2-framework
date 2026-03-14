@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="../assets/Agentic AI Security Defense Loop v2.png" alt="Operational Defense Loop" width="100%" />
+</div>
+
 # AISM Operational Defense Loop
 
 **Framework:** AI SAFE2 v2.1
