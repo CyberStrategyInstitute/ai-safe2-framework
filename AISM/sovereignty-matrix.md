@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="../assets/The Sovereignty Matrix v2.png" alt="AISM Sovereignty Matrix" width="100%" />
+</div>
+
 # AISM Sovereignty Matrix
 
 **Framework:** AI SAFE2 v2.1
