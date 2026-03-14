@@ -1,3 +1,8 @@
+
+<div align="center">
+  <img src="../assets/AI Control Stack Blueprint Diagram v2.png" alt="AI Control Stack Blueprint" width="100%" />
+</div>
+
 # AISM Control Stack
 
 **Framework:** AI SAFE2 v2.1
