@@ -1,3 +1,8 @@
+
+<div align="center">
+  <img src="../assets/AISM Compliance Crosswalk v2.png" alt="AISM Compliance Crosswalk" width="100%" />
+</div>
+
 # AISM Compliance Crosswalk
 ## AI SAFE2 Framework v2.1 — Cross-Framework Compliance Mapping
 
