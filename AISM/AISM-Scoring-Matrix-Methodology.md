@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="../aassets/AISM Scoring Matrix Methodology v2.png" alt="AISM Scoring Matrix Methodology" width="100%" />
+  <img src="../assets/AISM Scoring Matrix Methodology v2.png" alt="AISM Scoring Matrix Methodology" width="100%" />
 </div>
 
 # AISM Scoring Matrix Methodology
