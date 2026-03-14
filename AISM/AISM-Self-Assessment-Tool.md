@@ -1,3 +1,8 @@
+
+<div align="center">
+  <img src="../assets/AISM Self-Assessment Tool v2.png" alt="AISM Self-Assessment Tool" width="100%" />
+</div>
+
 # AISM Self-Assessment Tool
 ## AI Sovereignty Matrix — Organizational Assessment Questionnaire
 
