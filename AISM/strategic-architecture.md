@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="../assets/AI Strategic Agentic Governance Architecture v2.png" alt="AI Strategic Architecture" width="100%" />
+</div>
+
 # AISM Strategic Architecture
 
 **Framework:** AI SAFE2 v2.1
