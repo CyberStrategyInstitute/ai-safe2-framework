@@ -1,3 +1,8 @@
+
+<div align="center">
+  <img src="../assets/Full AISM Ecosystem - Agentic AI Operating System Framework v2.png" alt="Full AISM Ecosystem" width="100%" />
+</div>
+
 # AISM: AI Sovereignty Maturity Model
 
 ![AI-SAFE2 Shield & Command Wheel](../assets/diagrams/command-wheel.png)
@@ -60,9 +65,7 @@ AISM maps every control to seven regulatory and standards frameworks simultaneou
 
 AISM produces a single number: your AISM Sovereignty Score on a 1 to 5 scale. That score tells you where you are, where the gaps are, and what to prioritize. It integrates with CVSS scoring to produce a combined risk metric that connects AI governance posture to technical vulnerability severity.
 
-<div align="center">
-  <img src="../assets/Why AISM v2.png" alt="AI Sovereignty Maturity Model Overview" width="100%" />
-</div>
+
 
 ---
 
@@ -81,6 +84,8 @@ AISM governance is organized around five operational pillars, each representing 
 These pillars form a continuous operational loop. Shield stops threats at the boundary. Ledger records everything that happens. Circuit Breaker stops runaway behavior. Command Center keeps humans informed and in control. Learning Engine ensures the system gets smarter over time. The output of stage five feeds back into stage one.
 
 ---
+
+
 
 ## The Full AISM Ecosystem
 
@@ -106,6 +111,10 @@ Everything in this repository works together as a single governance system. Here
 | [AISM-Compliance-Crosswalk.md](./AISM-Compliance-Crosswalk.md) | Control mapping to NIST AI RMF, ISO 42001, EU AI Act, CSA AICM, NIST CSF 2.0, MITRE ATLAS, OWASP LLM | Compliance, audit, procurement |
 
 ---
+
+<div align="center">
+  <img src="../assets/Six-Step AI Sovereignty Roadmap v2.png" alt="Six-Step AI Sovereignty Roadmap" width="100%" />
+</div>
 
 ## New to AISM? Start Here
 
