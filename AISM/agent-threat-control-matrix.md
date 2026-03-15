@@ -1,3 +1,8 @@
+
+<div align="center">
+  <img src="../assets/AISM Agent Threat Control Matrix b v2.png" alt="AISM Agent Threat Control Matrix" width="100%" />
+</div>
+
 # AISM Agent Threat and Control Matrix
 
 **Framework:** AI SAFE2 v2.1
