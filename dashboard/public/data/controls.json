@@ -1,0 +1,80 @@
+[
+  {
+    "id": "SAN-001",
+    "name": "Input Sanitization & Validation",
+    "description": "Implement comprehensive input validation and sanitization mechanisms to prevent injection attacks and ensure data integrity in AI systems.",
+    "pillar": "Sanitize & Isolate",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "implementation_guidance": "Deploy multi-layer input validation including schema validation, content filtering, and anomaly detection. Implement allowlisting over denylisting where possible.",
+    "references": [
+      "OWASP Top 10",
+      "NIST AI RMF"
+    ]
+  },
+  {
+    "id": "AUD-001",
+    "name": "Model Inventory & Asset Management",
+    "description": "Maintain a comprehensive inventory of all AI models, their versions, dependencies, and deployment locations.",
+    "pillar": "Audit & Inventory",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "implementation_guidance": "Establish an AI asset register with metadata tracking including model lineage, training data sources, and performance metrics.",
+    "references": [
+      "ISO/IEC 42001",
+      "NIST AI RMF"
+    ]
+  },
+  {
+    "id": "FAIL-001",
+    "name": "Graceful Degradation Mechanisms",
+    "description": "Design systems to gracefully degrade functionality when AI components fail rather than experiencing catastrophic failure.",
+    "pillar": "Fail-Safe & Recovery",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "implementation_guidance": "Implement fallback mechanisms, circuit breakers, and manual override capabilities for critical AI-driven decisions.",
+    "references": [
+      "Safety Engineering Principles",
+      "ISO 26262"
+    ]
+  },
+  {
+    "id": "ENG-001",
+    "name": "Continuous Model Monitoring",
+    "description": "Establish real-time monitoring of model performance, drift detection, and anomaly identification.",
+    "pillar": "Engage & Monitor",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "implementation_guidance": "Deploy automated monitoring dashboards tracking accuracy, latency, drift metrics, and adversarial patterns.",
+    "references": [
+      "MLOps Best Practices",
+      "NIST AI RMF"
+    ]
+  },
+  {
+    "id": "EVO-001",
+    "name": "AI Security Training Program",
+    "description": "Develop and deliver comprehensive AI security awareness and technical training for all stakeholders.",
+    "pillar": "Evolve & Educate",
+    "risk_level": "Medium",
+    "is_gap_filler": false,
+    "implementation_guidance": "Create role-based training modules covering AI risks, secure development practices, and incident response procedures.",
+    "references": [
+      "SANS Security Awareness",
+      "OWASP AI Security & Privacy Guide"
+    ]
+  },
+  {
+    "id": "SAN-GAP-001",
+    "name": "Prompt Injection Defense",
+    "description": "Implement defenses against prompt injection attacks targeting large language models.",
+    "pillar": "Sanitize & Isolate",
+    "risk_level": "Critical",
+    "is_gap_filler": true,
+    "implementation_guidance": "Deploy prompt validation, instruction separation, and output filtering to prevent malicious prompt manipulation.",
+    "references": [
+      "OWASP Top 10 for LLM",
+      "Anthropic Safety Research"
+    ]
+  }
+]
