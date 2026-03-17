@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
 
   return {
-    base: "/ai-safe2-framework/", // ✅ MUST be inside return to work
+    base: "/ai-safe2-framework/dashboard/", // ✅ MUST be inside return to work
 
     server: {
       port: 3000,
