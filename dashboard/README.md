@@ -23,3 +23,38 @@ If you are contributing to the framework or want to test modifications to the UI
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/CyberStrategyInstitute/ai-safe2-framework.git
+   ```
+
+2. **Navigate to the dashboard module:**
+   ```bash
+   cd ai-safe2-framework/dashboard
+   ```
+
+3. **Run locally:** Simply double-click the `index.html` file to open it in your default web browser. No local web server is strictly necessary for static HTML/JS/CSS inspection.
+
+---
+
+## 📂 Module Architecture
+
+This folder serves as the UI/Presentation layer for the framework.
+
+```
+dashboard/
+├── index.html       # Main application entry point and structural layout
+├── css/             # Stylesheets and visual theme mapping to AI SAFE² branding
+├── js/              # Interactive logic, taxonomy data parsing, and dynamic rendering
+└── README.md        # This documentation file
+```
+
+---
+
+## 🤝 Modifying the Taxonomy
+
+As the AI SAFE² framework evolves, the dashboard must be updated to reflect the latest GRC standards and architectural guardrails.
+
+* **UI/UX Changes:** Modify the core `index.html` and corresponding CSS.
+* **Data Updates:** (Update this line based on how your app is built - e.g., "Modify the JSON objects within the `js/` directory to update pillar definitions and maturity scoring requirements.")
+
+---
+
+Part of the Cyber Strategy Institute open-source initiative. **Engineering Certainty for the AI Era.**
