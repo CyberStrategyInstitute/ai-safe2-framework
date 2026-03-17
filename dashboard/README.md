@@ -1,20 +1,25 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🧭 AI SAFE² Taxonomy Explorer & Dashboard
 
-# Run and deploy your AI Studio app
+Welcome to the official visual control plane and interactive taxonomy explorer for the **AI SAFE² Framework**. 
 
-This contains everything you need to run your app locally.
+Rather than reading through static documentation, this dashboard provides Security Architects, GRC Officers, and AI Engineers with a dynamic, interactive interface to navigate the framework's pillars, maturity models, and agentic AI guardrails.
 
-View your app in AI Studio: https://ai.studio/apps/4f6a7558-14bd-4705-a8b9-3c94ce898053
+---
 
-## Run Locally
+## 🚀 Access the Live Dashboard
 
-**Prerequisites:**  Node.js
+You do not need to download this repository to use the dashboard. It is hosted live via GitHub Pages.
 
+👉 **[Launch the AI SAFE² Taxonomy Explorer](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+*(Note: If the link returns a 404, please ensure GitHub Pages is enabled in the repository settings targeting the `main` branch).*
+
+---
+
+## 🛠️ Local Usage & Development
+
+If you are contributing to the framework or want to test modifications to the UI locally, no complex build process or CLI is required.
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/CyberStrategyInstitute/ai-safe2-framework.git
