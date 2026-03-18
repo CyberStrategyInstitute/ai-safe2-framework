@@ -176,6 +176,31 @@ graph LR;
 style C fill:#B80000,stroke:#333,stroke-width:2px;
 style H fill:#006400,stroke:#333,stroke-width:2px;
 ``` 
+---
+## 🎯 Interactive Dashboard
+ 
+**Explore all 128 AI SAFE² controls through our live, interactive taxonomy explorer.**
+ 
+### 👉 **[Launch Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)** 👈
+ 
+The AI SAFE² Dashboard provides security architects, GRC officers, and AI engineers with a dynamic, filterable interface to navigate the framework's complete control catalog.
+ 
+**Features:**
+- 🔍 **Real-time search** across all control metadata
+- 🎨 **Pillar-based filtering** for strategic domain focus  
+- 📊 **Risk-level visualization** (Critical, High, Medium, Low)
+- 💼 **Executive summaries** with business impact statements
+- 🏷️ **Framework mappings** to OWASP, MITRE, NIST, ISO standards
+- 🆕 **v2.1 highlights** for next-generation controls (Agents, Memory, NHI)
+- 📱 **Responsive design** optimized for all devices
+ 
+**No installation required** — the dashboard runs entirely in your browser with zero dependencies.
+ 
+<div align="center">
+<img src="assets/AI SAFE² Dashboard.png" alt="AI SAFE2 Framework Visual Map" width="100%" /> 
+</div>
+
+*Interactive taxonomy explorer with 128 controls across 5 strategic pillars*
 
 ---
 <br>
