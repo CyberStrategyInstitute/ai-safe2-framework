@@ -330,16 +330,19 @@ AI SAFE² is a living standard that adapts to the threat landscape.
 ├── 03-fail-safe-recovery/     # Pillar 3: Circuit Breakers & Kill Switches
 ├── 04-engage-monitor/         # Pillar 4: Human-in-the-Loop
 ├── 05-evolve-educate/         # Pillar 5: Red Teaming & Updates
+├── AISM/                      # AI Security Management Layer defining Governance, Control Mapping, and Operational Oversight
+├── FORGE-Act/                 # Execution & Enforcement Architecture that Operationalizes AI SAFE² Controls 
 ├── assets/                    # Visual Maps, Badges & Diagrams
 ├── config/                    # Security Configurations (default.yaml)
-├── gateway/                   # 🛡️ The AI SAFE² Gateway (Proxy Code)
+├── examples/                  # 🧪 Real-world usage examples
+├── gateway/                   # 🛡️ The AI SAFE² Gateway (Runtime Enforcement Layer)
 ├── guides/                    # 📚 Implementation Guides (Python & No-Code)
-├── research/                  # 🧠 Deep Dive Evidence (001-013)
+├── research/                  # 🧠 Threat intelligence & Deep Dive Evidence (001-014)
 ├── resources/                 # Community Tools & Checklists
-├── scanner/                   # 🕵️ The Audit Scanner CLI
+├── scanner/                   # 🕵️ The Audit Scanner CLI (Assessment Engine)
 ├── ADVANCED_AGENT_THREATS.md  # Guide: Swarm & RAG Vulnerabilities
 ├── Dockerfile                 # Gateway Build Instruction
-├── INTEGRATIONS.md          # 🔌 Ecosystem Map (Cursor, n8n, CI/CD)
+├── INTEGRATIONS.md            # 🔌 Ecosystem Map (Cursor, n8n, CI/CD)
 ├── QUICKSTART_5_MIN.md        # ⚡ START HERE: 5-Minute Audit
 ├── docker-compose.yml         # Container Orchestration
 ├── pyproject.toml             # Python Dependencies
