@@ -40,7 +40,7 @@ The FORGE Act is a citizen-first AI funding framework that:
 - Is **self-sustaining by Year 5** through an Ecosystem Reinvestment Fund (ROI recycling)
 - Establishes a **Solution RFI process** — submit a working GitHub repo, win a federal contract in 90 days
 
-The full policy brief is available at: [`The_FORGE_Act_Blueprint.pdf`](../The_FORGE_Act_Blueprint.pdf)  
+The full policy brief is available at: [`The_FORGE_Act_Blueprint.pdf`](../FORGE-Act/The_FORGE_Act_Blueprint.pdf)  
 The full strategy document is available upon request.
 
 ---
