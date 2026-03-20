@@ -1,4 +1,4 @@
-# ⚒ FORGE Act — Citizen Campaign Kit
+# ⚒ Freedom Open-source Research and Growth Engine (FORGE) Act — Citizen Campaign Kit
 
 **Freedom Open-source Research and Growth Engine**  
 *The American Marshall Plan for AI*
