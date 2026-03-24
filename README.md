@@ -12,7 +12,7 @@
 [![Scope](https://img.shields.io/badge/Scope-128_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm-red)](https://cyberstrategyinstitute.com/AI-Safe2/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/CyberStrategy1/ai-safe2-framework/graphs/commit-activity)
 
-[**5-Min Plan**](#5-min-plan) | [**The Architecture**](#architecture) | [**Universal GRC**](#grc) | [**Comparison**](#comparison) | [**Get Toolkit**](#-fast-track-implementation-the-toolkit) | [**Contributing**](#contributing)
+[**5-Min Plan**](#5-min-plan) | [**The Architecture**](#architecture) | [**Universal GRC**](#grc) | [**Comparison**](#comparison) | [**Get Toolkit**](#-fast-track-implementation-the-toolkit) | [**Contributing**](#contributing) | **[Launch Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)** 
 
 </div>
 
