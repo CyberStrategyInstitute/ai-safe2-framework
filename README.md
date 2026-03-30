@@ -331,7 +331,7 @@ AI SAFE² is a living standard that adapts to the threat landscape.
 ├── 04-engage-monitor/         # Pillar 4: Human-in-the-Loop
 ├── 05-evolve-educate/         # Pillar 5: Red Teaming & Updates
 ├── AISM/                      # AI Security Management Layer defining Governance, Control Mapping, and Operational Oversight
-├── FORGE-Act/                 # 🇺🇸 The American Marshall Plan for AI economic engine in all 435 congressional districts
+├── FORGE-Act/                 # The American Marshall Plan for AI economic engine in all 435 congressional districts
 ├── assets/                    # Visual Maps, Badges & Diagrams
 ├── config/                    # Security Configurations (default.yaml)
 ├── examples/                  # 🧪 Real-world usage examples
