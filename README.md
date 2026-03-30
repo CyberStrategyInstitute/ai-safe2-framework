@@ -362,6 +362,39 @@ This isn't just a repo; it's a mission. We recognize and reward the top 1% of se
 [**Read the Vanguard Program Details**](VANGUARD_PROGRAM.md)
 
 ---
+---
+
+## 🧠 Companion Framework: Cognitive Sovereignty Framework (CSF)
+
+AI SAFE² secures the AI system. It does not secure the human operating it.
+
+An operator who has experienced sufficient attention capture, cognitive offloading, or decision automation capture can be fully compromised — regardless of how well-hardened their AI infrastructure is. The AI system is secure. The human operating it is not. This is the gap AI SAFE² was designed to acknowledge but not address.
+
+That gap now has a companion framework.
+
+| | AI SAFE² | CSF |
+|---|---|---|
+| **Layer** | Machine | Human |
+| **Defends** | The AI system | The human operator |
+| **Governs** | The tool | The capacity to govern the tool |
+| **Prevents** | Prompt injection, data leakage, unsafe autonomy | Cognitive offloading, attention capture, decision automation capture, identity fragmentation |
+| **Ensures** | AI stays in its lane | The human stays capable of defining the lane |
+
+**The shared principle:** Both frameworks enforce the same core commitment — AI is always a tool, never a moral agent. Human authority is non-negotiable. AI SAFE²'s runtime governors enforce this at the technical layer. The CSF's E7 Protocol Stack enforces it as an architectural guarantee at the human-AI system layer.
+
+**If you are an AI SAFE² user:**
+- Review the [CSF Six-Domain Assessment](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/#six-domains) alongside your existing AI SAFE² implementation. Domain 6 (Digital & AI Symbiosis) is the direct human-layer complement to your AI governance work.
+- Substrate threats in the CSF taxonomy — particularly ST-003 (Cognitive Offloading) and ST-006 (Guardrail Alignment Drift) — require human behavioral interventions that no technical control can substitute for.
+- Use the [live CTSS Calculator](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/csf-explorer.html) to score the cognitive threat posture of your operating environment alongside your AI SAFE² risk assessments.
+
+> **Neither framework is sufficient without the other. AI SAFE² without CSF secures the tool while the operator degrades. CSF without AI SAFE² builds human resilience while the AI infrastructure remains exploitable.**
+
+→ **[CSF Learning Hub](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/)** — What it is, why it exists, how to use it  
+→ **[Threat Explorer](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/csf-explorer.html)** — Interactive taxonomy, CTSS scoring, swarm threat phases, human outcome indicators  
+→ **[Command Center](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/csf-command-center.html)** — Full framework in a single operational dashboard  
+→ **[Full Repository](https://github.com/CyberStrategyInstitute/cognitive-sovereignty)** — Source files, taxonomy registry, assessment templates
+
+---
 
 ## ✏️ Citation
 If you use AI SAFE² in research or commercial tooling, please cite the Cyber Strategy Institute:
