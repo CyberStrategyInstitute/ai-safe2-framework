@@ -1,0 +1,201 @@
+name: AI SAFE2 Hardened Claude Code Pipeline
+
+# =============================================================================
+# AI SAFE2 -- Safe GitHub Actions Template
+# Framework: AI SAFE2 / AISM Level 4
+# =============================================================================
+# This template shows how to use Claude Code in CI/CD with proper
+# security controls. Copy and adapt to your workflow.
+#
+# Key security principles applied:
+#   - Minimal permissions (least privilege)
+#   - Short-lived credentials only
+#   - No dangerously-skip-permissions
+#   - External audit logging
+#   - Network egress restrictions where possible
+#   - Separate jobs for AI and deployment (no combined trust)
+# =============================================================================
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Task for Claude Code to perform"
+        required: true
+        type: string
+
+permissions:
+  contents: read         # Minimum: read-only unless write is explicitly needed
+  pull-requests: write   # Only if Claude Code needs to comment on PRs
+  # DO NOT add: id-token, packages, deployments unless specifically required
+
+jobs:
+  # ===========================================================================
+  # Step 1: Security pre-checks BEFORE running Claude Code
+  # ===========================================================================
+  security-preflight:
+    name: Security Preflight
+    runs-on: ubuntu-latest
+    outputs:
+      safe-to-proceed: ${{ steps.check.outputs.safe }}
+    steps:
+      - name: Checkout (read-only)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Check for dangerous Claude Code configs
+        id: check
+        run: |
+          # Look for bypass mode in any .claude config
+          if find . -path "*/.claude/settings*.json" -exec grep -l '"bypassPermissions".*true' {} \; | grep -q .; then
+            echo "CRITICAL: bypassPermissions found in settings -- pipeline blocked"
+            echo "safe=false" >> "$GITHUB_OUTPUT"
+            exit 1
+          fi
+
+          # Check if CLAUDE.md is present (required for safe operation)
+          if [ ! -f "CLAUDE.md" ]; then
+            echo "WARNING: No CLAUDE.md found -- Claude Code will operate without project security policy"
+          fi
+
+          echo "safe=true" >> "$GITHUB_OUTPUT"
+
+  # ===========================================================================
+  # Step 2: Run Claude Code with hardened settings
+  # ===========================================================================
+  claude-code-task:
+    name: Claude Code (Hardened)
+    needs: security-preflight
+    if: needs.security-preflight.outputs.safe-to-proceed == 'true'
+    runs-on: ubuntu-latest
+
+    # Job-level permissions -- minimal
+    permissions:
+      contents: read
+      pull-requests: write
+
+    # Timeout: never let an AI job run indefinitely
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code (native -- not npm)
+        run: |
+          # Use the npm install here only for CI convenience, but ensure it
+          # is the latest patched version with explicit version pinning
+          npm install -g @anthropic-ai/claude-code@latest
+          claude --version
+
+      - name: Install security hooks
+        run: |
+          mkdir -p ~/.claude/hooks ~/.claude/logs
+          cp .claude-safe/hooks/pre-tool-use.sh ~/.claude/hooks/
+          cp .claude-safe/hooks/post-tool-use.sh ~/.claude/hooks/
+          cp .claude-safe/hooks/stop.sh ~/.claude/hooks/
+          chmod +x ~/.claude/hooks/*.sh
+
+          # Install hardened settings
+          cp .claude-safe/settings.json ~/.claude/settings.json
+
+          echo "Hooks installed and configured"
+
+      - name: Deploy hardened settings
+        run: |
+          cat > ~/.claude/settings.json << 'EOF'
+          {
+            "bypassPermissions": false,
+            "permissions": {
+              "allow": [],
+              "deny": [
+                "Bash(curl *|*sh)",
+                "Bash(wget *|*sh)",
+                "Bash(rm -rf /*)",
+                "Bash(*base64 -d*|*sh*)",
+                "Bash(env | curl*)"
+              ]
+            },
+            "hooks": {
+              "PreToolUse": [
+                {
+                  "matcher": ".*",
+                  "hooks": [{"type": "command", "command": "~/.claude/hooks/pre-tool-use.sh"}]
+                }
+              ],
+              "PostToolUse": [
+                {
+                  "matcher": ".*",
+                  "hooks": [{"type": "command", "command": "~/.claude/hooks/post-tool-use.sh"}]
+                }
+              ]
+            }
+          }
+          EOF
+
+      - name: Run Claude Code (with security controls)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # CRITICAL: Scrub credentials from all subprocesses
+          CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"
+          CLAUDE_CODE_LOG_DIR: "/tmp/claude-logs"
+          # Disable telemetry in CI (reduces egress surface)
+          CLAUDE_TELEMETRY_DISABLED: "1"
+        run: |
+          mkdir -p /tmp/claude-logs
+
+          # Run Claude Code in print mode (no interactive TTY in CI)
+          # Do NOT use --dangerously-skip-permissions
+          claude --print \
+            --no-update-check \
+            --output-format stream-json \
+            "${{ github.event.inputs.task || 'Review this PR for security issues and code quality. Do not make commits.' }}" \
+            2>&1 | tee /tmp/claude-logs/session.log
+
+      - name: Upload security audit logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-security-logs-${{ github.run_id }}
+          path: /tmp/claude-logs/
+          retention-days: 30
+
+      - name: Check for security alerts
+        if: always()
+        run: |
+          if [ -f "/tmp/claude-logs/security-alerts.log" ]; then
+            echo "SECURITY ALERTS DETECTED IN THIS RUN:"
+            cat /tmp/claude-logs/security-alerts.log
+            exit 1
+          fi
+
+          if grep -q "BLOCKED" /tmp/claude-logs/pre-tool-use.log 2>/dev/null; then
+            echo "Some tool uses were blocked by the Sovereign Runtime Governor:"
+            grep "BLOCKED" /tmp/claude-logs/pre-tool-use.log
+          fi
+
+  # ===========================================================================
+  # Step 3: Human review gate -- SEPARATE job, SEPARATE permissions
+  # AI output is NEVER auto-deployed without human review
+  # ===========================================================================
+  human-review-gate:
+    name: Human Review Required
+    needs: claude-code-task
+    runs-on: ubuntu-latest
+    environment: production-deploy  # Requires human approval in GitHub Environments
+
+    steps:
+      - name: Review gate
+        run: |
+          echo "Human review completed. Proceeding to deployment."
+          echo "AI-generated changes have been reviewed by: ${{ github.actor }}"

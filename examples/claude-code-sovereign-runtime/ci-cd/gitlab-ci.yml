@@ -1,0 +1,134 @@
+# =============================================================================
+# AI SAFE2 -- Hardened GitLab CI Template for Claude Code
+# Framework: AI SAFE2 / AISM Level 4
+# =============================================================================
+
+variables:
+  CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"
+  CLAUDE_TELEMETRY_DISABLED: "1"
+  CLAUDE_CODE_LOG_DIR: "/tmp/claude-logs"
+  # Never set DANGEROUSLY_SKIP_PERMISSIONS here
+
+stages:
+  - security-preflight
+  - ai-task
+  - human-gate
+  - deploy
+
+# ---------------------------------------------------------------------------
+# Stage 1: Security preflight -- block dangerous configs before AI runs
+# ---------------------------------------------------------------------------
+security-preflight:
+  stage: security-preflight
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache jq grep
+  script:
+    - echo "AI SAFE2 Security Preflight Check"
+
+    # Block if bypassPermissions is enabled anywhere
+    - |
+      if find . -path "*/.claude/settings*.json" -exec grep -l '"bypassPermissions".*true' {} \; | grep -q .; then
+        echo "CRITICAL: bypassPermissions: true found -- pipeline blocked"
+        exit 1
+      fi
+
+    # Warn if no CLAUDE.md
+    - |
+      if [ ! -f "CLAUDE.md" ]; then
+        echo "WARNING: No CLAUDE.md present. Claude will operate without project security policy."
+      else
+        echo "OK: CLAUDE.md found"
+      fi
+
+    - echo "Preflight passed"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+
+# ---------------------------------------------------------------------------
+# Stage 2: Claude Code task with security controls
+# ---------------------------------------------------------------------------
+ai-code-review:
+  stage: ai-task
+  image: node:20-alpine
+  timeout: 30 minutes
+  needs: [security-preflight]
+  before_script:
+    - npm install -g @anthropic-ai/claude-code@latest
+    - mkdir -p ~/.claude/hooks ~/.claude/logs /tmp/claude-logs
+
+    # Deploy hooks from repo (hooks must be committed to your repo)
+    - |
+      if [ -d ".claude-safe/hooks" ]; then
+        cp .claude-safe/hooks/pre-tool-use.sh ~/.claude/hooks/
+        cp .claude-safe/hooks/post-tool-use.sh ~/.claude/hooks/
+        cp .claude-safe/hooks/stop.sh ~/.claude/hooks/
+        chmod +x ~/.claude/hooks/*.sh
+      fi
+
+    # Deploy hardened settings
+    - |
+      cat > ~/.claude/settings.json << 'SETTINGS'
+      {
+        "bypassPermissions": false,
+        "permissions": {
+          "deny": [
+            "Bash(curl *|*sh)",
+            "Bash(wget *|*sh)",
+            "Bash(rm -rf /*)",
+            "Bash(*base64 -d*|*sh*)",
+            "Bash(env | curl*)"
+          ]
+        },
+        "hooks": {
+          "PreToolUse": [{"matcher": ".*", "hooks": [{"type": "command", "command": "~/.claude/hooks/pre-tool-use.sh"}]}],
+          "PostToolUse": [{"matcher": ".*", "hooks": [{"type": "command", "command": "~/.claude/hooks/post-tool-use.sh"}]}]
+        }
+      }
+      SETTINGS
+
+  script:
+    - echo "Running Claude Code with AI SAFE2 controls"
+    - |
+      claude --print \
+        --no-update-check \
+        --output-format stream-json \
+        "${CLAUDE_TASK:-Review this code for security issues. Do not make commits.}" \
+        2>&1 | tee /tmp/claude-logs/session.log
+
+    # Check for security alerts
+    - |
+      if [ -f "/tmp/claude-logs/security-alerts.log" ]; then
+        echo "SECURITY ALERTS in this run:"
+        cat /tmp/claude-logs/security-alerts.log
+        exit 1
+      fi
+
+  variables:
+    ANTHROPIC_API_KEY: $ANTHROPIC_API_KEY  # Set in GitLab CI/CD Variables (masked)
+
+  artifacts:
+    paths:
+      - /tmp/claude-logs/
+    expire_in: 30 days
+    when: always
+
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH'
+
+# ---------------------------------------------------------------------------
+# Stage 3: Human review gate (GitLab protected environments)
+# ---------------------------------------------------------------------------
+human-review:
+  stage: human-gate
+  environment:
+    name: ai-review-gate
+    # Configure this environment to require manual approval in GitLab
+  script:
+    - echo "Human review of AI output completed by $GITLAB_USER_LOGIN"
+  when: manual
+  needs: [ai-code-review]
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

@@ -1,0 +1,48 @@
+{
+  "_comment": "AI SAFE2 Enterprise Managed Settings -- Windows",
+  "_deploy_to": "C:\\ProgramData\\Anthropic\\ClaudeCode\\managed-settings.json",
+  "_managed_by": "Security Team -- do not modify manually",
+  "_framework": "AI SAFE2 / AISM Level 4",
+
+  "bypassPermissions": false,
+  "autoUpdaterStatus": "disabled",
+
+  "allowManagedHooksOnly": true,
+
+  "managedHooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:\\ProgramData\\Anthropic\\ClaudeCode\\hooks\\pre-tool-use.ps1"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:\\ProgramData\\Anthropic\\ClaudeCode\\hooks\\post-tool-use.ps1"
+          }
+        ]
+      }
+    ]
+  },
+
+  "permissions": {
+    "deny": [
+      "Bash(curl *|*sh)",
+      "Bash(rm -rf /*)",
+      "Bash(*base64 -d*|*sh*)"
+    ]
+  },
+
+  "remoteControl": {
+    "enabled": false
+  }
+}

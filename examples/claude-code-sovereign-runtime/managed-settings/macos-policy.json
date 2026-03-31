@@ -1,0 +1,62 @@
+{
+  "_comment": "AI SAFE2 Enterprise Managed Settings -- macOS",
+  "_deploy_to": "/Library/Application Support/ClaudeCode/managed-settings.json",
+  "_managed_by": "Security Team -- do not modify manually",
+  "_framework": "AI SAFE2 / AISM Level 4",
+
+  "bypassPermissions": false,
+  "autoUpdaterStatus": "disabled",
+
+  "allowManagedHooksOnly": true,
+
+  "managedHooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Library/Application Support/ClaudeCode/hooks/pre-tool-use.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Library/Application Support/ClaudeCode/hooks/post-tool-use.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Library/Application Support/ClaudeCode/hooks/stop.sh"
+          }
+        ]
+      }
+    ]
+  },
+
+  "permissions": {
+    "deny": [
+      "Bash(curl *|*sh)",
+      "Bash(wget *|*sh)",
+      "Bash(rm -rf /*)",
+      "Bash(sudo rm *)",
+      "Bash(*base64 -d*|*sh*)",
+      "Bash(env | curl*)",
+      "Bash(printenv | curl*)"
+    ]
+  },
+
+  "remoteControl": {
+    "enabled": false
+  }
+}
