@@ -1,3 +1,7 @@
+<div align="center">
+<img src="/assets/Engineering-External-Security-Guardrails.png" alt="Claude Code Sovereign Runtime Defense" width="100%" />
+</div>
+
 # Claude Code Sovereign Runtime -- AI SAFE2 Implementation Guide
 
 **Framework:** AI SAFE2 / AISM Level 4 (Sovereign Runtime Governance)
