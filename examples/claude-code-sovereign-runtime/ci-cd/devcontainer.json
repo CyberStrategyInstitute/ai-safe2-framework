@@ -1,0 +1,35 @@
+{
+  "name": "AI SAFE2 Hardened Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+
+  "containerEnv": {
+    "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1",
+    "CLAUDE_TELEMETRY_DISABLED": "1",
+    "CLAUDE_CODE_LOG_DIR": "/home/vscode/.claude/logs"
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup-claude-safe.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [],
+      "settings": {
+        "terminal.integrated.env.linux": {
+          "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1"
+        }
+      }
+    }
+  },
+
+  "remoteUser": "vscode",
+
+  "mounts": [
+    "source=${localEnv:HOME}/.claude-safe,target=/home/vscode/.claude-safe,type=bind,consistency=cached,readonly"
+  ]
+}

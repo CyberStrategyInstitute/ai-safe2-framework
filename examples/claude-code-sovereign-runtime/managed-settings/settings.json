@@ -1,0 +1,72 @@
+{
+  "permissions": {
+    "allow": [],
+    "deny": [
+      "Bash(curl *|*sh)",
+      "Bash(wget *|*sh)",
+      "Bash(curl *|bash)",
+      "Bash(wget *|bash)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~*)",
+      "Bash(chmod 777 *)",
+      "Bash(sudo rm *)",
+      "Bash(> /etc/*)",
+      "Bash(>> /etc/*)",
+      "Bash(cat /etc/passwd*)",
+      "Bash(cat /etc/shadow*)",
+      "Bash(*base64 -d*|*sh*)",
+      "Bash(*base64 -d*|*bash*)",
+      "Bash(env | curl*)",
+      "Bash(printenv | curl*)",
+      "Bash(*ANTHROPIC_API_KEY*curl*)",
+      "Bash(*AWS_SECRET*curl*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool-use.sh"
+          }
+        ]
+      },
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/pre-tool-use.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/post-tool-use.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/stop.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "bypassPermissions": false,
+  "cleanupPeriodDays": 7,
+  "includeCoAuthoredBy": true,
+  "autoUpdaterStatus": "disabled"
+}
