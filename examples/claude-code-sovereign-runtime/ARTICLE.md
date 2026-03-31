@@ -1,3 +1,7 @@
+<div align="center">
+<img src="/assets/AI-Source-Code-Leak-Guide.png" alt="How to Secure Against Claude Code Source Leak Risks" width="100%" />
+</div>
+
 # The Claude Code Source Leak: What It Means and How to Protect Yourself Right Now
 
 **Published:** March 31, 2026
