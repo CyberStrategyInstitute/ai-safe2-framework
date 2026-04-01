@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code: Velocity &amp; Governance | Cyber Strategy Institute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange:#f6921e; --maroon:#820f1a; --maroon-dim:rgba(130,15,26,.18);
+  --grey:#808080; --grey-light:#a0a0a0;
+  --bg:#08090c; --bg2:#0e1018; --bg3:#13161f; --bg4:#191d28;
+  --border:#1c2030; --border-hi:#252c3d;
+  --text:#bfc8db; --text-dim:#68748a; --text-bright:#e8edf8;
+  --green:#3dd68c; --blue:#4a9eff; --yellow:#f5c842; --red:#e84455;
+  --mono:'JetBrains Mono',monospace; --sans:'Sora',sans-serif;
+  --r:6px; --t:.17s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:15px}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.72;min-height:100vh}
+[id]{scroll-margin-top:72px}
+::-webkit-scrollbar{width:5px;background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px}
+
+/* ── HEADER ─────────────────────────────── */
+.hdr{position:sticky;top:0;z-index:300;background:rgba(8,9,12,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.hdr-in{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:1.25rem;padding:0 1.75rem;height:62px}
+.logo{display:flex;align-items:center;gap:.65rem;text-decoration:none;flex-shrink:0}
+.logo-mark{width:34px;height:34px;border-radius:5px;background:linear-gradient(135deg,var(--maroon),var(--orange));display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.66rem;font-weight:700;color:#fff;letter-spacing:.04em}
+.logo-name{font-size:.82rem;font-weight:700;color:var(--text-bright);display:block;letter-spacing:-.01em}
+.logo-path{font-family:var(--mono);font-size:.58rem;color:var(--text-dim);display:block}
+
+/* search */
+.srch{flex:1;max-width:370px;position:relative}
+.srch svg{position:absolute;left:.72rem;top:50%;transform:translateY(-50%);color:var(--text-dim);pointer-events:none}
+#s-inp{width:100%;padding:.46rem .75rem .46rem 2.15rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text-bright);font-family:var(--mono);font-size:.76rem;outline:none;transition:border-color var(--t)}
+#s-inp::placeholder{color:var(--text-dim)}
+#s-inp:focus{border-color:var(--orange)}
+#s-res{position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--bg3);border:1px solid var(--border-hi);border-radius:var(--r);z-index:400;display:none;max-height:360px;overflow-y:auto;box-shadow:0 10px 36px rgba(0,0,0,.55)}
+#s-res.on{display:block}
+.sr{display:block;padding:.6rem .95rem;cursor:pointer;border-bottom:1px solid var(--border);text-decoration:none;transition:background var(--t)}
+.sr:last-child{border-bottom:none}
+.sr:hover{background:var(--bg4)}
+.sr-tag{font-family:var(--mono);font-size:.56rem;color:var(--orange);text-transform:uppercase;letter-spacing:.1em}
+.sr-title{font-size:.8rem;color:var(--text-bright);margin-top:.08rem}
+.sr-excerpt{font-size:.68rem;color:var(--text-dim);margin-top:.12rem;line-height:1.4}
+.s-empty{padding:1rem;text-align:center;font-family:var(--mono);font-size:.73rem;color:var(--text-dim)}
+
+.hdr-cta{display:flex;gap:.5rem;flex-shrink:0;margin-left:auto}
+
+/* ── BUTTONS ─────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:.38rem;padding:.48rem 1.05rem;border-radius:var(--r);font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:.04em;text-decoration:none;cursor:pointer;transition:opacity var(--t),transform var(--t);border:none;white-space:nowrap}
+.btn:hover{opacity:.86;transform:translateY(-1px)}
+.btn-orange{background:var(--orange);color:#fff}
+.btn-maroon{background:var(--maroon);color:#fff}
+.btn-ghost{background:transparent;color:var(--text-dim);border:1px solid var(--border-hi)}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn-lg{padding:.7rem 1.4rem;font-size:.78rem}
+.btn-full{width:100%;justify-content:center;margin-bottom:.38rem}
+
+/* ── ALERT STRIP ─────────────────────────── */
+.alert-strip{background:linear-gradient(90deg,rgba(130,15,26,.32),rgba(130,15,26,.1));border-left:4px solid var(--maroon);padding:.9rem 1.75rem;display:flex;align-items:center;gap:1rem;border-bottom:1px solid rgba(130,15,26,.3);position:relative;z-index:1}
+.as-icon{font-size:1rem;flex-shrink:0}
+.as-title{font-family:var(--mono);font-size:.63rem;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.2rem}
+.as-body{font-size:.8rem;color:var(--text);line-height:1.5}
+.as-body a{color:var(--orange)}
+.as-cta{margin-left:auto;flex-shrink:0}
+
+/* ── HERO ─────────────────────────────────── */
+.hero{background:linear-gradient(180deg,rgba(130,15,26,.14) 0%,transparent 70%);border-bottom:1px solid var(--border);padding:3.75rem 1.75rem 2.75rem;position:relative;z-index:1}
+.hero-in{max-width:1300px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);margin-bottom:.9rem;display:flex;align-items:center;gap:.7rem}
+.eyebrow::before{content:'';display:block;width:18px;height:1px;background:var(--orange)}
+h1{font-size:clamp(1.85rem,4.5vw,3.1rem);font-weight:800;color:var(--text-bright);letter-spacing:-.03em;line-height:1.08;margin-bottom:1.15rem}
+.ao{color:var(--orange)}.am{color:var(--red)}
+.hero-sub{font-size:.95rem;color:var(--text-dim);max-width:680px;line-height:1.78;margin-bottom:1.85rem}
+.stats{display:flex;gap:1.75rem;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:1.2rem}
+.stat-n{font-family:var(--mono);font-size:1.55rem;font-weight:700;color:var(--orange);display:block;line-height:1}
+.stat-l{font-size:.68rem;color:var(--text-dim);margin-top:.22rem}
+
+/* ── TOPIC TILES ─────────────────────────── */
+.tiles-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.4rem 1.75rem;position:relative;z-index:1}
+.tiles-bar-in{max-width:1300px;margin:0 auto}
+.tiles-label{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.9rem}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.55rem}
+.tile{display:flex;flex-direction:column;gap:.28rem;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.8rem .95rem;text-decoration:none;cursor:pointer;transition:border-color var(--t),background var(--t),transform var(--t);position:relative;overflow:hidden}
+.tile::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--orange);transform:scaleX(0);transition:transform var(--t);transform-origin:left}
+.tile:hover{border-color:var(--orange);background:var(--bg4);transform:translateY(-2px)}
+.tile:hover::after{transform:scaleX(1)}
+.tile.active{border-color:var(--orange);background:rgba(246,146,30,.06)}
+.tile.active::after{transform:scaleX(1)}
+.ti{font-size:1.05rem}
+.tl{font-size:.76rem;font-weight:600;color:var(--text-bright);line-height:1.2}
+.ts{font-family:var(--mono);font-size:.58rem;color:var(--text-dim)}
+
+/* ── PAGE BODY ─────────────────────────────── */
+.pg{max-width:1300px;margin:0 auto;display:grid;grid-template-columns:1fr 268px;gap:0;align-items:start;position:relative;z-index:1}
+.main{padding:2.25rem 2.25rem 5rem 1.75rem;min-width:0}
+.side{padding:1.75rem 1.75rem 1.75rem 0;position:sticky;top:72px}
+
+/* ── SECTION STRUCTURE ──────────────────── */
+.sec{margin-bottom:3.25rem}
+.sec-hdr{display:flex;align-items:flex-start;gap:.9rem;margin-bottom:1.15rem;padding-bottom:.95rem;border-bottom:1px solid var(--border)}
+.sec-ico{font-size:1.35rem;width:40px;height:40px;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);display:flex;align-items:center;justify-content:center}
+.sec-meta{flex:1}
+h2{font-size:1.25rem;font-weight:700;color:var(--text-bright);letter-spacing:-.02em;line-height:1.2;margin-bottom:.28rem}
+.sec-line{font-size:.78rem;color:var(--text-dim);line-height:1.55}
+.back{font-family:var(--mono);font-size:.6rem;color:var(--text-dim);text-decoration:none;display:inline-flex;align-items:center;gap:.28rem;margin-left:auto;flex-shrink:0;align-self:flex-start;margin-top:.15rem;padding:.3rem .6rem;border:1px solid var(--border);border-radius:var(--r);transition:color var(--t),border-color var(--t)}
+.back:hover{color:var(--orange);border-color:var(--orange)}
+
+h3{font-family:var(--mono);font-size:.83rem;font-weight:600;color:var(--orange);margin:1.9rem 0 .7rem;display:flex;align-items:center;gap:.48rem}
+h3::before{content:'';display:block;width:3px;height:12px;background:var(--orange);border-radius:2px}
+h4{font-size:.86rem;font-weight:600;color:var(--text-bright);margin:1.15rem 0 .45rem}
+p{margin-bottom:.85rem;font-size:.87rem}
+a{color:var(--orange);text-decoration:none}
+a:hover{text-decoration:underline}
+strong{color:var(--text-bright);font-weight:600}
+
+/* ── SOVEREIGN RUNTIME ─── HERO CARD ──────── */
+.sov-card{background:linear-gradient(135deg,rgba(130,15,26,.28) 0%,rgba(246,146,30,.06) 55%,rgba(130,15,26,.12) 100%);border:1px solid rgba(246,146,30,.28);border-radius:10px;padding:2.35rem;margin-bottom:1.85rem;position:relative;overflow:hidden}
+.sov-card::before{content:'SOVEREIGN RUNTIME';position:absolute;right:-18px;top:-8px;font-family:var(--mono);font-size:4.8rem;font-weight:700;color:rgba(246,146,30,.035);pointer-events:none;white-space:nowrap;letter-spacing:.08em}
+.sov-badge{display:inline-flex;align-items:center;gap:.38rem;background:rgba(246,146,30,.1);border:1px solid rgba(246,146,30,.28);border-radius:20px;padding:.22rem .7rem;font-family:var(--mono);font-size:.6rem;font-weight:700;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.9rem}
+.sov-badge::before{content:'●';font-size:.42rem}
+.sov-title{font-size:1.4rem;font-weight:800;color:var(--text-bright);letter-spacing:-.02em;margin-bottom:.7rem;line-height:1.18}
+.sov-sub{font-size:.87rem;color:var(--text-dim);max-width:680px;line-height:1.78;margin-bottom:1.45rem}
+.sov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:.65rem;margin-bottom:1.65rem}
+.bitem{background:rgba(0,0,0,.24);border:1px solid var(--border);border-radius:var(--r);padding:.82rem .95rem;display:flex;gap:.6rem;align-items:flex-start}
+.bchk{color:var(--green);font-family:var(--mono);font-size:.75rem;flex-shrink:0;margin-top:.12rem}
+.btxt{font-size:.79rem;color:var(--text);line-height:1.52}
+.btxt strong{color:var(--text-bright);display:block;margin-bottom:.12rem;font-size:.8rem}
+.sov-ctas{display:flex;gap:.7rem;flex-wrap:wrap}
+.sov-meta{margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.055);display:flex;gap:1.75rem;flex-wrap:wrap}
+.sov-mi{font-family:var(--mono);font-size:.63rem;color:var(--text-dim)}
+.sov-mi strong{color:var(--text-bright);display:block;margin-bottom:.1rem}
+
+/* protects grid */
+.pro-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.55rem;margin:1rem 0}
+.pro-card{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--maroon);border-radius:var(--r);padding:.82rem .95rem}
+.pro-h{font-family:var(--mono);font-size:.65rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+.pro-b{font-size:.77rem;color:var(--text-dim);line-height:1.5}
+
+/* ── CALLOUTS ─────────────────────────────── */
+.note{border-radius:var(--r);padding:.9rem 1.15rem;margin:1.15rem 0;font-size:.83rem;line-height:1.62}
+.n-warn{background:rgba(130,15,26,.1);border:1px solid rgba(130,15,26,.32);border-left:3px solid var(--maroon)}
+.n-info{background:rgba(74,158,255,.055);border:1px solid rgba(74,158,255,.2);border-left:3px solid var(--blue)}
+.n-ok{background:rgba(61,214,140,.055);border:1px solid rgba(61,214,140,.2);border-left:3px solid var(--green)}
+.n-tip{background:rgba(246,146,30,.065);border:1px solid rgba(246,146,30,.2);border-left:3px solid var(--orange)}
+.nh{font-family:var(--mono);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:.38rem}
+.n-warn .nh{color:var(--red)} .n-info .nh{color:var(--blue)} .n-ok .nh{color:var(--green)} .n-tip .nh{color:var(--orange)}
+
+/* ── QUOTE ─────────────────────────────────── */
+.qblock{border-left:3px solid var(--orange);background:var(--bg3);padding:1rem 1.4rem;margin:1.4rem 0;border-radius:0 var(--r) var(--r) 0}
+.qblock p{font-style:italic;font-size:.87rem;color:var(--text);margin-bottom:.45rem}
+.qattr{font-family:var(--mono);font-size:.63rem;color:var(--text-dim)}
+.qattr strong{color:var(--orange)}
+
+/* ── CODE ─────────────────────────────────── */
+code{font-family:var(--mono);font-size:.81em;background:rgba(246,146,30,.08);color:var(--orange);padding:.11em .38em;border-radius:3px}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1.15rem 1.4rem;overflow-x:auto;margin:1.15rem 0}
+pre code{background:none;color:var(--text);font-size:.76rem;line-height:1.82;padding:0}
+.cl{font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.38rem;display:block}
+.cc{color:var(--text-dim)} .ck{color:#f5c842} .cv{color:var(--green)} .cs{color:#79c0ff}
+
+/* ── TABLES ─────────────────────────────────── */
+.tw{overflow-x:auto;margin:1.15rem 0;border-radius:var(--r);border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.79rem}
+thead{background:var(--bg3)}
+th{font-family:var(--mono);font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);padding:.68rem .95rem;text-align:left;border-bottom:1px solid var(--border-hi);white-space:nowrap}
+td{padding:.68rem .95rem;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(246,146,30,.02)}
+
+/* tags */
+.tag{display:inline-block;font-family:var(--mono);font-size:.57rem;padding:.13em .48em;border-radius:3px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.th{background:rgba(130,15,26,.22);color:var(--red);border:1px solid rgba(130,15,26,.42)}
+.tm{background:rgba(245,200,66,.1);color:var(--yellow);border:1px solid rgba(245,200,66,.3)}
+.tl{background:rgba(61,214,140,.1);color:var(--green);border:1px solid rgba(61,214,140,.3)}
+.tu{background:rgba(74,158,255,.1);color:var(--blue);border:1px solid rgba(74,158,255,.3)}
+.to{background:rgba(246,146,30,.1);color:var(--orange);border:1px solid rgba(246,146,30,.3)}
+
+/* ── FEATURE CARDS ────────────────────────── */
+.fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:.7rem;margin:1.15rem 0}
+.fc{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:1.05rem 1.15rem;transition:border-color var(--t)}
+.fc:hover{border-color:var(--orange)}
+.fc-cmd{font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--orange);margin-bottom:.32rem}
+.fc-lbl{font-size:.77rem;font-weight:600;color:var(--text-bright);margin-bottom:.28rem}
+.fc-desc{font-size:.75rem;color:var(--text-dim);line-height:1.5}
+.fc-risk{margin-top:.6rem}
+
+/* ── CHECKLIST ────────────────────────────── */
+.cklist{list-style:none;margin:1rem 0}
+.cklist li{display:flex;gap:.7rem;align-items:flex-start;padding:.58rem 0;border-bottom:1px solid var(--border);font-size:.83rem}
+.cklist li:last-child{border-bottom:none}
+.ci{font-family:var(--mono);font-size:.68rem;flex-shrink:0;margin-top:.1rem}
+.c-now{color:var(--red)} .c-do{color:var(--green)} .c-bef{color:var(--orange)} .c-best{color:var(--blue)}
+
+/* ── SIDEBAR ──────────────────────────────── */
+.sb-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.05rem;margin-bottom:.7rem}
+.sb-card h4{font-family:var(--mono);font-size:.57rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.8rem}
+.sbn a{display:flex;align-items:center;gap:.48rem;padding:.38rem 0;font-size:.74rem;color:var(--text-dim);text-decoration:none;border-bottom:1px solid var(--border);transition:color var(--t)}
+.sbn a:last-child{border-bottom:none}
+.sbn a:hover{color:var(--orange)}
+.sbn .si{font-size:.82rem;flex-shrink:0}
+.sb-cta{background:linear-gradient(135deg,rgba(130,15,26,.28),rgba(246,146,30,.09));border:1px solid rgba(246,146,30,.28);border-radius:var(--r);padding:1.2rem;margin-bottom:.7rem;text-align:center}
+.sb-cta p{font-size:.75rem;color:var(--text-dim);margin-bottom:.82rem;line-height:1.5}
+.rrow{display:flex;align-items:center;justify-content:space-between;padding:.32rem 0;border-bottom:1px solid var(--border);font-size:.71rem}
+.rrow:last-child{border-bottom:none}
+.rf{font-family:var(--mono);color:var(--text-dim)}
+
+/* ── AISM LEVELS ──────────────────────────── */
+.aism{display:flex;flex-direction:column;gap:.55rem;margin:1.15rem 0}
+.ar{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:.85rem .95rem;display:grid;grid-template-columns:80px 1fr auto;gap:.9rem;align-items:center}
+.ar.hi{border-color:var(--orange);background:rgba(246,146,30,.055)}
+.an{font-family:var(--mono);font-size:.66rem;font-weight:700;color:var(--text-dim)}
+.ar.hi .an{color:var(--orange)}
+.am2{font-size:.8rem;font-weight:600;color:var(--text-bright);margin-bottom:.18rem}
+.ad{font-size:.73rem;color:var(--text-dim)}
+.as2{font-family:var(--mono);font-size:.58rem;white-space:nowrap}
+
+/* ── FAB ──────────────────────────────────── */
+#fab{position:fixed;bottom:1.75rem;right:1.75rem;z-index:500;width:42px;height:42px;background:var(--maroon);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity .24s,transform .24s,background .17s;border:none;box-shadow:0 4px 18px rgba(0,0,0,.45);text-decoration:none}
+#fab.on{opacity:1;transform:translateY(0)}
+#fab:hover{background:var(--orange)}
+
+/* ── FOOTER ───────────────────────────────── */
+footer{border-top:1px solid var(--border);padding:2.25rem 1.75rem;text-align:center;font-family:var(--mono);font-size:.64rem;color:var(--text-dim);position:relative;z-index:1}
+footer a{color:var(--text-dim)} footer a:hover{color:var(--orange)}
+.fl{font-size:.78rem;font-weight:700;color:var(--text-bright);margin-bottom:.7rem;display:block}
+
+/* ── RESPONSIVE ───────────────────────────── */
+@media(max-width:960px){.pg{grid-template-columns:1fr}.side{display:none}.hdr-cta{display:none}}
+@media(max-width:580px){.hdr-in{padding:0 1rem}.main{padding:1.4rem .9rem 3.5rem}.tiles-bar{padding:1.1rem}.sov-card{padding:1.5rem}h1{font-size:1.7rem}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="logo" href="#">
+      <div class="logo-mark">CSI</div>
+      <div>
+        <span class="logo-name">Cyber Strategy Institute</span>
+        <span class="logo-path">ai-safe2-framework / guides</span>
+      </div>
+    </a>
+
+    <div class="srch">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="s-inp" type="text" placeholder="Search features, risks, commands&#8230;" autocomplete="off">
+      <div id="s-res"></div>
+    </div>
+
+    <div class="hdr-cta">
+      <a class="btn btn-ghost" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/guides" target="_blank">All Guides</a>
+      <a class="btn btn-orange" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/claude-code-sovereign-runtime" target="_blank">Get Runtime Package</a>
+    </div>
+  </div>
+</header>
+
+<!-- CVE ALERT -->
+<div class="alert-strip">
+  <div class="as-icon">&#9888;&#65039;</div>
+  <div>
+    <div class="as-title">CVE-2026-21852 &#8212; Immediate Action Required</div>
+    <div class="as-body">If you ran Claude Code against untrusted repos on version &lt; 2.0.65, <strong>rotate your Anthropic API key now.</strong> Confirmed key exfiltration path via pre-trust requests. <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/claude-code-sovereign-runtime" target="_blank">Full mitigation guide &#8594;</a></div>
+  </div>
+  <a class="btn btn-maroon as-cta" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/claude-code-sovereign-runtime" target="_blank">View Mitigation</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Developer Guide &#8212; April 2026</div>
+    <h1>Claude Code: <span class="ao">Velocity</span><br>&amp; <span class="am">Governance</span> After The Leak</h1>
+    <p class="hero-sub">512,000 lines of TypeScript. 44 unreleased features. The internal permission harness now in the public domain. This guide maps every major capability, the risk surface it opens, and how to build the architecture that lets you run Claude Code at its actual ceiling &#8212; safely.</p>
+    <div class="stats">
+      <div><span class="stat-n">512K</span><div class="stat-l">Lines exposed</div></div>
+      <div><span class="stat-n">1,900</span><div class="stat-l">Files reconstructable</div></div>
+      <div><span class="stat-n">44</span><div class="stat-l">Unreleased features</div></div>
+      <div><span class="stat-n">41.5K+</span><div class="stat-l">GitHub forks</div></div>
+      <div><span class="stat-n">89</span><div class="stat-l">Feature flags total</div></div>
+      <div><span class="stat-n">2nd</span><div class="stat-l">Same leak, 13 months later</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOPIC TILES NAV -->
+<div class="tiles-bar" id="top">
+  <div class="tiles-bar-in">
+    <div class="tiles-label">Jump to any topic &#8212; click to navigate, click again to return here</div>
+    <div class="tiles">
+      <a class="tile" href="#sovereign"><div class="ti">&#128737;&#65039;</div><div class="tl">Sovereign Runtime</div><div class="ts">Defense package</div></a>
+      <a class="tile" href="#multi-agent"><div class="ti">&#128256;</div><div class="tl">Multi-Agent Execution</div><div class="ts">/batch &#183; /branch &#183; -w</div></a>
+      <a class="tile" href="#prompt-opt"><div class="ti">&#9889;</div><div class="tl">Prompt Optimization</div><div class="ts">CLAUDE.md &#183; /compact</div></a>
+      <a class="tile" href="#automation"><div class="ti">&#128260;</div><div class="tl">Workflow Automation</div><div class="ts">/loop &#183; /schedule &#183; hooks</div></a>
+      <a class="tile" href="#agent-cfg"><div class="ti">&#129302;</div><div class="tl">Agent Configuration</div><div class="ts">--agent &#183; permissions</div></a>
+      <a class="tile" href="#remote"><div class="ti">&#128225;</div><div class="tl">Remote &amp; Mobile</div><div class="ts">--teleport &#183; Cowork</div></a>
+      <a class="tile" href="#unreleased"><div class="ti">&#128302;</div><div class="tl">Unreleased Features</div><div class="ts">KAIROS &#183; Coordinator</div></a>
+      <a class="tile" href="#risk"><div class="ti">&#9878;&#65039;</div><div class="tl">Risk Matrix</div><div class="ts">All features rated</div></a>
+      <a class="tile" href="#checklist"><div class="ti">&#9989;</div><div class="tl">Quick Checklist</div><div class="ts">Do this today</div></a>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN BODY -->
+<div class="pg">
+<main class="main">
+
+<!-- ═══ SOVEREIGN RUNTIME ═══ -->
+<section class="sec" id="sovereign">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#128737;&#65039;</div>
+    <div class="sec-meta">
+      <h2>Sovereign Runtime Defense Package</h2>
+      <div class="sec-line">The dedicated response to the leak &#8212; and the infrastructure that lets you use every feature below with confidence.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <div class="sov-card">
+    <div class="sov-badge">Featured Open-Source Package</div>
+    <div class="sov-title">Claude Code Sovereign Runtime<br>Defense Package</div>
+    <p class="sov-sub">The leaked harness means internal guardrails are now a known attack surface. The Sovereign Runtime Defense Package moves your enforcement boundary <em>outside</em> the agent&#8217;s process entirely &#8212; making it mathematically irrelevant what an adversary finds in the harness. If an unauthorized action is attempted, the external circuit breaker severs it before it commits. MIT license. 15-minute setup for individuals.</p>
+
+    <div class="sov-grid">
+      <div class="bitem"><div class="bchk">&#10003;</div><div class="btxt"><strong>External Enforcement Boundary</strong>Controls that live outside the agent&#8217;s process &#8212; cannot be seen, influenced, or bypassed by the agent&#8217;s own code.</div></div>
+      <div class="bitem"><div class="bchk">&#10003;</div><div class="btxt"><strong>Deterministic Circuit Breaker</strong>Unauthorized state transitions severed in milliseconds. Not flagged for review after the fact &#8212; stopped before they commit.</div></div>
+      <div class="bitem"><div class="bchk">&#10003;</div><div class="btxt"><strong>Subagent Permission Inheritance Control</strong>Every agent spawned via /batch or /branch inherits physical execution constraints, not just policy statements.</div></div>
+      <div class="bitem"><div class="bchk">&#10003;</div><div class="btxt"><strong>JIT Credential Wrapping</strong>Just-in-time credential scoping prevents exposure to autonomous loops, scheduled agents, and subagent swarms.</div></div>
+      <div class="bitem"><div class="bchk">&#10003;</div><div class="btxt"><strong>Behavioral Monitoring Hooks</strong>Pre-wired lifecycle hooks for linting, testing, and security validation &#8212; layered with the external governor.</div></div>
+      <div class="bitem"><div class="bchk">&#10003;</div><div class="btxt"><strong>MCP Server Hardening</strong>Explicit allowlists and permission scoping for all connected MCP integrations.</div></div>
+      <div class="bitem"><div class="bchk">&#10003;</div><div class="btxt"><strong>CI/CD Pipeline Templates</strong>Hardened build settings that prevent source map artifacts &#8212; addresses the root cause of both leaks.</div></div>
+      <div class="bitem"><div class="bchk">&#10003;</div><div class="btxt"><strong>Audit-Ready for Regulated Industries</strong>Proves the violation was <em>impossible</em>, not just that someone chose not to violate &#8212; the legal standard in pharma, life sciences, and financial services.</div></div>
+    </div>
+
+    <div class="sov-ctas">
+      <a class="btn btn-orange btn-lg" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/claude-code-sovereign-runtime" target="_blank">&#8659; Get the Defense Package (MIT, Free)</a>
+      <a class="btn btn-ghost btn-lg" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework" target="_blank">Full AI SAFE&#178; Framework</a>
+      <a class="btn btn-ghost btn-lg" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/guides" target="_blank">Browse All Guides</a>
+    </div>
+
+    <div class="sov-meta">
+      <div class="sov-mi"><strong>License</strong>MIT &#8212; free forever</div>
+      <div class="sov-mi"><strong>Setup Time</strong>~15 min (individual)</div>
+      <div class="sov-mi"><strong>Min Version</strong>Claude Code &#8805; 2.0.65</div>
+      <div class="sov-mi"><strong>Includes</strong>Hooks &#183; Settings &#183; JIT Creds &#183; MCP Hardening &#183; CI/CD Templates</div>
+    </div>
+  </div>
+
+  <h3>What It Protects Against</h3>
+  <div class="pro-grid">
+    <div class="pro-card"><div class="pro-h">Silent Override Bug</div><div class="pro-b">Blocks the <code>--dangerously-skip-permissions</code> + <code>--permission-mode plan</code> bypass where the UI lies about the agent&#8217;s actual permission state.</div></div>
+    <div class="pro-card"><div class="pro-h">Subagent Bypass Propagation</div><div class="pro-b">When /batch fans out to hundreds of agents, each inherits the external governor&#8217;s constraints &#8212; not the parent&#8217;s potentially compromised permission state.</div></div>
+    <div class="pro-card"><div class="pro-h">Autonomous Exfiltration</div><div class="pro-b">Anthropic&#8217;s API domain is allowlisted on most corporate firewalls. The governor monitors and constrains what traverses that trusted channel.</div></div>
+    <div class="pro-card"><div class="pro-h">Telemetry Dead Zones</div><div class="pro-b">The leak exposed exact telemetry blind spots. External monitoring covers areas where Anthropic&#8217;s native telemetry does not reach.</div></div>
+    <div class="pro-card"><div class="pro-h">Self-Propagating Subagents</div><div class="pro-b">In bypass mode with GitHub access, autonomous worm-like behavior is possible. The circuit breaker severs unauthorized push/execute sequences before they chain.</div></div>
+    <div class="pro-card"><div class="pro-h">Harness Zero-Days</div><div class="pro-b">An adversarial AI can map the full harness overnight. External enforcement means zero-days in the harness cannot reach the execution boundary.</div></div>
+  </div>
+
+  <div class="note n-tip">
+    <div class="nh">&#128161; The Core Principle</div>
+    You don&#8217;t build brakes to slow the engine down. You build them so you can drive fast safely. The Sovereign Runtime package is what lets you run /batch at hundreds of agents, enable /loop for autonomous overnight work, and use Cowork dispatch &#8212; with confidence that architecture enforces boundaries the agent&#8217;s own code cannot override.
+  </div>
+</section>
+
+<!-- ═══ MULTI-AGENT ═══ -->
+<section class="sec" id="multi-agent">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#128256;</div>
+    <div class="sec-meta">
+      <h2>Multi-Agent Execution</h2>
+      <div class="sec-line">Stop working sequentially. The architecture was built for parallel &#8212; most developers aren&#8217;t using it.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <div class="note n-tip">
+    <div class="nh">&#128640; The Benefit</div>
+    Ahad Shams restructured his entire Meta ads workflow after reading the leaked coordinator mode architecture &#8212; 4 agents running simultaneously instead of sequential steps. A 5-hour audit process completed in under 2 hours: a <strong>60% speed improvement</strong> from understanding what Claude Code was actually built for.
+  </div>
+
+  <h3>/batch &#8212; Fan Out to Hundreds of Agents</h3>
+  <p><strong>What it does:</strong> Interviews you about the task, then fans out to as many parallel worktree agents as needed &#8212; dozens, hundreds, even thousands for large migrations. Each agent gets its own isolated branch, working simultaneously.</p>
+  <p><strong>Why it&#8217;s nearly free at scale:</strong> When Claude Code forks a subagent, it creates a byte-identical copy of the parent context. The API caches this. Five agents in parallel costs barely more than one sequentially. The source code confirms this architecture explicitly &#8212; it was designed for it.</p>
+
+  <span class="cl">Example: /batch for parallel code migration</span>
+  <pre><code><span class="cc"># Start batch mode &#8212; Claude interviews you, then fans out</span>
+/batch
+
+<span class="cc"># Claude spawns parallel agents like:</span>
+<span class="cc">#  Agent 1 &#8594; auth module refactor     (worktree: feature/auth-refactor)</span>
+<span class="cc">#  Agent 2 &#8594; test coverage pass       (worktree: feature/test-coverage)</span>
+<span class="cc">#  Agent 3 &#8594; dependency updates       (worktree: feature/deps-update)</span>
+<span class="cc">#  Agent 4 &#8594; docs sync               (worktree: feature/docs-sync)</span>
+<span class="cc">#  Agent 5 &#8594; security audit          (worktree: feature/sec-audit)</span>
+<span class="cc"># All run simultaneously. All share the prompt cache.</span></code></pre>
+
+  <div class="note n-warn">
+    <div class="nh">&#9888; Risk: Blast Radius Scales With Agent Count</div>
+    When you fan out to 100 agents, any single compromised subagent&#8217;s blast radius becomes instantaneous. Subagents inherit the parent&#8217;s permission state including any bypassed flags. Map what each agent can reach before scaling. See the <a href="#sovereign">Sovereign Runtime package</a> for subagent permission control.
+  </div>
+
+  <h3>/branch &#8212; Fork Without Losing Context</h3>
+  <p><strong>What it does:</strong> Forks a running session into two parallel threads. Deep into a hard problem, want to explore an alternative? Branch it. The existing session keeps running. The fork explores the alternative. Compare outcomes.</p>
+  <p>CLI equivalent: <code>claude --resume --fork-session</code> &#8212; sessions persist at <code>~/.claude/projects/{hash}/{sessionId}.jsonl</code>. Always use <code>--continue</code> by default. Stop starting fresh every session.</p>
+
+  <h3>claude -w &#8212; Worktrees for True Isolation</h3>
+  <p>Starts a new session in a fresh git worktree. Run dozens of Claude instances simultaneously in the same repo, each with its own isolated branch. Combined with /batch, this is the mechanical foundation of parallel execution at scale.</p>
+
+  <span class="cl">Parallel worktree setup</span>
+  <pre><code><span class="cc"># Spawn isolated agent in its own git worktree</span>
+claude -w
+
+<span class="cc"># Each -w agent gets:</span>
+<span class="cc">#  - Its own git worktree + isolated branch</span>
+<span class="cc">#  - Independent file system state</span>
+<span class="cc">#  - Shared prompt cache (cost-efficient)</span>
+
+<span class="cc"># Always resume sessions &#8212; never start fresh</span>
+claude --continue</code></pre>
+
+  <div class="qblock">
+    <p>"/branch and /batch are the ones that change how you think about work, not just speed. Forking sessions and fanning out to hundreds of agents means you stop thinking sequentially."</p>
+    <div class="qattr"><strong>Matt Flannery</strong> &#183; Slalom Consulting, Life Sciences AI Practice</div>
+  </div>
+</section>
+
+<!-- ═══ PROMPT OPTIMIZATION ═══ -->
+<section class="sec" id="prompt-opt">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#9889;</div>
+    <div class="sec-meta">
+      <h2>Prompt &amp; Context Optimization</h2>
+      <div class="sec-line">The highest-leverage changes in Claude Code aren&#8217;t prompts &#8212; they&#8217;re configuration. Most developers use 200 characters of their 40,000-character CLAUDE.md budget.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <div class="note n-tip">
+    <div class="nh">&#128640; The Benefit</div>
+    CLAUDE.md is loaded on <strong>every single query iteration</strong> &#8212; not at session start. Every turn. The source code confirms this. 40,000 characters, re-read with every message you send. It&#8217;s the difference between a generic assistant and one that knows your codebase, conventions, and security rules without being reminded.
+  </div>
+
+  <h3>CLAUDE.md &#8212; The Config Most Developers Ignore</h3>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>File</th><th>Scope</th><th>Use For</th><th>Git Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>~/.claude/CLAUDE.md</code></td><td>Global</td><td>Coding style, language prefs, personal rules</td><td>Private</td></tr>
+        <tr><td><code>./CLAUDE.md</code></td><td>Project</td><td>Architecture decisions, file conventions, test patterns</td><td>Committed</td></tr>
+        <tr><td><code>.claude/rules/*.md</code></td><td>Modular</td><td>Domain-specific rules, team conventions, per-feature guides</td><td>Committed</td></tr>
+        <tr><td><code>CLAUDE.local.md</code></td><td>Private local</td><td>Personal notes, local paths, credential refs</td><td>Gitignored</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <span class="cl">CLAUDE.md &#8212; project-level starter template</span>
+  <pre><code><span class="cc"># Architecture</span>
+<span class="cc">## Stack: Node 20 + TypeScript strict + Postgres/Prisma</span>
+<span class="cc">## API routes ONLY in /src/api &#8212; never in /src/pages</span>
+<span class="cc">## All DB queries through /src/lib/db &#8212; never raw SQL</span>
+
+<span class="cc"># Conventions</span>
+<span class="cc">## Files: kebab-case. Components: PascalCase.</span>
+<span class="cc">## Tests live next to the file: foo.ts &#8594; foo.test.ts</span>
+
+<span class="cc"># Never Do This (enforced every turn)</span>
+<span class="cc">## Never use console.log &#8212; use logger.info/warn/error</span>
+<span class="cc">## Never commit .env files or API keys</span>
+<span class="cc">## Never use `any` type without an explanatory comment</span>
+
+<span class="cc"># Security Rules</span>
+<span class="cc">## Validate all user input at API boundary with Zod</span>
+<span class="cc">## Sanitize all user-supplied content before rendering</span></code></pre>
+
+  <h3>Context Compaction &#8212; 5 Strategies from the Source</h3>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Strategy</th><th>Trigger</th><th>What Happens</th><th>When to Use</th></tr></thead>
+      <tbody>
+        <tr><td><code>microcompact</code></td><td>Time-based</td><td>Clears old tool results</td><td>Automatic</td></tr>
+        <tr><td><code>context collapse</code></td><td>Pressure threshold</td><td>Summarizes spans of conversation</td><td>Automatic</td></tr>
+        <tr><td><code>session memory</code></td><td>Compaction events</td><td>Extracts task specs, file lists, errors, learnings to file</td><td>Automatic &#8212; builds over time</td></tr>
+        <tr><td><code>full compact</code></td><td>Manual <code>/compact</code></td><td>Summarizes entire history into clean context</td><td><strong>Use proactively &#8212; like a save point</strong></td></tr>
+        <tr><td><code>PTL truncation</code></td><td>Overflow</td><td>Drops oldest message groups</td><td>Last resort &#8212; prevent with /compact</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note n-tip">
+    <div class="nh">&#128161; Pro Tip: /compact as a Save Point</div>
+    Use <code>/compact</code> proactively &#8212; before switching major task context, before a long autonomous loop, after completing a feature. Preserve what matters, clear what doesn&#8217;t, keep moving. Default window is 200K tokens; opt into 1M with the <code>[1m]</code> model suffix for large codebases.
+  </div>
+</section>
+
+<!-- ═══ WORKFLOW AUTOMATION ═══ -->
+<section class="sec" id="automation">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#128260;</div>
+    <div class="sec-meta">
+      <h2>Workflow Automation</h2>
+      <div class="sec-line">Hooks, loops, and schedules let Claude Code work while you don&#8217;t. 25+ lifecycle events. Up to a week of autonomous execution.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <div class="note n-tip">
+    <div class="nh">&#128640; The Benefit</div>
+    Boris Cherny, the engineer who built Claude Code at Anthropic, runs dozens of loops locally at all times. <code>/loop 5m /babysit</code> auto-rebases and addresses code review comments on all PRs continuously. The hook system lets you build a custom development environment on top of Claude Code &#8212; not by prompting better, but by wiring into the system itself.
+  </div>
+
+  <h3>The Hook System &#8212; 25+ Lifecycle Events</h3>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Event</th><th>When It Fires</th><th>Power Use Case</th></tr></thead>
+      <tbody>
+        <tr><td><code>PreToolUse</code></td><td>Before any tool executes</td><td>Block dangerous bash patterns, auto-run linting, validate security rules before execution</td></tr>
+        <tr><td><code>PostToolUse</code></td><td>After any tool executes</td><td>Run tests after every edit, validate code patterns were followed</td></tr>
+        <tr><td><code>UserPromptSubmit</code></td><td>When you send a message</td><td>Auto-inject git diffs, test output, project state into every prompt automatically</td></tr>
+        <tr><td><code>SessionStart</code></td><td>Session begins</td><td>Load context, set env vars, authenticate external services</td></tr>
+        <tr><td><code>SessionEnd</code></td><td>Session closes</td><td>Slack notifications, session summaries, rotate temp credentials</td></tr>
+        <tr><td><code>PermissionPrompt</code></td><td>Permission requested</td><td>Route approval to WhatsApp or Slack &#8212; approve from your phone</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>5 hook types available:</strong> <code>command</code> (shell script), <code>prompt</code> (inject via LLM), <code>agent</code> (full verification loop), <code>HTTP</code> (webhook to any service), <code>function</code> (JavaScript)</p>
+
+  <span class="cl">.claude/hooks/pre-tool-use.sh &#8212; security hook example</span>
+  <pre><code>#!/bin/bash
+<span class="cc"># Block dangerous patterns before any tool executes</span>
+TOOL_INPUT="$1"
+
+if echo "$TOOL_INPUT" | grep -q "rm -rf"; then
+  echo '{"decision": "block", "reason": "rm -rf blocked by security policy"}'
+  exit 0
+fi
+
+if echo "$TOOL_INPUT" | grep -qP "curl.+\|.*(bash|sh)"; then
+  echo '{"decision": "block", "reason": "curl pipe execution blocked"}'
+  exit 0
+fi
+
+echo '{"decision": "allow"}'</code></pre>
+
+  <span class="cl">.claude/hooks/user-prompt-submit.sh &#8212; auto-inject context</span>
+  <pre><code>#!/bin/bash
+<span class="cc"># Automatically inject git status + last test run into every prompt</span>
+GIT_STATUS=$(git status --short 2>/dev/null | head -20)
+LAST_TESTS=$(cat .last-test-output 2>/dev/null | tail -30)
+
+cat &lt;&lt;EOF
+{
+  "additionalContext": "Git:\n${GIT_STATUS}\n\nLast tests:\n${LAST_TESTS}"
+}
+EOF</code></pre>
+
+  <div class="note n-warn">
+    <div class="nh">&#9888; Risk: Telemetry Dead Zones Now Mapped</div>
+    The leaked code exposed Anthropic&#8217;s exact telemetry flags &#8212; meaning adversaries now know precisely where monitoring <em>isn&#8217;t</em>. Autonomous loops in documented blind spots, against a harness whose bypass logic is public, warrant the external monitoring from the <a href="#sovereign">Sovereign Runtime package</a> before production use.
+  </div>
+
+  <h3>/btw &#8212; Side Questions Without Stopping Work</h3>
+  <p>Ask side questions while the agent keeps working. The async generator architecture routes your /btw question separately &#8212; the main stream continues uninterrupted. Boris uses it constantly as an inline lookup during long tasks. Zero interruption cost.</p>
+
+  <h3>Interrupt Freely &#8212; Zero Penalty</h3>
+  <p>The entire pipeline uses async generators yielding individual events. Pressing Escape cleanly aborts the current stream without losing previous context. Don&#8217;t wait for a response you know is going wrong &#8212; interrupt immediately and redirect. Your accumulated context is preserved. Treat it like pair programming.</p>
+</section>
+
+<!-- ═══ AGENT CONFIGURATION ═══ -->
+<section class="sec" id="agent-cfg">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#129302;</div>
+    <div class="sec-meta">
+      <h2>Agent Configuration</h2>
+      <div class="sec-line">--agent is the most overlooked feature in Claude Code. Scoped roles with custom toolsets implement least-privilege by architecture, not by policy.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <h3>--agent &#8212; Scoped Roles with Custom Tools</h3>
+  <p>Loads a custom system prompt and toolset from <code>.claude/agents/</code>. A reviewer agent with read-only tools is a fundamentally different risk context than a deployer with write access &#8212; this is least-privilege by architecture, not by hoping.</p>
+
+  <div class="fg">
+    <div class="fc"><div class="fc-cmd">--agent reviewer</div><div class="fc-lbl">Code Review Agent</div><div class="fc-desc">Read-only. Suggests changes, never writes, executes, or modifies. Safe for untrusted code review.</div><div class="fc-risk"><span class="tag tl">LOW RISK</span></div></div>
+    <div class="fc"><div class="fc-cmd">--agent researcher</div><div class="fc-lbl">Research Agent</div><div class="fc-desc">Web search and read only. No file writes, no bash. Safe for information gathering tasks.</div><div class="fc-risk"><span class="tag tl">LOW RISK</span></div></div>
+    <div class="fc"><div class="fc-cmd">--agent deployer</div><div class="fc-lbl">Deploy Agent</div><div class="fc-desc">Constrained write access to deployment configs only. Explicit deny on source code edits.</div><div class="fc-risk"><span class="tag tm">MED &#8212; configure carefully</span></div></div>
+  </div>
+
+  <span class="cl">.claude/agents/reviewer.json</span>
+  <pre><code>{
+  <span class="ck">"name"</span>: <span class="cs">"reviewer"</span>,
+  <span class="ck">"description"</span>: <span class="cs">"Code review &#8212; read-only, no execution"</span>,
+  <span class="ck">"system"</span>: <span class="cs">"You are a senior code reviewer. Read and suggest. Never write, execute, or modify."</span>,
+  <span class="ck">"tools"</span>: [<span class="cs">"Read"</span>, <span class="cs">"Search"</span>, <span class="cs">"Grep"</span>, <span class="cs">"ListFiles"</span>],
+  <span class="ck">"permissions"</span>: { <span class="ck">"deny"</span>: [<span class="cs">"Write(**)"</span>, <span class="cs">"Edit(**)"</span>, <span class="cs">"Bash(*)"</span>] }
+}</code></pre>
+
+  <h3>Permission System &#8212; Configure It Once</h3>
+  <p>5-level cascade: <strong>policy &#8594; flag &#8594; local &#8594; project &#8594; user</strong>. Every permission click is time wasted. Set glob patterns once in <code>settings.json</code> and never click again.</p>
+
+  <span class="cl">~/.claude/settings.json &#8212; recommended baseline</span>
+  <pre><code>{
+  <span class="ck">"permissions"</span>: {
+    <span class="ck">"allow"</span>: [
+      <span class="cs">"Bash(npm *)"</span>, <span class="cs">"Bash(git *)"</span>, <span class="cs">"Bash(make *)"</span>,
+      <span class="cs">"Edit(src/**)"</span>, <span class="cs">"Write(src/**)"</span>, <span class="cs">"Read(**)"</span>
+    ],
+    <span class="ck">"deny"</span>: [
+      <span class="cs">"Bash(rm -rf *)"</span>, <span class="cs">"Bash(curl * | bash)"</span>,
+      <span class="cs">"Write(/etc/**)"</span>, <span class="cs">"Write(~/.ssh/**)"</span>
+    ]
+  }
+}</code></pre>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Mode</th><th>Behavior</th><th>Best For</th><th>Risk</th></tr></thead>
+      <tbody>
+        <tr><td><code>auto</code></td><td>LLM classifier per action; races multiple resolvers, first wins</td><td>Interactive development &#8212; the sweet spot</td><td><span class="tag tl">LOW</span></td></tr>
+        <tr><td><code>allowEdits</code></td><td>Auto-allows file edits in working directory</td><td>Trusted project dirs only</td><td><span class="tag tm">MEDIUM</span></td></tr>
+        <tr><td><code>bypass</code></td><td>No permission checks at all</td><td>Controlled CI automation &#8212; never interactive</td><td><span class="tag th">HIGH</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note n-warn">
+    <div class="nh">&#9888; Critical: Silent Override Bug</div>
+    Combining <code>--dangerously-skip-permissions</code> with <code>--permission-mode plan</code> causes the bypass to silently win. The UI shows planning mode. <strong>The agent has root.</strong> Never use these flags together. Audit your running flag combinations now.
+  </div>
+</section>
+
+<!-- ═══ REMOTE & MOBILE ═══ -->
+<section class="sec" id="remote">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#128225;</div>
+    <div class="sec-meta">
+      <h2>Remote &amp; Mobile Access</h2>
+      <div class="sec-line">Start on desktop, pick up on your phone. Or control your entire laptop from anywhere. Same context, any device.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <div class="fg">
+    <div class="fc"><div class="fc-cmd">--teleport</div><div class="fc-lbl">Session Teleportation</div><div class="fc-desc">Move running sessions between phone, web, desktop, and terminal. Same context, different device. Boris has remote-control-by-default enabled in settings.</div></div>
+    <div class="fc"><div class="fc-cmd">/remote-control</div><div class="fc-lbl">Remote Session Control</div><div class="fc-desc">Control a local running session from anywhere. Approve permission prompts from your phone while agents work on your machine.</div></div>
+    <div class="fc"><div class="fc-cmd">Cowork Dispatch</div><div class="fc-lbl">Full Laptop Remote Access</div><div class="fc-desc">Not just code &#8212; your entire laptop. Slack, files, anything on your machine remotely. Boris uses it daily as his default working mode.</div></div>
+  </div>
+
+  <div class="note n-warn">
+    <div class="nh">&#9888; Architecture Warning: Native C2 Channel</div>
+    <code>/remote-control</code> is architecturally a Command and Control (C2) channel. With the harness internals now public, this stack specifically benefits from <strong>network-level controls</strong> &#8212; not just application-layer trust. Cowork dispatch is full laptop remote access. Apply the same security posture you would to RDP or SSH.
+  </div>
+</section>
+
+<!-- ═══ UNRELEASED FEATURES ═══ -->
+<section class="sec" id="unreleased">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#128302;</div>
+    <div class="sec-meta">
+      <h2>Unreleased Features</h2>
+      <div class="sec-line">The roadmap is a release schedule. 44 feature flags for fully-built, compiled features behind gates &#8212; not vaporware.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <div class="note n-info">
+    <div class="nh">&#8505; Source: Leaked npm Source Map Artifact, March 31 2026</div>
+    These flags were exposed and documented by multiple researchers from the reconstructed TypeScript source. Each represents compiled, functional code behind a feature gate. Released features will ship into an environment where the harness internals are already public.
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Flag</th><th>Feature</th><th>What It Does</th><th>Risk Surface</th></tr></thead>
+      <tbody>
+        <tr><td><code>KAIROS</code></td><td>Persistent Assistant</td><td>4-phase subagent loop (Orient&#8594;Gather&#8594;Consolidate&#8594;Prune), background sessions, GitHub webhooks, proactive ticks</td><td><span class="tag th">HIGHEST &#8212; always-on agent</span></td></tr>
+        <tr><td><code>COORDINATOR_MODE</code></td><td>Multi-Agent Coordinator</td><td>One Claude spawns and manages multiple worker Claudes in parallel. Workers push via task notification XML.</td><td><span class="tag th">HIGH &#8212; orchestration layer</span></td></tr>
+        <tr><td><code>BG_SESSIONS</code></td><td>Background Sessions</td><td>Agents running 24/7 with GitHub webhook triggers. Start work, go offline, return to results.</td><td><span class="tag th">HIGH &#8212; persistent autonomous</span></td></tr>
+        <tr><td><code>ULTRAPLAN</code></td><td>30-Min Remote Planning</td><td>OCR browser planning session. Opus 4.6. Approve/reject in browser. Loops to execute.</td><td><span class="tag tm">MEDIUM</span></td></tr>
+        <tr><td><code>WEB_BROWSER_TOOL</code></td><td>Full Browser Control</td><td>Playwright-powered browser automation. Claude sees and interacts with any web page.</td><td><span class="tag tm">MEDIUM</span></td></tr>
+        <tr><td><code>DAEMON</code></td><td>Session Supervisor</td><td>Long-running supervisor with background workers. tmux integration. <code>claude --bg</code> detaches, not kills.</td><td><span class="tag tm">MEDIUM</span></td></tr>
+        <tr><td><code>BRIDGE_MODE</code></td><td>Remote Control Bridge</td><td>WebSocket+SSE duplex between local Claude and claude.ai. UUID-deduped sessions.</td><td><span class="tag tm">MEDIUM</span></td></tr>
+        <tr><td><code>KAIROS_DREAM</code></td><td>Memory Consolidation</td><td>Agents sleep and self-resume. Auto-dream memory distillation every 24h across sessions.</td><td><span class="tag tm">MEDIUM</span></td></tr>
+        <tr><td><code>EXTRACT_MEMORIES</code></td><td>Persistent Memory</td><td>Memory that survives across sessions. Agent learns preferences and codebase over time.</td><td><span class="tag tl">LOW-MED</span></td></tr>
+        <tr><td><code>VOICE_MODE</code></td><td>Voice Commands</td><td>Voice input integration for hands-free development.</td><td><span class="tag tl">LOW</span></td></tr>
+        <tr><td><code>BUDDY</code></td><td>AI Companion Pet &#128062;</td><td>Tamagotchi-style companion. 18 species hex-encoded to avoid CI canary triggers. Rarity tiers, hats, userId-hash stats.</td><td><span class="tag tl">CHARMING</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note n-warn">
+    <div class="nh">&#9888; Build Governance Before KAIROS Ships</div>
+    KAIROS is the largest new execution surface coming to Claude Code &#8212; a persistent, always-on agent with GitHub webhooks and background session management. The architectural governance decisions you make today are the ones you&#8217;ll scale into when KAIROS, COORDINATOR_MODE, and BG_SESSIONS release. Build the enforcement boundary before you need it.
+  </div>
+</section>
+
+<!-- ═══ RISK MATRIX ═══ -->
+<section class="sec" id="risk">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#9878;&#65039;</div>
+    <div class="sec-meta">
+      <h2>Feature Risk Matrix</h2>
+      <div class="sec-line">Every feature here is worth using. This table exists so you configure appropriately &#8212; not to scare you away from the capabilities.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Feature</th><th>Capability</th><th>Post-Leak Risk</th><th>Level</th><th>Key Mitigation</th></tr></thead>
+      <tbody>
+        <tr><td><code>/batch</code></td><td>Fan out to hundreds of parallel agents</td><td>Bypass state propagates instantaneously across all subagents</td><td><span class="tag th">HIGH</span></td><td>External Runtime Governor before scale; map blast radius</td></tr>
+        <tr><td><code>--add-dir</code></td><td>Full read/write to additional repos</td><td>Silent override bug: UI lies in bypass+plan mode</td><td><span class="tag th">HIGH</span></td><td>Never combine with <code>--dangerously-skip-permissions</code></td></tr>
+        <tr><td>Cowork dispatch</td><td>Full laptop remote access</td><td>Widest possible execution surface; full OS access remotely</td><td><span class="tag th">HIGH</span></td><td>Network-level zero-trust; explicit action allowlist</td></tr>
+        <tr><td><code>/remote-control</code></td><td>Control sessions from anywhere</td><td>Native C2 channel; harness internals now public</td><td><span class="tag th">HIGH</span></td><td>Network-level controls; not application-layer trust alone</td></tr>
+        <tr><td><code>/loop</code> / <code>/schedule</code></td><td>Autonomous execution over time</td><td>Telemetry dead zones now mapped and public</td><td><span class="tag tm">MEDIUM</span></td><td>External monitoring; Sovereign Runtime behavioral hooks</td></tr>
+        <tr><td><code>/branch</code> / <code>-w</code></td><td>Fork sessions or worktrees</td><td>Inherits parent permission state incl. compromised flags</td><td><span class="tag tm">MEDIUM</span></td><td>Verify trust state before branching</td></tr>
+        <tr><td>Hooks (standalone)</td><td>Inject logic into agent lifecycle</td><td>First layer adversaries probe; insufficient as sole enforcement</td><td><span class="tag tm">MEDIUM</span></td><td>Layer with external governor; hooks are the inner layer only</td></tr>
+        <tr><td>Chrome extension</td><td>Claude sees browser, iterates on output</td><td>Browser access alongside execution permissions &#8212; combined surface</td><td><span class="tag tm">MEDIUM</span></td><td>Understand full execution context when combined with write access</td></tr>
+        <tr><td><code>--agent</code></td><td>Scoped roles with custom tools</td><td>Role scoping reduces surface; well-designed least-privilege</td><td><span class="tag tl">LOW</span></td><td>Define roles explicitly; deny unnecessary tools per agent</td></tr>
+        <tr><td>CLAUDE.md</td><td>Load security rules every turn</td><td>Minimal risk; improves governance consistency</td><td><span class="tag tl">LOW</span></td><td>Encode &#8220;never do&#8221; rules and security validation patterns</td></tr>
+        <tr><td><code>/btw</code></td><td>Side questions without interruption</td><td>Minimal surface; parallel stream routing</td><td><span class="tag tl">LOW</span></td><td>No special mitigations needed</td></tr>
+        <tr><td><code>--bare</code></td><td>Skip auto-loading for fast startup</td><td>Lower surface; explicit control over what loads</td><td><span class="tag tl">LOW</span></td><td>Always specify everything explicitly in production</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ CHECKLIST ═══ -->
+<section class="sec" id="checklist">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#9989;</div>
+    <div class="sec-meta">
+      <h2>Developer Checklist</h2>
+      <div class="sec-line">Immediate actions first, then high-leverage config, then scale safely.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <h3>&#128680; Immediate &#8212; Do Right Now</h3>
+  <ul class="cklist">
+    <li><span class="ci c-now">!</span><span>Rotate your Anthropic API key if you ran Claude Code against untrusted repos on version &lt; 2.0.65 &#8212; CVE-2026-21852 key exfiltration path is confirmed</span></li>
+    <li><span class="ci c-now">!</span><span>Update to Claude Code &#8805; 2.0.65 immediately</span></li>
+    <li><span class="ci c-now">!</span><span>Audit flag combinations &#8212; <code>--dangerously-skip-permissions</code> + <code>--permission-mode plan</code> = silent bypass, UI lies about permission state</span></li>
+    <li><span class="ci c-now">!</span><span>Review your <code>--add-dir</code> scope &#8212; know exactly what repos and directories are in play for any running session</span></li>
+  </ul>
+
+  <h3>&#9889; High-Leverage Config &#8212; Highest ROI</h3>
+  <ul class="cklist">
+    <li><span class="ci c-do">&#10003;</span><span><strong>Write a real CLAUDE.md</strong> &#8212; 40K chars, loaded every turn. Architecture decisions, conventions, and explicit &#8220;never do this&#8221; security rules. Your single highest-ROI change.</span></li>
+    <li><span class="ci c-do">&#10003;</span><span><strong>Configure <code>~/.claude/settings.json</code></strong> &#8212; set allow/deny glob patterns, switch to <code>auto</code> permission mode. Eliminate click fatigue and configure security simultaneously.</span></li>
+    <li><span class="ci c-do">&#10003;</span><span><strong>Define agent roles with <code>--agent</code></strong> &#8212; reviewer (read-only), deployer (constrained write), researcher (search-only). Least privilege by architecture.</span></li>
+    <li><span class="ci c-do">&#10003;</span><span><strong>Always use <code>--continue</code></strong> &#8212; JSONL persistence + session memory builds accumulated context over time. Stop starting fresh every session.</span></li>
+    <li><span class="ci c-do">&#10003;</span><span><strong>Set up PreToolUse and PostToolUse hooks</strong> &#8212; linting before writes, tests after edits at minimum. This is the real extension API.</span></li>
+  </ul>
+
+  <h3>&#128256; Before Scaling /batch or /loop</h3>
+  <ul class="cklist">
+    <li><span class="ci c-bef">&#8594;</span><span>Install the <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/claude-code-sovereign-runtime" target="_blank">Sovereign Runtime Defense Package</a> &#8212; external enforcement that governs from outside the agent&#8217;s process</span></li>
+    <li><span class="ci c-bef">&#8594;</span><span>Map the blast radius before fanning out &#8212; what can a single compromised subagent reach from each agent&#8217;s starting context?</span></li>
+    <li><span class="ci c-bef">&#8594;</span><span>Confirm enforcement boundary is outside the agent&#8217;s process, not just hooks (which live inside the harness)</span></li>
+    <li><span class="ci c-bef">&#8594;</span><span>Know where your telemetry stops &#8212; the leaked code documents the blind spots</span></li>
+  </ul>
+
+  <h3>&#128161; Ongoing Best Practices</h3>
+  <ul class="cklist">
+    <li><span class="ci c-best">&#8226;</span><span>Use <code>/compact</code> proactively &#8212; treat it as a save point; the 5 compaction strategies exist because context pressure is a central, real problem</span></li>
+    <li><span class="ci c-best">&#8226;</span><span>Connect MCP servers for external systems &#8212; deferred loading means zero performance cost until the tool is actually invoked</span></li>
+    <li><span class="ci c-best">&#8226;</span><span>Interrupt freely with Escape &#8212; async generators mean zero penalty; redirect the moment it goes wrong</span></li>
+    <li><span class="ci c-best">&#8226;</span><span>Use <code>--bare</code> for all production automation &#8212; explicit, controlled, no inherited defaults</span></li>
+    <li><span class="ci c-best">&#8226;</span><span>Opt into 1M token context via <code>[1m]</code> model suffix for large codebases and cross-file refactors</span></li>
+  </ul>
+</section>
+
+<!-- ═══ GOVERNANCE ═══ -->
+<section class="sec" id="governance">
+  <div class="sec-hdr">
+    <div class="sec-ico">&#127963;&#65039;</div>
+    <div class="sec-meta">
+      <h2>The AISM Maturity Model</h2>
+      <div class="sec-line">From &#8220;you should not&#8221; to &#8220;you cannot.&#8221; The only transition that survives a regulatory audit &#8212; or a machine-speed adversary &#8212; in the agentic era.</div>
+    </div>
+    <a class="back" href="#top">&#8593; Topics</a>
+  </div>
+
+  <div class="qblock">
+    <p>&#8220;The Runtime Governor concept moves the constraint from policy (&#8216;you should not do this&#8217;) to architecture (&#8216;you cannot do this&#8217;). In regulated environments, the audit trail needs to prove the violation was impossible &#8212; not just that someone chose not to violate.&#8221;</p>
+    <div class="qattr"><strong>Matt Flannery</strong> &#183; Slalom Consulting, Life Sciences AI Practice</div>
+  </div>
+
+  <div class="aism">
+    <div class="ar"><div class="an">LEVEL 1</div><div><div class="am2">Visibility</div><div class="ad">Logging, monitoring, basic observability. You can see what happened &#8212; after the fact.</div></div><div class="as2"><span class="tag tm">FORENSIC</span></div></div>
+    <div class="ar"><div class="an">LEVEL 2</div><div><div class="am2">Ledger</div><div class="ad">Audit logs, risk scoring, structured records. High-definition visibility &#8212; still asynchronous, still after the fact.</div></div><div class="as2"><span class="tag tm">FORENSIC</span></div></div>
+    <div class="ar"><div class="an">LEVEL 3</div><div><div class="am2">Governance</div><div class="ad">Approval workflows, Human-in-the-Loop gates. Humans can intervene &#8212; at human speed. Cannot match machine-speed parallel execution.</div></div><div class="as2"><span class="tag tm">HUMAN SPEED</span></div></div>
+    <div class="ar hi"><div class="an">LEVEL 4</div><div><div class="am2">Runtime Control &#8212; Sovereign Runtime</div><div class="ad">External deterministic Runtime Governor. In-line circuit breaker. Severs unauthorized state transitions in milliseconds. Violation is mathematically impossible, not just unlikely.</div></div><div class="as2"><span class="tag to">MACHINE SPEED</span></div></div>
+  </div>
+
+  <div class="note n-ok">
+    <div class="nh">&#10003; Open-Source &#8212; MIT &#8212; 15-Minute Setup</div>
+    The <strong>AI SAFE&#178; Claude Code Sovereign Runtime Defense Package</strong> implements AISM Level 4 enforcement.<br>
+    <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/claude-code-sovereign-runtime" target="_blank">github.com/CyberStrategyInstitute &#8594; claude-code-sovereign-runtime</a>
+  </div>
+</section>
+
+</main>
+
+<!-- SIDEBAR -->
+<aside class="side">
+  <div class="sb-cta">
+    <p>Deploy Claude Code at full capability with the open-source Sovereign Runtime Defense Package.</p>
+    <a class="btn btn-orange btn-full" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/claude-code-sovereign-runtime" target="_blank">&#8659; Defense Package (MIT)</a>
+    <a class="btn btn-ghost btn-full" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework" target="_blank">Full AI SAFE&#178; Framework</a>
+    <a class="btn btn-ghost btn-full" href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/guides" target="_blank">All Guides</a>
+  </div>
+
+  <div class="sb-card">
+    <h4>On This Page</h4>
+    <div class="sbn">
+      <a href="#sovereign"><span class="si">&#128737;&#65039;</span>Sovereign Runtime Package</a>
+      <a href="#multi-agent"><span class="si">&#128256;</span>Multi-Agent Execution</a>
+      <a href="#prompt-opt"><span class="si">&#9889;</span>Prompt Optimization</a>
+      <a href="#automation"><span class="si">&#128260;</span>Workflow Automation</a>
+      <a href="#agent-cfg"><span class="si">&#129302;</span>Agent Configuration</a>
+      <a href="#remote"><span class="si">&#128225;</span>Remote &amp; Mobile</a>
+      <a href="#unreleased"><span class="si">&#128302;</span>Unreleased Features</a>
+      <a href="#risk"><span class="si">&#9878;&#65039;</span>Risk Matrix</a>
+      <a href="#checklist"><span class="si">&#9989;</span>Checklist</a>
+      <a href="#governance"><span class="si">&#127963;&#65039;</span>AISM Levels</a>
+    </div>
+  </div>
+
+  <div class="sb-card">
+    <h4>Quick Risk Reference</h4>
+    <div class="rrow"><span class="rf">/batch at scale</span><span class="tag th">HIGH</span></div>
+    <div class="rrow"><span class="rf">--add-dir + bypass</span><span class="tag th">HIGH</span></div>
+    <div class="rrow"><span class="rf">Cowork dispatch</span><span class="tag th">HIGH</span></div>
+    <div class="rrow"><span class="rf">/remote-control</span><span class="tag th">HIGH</span></div>
+    <div class="rrow"><span class="rf">/loop + /schedule</span><span class="tag tm">MED</span></div>
+    <div class="rrow"><span class="rf">/branch inheritance</span><span class="tag tm">MED</span></div>
+    <div class="rrow"><span class="rf">Hooks (standalone)</span><span class="tag tm">MED</span></div>
+    <div class="rrow"><span class="rf">--agent scoped roles</span><span class="tag tl">LOW</span></div>
+    <div class="rrow"><span class="rf">CLAUDE.md</span><span class="tag tl">LOW</span></div>
+    <div class="rrow"><span class="rf">--bare automation</span><span class="tag tl">LOW</span></div>
+  </div>
+
+  <div class="sb-card">
+    <h4>Resources</h4>
+    <div class="sbn">
+      <a href="https://docs.claude.com" target="_blank"><span class="si">&#128196;</span>Claude Code Docs</a>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework" target="_blank"><span class="si">&#11088;</span>AI SAFE&#178; GitHub</a>
+      <a href="https://cloudsecurityalliance.org" target="_blank"><span class="si">&#128274;</span>CSA Agentic Trust</a>
+    </div>
+  </div>
+</aside>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="fl">Cyber Strategy Institute</span>
+  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework" target="_blank">AI SAFE&#178; Framework</a> &#183;
+  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/claude-code-sovereign-runtime" target="_blank">Sovereign Runtime Package</a> &#183;
+  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/guides" target="_blank">All Guides</a><br><br>
+  Vincent Sullivan &#183; Former Technical Director, USCYBERCOM &#183; Founder &amp; CEO, Cyber Strategy Institute<br>
+  MIT License &#183; April 2026 &#183; Claude Code &#8805; 2.0.65 &#183; <a href="https://docs.claude.com" target="_blank">docs.claude.com</a>
+</footer>
+
+<a id="fab" href="#top" title="Back to top">&#8593;</a>
+
+<script>
+// ── SEARCH ────────────────────────────────────────────────────────────────
+const IDX = [
+  {tag:"Sovereign Runtime",title:"Claude Code Sovereign Runtime Defense Package",excerpt:"External enforcement boundary, circuit breaker, MIT license, 15-minute setup.",href:"#sovereign"},
+  {tag:"Sovereign Runtime",title:"What the Runtime Package Protects Against",excerpt:"Silent override bug, subagent bypass propagation, exfiltration, telemetry dead zones, self-propagating agents.",href:"#sovereign"},
+  {tag:"Multi-Agent",title:"/batch — Fan Out to Hundreds of Agents",excerpt:"Interviews you, fans out to parallel worktree agents. 60% speed improvement example. Byte-identical cache.",href:"#multi-agent"},
+  {tag:"Multi-Agent",title:"/branch — Fork Session Without Losing Context",excerpt:"Fork a running session into two parallel threads. Explore alternatives without losing accumulated context.",href:"#multi-agent"},
+  {tag:"Multi-Agent",title:"claude -w — Worktree Isolation",excerpt:"New session in fresh git worktree. Dozens of Claude instances simultaneously, each with isolated branch.",href:"#multi-agent"},
+  {tag:"Prompt Optimization",title:"CLAUDE.md — Loaded Every Single Turn",excerpt:"40,000 characters loaded on every query iteration. Global, project, modular rules, and gitignored local notes.",href:"#prompt-opt"},
+  {tag:"Prompt Optimization",title:"Context Compaction — 5 Strategies from Source",excerpt:"microcompact, context collapse, session memory, full compact, PTL truncation. Use /compact proactively.",href:"#prompt-opt"},
+  {tag:"Prompt Optimization",title:"Session Persistence — Always Use --continue",excerpt:"JSONL at ~/.claude/projects. Stop starting fresh. Session memory extracts and preserves key context.",href:"#prompt-opt"},
+  {tag:"Automation",title:"Hook System — 25+ Lifecycle Events",excerpt:"PreToolUse, PostToolUse, UserPromptSubmit, SessionStart. 5 hook types: command, prompt, agent, HTTP, function.",href:"#automation"},
+  {tag:"Automation",title:"/loop and /schedule — Autonomous Execution",excerpt:"Autopilot at set intervals. Boris runs /loop 5m /babysit on all PRs. Up to a week scheduled.",href:"#automation"},
+  {tag:"Automation",title:"/btw — Side Questions Without Interrupting Work",excerpt:"Ask side questions while agent keeps working. Async generators route separately. Zero interruption cost.",href:"#automation"},
+  {tag:"Agent Config",title:"--agent — Scoped Roles and Custom Tools",excerpt:"Load custom system prompt and tools from .claude/agents/. Reviewer, deployer, researcher with scoped permissions.",href:"#agent-cfg"},
+  {tag:"Agent Config",title:"Permission System — 5-Level Settings Cascade",excerpt:"policy > flag > local > project > user. Configure glob patterns in settings.json. auto mode is the sweet spot.",href:"#agent-cfg"},
+  {tag:"Agent Config",title:"--bare — 10x Faster Startup",excerpt:"Skip auto-loading CLAUDE.md, settings, MCPs. For production automation, explicitly specify everything.",href:"#agent-cfg"},
+  {tag:"Remote",title:"--teleport — Session Teleportation",excerpt:"Move running sessions between phone, web, desktop, terminal. Same context, any device.",href:"#remote"},
+  {tag:"Remote",title:"/remote-control — Control from Anywhere",excerpt:"Control local sessions remotely. Approve permission prompts from phone while agents work on your machine.",href:"#remote"},
+  {tag:"Remote",title:"Cowork Dispatch — Full Laptop Remote Access",excerpt:"Not just code — your entire laptop remotely. Slack, files, anything on your machine from anywhere.",href:"#remote"},
+  {tag:"Unreleased",title:"KAIROS — Persistent Background Assistant",excerpt:"4-phase subagent loop, background sessions, GitHub webhooks. Largest upcoming execution surface.",href:"#unreleased"},
+  {tag:"Unreleased",title:"COORDINATOR_MODE — One Claude Managing Many",excerpt:"One Claude spawns and manages multiple worker Claudes in parallel via task notification XML.",href:"#unreleased"},
+  {tag:"Unreleased",title:"BG_SESSIONS — 24/7 Background Agents",excerpt:"Agents running continuously with GitHub webhook triggers. Start work, go offline, return to results.",href:"#unreleased"},
+  {tag:"Unreleased",title:"BUDDY — AI Companion Pet Easter Egg",excerpt:"Tamagotchi-style companion. 18 species hex-encoded to avoid CI canary triggers. Rarity tiers, hats.",href:"#unreleased"},
+  {tag:"Security",title:"CVE-2026-21852 — Key Exfiltration Path",excerpt:"Confirmed via pre-trust requests. Rotate API key if used against untrusted repos on version < 2.0.65.",href:"#checklist"},
+  {tag:"Security",title:"Silent Override Bug — UI Lies",excerpt:"--dangerously-skip-permissions + --permission-mode plan = bypass silently wins. Agent has root, UI shows planning.",href:"#risk"},
+  {tag:"Security",title:"Feature Risk Matrix — All Features Rated",excerpt:"Complete risk ratings. HIGH: /batch, --add-dir, Cowork, /remote-control. Full table with mitigations.",href:"#risk"},
+  {tag:"Governance",title:"AISM Level 4 — Runtime Control",excerpt:"External deterministic Runtime Governor. In-line circuit breaker. Violation mathematically impossible.",href:"#governance"},
+  {tag:"Governance",title:"Policy vs Architecture — You Should Not vs You Cannot",excerpt:"Matt Flannery: regulated environments need to prove violation was impossible, not that someone chose not to violate.",href:"#governance"},
+];
+
+const inp = document.getElementById('s-inp');
+const res = document.getElementById('s-res');
+
+inp.addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  res.innerHTML = '';
+  if (q.length < 2) { res.classList.remove('on'); return; }
+  const hits = IDX.filter(x =>
+    x.title.toLowerCase().includes(q) ||
+    x.excerpt.toLowerCase().includes(q) ||
+    x.tag.toLowerCase().includes(q)
+  ).slice(0, 8);
+  if (!hits.length) {
+    res.innerHTML = '<div class="s-empty">No results for "' + q + '"</div>';
+    res.classList.add('on'); return;
+  }
+  hits.forEach(item => {
+    const a = document.createElement('a');
+    a.className = 'sr'; a.href = item.href;
+    a.innerHTML = '<div class="sr-tag">'+item.tag+'</div><div class="sr-title">'+item.title+'</div><div class="sr-excerpt">'+item.excerpt+'</div>';
+    a.addEventListener('click', () => { res.classList.remove('on'); inp.value = ''; });
+    res.appendChild(a);
+  });
+  res.classList.add('on');
+});
+document.addEventListener('click', e => { if (!e.target.closest('.srch')) res.classList.remove('on'); });
+inp.addEventListener('keydown', e => { if (e.key === 'Escape') { res.classList.remove('on'); inp.value = ''; } });
+
+// ── FAB ───────────────────────────────────────────────────────────────────
+const fab = document.getElementById('fab');
+window.addEventListener('scroll', () => fab.classList.toggle('on', scrollY > 380), {passive:true});
+
+// ── ACTIVE TILE HIGHLIGHT ─────────────────────────────────────────────────
+const sections = document.querySelectorAll('section[id]');
+const tiles = document.querySelectorAll('.tile');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    tiles.forEach(t => t.classList.remove('active'));
+    const t = document.querySelector('.tile[href="#'+e.target.id+'"]');
+    if (t) t.classList.add('active');
+  });
+}, {threshold: 0.3, rootMargin: '-60px 0px -40% 0px'});
+sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
