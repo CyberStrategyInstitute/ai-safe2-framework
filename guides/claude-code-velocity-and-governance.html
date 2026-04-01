@@ -24,6 +24,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:
 ::-webkit-scrollbar{width:5px;background:var(--bg2)}
 ::-webkit-scrollbar-thumb{background:var(--border-hi);border-radius:3px}
 
+/*-- Logo-------------------------------- */
+  .logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 36px;   /* 🔑 controls size */
+  width: auto;    /* preserves aspect ratio */
+  display: block; /* removes inline spacing issues */
+}
+
+
 /* ── HEADER ─────────────────────────────── */
 .hdr{position:sticky;top:0;z-index:300;background:rgba(8,9,12,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
 .hdr-in{max-width:1300px;margin:0 auto;display:flex;align-items:center;gap:1.25rem;padding:0 1.75rem;height:62px}
