@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI SAFE² v3.0 Release Notes — Cyber Strategy Institute</title>
+  <style>
+    :root {
+      --bg:           #0d1117;
+      --surface:      #13181f;
+      --surface-2:    #1a2030;
+      --border:       #820f1a;
+      --border-dim:   rgba(130,15,26,0.35);
+      --accent:       #f6921e;
+      --accent-dim:   rgba(246,146,30,0.10);
+      --maroon:       #820f1a;
+      --maroon-dim:   rgba(130,15,26,0.15);
+      --grey:         #808080;
+      --text:         #e8e8e8;
+      --text-muted:   #808080;
+      --green:        #4caf7d;
+      --red:          #f85149;
+      --yellow:       #d29922;
+      --font:         -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --mono:         "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 15px; line-height: 1.7; padding: 0 0 80px; }
+    .top-bar { background: var(--maroon); height: 4px; width: 100%; }
+
+    .release-header { background: var(--surface); border-bottom: 1px solid var(--border-dim); padding: 40px 40px 32px; }
+    .header-inner { max-width: 860px; margin: 0 auto; }
+    .org-label { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 16px; }
+    .org-label::before { content: ''; display: inline-block; width: 18px; height: 2px; background: var(--accent); }
+    h1 { font-size: 30px; font-weight: 700; color: #ffffff; margin-bottom: 14px; letter-spacing: -0.02em; }
+    h1 span { color: var(--accent); }
+    .meta-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .version-badge { display: inline-block; background: var(--maroon); color: #ffffff; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 3px 12px; border-radius: 3px; text-transform: uppercase; }
+    .date { color: var(--text-muted); font-size: 13px; }
+    .tagline { margin-top: 16px; font-size: 15px; color: var(--text-muted); max-width: 700px; line-height: 1.6; }
+
+    .wrapper { max-width: 860px; margin: 0 auto; padding: 0 40px; }
+
+    .qa-bar { display: flex; align-items: center; gap: 18px; background: var(--surface); border-left: 4px solid var(--green); border-radius: 0 6px 6px 0; padding: 16px 22px; margin: 36px 0 8px; }
+    .qa-pass { font-size: 26px; font-weight: 700; color: var(--green); font-variant-numeric: tabular-nums; }
+    .qa-label-title { font-size: 13px; font-weight: 600; color: var(--text); }
+    .qa-label-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin: 44px 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border-dim); display: flex; align-items: center; gap: 10px; }
+    h2::before { content: ''; display: inline-block; width: 3px; height: 16px; background: var(--maroon); border-radius: 2px; flex-shrink: 0; }
+    h3 { font-size: 14px; font-weight: 600; color: #ffffff; margin: 22px 0 8px; }
+    p { margin-bottom: 12px; color: var(--text); }
+    ul, ol { padding-left: 22px; margin-bottom: 14px; }
+    li { margin-bottom: 6px; color: var(--text); }
+
+    code { font-family: var(--mono); font-size: 12.5px; background: var(--surface-2); border: 1px solid rgba(246,146,30,0.2); border-radius: 3px; padding: 1px 6px; color: var(--accent); }
+    pre { background: var(--surface); border: 1px solid var(--border-dim); border-left: 3px solid var(--maroon); border-radius: 4px; padding: 16px 18px; overflow-x: auto; font-family: var(--mono); font-size: 13px; color: #e8e8e8; margin-bottom: 16px; }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 13.5px; }
+    th { background: var(--surface); color: var(--text-muted); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border); }
+    td { padding: 11px 14px; border-bottom: 1px solid rgba(130,15,26,0.2); vertical-align: top; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(246,146,30,0.03); }
+
+    .badge { display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; }
+    .badge-critical { background: rgba(248,81,73,0.12); color: #f85149; border: 1px solid #f85149; }
+    .badge-high     { background: rgba(210,153,34,0.12); color: #d29922; border: 1px solid #d29922; }
+    .badge-fixed    { background: rgba(76,175,125,0.12); color: #4caf7d; border: 1px solid #4caf7d; }
+    .badge-new      { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(246,146,30,0.5); }
+    .badge-nexus    { background: rgba(130,15,26,0.20); color: #e06070; border: 1px solid rgba(130,15,26,0.6); }
+
+    .file-links { list-style: none; padding: 0; }
+    .file-links li { display: flex; align-items: baseline; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(130,15,26,0.2); font-family: var(--mono); font-size: 13px; }
+    .file-links li:last-child { border-bottom: none; }
+    .file-links a { color: var(--accent); text-decoration: none; }
+    .file-links a:hover { text-decoration: underline; }
+    .file-links .file-desc { font-family: var(--font); font-size: 12px; color: var(--text-muted); }
+
+    .callout { border-radius: 0 6px 6px 0; padding: 16px 20px; margin-bottom: 20px; }
+    .callout-warn { background: var(--maroon-dim); border: 1px solid var(--border-dim); border-left: 4px solid var(--maroon); }
+    .callout-nexus { background: rgba(246,146,30,0.05); border: 1px solid rgba(246,146,30,0.2); border-left: 4px solid var(--accent); }
+    .callout p { color: var(--text-muted); font-size: 13.5px; margin: 0; }
+    .callout strong { color: var(--text); }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .release-footer { margin-top: 60px; padding: 24px 40px; background: var(--surface); border-top: 1px solid var(--border-dim); }
+    .footer-inner { max-width: 860px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-inner p { font-size: 12px; color: var(--text-muted); margin: 0; }
+    .footer-mark { color: var(--accent); font-weight: 600; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<div class="release-header">
+  <div class="header-inner">
+    <div class="org-label">Cyber Strategy Institute</div>
+    <h1>AI SAFE² <span>Framework</span></h1>
+    <div class="meta-row">
+      <span class="version-badge">v3.0.0</span>
+      <span class="date">Released April 2026</span>
+    </div>
+    <p class="tagline">
+      Production enforcement gateway with multi-provider support. Full 3-vector risk scoring,
+      4-tier HITL circuit breaker, HMAC-chained immutable audit, heartbeat-gated safe mode,
+      outbound response scanning, and NEXUS-A2A v0.2 compatibility hooks.
+      48 tests. All passing.
+    </p>
+  </div>
+</div>
+
+<div class="wrapper">
+
+  <!-- QA bar -->
+  <div class="qa-bar">
+    <div class="qa-pass">48 / 48</div>
+    <div>
+      <div class="qa-label-title">Tests passing</div>
+      <div class="qa-label-sub">HeartbeatMonitor · ImmutableAuditLog · RiskScorer · HITLCircuitBreaker · ResponseScanner · RateLimiter · ProviderAdapters · NEXUS Compatibility</div>
+    </div>
+  </div>
+
+  <!-- Bug fixes -->
+  <h2>Bug Fixes</h2>
+
+  <h3>Critical — Heartbeat GENESIS_HASH regex mismatch</h3>
+  <p>
+    <code>GENESIS_HASH</code> was initialized as the string literal
+    <code>"GENESIS:SAFE2:v3.0:OPENCLAW"</code>. The <code>HeartbeatMonitor</code>
+    regex requires <code>[a-f0-9]{16}</code> for the hash field. The colon-delimited
+    sentinel failed validation on every first-run heartbeat, causing the gateway to
+    reject its own initialized file as malformed.
+  </p>
+  <p>
+    <strong>Fix:</strong> <code>GENESIS_HASH</code> is now derived as
+    <code>sha256(b"GENESIS:SAFE2:v3.0:OPENCLAW").hexdigest()[:16]</code>
+    — always valid hex, always 16 characters, regex-safe.
+    Resolved value: <code>e9c2244761019e50</code>.
+  </p>
+
+  <table>
+    <thead><tr><th>Component</th><th>Severity</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><code>HeartbeatMonitor.GENESIS_HASH</code> — regex mismatch on first-run init</td><td><span class="badge badge-critical">Critical</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td><code>REQUEST_LOG</code> shared list race condition under <code>threaded=True</code></td><td><span class="badge badge-critical">Critical</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td>Rate limiting defined in config but not enforced in code</td><td><span class="badge badge-critical">Critical</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td>Mutable plain-file audit log — no HMAC chain, no tamper detection</td><td><span class="badge badge-critical">Critical</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td>No heartbeat validation at all (Bug #11766)</td><td><span class="badge badge-critical">Critical</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td>HITL binary block — single threshold, no 4-tier spec</td><td><span class="badge badge-high">High</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td>Risk scoring 2-vector only — missing target sensitivity + historical context</td><td><span class="badge badge-high">High</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td>No A2A impersonation detection</td><td><span class="badge badge-high">High</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td>No outbound response scanning for exfil / tool_use injection</td><td><span class="badge badge-high">High</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+      <tr><td><code>main.py</code> — stub only, version tagged 2.1.0, zero enforcement</td><td><span class="badge badge-high">High</span></td><td><span class="badge badge-fixed">Fixed</span></td></tr>
+    </tbody>
+  </table>
+
+  <!-- New in v3.0 -->
+  <h2>New in v3.0</h2>
+
+  <table>
+    <thead><tr><th>Component</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-new">New</span> <code>HeartbeatMonitor</code></td>
+        <td>Validates <code>HEARTBEAT.md</code> before every proxied request. Regex-validated format with ISO-8601 timestamp and hex hash chain. Missing / empty / stale → safe mode. Never auto-creates; <code>--init-heartbeat</code> for first run only.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> <code>ImmutableAuditLog</code></td>
+        <td>HMAC-SHA256 chained JSONL. Each entry: <code>HMAC(AUDIT_CHAIN_KEY, "{prev_hash}|{entry_json_sorted}")</code>. Atomic write with <code>fsync()</code>. Chain verified on startup — break activates safe mode. <code>/audit/verify-chain</code> route for on-demand integrity check.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> 3-vector risk scoring</td>
+        <td>Action type (0.40) × target sensitivity (0.35) × historical context (0.25). Injection modifier +5.0, A2A modifier +3.0. Composite capped at 10.0. Per-user fingerprint history persisted across restarts.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> 4-tier HITL circuit breaker</td>
+        <td>AUTO (0–3) / MEDIUM (4–6, X-HITL-Token) / HIGH (7–8, token + X-HITL-Reason ≥ 20 chars) / CRITICAL (&gt;8, out-of-band HMAC-SHA256 2FA challenge-response). Tokens TTL-scoped to 300s, consumed on use.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> Multi-provider support</td>
+        <td>Pass-through adapter architecture supporting Anthropic, OpenAI/Codex, Gemini, Ollama (local models), and OpenRouter. Switch providers with one config value. All enforcement controls operate identically across providers. Response scanning normalizes each provider's wire format to a unified inspection model.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> <code>provider_adapters.py</code></td>
+        <td>Standalone adapter module. Per-provider classes handle auth headers, request normalization for enforcement, and response content extraction for scanning. Adding a new provider requires only a new adapter class — no core enforcement logic changes.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-nexus">NEXUS</span> NEXUS-A2A v0.2 compatibility</td>
+        <td>Header detection, identity field passthrough, and delegation chain logging for NEXUS-A2A v0.2. A2A detection upgraded to NEXUS-aware indicator set. NEXUS identity fields written to every audit log entry when present. No NEXUS runtime required — enforcement mode activates via single config flag when NEXUS ships.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> Response scanner</td>
+        <td>Inspects every upstream response before returning to client. Flags exfiltration patterns in text blocks and injection payloads in <code>tool_use</code> input fields. Provider-aware: each adapter normalizes its response format for unified scanning.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> <code>SafeMode</code></td>
+        <td>Event-based hard stop. Activated by heartbeat failure or audit chain break. Deactivated only by operator key via <code>POST /emergency/deactivate-safe-mode</code>. Agents cannot self-recover.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> <code>scanner.py</code></td>
+        <td>Nightly external auditor. Checks: HMAC chain integrity, heartbeat validity, config security, secret sprawl, environment completeness, log permissions, drill calendar (90-day red-team, 180-day A2A). Exit 0/1/2 with <code>--json</code> for CI integration.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> <code>start.sh</code> v3</td>
+        <td>9-step pre-flight: Python version, pip deps, env var validation, YAML syntax, network security, scanner pre-flight, heartbeat validation, log permissions, exec into Flask. Hard-aborts on any critical failure. Python YAML parsing throughout — no grep/awk.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-new">New</span> Per-user rate limiting</td>
+        <td>Dual sliding window: requests/minute + requests/hour. Per-identity enforcement with no cross-user bleed. Configured via <code>config.yaml</code> and enforced in code.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- NEXUS callout -->
+  <div class="callout callout-nexus">
+    <p>
+      <strong>NEXUS-A2A v0.2 — forward-compatible from day one.</strong>
+      When NEXUS-A2A ships, update <code>nexus.enforcement</code> in <code>config.yaml</code>
+      from <code>"passthrough"</code> to <code>"verify"</code> or <code>"enforce"</code>.
+      No gateway code changes required.
+    </p>
+  </div>
+
+  <!-- Framework spec -->
+  <h2>Framework Spec — v3.0 Additions</h2>
+  <ul>
+    <li>23 new pillar controls across all five technical pillars</li>
+    <li>Cross-pillar governance controls CP.1–CP.10</li>
+    <li>OWASP AIVSS v0.8 composite risk scoring integration</li>
+    <li>Agent Replication Governance (CP.9) — first-in-field standard</li>
+    <li>HEAR Doctrine — Human Ethical Agent of Record (CP.10), cryptographically enforced fail-closed</li>
+    <li>Swarm Defense Architecture — eight defense domains</li>
+    <li>Six-architecture agent taxonomy</li>
+    <li>Sovereignty Scale (S0–S4)</li>
+    <li>ACT Capability Tiers (1–4)</li>
+    <li>Agent Protocol and Execution Model — nine canonical message types</li>
+    <li>NEXUS-A2A v0.2 compatibility (enforcement hooks, identity passthrough, NEXUS-aware A2A detection)</li>
+    <li>Mapping to 27+ compliance frameworks</li>
+  </ul>
+
+  <!-- File index -->
+  <h2>Repository Files</h2>
+  <ul class="file-links">
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/gateway/main.py">gateway/main.py</a>
+      <span class="file-desc">— FastAPI async core gateway, full v3.0 enforcement stack</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/gateway/provider_adapters.py">gateway/provider_adapters.py</a>
+      <span class="file-desc">— Multi-provider adapter layer: Anthropic, OpenAI, Gemini, Ollama, OpenRouter + NEXUS-A2A hooks</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/gateway/README.md">gateway/README.md</a>
+      <span class="file-desc">— Core gateway: architecture, quick start, multi-provider config, NEXUS compatibility</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/examples/openclaw/gateway/gateway.py">examples/openclaw/gateway/gateway.py</a>
+      <span class="file-desc">— Flask-based OpenClaw enforcement proxy</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/examples/openclaw/gateway/provider_adapters.py">examples/openclaw/gateway/provider_adapters.py</a>
+      <span class="file-desc">— Provider adapter layer for OpenClaw (shared module)</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/examples/openclaw/gateway/config.yaml">examples/openclaw/gateway/config.yaml</a>
+      <span class="file-desc">— Full v3.0 configuration: thresholds, weights, provider config, NEXUS settings</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/examples/openclaw/gateway/start.sh">examples/openclaw/gateway/start.sh</a>
+      <span class="file-desc">— 9-step pre-flight validator and gateway launcher</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/examples/openclaw/gateway/README.md">examples/openclaw/gateway/README.md</a>
+      <span class="file-desc">— OpenClaw gateway deployment reference</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/scanner/scanner.py">scanner/scanner.py</a>
+      <span class="file-desc">— Nightly auditor: chain integrity, heartbeat, config, secret sprawl, drill calendar</span>
+    </li>
+    <li>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/tests/test_gateway.py">tests/test_gateway.py</a>
+      <span class="file-desc">— QA suite: 48 tests across all enforcement components, provider adapters, and NEXUS compatibility</span>
+    </li>
+  </ul>
+
+  <!-- Upgrade notes -->
+  <h2>Upgrading from v2.1</h2>
+
+  <div class="callout callout-warn">
+    <p><strong>Breaking change:</strong> v2.1 configs and audit logs are not forward-compatible. Complete the steps below before going live.</p>
+  </div>
+
+  <ol>
+    <li>Generate and export <code>AUDIT_CHAIN_KEY</code> and <code>OPERATOR_DEACTIVATION_KEY</code> before starting.</li>
+    <li>Place <code>provider_adapters.py</code> in the same directory as <code>gateway.py</code> (or <code>main.py</code>). Without it the gateway falls back to Anthropic-only mode.</li>
+    <li>Run <code>python3 gateway.py --init-heartbeat</code> once to create <code>HEARTBEAT.md</code>.</li>
+    <li>Replace <code>config.yaml</code> entirely. New required sections: <code>provider</code>, <code>providers</code>, <code>hitl_thresholds</code>, <code>risk_weights</code>, <code>heartbeat</code>, <code>audit_governance</code>, <code>nexus</code>.</li>
+    <li>Archive existing audit logs — plain-format entries do not pass HMAC chain verification. Start a fresh log file.</li>
+    <li>Set <code>provider.active</code> to your chosen provider. Set the corresponding API key environment variable.</li>
+    <li>Review HITL tier thresholds before going live. Default: AUTO ≤ 3.0 / MEDIUM ≤ 6.0 / HIGH ≤ 8.0 / CRITICAL &gt; 8.0.</li>
+  </ol>
+
+</div>
+
+<div class="release-footer">
+  <div class="footer-inner">
+    <p>
+      <span class="footer-mark">AI SAFE² v3.0</span> &nbsp;·&nbsp; Cyber Strategy Institute &nbsp;·&nbsp;
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework">github.com/CyberStrategyInstitute/ai-safe2-framework</a>
+    </p>
+    <p>Framework and gateway provided under repository license. All controls reference AI SAFE² v3.0 specification.</p>
+  </div>
+</div>
+
+</body>
+</html>
