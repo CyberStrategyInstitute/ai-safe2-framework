@@ -2,11 +2,16 @@
 """
 AI SAFE² Control Gateway for OpenClaw — v3.0
 ═══════════════════════════════════════════════════════════════════════════════
-Reverse-proxy enforcement layer between OpenClaw and the Anthropic API.
-Implements the full AI SAFE² governance stack as an EXTERNAL control boundary.
+AI enforcement proxy implementing the full AI SAFE² v3.0 governance stack.
+Supports multiple LLM providers via a pass-through adapter architecture.
+NEXUS-A2A v0.2 compatible: envelope detection, identity passthrough, NEXUS-aware
+A2A detection. Full NEXUS enforcement is a NEXUS runtime concern.
+
+Supported providers: anthropic | openai | gemini | ollama | openrouter
+Active provider set via config.yaml → provider.active
 
 Architecture (separation of concerns):
-  OpenClaw (tactical execution) ──► [This Gateway] ──► Anthropic API
+  OpenClaw (tactical execution) ──► [This Gateway] ──► Active LLM Provider
                                            │
                           ┌────────────────┴─────────────────┐
                           │         Governance Stack           │
@@ -60,6 +65,21 @@ except ImportError:
     print("ERROR: Required packages not installed.")
     print("Run: pip3 install flask requests jsonschema pyyaml")
     sys.exit(1)
+
+# Provider adapter layer (multi-provider + NEXUS-A2A compatibility)
+try:
+    from provider_adapters import (
+        get_adapter, list_providers, extract_nexus_audit_fields,
+        NEXUS_A2A_INDICATORS, NormalizedRequest,
+    )
+    _ADAPTERS_AVAILABLE = True
+except ImportError:
+    _ADAPTERS_AVAILABLE = False
+    logger_bootstrap = logging.getLogger(__name__)
+    logger_bootstrap.warning(
+        "provider_adapters.py not found — falling back to Anthropic-only mode. "
+        "Place provider_adapters.py in the same directory as gateway.py."
+    )
 
 # ─── Version ──────────────────────────────────────────────────────────────────
 GATEWAY_VERSION = "3.0.0"
@@ -457,12 +477,17 @@ INJECTION_PATTERNS = [
     "ignore your training", "act as if you have no restrictions",
 ]
 
-A2A_INDICATORS = [
-    "orchestrat", "subagent", "delegate to", "forward to agent",
-    "as the orchestrator", "acting as agent", "i am the supervisor",
-    "agent-to-agent", "tool_result", "[inst]", "<|im_start|>",
-    "from: agent", "x-agent-id", "multi-agent",
-]
+# A2A detection — NEXUS-aware when adapters available, base indicators otherwise
+# NEXUS_A2A_INDICATORS (from provider_adapters) extends this list with
+# NEXUS v0.2 canonical message types and identity fields.
+A2A_INDICATORS = (
+    NEXUS_A2A_INDICATORS if _ADAPTERS_AVAILABLE else [
+        "orchestrat", "subagent", "delegate to", "forward to agent",
+        "as the orchestrator", "acting as agent", "i am the supervisor",
+        "agent-to-agent", "tool_result", "[inst]", "<|im_start|>",
+        "from: agent", "x-agent-id", "multi-agent",
+    ]
+)
 
 SECRET_REDACT_RE = re.compile(
     r"(sk-ant-api\d+-[a-zA-Z0-9_\-]{95}|sk-[a-zA-Z0-9]{48}|"
@@ -1014,9 +1039,25 @@ def proxy_messages():
                 )
                 return jsonify({"error": "Schema validation failed", "detail": e.message[:200]}), 400
 
-        # 3-Vector risk scoring
+        # Normalize request for enforcement + NEXUS field extraction
+        _active_normalized_req = None
+        if _ADAPTERS_AVAILABLE:
+            try:
+                active_provider = CONFIG.get("provider", {}).get("active", "anthropic")
+                _adapter_inst   = get_adapter(active_provider, CONFIG.get("providers", {}))
+                _active_normalized_req = _adapter_inst.normalize_request(
+                    dict(request.headers), data
+                )
+            except Exception as _e:
+                logger.warning("Adapter normalization failed: %s", _e)
+
+        # 3-Vector risk scoring (use normalized risk input if available)
+        risk_input = (
+            _active_normalized_req.to_risk_input()
+            if _active_normalized_req else data
+        )
         risk_score, vector, injection_detected, a2a_detected = calculate_composite_risk(
-            data, user_id, _hist_tracker
+            risk_input, user_id, _hist_tracker
         )
         tier = _hitl.tier_for_score(risk_score)
 
@@ -1053,25 +1094,40 @@ def proxy_messages():
             )
             return jsonify(hitl_result["body"]), hitl_result["status"]
 
-        # Forward to Anthropic
-        api_key = CONFIG.get("anthropic", {}).get("api_key", "")
-        if not api_key:
-            return jsonify({"error": "Anthropic API key not configured"}), 500
+        # ── Multi-provider dispatch ────────────────────────────────────────
+        # Route to active provider via adapter. Falls back to Anthropic if
+        # provider_adapters.py is unavailable.
+        try:
+            if _ADAPTERS_AVAILABLE:
+                active_provider = CONFIG.get("provider", {}).get("active", "anthropic")
+                timeout         = CONFIG.get("provider", {}).get("timeout_seconds", 60)
+                adapter         = get_adapter(active_provider, CONFIG.get("providers", {}))
+                upstream        = adapter.forward(raw_body, timeout=timeout)
+            else:
+                # Fallback: Anthropic direct (no adapter)
+                api_key = CONFIG.get("providers", {}).get("anthropic", {}).get("api_key", "")
+                if not api_key:
+                    return jsonify({"error": "API key not configured"}), 500
+                upstream = http_requests.post(
+                    "https://api.anthropic.com/v1/messages",
+                    headers={
+                        "x-api-key": api_key,
+                        "anthropic-version": "2023-06-01",
+                        "content-type": "application/json",
+                        "x-forwarded-by": f"aisafe2-gateway/{GATEWAY_VERSION}",
+                    },
+                    data=raw_body,
+                    timeout=60,
+                )
+        except ValueError as e:
+            logger.error("Provider config error: %s", e)
+            return jsonify({"error": "Provider not configured", "detail": str(e)}), 500
 
-        upstream = http_requests.post(
-            "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": api_key,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-                "x-forwarded-by": f"aisafe2-gateway/{GATEWAY_VERSION}",
-            },
-            data=raw_body,  # forward original bytes (Anthropic needs un-redacted)
-            timeout=CONFIG.get("anthropic", {}).get("timeout_seconds", 60),
-        )
-
-        # Response scanning
-        is_clean, scan_reason = scan_response_body(upstream.content)
+        # ── Response scanning (provider-aware) ─────────────────────────────
+        if _ADAPTERS_AVAILABLE:
+            is_clean, scan_reason = adapter.scan_response(upstream.content)
+        else:
+            is_clean, scan_reason = scan_response_body(upstream.content)
         if not is_clean:
             logger.warning("Response scan BLOCKED: %s", scan_reason)
             _audit_log.append(
@@ -1085,14 +1141,20 @@ def proxy_messages():
                 "policy": FRAMEWORK_REF,
             }), 403
 
-        # Success — log approved request
+        # Success — log approved request (include NEXUS fields if present)
+        nexus_extra = (
+            extract_nexus_audit_fields(
+                _active_normalized_req) if _ADAPTERS_AVAILABLE and _active_normalized_req else {}
+        )
         _audit_log.append(
             user_id=user_id, request_hash=request_hash, risk_score=risk_score,
             risk_vectors=vector, hitl_tier=tier.value, blocked=False, reason=None,
             extra={
-                "a2a_flagged": a2a_detected,
-                "upstream_status": upstream.status_code,
-                "response_scan": "clean",
+                "a2a_flagged":       a2a_detected,
+                "upstream_status":   upstream.status_code,
+                "response_scan":     "clean",
+                "provider":          CONFIG.get("provider", {}).get("active", "anthropic"),
+                **nexus_extra,
             },
         )
 

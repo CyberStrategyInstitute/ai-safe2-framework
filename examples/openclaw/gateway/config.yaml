@@ -73,12 +73,64 @@ gateway:
     - "wget | sh"
 
 # ── Anthropic API ──────────────────────────────────────────────────────────
-anthropic:
-  # Set via environment: export ANTHROPIC_API_KEY=sk-ant-...
-  api_key: "${ANTHROPIC_API_KEY}"
-  default_model: "claude-sonnet-4-20250514"
-  max_tokens: 4096
+# ── Provider Configuration ────────────────────────────────────────────────
+# Set active_provider to the provider you want the gateway to route to.
+# All API keys MUST be set via environment variables — never hardcoded here.
+#
+# Supported providers: anthropic, openai, gemini, ollama, openrouter
+#
+# Pass-through design: client sends requests in the provider's native format.
+# The gateway enforces on the normalized internal representation, then forwards
+# the original payload untouched. See provider_adapters.py for full detail.
+
+provider:
+  active: "anthropic"           # Change to: openai | gemini | ollama | openrouter
   timeout_seconds: 60
+
+providers:
+
+  anthropic:
+    api_key: "${ANTHROPIC_API_KEY}"
+    endpoint: "https://api.anthropic.com/v1/messages"
+    version: "2023-06-01"
+    default_model: "claude-sonnet-4-20250514"
+    max_tokens: 4096
+
+  openai:
+    api_key: "${OPENAI_API_KEY}"
+    endpoint: "https://api.openai.com/v1/chat/completions"
+    default_model: "gpt-4o"
+    organization: ""              # Optional: your OpenAI org ID
+
+  gemini:
+    api_key: "${GEMINI_API_KEY}"
+    endpoint: ""                  # Auto-built from model name if blank
+    model: "gemini-1.5-pro"
+
+  ollama:
+    host: "http://localhost:11434"
+    path: "/api/chat"             # Use /api/generate for raw completion
+    model: "llama3"               # Any model pulled via: ollama pull <model>
+    api_key: ""                   # Leave blank for local Ollama (no auth)
+
+  openrouter:
+    api_key: "${OPENROUTER_API_KEY}"
+    endpoint: "https://openrouter.ai/api/v1/chat/completions"
+    model: "anthropic/claude-sonnet-4-20250514"
+    site_url: "https://github.com/CyberStrategyInstitute/ai-safe2-framework"
+    site_title: "AI SAFE2 Gateway"
+
+# ── NEXUS-A2A Compatibility ───────────────────────────────────────────────
+# NEXUS-A2A v0.2 header passthrough and detection settings.
+# Full NEXUS enforcement is a NEXUS runtime concern — not implemented here.
+# When NEXUS ships, update nexus.enforcement to: verify | enforce
+
+nexus:
+  enabled: true                   # Detect and log NEXUS-A2A headers when present
+  enforcement: "passthrough"      # passthrough = log only; future: verify | enforce
+  log_agent_identity: true        # Log x-nexus-agent-id in audit entries
+  log_delegation_chain: false     # Log delegation chain (verbose; enable for deep audit)
+  a2a_detection: "nexus_aware"    # nexus_aware = NEXUS + base AI SAFE2 indicators
 
 # ── Heartbeat Monitor ─────────────────────────────────────────────────────
 # Bug #11766 mitigation: the gateway NEVER auto-creates HEARTBEAT.md.
