@@ -14,7 +14,7 @@
 [Release Notes](#release-notes) &nbsp;·&nbsp;
 [gateway/README.md](./gateway/README.md) &nbsp;·&nbsp;
 [Core Gateway README](../../gateway/README.md) &nbsp;·&nbsp;
-[v3.0 Gateway Release Note](./gateway-release-v3.0.html)
+[v3.0 Gateway Release Note](https://cyberstrategyinstitute.github.io/examples/openclaw/gateway-release-v3.0.html)
 
 ---
 
@@ -31,7 +31,7 @@ A governed, secure, and auditable OpenClaw agent workspace — from identity thr
 | Component | Version | Released | Notes |
 |-----------|---------|----------|-------|
 | OpenClaw Core File Standard | v2.0 | 2026-02-25 | 11 governance files, Love Equation alignment, memory governance |
-| OpenClaw Gateway | v3.0 | April 2026 | Multi-provider, NEXUS-A2A compatible, 48 tests passing — [full release note](./gateway-release-v3.0.html) |
+| OpenClaw Gateway | v3.0 | April 2026 | Multi-provider, NEXUS-A2A compatible, 48 tests passing — [full release note](https://cyberstrategyinstitute.github.io/examples/openclaw/gateway-release-v3.0.html) |
 
 ---
 
