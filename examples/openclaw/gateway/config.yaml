@@ -1,70 +1,165 @@
-# AI SAFE² Control Gateway Configuration
-# Version: 2.1
+# AI SAFE² Control Gateway — OpenClaw Configuration
+# Version: 3.0
+# ─────────────────────────────────────────────────────────────────────────────
+# SECURITY RULES:
+#   1. NEVER commit real API keys. Use environment variables.
+#   2. AUDIT_CHAIN_KEY must be set via: export AUDIT_CHAIN_KEY=$(openssl rand -hex 32)
+#   3. OPERATOR_DEACTIVATION_KEY must be set for safe mode recovery.
+#   4. bind_host MUST be 127.0.0.1 in production unless using reverse proxy.
+# ─────────────────────────────────────────────────────────────────────────────
 
 gateway:
-  # Network binding (SECURITY: Use 127.0.0.1 for localhost only)
-  bind_host: "127.0.0.1"  # localhost only (NOT 0.0.0.0)
+  # Network binding
+  # SECURITY: 127.0.0.1 = localhost only. Never 0.0.0.0 without a reverse proxy.
+  bind_host: "127.0.0.1"
   bind_port: 8888
-  
-  # Tool policy
-  allow_high_risk_tools: false  # Block exec, browser, cron, etc.
-  
-  # Risk threshold (0-10)
-  # Requests with risk score >= threshold are blocked
-  risk_threshold: 7.0
-  
-  # Rate limiting
-  max_requests_per_minute: 60
-  max_requests_per_hour: 1000
 
+  # ── HITL Circuit Breaker Tier Thresholds ──────────────────────────────────
+  # Risk score boundaries for Human-in-the-Loop tier escalation.
+  # All scores are on a 0–10 scale from the 3-vector composite formula.
+  #
+  # Tier     Score Range  Required Action
+  # AUTO     0–3.0        Automatic approval, log only
+  # MEDIUM   3.1–6.0      X-HITL-Token header (issued on first attempt)
+  # HIGH     6.1–8.0      X-HITL-Token + X-HITL-Reason (≥20 chars)
+  # CRITICAL 8.1–10.0     Out-of-band 2FA challenge-response
+  hitl_thresholds:
+    auto_max:   3.0
+    medium_max: 6.0
+    high_max:   8.0
+    # Score > high_max → CRITICAL (2FA)
+
+  # ── 3-Vector Risk Scoring Weights ─────────────────────────────────────────
+  # Weights must sum to 1.0
+  # action_type:       read=0, write=5, delete/exec=10
+  # target_sensitivity: public=0, personal=5, system/key=10
+  # historical_context: frequent=0, rare=5, never-seen=10
+  risk_weights:
+    action_type:        0.40
+    target_sensitivity: 0.35
+    historical_context: 0.25
+
+  # Score modifiers (added to composite before cap at 10.0)
+  risk_modifiers:
+    injection_detected: +5.0
+    a2a_impersonation:  +3.0
+
+  # ── Rate Limiting ─────────────────────────────────────────────────────────
+  max_requests_per_minute: 60
+  max_requests_per_hour:   1000
+
+  # ── Historical Context ────────────────────────────────────────────────────
+  # Path for per-user action frequency database (JSON)
+  history_db: "data/action_history.json"
+
+  # ── Tool Policy ───────────────────────────────────────────────────────────
+  # Explicit allow-list takes precedence over risk score for low-risk tools.
+  # High-risk tools (exec, cron, browser, delete, gateway) are ALWAYS scored.
+  tool_allowlist:
+    - "read"
+    - "search"
+    - "retrieve"
+    - "list"
+    - "describe"
+
+  # Custom patterns added to the built-in injection detection list
+  custom_blocked_patterns:
+    - "sudo"
+    - "rm -rf"
+    - "DROP DATABASE"
+    - "DELETE FROM users"
+    - "chmod 777"
+    - "curl | bash"
+    - "wget | sh"
+
+# ── Anthropic API ──────────────────────────────────────────────────────────
 anthropic:
-  # API key (use environment variable for security)
-  # Set with: export ANTHROPIC_API_KEY=sk-ant-...
+  # Set via environment: export ANTHROPIC_API_KEY=sk-ant-...
   api_key: "${ANTHROPIC_API_KEY}"
-  
-  # Model defaults
   default_model: "claude-sonnet-4-20250514"
   max_tokens: 4096
+  timeout_seconds: 60
 
+# ── Heartbeat Monitor ─────────────────────────────────────────────────────
+# Bug #11766 mitigation: the gateway NEVER auto-creates HEARTBEAT.md.
+# A missing/empty/stale file triggers safe mode, not silent failure.
+heartbeat:
+  path: "HEARTBEAT.md"
+
+  # Maximum age before the heartbeat is considered stale (seconds)
+  # Should be 2–3× the write_interval_seconds value
+  max_staleness_seconds: 120
+
+  # How often the background thread writes a new heartbeat (seconds)
+  write_interval_seconds: 30
+
+  # Background jobs must call validate() before executing.
+  # If validate() returns False, the job MUST abort and alert.
+  require_valid_for_background_jobs: true
+
+# ── Audit Logging ──────────────────────────────────────────────────────────
 logging:
-  # Audit log file path
-  audit_log: "gateway_audit.log"
-  
-  # Redact secrets in logs
+  # HMAC-chained immutable JSONL audit log
+  # AUDIT_CHAIN_KEY env var must be set for chain integrity
+  audit_log: "logs/gateway_audit.jsonl"
+
+  # Operational (non-audit) log
+  operational_log: "logs/gateway.log"
+
+  # Redact API keys and secrets from all log entries
   redact_secrets: true
-  
-  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+
+  # Log level for operational log (DEBUG, INFO, WARNING, ERROR, CRITICAL)
   log_level: "INFO"
-  
-  # Retention (days)
+
+  # Audit log retention (informational — implement via logrotate or cron)
   retention_days: 90
 
-# Tool allowlist (if using fine-grained control)
-# Only these tools will be allowed even if high_risk_tools is true
-tool_allowlist:
-  - "read"
-  - "search"
-  - "retrieve"
+# ── Audit Governance ──────────────────────────────────────────────────────
+# "Who governs the governor?" — AI SAFE² Evolve & Educate pillar
+audit_governance:
+  # Run chain verification on startup
+  verify_chain_on_startup: true
 
-# Blocked patterns (additional to built-in list)
-custom_blocked_patterns:
-  - "sudo"
-  - "rm -rf"
-  - "DROP DATABASE"
-  - "DELETE FROM users"
+  # Scanner runs nightly. See scanner.py.
+  scanner:
+    enabled: true
+    script: "scanner.py"
+    schedule: "0 2 * * *"        # 2 AM nightly (cron format)
+    alert_on_failure: true
 
-# Trusted sources (bypass some checks)
-trusted_users:
-  # Add user IDs that should have elevated privileges
-  # - "admin@example.com"
+  # Red-team drill schedule (operator reminder — not automated)
+  red_team:
+    quarterly_drill_reminder: true
+    last_drill_date: ""          # Update after each drill: YYYY-MM-DD
+    next_due_date: ""            # Set to 90 days after last_drill_date
 
-# Alerting (optional - requires additional setup)
+  # A2A impersonation drill schedule
+  a2a_test:
+    semi_annual_reminder: true
+    last_test_date: ""
+    next_due_date: ""
+
+# ── Alerting ──────────────────────────────────────────────────────────────
 alerts:
-  enabled: false
-  # webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
-  # email: "security@example.com"
-  
-  # Alert on these events
-  alert_on_blocked_request: true
-  alert_on_high_risk: true
-  alert_on_injection_attempt: true
+  enabled: false   # Set to true when webhook is configured
+
+  # Slack/Teams/PagerDuty webhook URL
+  # webhook_url: "${ALERT_WEBHOOK_URL}"
+
+  # Events that trigger alerts
+  alert_on_blocked_request:    true
+  alert_on_injection_attempt:  true
+  alert_on_high_risk:          true   # Score ≥ high_max
+  alert_on_safe_mode:          true
+  alert_on_chain_break:        true
+  alert_on_a2a_detection:      true
+  alert_on_heartbeat_failure:  true
+
+# ── Trusted Identities ────────────────────────────────────────────────────
+# Identities in this list receive reduced historical_context scoring
+# (treated as "frequent" regardless of actual history).
+# This prevents false escalations for known operator tooling.
+# trusted_users:
+#   - "operator@example.com"
+#   - "ci-pipeline"
