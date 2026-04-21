@@ -1,0 +1,28 @@
+{
+  "_comment": "AI SAFE2 MCP Server — Local stdio config for any MCP-compatible client",
+  "_docs": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/skills/mcp/README.md",
+
+  "mcpServers": {
+    "ai-safe2": {
+      "_comment": "Local stdio: inherently secure, no auth, full Pro access",
+      "command": "python",
+      "args": ["-m", "mcp_server.app"],
+      "env": {
+        "MCP_TRANSPORT": "stdio",
+        "PYTHONPATH": "/REPLACE/WITH/YOUR/PATH/skills/mcp/src",
+        "LOG_LEVEL": "WARNING"
+      }
+    },
+
+    "ai-safe2-docker": {
+      "_comment": "Docker stdio variant — same result, no Python install needed",
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "--env", "MCP_TRANSPORT=stdio",
+        "--env", "LOG_LEVEL=WARNING",
+        "ai-safe2-mcp"
+      ]
+    }
+  }
+}

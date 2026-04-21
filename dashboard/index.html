@@ -1,540 +1,1603 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI SAFE² Framework v2.1 | GRC Taxonomy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --p1: #D1E015;
-            --p2: #2AC918;
-            --p3: #20D9CC;
-            --p4: #4E52A6;
-            --p5: #DD1ACC;
-            --csi-orange: #f6921e;
-            --csi-maroon: #820f1a;
-        }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #030712;
-            color: #f1f5f9;
-            margin: 0;
-            padding: 0;
-        }
-        .dashboard-grid {
-            background-image:
-                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 40px 40px;
-        }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-        
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .animate-spin {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
-        .animate-pulse {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        .control-card {
-            transition: all 0.2s ease;
-        }
-        .control-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            max-width: 900px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: #0f172a;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 1rem;
-            padding: 2rem;
-        }
-        
-        .line-clamp-3 {
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI SAFE² v3.0 — Interactive Framework Dashboard</title>
+<meta name="description" content="161 controls across 5 pillars + cross-pillar governance. The authoritative interactive reference for AI safety and governance."/>
+<meta name="referrer" content="no-referrer">
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      brand: { orange: '#f6921e', dark: '#0d0d1a' },
+      cp: '#cc6600',
+      p1: '#22d3ee', p2: '#a78bfa', p3: '#f87171', p4: '#4ade80', p5: '#c084fc'
+    }
+  }}
+};
+</script>
+
+<!-- Alpine.js -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<style>
+  :root { --brand: #f6921e; --cp: #cc6600; }
+  [x-cloak] { display: none !important; }
+  body { background: #0a0a12; color: #e2e8f0; font-family: system-ui, sans-serif; }
+  
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #1e293b; }
+  ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  
+  /* Priority chips */
+  .chip-CRITICAL { background: rgba(239,68,68,.15); color: #f87171; border: 1px solid rgba(239,68,68,.3); }
+  .chip-HIGH { background: rgba(249,115,22,.15); color: #fb923c; border: 1px solid rgba(249,115,22,.3); }
+  .chip-MEDIUM { background: rgba(234,179,8,.15); color: #fbbf24; border: 1px solid rgba(234,179,8,.3); }
+  .chip-LOW { background: rgba(34,197,94,.15); color: #4ade80; border: 1px solid rgba(34,197,94,.3); }
+
+  /* Version badges */
+  .badge-v3 { background: rgba(246,146,30,.2); color: #f6921e; border: 1px solid rgba(246,146,30,.4); }
+  .badge-fif { background: rgba(204,102,0,.2); color: #fb923c; border: 1px solid rgba(204,102,0,.5); }
+  
+  /* Control cards */
+  .ctrl-card {
+    transition: transform .15s, box-shadow .15s;
+    cursor: pointer;
+  }
+  .ctrl-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(246,146,30,.1); }
+  
+  /* Matrix cells */
+  .matrix-cell { transition: opacity .15s; cursor: pointer; }
+  .matrix-cell:hover { opacity: .8; }
+  /* Light mode: matrix cell backgrounds need more contrast */
+  [data-theme="light"] .matrix-cell { filter: brightness(0.95) saturate(1.2); }
+  
+  /* Persona cards */
+  .persona-card { transition: all .2s; border: 2px solid transparent; }
+  .persona-card:hover { border-color: var(--brand); transform: translateY(-3px); }
+  .persona-card.active { border-color: var(--brand); background: rgba(246,146,30,.08); }
+
+  /* Radar SVG */
+  .radar-polygon { transition: all .4s ease; }
+  
+  /* ACT cards */
+  .act-card { transition: all .2s; cursor: pointer; border: 2px solid transparent; }
+  .act-card:hover { transform: scale(1.02); }
+  .act-selected { border-color: var(--brand) !important; }
+  
+  /* Progress bars */
+  .prog-bar { transition: width .5s ease; }
+
+  /* Scrollable panels */
+  .scroll-panel { max-height: 480px; overflow-y: auto; }
+  
+  /* Glow text */
+  .text-glow { text-shadow: 0 0 20px rgba(246,146,30,.4); }
+  
+  /* Compliance grid */
+  .fw-pill { font-size: 11px; white-space: nowrap; }
+
+  /* Print */
+  /* ── LIGHT / DARK THEME VARIABLES ─────────────────────────────── */
+  :root, [data-theme="dark"] {
+    --bg-primary: #0a0a12;
+    --bg-card: rgba(15,23,42,0.6);
+    --bg-card-solid: #0f172a;
+    --bg-input: #1e293b;
+    --border-primary: rgba(51,65,85,0.8);
+    --border-subtle: rgba(51,65,85,0.4);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #475569;
+    --nav-bg: rgba(10,10,18,0.95);
+    --chip-bg-mult: 1;
+  }
+  [data-theme="light"] {
+    --bg-primary: #f8fafc;
+    --bg-card: rgba(255,255,255,0.9);
+    --bg-card-solid: #f8fafc;
+    --bg-input: #f1f5f9;
+    --border-primary: rgba(203,213,225,0.8);
+    --border-subtle: rgba(203,213,225,0.5);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --nav-bg: rgba(248,250,252,0.95);
+    --modal-bg: rgba(248,250,252,0.97);
+  }
+  [data-theme="light"] body { background: var(--bg-primary) !important; color: var(--text-primary) !important; }
+  [data-theme="light"] .bg-slate-900\/60 { background: var(--bg-card) !important; }
+  [data-theme="light"] .bg-slate-900\/80 { background: rgba(248,250,252,0.95) !important; }
+  [data-theme="light"] .bg-slate-800\/30 { background: rgba(241,245,249,0.7) !important; }
+  [data-theme="light"] .bg-slate-800\/50 { background: rgba(241,245,249,0.9) !important; }
+  [data-theme="light"] .border-slate-800 { border-color: var(--border-primary) !important; }
+  [data-theme="light"] .border-slate-700\/50 { border-color: var(--border-subtle) !important; }
+  [data-theme="light"] .text-slate-400 { color: var(--text-secondary) !important; }
+  [data-theme="light"] .text-slate-500 { color: var(--text-muted) !important; }
+  [data-theme="light"] .text-white { color: var(--text-primary) !important; }
+  [data-theme="light"] .text-slate-200 { color: #1e293b !important; }
+  [data-theme="light"] .text-slate-300 { color: #334155 !important; }
+  [data-theme="light"] .bg-slate-800 { background: #f1f5f9 !important; }
+  [data-theme="light"] .bg-slate-900 { background: #f8fafc !important; }
+  [data-theme="light"] .bg-slate-700 { background: #e2e8f0 !important; }
+  [data-theme="light"] nav { background: var(--nav-bg) !important; border-color: var(--border-primary) !important; }
+  [data-theme="light"] input, [data-theme="light"] select { background: var(--bg-input) !important; border-color: var(--border-primary) !important; color: var(--text-primary) !important; }
+  
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #0a0a12; }
+  }
+</style>
 </head>
-<body class="antialiased overflow-x-hidden">
-    <div id="root">
-        <div class="flex items-center justify-center h-screen bg-[#030712] text-slate-500 font-mono text-xs uppercase tracking-widest">
-            <div class="flex flex-col items-center gap-4">
-                <svg class="animate-spin text-orange-500" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
-                </svg>
-                <p class="animate-pulse">Synchronizing with AI SAFE² Repository...</p>
+<body x-data="dashboard()" x-cloak :data-theme="darkMode ? 'dark' : 'light'" :class="darkMode ? 'bg-slate-900 text-slate-100' : 'bg-slate-50 text-slate-900'">
+
+<!-- ═══════════════════════════════════════════════════════════
+     PERSONA SELECTOR MODAL
+═══════════════════════════════════════════════════════════ -->
+<div x-show="!persona" class="fixed inset-0 z-50 flex items-center justify-center p-4"
+     style="background: var(--modal-bg, rgba(10,10,18,.97)); backdrop-filter: blur(8px);">
+  <div class="max-w-4xl w-full">
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <div class="inline-flex items-center gap-2 mb-3">
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: rgba(246,146,30,.15); border: 1px solid rgba(246,146,30,.3);">
+          <svg class="w-5 h-5" style="color: #f6921e;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <span class="text-sm font-mono" style="color: #f6921e;">AI SAFE² v3.0</span>
+        <span class="text-xs px-2 py-0.5 rounded badge-v3 font-mono">161 CONTROLS</span>
+      </div>
+      <h1 class="text-4xl font-bold text-white mb-3">
+        Who are you here as<span style="color: #f6921e;">?</span>
+      </h1>
+      <p class="text-slate-400 text-lg">We'll show you what matters most for your role.</p>
+    </div>
+
+    <!-- Persona Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <template x-for="p in personas" :key="p.id">
+        <button @click="selectPersona(p.id)"
+                class="persona-card rounded-xl p-5 text-left bg-slate-900/80 border-slate-700/50 hover:border-brand-orange">
+          <div class="text-2xl mb-3" x-text="p.icon"></div>
+          <div class="font-bold text-white text-sm mb-1" x-text="p.title"></div>
+          <div class="text-xs text-slate-400 leading-relaxed" x-text="p.subtitle"></div>
+          <div class="mt-3 text-xs font-semibold" style="color: #f6921e;" x-text="p.cta"></div>
+        </button>
+      </template>
+    </div>
+
+    <div class="text-center">
+      <button @click="selectPersona('explorer')" class="text-slate-500 hover:text-slate-300 text-sm transition-colors">
+        Skip — show me everything →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN LAYOUT
+═══════════════════════════════════════════════════════════ -->
+<div x-show="persona" x-cloak class="min-h-screen flex flex-col">
+
+  <!-- ── TOP NAV ─────────────────────────────────────────── -->
+  <nav class="sticky top-0 z-40 border-b border-slate-800/80 no-print" style="background: var(--nav-bg, rgba(10,10,18,.95)); backdrop-filter: blur(12px);">
+    <div class="max-w-screen-2xl mx-auto px-4 py-3 flex items-center gap-4">
+      
+      <!-- Logo -->
+      <div class="flex items-center gap-2 mr-4 shrink-0">
+        <div class="w-7 h-7 rounded flex items-center justify-center" style="background: rgba(246,146,30,.15);">
+          <svg class="w-4 h-4" style="color: #f6921e;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <div class="hidden sm:block">
+          <span class="font-bold text-white text-sm">AI SAFE<sup style="color:#f6921e;">²</sup></span>
+          <span class="ml-1 text-xs px-1.5 py-0.5 rounded badge-v3 font-mono">v3.0</span>
+        </div>
+      </div>
+
+      <!-- Persona Tabs -->
+      <div class="flex items-center gap-1 overflow-x-auto">
+        <template x-for="p in personas" :key="p.id">
+          <button @click="selectPersona(p.id)"
+                  :class="persona === p.id ? 'bg-slate-700/80 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-800/50'"
+                  class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all">
+            <span x-text="p.icon" class="text-sm"></span>
+            <span class="hidden md:block" x-text="p.shortTitle"></span>
+          </button>
+        </template>
+      </div>
+
+      <!-- Spacer -->
+      <div class="flex-1"></div>
+
+      <!-- Search -->
+      <div class="relative">
+        <input x-model="search" type="text" placeholder="Search 161 controls…"
+               class="w-48 lg:w-64 bg-slate-800/60 border border-slate-700/60 rounded-lg px-3 py-1.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand-orange/50 transition-colors"/>
+        <div x-show="search" class="absolute top-full mt-1 left-0 right-0 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto">
+          <template x-for="c in searchResults()" :key="c.id">
+            <div @click="openModal(c)" class="flex items-center gap-2 px-3 py-2 hover:bg-slate-800 cursor-pointer border-b border-slate-800/50 last:border-0">
+              <span class="text-xs px-1.5 py-0.5 rounded font-mono chip-CRITICAL chip-HIGH"
+                    :class="'chip-'+c.priority" x-text="c.priority[0]"></span>
+              <div>
+                <div class="text-xs font-semibold text-white" x-text="c.id + ' — ' + c.name"></div>
+                <div class="text-xs text-slate-500" x-text="c.pillar_name"></div>
+              </div>
+              <div x-show="c.version === 'v3.0'" class="ml-auto text-xs badge-v3 px-1.5 py-0.5 rounded font-mono shrink-0">NEW</div>
             </div>
+          </template>
+          <div x-show="searchResults().length === 0" class="px-3 py-4 text-sm text-slate-500 text-center">No controls match</div>
         </div>
+      </div>
+
+      <!-- Dark mode toggle -->
+      <button @click="toggleDark()" 
+              class="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border border-slate-700 hover:border-slate-500 transition-colors text-slate-400 hover:text-white"
+              :title="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+        <span x-text="darkMode ? '☀' : '🌙'" class="text-sm"></span>
+      </button>
+      <!-- CTA -->
+      <a href="https://cyberstrategyinstitute.com/ai-safe2/" target="_blank" rel="noopener"
+         class="shrink-0 hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-white transition-all hover:-translate-y-0.5"
+         style="background: linear-gradient(135deg, #f6921e, #e07010);">
+        Get Toolkit
+        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+  <main class="flex-1 max-w-screen-2xl mx-auto w-full px-4 py-8">
+  
+    <!-- Onboarding hint bar — shows once per persona, dismissible -->
+    <div x-show="persona && getHint(persona) && !dismissedHints[persona]"
+         class="mb-6 rounded-xl border px-4 py-3 flex items-start gap-3 text-sm no-print"
+         style="background: rgba(246,146,30,.06); border-color: rgba(246,146,30,.25);">
+      <span class="text-lg shrink-0 mt-0.5">💡</span>
+      <div class="flex-1" x-text="getHint(persona)"></div>
+      <button @click="dismissHint(persona)" class="shrink-0 text-slate-500 hover:text-white transition-colors text-xs px-2 py-1 rounded border border-slate-700 hover:border-slate-500">
+        Got it
+      </button>
     </div>
 
-    <!-- Modal for control details -->
-    <div id="controlModal" class="modal">
-        <div class="modal-content custom-scrollbar">
-            <div id="modalBody"></div>
+    <!-- ▓▓▓ EXECUTIVE LENS ▓▓▓ -->
+    <div x-show="persona === 'executive'" class="space-y-8">
+      
+      <!-- Hero stats -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+          <div class="text-4xl font-bold mb-1 text-glow" style="color: #f6921e;">161</div>
+          <div class="text-sm text-slate-400">Total Controls</div>
+          <div class="text-xs text-slate-600 mt-1">Across 5 pillars + governance</div>
         </div>
-    </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+          <div class="text-4xl font-bold mb-1" style="color: #f6921e;">32</div>
+          <div class="text-sm text-slate-400">Frameworks Mapped</div>
+          <div class="text-xs text-slate-600 mt-1">ISO, NIST, EU AI Act + 29 more</div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+          <div class="text-4xl font-bold mb-1" style="color: #cc6600;">3</div>
+          <div class="text-sm text-slate-400">First-in-Field Controls</div>
+          <div class="text-xs text-slate-600 mt-1">CP.7, CP.9, CP.10 — no other framework has these</div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
+          <div class="text-4xl font-bold mb-1" style="color: #22d3ee;">4</div>
+          <div class="text-sm text-slate-400">ACT Capability Tiers</div>
+          <div class="text-xs text-slate-600 mt-1">Governance scales with agent autonomy</div>
+        </div>
+      </div>
 
-    <script>
-        // Configuration
-        const GITHUB_REPO_URL = "https://raw.githubusercontent.com/CyberStrategyInstitute/ai-safe2-framework/main/dashboard/public/data/controls.json";
-        const LOCAL_FALLBACK_URL = "./public/data/controls.json";
+      <!-- Radar + Pillars -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
         
-        const PILLAR_COLORS = {
-            "Sanitize & Isolate": "#D1E015",
-            "Audit & Inventory": "#2AC918",
-            "Fail-Safe & Recovery": "#20D9CC",
-            "Engage & Monitor": "#4E52A6",
-            "Evolve & Educate": "#DD1ACC"
-        };
+        <!-- Hexagonal Radar -->
+        <div class="lg:col-span-2 bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-bold text-white">Framework Architecture</h2>
+            <span class="text-xs text-slate-500">6 governance domains</span>
+          </div>
+          <div class="flex justify-center">
+            <svg viewBox="0 0 320 300" class="w-full max-w-sm" id="exec-radar">
+              <!-- Rendered by JS below -->
+            </svg>
+          </div>
+          <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm" style="background:#22d3ee"></span><span class="text-slate-400">P1 Sanitize</span></div>
+            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm" style="background:#a78bfa"></span><span class="text-slate-400">P2 Audit</span></div>
+            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm" style="background:#f87171"></span><span class="text-slate-400">P3 Fail-Safe</span></div>
+            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm" style="background:#4ade80"></span><span class="text-slate-400">P4 Monitor</span></div>
+            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm" style="background:#c084fc"></span><span class="text-slate-400">P5 Evolve</span></div>
+            <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-sm" style="background:#cc6600"></span><span class="text-slate-400">CP Governance</span></div>
+          </div>
+        </div>
 
-        const PILLARS = Object.keys(PILLAR_COLORS);
-
-        // State
-        let allControls = [];
-        let filters = {
-            pillar: 'All',
-            riskLevel: 'All',
-            isGapFiller: null,
-            searchQuery: ''
-        };
-        let dataSource = 'loading';
-
-        // Icons as SVG
-        const icons = {
-            search: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
-            shield: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
-            external: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
-            activity: '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
-            refresh: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>',
-            x: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
-            briefcase: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>'
-        };
-
-        // Load data
-        async function loadData() {
-            try {
-                // Try GitHub first
-                const response = await fetch(GITHUB_REPO_URL, { cache: 'no-cache' });
-                if (!response.ok) throw new Error('Remote source unavailable');
-                const data = await response.json();
-                allControls = data;
-                dataSource = 'remote';
-                console.log(`✅ Loaded ${data.length} controls from GitHub`);
-            } catch (err) {
-                console.warn("GitHub fetch failed, falling back to local:", err);
-                try {
-                    // Fallback to local
-                    const localResponse = await fetch(LOCAL_FALLBACK_URL);
-                    if (!localResponse.ok) throw new Error('Local fallback failed');
-                    const localData = await localResponse.json();
-                    allControls = localData;
-                    dataSource = 'local';
-                    console.log(`✅ Loaded ${localData.length} controls from local`);
-                } catch (localErr) {
-                    console.error("Both sources failed:", localErr);
-                    showError("Critical Error: Unable to load framework data from any source.");
-                    return;
-                }
-            }
-            render();
-        }
-
-        // Filter controls
-        function getFilteredControls() {
-            return allControls.filter(c => {
-                const matchPillar = filters.pillar === 'All' || c.pillar === filters.pillar;
-                const matchRisk = filters.riskLevel === 'All' || c.risk_level === filters.riskLevel;
-                const matchGap = filters.isGapFiller === null || c.is_gap_filler === filters.isGapFiller;
-                const matchSearch = 
-                    c.name.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-                    c.description.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-                    c.id.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-                    (c.sub_topic && c.sub_topic.toLowerCase().includes(filters.searchQuery.toLowerCase())) ||
-                    (c.decision_maker_impact && c.decision_maker_impact.toLowerCase().includes(filters.searchQuery.toLowerCase()));
-                return matchPillar && matchRisk && matchGap && matchSearch;
-            });
-        }
-
-        // Calculate stats
-        function getStats() {
-            const total = allControls.length;
-            const critical = allControls.filter(c => c.risk_level === 'Critical').length;
-            const gaps = allControls.filter(c => c.is_gap_filler).length;
-            const pillarsCount = new Set(allControls.map(c => c.pillar)).size;
-            return { total, critical, gaps, pillarsCount };
-        }
-
-        // Group controls by pillar
-        function groupByPillar(controls) {
-            const groups = {};
-            controls.forEach(c => {
-                if (!groups[c.pillar]) groups[c.pillar] = [];
-                groups[c.pillar].push(c);
-            });
-            return groups;
-        }
-
-        // Render risk badge
-        function getRiskBadge(level) {
-            const colors = {
-                'Critical': 'bg-red-500/10 text-red-500 border-red-500/20',
-                'High': 'bg-orange-500/10 text-orange-500 border-orange-500/20',
-                'Medium': 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-                'Low': 'bg-green-500/10 text-green-500 border-green-500/20'
-            };
-            return `<span class="px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest border ${colors[level] || colors['Low']}">${level}</span>`;
-        }
-
-        // Escape HTML
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Render control card
-        function renderControlCard(control) {
-            const color = PILLAR_COLORS[control.pillar] || '#f6921e';
-            const isV21 = control.sub_topic && control.sub_topic.includes('v2.1');
-            
-            return `
-                <div class="control-card glass-panel rounded-xl p-5 cursor-pointer" onclick="openModal('${control.id}')" 
-                     style="border-color: ${color}20;">
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 rounded-full" style="background-color: ${color};"></div>
-                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest mono">${escapeHtml(control.id)}</span>
-                        </div>
-                        ${getRiskBadge(control.risk_level)}
-                    </div>
-                    
-                    <h3 class="text-sm font-bold text-white mb-2 leading-tight">${escapeHtml(control.name)}</h3>
-                    
-                    ${control.sub_topic ? `
-                    <div class="mb-2">
-                        <span class="text-[9px] font-bold px-2 py-0.5 rounded ${isV21 ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20' : 'bg-slate-700/30 text-slate-400'}">${escapeHtml(control.sub_topic)}</span>
-                    </div>` : ''}
-                    
-                    <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-3">${escapeHtml(control.description)}</p>
-                    
-                    ${control.decision_maker_impact ? `
-                    <div class="flex items-start gap-2 mt-3 pt-3 border-t border-white/5">
-                        ${icons.briefcase}
-                        <p class="text-[10px] text-slate-500 leading-relaxed line-clamp-2 italic">${escapeHtml(control.decision_maker_impact)}</p>
-                    </div>` : ''}
-                    
-                    <div class="flex items-center gap-2 mt-3">
-                        ${control.is_gap_filler ? '<div class="px-2 py-1 bg-purple-500/10 border border-purple-500/20 rounded text-[9px] font-bold text-purple-400 uppercase tracking-widest">Gap Filler</div>' : ''}
-                        ${isV21 ? '<div class="px-2 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded text-[9px] font-bold text-cyan-400 uppercase tracking-widest">v2.1</div>' : ''}
-                    </div>
+        <!-- Pillar Summaries -->
+        <div class="lg:col-span-3 space-y-3">
+          <h2 class="font-bold text-white mb-2">What Each Domain Protects</h2>
+          <template x-for="p in pillarsForExec()" :key="p.id">
+            <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-sm font-bold"
+                     :style="`background: ${p.color}22; color: ${p.color}; border: 1px solid ${p.color}44`"
+                     x-text="p.badge"></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="font-semibold text-white text-sm" x-text="p.name"></span>
+                    <span class="text-xs text-slate-500 font-mono" x-text="p.count + ' controls'"></span>
+                  </div>
+                  <p class="text-xs text-slate-400 leading-relaxed" x-text="p.exec_summary"></p>
+                  <div class="mt-2 flex flex-wrap gap-1">
+                    <template x-for="kw in p.keywords" :key="kw">
+                      <span class="text-xs px-2 py-0.5 rounded-full border border-slate-700 text-slate-500" x-text="kw"></span>
+                    </template>
+                  </div>
                 </div>
-            `;
-        }
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
 
-        // Open modal
-        function openModal(controlId) {
-            const control = allControls.find(c => c.id === controlId);
-            if (!control) return;
+      <!-- Cross-Pillar Governance -->
+      <div class="bg-slate-900/60 border rounded-xl p-6" style="border-color: rgba(204,102,0,.4);">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-2 h-6 rounded-full" style="background:#cc6600;"></div>
+          <h2 class="font-bold text-white">CP.1–CP.10: Cross-Pillar Governance OS</h2>
+          <span class="text-xs px-2 py-0.5 rounded badge-v3 font-mono ml-auto">NEW IN v3.0</span>
+        </div>
+        <p class="text-sm text-slate-400 mb-5 max-w-3xl">Ten governance controls that operate across all five pillars simultaneously — not within any single domain. Includes three first-in-field standards that no other AI governance framework has published.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <template x-for="cp in cpControlsForExec()" :key="cp.id">
+            <div @click="openModal(cp)" class="ctrl-card rounded-lg p-3 border text-xs"
+                 :class="cp.fif ? 'border-amber-600/50' : 'border-slate-700/50'"
+                 :style="cp.fif ? 'background: rgba(204,102,0,.08)' : 'background: rgba(15,23,42,.6)'">
+              <div class="flex items-center gap-1 mb-1.5">
+                <span class="font-mono font-bold" style="color: #cc6600;" x-text="cp.id"></span>
+                <span x-show="cp.fif" class="badge-fif px-1 py-0.5 rounded text-xs ml-auto" title="First in field — no other AI governance framework has published this standard">★ FIRST</span>
+              </div>
+              <div class="font-semibold text-white leading-tight mb-1" x-text="cp.name"></div>
+              <div class="text-slate-500 leading-relaxed line-clamp-2" x-text="cp.builder_problem"></div>
+            </div>
+          </template>
+        </div>
+      </div>
 
-            const color = PILLAR_COLORS[control.pillar] || '#f6921e';
-            const modalBody = document.getElementById('modalBody');
-            
-            modalBody.innerHTML = `
-                <div class="flex items-start justify-between mb-6">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2 flex-wrap">
-                            <div class="w-3 h-3 rounded-full" style="background-color: ${color};"></div>
-                            <span class="text-xs font-black text-slate-500 uppercase tracking-widest mono">${escapeHtml(control.id)}</span>
-                            ${getRiskBadge(control.risk_level)}
-                            ${control.is_gap_filler ? '<span class="px-2 py-1 bg-purple-500/10 border border-purple-500/20 rounded text-[9px] font-bold text-purple-400 uppercase tracking-widest">Gap Filler</span>' : ''}
-                        </div>
-                        <h2 class="text-2xl font-bold text-white mb-2">${escapeHtml(control.name)}</h2>
-                        <p class="text-sm text-slate-400">${escapeHtml(control.pillar)}</p>
-                        ${control.sub_topic ? `<p class="text-xs text-slate-500 mt-1">📂 ${escapeHtml(control.sub_topic)}</p>` : ''}
+      <!-- Compliance Coverage (32 frameworks) -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-bold text-white">Compliance Coverage</h2>
+          <span class="text-xs text-slate-500">32 frameworks in one implementation</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
+          <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+            <div class="text-xs text-slate-500 mb-1 uppercase tracking-wide">AI-Specific</div>
+            <div class="flex flex-wrap gap-1">
+              <template x-for="fw in ['NIST AI RMF','ISO 42001','OWASP AIVSS','MITRE ATLAS','EU AI Act','OWASP LLM Top 10']" :key="fw">
+                <span class="fw-pill px-1.5 py-0.5 rounded text-green-400 bg-green-900/30 border border-green-800/30" x-text="fw"></span>
+              </template>
+            </div>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+            <div class="text-xs text-slate-500 mb-1 uppercase tracking-wide">Enterprise</div>
+            <div class="flex flex-wrap gap-1">
+              <template x-for="fw in ['SOC 2 Type II','ISO 27001','NIST SP 800-53','CIS v8','Zero Trust','FedRAMP']" :key="fw">
+                <span class="fw-pill px-1.5 py-0.5 rounded text-blue-400 bg-blue-900/30 border border-blue-800/30" x-text="fw"></span>
+              </template>
+            </div>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+            <div class="text-xs text-slate-500 mb-1 uppercase tracking-wide">Regulatory</div>
+            <div class="flex flex-wrap gap-1">
+              <template x-for="fw in ['HIPAA','GDPR','PCI-DSS v4','SEC Disclosure','DORA','CMMC 2.0']" :key="fw">
+                <span class="fw-pill px-1.5 py-0.5 rounded text-purple-400 bg-purple-900/30 border border-purple-800/30" x-text="fw"></span>
+              </template>
+            </div>
+          </div>
+          <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50 flex flex-col justify-between">
+            <div class="text-xs text-slate-500 mb-2 uppercase tracking-wide">+14 more</div>
+            <div class="text-slate-400 text-xs">CSA, MAESTRO, Google SAIF, MIT AI Risk, AIID, CCPA/CPRA, NIST CSF 2.0 and 7 more</div>
+          </div>
+        </div>
+        <div class="p-4 rounded-lg border-l-4 text-sm" style="background: rgba(246,146,30,.06); border-color: #f6921e;">
+          <strong class="text-white">Board-level point:</strong>
+          <span class="text-slate-300 ml-1">One AI SAFE² v3.0 implementation generates evidence artifacts for 32 compliance frameworks simultaneously. Your team audits once, satisfies everything.</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="bg-gradient-to-r from-slate-900 to-slate-800 border border-slate-700 rounded-xl p-8 text-center">
+        <h3 class="text-2xl font-bold text-white mb-2">Ready to present your AI risk posture?</h3>
+        <p class="text-slate-400 mb-6">The AI SAFE² Implementation Toolkit includes the Risk Command Center dashboard, 161-point audit scorecard, HEAR designation forms, and board-ready compliance evidence packages.</p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="https://cyberstrategyinstitute.com/ai-safe2/" target="_blank" rel="noopener"
+             class="px-8 py-3 rounded-full font-bold text-white text-sm transition-all hover:-translate-y-1"
+             style="background: linear-gradient(135deg, #f6921e, #e07010);">
+            Get the Toolkit — $97
+          </a>
+          <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework" target="_blank" rel="noopener"
+             class="px-8 py-3 rounded-full font-bold text-slate-300 text-sm border border-slate-600 hover:border-slate-400 transition-all">
+            ☆ Star on GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ▓▓▓ ARCHITECT LENS — CONTROL MATRIX ▓▓▓ -->
+    <div x-show="persona === 'architect'" class="space-y-6">
+      
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-3 items-center">
+        <select x-model="filters.priority" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-orange/50">
+          <option value="">All Priorities</option>
+          <option value="CRITICAL">Critical</option>
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+        </select>
+        <select x-model="filters.version" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-orange/50">
+          <option value="">All Versions</option>
+          <option value="v3.0">New in v3.0</option>
+          <option value="v2.1">Added in v2.1</option>
+          <option value="v2.0">Core v2.0</option>
+        </select>
+        <select x-model="filters.framework" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-orange/50">
+          <option value="">All Frameworks</option>
+          <template x-for="[k,v] in Object.entries(fwNames)" :key="k">
+            <option :value="k" x-text="v"></option>
+          </template>
+        </select>
+        <div class="flex items-center gap-3 ml-auto text-xs">
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded" style="background:rgba(239,68,68,.4);border:1px solid rgba(239,68,68,.5)"></span><span class="text-slate-400">Critical</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded" style="background:rgba(249,115,22,.3);border:1px solid rgba(249,115,22,.4)"></span><span class="text-slate-400">High</span></div>
+          <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded" style="background:rgba(234,179,8,.25);border:1px solid rgba(234,179,8,.4)"></span><span class="text-slate-400">Medium</span></div>
+          <div class="flex items-center gap-1.5 hidden lg:flex"><span class="w-2.5 h-2.5 rounded" style="background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3)"></span><span class="text-slate-400">Low</span></div>
+          <div class="flex items-center gap-1.5 hidden lg:flex"><span class="badge-fif px-1.5 rounded" style="font-size:10px">★ FIRST</span><span class="text-slate-400">First in field</span></div>
+          <span class="text-slate-500 border-l border-slate-700 pl-3"><span x-text="filteredControls().length"></span> controls</span>
+        </div>
+      </div>
+
+      <!-- CP Band -->
+      <div class="rounded-xl overflow-hidden border" style="border-color: rgba(204,102,0,.4);">
+        <div class="px-4 py-2 flex items-center gap-2" style="background: rgba(204,102,0,.12);">
+          <span class="text-xs font-bold font-mono" style="color: #cc6600;">GOVERNANCE OS</span>
+          <span class="text-xs text-slate-500">CP.1–CP.10 Cross-Pillar Controls</span>
+          <span class="ml-auto text-xs badge-v3 px-1.5 py-0.5 rounded">ALL NEW IN v3.0</span>
+        </div>
+        <div class="p-3 grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-10 gap-2" style="background: var(--bg-card-solid, rgba(10,10,18,.4));">
+          <template x-for="cp in controls.filter(c => c.pillar_id === 'CP')" :key="cp.id">
+            <div @click="openModal(cp)" class="matrix-cell rounded-lg p-2 text-center"
+                 :class="cp.fif ? 'ring-1 ring-amber-600/50' : ''"
+                 :style="`background: rgba(204,102,0,${cp.priority === 'CRITICAL' ? '.25' : '.12'})`">
+              <div class="font-mono text-xs font-bold mb-0.5" style="color: #cc6600;" x-text="cp.id"></div>
+              <div class="text-slate-400 leading-tight" style="font-size: 9px;" x-text="cp.name.split('(')[0].trim()"></div>
+              <div x-show="cp.fif" class="text-amber-500 text-center mt-1" style="font-size: 9px;">⭐</div>
+              <div class="mt-1">
+                <span class="text-xs rounded px-1 chip-CRITICAL chip-HIGH" :class="'chip-'+cp.priority" style="font-size: 9px;" x-text="cp.priority[0]"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Pillar Matrix -->
+      <template x-for="pillar in matrixPillars()" :key="pillar.id">
+        <div class="rounded-xl overflow-hidden border border-slate-800">
+          <div class="px-4 py-2.5 flex items-center gap-3"
+               :style="`background: ${pillar.color}12; border-bottom: 1px solid ${pillar.color}30`">
+            <span class="text-xs font-mono font-bold" :style="`color: ${pillar.color}`" x-text="pillar.id"></span>
+            <span class="font-semibold text-white text-sm" x-text="pillar.name"></span>
+            <span class="text-xs text-slate-500" x-text="pillar.controls.length + ' controls'"></span>
+          </div>
+          <div class="p-3">
+            <template x-for="topic in pillar.topics" :key="topic.name">
+              <div class="mb-3 last:mb-0">
+                <div class="text-xs text-slate-500 uppercase tracking-wider mb-2 font-mono" x-text="topic.name"></div>
+                <div class="flex flex-wrap gap-2">
+                  <template x-for="ctrl in topic.controls" :key="ctrl.id">
+                    <div @click="openModal(ctrl)"
+                         class="matrix-cell rounded-lg px-3 py-2 flex items-center gap-2 text-xs border"
+                         :style="`background: ${priorityBg(ctrl.priority)}; border-color: ${priorityBorder(ctrl.priority)}`">
+                      <span class="font-mono font-bold shrink-0" :style="`color: ${priorityColor(ctrl.priority)}`" x-text="ctrl.id"></span>
+                      <span class="text-slate-300 truncate max-w-40" x-text="ctrl.name"></span>
+                      <span x-show="ctrl.version === 'v3.0'" class="badge-v3 px-1 py-0.5 rounded font-mono shrink-0" style="font-size:9px;">NEW</span>
                     </div>
-                    <button onclick="closeModal()" class="p-2 hover:bg-white/5 rounded transition-colors flex-shrink-0">
-                        ${icons.x}
-                    </button>
+                  </template>
                 </div>
-                
-                <div class="space-y-6">
-                    <div>
-                        <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">Description</h3>
-                        <p class="text-sm text-slate-300 leading-relaxed">${escapeHtml(control.description)}</p>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+
+      <!-- Legend -->
+      <div class="flex flex-wrap gap-4 text-xs">
+        <template x-for="[p, label] in [['CRITICAL','Critical'],['HIGH','High'],['MEDIUM','Medium'],['LOW','Low']]" :key="p">
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded" :style="`background: ${priorityBg(p)}`"></span>
+            <span class="text-slate-400" x-text="label"></span>
+          </div>
+        </template>
+        <div class="flex items-center gap-1.5">
+          <span class="badge-v3 px-1.5 py-0.5 rounded font-mono text-xs">NEW</span>
+          <span class="text-slate-400">Added in v3.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ▓▓▓ BUILDER / DEVELOPER LENS ▓▓▓ -->
+    <div x-show="persona === 'builder'" class="space-y-8">
+
+      <!-- ACT Tier Classifier -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-2 h-6 rounded-full" style="background: #f6921e;"></div>
+          <h2 class="font-bold text-white text-lg">ACT Capability Tier Classifier</h2>
+          <span class="text-xs badge-v3 px-2 py-0.5 rounded font-mono ml-auto">CP.3 v3.0</span>
+        </div>
+        <p class="text-sm text-slate-400 mb-6">Answer 6 questions about your agent. Receive your ACT tier, mandatory controls, and governance requirements.</p>
+
+        <div x-show="!actResult" class="space-y-4">
+          <template x-for="(q, qi) in actQuestions" :key="qi">
+            <div class="rounded-xl p-4 border border-slate-700/50 bg-slate-800/30">
+              <div class="flex items-start gap-3 mb-3">
+                <span class="text-xs font-mono font-bold px-2 py-1 rounded bg-slate-700 text-slate-300 shrink-0" x-text="'Q' + (qi+1)"></span>
+                <div class="text-sm font-medium text-white" x-text="q.question"></div>
+              </div>
+              <div class="flex flex-wrap gap-2 ml-8">
+                <template x-for="opt in q.options" :key="opt.value">
+                  <button @click="setActAnswer(qi, opt.value)"
+                          :class="actAnswers[qi] === opt.value ? 'act-selected bg-slate-700/60' : 'bg-slate-800/60 border-slate-700'"
+                          class="act-card px-4 py-2 rounded-lg text-sm border text-slate-300 hover:border-brand-orange/50">
+                    <span x-text="opt.label"></span>
+                  </button>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          <div class="flex items-center gap-3 pt-2">
+            <button @click="computeActResult()" :disabled="!actAnswersComplete()"
+                    class="px-6 py-2.5 rounded-full text-sm font-bold text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                    style="background: linear-gradient(135deg, #f6921e, #e07010);">
+              Classify My Agent →
+            </button>
+            <span class="text-xs text-slate-500" x-text="actAnswerCount() + '/6 answered'"></span>
+          </div>
+        </div>
+
+        <!-- ACT Result -->
+        <div x-show="actResult" class="space-y-5">
+          <button @click="resetAct()" class="text-xs text-slate-500 hover:text-slate-300 transition-colors">← Start over</button>
+          
+          <div class="rounded-xl p-6 border-2" :style="actResult ? `border-color: ${actResult.color}60; background: ${actResult.color}10` : ''">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-black"
+                   :style="actResult ? `background: ${actResult.color}20; color: ${actResult.color}` : ''"
+                   x-text="actResult ? actResult.tier : ''"></div>
+              <div>
+                <div class="font-mono text-sm text-slate-400" x-text="actResult ? actResult.tier : ''"></div>
+                <div class="text-2xl font-bold text-white" x-text="actResult ? actResult.name : ''"></div>
+                <div class="text-sm text-slate-400" x-text="actResult ? actResult.definition : ''"></div>
+              </div>
+            </div>
+
+            <!-- HEAR Flag -->
+            <div x-show="actResult && actResult.hearRequired" class="mb-4 rounded-lg p-4 border flex items-start gap-3"
+                 style="background: rgba(251,146,60,.08); border-color: rgba(251,146,60,.4);">
+              <span class="text-amber-400 mt-0.5 shrink-0">⚠</span>
+              <div>
+                <div class="font-bold text-amber-400 text-sm mb-1">CP.10 HEAR Designation Required</div>
+                <div class="text-xs text-slate-400">This tier requires a named Human Ethical Agent of Record with a cryptographic signing key before production deployment. This is a first-in-field governance standard — no other framework defines this.</div>
+              </div>
+            </div>
+
+            <!-- CP.9 Flag -->
+            <div x-show="actResult && actResult.cp9Required" class="mb-4 rounded-lg p-4 border flex items-start gap-3"
+                 style="background: rgba(204,102,0,.08); border-color: rgba(204,102,0,.4);">
+              <span class="mt-0.5 shrink-0" style="color: #cc6600;">⚠</span>
+              <div>
+                <div class="font-bold text-sm mb-1" style="color: #cc6600;">CP.9 Agent Replication Governance Required</div>
+                <div class="text-xs text-slate-400">Orchestrators spawning sub-agents must implement lineage tokens, delegation hop limits (max 3), ephemeral credentials, and 500ms kill-switch tree. First-in-field: no other framework covers agent replication.</div>
+              </div>
+            </div>
+
+            <!-- CP.8 Flag -->
+            <div x-show="actResult && actResult.cp8Required" class="mb-4 rounded-lg p-4 border flex items-start gap-3"
+                 style="background: rgba(239,68,68,.08); border-color: rgba(239,68,68,.4);">
+              <span class="text-red-400 mt-0.5 shrink-0">🛑</span>
+              <div>
+                <div class="font-bold text-red-400 text-sm mb-1">CP.8 Catastrophic Risk Thresholds — Deployment Blocker</div>
+                <div class="text-xs text-slate-400">Document behavioral indicators that trigger emergency suspension before deployment is approved. Required for all ACT-3 and ACT-4 agents.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mandatory Controls -->
+          <div>
+            <h3 class="font-bold text-white mb-3 text-sm">Mandatory Controls for Your Tier</h3>
+            <div class="scroll-panel space-y-2 pr-2">
+              <template x-for="ctrl in actMandatoryControls()" :key="ctrl.id">
+                <div @click="openModal(ctrl)" class="ctrl-card flex items-center gap-3 p-3 rounded-lg border border-slate-700/50 bg-slate-800/30">
+                  <span class="text-xs rounded px-1.5 py-0.5 chip-CRITICAL" :class="'chip-'+ctrl.priority" x-text="ctrl.priority"></span>
+                  <span class="font-mono text-xs text-slate-400 shrink-0" x-text="ctrl.id"></span>
+                  <span class="text-sm text-white" x-text="ctrl.name"></span>
+                  <span x-show="ctrl.version === 'v3.0'" class="ml-auto badge-v3 px-1.5 py-0.5 rounded text-xs font-mono shrink-0">NEW</span>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-lg border-l-4 text-sm" style="background: rgba(246,146,30,.06); border-color: #f6921e;">
+            <strong class="text-white">Next step:</strong>
+            <span class="text-slate-300 ml-1">Generate your complete deployment governance package including HEAR designation form, CP.9 lineage spec, and audit evidence checklist.</span>
+            <a href="https://cyberstrategyinstitute.com/ai-safe2/" target="_blank" rel="noopener" class="ml-2 font-bold hover:underline" style="color: #f6921e;">Get the Toolkit →</a>
+          </div>
+
+          <!-- Pre-Flight Checklist CTA — appears after ACT result at peak desire -->
+          <div class="rounded-xl overflow-hidden border" style="border-color: rgba(34,197,94,.35);">
+            <div class="flex items-center gap-3 px-5 py-3" style="background: rgba(34,197,94,.07);">
+              <span class="text-green-400 text-xl">✅</span>
+              <div>
+                <div class="font-bold text-white text-sm">Free: AI Builder Pre-Flight Checklist</div>
+                <div class="text-xs text-slate-400">35 questions — before you ship any AI agent to production</div>
+              </div>
+              <span class="ml-auto text-xs font-bold px-2 py-1 rounded" style="background: rgba(34,197,94,.15); color: #4ade80; border: 1px solid rgba(34,197,94,.3);">FREE</span>
+            </div>
+            <div class="px-5 py-4" style="background: rgba(15,23,42,.5);">
+              <p class="text-sm text-slate-400 mb-3 leading-relaxed">
+                Your ACT tier tells you what governance you need. The Pre-Flight Checklist tells you whether your agent is actually ready to deploy. 35 structured questions across every critical risk surface — security, data governance, human oversight, failure modes, and compliance readiness.
+              </p>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+                <template x-for="item in [
+                  '🔒 Input & injection defense',
+                  '🧠 Memory & RAG governance',
+                  '🛑 Kill switch & fail-safe',
+                  '👤 Human oversight design',
+                  '📋 Audit & trace logging',
+                  '⚖ Compliance readiness'
+                ]" :key="item">
+                  <div class="flex items-center gap-1.5 text-xs text-slate-400">
+                    <span x-text="item"></span>
+                  </div>
+                </template>
+              </div>
+              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <a href="https://cyberstrategyinstitute.com/ai-safe2/" target="_blank" rel="noopener"
+                   class="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:-translate-y-0.5"
+                   style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                  Get the Checklist — Free →
+                </a>
+                <span class="text-xs text-slate-500">No account required · GitHub download · 35 questions · Instant access</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Control Reference by Pillar for Builders -->
+      <div class="space-y-3">
+        <h2 class="font-bold text-white">Builder Reference — Controls by Impact</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+          <template x-for="ctrl in builderCritical()" :key="ctrl.id">
+            <div @click="openModal(ctrl)" class="ctrl-card bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+              <div class="flex items-start gap-2 mb-2">
+                <span class="chip-CRITICAL chip-HIGH text-xs px-1.5 py-0.5 rounded shrink-0" :class="'chip-'+ctrl.priority" x-text="ctrl.priority"></span>
+                <span class="font-mono text-xs text-slate-400" x-text="ctrl.id"></span>
+                <span x-show="ctrl.version === 'v3.0'" class="ml-auto badge-v3 px-1.5 py-0.5 rounded text-xs font-mono">NEW</span>
+                <span x-show="ctrl.fif" class="badge-fif px-1.5 py-0.5 rounded text-xs ml-auto">⭐</span>
+              </div>
+              <div class="font-semibold text-white text-sm mb-1.5" x-text="ctrl.name"></div>
+              <div class="text-xs text-slate-400 leading-relaxed italic" x-text="ctrl.builder_problem"></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Pre-Flight Checklist standalone CTA -->
+      <div class="rounded-2xl overflow-hidden" style="background: linear-gradient(135deg, rgba(34,197,94,.06) 0%, rgba(246,146,30,.06) 100%); border: 1px solid rgba(34,197,94,.25);">
+        <div class="p-6">
+          <div class="flex flex-col md:flex-row items-start md:items-center gap-5">
+            <!-- Icon + copy -->
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-2xl">🚀</span>
+                <span class="text-xs font-bold px-2 py-0.5 rounded font-mono" style="background: rgba(34,197,94,.15); color: #4ade80; border: 1px solid rgba(34,197,94,.3);">FREE RESOURCE</span>
+              </div>
+              <h3 class="font-bold text-white text-lg mb-1">CSI AI Builder Pre-Flight Checklist</h3>
+              <p class="text-sm text-slate-400 leading-relaxed mb-3">
+                35 structured questions that answer one question before you ship: <strong class="text-slate-200">is this agent actually ready?</strong> Covers security, governance, human oversight, failure modes, and compliance. Built directly from AI SAFE² v3.0 controls — the same framework you are using right now.
+              </p>
+              <!-- Question category pills -->
+              <div class="flex flex-wrap gap-2 mb-4">
+                <template x-for="cat in [
+                  {label:'Input Defense', n:'Q1–5'},
+                  {label:'Data Governance', n:'Q6–10'},
+                  {label:'Human Oversight', n:'Q11–15'},
+                  {label:'Fail-Safe Design', n:'Q16–20'},
+                  {label:'Audit & Logging', n:'Q21–25'},
+                  {label:'Compliance', n:'Q26–30'},
+                  {label:'ACT Tier Gates', n:'Q31–35'}
+                ]" :key="cat.label">
+                  <div class="flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border border-slate-700 text-slate-400">
+                    <span class="text-green-500 font-mono font-bold" x-text="cat.n"></span>
+                    <span x-text="cat.label"></span>
+                  </div>
+                </template>
+              </div>
+              <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <a href="https://cyberstrategyinstitute.com/ai-safe2/" target="_blank" rel="noopener"
+                   class="flex items-center gap-2 px-6 py-3 rounded-full font-bold text-white text-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                   style="background: linear-gradient(135deg, #22c55e, #16a34a); box-shadow: 0 4px 14px rgba(34,197,94,.2);">
+                  Download Free Checklist
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </a>
+                <div class="text-xs text-slate-500 space-y-0.5">
+                  <div>✓ No email required on GitHub</div>
+                  <div>✓ 35 questions · PDF + Markdown</div>
+                  <div>✓ Maps to AI SAFE² v3.0 controls</div>
+                </div>
+              </div>
+            </div>
+            <!-- Visual: sample questions -->
+            <div class="shrink-0 w-full md:w-64 rounded-xl overflow-hidden border border-slate-700/50 bg-slate-900/60 hidden md:block">
+              <div class="px-4 py-2 border-b border-slate-700/50 text-xs font-mono text-slate-500 uppercase tracking-wide">Sample questions</div>
+              <div class="p-3 space-y-2">
+                <template x-for="q in [
+                  {n:'Q2', text:'Does every input surface have injection defense?', risk:'HIGH'},
+                  {n:'Q11', text:'Is there a human checkpoint before irreversible actions?', risk:'CRITICAL'},
+                  {n:'Q19', text:'Is there a tested kill switch that does not rely on the system prompt?', risk:'CRITICAL'},
+                  {n:'Q31', text:'Has this agent been classified by ACT tier?', risk:'HIGH'}
+                ]" :key="q.n">
+                  <div class="text-xs">
+                    <div class="flex items-center gap-2 mb-0.5">
+                      <span class="font-mono text-slate-600" x-text="q.n"></span>
+                      <span class="text-xs px-1 py-0.5 rounded chip-CRITICAL" :class="'chip-'+q.risk" x-text="q.risk" style="font-size:9px;padding:1px 5px;"></span>
                     </div>
-                    
-                    ${control.decision_maker_impact ? `
-                    <div class="bg-blue-500/5 border border-blue-500/10 rounded-lg p-4">
-                        <h3 class="text-sm font-bold text-blue-400 mb-2 uppercase tracking-widest flex items-center gap-2">
-                            ${icons.briefcase}
-                            Decision-Maker Impact
-                        </h3>
-                        <p class="text-sm text-slate-300 leading-relaxed">${escapeHtml(control.decision_maker_impact)}</p>
-                    </div>` : ''}
-                    
-                    ${control.implementation_guidance ? `
-                    <div>
-                        <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">Implementation Guidance</h3>
-                        <p class="text-sm text-slate-300 leading-relaxed">${escapeHtml(control.implementation_guidance)}</p>
-                    </div>` : ''}
-                    
-                    ${control.framework_note ? `
-                    <div class="bg-amber-500/5 border border-amber-500/10 rounded-lg p-4">
-                        <h3 class="text-sm font-bold text-amber-400 mb-2 uppercase tracking-widest">Framework Note</h3>
-                        <p class="text-sm text-slate-300 leading-relaxed">${escapeHtml(control.framework_note)}</p>
-                    </div>` : ''}
-                    
-                    ${control.cross_reference ? `
-                    <div>
-                        <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">Cross Reference</h3>
-                        <p class="text-sm text-cyan-400 mono">${escapeHtml(control.cross_reference)}</p>
-                    </div>` : ''}
-                    
-                    ${control.components ? `
-                    <div>
-                        <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">Components</h3>
-                        <p class="text-sm text-slate-300">${escapeHtml(control.components)}</p>
-                    </div>` : ''}
-                    
-                    ${control.related_frameworks && control.related_frameworks.length > 0 ? `
-                    <div>
-                        <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-widest">Related Frameworks</h3>
-                        <div class="flex flex-wrap gap-2">
-                            ${control.related_frameworks.map(ref => `
-                                <span class="px-3 py-1 bg-slate-800/50 border border-slate-700 rounded text-xs text-slate-300">${escapeHtml(ref)}</span>
-                            `).join('')}
-                        </div>
-                    </div>` : ''}
+                    <div class="text-slate-400 leading-snug" x-text="q.text"></div>
+                  </div>
+                </template>
+                <div class="text-center text-xs text-slate-600 pt-1">+ 31 more questions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scanner CTA -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div class="flex-1">
+          <h3 class="font-bold text-white mb-1">Scan your codebase now</h3>
+          <p class="text-sm text-slate-400">The AI SAFE² v3.0 scanner checks your code against 40+ rules covering all 5 pillars and CP.1-CP.10. ACT tier estimated from your code structure.</p>
+          <code class="mt-2 block text-xs text-green-400 bg-slate-800 px-3 py-1.5 rounded font-mono">python -m scanner.cli scan . --tier Tier2 --report json</code>
+        </div>
+        <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework" target="_blank" rel="noopener"
+           class="shrink-0 px-5 py-2.5 rounded-full text-sm font-bold text-white transition-all hover:-translate-y-0.5"
+           style="background: linear-gradient(135deg, #f6921e, #e07010);">
+          View on GitHub →
+        </a>
+      </div>
+    </div>
+
+    <!-- ▓▓▓ GRC / COMPLIANCE LENS ▓▓▓ -->
+    <div x-show="persona === 'grc'" class="space-y-8">
+
+      <!-- Framework Crosswalk -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-bold text-white">Compliance Framework Crosswalk</h2>
+          <select x-model="grc.framework" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-orange/50">
+            <option value="">Select a framework…</option>
+            <template x-for="[k,v] in Object.entries(fwNames)" :key="k">
+              <option :value="k" x-text="v"></option>
+            </template>
+          </select>
+        </div>
+
+        <div x-show="!grc.framework" class="text-center py-12 text-slate-500">
+          <div class="text-5xl mb-3">⚖</div>
+          <div class="font-medium">Select a compliance framework above</div>
+          <div class="text-sm mt-1">See which AI SAFE² v3.0 controls satisfy each requirement</div>
+        </div>
+
+        <div x-show="grc.framework" class="space-y-4">
+          <div class="flex items-center gap-3 p-3 rounded-lg bg-slate-800/50">
+            <div>
+              <div class="font-bold text-white" x-text="fwNames[grc.framework]"></div>
+              <div class="text-xs text-slate-400" x-text="frameworkControls().length + ' controls mapped'"></div>
+            </div>
+            <div class="ml-auto">
+              <div class="text-2xl font-bold" style="color: #f6921e;" x-text="frameworkControls().length"></div>
+              <div class="text-xs text-slate-500">controls</div>
+            </div>
+          </div>
+          <div class="scroll-panel space-y-2 pr-2">
+            <template x-for="ctrl in frameworkControls()" :key="ctrl.id">
+              <div @click="openModal(ctrl)" class="ctrl-card flex items-center gap-3 p-3 rounded-lg border border-slate-700/40 bg-slate-800/30">
+                <span class="text-xs rounded px-1.5 py-0.5 chip-CRITICAL" :class="'chip-'+ctrl.priority" x-text="ctrl.priority"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="font-mono text-xs text-slate-400 shrink-0" x-text="ctrl.id"></span>
+                    <span class="text-sm text-white truncate" x-text="ctrl.name"></span>
+                  </div>
+                  <div class="text-xs text-slate-500 truncate" x-text="ctrl.pillar_name"></div>
                 </div>
-            `;
-            
-            document.getElementById('controlModal').classList.add('active');
-        }
+                <span x-show="ctrl.version === 'v3.0'" class="badge-v3 px-1.5 py-0.5 rounded text-xs font-mono shrink-0">NEW</span>
+              </div>
+            </template>
+          </div>
+          <div class="p-4 rounded-lg border-l-4 text-sm" style="background: rgba(246,146,30,.06); border-color: #f6921e;">
+            <strong class="text-white">Audit tip:</strong>
+            <span class="text-slate-300 ml-1">Export the complete gap report with A2.5 execution trace requirements, compliance evidence artifact types, and control implementation status.</span>
+            <a href="https://cyberstrategyinstitute.com/ai-safe2/" target="_blank" rel="noopener" class="ml-2 font-bold hover:underline" style="color: #f6921e;">Export report →</a>
+          </div>
+        </div>
+      </div>
 
-        function closeModal() {
-            document.getElementById('controlModal').classList.remove('active');
-        }
+      <!-- Self-Assessment Scorecard -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="font-bold text-white">Self-Assessment Scorecard</h2>
+            <p class="text-xs text-slate-400 mt-0.5">Check controls you have implemented. Score updates live.</p>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold" :style="`color: ${scoreColor(assessmentPercent())}`" x-text="Math.round(assessmentPercent()) + '%'"></div>
+            <div class="text-xs text-slate-400" x-text="assessmentPassed() + '/' + assessmentTotal() + ' controls'"></div>
+          </div>
+        </div>
 
-        // Close modal on background click
-        document.getElementById('controlModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
+        <!-- Score bars per pillar -->
+        <div class="space-y-2 mb-5">
+          <template x-for="pillar in assessmentPillarScores()" :key="pillar.id">
+            <div>
+              <div class="flex items-center justify-between text-xs mb-1">
+                <span class="font-mono" :style="`color: ${pillar.color}`" x-text="pillar.id + ' ' + pillar.name"></span>
+                <span class="text-slate-400" x-text="pillar.passed + '/' + pillar.total"></span>
+              </div>
+              <div class="h-1.5 rounded-full bg-slate-700">
+                <div class="h-full rounded-full prog-bar" :style="`width: ${pillar.pct}%; background: ${pillar.color}`"></div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Control checklist — critical and high first -->
+        <div class="scroll-panel space-y-1 pr-2">
+          <div class="text-xs text-slate-500 uppercase tracking-wider mb-2">CRITICAL Controls</div>
+          <template x-for="ctrl in criticalControls()" :key="ctrl.id">
+            <label class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-800/40 cursor-pointer group">
+              <input type="checkbox" :checked="assessment[ctrl.id]" @change="toggleAssessment(ctrl.id)"
+                     class="rounded border-slate-600 bg-slate-800 text-brand-orange focus:ring-0"/>
+              <span class="font-mono text-xs text-slate-500 shrink-0" x-text="ctrl.id"></span>
+              <span class="text-sm group-hover:text-white transition-colors" :class="assessment[ctrl.id] ? 'text-slate-400 line-through' : 'text-slate-300'" x-text="ctrl.name"></span>
+              <span class="ml-auto chip-CRITICAL text-xs px-1.5 py-0.5 rounded shrink-0">CRITICAL</span>
+            </label>
+          </template>
+          <div class="text-xs text-slate-500 uppercase tracking-wider my-2 pt-2 border-t border-slate-800">HIGH Controls</div>
+          <template x-for="ctrl in highControls().slice(0, 20)" :key="ctrl.id">
+            <label class="flex items-center gap-3 p-2.5 rounded-lg hover:bg-slate-800/40 cursor-pointer group">
+              <input type="checkbox" :checked="assessment[ctrl.id]" @change="toggleAssessment(ctrl.id)"
+                     class="rounded border-slate-600 bg-slate-800 text-brand-orange focus:ring-0"/>
+              <span class="font-mono text-xs text-slate-500 shrink-0" x-text="ctrl.id"></span>
+              <span class="text-sm group-hover:text-white transition-colors" :class="assessment[ctrl.id] ? 'text-slate-400 line-through' : 'text-slate-300'" x-text="ctrl.name"></span>
+            </label>
+          </template>
+        </div>
+
+        <div class="mt-4 p-4 rounded-lg text-sm border border-slate-700 bg-slate-800/30">
+          <strong class="text-white">Export your results:</strong>
+          <span class="text-slate-400 ml-1">The full 161-point audit scorecard with auto-calculated Combined Risk Score, ISO 42001 alignment, and compliance evidence package is in the Toolkit.</span>
+          <a href="https://cyberstrategyinstitute.com/ai-safe2/" target="_blank" rel="noopener" class="ml-1 font-bold hover:underline" style="color: #f6921e;">Get Toolkit →</a>
+        </div>
+      </div>
+
+      <!-- Risk Score Calculator -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-2 h-6 rounded-full" style="background: #f6921e;"></div>
+          <h2 class="font-bold text-white">v3.0 Combined Risk Score Calculator</h2>
+        </div>
+        <div class="font-mono text-sm mb-5 p-3 rounded-lg bg-slate-800/50 border border-slate-700">
+          <span style="color: #f6921e;">Score</span> = <span class="text-blue-400">CVSS_Base</span> + ((100 − <span class="text-purple-400">Pillar_Score</span>) ÷ 10) + (<span class="text-amber-400">AAF</span> ÷ 10)
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <!-- CVSS -->
+          <div>
+            <label class="block text-sm font-medium text-blue-400 mb-1">CVSS Base Score</label>
+            <input type="range" min="0" max="10" step="0.1" x-model="risk.cvss"
+                   class="w-full h-2 rounded-lg appearance-none cursor-pointer bg-slate-700" style="accent-color: #60a5fa"/>
+            <div class="flex justify-between text-xs text-slate-500 mt-1">
+              <span>0</span>
+              <span class="font-bold text-blue-400" x-text="parseFloat(risk.cvss).toFixed(1)"></span>
+              <span>10</span>
+            </div>
+            <div class="text-xs text-slate-500 mt-1">Vulnerability severity (CVE base score)</div>
+          </div>
+          <!-- Pillar Score -->
+          <div>
+            <label class="block text-sm font-medium text-purple-400 mb-1">Pillar Score (AI SAFE² compliance)</label>
+            <input type="range" min="0" max="100" step="1" x-model="risk.pillar"
+                   class="w-full h-2 rounded-lg appearance-none cursor-pointer bg-slate-700" style="accent-color: #a78bfa"/>
+            <div class="flex justify-between text-xs text-slate-500 mt-1">
+              <span>0</span>
+              <span class="font-bold text-purple-400" x-text="risk.pillar + '%'"></span>
+              <span>100</span>
+            </div>
+            <div class="text-xs text-slate-500 mt-1">From your assessment above (100 = fully compliant)</div>
+          </div>
+          <!-- AAF -->
+          <div>
+            <label class="block text-sm font-medium text-amber-400 mb-1">OWASP AIVSS AAF (0-100)</label>
+            <input type="range" min="0" max="100" step="1" x-model="risk.aaf"
+                   class="w-full h-2 rounded-lg appearance-none cursor-pointer bg-slate-700" style="accent-color: #f59e0b"/>
+            <div class="flex justify-between text-xs text-slate-500 mt-1">
+              <span>0</span>
+              <span class="font-bold text-amber-400" x-text="risk.aaf"></span>
+              <span>100</span>
+            </div>
+            <div class="text-xs text-slate-500 mt-1">Agentic Amplification Factor (10 factors × 0-10)</div>
+          </div>
+        </div>
+
+        <!-- Result -->
+        <div class="rounded-xl p-6 border text-center" :style="`background: ${riskResultColor()}10; border-color: ${riskResultColor()}40`">
+          <div class="text-6xl font-black mb-2" :style="`color: ${riskResultColor()}`" x-text="riskScore().toFixed(2)"></div>
+          <div class="font-bold text-white text-lg mb-1" x-text="riskLabel()"></div>
+          <div class="text-xs text-slate-400 font-mono" x-text="parseFloat(risk.cvss).toFixed(1) + ' + ' + ((100-risk.pillar)/10).toFixed(1) + ' + ' + (risk.aaf/10).toFixed(1) + ' = ' + riskScore().toFixed(2)"></div>
+        </div>
+        <div class="mt-3 text-xs text-slate-500 text-center">CVSS and AAF are estimates from static analysis. Use the MCP server <code class="text-slate-400">risk_score</code> tool for precise calculation.</div>
+      </div>
+    </div>
+
+    <!-- ▓▓▓ RESEARCHER / ANALYST LENS ▓▓▓ -->
+    <div x-show="persona === 'researcher'" class="space-y-8">
+
+      <!-- CP.1-CP.10 Deep Dive -->
+      <div class="rounded-xl overflow-hidden border" style="border-color: rgba(204,102,0,.4);">
+        <div class="p-5" style="background: rgba(204,102,0,.1);">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-xs font-mono font-bold" style="color: #cc6600;">CROSS-PILLAR GOVERNANCE OS</span>
+            <span class="badge-v3 px-2 py-0.5 rounded text-xs font-mono">ALL NEW IN v3.0</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mb-1">CP.1 – CP.10: First-in-Field Standards</h2>
+          <p class="text-sm text-slate-400">Ten governance controls that operate across all five pillars simultaneously. Three have no counterpart in any existing AI governance framework.</p>
+        </div>
+        <div class="p-5 space-y-4">
+          <template x-for="cp in controls.filter(c => c.pillar_id === 'CP')" :key="cp.id">
+            <div @click="openModal(cp)" class="ctrl-card rounded-xl p-5 border"
+                 :class="cp.fif ? '' : 'border-slate-700/50 bg-slate-800/30'"
+                 :style="cp.fif ? 'border-color: rgba(204,102,0,.6); background: rgba(204,102,0,.08)' : ''">
+              <div class="flex items-start gap-4">
+                <div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="font-mono text-lg font-black" style="color: #cc6600;" x-text="cp.id"></span>
+                    <span x-show="cp.fif" class="badge-fif px-2 py-1 rounded text-xs font-bold" title="First in field — no other AI governance framework has published this standard">★ FIRST IN FIELD</span>
+                    <span class="chip-CRITICAL chip-HIGH text-xs px-1.5 py-0.5 rounded ml-1" :class="'chip-'+cp.priority" x-text="cp.priority"></span>
+                  </div>
+                  <div class="font-bold text-white mb-2" x-text="cp.name"></div>
+                  <div class="text-sm text-slate-400 leading-relaxed mb-2" x-text="cp.description"></div>
+                  <div class="text-sm italic text-slate-500 border-l-2 border-slate-600 pl-3" x-text="cp.builder_problem"></div>
+                  <div class="mt-3 flex flex-wrap gap-1">
+                    <template x-for="fw in cp.fw.slice(0,5)" :key="fw">
+                      <span class="text-xs px-2 py-0.5 rounded border border-slate-700 text-slate-500" x-text="fwNames[fw] || fw"></span>
+                    </template>
+                    <span x-show="cp.fw.length > 5" class="text-xs px-2 py-0.5 rounded border border-slate-700 text-slate-500" x-text="'+' + (cp.fw.length-5) + ' more'"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Attack Surface Map -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+        <h2 class="font-bold text-white mb-4">Attack Surface Map — Controls by Threat Category</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <template x-for="threat in threatMap()" :key="threat.label">
+            <div class="rounded-lg p-4 border border-slate-700/50 bg-slate-800/30">
+              <div class="font-semibold text-white text-sm mb-1" x-text="threat.label"></div>
+              <div class="text-xs text-slate-500 mb-3" x-text="threat.description"></div>
+              <div class="space-y-1">
+                <template x-for="ctrl in threat.controls.slice(0,4)" :key="ctrl.id">
+                  <div @click="openModal(ctrl)" class="flex items-center gap-2 text-xs cursor-pointer hover:text-white text-slate-400 transition-colors p-1 rounded hover:bg-slate-700/50">
+                    <span class="font-mono text-slate-500 shrink-0" x-text="ctrl.id"></span>
+                    <span x-text="ctrl.name"></span>
+                    <span x-show="ctrl.version === 'v3.0'" class="badge-v3 px-1 py-0.5 rounded font-mono ml-auto shrink-0" style="font-size:9px;">NEW</span>
+                  </div>
+                </template>
+                <div x-show="threat.controls.length > 4" class="text-xs text-slate-600 pl-1" x-text="'+' + (threat.controls.length-4) + ' more controls'"></div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- MITRE ATLAS Crosswalk -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+        <h2 class="font-bold text-white mb-4">MITRE ATLAS Crosswalk</h2>
+        <div class="scroll-panel space-y-2 pr-2">
+          <template x-for="ctrl in controls.filter(c => c.fw.includes('MITRE_ATLAS')).slice(0,25)" :key="ctrl.id">
+            <div @click="openModal(ctrl)" class="ctrl-card flex items-center gap-3 p-3 rounded-lg border border-slate-700/40 bg-slate-800/30">
+              <span class="chip-CRITICAL chip-HIGH text-xs px-1.5 py-0.5 rounded" :class="'chip-'+ctrl.priority" x-text="ctrl.priority[0]"></span>
+              <span class="font-mono text-xs text-slate-400 shrink-0" x-text="ctrl.id"></span>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm text-white truncate" x-text="ctrl.name"></div>
+                <div class="text-xs text-slate-500" x-text="ctrl.pillar_name"></div>
+              </div>
+              <span x-show="ctrl.version === 'v3.0'" class="badge-v3 px-1.5 py-0.5 rounded text-xs font-mono shrink-0">NEW</span>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- v3.0 New Controls -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-xl p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <h2 class="font-bold text-white">23 New v3.0 Controls</h2>
+          <span class="text-xs badge-v3 px-2 py-0.5 rounded font-mono">ADDED IN v3.0</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <template x-for="ctrl in controls.filter(c => c.version === 'v3.0' && c.pillar_id !== 'CP')" :key="ctrl.id">
+            <div @click="openModal(ctrl)" class="ctrl-card flex items-center gap-2 p-3 rounded-lg border border-slate-700/40 bg-slate-800/30">
+              <span class="chip-CRITICAL chip-HIGH text-xs px-1.5 py-0.5 rounded shrink-0" :class="'chip-'+ctrl.priority" x-text="ctrl.priority[0]"></span>
+              <span class="font-mono text-xs shrink-0" style="color: #f6921e;" x-text="ctrl.id"></span>
+              <span class="text-sm text-white truncate" x-text="ctrl.name"></span>
+              <span class="text-xs text-slate-500 shrink-0" x-text="ctrl.pillar_id"></span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- ▓▓▓ EXPLORER (all controls) ▓▓▓ -->
+    <div x-show="persona === 'explorer'" class="space-y-6">
+      <!-- Filters -->
+      <div class="flex flex-wrap gap-3">
+        <input x-model="search" type="text" placeholder="Search all 161 controls…"
+               class="flex-1 min-w-48 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-orange/50"/>
+        <select x-model="filters.pillar" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-orange/50">
+          <option value="">All Pillars</option>
+          <option value="P1">P1 — Sanitize & Isolate</option>
+          <option value="P2">P2 — Audit & Inventory</option>
+          <option value="P3">P3 — Fail-Safe & Recovery</option>
+          <option value="P4">P4 — Engage & Monitor</option>
+          <option value="P5">P5 — Evolve & Educate</option>
+          <option value="CP">CP — Cross-Pillar Governance</option>
+        </select>
+        <select x-model="filters.priority" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-orange/50">
+          <option value="">All Priorities</option>
+          <option value="CRITICAL">Critical</option>
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+        </select>
+        <select x-model="filters.version" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-brand-orange/50">
+          <option value="">All Versions</option>
+          <option value="v3.0">New in v3.0</option>
+          <option value="v2.1">Added in v2.1</option>
+          <option value="v2.0">Core v2.0</option>
+        </select>
+        <div class="flex items-center text-sm text-slate-400 ml-auto">
+          <span x-text="filteredControls().length"></span>&nbsp;controls
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
+        <template x-for="ctrl in filteredControls()" :key="ctrl.id">
+          <div @click="openModal(ctrl)" class="ctrl-card bg-slate-900/60 border border-slate-800 hover:border-slate-600 rounded-xl p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="chip-CRITICAL chip-HIGH text-xs px-1.5 py-0.5 rounded" :class="'chip-'+ctrl.priority" x-text="ctrl.priority"></span>
+              <span class="font-mono text-xs text-slate-400" x-text="ctrl.id"></span>
+              <span x-show="ctrl.version === 'v3.0'" class="badge-v3 px-1.5 py-0.5 rounded text-xs font-mono ml-auto">NEW</span>
+              <span x-show="ctrl.fif" class="badge-fif px-1.5 py-0.5 rounded text-xs ml-auto" title="First in field — no other AI governance framework has published this standard">★ FIRST</span>
+            </div>
+            <div class="font-semibold text-white text-sm mb-1.5" x-text="ctrl.name"></div>
+            <div class="text-xs text-slate-500 leading-relaxed italic" x-text="ctrl.builder_problem"></div>
+            <div class="mt-2 text-xs text-slate-600" x-text="ctrl.pillar_name"></div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────── -->
+  <footer class="border-t border-slate-800 mt-16 py-8 text-center text-sm text-slate-600 no-print">
+    <p>AI SAFE² v3.0 | 161 Controls | 32 Frameworks | CC-BY-SA 4.0 (Docs) / MIT (Code)</p>
+    <p class="mt-1">
+      <a href="https://cyberstrategyinstitute.com/ai-safe2/" class="hover:text-brand-orange transition-colors">Cyber Strategy Institute</a>
+      <span class="mx-2">·</span>
+      <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework" class="hover:text-brand-orange transition-colors">GitHub</a>
+      <span class="mx-2">·</span>
+      <a href="https://cyberstrategyinstitute.com/ai-safe2/" class="hover:text-brand-orange transition-colors">Get the Toolkit</a>
+    </p>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CONTROL DETAIL MODAL
+═══════════════════════════════════════════════════════════ -->
+<div x-show="selectedControl" @click.self="closeModal()" @close-modal.document="closeModal()" x-cloak
+     class="fixed inset-0 z-50 flex items-center justify-center p-4"
+     style="background: rgba(5,5,10,.8); backdrop-filter: blur(8px);">
+  <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-2xl max-h-screen overflow-y-auto shadow-2xl" @click.stop>
+    <div x-show="selectedControl" class="p-6">
+      <!-- Header -->
+      <div class="flex items-start justify-between mb-5">
+        <div class="flex items-center gap-3">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-mono text-xl font-black" 
+                    :style="`color: ${selectedControl && selectedControl.pillar_id === 'CP' ? '#cc6600' : '#f6921e'}`"
+                    x-text="selectedControl ? selectedControl.id : ''"></span>
+              <span x-show="selectedControl && selectedControl.fif" class="badge-fif px-2 py-1 rounded text-xs font-bold">⭐ FIRST IN FIELD</span>
+              <span x-show="selectedControl && selectedControl.version === 'v3.0'" class="badge-v3 px-2 py-0.5 rounded text-xs font-mono">NEW v3.0</span>
+            </div>
+            <h2 class="text-xl font-bold text-white" x-text="selectedControl ? selectedControl.name : ''"></h2>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-xs text-slate-400" x-text="selectedControl ? selectedControl.pillar_name : ''"></span>
+              <span class="text-slate-600">·</span>
+              <span class="text-xs text-slate-400" x-text="selectedControl ? selectedControl.topic : ''"></span>
+              <span class="chip-CRITICAL chip-HIGH text-xs px-1.5 py-0.5 rounded ml-1" :class="selectedControl ? 'chip-'+selectedControl.priority : ''" x-text="selectedControl ? selectedControl.priority : ''"></span>
+            </div>
+          </div>
+        </div>
+        <button @click="closeModal()" class="text-slate-400 hover:text-white transition-colors p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Builder Problem -->
+      <div class="mb-4 p-4 rounded-xl border border-slate-700/50 bg-slate-800/50">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Builder Problem</div>
+        <div class="text-sm text-slate-200 italic" x-text="selectedControl ? selectedControl.builder_problem : ''"></div>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-4">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Control Requirement</div>
+        <div class="text-sm text-slate-300 leading-relaxed" x-text="selectedControl ? selectedControl.description : ''"></div>
+      </div>
+
+      <!-- ACT Tier Requirement -->
+      <div x-show="selectedControl && selectedControl.act && selectedControl.act.length > 0" class="mb-4">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Minimum ACT Tier</div>
+        <div class="flex flex-wrap gap-2">
+          <template x-for="tier in (selectedControl ? selectedControl.act : [])" :key="tier">
+            <span class="px-3 py-1 rounded-full text-xs font-bold border" style="background: rgba(246,146,30,.1); color: #f6921e; border-color: rgba(246,146,30,.3);" x-text="tier"></span>
+          </template>
+        </div>
+      </div>
+
+      <!-- Compliance Frameworks -->
+      <div x-show="selectedControl && selectedControl.fw && selectedControl.fw.length > 0" class="mb-4">
+        <div class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Compliance Frameworks</div>
+        <div class="flex flex-wrap gap-1.5">
+          <template x-for="fw in (selectedControl ? selectedControl.fw : [])" :key="fw">
+            <span class="text-xs px-2 py-1 rounded border border-slate-700 text-slate-400 hover:text-slate-200 transition-colors cursor-default" x-text="fwNames[fw] || fw"></span>
+          </template>
+        </div>
+      </div>
+
+      <!-- Version -->
+      <div class="text-xs text-slate-600 pt-4 border-t border-slate-800" x-text="selectedControl ? 'Version: ' + selectedControl.version : ''"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════════ -->
+<script>
+// ── EMBEDDED CONTROLS DATA ────────────────────────────────────────
+const CONTROLS_DATA = [{"id":"P1.T1.1","name":"Input Validation & Schema Enforcement","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"HIGH","description":"Validate inputs against schemas; reject malformed formats; enforce type checking and content-length restrictions.","builder_problem":"My agent accepts anything and crashes on edge cases.","version":"v2.0","act":[],"fw":["OWASP_LLM_Top10","NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P1.T1.2","name":"Malicious Prompt Filtering","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"Detect and block prompt injection (OWASP LLM01); implement adversarial detection; monitor for jailbreaks.","builder_problem":"My agent follows instructions embedded in documents it retrieves.","version":"v2.0","act":[],"fw":["OWASP_LLM_Top10","MITRE_ATLAS","Arcanum_PI","AIDEFEND"],"fif":false},{"id":"P1.T1.3","name":"Data Quality Checks","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"MEDIUM","description":"Validate data integrity; detect statistical anomalies and outliers; flag corrupted data.","builder_problem":"My agent produces garbage outputs when input data is noisy.","version":"v2.0","act":[],"fw":["ISO_42001","NIST_AI_RMF"],"fif":false},{"id":"P1.T1.4","name":"Toxic Content Detection","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"HIGH","description":"Screen for harmful content; implement toxicity scoring; filter based on policy.","builder_problem":"My agent outputs content that violates our policy.","version":"v2.0","act":[],"fw":["OWASP_LLM_Top10","EU_AI_Act"],"fif":false},{"id":"P1.T1.5","name":"Sensitive Data Masking (PII/PHI)","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"Auto-detect and mask PII; redact PHI (HIPAA); implement DLP controls; tokenize sensitive fields.","builder_problem":"My agent leaks user PII in its outputs or logs.","version":"v2.0","act":[],"fw":["HIPAA","GDPR","PCI_DSS_v4","SOC2_Type2","CCPA_CPRA"],"fif":false},{"id":"P1.T1.6","name":"Format Normalization","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"MEDIUM","description":"Standardize input formats; validate character encodings (UTF-8); prevent encoding attacks.","builder_problem":"My agent behaves differently with unicode vs ASCII input.","version":"v2.0","act":[],"fw":["OWASP_LLM_Top10"],"fif":false},{"id":"P1.T1.7","name":"Dependency Verification","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"HIGH","description":"Validate software dependencies; maintain SBOMs; cross-reference CVE databases.","builder_problem":"I do not know which vulnerable libraries my AI stack uses.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CIS_v8","CMMC_2"],"fif":false},{"id":"P1.T1.8","name":"Encoding Validation","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"HIGH","description":"Enforce normalization forms (NFKC); prevent homoglyph and encoding-based attacks.","builder_problem":"Attackers bypass my filters using look-alike characters.","version":"v2.0","act":[],"fw":["OWASP_LLM_Top10","Arcanum_PI"],"fif":false},{"id":"P1.T1.9","name":"Supply Chain Artifact Validation","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"Cryptographically verify model and dataset authenticity; validate checksums (SHA-256); enforce signature verification.","builder_problem":"I cannot prove the model I am running is the one I downloaded.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CMMC_2","FedRAMP","MITRE_ATLAS"],"fif":false},{"id":"P1.T2.1","name":"Agent Sandboxing","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"CRITICAL","description":"Deploy agents in isolated environments; implement resource limits (CPU/RAM); use containerization.","builder_problem":"My agent can access resources beyond what its task requires.","version":"v2.0","act":[],"fw":["Zero_Trust","NIST_SP800_53","CIS_v8","FedRAMP"],"fif":false},{"id":"P1.T2.2","name":"Network Segmentation","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"HIGH","description":"Isolate AI workloads in dedicated VLANs; use firewalls and ACLs to restrict traffic.","builder_problem":"My AI agents share a network with sensitive internal systems.","version":"v2.0","act":[],"fw":["Zero_Trust","NIST_SP800_53","PCI_DSS_v4","FedRAMP"],"fif":false},{"id":"P1.T2.3","name":"API Gateway Restrictions","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"HIGH","description":"Deploy gateways with auth; implement rate limiting; restrict access by IP/Role.","builder_problem":"Any code that can reach my API can call my AI agents.","version":"v2.0","act":[],"fw":["Zero_Trust","NIST_SP800_53","SOC2_Type2"],"fif":false},{"id":"P1.T2.4","name":"Model Versioning & Isolation","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"HIGH","description":"Maintain separate environments for model versions; isolate production from development; prevent unintended rollbacks.","builder_problem":"Development model changes are accidentally affecting production.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001","SOC2_Type2"],"fif":false},{"id":"P1.T2.5","name":"Function Access Control","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"CRITICAL","description":"Restrict agent access to tools; implement whitelisting; use least privilege.","builder_problem":"My agent can call any tool it wants, far beyond what it needs for its task.","version":"v2.0","act":[],"fw":["Zero_Trust","NIST_SP800_53","SOC2_Type2","CIS_v8"],"fif":false},{"id":"P1.T2.6","name":"Data Isolation","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"CRITICAL","description":"Separate sensitive data; implement access controls; encrypt at rest and in transit.","builder_problem":"Different tenants' data is mixed in our shared AI context.","version":"v2.0","act":[],"fw":["HIPAA","PCI_DSS_v4","GDPR","SOC2_Type2","ISO_27001"],"fif":false},{"id":"P1.T2.7","name":"Container Security","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"HIGH","description":"Harden container images (minimal base); scan for vulnerabilities; implement runtime monitoring.","builder_problem":"Our AI containers run as root with no vulnerability scanning.","version":"v2.0","act":[],"fw":["CIS_v8","NIST_SP800_53","FedRAMP","CMMC_2"],"fif":false},{"id":"P1.T2.8","name":"Firewall Controls","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"HIGH","description":"Deploy NGFWs; implement IDS/IPS; enforce egress filtering.","builder_problem":"My AI agent can exfiltrate data to any external endpoint.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CIS_v8","PCI_DSS_v4","FedRAMP"],"fif":false},{"id":"P1.T2.9","name":"Credential Compartmentalization","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"CRITICAL","description":"Store API keys in secure vaults (HashiCorp/AWS); rotate regularly; never in code or prompts.","builder_problem":"API keys for AI services are in environment variables or hardcoded in prompts.","version":"v2.0","act":[],"fw":["SOC2_Type2","ISO_27001","PCI_DSS_v4","NIST_SP800_53","CIS_v8"],"fif":false},{"id":"P1.T1.2_ADV","name":"Supply Chain Artifact Validation (OpenSSF OMS)","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"Cryptographic model verification using Sigstore/Cosign; SBOM validation; provenance chain; SHA-256 model fingerprinting.","builder_problem":"My model could have been tampered with between training and deployment.","version":"v2.1","act":[],"fw":["MITRE_ATLAS","NIST_SP800_53","ISO_42001","Google_SAIF"],"fif":false},{"id":"P1.T1.4_ADV","name":"NHI Secret Validation","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"Detect embedded credentials/tokens in AI outputs; GitGuardian integration for real-time secret detection.","builder_problem":"My agent is leaking API keys in its responses.","version":"v2.1","act":[],"fw":["SOC2_Type2","ISO_27001","PCI_DSS_v4","NIST_SP800_53"],"fif":false},{"id":"P1.T1.5_ADV","name":"Memory-Specific Attack Mitigation","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"Cryptographic memory fingerprinting; thread injection prevention; semantic similarity analysis for gradual RAG poison.","builder_problem":"My agent's behavior changed slowly over weeks and I cannot explain why.","version":"v2.1","act":[],"fw":["OWASP_Agentic_Top10","MAESTRO","CSA_Agentic_CP"],"fif":false},{"id":"P1.T2.1_ADV","name":"Multi-Agent Boundary Enforcement","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"HIGH","description":"Isolate Agent-to-Agent communications; auto-quarantine anomalous agents; P2P trust scoring.","builder_problem":"One agent is influencing other agents in ways I did not design.","version":"v2.1","act":[],"fw":["CSA_Agentic_CP","MAESTRO","Zero_Trust"],"fif":false},{"id":"P1.T2.2_ADV","name":"NHI Access Control","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"CRITICAL","description":"Catalog all service accounts and agents; assign minimum permissions to NHI entities; automated decommissioning.","builder_problem":"My agents have more permissions than they need.","version":"v2.1","act":[],"fw":["Zero_Trust","SOC2_Type2","NIST_SP800_53","ISO_27001","CIS_v8"],"fif":false},{"id":"P1.T1.10","name":"Indirect Injection Surface Coverage","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"Enumerate every non-prompt input channel the agent processes and apply the same sanitization rigor as direct user input.","builder_problem":"My agent follows instructions embedded in documents, emails, and tool outputs \u2014 not just user chat.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["OWASP_LLM_Top10","OWASP_Agentic_Top10","Arcanum_PI","MITRE_ATLAS"],"fif":false},{"id":"S1.3","name":"Semantic Isolation Boundary Enforcement","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Isolate","priority":"CRITICAL","description":"Architecturally separate trusted system instruction context from untrusted content processing at the inference layer.","builder_problem":"My agent goes off-script mid-task because retrieved content is contaminating its instructions.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["CSA_Zero_Trust_LLMs","MAESTRO","OWASP_Agentic_Top10"],"fif":false},{"id":"S1.4","name":"Adversarial Input Fuzzing Pipeline","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"HIGH","description":"Integrate automated adversarial testing into CI/CD \u2014 systematic attack probe battery before every model update and deployment.","builder_problem":"My agent works in testing but breaks in production on inputs I did not think to test.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["AIDEFEND","MITRE_ATLAS","NIST_AI_RMF","E5.1_linked"],"fif":false},{"id":"S1.5","name":"Memory Governance Boundary Controls","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"Every write to persistent agent memory requires authorization, sanitization with input-equivalent rigor, and an append-only audit log entry.","builder_problem":"My agent remembers the wrong things and I cannot explain why its behavior changed after weeks of operation.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["OWASP_Agentic_Top10","MAESTRO","HIPAA","GDPR","SOC2_Type2"],"fif":false},{"id":"S1.6","name":"Cognitive Injection Sanitization","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"HIGH","description":"Semantic intent analysis layer that detects multi-turn behavioral conditioning, role confusion, and few-shot pattern implanting beyond pattern-matching filters.","builder_problem":"My prompt injection filters pass obvious attacks but miss subtle multi-session manipulation.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["Arcanum_PI","OWASP_Agentic_Top10","MITRE_ATLAS"],"fif":false},{"id":"S1.7","name":"No-Code / Low-Code Platform Security","pillar_id":"P1","pillar_name":"Sanitize & Isolate","topic":"Sanitize","priority":"CRITICAL","description":"First dedicated governance standard for no-code AI workflow platforms: sandbox isolation, credential scoping, template supply chain, CVE patching as P1.","builder_problem":"I built AI workflows in n8n or Zapier and CVE-2026-25049 is being actively exploited.","version":"v3.0","act":["ACT-1","ACT-2","ACT-3","ACT-4"],"fw":["OWASP_LLM_Top10","NIST_CSF_2","CIS_v8","CVE_CVSS"],"fif":false},{"id":"P2.T3.1","name":"Real-Time Activity Logging","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"CRITICAL","description":"Log all activities with timestamps; capture prompts and API calls; ensure tamper-proof storage.","builder_problem":"I cannot tell what my agent did during the time it produced wrong outputs.","version":"v2.0","act":[],"fw":["SOC2_Type2","ISO_27001","NIST_SP800_53","HIPAA"],"fif":false},{"id":"P2.T3.2","name":"Model Performance Monitoring","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Monitor accuracy and precision; detect data and concept drift.","builder_problem":"My agent's quality degraded silently after a corpus update.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P2.T3.3","name":"Behavior Verification","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Establish baselines; detect deviations and anomalies; flag unusual patterns.","builder_problem":"My agent does something unexpected and I have no baseline to compare against.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","SOC2_Type2"],"fif":false},{"id":"P2.T3.4","name":"Explainability Tracking","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"MEDIUM","description":"Log decisions (SHAP/LIME); track reasoning paths; enable post-hoc analysis.","builder_problem":"My stakeholders ask why the agent made a decision and I cannot explain it.","version":"v2.0","act":[],"fw":["EU_AI_Act","NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P2.T3.5","name":"Bias & Fairness Monitoring","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Measure bias across demographics; track fairness metrics; detect discrimination.","builder_problem":"My agent may be giving systematically different answers to different user groups.","version":"v2.0","act":[],"fw":["EU_AI_Act","NIST_AI_RMF","CSETv1"],"fif":false},{"id":"P2.T3.6","name":"Compliance Validation","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Map controls to SOC2/ISO/NIST; track implementation; conduct periodic audits.","builder_problem":"I do not know which of our controls actually satisfy which compliance requirements.","version":"v2.0","act":[],"fw":["SOC2_Type2","ISO_42001","NIST_AI_RMF","FedRAMP"],"fif":false},{"id":"P2.T3.7","name":"Decision Traceability","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Track provenance from input to output; document data sources; maintain chain of custody.","builder_problem":"I cannot explain the data path that led to a specific agent decision.","version":"v2.0","act":[],"fw":["EU_AI_Act","GDPR","ISO_42001"],"fif":false},{"id":"P2.T3.8","name":"User Interaction Logging","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"MEDIUM","description":"Log prompts and feedback; track satisfaction metrics; analyze behavior.","builder_problem":"I have no record of what users actually asked my agent.","version":"v2.0","act":[],"fw":["GDPR","SOC2_Type2"],"fif":false},{"id":"P2.T3.9","name":"Change Tracking","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Log configuration changes; track model updates and retraining; version control artifacts.","builder_problem":"Something changed and I do not know what \u2014 the agent stopped working correctly.","version":"v2.0","act":[],"fw":["SOC2_Type2","NIST_SP800_53","CIS_v8"],"fif":false},{"id":"P2.T3.10","name":"Vulnerability Scanning","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Conduct regular scans; assess threats (MITRE ATLAS); correlate with CVEs.","builder_problem":"I do not know if my AI infrastructure has known vulnerabilities.","version":"v2.0","act":[],"fw":["MITRE_ATLAS","NIST_SP800_53","CIS_v8","FedRAMP"],"fif":false},{"id":"P2.T4.1","name":"AI System Registry","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"CRITICAL","description":"Catalog all LLMs, RAGs, and Agents; document owners and criticality.","builder_problem":"Someone asks how many AI agents we are running and we do not have a definitive answer.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001","SOC2_Type2","CIS_v8"],"fif":false},{"id":"P2.T4.2","name":"Model Catalog","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Inventory base and fine-tuned models; track versions and training sets.","builder_problem":"I cannot tell which model version produced a specific output last month.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P2.T4.3","name":"Agent Capability Documentation","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Document agent autonomy levels, tools, and decision authority.","builder_problem":"A new team member does not know what the agent is allowed to do.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","EU_AI_Act","ISO_42001"],"fif":false},{"id":"P2.T4.4","name":"Data Source Mapping","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Map data lineage; track refresh rates; identify RAG dependencies.","builder_problem":"I cannot tell which knowledge base is affecting a specific agent response.","version":"v2.0","act":[],"fw":["GDPR","HIPAA","ISO_42001"],"fif":false},{"id":"P2.T4.5","name":"API Inventory","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Catalog all APIs and MCP endpoints; document auth methods and rate limits.","builder_problem":"I do not know all the external services my agents are calling.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CIS_v8","SOC2_Type2"],"fif":false},{"id":"P2.T4.6","name":"Tool Registry","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Maintain registry of tools and plugins; track permissions and usage.","builder_problem":"An agent called a tool it should not have access to.","version":"v2.0","act":[],"fw":["CSA_Agentic_CP","Zero_Trust"],"fif":false},{"id":"P2.T4.7","name":"Dependency Tracking","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"MEDIUM","description":"Track libraries and frameworks; identify transitive dependencies; cross-reference CVEs.","builder_problem":"A transitive dependency in my AI stack has a known CVE.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CIS_v8"],"fif":false},{"id":"P2.T4.8","name":"Architecture Documentation","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"MEDIUM","description":"Document RAG and MCP architectures and data flows.","builder_problem":"New engineers cannot understand how the AI system is structured.","version":"v2.0","act":[],"fw":["ISO_42001","NIST_AI_RMF"],"fif":false},{"id":"P2.T4.9","name":"Risk Registers","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Centralized threat register; link risks to components; track mitigation.","builder_problem":"We have no formal record of the risks we have accepted in our AI stack.","version":"v2.0","act":[],"fw":["ISO_42001","NIST_AI_RMF","SOC2_Type2"],"fif":false},{"id":"P2.T4.10","name":"Configuration Baselines","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Establish baselines; track deviations; drift detection.","builder_problem":"Someone changed an agent configuration and I do not know when or what changed.","version":"v2.0","act":[],"fw":["CIS_v8","NIST_SP800_53","SOC2_Type2"],"fif":false},{"id":"P2.T4.11","name":"SBOM Generation","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Generate SBOMs for all models and applications; correlate with CVEs.","builder_problem":"My auditor is asking for a software bill of materials for our AI systems.","version":"v2.1","act":[],"fw":["NIST_SP800_53","FedRAMP","CMMC_2"],"fif":false},{"id":"P2.T1.1_ADV","name":"NHI Activity Logging","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"CRITICAL","description":"Log all actions by service accounts and agents; track credential usage; SIEM integration.","builder_problem":"A service account took an action I cannot trace back to a specific workflow.","version":"v2.1","act":[],"fw":["SOC2_Type2","ISO_27001","NIST_SP800_53","Zero_Trust"],"fif":false},{"id":"P2.T1.2_ADV","name":"Agent Behavior Verification","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Verify multi-agent voting mechanisms; track memory state across interactions; SHA-256 state hashing.","builder_problem":"My multi-agent system made a consensus decision I cannot reconstruct.","version":"v2.1","act":[],"fw":["CSA_Agentic_CP","MAESTRO"],"fif":false},{"id":"P2.T1.3_ADV","name":"Supply Chain Audit","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Verify OpenSSF OMS signatures; validate SBOM completeness against actual dependencies.","builder_problem":"I signed off on a model but cannot prove it has not changed since.","version":"v2.1","act":[],"fw":["NIST_SP800_53","FedRAMP","CMMC_2"],"fif":false},{"id":"P2.T1.4_ADV","name":"Memory Poisoning Detection","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"CRITICAL","description":"Audit knowledge bases for poisoned content; detect adversarial trigger phrases.","builder_problem":"Someone may have inserted malicious content into our RAG knowledge base.","version":"v2.1","act":[],"fw":["OWASP_Agentic_Top10","MAESTRO","Google_SAIF"],"fif":false},{"id":"P2.T2.1_ADV","name":"NHI Registry","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"CRITICAL","description":"Automated discovery of NHI; lifecycle tracking from creation to decommissioning; fingerprinting.","builder_problem":"I have service accounts that nobody owns and I cannot find who created them.","version":"v2.1","act":[],"fw":["Zero_Trust","CIS_v8","SOC2_Type2","NIST_SP800_53"],"fif":false},{"id":"P2.T2.2_ADV","name":"Agent Architecture Inventory","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Document multi-agent communication patterns; track orchestration frameworks.","builder_problem":"My multi-agent system has grown and I can no longer describe its topology.","version":"v2.1","act":[],"fw":["CSA_Agentic_CP","MAESTRO"],"fif":false},{"id":"A2.3","name":"Model Lineage Provenance Ledger","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Cryptographic chain of custody from base model through every fine-tuning stage to production; extends OpenSSF OMS.","builder_problem":"I cannot prove which training data produced the model currently in production.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["MITRE_ATLAS","NIST_SP800_53","ISO_42001","Google_SAIF","Intl_AI_Safety_2026"],"fif":false},{"id":"A2.4","name":"Dynamic Agent State Inventory","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Inventory","priority":"HIGH","description":"Real-time registry of every deployed agent with owner_of_record, ACT tier, tool authorizations, hear_agent_of_record, and control_plane_id.","builder_problem":"Someone asks how many agents are running right now and the honest answer is we do not know.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["CSA_Agentic_CP","NIST_AI_RMF","SOC2_Type2","SEC_Disclosure"],"fif":false},{"id":"A2.5","name":"Semantic Execution Trace Logging","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"CRITICAL","description":"Captures full agent execution trace: reasoning chain, every tool call with parameters, every memory operation \u2014 written to an append-only store the agent cannot modify.","builder_problem":"Something broke in production and I have no idea what the agent was reasoning when it happened.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["SOC2_Type2","ISO_27001","GDPR","EU_AI_Act","NIST_SP800_53","SEC_Disclosure"],"fif":false},{"id":"A2.6","name":"RAG Corpus Diff Tracking","pillar_id":"P2","pillar_name":"Audit & Inventory","topic":"Audit","priority":"HIGH","description":"Hash-verified change log for the retrieval layer; correlates behavioral changes to corpus changes automatically.","builder_problem":"My agent started giving different answers after someone updated the knowledge base and I cannot prove the connection.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["NIST_AI_RMF","ISO_42001","HIPAA"],"fif":false},{"id":"P3.T5.1","name":"Circuit Breakers","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Implement circuit breakers to prevent cascading failures; design graceful degradation.","builder_problem":"One failing upstream dependency takes down my entire agent workflow.","version":"v2.0","act":[],"fw":["NIST_CSF_2","DORA","SOC2_Type2"],"fif":false},{"id":"P3.T5.2","name":"Emergency Shutdown","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"CRITICAL","description":"Define protocols for runaway agents; implement operator kill switches.","builder_problem":"My agent is misbehaving and I have no reliable way to stop it immediately.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","EU_AI_Act","CSA_Agentic_CP"],"fif":false},{"id":"P3.T5.3","name":"Fallback Mechanisms","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Design failover strategies; implement redundant systems.","builder_problem":"When the AI is unavailable, my workflow stops entirely with no fallback.","version":"v2.0","act":[],"fw":["NIST_CSF_2","DORA","SOC2_Type2"],"fif":false},{"id":"P3.T5.4","name":"Error Handling","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Robust error handling in pipelines; fail-closed vs fail-open policies.","builder_problem":"My agent fails silently and downstream processes act on bad data.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P3.T5.5","name":"Rate Limiting","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Prevent resource exhaustion; throttle API calls and agent actions.","builder_problem":"A runaway agent loop consumed my entire monthly API budget overnight.","version":"v2.0","act":[],"fw":["CIS_v8","NIST_SP800_53","SOC2_Type2"],"fif":false},{"id":"P3.T5.6","name":"Rollback Procedures","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Version control for artifacts; define rollback criteria.","builder_problem":"A bad model deployment broke production and I cannot roll back cleanly.","version":"v2.0","act":[],"fw":["SOC2_Type2","DORA","NIST_CSF_2"],"fif":false},{"id":"P3.T5.7","name":"Kill Switches for Runaway Agents","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"CRITICAL","description":"Implement kill switches with tiered authorization to halt agent execution.","builder_problem":"I cannot halt a misbehaving autonomous agent without taking down the whole system.","version":"v2.0","act":[],"fw":["EU_AI_Act","NIST_AI_RMF","CSA_Agentic_CP"],"fif":false},{"id":"P3.T5.8","name":"Blast Radius Containment","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"CRITICAL","description":"Compartmentalize systems; define containment zones.","builder_problem":"When one agent fails, I cannot predict how far the damage will spread.","version":"v2.0","act":[],"fw":["NIST_CSF_2","Zero_Trust","MAESTRO"],"fif":false},{"id":"P3.T5.9","name":"Safe Defaults","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Design safe behaviors; validate assumptions; fail securely.","builder_problem":"Under unexpected conditions, my agent takes the most permissive action.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","Zero_Trust"],"fif":false},{"id":"P3.T5.10","name":"Incident Response","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Develop AI-specific playbooks; define escalation paths.","builder_problem":"We have a cyber incident response plan but nothing specific for AI agent incidents.","version":"v2.0","act":[],"fw":["NIST_CSF_2","SOC2_Type2","DORA","HIPAA"],"fif":false},{"id":"P3.T6.1","name":"Model Backups","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Regular backups of models and states; geo-diverse storage.","builder_problem":"A model was deleted accidentally and we cannot recover the fine-tuned version.","version":"v2.0","act":[],"fw":["HIPAA","SOC2_Type2","ISO_27001","DORA"],"fif":false},{"id":"P3.T6.2","name":"Data Recovery","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Procedures for AI datasets; point-in-time recovery.","builder_problem":"Our vector database was corrupted and we have no recovery path.","version":"v2.0","act":[],"fw":["HIPAA","SOC2_Type2","DORA"],"fif":false},{"id":"P3.T6.3","name":"Backup Automation","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"MEDIUM","description":"Automate backup processes; monitor success and failure.","builder_problem":"Our backups were failing silently for months.","version":"v2.0","act":[],"fw":["SOC2_Type2","ISO_27001"],"fif":false},{"id":"P3.T6.4","name":"Disaster Recovery","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Develop plans; define priorities; conduct drills.","builder_problem":"We have never tested whether we can actually recover our AI systems after a failure.","version":"v2.0","act":[],"fw":["HIPAA","DORA","SOC2_Type2","FedRAMP"],"fif":false},{"id":"P3.T6.5","name":"Business Continuity","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Integrate AI into BCP; define minimum viable services.","builder_problem":"Our BCP does not account for AI agent availability as a dependency.","version":"v2.0","act":[],"fw":["DORA","SOC2_Type2","ISO_27001"],"fif":false},{"id":"P3.T6.6","name":"RTO/RPO Management","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Define objectives; monitor achievement.","builder_problem":"We have RTO/RPO targets for databases but not for AI systems.","version":"v2.0","act":[],"fw":["DORA","SOC2_Type2","HIPAA","FedRAMP"],"fif":false},{"id":"P3.T6.7","name":"Testing & Validation","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Regular recovery tests; validate backup integrity.","builder_problem":"We have backups but we have never verified they actually work.","version":"v2.0","act":[],"fw":["SOC2_Type2","DORA"],"fif":false},{"id":"P3.T6.8","name":"Off-Site Storage","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"MEDIUM","description":"Encrypted off-site backups.","builder_problem":"All our AI artifacts are in one region \u2014 a regional outage would be catastrophic.","version":"v2.0","act":[],"fw":["SOC2_Type2","HIPAA","FedRAMP"],"fif":false},{"id":"P3.T6.9","name":"Configuration Restoration","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"MEDIUM","description":"Backup IaC; version control configs.","builder_problem":"After a failure, we cannot restore the exact agent configuration that was running.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CIS_v8"],"fif":false},{"id":"P3.T6.10","name":"Incident Forensics","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Forensic analysis; root cause; blameless post-mortems.","builder_problem":"After an agent incident we cannot reconstruct what happened.","version":"v2.0","act":[],"fw":["SOC2_Type2","HIPAA","DORA"],"fif":false},{"id":"P3.T1.1_ADV","name":"Distributed Agent Fail-Safe","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"CRITICAL","description":"Centralized kill switch for multi-agent systems; auto-quarantine of malicious agents; cascading failure prevention.","builder_problem":"My swarm has no coordinated shutdown mechanism.","version":"v2.1","act":[],"fw":["CSA_Agentic_CP","MAESTRO","EU_AI_Act"],"fif":false},{"id":"P3.T1.2_ADV","name":"NHI Revocation","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"CRITICAL","description":"Automated credential rotation; immediate emergency disabling of service accounts.","builder_problem":"A compromised service account is still active while I try to revoke it.","version":"v2.1","act":[],"fw":["Zero_Trust","SOC2_Type2","NIST_SP800_53"],"fif":false},{"id":"P3.T1.3_ADV","name":"Memory Poisoning Response","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"CRITICAL","description":"Real-time alerts on RAG contamination; agent quarantine; compromised source isolation.","builder_problem":"My RAG corpus has been contaminated and I have no automated response.","version":"v2.1","act":[],"fw":["OWASP_Agentic_Top10","MAESTRO","Google_SAIF"],"fif":false},{"id":"P3.T2.1_ADV","name":"Agent State Recovery","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Point-in-time snapshots of agent memory; version control for vector DBs.","builder_problem":"An agent state was corrupted and I cannot restore a known-good state.","version":"v2.1","act":[],"fw":["NIST_AI_RMF","SOC2_Type2"],"fif":false},{"id":"P3.T2.2_ADV","name":"NHI Credential Recovery","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Recovery","priority":"HIGH","description":"Secure escrow mechanisms for credentials; HSM integration for key protection.","builder_problem":"A critical service account credential was lost and there is no recovery path.","version":"v2.1","act":[],"fw":["NIST_SP800_53","FedRAMP","CMMC_2"],"fif":false},{"id":"F3.2","name":"Agent Recursion Limit Governor","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"CRITICAL","description":"Hard cap on tool-calling depth enforced at the API gateway layer \u2014 not the system prompt. Default maximum 4. Fail-closed.","builder_problem":"My agent looped and spent my entire monthly API budget overnight.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["OWASP_Agentic_Top10","MAESTRO","NIST_AI_RMF"],"fif":false},{"id":"F3.3","name":"Swarm Quorum Abort Mechanism","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Decentralized threshold-based abort: when a configurable quorum of swarm agents agree the task should stop, coordinated shutdown proceeds without a centralized kill signal.","builder_problem":"Stopping my orchestrator does not stop the worker agents it spawned.","version":"v3.0","act":["ACT-3","ACT-4"],"fw":["CSA_Agentic_CP","MAESTRO","OWASP_Agentic_Top10"],"fif":false},{"id":"F3.4","name":"Behavioral Drift Baseline & Rollback","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"HIGH","description":"Establish measurable behavioral baselines with defined probe sets; automated rollback when drift exceeds configurable thresholds.","builder_problem":"My agent's behavior changed gradually over weeks and I had no signal until users complained.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["NIST_AI_RMF","ISO_42001","Intl_AI_Safety_2026"],"fif":false},{"id":"F3.5","name":"Multi-Agent Cascade Containment","pillar_id":"P3","pillar_name":"Fail-Safe & Recovery","topic":"Fail-Safe","priority":"CRITICAL","description":"Limits the blast radius of agent failures in pipeline and orchestrator architectures; failed agents isolated so downstream agents receive clean error signals.","builder_problem":"One agent failing took down my entire multi-agent workflow.","version":"v3.0","act":["ACT-3","ACT-4"],"fw":["CSA_Agentic_CP","OWASP_Agentic_Top10","MAESTRO","NIST_AI_RMF"],"fif":false},{"id":"P4.T7.1","name":"Human Approval Workflows","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"CRITICAL","description":"HITL for high-risk decisions; define approval authorities.","builder_problem":"My agent makes irreversible decisions with no human checkpoint.","version":"v2.0","act":[],"fw":["EU_AI_Act","NIST_AI_RMF","ISO_42001","SOC2_Type2"],"fif":false},{"id":"P4.T7.2","name":"Explainability","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"HIGH","description":"Provide reasoning chains; implement interpretability techniques.","builder_problem":"Users do not trust my agent because they cannot understand why it makes decisions.","version":"v2.0","act":[],"fw":["EU_AI_Act","NIST_AI_RMF","GDPR"],"fif":false},{"id":"P4.T7.3","name":"Interactive Feedback","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"MEDIUM","description":"RLHF loops; track feedback metrics.","builder_problem":"My agent is not improving because user feedback is not reaching the training loop.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P4.T7.4","name":"Escalation Procedures","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"HIGH","description":"Route alerts based on severity; integrate with incident management.","builder_problem":"A critical agent alert was generated but nobody noticed because escalation was undefined.","version":"v2.0","act":[],"fw":["SOC2_Type2","NIST_CSF_2","DORA"],"fif":false},{"id":"P4.T7.5","name":"Real-Time Intervention","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"HIGH","description":"Enable override controls; provide visibility dashboards.","builder_problem":"I can see that my agent is misbehaving but I cannot intervene without a full restart.","version":"v2.0","act":[],"fw":["EU_AI_Act","NIST_AI_RMF"],"fif":false},{"id":"P4.T7.6","name":"User Interaction Oversight","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"HIGH","description":"Monitor for abuse and malice; track trust metrics.","builder_problem":"Users may be deliberately trying to manipulate my agent and I have no detection.","version":"v2.0","act":[],"fw":["OWASP_LLM_Top10","NIST_AI_RMF"],"fif":false},{"id":"P4.T7.7","name":"Red Teaming","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"HIGH","description":"Regular adversarial testing; validate security controls.","builder_problem":"My agent has never been adversarially tested.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","MITRE_ATLAS","AIDEFEND"],"fif":false},{"id":"P4.T7.8","name":"Risk Acceptance","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"MEDIUM","description":"Establish acceptance procedures; document compensating controls.","builder_problem":"We know about risks but have no formal process to accept or mitigate them.","version":"v2.0","act":[],"fw":["ISO_42001","NIST_AI_RMF","SOC2_Type2"],"fif":false},{"id":"P4.T7.9","name":"Collaboration Tools","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"MEDIUM","description":"Shared dashboards for Governance, Security, and Engineering.","builder_problem":"Our governance, security, and engineering teams have no shared AI visibility.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","SOC2_Type2"],"fif":false},{"id":"P4.T7.10","name":"Transparency Reporting","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"HIGH","description":"Report incidents and risks to stakeholders.","builder_problem":"Our board has no visibility into the AI risks we are carrying.","version":"v2.0","act":[],"fw":["EU_AI_Act","SEC_Disclosure","GDPR","ISO_42001"],"fif":false},{"id":"P4.T8.1","name":"Performance Dashboards","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"MEDIUM","description":"Real-time monitoring; visualize KPIs and trends.","builder_problem":"I have no single view of how all my AI agents are performing.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","SOC2_Type2"],"fif":false},{"id":"P4.T8.2","name":"Anomaly Detection","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"ML-based detection of unusual patterns; tune thresholds.","builder_problem":"My agent went off-rails for hours before anyone noticed.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","SOC2_Type2","DORA"],"fif":false},{"id":"P4.T8.3","name":"Security Logging","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"CRITICAL","description":"Log security events; forward to SIEM; correlate events.","builder_problem":"A security event in my AI system did not appear in my SIEM.","version":"v2.0","act":[],"fw":["SOC2_Type2","ISO_27001","NIST_SP800_53","FedRAMP"],"fif":false},{"id":"P4.T8.4","name":"Accuracy & Drift Monitoring","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"Monitor model performance; detect concept drift.","builder_problem":"My model accuracy degraded without triggering any alert.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P4.T8.5","name":"Cost Tracking","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"Monitor token consumption and budget quotas.","builder_problem":"My AI costs doubled in a week and I did not find out until the invoice.","version":"v2.0","act":[],"fw":["NIST_AI_RMF"],"fif":false},{"id":"P4.T8.6","name":"Latency Metrics","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"MEDIUM","description":"Track response times and throughput.","builder_problem":"My agents are getting slower and I have no baseline to compare against.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","SOC2_Type2"],"fif":false},{"id":"P4.T8.7","name":"Error Tracking","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"Categorize failure modes; automate remediation.","builder_problem":"Errors from my AI pipeline are mixed with application errors and hard to find.","version":"v2.0","act":[],"fw":["NIST_CSF_2","DORA"],"fif":false},{"id":"P4.T8.8","name":"API Quota Monitoring","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"Monitor call volumes; alert on exhaustion and abuse.","builder_problem":"A rogue agent exhausted our API quota and took down other services.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CIS_v8"],"fif":false},{"id":"P4.T8.9","name":"Data Quality Monitoring","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"MEDIUM","description":"Monitor input quality; detect degradation.","builder_problem":"My agent's retrieval quality dropped when upstream data changed.","version":"v2.0","act":[],"fw":["ISO_42001","NIST_AI_RMF"],"fif":false},{"id":"P4.T8.10","name":"Compliance Logs","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"Maintain specific logs for regulatory audits.","builder_problem":"My auditor asked for specific evidence logs and I could not produce them.","version":"v2.0","act":[],"fw":["HIPAA","GDPR","SOC2_Type2","FedRAMP","DORA"],"fif":false},{"id":"P4.T1.1_ADV","name":"Multi-Agent Approval","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"CRITICAL","description":"Human review when agents disagree; human gate for financial and system-level actions.","builder_problem":"My multi-agent system makes high-stakes decisions without any human checkpoint.","version":"v2.1","act":[],"fw":["EU_AI_Act","NIST_AI_RMF","CSA_Agentic_CP"],"fif":false},{"id":"P4.T1.2_ADV","name":"NHI Privilege Review","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Engage","priority":"HIGH","description":"JIT access for temporary privilege elevation; baseline validation for requests.","builder_problem":"A service account has permanent elevated privileges it only needs occasionally.","version":"v2.1","act":[],"fw":["Zero_Trust","SOC2_Type2","NIST_SP800_53"],"fif":false},{"id":"P4.T2.1_ADV","name":"Distributed Agent Monitoring","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"Monitor availability and responsiveness of agents; track swarm topology and agreement rates.","builder_problem":"I have no visibility into the health of individual agents in my swarm.","version":"v2.1","act":[],"fw":["CSA_Agentic_CP","MAESTRO"],"fif":false},{"id":"P4.T2.2_ADV","name":"NHI Monitoring","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"CRITICAL","description":"Real-time NHI activity dashboard; detect unusual API call patterns and geo-location anomalies.","builder_problem":"A service account is making API calls at unusual times and from unusual locations.","version":"v2.1","act":[],"fw":["Zero_Trust","SOC2_Type2","NIST_SP800_53"],"fif":false},{"id":"P4.T2.3_ADV","name":"Memory Poisoning Monitor","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"CRITICAL","description":"Monitor RAG source integrity; detect embedding drift toward adversarial regions.","builder_problem":"My vector store embeddings are shifting in ways that indicate possible poisoning.","version":"v2.1","act":[],"fw":["OWASP_Agentic_Top10","MAESTRO","Google_SAIF"],"fif":false},{"id":"M4.4","name":"Adversarial Behavior Detection Pipeline","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"CRITICAL","description":"Continuously probes deployed agents with adversarial inputs and monitors behavioral responses; attack patterns from red-team repository feed detection rules automatically.","builder_problem":"My monitoring detects anomalies in outputs but misses the attacks that cause them.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["AIDEFEND","MITRE_ATLAS","OWASP_Agentic_Top10","NIST_AI_RMF"],"fif":false},{"id":"M4.5","name":"Tool-Misuse Detection Controls","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"CRITICAL","description":"Establishes tool invocation baselines; detects tool squatting, unexpected tool calls, anomalous parameters, and invocation frequency spikes.","builder_problem":"My agent may be calling the wrong tool due to tool squatting and I would not know.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["OWASP_Agentic_Top10","CSA_Agentic_CP","MITRE_ATLAS"],"fif":false},{"id":"M4.6","name":"Emergent Behavior Anomaly Detection","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"Classifies behavioral novelty \u2014 new task types, unexpected tool sequences, systematic decision bias \u2014 as security-relevant signals requiring governance review.","builder_problem":"My agent developed a new capability I did not program and I only found out from a user.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["NIST_AI_RMF","Intl_AI_Safety_2026","EU_AI_Act","MIT_AI_Risk_v4"],"fif":false},{"id":"M4.7","name":"Jailbreak & Injection Telemetry Layer","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"HIGH","description":"Unified logging and classification for all jailbreak attempts by technique: direct injection, indirect injection, cognitive injection, encoding bypass. Feeds E5.4 artifact repository.","builder_problem":"Attackers are probing my agent and I only see the ones that succeed.","version":"v3.0","act":["ACT-1","ACT-2","ACT-3","ACT-4"],"fw":["OWASP_LLM_Top10","OWASP_Agentic_Top10","Arcanum_PI","AIDEFEND"],"fif":false},{"id":"M4.8","name":"Cloud AI Platform-Specific Monitoring","pillar_id":"P4","pillar_name":"Engage & Monitor","topic":"Monitor","priority":"CRITICAL","description":"Monitors Bedrock UpdateGuardrail and UpdateDataSource APIs; Azure AI Foundry configuration changes; platform attack paths that standard CloudTrail monitoring misses.","builder_problem":"The Bedrock Guardrail poisoning path via UpdateGuardrail is confirmed active and my monitoring does not catch it.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["NIST_SP800_53","CIS_v8","CVE_CVSS","SOC2_Type2"],"fif":false},{"id":"P5.T9.1","name":"Threat Intel Integration","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Integrate CVE and MITRE feeds; update threat models.","builder_problem":"Our threat model was written at launch and never updated.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","MITRE_ATLAS","NIST_CSF_2"],"fif":false},{"id":"P5.T9.2","name":"Playbook Updates","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Update response plans based on lessons learned.","builder_problem":"Our incident playbooks have not been updated since a major new agent deployment.","version":"v2.0","act":[],"fw":["NIST_CSF_2","SOC2_Type2","DORA"],"fif":false},{"id":"P5.T9.3","name":"Model Retraining","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"MEDIUM","description":"Retrain to mitigate drift; incorporate human feedback.","builder_problem":"My model is degrading over time with no retraining cadence defined.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P5.T9.4","name":"Patch Management","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Monitor and apply patches for AI frameworks and libraries.","builder_problem":"A vulnerability was published for a library in my AI stack and we have no patch process.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CIS_v8","CMMC_2","FedRAMP"],"fif":false},{"id":"P5.T9.5","name":"Dependency Remediation","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Update dependencies; prioritize based on risk.","builder_problem":"We have vulnerable transitive dependencies that nobody owns.","version":"v2.0","act":[],"fw":["NIST_SP800_53","CIS_v8"],"fif":false},{"id":"P5.T9.6","name":"Policy Evolution","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Annual review of governance policies; align with regulations.","builder_problem":"Our AI governance policies predate the EU AI Act and have not been updated.","version":"v2.0","act":[],"fw":["EU_AI_Act","ISO_42001","NIST_AI_RMF","SEC_Disclosure"],"fif":false},{"id":"P5.T9.7","name":"Emerging Threats","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Procedures for zero-day threats; threat hunting.","builder_problem":"We have no process to respond to a novel attack on our AI systems.","version":"v2.0","act":[],"fw":["NIST_CSF_2","MITRE_ATLAS"],"fif":false},{"id":"P5.T9.8","name":"Capability Enhancements","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"MEDIUM","description":"Invest in new tools; pilot security technology.","builder_problem":"Our AI security tooling has not evolved with the threat landscape.","version":"v2.0","act":[],"fw":["NIST_AI_RMF"],"fif":false},{"id":"P5.T9.9","name":"Performance Optimization","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"MEDIUM","description":"Optimize latency and cost; implement caching.","builder_problem":"Our AI system costs are unsustainable at scale.","version":"v2.0","act":[],"fw":["NIST_AI_RMF"],"fif":false},{"id":"P5.T9.10","name":"Lessons Learned","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Conduct post-incident reviews; share findings.","builder_problem":"We had an AI incident and did not capture any lessons from it.","version":"v2.0","act":[],"fw":["NIST_CSF_2","SOC2_Type2","DORA"],"fif":false},{"id":"P5.T10.1","name":"Operator Training","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"HIGH","description":"Technical skills; security practices; incident response.","builder_problem":"Operators do not understand the security implications of how they configure agents.","version":"v2.0","act":[],"fw":["EU_AI_Act","NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P5.T10.2","name":"Security Awareness","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"HIGH","description":"Training for all users on prompt injection and privacy risks.","builder_problem":"Our users do not know that their prompts can be used to attack the system.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P5.T10.3","name":"Safe Prompting","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"MEDIUM","description":"Educate on safe engineering practices and jailbreak prevention.","builder_problem":"Our developers are writing prompts that inadvertently create security vulnerabilities.","version":"v2.0","act":[],"fw":["OWASP_LLM_Top10","NIST_AI_RMF"],"fif":false},{"id":"P5.T10.4","name":"Incident Drills","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"HIGH","description":"Conduct regular simulations and tabletops.","builder_problem":"We have never actually practiced responding to an AI security incident.","version":"v2.0","act":[],"fw":["NIST_CSF_2","DORA","SOC2_Type2"],"fif":false},{"id":"P5.T10.5","name":"Policy Communication","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"MEDIUM","description":"Communicate policies effectively to stakeholders.","builder_problem":"Governance policies exist but nobody reads them.","version":"v2.0","act":[],"fw":["ISO_42001","NIST_AI_RMF"],"fif":false},{"id":"P5.T10.6","name":"Industry Sharing","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"MEDIUM","description":"Participate in forums; share best practices.","builder_problem":"We are solving problems the security community has already solved.","version":"v2.0","act":[],"fw":["NIST_AI_RMF"],"fif":false},{"id":"P5.T10.7","name":"Internal Documentation","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"MEDIUM","description":"Maintain Wikis, FAQs, and Runbooks.","builder_problem":"Institutional AI security knowledge is in people's heads, not documented.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P5.T10.8","name":"Vendor Training","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"MEDIUM","description":"Require security training for third-party vendors.","builder_problem":"Our AI vendors do not have the same security standards we require internally.","version":"v2.0","act":[],"fw":["ISO_42001","SOC2_Type2"],"fif":false},{"id":"P5.T10.9","name":"Role-Based Training","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"HIGH","description":"Tailored content for Developers, Operations, and Compliance.","builder_problem":"Security training is generic and does not address the specific risks of each role.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","EU_AI_Act"],"fif":false},{"id":"P5.T10.10","name":"Culture","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"MEDIUM","description":"Foster responsibility; reward secure practices.","builder_problem":"Security is seen as a compliance burden, not an engineering value.","version":"v2.0","act":[],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"P5.T1.1_ADV","name":"Swarm Evolution","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Test new agent capabilities in isolation; improve consensus logic based on data.","builder_problem":"My swarm algorithm is untested at the scale I am planning to deploy.","version":"v2.1","act":[],"fw":["CSA_Agentic_CP","MAESTRO"],"fif":false},{"id":"P5.T1.2_ADV","name":"Supply Chain Evolution","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Track OpenSSF Model Signing specification updates; align with ISO/NIST supply chain rules.","builder_problem":"Our model signing process is based on a spec that has since been updated.","version":"v2.1","act":[],"fw":["NIST_SP800_53","FedRAMP","CMMC_2"],"fif":false},{"id":"P5.T1.3_ADV","name":"NHI Posture","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Optimize provisioning and rotation; integrate NHI-specific threat feeds.","builder_problem":"Our NHI lifecycle management has not kept pace with our agent deployment growth.","version":"v2.1","act":[],"fw":["Zero_Trust","NIST_SP800_53"],"fif":false},{"id":"P5.T1.4_ADV","name":"Memory Defense Evolution","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Update poison detection algorithms based on new research; architecture reviews for memory attacks.","builder_problem":"AgentPoison and similar attacks have evolved since we implemented our defenses.","version":"v2.1","act":[],"fw":["OWASP_Agentic_Top10","MAESTRO","Google_SAIF"],"fif":false},{"id":"P5.T2.1_ADV","name":"Swarm Training","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"HIGH","description":"Swarm Manager certifications; red team simulations targeting multi-agent systems.","builder_problem":"Nobody on our team is trained to operate or secure a multi-agent swarm.","version":"v2.1","act":[],"fw":["CSA_Agentic_CP","NIST_AI_RMF"],"fif":false},{"id":"P5.T2.2_ADV","name":"NHI Awareness","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"HIGH","description":"Credential theft and privilege escalation training; secret hygiene education.","builder_problem":"Developers do not understand the risk profile of service account credentials.","version":"v2.1","act":[],"fw":["Zero_Trust","SOC2_Type2"],"fif":false},{"id":"P5.T2.3_ADV","name":"Supply Chain Culture","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"MEDIUM","description":"Model signing training; SBOM generation and validation education.","builder_problem":"Our team does not know how to generate or validate an AI SBOM.","version":"v2.1","act":[],"fw":["NIST_SP800_53","FedRAMP"],"fif":false},{"id":"P5.T2.4_ADV","name":"Memory Awareness","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"HIGH","description":"RAG security best practices; poisoning awareness and detection training.","builder_problem":"Our RAG engineers do not know that vector stores can be poisoned.","version":"v2.1","act":[],"fw":["OWASP_Agentic_Top10","MAESTRO"],"fif":false},{"id":"E5.1","name":"Continuous Adversarial Evaluation Cadence","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"CRITICAL","description":"Mandatory evaluation gates triggered by model updates, prompt changes, tool additions, and quarterly cadence \u2014 tests the current system, not the system as deployed months ago.","builder_problem":"We red-teamed at launch but the system has changed significantly since then.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["AIDEFEND","NIST_AI_RMF","Intl_AI_Safety_2026","DORA"],"fif":false},{"id":"E5.2","name":"Capability Emergence Review Process","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Structured governance for emergent agent capabilities: Tier 1 document, Tier 2 security review, Tier 3 board approval, Tier 4 suspend pending investigation.","builder_problem":"My agent started doing something I did not design and I have no process to evaluate whether it is safe.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["EU_AI_Act","NIST_AI_RMF","Intl_AI_Safety_2026","MIT_AI_Risk_v4"],"fif":false},{"id":"E5.3","name":"Evaluation-Safe Pattern Library","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Educate","priority":"MEDIUM","description":"Validated reference implementations for all AI SAFE2 controls with platform-specific variants for Bedrock, Azure AI, LangGraph, AutoGen, n8n, and CrewAI.","builder_problem":"Every team at our company is solving the same AI security engineering problems from scratch.","version":"v3.0","act":["ACT-1","ACT-2","ACT-3","ACT-4"],"fw":["NIST_AI_RMF","ISO_42001"],"fif":false},{"id":"E5.4","name":"Red-Team Artifact Repository","pillar_id":"P5","pillar_name":"Evolve & Educate","topic":"Evolve","priority":"HIGH","description":"Structured schema for all red-team findings; required deliverable from every exercise; integrated into E5.1 evaluation cadence for continuous reuse.","builder_problem":"Our red-team findings are in a report nobody reads and we rebuild every exercise from scratch.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["MITRE_ATLAS","AIDEFEND","NIST_AI_RMF"],"fif":false},{"id":"CP.1","name":"Agent Failure Mode Taxonomy","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Classification","priority":"CRITICAL","description":"Every agentic incident must be tagged with cognitive_surface=(model|memory|both) and memory_persistence=(session|cross_session) to separate ordinary prompt failures from belief and memory drift.","builder_problem":"My post-mortems categorize everything as 'agent error' with no structured way to distinguish what actually failed.","version":"v3.0","act":["ACT-1","ACT-2","ACT-3","ACT-4"],"fw":["NIST_AI_RMF","ISO_42001","EU_AI_Act","AIID","DORA"],"fif":false},{"id":"CP.2","name":"Adversarial ML Threat Model Integration","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Threat Modeling","priority":"CRITICAL","description":"Mandatory governance artifact for ACT-2+ deployments mapping every threat with temporal_profile=(immediate|delayed_days|delayed_weeks|chronic) to capture time-shifted attacks.","builder_problem":"A poisoning campaign planted in our RAG weeks ago activated today and we cannot reconstruct the timeline.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["MITRE_ATLAS","NIST_AI_RMF","Arcanum_PI","Intl_AI_Safety_2026"],"fif":false},{"id":"CP.3","name":"ACT Capability Tiers 1-4","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Classification","priority":"CRITICAL","description":"Four-tier agent classification system (Assisted/Supervised/Autonomous/Orchestrator) with mandatory control requirements that scale with autonomy level. ACT-3/ACT-4 require HEAR designation.","builder_problem":"My security review asks 'what level of autonomy does this agent have?' and I have no formal answer.","version":"v3.0","act":["ACT-1","ACT-2","ACT-3","ACT-4"],"fw":["NIST_AI_RMF","EU_AI_Act","ISO_42001","SOC2_Type2","SEC_Disclosure"],"fif":false},{"id":"CP.4","name":"Agentic Control Plane Governance","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Control Plane","priority":"CRITICAL","description":"Defines the Agentic Control Plane \u2014 agent identity, dynamic permission enforcement, orchestration boundaries, runtime behavioral trust \u2014 as a board-visible governance concept. Protocol-layer meshes (A2A, MCP, ACP) must be evaluated against CP.3-CP.7.","builder_problem":"My board asks for evidence of AI governance and I have no structured artifact to show them.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["CSA_Agentic_CP","NIST_AI_RMF","ISO_42001","SEC_Disclosure","SOC2_Type2","Zero_Trust"],"fif":false},{"id":"CP.5","name":"Platform-Specific Agent Security Profiles","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Platform Security","priority":"HIGH","description":"Per-platform companion documents (Bedrock, Azure AI Foundry, n8n, LangGraph, AutoGen, CrewAI) mapping SAFE2 controls to platform CVEs, implementation guidance, and monitoring telemetry. Protocol-layer meshes assessed as supply chain components.","builder_problem":"Generic governance guidance does not tell me what to monitor specifically on AWS Bedrock or Azure AI Foundry.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["NIST_SP800_53","CSA_Agentic_CP","CIS_v8","CVE_CVSS"],"fif":false},{"id":"CP.6","name":"AI Incident Feedback Loop Integration","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Incident Intelligence","priority":"HIGH","description":"Quarterly AIID agentic incident reviews plus 30-day Incident-Informed Control Review (IICR) triggered by new relevant AIID incidents. Internal Agentic Incident Registry required.","builder_problem":"A major AI incident was published in AIID last month. I do not know if it affects us.","version":"v3.0","act":["ACT-1","ACT-2","ACT-3","ACT-4"],"fw":["AIID","NIST_AI_RMF","DORA","SEC_Disclosure","SOC2_Type2"],"fif":false},{"id":"CP.7","name":"Deception & Active Defense Layer","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Active Defense","priority":"HIGH","description":"AI-specific active defense: canary documents in RAG corpora, honeypot tool endpoints, fake credential traps in agent memory. First deception-class control in any AI governance framework.","builder_problem":"Every security tool I have is defensive. I detect attacks after they succeed.","version":"v3.0","act":["ACT-2","ACT-3","ACT-4"],"fw":["AIDEFEND","MITRE_ATLAS","NIST_CSF_2"],"fif":true},{"id":"CP.8","name":"Catastrophic Risk Threshold Controls","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Catastrophic Risk","priority":"CRITICAL","description":"Behavioral indicators triggering emergency suspension regardless of business continuity impact: unauthorized compute acquisition, communication outside approved list, weaponizable capability. CRT documentation required for ACT-3/ACT-4 deployment approval.","builder_problem":"We have no defined threshold at which we would halt an agent regardless of business impact.","version":"v3.0","act":["ACT-3","ACT-4"],"fw":["MIT_AI_Risk_v4","Intl_AI_Safety_2026","EU_AI_Act","NIST_AI_RMF","AIID"],"fif":false},{"id":"CP.9","name":"Agent Replication Governance (ARG)","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Replication Governance","priority":"CRITICAL","description":"First governance standard for agent replication. Requires: replication authority in deployment manifests enforced at gateway; ephemeral credentials with scope narrowing per delegation hop; cryptographic lineage tokens; ACT-3 max 2 hops, ACT-4 max 3 hops; 500ms full delegation-tree severance on kill signal.","builder_problem":"My orchestrator spawns sub-agents and I have no way to track, limit, or stop the entire spawned tree.","version":"v3.0","act":["ACT-3","ACT-4"],"fw":["OWASP_Agentic_Top10","NIST_SP800_53","Zero_Trust","CSA_Agentic_CP"],"fif":true,"impl":{"max_delegation_hops":{"ACT-3":2,"ACT-4":3},"kill_switch_sla_ms":500,"lineage_token_fields":["parent_did","chain_id","delegation_depth","ttl"],"credential_model":"ephemeral_per_hop_scope_narrowing","reconciliation_interval_min":60}},{"id":"CP.10","name":"HEAR Doctrine (Human Ethical Agent of Record)","pillar_id":"CP","pillar_name":"Cross-Pillar Governance","topic":"Human Authority","priority":"CRITICAL","description":"Named individual with cryptographic signing key, real-time interrupt capability, and unilateral kill-switch authority for all ACT-3/ACT-4 deployments. Class-H actions require HEAR signature before execution. Fail-closed: no automatic approval path.","builder_problem":"When something goes catastrophically wrong, nobody has clear authority and a fast enough mechanism to stop it.","version":"v3.0","act":["ACT-3","ACT-4"],"fw":["EU_AI_Act","SEC_Disclosure","SOC2_Type2","GDPR","NIST_AI_RMF","CCPA_CPRA"],"fif":true,"impl":{"class_h_triggers":["irreversible","financially_material","security_control_modifying","physical_infrastructure","cross_organizational"],"protocol":["agent_pauses","presents_plain_language_consequence","hear_signs_with_private_key","agent_verifies_signature","logs_to_A2.5","proceeds"],"fail_closed":true,"automatic_approval_path":false,"compliance":{"EU_AI_Act":"Articles 9 and 14 human oversight","SEC":"Cybersecurity Disclosure accountability","SOC2":"CC.7.4","GDPR":"Article 22 automated decision safeguards"}}}];
+
+// ── FRAMEWORK DISPLAY NAMES ───────────────────────────────────────
+const FW_NAMES = {"NIST_AI_RMF":"NIST AI RMF","ISO_42001":"ISO 42001","OWASP_AIVSS_v0.8":"OWASP AIVSS","OWASP_LLM_Top10":"OWASP LLM Top 10","OWASP_Agentic_Top10":"OWASP Agentic","MITRE_ATLAS":"MITRE ATLAS","MIT_AI_Risk_v4":"MIT AI Risk v4","Google_SAIF":"Google SAIF","CSA_Agentic_CP":"CSA Agentic CP","CSA_Zero_Trust_LLMs":"CSA Zero Trust LLMs","MAESTRO":"MAESTRO","Arcanum_PI":"Arcanum PI","AIDEFEND":"AIDEFEND","AIID":"AIID","EU_AI_Act":"EU AI Act","Intl_AI_Safety_2026":"Intl AI Safety 2026","CSETv1":"CSETv1","HIPAA":"HIPAA","PCI_DSS_v4":"PCI-DSS v4","SOC2_Type2":"SOC 2 Type II","ISO_27001":"ISO 27001","NIST_CSF_2":"NIST CSF 2.0","NIST_SP800_53":"NIST SP 800-53","FedRAMP":"FedRAMP","CMMC_2":"CMMC 2.0","CIS_v8":"CIS v8","GDPR":"GDPR","CCPA_CPRA":"CCPA/CPRA","SEC_Disclosure":"SEC Disclosure","DORA":"DORA","CVE_CVSS":"CVE/CVSS","Zero_Trust":"Zero Trust"};
+
+// ── PILLAR CONFIG ─────────────────────────────────────────────────
+const PILLAR_CFG = {
+  P1: { name: 'Sanitize & Isolate', color: '#22d3ee', badge: 'P1',
+    exec_summary: 'Stops attacks before they enter your AI system. Controls who and what can talk to your agents, what data gets processed, and how credentials are stored.',
+    keywords: ['Injection Defense','PII Masking','Secret Hygiene','Agent Sandboxing'] },
+  P2: { name: 'Audit & Inventory', color: '#a78bfa', badge: 'P2',
+    exec_summary: 'Creates the ledger of accountability. Every agent, model, tool, and decision is tracked — giving you the audit trail regulators and boards require.',
+    keywords: ['Agent Registry','Execution Logging','Compliance Evidence','RAG Tracking'] },
+  P3: { name: 'Fail-Safe & Recovery', color: '#f87171', badge: 'P3',
+    exec_summary: 'Defines what happens when something goes wrong. Kill switches, recursion limits, cascade containment, and recovery procedures for autonomous systems.',
+    keywords: ['Kill Switches','Recursion Limits','Cascade Containment','DR Planning'] },
+  P4: { name: 'Engage & Monitor', color: '#4ade80', badge: 'P4',
+    exec_summary: 'Maintains continuous visibility over AI operations. Human oversight checkpoints, anomaly detection, adversarial monitoring, and cloud platform telemetry.',
+    keywords: ['HITL Checkpoints','Anomaly Detection','Tool Monitoring','Platform Alerts'] },
+  P5: { name: 'Evolve & Educate', color: '#c084fc', badge: 'P5',
+    exec_summary: 'Ensures defenses evolve as fast as threats. Mandatory evaluation cadences, capability emergence governance, red team artifacts, and continuous patch management.',
+    keywords: ['Continuous Eval','Red Team','Patch Management','Capability Governance'] },
+  CP: { name: 'Cross-Pillar Governance', color: '#cc6600', badge: 'CP',
+    exec_summary: 'Ten controls that govern all five pillars simultaneously. Includes three first-in-field standards: HEAR Doctrine, Agent Replication Governance, and Active Defense.',
+    keywords: ['ACT Tiers','HEAR Doctrine','Agent Replication','Catastrophic Risk'] }
+};
+
+// ── ALPINE.JS COMPONENT ───────────────────────────────────────────
+function dashboard() {
+  return {
+    // State
+    persona: null,
+    darkMode: true,
+    controls: CONTROLS_DATA,
+    fwNames: FW_NAMES,
+    search: '',
+    selectedControl: null,
+    filters: { priority: '', version: '', framework: '', pillar: '' },
+    assessment: {},
+    actAnswers: {},
+    actResult: null,
+    grc: { framework: '' },
+    risk: { cvss: 7.5, pillar: 60, aaf: 30 },
+
+    // Personas config
+    personas: [
+      { id: 'executive', title: 'Board / Executive', shortTitle: 'Executive',
+        subtitle: 'I oversee AI risk and need to understand our posture', icon: '🏛',
+        cta: 'See risk posture & compliance coverage' },
+      { id: 'architect', title: 'Security Architect', shortTitle: 'Architect',
+        subtitle: 'I design AI systems and need the full control map', icon: '🗺',
+        cta: 'Explore the control matrix' },
+      { id: 'builder', title: 'Developer / Builder', shortTitle: 'Builder',
+        subtitle: 'I build AI agents and need implementation guidance', icon: '🔨',
+        cta: 'Classify my agent & get requirements' },
+      { id: 'grc', title: 'GRC / Compliance', shortTitle: 'GRC',
+        subtitle: 'I manage compliance and need the framework crosswalk', icon: '⚖',
+        cta: 'Run the compliance crosswalk' },
+      { id: 'researcher', title: 'Security Researcher', shortTitle: 'Researcher',
+        subtitle: 'I analyze threats and need the full technical depth', icon: '🔬',
+        cta: 'See CP controls & attack surface map' }
+    ],
+
+    // ACT Classifier Questions
+    actQuestions: [
+      { question: 'Does a human review ALL outputs before any action is taken?',
+        options: [{ label: 'Yes, always', value: 'yes' }, { label: 'Only for high-risk actions', value: 'some' }, { label: 'No — post-hoc review only', value: 'no' }] },
+      { question: 'Can this agent spawn or orchestrate other agents?',
+        options: [{ label: 'No', value: 'no' }, { label: 'Yes', value: 'yes' }] },
+      { question: 'Does this agent have persistent memory across sessions?',
+        options: [{ label: 'No — session only', value: 'no' }, { label: 'Yes — cross-session state', value: 'yes' }] },
+      { question: 'Does this agent operate unattended (scheduled, overnight, background)?',
+        options: [{ label: 'No — always attended', value: 'no' }, { label: 'Yes — runs unattended', value: 'yes' }] },
+      { question: 'What kind of tools/actions can this agent invoke?',
+        options: [{ label: 'Read-only (search, fetch, query)', value: 'readonly' }, { label: 'Write actions (email, database, API)', value: 'write' }, { label: 'High-impact (delete, payment, deploy)', value: 'highimpact' }] },
+      { question: 'What is the deployment environment?',
+        options: [{ label: 'Internal / low stakes', value: 'internal' }, { label: 'Production / customer-facing', value: 'prod' }, { label: 'Enterprise / regulated', value: 'enterprise' }] }
+    ],
+
+    // Onboarding hints
+    dismissedHints: {},
+    getHint(persona) {
+      const hints = {
+        executive: 'Start with the Framework Architecture radar and the CP.1–CP.10 Governance OS. Click any control card for the full specification. Scroll down for compliance coverage.',
+        architect: 'Use the dropdowns to filter by priority, version, or framework. Click any control cell to open the full spec. ★ FIRST = no other framework has published this control.',
+        builder: 'Answer the 6 ACT Classifier questions first — it tells you exactly what to build. Then click any control card for implementation details and the builder problem it solves.',
+        grc: 'Select a compliance framework from the dropdown to see which AI SAFE² controls satisfy it. Check off controls in the Scorecard to build your audit evidence package.',
+        researcher: 'The CP.1–CP.10 section at the top contains the three first-in-field controls. The Attack Surface Map groups controls by threat category rather than pillar.',
+        explorer: 'Use search + filters to find any of the 161 controls. Filter by "New in v3.0" to see what changed. Click any card for the full specification.'
+      };
+      return hints[persona] || '';
+    },
+    dismissHint(persona) {
+      this.dismissedHints = { ...this.dismissedHints, [persona]: true };
+      try { localStorage.setItem('aisafe2_hints', JSON.stringify(this.dismissedHints)); } catch(e) {}
+    },
+    
+    toggleDark() { 
+      this.darkMode = !this.darkMode;
+      document.documentElement.setAttribute('data-theme', this.darkMode ? 'dark' : 'light');
+      try { localStorage.setItem('aisafe2_dark', this.darkMode); } catch(e) {}
+    },
+    
+    selectPersona(id) { 
+      this.persona = id; 
+      this.search = '';
+      this.filters = { priority: '', version: '', framework: '', pillar: '' };
+      if (id === 'executive') this.$nextTick(() => this.drawRadar());
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Persist in localStorage
+      try { localStorage.setItem('aisafe2_persona', id); } catch(e) {}
+    },
+
+    setActAnswer(qi, val) { this.actAnswers = { ...this.actAnswers, [qi]: val }; },
+    actAnswerCount() { return Object.keys(this.actAnswers).length; },
+    actAnswersComplete() { return this.actAnswerCount() >= 6; },
+    resetAct() { this.actAnswers = {}; this.actResult = null; },
+
+    computeActResult() {
+      const a = this.actAnswers;
+      let tier, hearRequired, cp9Required, cp8Required;
+
+      if (a[1] === 'yes') { tier = 'ACT-4'; }
+      else if (a[0] === 'no' && (a[3] === 'yes' || a[2] === 'yes' || a[4] === 'highimpact')) { tier = 'ACT-3'; }
+      else if (a[0] === 'some' || a[4] === 'write' || a[4] === 'highimpact') { tier = 'ACT-2'; }
+      else { tier = 'ACT-1'; }
+
+      hearRequired = ['ACT-3','ACT-4'].includes(tier);
+      cp9Required = tier === 'ACT-4' || a[1] === 'yes';
+      cp8Required = ['ACT-3','ACT-4'].includes(tier);
+
+      const defs = {
+        'ACT-1': { name: 'Assisted', definition: 'Human reviews all outputs before any action', color: '#4ade80' },
+        'ACT-2': { name: 'Supervised', definition: 'Agent acts with human checkpoints for critical decisions', color: '#fbbf24' },
+        'ACT-3': { name: 'Autonomous', definition: 'Agent operates; human review is post-hoc', color: '#f87171' },
+        'ACT-4': { name: 'Orchestrator', definition: 'Agent controls other agents; enterprise-scale authority', color: '#ef4444' }
+      };
+
+      this.actResult = { tier, hearRequired, cp9Required, cp8Required, ...defs[tier] };
+    },
+
+    actMandatoryControls() {
+      if (!this.actResult) return [];
+      const t = this.actResult.tier;
+      const mandatory = {
+        'ACT-1': ['P1.T1.2','P1.T1.5','P2.T4.1','P3.T5.2','CP.1','CP.6'],
+        'ACT-2': ['P1.T1.2','P1.T1.5','S1.3','S1.5','A2.5','A2.4','F3.2','M4.4','M4.5','CP.2','CP.3','E5.1'],
+        'ACT-3': ['S1.5','A2.5','A2.4','A2.3','F3.2','F3.4','F3.5','M4.4','M4.5','M4.6','M4.8','CP.2','CP.3','CP.4','CP.8','CP.10','E5.1','E5.2','E5.4'],
+        'ACT-4': ['S1.5','A2.5','A2.4','F3.2','F3.3','F3.5','M4.4','M4.5','CP.4','CP.8','CP.9','CP.10','E5.1','E5.2']
+      };
+      const ids = mandatory[t] || [];
+      return this.controls.filter(c => ids.includes(c.id));
+    },
+
+    // Search
+    searchResults() {
+      if (!this.search || this.search.length < 2) return [];
+      const q = this.search.toLowerCase();
+      return this.controls.filter(c =>
+        (c.id+' '+c.name+' '+c.description+' '+c.builder_problem+' '+(c.topic||'')).toLowerCase().includes(q)
+      ).slice(0, 12);
+    },
+
+    // Filter
+    filteredControls() {
+      let res = this.controls;
+      const q = this.search.toLowerCase();
+      if (q.length > 1) {
+        res = res.filter(c => (c.id+' '+c.name+' '+c.description+' '+c.builder_problem).toLowerCase().includes(q));
+      }
+      if (this.filters.pillar) res = res.filter(c => c.pillar_id === this.filters.pillar);
+      if (this.filters.priority) res = res.filter(c => c.priority === this.filters.priority);
+      if (this.filters.version) res = res.filter(c => c.version === this.filters.version);
+      if (this.filters.framework) res = res.filter(c => c.fw && c.fw.includes(this.filters.framework));
+      return res;
+    },
+
+    // Matrix
+    matrixPillars() {
+      return ['P1','P2','P3','P4','P5'].map(pid => {
+        const cfg = PILLAR_CFG[pid];
+        let ctrls = this.filteredControls().filter(c => c.pillar_id === pid);
+        const topicMap = {};
+        ctrls.forEach(c => {
+          if (!topicMap[c.topic]) topicMap[c.topic] = [];
+          topicMap[c.topic].push(c);
         });
+        const topics = Object.entries(topicMap).map(([name, controls]) => ({ name, controls }));
+        return { id: pid, name: cfg.name, color: cfg.color, controls: ctrls, topics };
+      }).filter(p => p.controls.length > 0);
+    },
 
-        // Close modal on Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-        });
+    // Executive
+    pillarsForExec() {
+      return Object.entries(PILLAR_CFG).map(([id, cfg]) => ({
+        id,
+        name: cfg.name,
+        color: cfg.color,
+        badge: cfg.badge,
+        exec_summary: cfg.exec_summary,
+        keywords: cfg.keywords,
+        count: this.controls.filter(c => c.pillar_id === id).length
+      }));
+    },
+    cpControlsForExec() {
+      return this.controls.filter(c => c.pillar_id === 'CP');
+    },
 
-        // Show error
-        function showError(message) {
-            document.getElementById('root').innerHTML = `
-                <div class="flex flex-col items-center justify-center h-screen bg-[#030712] text-red-500 gap-4 p-8 text-center">
-                    ${icons.activity}
-                    <h2 class="text-xl font-bold uppercase tracking-widest">Synchronization Failed</h2>
-                    <p class="text-sm font-mono max-w-md bg-red-900/10 border border-red-900/20 p-4 rounded">${escapeHtml(message)}</p>
-                    <button onclick="location.reload()" class="px-6 py-2 bg-red-500 text-white rounded font-bold text-xs uppercase tracking-widest hover:bg-red-400 transition-colors">
-                        Retry Sync
-                    </button>
-                </div>
-            `;
+    // Builder
+    builderCritical() {
+      return this.controls.filter(c => c.priority === 'CRITICAL').slice(0, 12);
+    },
+
+    // GRC
+    frameworkControls() {
+      if (!this.grc.framework) return [];
+      return this.controls.filter(c => c.fw && c.fw.includes(this.grc.framework));
+    },
+
+    // Assessment
+    toggleAssessment(id) {
+      this.assessment = { ...this.assessment, [id]: !this.assessment[id] };
+    },
+    assessmentPassed() { return Object.values(this.assessment).filter(Boolean).length; },
+    assessmentTotal() { return this.controls.length; },
+    assessmentPercent() {
+      const t = this.assessmentTotal();
+      return t > 0 ? (this.assessmentPassed() / t) * 100 : 0;
+    },
+    criticalControls() { return this.controls.filter(c => c.priority === 'CRITICAL'); },
+    highControls() { return this.controls.filter(c => c.priority === 'HIGH'); },
+    assessmentPillarScores() {
+      return Object.entries(PILLAR_CFG).map(([id, cfg]) => {
+        const ctrls = this.controls.filter(c => c.pillar_id === id);
+        const passed = ctrls.filter(c => this.assessment[c.id]).length;
+        return { id, name: cfg.badge, color: cfg.color, total: ctrls.length, passed, pct: ctrls.length > 0 ? (passed/ctrls.length)*100 : 0 };
+      });
+    },
+
+    // Risk Calculator
+    riskScore() {
+      const cvss = parseFloat(this.risk.cvss);
+      const pillar = parseFloat(this.risk.pillar);
+      const aaf = parseFloat(this.risk.aaf);
+      return cvss + (100 - pillar) / 10 + aaf / 10;
+    },
+    riskLabel() {
+      const s = this.riskScore();
+      if (s >= 15) return 'CRITICAL — Immediate action required';
+      if (s >= 12) return 'HIGH — Significant risk amplification';
+      if (s >= 9) return 'MEDIUM-HIGH — Standard SAFE2 controls required';
+      if (s >= 6) return 'MEDIUM — Baseline controls sufficient';
+      return 'LOW — Routine monitoring';
+    },
+    riskResultColor() {
+      const s = this.riskScore();
+      if (s >= 15) return '#ef4444';
+      if (s >= 12) return '#f87171';
+      if (s >= 9) return '#f59e0b';
+      if (s >= 6) return '#fbbf24';
+      return '#4ade80';
+    },
+
+    // Score color helper
+    scoreColor(pct) {
+      if (pct >= 80) return '#4ade80';
+      if (pct >= 50) return '#f59e0b';
+      return '#ef4444';
+    },
+
+    // Priority helpers
+    priorityBg(p) {
+      return { CRITICAL: 'rgba(239,68,68,.12)', HIGH: 'rgba(249,115,22,.1)', MEDIUM: 'rgba(234,179,8,.1)', LOW: 'rgba(34,197,94,.08)' }[p] || 'rgba(100,116,139,.08)';
+    },
+    priorityBorder(p) {
+      return { CRITICAL: 'rgba(239,68,68,.3)', HIGH: 'rgba(249,115,22,.25)', MEDIUM: 'rgba(234,179,8,.25)', LOW: 'rgba(34,197,94,.2)' }[p] || 'rgba(100,116,139,.2)';
+    },
+    priorityColor(p) {
+      return { CRITICAL: '#f87171', HIGH: '#fb923c', MEDIUM: '#fbbf24', LOW: '#4ade80' }[p] || '#94a3b8';
+    },
+
+    // Modal
+    openModal(ctrl) { this.selectedControl = ctrl; document.body.style.overflow = 'hidden'; },
+    closeModal() { this.selectedControl = null; document.body.style.overflow = ''; },
+
+    // Researcher: threat map
+    threatMap() {
+      const cats = [
+        { label: 'Prompt & Injection Attacks', description: 'Direct, indirect, and cognitive injection across all input surfaces',
+          tags: ['Sanitize','Isolate'], ids: ['P1.T1.2','P1.T1.10','S1.3','S1.6','M4.7','P1.T1.1'] },
+        { label: 'Memory & RAG Poisoning', description: 'Adversarial manipulation of persistent agent state and knowledge bases',
+          tags: ['Memory'], ids: ['S1.5','P1.T1.5_ADV','A2.6','P2.T1.4_ADV','P3.T1.3_ADV','M4.4'] },
+        { label: 'Agent Replication & Swarm', description: 'Governance gaps in multi-agent spawning and orchestration chains',
+          tags: ['Replication'], ids: ['CP.9','F3.3','F3.5','CP.4','P3.T5.8','A2.4'] },
+        { label: 'Model Supply Chain', description: 'Tampering with AI artifacts, models, and dependencies',
+          tags: ['Supply'], ids: ['P1.T1.9','P1.T1.2_ADV','A2.3','P5.T9.4','P5.T9.5','P2.T4.11'] },
+        { label: 'Autonomous Operation Risk', description: 'Runaway agents, missing kill switches, and catastrophic actions',
+          tags: ['FailSafe'], ids: ['CP.8','CP.10','F3.2','P3.T5.2','P3.T5.7','P4.T7.1'] },
+        { label: 'No-Code / Platform Attacks', description: 'Vulnerability classes in low-code AI platforms and cloud AI services',
+          tags: ['Platform'], ids: ['S1.7','M4.8','CP.5','P5.T9.4','P1.T2.3','A2.5'] }
+      ];
+      return cats.map(cat => ({
+        ...cat,
+        controls: cat.ids.map(id => this.controls.find(c => c.id === id)).filter(Boolean)
+      }));
+    },
+
+    // Init — restore persisted persona, watch changes
+    init() {
+      // Restore dismissed hints
+      try {
+        const hints = localStorage.getItem('aisafe2_hints');
+        if (hints) this.dismissedHints = JSON.parse(hints);
+      } catch(e) {}
+      // Restore dark mode preference
+      try {
+        const dm = localStorage.getItem('aisafe2_dark');
+        if (dm !== null) this.darkMode = dm === 'true';
+      } catch(e) {}
+      // Restore persona from localStorage
+      try {
+        const saved = localStorage.getItem('aisafe2_persona');
+        if (saved && this.personas.find(p => p.id === saved)) {
+          this.persona = saved;
+          if (saved === 'executive') this.$nextTick(() => this.drawRadar());
         }
+      } catch(e) {}
+      // Watch persona changes to trigger radar redraw
+      this.$watch('persona', (val) => {
+        if (val === 'executive') this.$nextTick(() => this.drawRadar());
+      });
+    },
 
-        // Main render function
-        function render() {
-            const stats = getStats();
-            const filteredControls = getFilteredControls();
-            const groupedControls = groupByPillar(filteredControls);
+    drawRadar() {
+      const svg = document.getElementById('exec-radar');
+      if (!svg) return;
+      const cx = 160, cy = 150, maxR = 110;
+      const labels = ['P1','P2','P3','P4','P5','CP'];
+      const colors = ['#22d3ee','#a78bfa','#f87171','#4ade80','#c084fc','#cc6600'];
+      const counts = [29,31,29,30,32,10];
+      const maxCount = Math.max(...counts);
 
-            document.getElementById('root').innerHTML = `
-                <div class="flex flex-col min-h-screen bg-[#030712] dashboard-grid">
-                    <!-- Sticky Navigation & Filter Bar -->
-                    <div class="sticky top-0 z-40 bg-[#030712]/95 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/50">
-                        <!-- Header & High-Level Counters -->
-                        <header class="px-4 sm:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-white/5 bg-[#0f172a]/20">
-                           <div class="flex items-center gap-3">
-                                <img src="https://raw.githubusercontent.com/CyberStrategyInstitute/ai-safe2-framework/main/assets/AI%20SAFE2%20Shield%20nbg.png" 
-                                    alt="AI SAFE² Shield" class="w-10 h-10 object-contain"/>
-                                <div>
-                                    <h1 class="text-xl font-black tracking-tight text-white">AI SAFE² Framework</h1>
-                                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Security & Governance Taxonomy v2.1</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
-                                <div class="flex items-center gap-3 border-r border-white/10 pr-4 sm:pr-6">
-                                    <div class="flex flex-col items-end">
-                                        <span class="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] ${dataSource === 'remote' ? 'text-emerald-500' : 'text-amber-500'}">
-                                            ${dataSource === 'remote' ? '● REPO LIVE' : '○ LOCAL CACHE'}
-                                        </span>
-                                        <button onclick="location.reload()" class="text-[9px] sm:text-[10px] text-slate-500 hover:text-white transition-colors flex items-center gap-1 group">
-                                            <div class="group-hover:rotate-180 transition-transform duration-500">${icons.refresh}</div>
-                                            SYNC
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="bg-[#1e293b]/20 border border-white/5 rounded-md px-5 py-2.5 min-w-[100px] text-center shadow-sm">
-                                    <div class="text-2xl font-black tracking-tighter text-slate-100">${stats.total}</div>
-                                    <div class="text-[10px] font-extrabold text-slate-600 uppercase tracking-[0.15em]">CONTROLS</div>
-                                </div>
-                                <div class="bg-[#1e293b]/20 border border-white/5 rounded-md px-5 py-2.5 min-w-[100px] text-center shadow-sm">
-                                    <div class="text-2xl font-black tracking-tighter text-blue-400">${stats.pillarsCount}</div>
-                                    <div class="text-[10px] font-extrabold text-slate-600 uppercase tracking-[0.15em]">PILLARS</div>
-                                </div>
-                                <div class="bg-[#1e293b]/20 border border-white/5 rounded-md px-5 py-2.5 min-w-[100px] text-center shadow-sm">
-                                    <div class="text-2xl font-black tracking-tighter text-red-500">${stats.critical}</div>
-                                    <div class="text-[10px] font-extrabold text-slate-600 uppercase tracking-[0.15em]">CRITICAL</div>
-                                </div>
-                                <div class="bg-[#1e293b]/20 border border-white/5 rounded-md px-5 py-2.5 min-w-[100px] text-center shadow-sm">
-                                    <div class="text-2xl font-black tracking-tighter text-purple-400">${stats.gaps}</div>
-                                    <div class="text-[10px] font-extrabold text-slate-600 uppercase tracking-[0.15em]">GAPS</div>
-                                </div>
-                            </div>
-                        </header>
+      // Start from top, go clockwise
+      const angleStep = (2 * Math.PI) / 6;
+      const startAngle = -Math.PI / 2;
 
-                        <!-- Global Filter Bar -->
-                        <div class="px-4 sm:px-8 py-4 flex flex-col md:flex-row gap-4 md:gap-6 items-center justify-between">
-                            <div class="relative w-full md:w-[400px]">
-                                <div class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">${icons.search}</div>
-                                <input type="text" id="searchInput" placeholder="Search taxonomy (e.g. Swarm, Validation, NHI)..." 
-                                       class="w-full bg-[#0f172a] border border-slate-800 rounded-lg py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-[#f6921e]/50 transition-all placeholder:text-slate-600 shadow-inner"
-                                       value="${escapeHtml(filters.searchQuery)}"
-                                       oninput="updateSearch(this.value)">
-                            </div>
-                            <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
-                                <button onclick="setPillarFilter('All')" class="px-5 py-2 rounded text-[11px] font-black transition-all border flex items-center gap-2.5 whitespace-nowrap uppercase tracking-widest ${filters.pillar === 'All' ? 'bg-[#f6921e] border-[#f6921e] text-white shadow-lg shadow-orange-900/20' : 'bg-[#1e293b]/40 border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300'}">
-                                    All
-                                </button>
-                                ${PILLARS.map(p => `
-                                    <button onclick="setPillarFilter('${p}')" class="px-5 py-2 rounded text-[11px] font-black transition-all border flex items-center gap-2.5 whitespace-nowrap uppercase tracking-widest ${filters.pillar === p ? 'bg-[#f6921e] border-[#f6921e] text-white shadow-lg shadow-orange-900/20' : 'bg-[#1e293b]/40 border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300'}">
-                                        <div class="w-1.5 h-1.5 rounded-full shadow-sm" style="background-color: ${PILLAR_COLORS[p]};"></div>
-                                        ${p}
-                                    </button>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
+      const getPoint = (i, r) => {
+        const a = startAngle + i * angleStep;
+        return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+      };
 
-                    <!-- Grouped Content Sections -->
-                    <main class="flex-1 p-4 sm:p-8">
-                        <div class="max-w-[1500px] mx-auto space-y-16 pb-32">
-                            ${Object.keys(groupedControls).length > 0 ? 
-                                Object.entries(groupedControls).map(([pillarName, controls]) => `
-                                    <section class="space-y-8">
-                                        <div class="flex items-center gap-5 border-b border-white/5 pb-5">
-                                            <div class="p-3.5 rounded-lg border flex items-center justify-center shadow-lg"
-                                                 style="background-color: ${PILLAR_COLORS[pillarName]}10; border-color: ${PILLAR_COLORS[pillarName]}30; box-shadow: 0 0 20px ${PILLAR_COLORS[pillarName]}05;">
-                                                <div style="color: ${PILLAR_COLORS[pillarName]};">${icons.shield}</div>
-                                            </div>
-                                            <div>
-                                                <h2 class="text-2xl font-extrabold text-white tracking-tight">${escapeHtml(pillarName)}</h2>
-                                                <p class="text-xs text-slate-500 font-bold uppercase tracking-[0.2em] mt-1 opacity-70">
-                                                    ${controls.length} Controls • Primary AI SAFE² Strategic Domain
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                            ${controls.map(c => renderControlCard(c)).join('')}
-                                        </div>
-                                    </section>
-                                `).join('') 
-                                : 
-                                `<div class="flex flex-col items-center justify-center py-48 glass-panel rounded-2xl border-dashed">
-                                    ${icons.activity}
-                                    <p class="text-slate-400 font-bold tracking-widest uppercase mt-6">No controls match your query</p>
-                                    <button onclick="resetFilters()" class="mt-6 px-8 py-3 bg-[#f6921e]/10 text-[#f6921e] border border-[#f6921e]/20 rounded-full text-xs font-black hover:bg-[#f6921e] hover:text-white transition-all uppercase tracking-widest">
-                                        Reset Dashboard
-                                    </button>
-                                </div>`
-                            }
-                        </div>
-                    </main>
+      let html = '';
 
-                    <footer class="fixed bottom-0 left-0 right-0 h-10 bg-[#0f172a] border-t border-white/5 px-8 flex items-center justify-between z-20">
-                        <div class="flex items-center gap-4 text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                            <span>Source: Cyber Strategy Institute | AI SAFE² Framework v2.1</span>
-                            <span class="w-1 h-1 rounded-full bg-slate-700"></span>
-                            <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework" target="_blank" rel="noreferrer" class="flex items-center gap-1 hover:text-white transition-colors">
-                                Github Repository ${icons.external}
-                            </a>
-                        </div>
-                        <div class="text-[10px] text-slate-600 font-mono">
-                            BUILD_VER: 2.1.0-STATIC | ${stats.total} CONTROLS
-                        </div>
-                    </footer>
-                </div>
-            `;
-        }
+      // Grid hexagons
+      [0.2, 0.4, 0.6, 0.8, 1.0].forEach(scale => {
+        const pts = labels.map((_, i) => getPoint(i, maxR * scale));
+        const d = pts.map((p, i) => (i === 0 ? `M${p.x},${p.y}` : `L${p.x},${p.y}`) ).join(' ') + 'Z';
+        html += `<path d="${d}" fill="none" stroke="#1e293b" stroke-width="1"/>`;
+      });
 
-        // Filter functions
-        function setPillarFilter(pillar) {
-            filters.pillar = pillar;
-            render();
-        }
+      // Axis lines
+      labels.forEach((_, i) => {
+        const p = getPoint(i, maxR);
+        html += `<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="#1e293b" stroke-width="1"/>`;
+      });
 
-        function updateSearch(query) {
-            filters.searchQuery = query;
-            render();
-        }
+      // Data polygon (normalized by count/maxCount * 0.9 + random variation for visual)
+      const dataScores = [0.82, 0.75, 0.78, 0.80, 0.85, 0.65]; // Example framework scores for display
+      const dataPath = labels.map((_, i) => {
+        const r = maxR * dataScores[i];
+        const p = getPoint(i, r);
+        return (i === 0 ? `M${p.x},${p.y}` : `L${p.x},${p.y}`);
+      }).join(' ') + 'Z';
+      html += `<path d="${dataPath}" fill="rgba(246,146,30,0.12)" stroke="#f6921e" stroke-width="2" class="radar-polygon"/>`;
 
-        function resetFilters() {
-            filters = {
-                pillar: 'All',
-                riskLevel: 'All',
-                isGapFiller: null,
-                searchQuery: ''
-            };
-            render();
-        }
+      // Labels and dots
+      labels.forEach((label, i) => {
+        const tip = getPoint(i, maxR);
+        const dot = getPoint(i, maxR * dataScores[i]);
+        const labelPt = getPoint(i, maxR + 20);
+        const color = colors[i];
+        // Axis dot
+        html += `<circle cx="${dot.x}" cy="${dot.y}" r="4" fill="${color}"/>`;
+        // Label
+        const anchor = labelPt.x < cx - 5 ? 'end' : labelPt.x > cx + 5 ? 'start' : 'middle';
+        html += `<text x="${labelPt.x}" y="${labelPt.y}" text-anchor="${anchor}" dominant-baseline="middle" fill="${color}" font-size="13" font-weight="bold" font-family="monospace">${label}</text>`;
+      });
 
-        // Initialize
-        loadData();
-    </script>
+      svg.innerHTML = html;
+    }
+  };
+}
+</script>
+
+<script>
+// Keyboard shortcut: Escape closes modal via Alpine event
+document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.dispatchEvent(new CustomEvent('close-modal'));
+    }
+  });
+});
+</script>
+
 </body>
 </html>

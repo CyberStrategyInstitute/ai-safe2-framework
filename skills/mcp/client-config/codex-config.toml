@@ -1,0 +1,24 @@
+# AI SAFE2 MCP Server — Codex Configuration
+# Add to your Codex config file (typically ~/.codex/config.toml)
+
+# ── Option A: Remote HTTPS (Pro token) ────────────────────────────────────────
+experimental_use_rmcp_client = true
+
+[mcp_servers.ai-safe2]
+url = "https://your-domain.example/mcp"
+bearer_token = "YOUR_TOKEN_HERE"
+startup_timeout_sec = 20
+tool_timeout_sec = 60
+
+# ── Option B: Local stdio (no token needed) ───────────────────────────────────
+# Uncomment below and comment out the remote config above
+#
+# [mcp_servers.ai-safe2-local]
+# command = "python"
+# args = ["-m", "mcp_server.app"]
+# env = { MCP_TRANSPORT = "stdio", PYTHONPATH = "/path/to/skills/mcp/src" }
+
+# ── Notes ─────────────────────────────────────────────────────────────────────
+# Get your token: https://cyberstrategyinstitute.com/ai-safe2/
+# Free tier token: limited to 30 controls, 5 frameworks, no code review
+# Pro tier token:  full 161 controls, all 32 frameworks, all tools

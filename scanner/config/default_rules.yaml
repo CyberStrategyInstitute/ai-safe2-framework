@@ -1,0 +1,137 @@
+# AI SAFE² v3.0 Scanner — Default Rule Configuration
+# Configurable thresholds per ACT tier and rule behavior.
+# Pass this file to the scanner with: --config scanner/config/default_rules.yaml
+
+# ── Failure Thresholds per ACT Tier ───────────────────────────────────────────
+# The scanner uses the --tier flag to select which threshold applies.
+# Tier3 is strict (CI/CD for production ACT-3/4 deployments).
+# Tier2 is balanced (standard enterprise gate).
+# Tier1 is baseline (early-stage / internal tooling).
+
+thresholds:
+  Tier1:
+    min_score: 50
+    description: "Baseline — early-stage or internal tooling. Fail only on critical failures."
+    block_on_severity: [CRITICAL]
+
+  Tier2:
+    min_score: 70
+    description: "Balanced — standard enterprise gate. Recommended for most production deployments."
+    block_on_severity: [CRITICAL, HIGH]
+
+  Tier3:
+    min_score: 90
+    description: >
+      Strict — for ACT-3 and ACT-4 autonomous agent deployments.
+      Blocks on any critical, high, or governance gap.
+    block_on_severity: [CRITICAL, HIGH, MEDIUM]
+    require_no_governance_gaps: true   # fail if any HEAR/CP.9/CP.8 gap detected
+    require_act_tier_max: ACT-2        # fail if ACT-3 or ACT-4 detected without full governance
+
+# ── Severity Scoring Weights ──────────────────────────────────────────────────
+# How many points each severity level deducts from the 100-point score.
+
+scoring:
+  CRITICAL: 10
+  HIGH: 5
+  MEDIUM: 2
+  LOW: 1
+  INFO: 0
+
+# ── Per-Control Overrides ─────────────────────────────────────────────────────
+# Override severity or disable specific rules for your environment.
+# Useful when a rule produces known false positives in your codebase.
+#
+# Format:
+#   control_id:
+#     enabled: true|false
+#     severity_override: CRITICAL|HIGH|MEDIUM|LOW|INFO
+#     note: "Reason for override"
+
+control_overrides:
+  # Example: downgrade entropy findings if you use a lot of base64 in config
+  # P1.T1.4_ADV_entropy:
+  #   severity_override: MEDIUM
+  #   note: "We use long base64 config values — false positive rate is high"
+
+  # Example: disable the n8n check if you don't use n8n
+  # S1.7:
+  #   enabled: false
+  #   note: "We do not use n8n or Make.com in this project"
+
+  # Example: downgrade loop detection for known-safe scheduler code
+  # P3.T5.1:
+  #   severity_override: LOW
+  #   note: "Our scheduler loop has a verified exit condition"
+
+# ── File Exclusions ───────────────────────────────────────────────────────────
+# Paths and patterns to exclude from scanning.
+# Useful for excluding vendored code, generated files, or test fixtures.
+
+exclusions:
+  directories:
+    - node_modules
+    - .git
+    - venv
+    - .venv
+    - __pycache__
+    - .pytest_cache
+    - dist
+    - build
+    - .tox
+    - .eggs
+    # Add your own:
+    # - vendor
+    # - generated
+
+  file_patterns:
+    # Files matching these patterns are skipped
+    - "*.min.js"
+    - "*.min.css"
+    - "*.lock"
+    - "*.sum"
+    # Add your own:
+    # - "migrations/*.py"
+
+  # Test files: CRITICAL findings are still reported, but HIGH/MEDIUM/LOW are suppressed
+  # to reduce noise from intentionally vulnerable test fixtures.
+  suppress_non_critical_in_tests: true
+
+# ── Entropy Detection ─────────────────────────────────────────────────────────
+# Tune the Shannon entropy threshold for secret detection.
+# Lower = more sensitive (more false positives).
+# Higher = less sensitive (may miss some secrets).
+# Default: 4.5 (calibrated for typical secret formats)
+
+entropy:
+  threshold: 4.5
+  min_token_length: 20
+  # Patterns that are always excluded from entropy scanning regardless of score
+  false_positive_patterns:
+    - "https?://"
+    - "base64"
+    - "data:image"
+    - "sha256:"
+    - "-----BEGIN"
+    - "-----END"
+
+# ── ACT Tier Detection Sensitivity ───────────────────────────────────────────
+# Controls how aggressively the scanner estimates ACT tier from code signals.
+# 'strict': ACT-3 on any single autonomous signal
+# 'balanced': ACT-3 requires 2+ autonomous signals (default)
+# 'relaxed': ACT-3 requires 3+ autonomous signals
+
+act_tier_detection:
+  sensitivity: balanced
+  # Set to true to include ACT tier estimate in SARIF output
+  include_in_sarif: true
+
+# ── Report Configuration ──────────────────────────────────────────────────────
+
+report:
+  # Maximum number of findings per framework in the compliance report
+  max_evidence_per_framework: 10
+  # Include frameworks with zero violations in the report
+  include_passing_frameworks: true
+  # Controls JSON path — auto-detected if not set
+  # controls_json_path: "../skills/mcp/data/ai-safe2-controls-v3.0.json"

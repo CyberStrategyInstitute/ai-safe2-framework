@@ -9,14 +9,14 @@
 **Version:** 1.0  
 **Date:** March 2026  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE2 v2.1 — AI Sovereignty Matrix (AISM)  
+**Framework:** AI SAFE2 v3.0 — AI Sovereignty Matrix (AISM)  
 **Status:** Proposed Methodology
 
 ---
 
 ## 1. Purpose & Scope
 
-This document establishes a rigorous, quantitative scoring methodology for the AI Sovereignty Matrix (AISM), enabling organizations to measure, benchmark, and advance their maturity across all five pillars of the AI SAFE2 Framework v2.1. The methodology is purpose-built for the **agentic AI era** — where autonomous multi-agent systems, non-human identities (NHI), and distributed AI architectures create governance challenges that no existing framework fully addresses.
+This document establishes a rigorous, quantitative scoring methodology for the AI Sovereignty Matrix (AISM), enabling organizations to measure, benchmark, and advance their maturity across all five pillars of the AI SAFE2 Framework v3.0. The methodology is purpose-built for the **agentic AI era** — where autonomous multi-agent systems, non-human identities (NHI), and distributed AI architectures create governance challenges that no existing framework fully addresses.
 
 ### 1.1 Design Principles
 
@@ -118,7 +118,7 @@ Five candidate scoring approaches were evaluated against criteria critical to th
 
 ### 3.1 The AISM Composite Scoring Framework
 
-The recommended methodology — the **AISM Sovereignty Score** — combines the strongest elements from all five approaches into a unified system purpose-built for AI SAFE2 v2.1.
+The recommended methodology — the **AISM Sovereignty Score** — combines the strongest elements from all five approaches into a unified system purpose-built for AI SAFE2 v3.0.
 
 ### 3.2 Maturity Levels (5-Level Scale)
 
@@ -236,7 +236,7 @@ Default pillar weights (equal by default, adjustable):
 
 ### 3.6 Combined Risk Score Integration
 
-For organizations also tracking technical vulnerabilities, AISM integrates with CVSS (as defined in AI SAFE2 v2.1):
+For organizations also tracking technical vulnerabilities, AISM integrates with CVSS (as defined in AI SAFE2 v3.0):
 
 ```
 Combined Risk = CVSS Base Score × ((100 - Pillar Score as %) / 10)
@@ -312,7 +312,7 @@ Every score must be substantiated with verifiable evidence. The AISM requires th
 7. NIST. (2025). "Cybersecurity Framework Profile for Artificial Intelligence." NIST IR 8596 iprd.
 8. NIST. (2023). "AI Risk Management Framework (AI RMF 1.0)." NIST AI 100-1.
 9. Peixoto, E.C., et al. (2025). "Clarifying Core Dimensions in Digital Maturity Models." arXiv:2602.07569v1.
-10. Cyber Strategy Institute. (2025). "AI SAFE2 Framework Version 2.1 — Advanced Agentic Distributed AI Edition."
+10. Cyber Strategy Institute. (2025). "AI SAFE2 Framework Version 3.0 — Advanced Agentic Distributed AI Edition."
 11. RAI Institute. (2024). "Responsible AI Maturity Model." Five stages: Aware → Transformative.
 12. iQomply. (2026). "ISO 42001 Maturity Model." Five levels: Initial → Mature.
 
