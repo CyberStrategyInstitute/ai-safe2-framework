@@ -6,7 +6,19 @@ on:
       - main
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install markdownlint
+        run: npm install -g markdownlint-cli
+
+      - name: Run markdownlint (ignore MD045)
+        run: markdownlint "**/*.md" --disable MD045
+
   build-and-deploy:
+    needs: lint
     runs-on: ubuntu-latest
 
     steps:
