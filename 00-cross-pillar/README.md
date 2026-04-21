@@ -1,7 +1,7 @@
 # Cross-Pillar Governance Layer
 ### ⚙️ The Governance OS
 
-[![Cross-Pillar](https://img.shields.io/badge/Cross--Pillar-Governance_Layer_CP.1--CP.10-cc6600?style=for-the-badge&labelColor=black)](./README.md)
+[![Governance Layer CP.1–CP.10 Cross-Pillar Controls](https://img.shields.io/badge/Cross--Pillar-Governance_Layer_CP.1--CP.10-cc6600?style=for-the-badge&labelColor=black)](./README.md)
 
 [🔙 Back to Main Framework](../README.md) | [← Pillar 5: Evolve & Educate](../05-evolve-educate/README.md) | [AISM Layer →](../AISM/)
 
@@ -21,7 +21,7 @@
 
 ## 🏗️ Cross-Pillar Controls Overview
 
-![CP](https://img.shields.io/badge/New_in_v3.0-10_Cross--Pillar_Controls-cc6600?style=flat-square)
+![10 Cross-Pillar Controls introduced in v3.0](https://img.shields.io/badge/New_in_v3.0-10_Cross--Pillar_Controls-cc6600?style=flat-square)
 
 | Control | Name | Priority | Governing |
 | :--- | :--- | :--- | :--- |
@@ -162,7 +162,9 @@ This captures time-shifted attacks — latent prompt poisoning, slow memory cond
 <a id="cp9"></a>
 ## CP.9 — Agent Replication Governance (ARG)
 
-![First in Field](https://img.shields.io/badge/First_in_Field-No_other_framework_has_this_standard-cc6600?style=flat-square)
+![First in Field: Standard introduces a unified security control model](https://img.shields.io/badge/First_in_Field-No_other_framework_has_this_standard-cc6600?style=flat-square)
+
+![First in Field: Requires enforcement across all control layers](https://img.shields.io/badge/First_in_Field-No_other_framework_requires_this-cc6600?style=flat-square)
 
 **What it governs:** The first formal governance standard for agent replication — the moment one agent can clone itself, four core security assumptions simultaneously collapse.
 
@@ -189,7 +191,9 @@ All four fail at once, at machine speed. NIST, ISO, OWASP, and enterprise IAM ha
 <a id="cp10"></a>
 ## CP.10 — The HEAR Doctrine (Human Ethical Agent of Record)
 
-![First in Field](https://img.shields.io/badge/First_in_Field-No_other_framework_requires_this-cc6600?style=flat-square)
+![First in Field: Standard introduces a unified security control model](https://img.shields.io/badge/First_in_Field-No_other_framework_has_this_standard-cc6600?style=flat-square)
+
+![First in Field: Requires enforcement across all control layers](https://img.shields.io/badge/First_in_Field-No_other_framework_requires_this-cc6600?style=flat-square)
 
 **What it governs:** The requirement that every ACT-3 and ACT-4 deployment has a named Human Ethical Agent of Record with cryptographic signing authority and unilateral kill-switch capability.
 
