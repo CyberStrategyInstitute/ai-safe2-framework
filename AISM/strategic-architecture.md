@@ -4,7 +4,7 @@
 
 # AISM Strategic Architecture
 
-**Framework:** AI SAFE2 v2.1
+**Framework:** AI SAFE2 v3.0
 **Organization:** Cyber Strategy Institute
 **Version:** March 2026
 

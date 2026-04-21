@@ -1,139 +1,103 @@
-# 🧭 AI SAFE² Taxonomy Explorer & Dashboard
+# 🧭 AI SAFE² Framework Dashboard — v3.0
 
-Welcome to the official visual control plane and interactive taxonomy explorer for the **AI SAFE² Framework**. 
-
-Rather than reading through static documentation, this dashboard provides Security Architects, GRC Officers, and AI Engineers with a dynamic, interactive interface to navigate the framework's pillars, maturity models, and agentic AI guardrails.
+Interactive control plane and taxonomy explorer for the **AI SAFE² v3.0 Framework** — 161 controls across 5 operational pillars and a 10-control Cross-Pillar Governance OS.
 
 ---
 
 ## 🎯 Interactive Dashboard
- 
-**Explore all 128 AI SAFE² controls through our live, interactive taxonomy explorer.**
- 
-### 👉 **[Launch Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)** 👈
- 
-The AI SAFE² Dashboard provides security architects, GRC officers, and AI engineers with a dynamic, filterable interface to navigate the framework's complete control catalog.
- 
+
+**[→ Launch Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
+
 **Features:**
-- 🔍 **Real-time search** across all control metadata
-- 🎨 **Pillar-based filtering** for strategic domain focus  
-- 📊 **Risk-level visualization** (Critical, High, Medium, Low)
-- 💼 **Executive summaries** with business impact statements
-- 🏷️ **Framework mappings** to OWASP, MITRE, NIST, ISO standards
-- 🆕 **v2.1 highlights** for next-generation controls (Agents, Memory, NHI)
-- 📱 **Responsive design** optimized for all devices
- 
-**No installation required** — the dashboard runs entirely in your browser with zero dependencies.
- 
-![AI SAFE² Dashboard Preview](assets/dashboard-preview.png)  
-*Interactive taxonomy explorer with 128 controls across 5 strategic pillars*
- 
+- 👤 **Persona-routed lenses** — Executive, Architect, Builder, GRC, Researcher, Explorer
+- 🤖 **ACT Tier Classifier** — 6 questions → ACT tier + mandatory controls + HEAR/CP.9/CP.8 flags  
+- 🛡 **CP.1-CP.10 Governance OS** — 3 first-in-field controls (HEAR, Agent Replication, Active Defense)
+- 🔍 **Real-time search** across all 161 control specifications
+- 🎨 **Pillar matrix** — filter by priority, version, framework; CP governance band at top
+- ⚖ **Compliance crosswalk** — 32 frameworks; select any to see mapped controls
+- 📊 **v3.0 Risk Calculator** — CVSS + Pillar + AIVSS AAF live formula
+- 🌙 **Dark / light mode** with localStorage persistence
+- ✅ **Pre-Flight Checklist CTA** — 35-question builder readiness checklist (free)
+- 📱 **Responsive** — no installation, runs entirely in browser
+
+**No installation required.**
+
 ---
- 
+
 ## 📚 Documentation
- 
-- **[Dashboard User Guide](dashboard/README.md)** - Complete usage documentation
-- **[Release Notes v2.1.0](RELEASE-NOTES-v2.1.0.md)** - Latest features and improvements
-- **[Framework Overview](README.md)** - Methodology and strategic approach *(link to your existing docs)*
-- **[Control Schema](dashboard/public/data/controls.json)** - Machine-readable control definitions
- 
+
+- **[Framework Overview](README.md)**
+- **[Controls Schema](dashboard/public/data/controls.json)** — machine-readable, 161 controls, v3.0 schema
+- **[MCP Server](skills/mcp/README.md)** — Claude Code integration
+- **[Scanner](scanner/README.md)** — CI/CD code scanning
+- **[Release Notes](RELEASE-NOTES-v3.0.0.md)**
+
 ---
- 
+
 ## 🚀 Quick Start
- 
+
 ### For Framework Users
 1. Visit the **[live dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
-2. Use the search bar or pillar filters to find relevant controls
-3. Click any control card to view detailed implementation guidance
-4. Reference the decision-maker impact for stakeholder communications
- 
+2. Select your role — the dashboard routes you to the right view
+3. Run the ACT Tier Classifier to understand your governance requirements
+4. Click any control card for the full specification
+
 ### For Developers
 ```bash
-# Clone the repository
 git clone https://github.com/CyberStrategyInstitute/ai-safe2-framework.git
- 
-# Navigate to dashboard
 cd ai-safe2-framework/dashboard
- 
-# Open locally (no build required)
-open index.html
+open index.html  # no build required
 ```
- 
+
 ### For Integration
 ```bash
-# Fetch controls programmatically
+# 161 controls, v3.0 schema — includes builder_problem, act_minimum, 
+# compliance_frameworks (32), version_added, first_in_field
 curl https://raw.githubusercontent.com/CyberStrategyInstitute/ai-safe2-framework/main/dashboard/public/data/controls.json
 ```
- 
+
 ---
- 
+
 ## 🎯 Who Should Use This
- 
-| Role | Use Case |
-|------|----------|
-| **Security Architects** | Design AI system controls and threat models |
-| **GRC Officers** | Map to compliance frameworks and audit requirements |
-| **AI Engineers** | Access implementation guidance and technical references |
-| **Executive Leadership** | Understand business impact and risk prioritization |
-| **Consultants** | Navigate the framework efficiently during assessments |
-| **Researchers** | Explore the taxonomy for academic study |
- 
----
- 
-## 📊 Framework Statistics
- 
-- **128 Controls** across **5 Strategic Pillars**
-- **4 Risk Levels** for prioritization (Critical → Low)
-- **20+ Framework Mappings** (OWASP, MITRE ATLAS, NIST, ISO, etc.)
-- **v2.1 Additions** covering Agents, Memory, NHI, Multi-Agent systems
-- **Gap Filler Controls** for threats unique to AI systems
- 
----
- 
-*For detailed release information, see [RELEASE-NOTE 2026-3-18 AI SAFE² Framework Dashboard v2.1.0](https://github.com/CyberStrategyInstitute/ai-safe2-framework/releases/tag/2026-3-18-AI-SAFE%C2%B2-Framework-Dashboard-v2.1)*
+
+| Role | What the dashboard shows you |
+|------|------------------------------|
+| **Board / Executive** | Hexagonal posture radar, 32-framework compliance coverage, CP.1-CP.10 Governance OS in plain English |
+| **Security Architect** | Full 161-control matrix, filter by pillar / priority / version / framework, CP governance band at top |
+| **Developer / Builder** | ACT Tier Classifier → mandatory controls + HEAR / CP.9 / CP.8 flags, builder-problem framing on every control |
+| **GRC / Compliance** | Compliance crosswalk (32 frameworks), self-assessment scorecard, live v3.0 risk calculator |
+| **Security Researcher** | CP.1-CP.10 deep dive, MITRE ATLAS crosswalk, attack surface map, 23 new v3.0 controls |
+| **Consultant / Assessor** | Explorer mode — search all 161 controls, filter by any dimension |
 
 ---
 
-## 🛠️ Local Usage & Development
+## 📊 Framework Statistics — v3.0
 
-If you are contributing to the framework or want to test modifications to the UI locally, no complex build process or CLI is required.
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/CyberStrategyInstitute/ai-safe2-framework.git
-   ```
-
-2. **Navigate to the dashboard module:**
-   ```bash
-   cd ai-safe2-framework/dashboard
-   ```
-
-3. **Run locally:** Simply double-click the `index.html` file to open it in your default web browser. No local web server is strictly necessary for static HTML/JS/CSS inspection.
+- **161 Controls** — 151 pillar controls + 10 Cross-Pillar Governance OS (CP.1-CP.10)
+- **5 Operational Pillars** — Sanitize & Isolate, Audit & Inventory, Fail-Safe & Recovery, 
+  Engage & Monitor, Evolve & Educate
+- **CP.1-CP.10 Governance OS** — all new in v3.0; CP.7, CP.9, CP.10 are first-in-field standards
+- **32 Compliance Frameworks** — ISO 42001, NIST AI RMF, EU AI Act, SOC 2, HIPAA, GDPR, 
+  FedRAMP, CMMC 2.0, DORA, SEC Disclosure + 22 more
+- **4 ACT Capability Tiers** — governance requirements that scale with agent autonomy level
+- **v3.0 Additions** — 23 new pillar controls + CP.1-CP.10, HEAR Doctrine (CP.10), 
+  Agent Replication Governance (CP.9), AIVSS AAF composite risk scoring
 
 ---
 
 ## 📂 Module Architecture
-
-This folder serves as the UI/Presentation layer for the framework.
-
-```
 dashboard/
-├── index.html          ← NEW standalone file
+├── index.html              ← Standalone dashboard — 161 controls embedded inline
+│                             (CONTROLS_DATA const ~70KB, no runtime fetch required)
 ├── public/
 │   └── data/
-│       └── controls.json   ← Your existing data
-└── README.md           ← Quick Start
-```
+│       └── controls.json   ← v3.0 schema — for programmatic/curl access
+└── README.md
 
----
+## 🤝 Modifying the Dashboard
 
-## 🤝 Modifying the Taxonomy
-
-As the AI SAFE² framework evolves, the dashboard must be updated to reflect the latest GRC standards and architectural guardrails.
-
-* **UI/UX Changes:** Modify the core `index.html` and corresponding CSS.
-* **Data Updates:** (Update this line based on how your app is built - e.g., "Modify the JSON objects within the `js/` directory to update pillar definitions and maturity scoring requirements.")
-
----
-
-Part of the Cyber Strategy Institute open-source initiative. **Engineering Certainty for the AI Era.**
+- **UI changes:** Edit `dashboard/index.html` — Alpine.js + Tailwind CDN, no build step required
+- **Control data updates:** 
+  1. Replace `dashboard/public/data/controls.json` with the new controls JSON
+  2. Search for `const CONTROLS_DATA =` in `index.html` and replace the embedded array
+     (the dashboard reads from the embedded constant, not the external JSON file)

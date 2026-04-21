@@ -1,0 +1,78 @@
+# AI SAFE2 MCP Server — Docker Compose
+# Local development + production HTTPS via Caddy
+#
+# Local dev (no HTTPS):
+#   docker compose up mcp-server
+#   Connect at http://127.0.0.1:8000/mcp (stdio preferred for local dev)
+#
+# Production (HTTPS via Caddy):
+#   Set DOMAIN in .env
+#   docker compose up
+#   Connect at https://your-domain.example/mcp
+
+services:
+
+  # ── MCP Server ───────────────────────────────────────────────────────────────
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-safe2-mcp
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MCP_TRANSPORT: streamable-http
+      MCP_HOST: "0.0.0.0"
+      MCP_PORT: "8000"
+    # Bind to localhost only — Caddy is the only thing that should reach this port
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      # Mount data directory for easy JSON updates without rebuild
+      - ./data:/app/data:ro
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "1.0"
+
+  # ── Caddy (automatic HTTPS) ───────────────────────────────────────────────────
+  # Caddy automatically obtains and renews TLS certificates via Let's Encrypt.
+  # Set DOMAIN in .env to your actual public domain.
+  caddy:
+    image: caddy:2.8-alpine
+    container_name: ai-safe2-caddy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+      - "80:80"    # HTTP -> HTTPS redirect only
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - internal
+      - external
+    depends_on:
+      mcp-server:
+        condition: service_healthy
+
+networks:
+  internal:
+    driver: bridge
+    internal: true        # no direct external access to MCP server
+  external:
+    driver: bridge
+
+volumes:
+  caddy_data:             # TLS certificates (persisted across restarts)
+  caddy_config:

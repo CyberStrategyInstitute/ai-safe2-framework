@@ -1,8 +1,7 @@
 # Standard Engineering Controls for AI SAFE² Compliance
 
-**Version:** 1.0  
+**Version:** 2.1  
 **Date:** February 7, 2026  
-**Author:** Vincent Sullivan  
 **Status:** Technical Specification
 
 ![Compensating Controls Spec](https://placehold.co/1200x630/1D1D1F/f6921e?text=Engineering+Controls+Specification)

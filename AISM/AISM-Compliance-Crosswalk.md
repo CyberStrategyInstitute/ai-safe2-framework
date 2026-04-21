@@ -4,7 +4,7 @@
 </div>
 
 # AISM Compliance Crosswalk
-## AI SAFE2 Framework v2.1 — Cross-Framework Compliance Mapping
+## AI SAFE2 Framework v3.0 — Cross-Framework Compliance Mapping
 
 **Version:** 1.0  
 **Date:** March 2026  
@@ -15,7 +15,7 @@
 
 ## 1. Overview
 
-This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
+This crosswalk maps every AI SAFE2 v3.0 pillar, topic, and maturity level to:
 - **NIST AI RMF 1.0** (Govern, Map, Measure, Manage)
 - **ISO/IEC 42001:2022** (AI Management System clauses)
 - **EU AI Act** (Articles for high-risk AI systems)
@@ -42,7 +42,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P1.T1.8 Format Normalization / Encoding Validation (Extended) | MEASURE 2.9 | 8.2.2 | Art. 15(4) | DSP | PR.DS | — | — |
 | P1.T1.9 Supply Chain Artifact Validation | MAP 5.2, GOVERN 6.2 | 8.2.4 | Art. 15(2) | STA | ID.SC | AML.T0010 | LLM05, LLM10 |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -64,7 +64,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P1.T2.8 Firewall / Network Perimeter Controls | MANAGE 2.2 | 8.3.3 | Art. 15(3) | IVS | PR.AC | — | — |
 | P1.T2.9 API Key / Credential Compartmentalization | MANAGE 2.2 | 8.3.3 | Art. 15(3) | IAM | PR.AC | — | — |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -90,7 +90,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P2.T3.9 AI System Change Tracking | GOVERN 1.6, MANAGE 4.1 | 8.1 | Art. 12(2) | GRC | PR.IP | — | — |
 | P2.T3.10 Vulnerability Scanning / Threat Assessment | MEASURE 2.9 | 8.4 | Art. 9(5) | TVM (Threat & Vulnerability Mgmt) | ID.RA | Full ATLAS mapping | — |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -115,7 +115,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P2.T4.10 Configuration Baseline Tracking | MANAGE 4.1 | 8.1 | Art. 12(2) | GRC | PR.IP | — | — |
 | P2.T4.11 SBOM Generation / Tracking | GOVERN 6.2 | 8.2.4 | Art. 15(2) | STA | ID.AM | — | LLM05, LLM10 |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -142,7 +142,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P3.T5.9 Safe Defaults / Defensive Programming | MANAGE 2.2 | 8.4 | Art. 15(4) | AIS | PR.DS | — | — |
 | P3.T5.10 Incident Response Playbooks | MANAGE 4.3 | 8.4 | Art. 62(1) | SEF (Security Incident Mgmt) | RS.RP | — | — |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -165,7 +165,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P3.T6.9 Configuration Restoration | MANAGE 4.1 | 8.1 | Art. 12(2) | GRC | RC.RP | — | — |
 | P3.T6.10 Incident Forensics / Post-Mortems | MANAGE 4.3 | 8.4 | Art. 62(1) | SEF | RS.AN | — | — |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -191,7 +191,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P4.T7.9 Cross-Functional Collaboration | GOVERN 2.2 | 5.3 | Art. 17(1-k) | GRC | GV.RR | — | — |
 | P4.T7.10 Stakeholder Transparency / Reporting | GOVERN 1.4, GOVERN 5.2 | 9.3 | Art. 13(1) | TRN | GV.OC | — | — |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -213,7 +213,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P4.T8.9 Data Quality Metrics | MEASURE 2.6 | 8.2.2 | Art. 10(2) | DLM | DE.CM | — | — |
 | P4.T8.10 Compliance Audit Logs | GOVERN 1.1, GOVERN 3.2 | 9.2 | Art. 17(1) | GRC | GV.OC | — | — |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -240,7 +240,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P5.T9.9 Performance Optimization | MEASURE 2.6, MANAGE 4.1 | 8.5 | Art. 15(1) | AIS | PR.IP | — | — |
 | P5.T9.10 Incident Lessons Learned | MANAGE 4.3, GOVERN 4.1 | 10.1 | Art. 62(2) | SEF | RS.IM | — | — |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -264,7 +264,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 | P5.T10.9 Role-Based Training | GOVERN 4.1 | 7.2 | Art. 4(1) | HRS | GV.AT | — | — |
 | P5.T10.10 Culture / Accountability Framework | GOVERN 2.1, GOVERN 2.2 | 5.1, 7.3 | Art. 17(1-k) | GRC | GV.RR | — | — |
 
-#### Gap Filler Subtopics (v2.1)
+#### Gap Filler Subtopics (v3.0)
 
 | AI SAFE2 Subtopic | NIST AI RMF | ISO 42001 | EU AI Act | CSA AICM Domain | NIST CSF 2.0 | MITRE ATLAS | OWASP LLM |
 |---|---|---|---|---|---|---|---|
@@ -277,7 +277,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 
 ## 7. Framework Coverage Summary
 
-| Framework | AI SAFE2 v2.1 Coverage | Mapped Subcategories/Clauses |
+| Framework | AI SAFE2 v3.0 Coverage | Mapped Subcategories/Clauses |
 |---|---|---|
 | **NIST AI RMF 1.0** | 100% | All GOVERN, MAP, MEASURE, MANAGE subcategories |
 | **ISO/IEC 42001:2022** | 100% | Clauses 5.x, 6.x, 7.x, 8.x, 9.x, 10.x |
@@ -298,7 +298,7 @@ This crosswalk maps every AI SAFE2 v2.1 pillar, topic, and maturity level to:
 5. NIST CSF 2.0 (2024). Cybersecurity Framework 2.0.
 6. MITRE ATLAS (2025). Adversarial Threat Landscape for AI Systems.
 7. OWASP (2025). Top 10 for LLM Applications.
-8. Cyber Strategy Institute (2025). AI SAFE2 Framework v2.1.
+8. Cyber Strategy Institute (2025). AI SAFE2 Framework v3.0.
 
 ---
 

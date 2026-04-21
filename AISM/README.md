@@ -11,7 +11,7 @@
 **Core Principle:** *Probabilistic intelligence requires deterministic control.*
 
 **Organization:** Cyber Strategy Institute
-**Framework:** AI SAFE2 v2.1
+**Framework:** AI SAFE2 v3.0
 **Version:** March 2026
 
 ---

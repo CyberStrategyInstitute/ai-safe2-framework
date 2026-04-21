@@ -1,0 +1,64 @@
+# AI SAFE2 MCP Server — Caddyfile
+# Automatic HTTPS via Let's Encrypt. Replace {$DOMAIN} with your actual domain.
+# Set DOMAIN env var before starting: DOMAIN=mcp.yourdomain.com docker compose up
+
+{$DOMAIN} {
+    # Automatic TLS from Let's Encrypt (no configuration needed)
+
+    # Security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        # Remove server fingerprint
+        -Server
+    }
+
+    # CORS: allow MCP clients (Claude Desktop, Codex, etc.)
+    @options method OPTIONS
+    handle @options {
+        header Access-Control-Allow-Origin "*"
+        header Access-Control-Allow-Methods "POST, GET, OPTIONS"
+        header Access-Control-Allow-Headers "Authorization, Content-Type, Accept"
+        header Access-Control-Max-Age "86400"
+        respond 204
+    }
+
+    # Rate limiting: 60 requests per minute per IP (basic DDoS mitigation)
+    # For production, consider adding a more sophisticated rate limiter
+    rate_limit {
+        zone dynamic {
+            key {remote_host}
+            events 60
+            window 1m
+        }
+    }
+
+    # Health check endpoint — no auth required
+    handle /health {
+        reverse_proxy mcp-server:8000
+    }
+
+    # MCP endpoint — auth is handled by the MCP server itself
+    handle /mcp* {
+        reverse_proxy mcp-server:8000 {
+            header_up X-Forwarded-For {remote_host}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
+    # Block everything else
+    handle {
+        respond "Not Found" 404
+    }
+
+    # Logging
+    log {
+        output stdout
+        format json
+        level INFO
+    }
+}
+
+# HTTP -> HTTPS redirect (handled automatically by Caddy)

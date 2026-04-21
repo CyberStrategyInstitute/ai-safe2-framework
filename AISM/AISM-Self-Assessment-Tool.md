@@ -9,7 +9,7 @@
 **Version:** 1.0  
 **Date:** March 2026  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE2 v2.1 — AISM Scoring Methodology  
+**Framework:** AI SAFE2 v3.0 — AISM Scoring Methodology  
 **Purpose:** Self-assessment for organizations to determine their AISM maturity level
 
 ---
@@ -570,7 +570,7 @@
 
 ## References
 
-1. Cyber Strategy Institute (2025). AI SAFE2 Framework v2.1.
+1. Cyber Strategy Institute (2025). AI SAFE2 Framework v3.0.
 2. Dotan et al. (2024). IEEE/NIST AI RMF Flexible Maturity Model.
 3. Microsoft Research (2023). Responsible AI Maturity Model.
 4. Cloud Security Alliance (2025). AI Controls Matrix (AICM) v1.0.

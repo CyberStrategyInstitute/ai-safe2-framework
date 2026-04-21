@@ -2,88 +2,89 @@
 
 <img src="assets/AI SAFE2 Architecture.png" alt="AI SAFE2 Framework Visual Map" width="100%" />
 
-# AI SAFE² Framework v2.1
-### The Universal GRC Standard for Agentic AI & ISO 42001 Compliance
+# AI SAFE² Framework v3.0
+### The Universal GRC Standard for Agentic AI, Swarm Governance, and ISO 42001 Compliance
 
-[![Version](https://img.shields.io/badge/version-2.1.0-orange.svg)](https://github.com/CyberStrategy1/ai-safe2-framework/releases)
+[![Version](https://img.shields.io/badge/version-3.0.0-orange.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/releases)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC_BY--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Compliance](https://img.shields.io/badge/Mapped-ISO_42001_%7C_NIST_%7C_SOC2_%2B-005696?style=flat-square&logo=auth0)](https://cyberstrategyinstitute.com/AI-Safe2/)
-[![Scope](https://img.shields.io/badge/Scope-128_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm-red)](https://cyberstrategyinstitute.com/AI-Safe2/)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/CyberStrategy1/ai-safe2-framework/graphs/commit-activity)
+[![Compliance](https://img.shields.io/badge/Mapped-32_Frameworks_%7C_ISO_42001_%7C_NIST_%7C_SOC2_%7C_EU_AI_Act_%2B-005696?style=flat-square&logo=auth0)](https://cyberstrategyinstitute.com/ai-safe2/)
+[![Scope](https://img.shields.io/badge/Scope-161_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm_%7C_CP.1--CP.10-red)](https://cyberstrategyinstitute.com/ai-safe2/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/graphs/commit-activity)
 
-[**5-Min Plan**](#5-min-plan) | [**The Architecture**](#architecture) | [**Universal GRC**](#grc) | [**Comparison**](#comparison) | [**Get Toolkit**](#-fast-track-implementation-the-toolkit) | [**Contributing**](#contributing) | **[Launch Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)** 
+[**Why AI SAFE²**](#why) | [**5-Min Start**](#5-min-plan) | [**Architecture**](#architecture) | [**32 Frameworks**](#grc) | [**Comparison**](#comparison) | [**Get Toolkit**](#toolkit) | [**Dashboard**](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 </div>
 
 ---
 
-# 🛡️ What is AI SAFE²?
+<a id="why"></a>
+## 🎯 What AI SAFE² Is For
 
-**AI SAFE² (Secure AI Framework for Enterprise Ecosystems)** is the open-source governance standard for **Security Architects, GRC Officers, and Platform Engineers** who need to secure Agentic AI without slowing down innovation.
+Every team building AI agents in production hits the same moment. An agent that worked correctly for weeks starts producing subtly wrong outputs. No code changed. No model was updated. The team spends days reconstructing what happened — only to discover that something in the retrieval layer shifted, a memory write accumulated the wrong belief across sessions, or a tool call escalated in a direction nobody had modeled. The execution was a black box. The post-mortem raises more questions than it answers.
 
-### 🏆 The Race is Over. We Built the Bridge.
-While legacy GRC platforms (e.g., Vanta, Drata) are still struggling to define what an "AI Agent" is, **AI SAFE² v2.1** provides the finished bridge between the **Technical Reality** of your stack and the **Regulatory Reality** of the world.
+### Why It Matters
 
-> **What this Means:** AI SAFE² is the only framework that maps **Agentic Swarms, Non-Human Identities (NHI), and Vector DB risks** directly to **ISO 42001, NIST AI RMF, SOC 2 and 10+ other frameworks** controls into a single operational schema.
+The tools on the market each solve one layer. Runtime scanners block injections but generate no compliance evidence. Legacy GRC platforms govern employees and laptops — they have no concept of an autonomous agent, a swarm, or a non-human identity with its own permission lifecycle. General frameworks describe the risk landscape without specifying how to engineer the fix. What is missing in all of them is a governance contract: a formal specification of the complete operating envelope for agentic AI that defines what gets sanitized, what gets logged, how failures are contained, who holds the authority to stop a deployment when it needs to stop, and what evidence satisfies the audit.
 
+### How AI SAFE² Addresses It
 
----
-## 🏗️ The Core Architecture (The 5 Pillars)
+That is exactly what this framework is. AI SAFE² v3.0 is the engineering specification for agentic AI that happens to satisfy every major compliance requirement simultaneously — because it was built by reverse-engineering actual failure modes from production deployments, then defining the controls required to prevent them. Version 3.0 adds 23 new pillar controls grounded in validated red-team findings, bringing the total to **161 controls**, 151 across five operational pillars. It also introduces 10 cross-pillar governance controls that address what no other framework has yet touched: agent replication governance (the moment one agent can clone itself, four IAM assumptions collapse at once), named kill-switch authority for autonomous deployments, and the first integration of OWASP AIVSS v0.8 amplification scoring into a GRC risk formula.
 
-The framework is architected around **5 Strategic Pillars** that provide defense-in-depth for Agentic Workflows.
-
-*   ![P1](https://img.shields.io/badge/Pillar_1-Sanitize_&_Isolate-9aa60f?style=for-the-badge&labelColor=black) **The Shield:** Input validation, prompt injection defense, and cryptographic agent sandboxing.
-
-*   ![P2](https://img.shields.io/badge/Pillar_2-Audit_&_Inventory-1e9611?style=for-the-badge&labelColor=black) **The Ledger:** Full visibility, immutable logging (Chain of Thought), and asset registry.
-
-*   ![P3](https://img.shields.io/badge/Pillar_3-Fail--Safe_&_Recovery-169c92?style=for-the-badge&labelColor=black) **The Brakes:** Kill switches, circuit breakers, and "Safe Mode" reversion protocols.
-
-*   ![P4](https://img.shields.io/badge/Pillar_4-Engage_&_Monitor-4E52A6?style=for-the-badge&labelColor=black) **The Control Room:** Human-in-the-loop (HITL) workflows and real-time anomaly detection.
-
-*   ![P5](https://img.shields.io/badge/Pillar_5-Evolve_&_Educate-b0158a?style=for-the-badge&labelColor=black) **The Feedback Loop:** Continuous Red Teaming, threat intelligence integration, and operator training.
+> **What users get:** Consistency, privacy, security, reliability, and predictability — so AI systems deliver their intended outcomes without silent failures, governance gaps, or compliance surprises.
 
 ---
 
-### 🆚 Positioning: Why AI SAFE²? (The "Game Over" Matrix)
-Most tools solve *one* layer of the problem. AI SAFE² is the **Unified Operating System** that connects them all.
+## 🏗️ The Core Architecture
 
-| Competitor Type | Examples | The Gap | **The AI SAFE² Solution** |
-| :--- | :--- | :--- | :--- |
-| **Runtime Scanners** | Rebuff, PromptMap, Lakera | **Too Narrow:** They block injections but ignore governance, policy, and compliance evidence. | **Governance Layer:** We mandate *where* to put scanners and *how* to audit them for ISO 42001. |
-| **Legacy GRC** | Vanta, Drata, Archer | **Too Broad:** They focus on human SSO and laptops. They are blind to Agentic Swarms and RAG Poisoning. | **Agentic Native:** We treat AI Agents as "First-Class Citizens" with their own identity and access lifecycles. |
-| **General Frameworks** | NIST AI RMF, MITRE ATLAS | **Too Abstract:** They tell you *what* the risks are, but not *how* to engineer the fix in Python/Docker. | **Engineering SOPs:** We provide the JSON schemas, CLI commands, and configs to enforce the standard. |
+The framework is organized around **5 Operational Pillars** plus a **Cross-Pillar Governance Layer** introduced in v3.0. Together they form a complete operational contract covering every phase of agentic AI.
+
+| Pillar | Role | Focus |
+| :--- | :--- | :--- |
+| ![P1](https://img.shields.io/badge/Pillar_1-Sanitize_&_Isolate-9aa60f?style=for-the-badge&labelColor=black) | **The Shield** | Input validation, injection defense, memory governance, no-code platform security |
+| ![P2](https://img.shields.io/badge/Pillar_2-Audit_&_Inventory-1e9611?style=for-the-badge&labelColor=black) | **The Ledger** | Full visibility, semantic execution tracing, model provenance, RAG diff tracking |
+| ![P3](https://img.shields.io/badge/Pillar_3-Fail--Safe_&_Recovery-169c92?style=for-the-badge&labelColor=black) | **The Brakes** | Recursion limits, swarm abort, behavioral drift rollback, cascade containment |
+| ![P4](https://img.shields.io/badge/Pillar_4-Engage_&_Monitor-4E52A6?style=for-the-badge&labelColor=black) | **The Control Room** | Adversarial detection, tool-misuse monitoring, cloud AI platform telemetry, HITL |
+| ![P5](https://img.shields.io/badge/Pillar_5-Evolve_&_Educate-b0158a?style=for-the-badge&labelColor=black) | **The Feedback Loop** | Continuous adversarial evaluation, capability emergence review, red-team repositories |
+| ![CP](https://img.shields.io/badge/Cross--Pillar-Governance_Layer-cc6600?style=for-the-badge&labelColor=black) | **The Governance OS** | ACT tiers, control planes, agent replication governance, HEAR doctrine, catastrophic risk thresholds |
+
+---
+
+## 📂 Navigate the Framework
+
+| Section | Link | What You'll Find |
+| :--- | :--- | :--- |
+| Pillar 1: Sanitize & Isolate | [01-sanitize-isolate/](./01-sanitize-isolate/README.md) | Input defense, injection coverage, memory governance, no-code security |
+| Pillar 2: Audit & Inventory | [02-audit-inventory/](./02-audit-inventory/README.md) | Tracing, logging, model lineage, RAG integrity |
+| Pillar 3: Fail-Safe & Recovery | [03-fail-safe-recovery/](./03-fail-safe-recovery/README.md) | Circuit breakers, recursion limits, rollback |
+| Pillar 4: Engage & Monitor | [04-engage-monitor/](./04-engage-monitor/README.md) | Detection pipelines, HITL, platform monitoring |
+| Pillar 5: Evolve & Educate | [05-evolve-educate/](./05-evolve-educate/README.md) | Adversarial evaluation, red-team artifacts |
+| Cross-Pillar Governance | [00-cross-pillar/](./00-cross-pillar/README.md) | CP.1-CP.10: ACT tiers, HEAR doctrine, replication governance |
+| AISM Layer | [AISM/](./AISM/) | Governance, control mapping, operational oversight |
+| Research Notes | [research/](./research/) | Deep-dive evidence for all controls (001-014) |
+| Interactive Dashboard | [Launch Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | Search, filter, and explore all 161 controls live |
 
 ---
 
-### 🎯 Target Scope & Environment
-AI SAFE² v2.1 is engineered for the **Modern AI Stack**, not just chatbots. It explicitly governs:
-*   **Orchestration:** n8n, LangGraph, Make.com, CrewAI and others.
-*   **Coding Assistants:** Cursor, Windsurf ("Vibe Coding"), GitHub Copilot and others.
-*   **Infrastructure:** Vector Databases (Pinecone/Weaviate), MCP Servers, and Dockerized Agents.
-
-> **The 95% Advantage:** We have done the heavy lifting. By adopting AI SAFE², you inherit a pre-built governance structure that satisfies **ISO 42001, NIST AI RMF, SOC 2, HIPAA, and GDPR** simultaneously.
-
----
 <a id="5-min-plan"></a>
 ## 🚀 Start Securing in 5 Minutes
 
 **Don't wait for a breach. Choose your path and lock it down.**
 
-* Download ```skill.md``` and upload it to 'Claude Projects' > 'Project Knowledge'. Your Claude instance is now a certified AI SAFE² Architect.
+> Download `skill.md` and upload it to Claude Projects > Project Knowledge. Your Claude instance becomes a certified AI SAFE² Architect immediately.
 
-| I am a... | 🛠️ Your Action Plan | ⏱️ Time To Fix |
+| I am a... | 🛠️ Your Action Plan | ⏱️ Time |
 | :--- | :--- | :--- |
-| **Developer / Engineer** | [**⚡ Run the 5-Minute Audit**](QUICKSTART.md) | 5 min |
-| **Python Builder** | [**🐍 Secure Python Implementation**](guides/DEVELOPER_IMPLEMENTATION.md) | 15 min |
-| **No-Code / Automation** | [**🤖 Secure Make.com & n8n Workflows**](guides/NO_CODE_AUTOMATION.md) | 10 min |
-| **CISO / Compliance** | [**🛡️ Get the Full GRC Toolkit**](https://cyberstrategyinstitute.com/AI-Safe2/) | Instant |
+| **Developer / Engineer** | [Run the 5-Minute Audit](QUICKSTART.md) | 5 min |
+| **Python Builder** | [Secure Python Implementation](guides/DEVELOPER_IMPLEMENTATION.md) | 15 min |
+| **No-Code / Automation** | [Secure Make.com & n8n Workflows](guides/NO_CODE_AUTOMATION.md) | 10 min |
+| **CISO / Compliance** | [Get the Full GRC Toolkit](https://cyberstrategyinstitute.com/ai-safe2/) | Instant |
 
-> *Stuck? Hitting errors? Check the [Troubleshooting Guide](TROUBLESHOOTING.md).*
+---
 
 ## 🤖 OpenClaw Integration — Real-World Agent Governance
 
-> **New in v2.0 (Feb 2026):** The AI SAFE² OpenClaw Core File Standard ships 11 governance files that apply the full five-pillar model to a personal AI agent workspace. Drop them in, fill the placeholders, run the smoke test, and your agent is governed.
+> **New in v2.0:** The AI SAFE² OpenClaw Core File Standard ships 11 governance files that apply the full five-pillar model to a personal AI agent workspace. Drop them in, fill the placeholders, run the smoke test, and your agent is governed.
 
 OpenClaw is the first widely-deployed, self-hosted autonomous agent with shell access — exactly the class of system AI SAFE² was designed to govern. The integration gives every OpenClaw operator a complete, auditable governance stack in under an afternoon.
 
@@ -91,76 +92,54 @@ OpenClaw is the first widely-deployed, self-hosted autonomous agent with shell a
 
 | Layer | What | Where |
 |---|---|---|
-| **Internal Governance** (new) | 11 core files defining values, rules, memory, identity, and workspace policy | `examples/openclaw/core/` |
-| **External Enforcement** (original) | Scanner, gateway, v1 memory vaccine — infrastructure that wraps the agent | `examples/openclaw/` |
+| **Internal Governance** | 11 core files defining values, rules, memory, identity, and workspace policy | `examples/openclaw/core/` |
+| **External Enforcement** | Scanner, gateway, v1 memory vaccine — infrastructure that wraps the agent | `examples/openclaw/` |
 
 Both layers are required. Internal governance defines what the agent *intends* to do. External enforcement ensures nothing harmful *escapes* even if the agent is deceived.
 
-### The 11 Core Files at a Glance
-
-| File | AI SAFE² Pillar | What It Governs |
-|---|---|---|
-| `IDENTITY.md` | S — Sanitize | 5-line anchor loaded first; resists identity-replacement attacks |
-| `SOUL.md` | S — Sanitize | Constitution + Love Equation alignment bands (Green/Yellow/Red) |
-| `AGENTS.md` | S + A | Operating rules, SKILL.md supply chain security, data classification |
-| `USER.md` | A — Audit | Human contract, trust delegation, three-tier data classification |
-| `TOOLS.md` | A — Audit | Config values only; architectural separation prevents config → injection |
-| `HEARTBEAT.md` | E — Engage | Scheduled monitoring: security scan, alignment drift, sub-agent summary |
-| `SUBAGENT-POLICY.md` | S + F | Worker trust tiers, context isolation, injection detection in outputs |
-| `MODEL-ROUTER.md` | F + S | Tier routing, graceful degradation, data residency enforcement |
-| `openclaw_memory.md` v2 | S + A | Memory write governance, Love Equation C/D scoring, sub-agent isolation |
-| `OPENCLAW-WORKSPACE-POLICY.md` | All 5 | Cross-agent trust, compliance mapping, workspace incident response |
-| `OPENCLAW-AGENT-TEMPLATE.md` | ² — Evolve | 8-step setup checklist with mandatory smoke tests |
-
-### Quick Start
-
+**Quick Start:**
 ```bash
 cp -r examples/openclaw/core/. ~/my-agent/
 # Then open OPENCLAW-AGENT-TEMPLATE.md and follow the checklist
 ```
 
-**→ [Full documentation: examples/openclaw/core/README.md](./examples/openclaw/core/README.md)**
-
-
-
 **Quick Start:** [10-Minute Hardening Guide](./guides/openclaw-hardening.md)
 
 **Full Resources:** [examples/openclaw/](./examples/openclaw/)
 
-**Industry Resources:** [Resource Map](./resources/openclaw_security_resource_map.md)
-
 ---
+
 <a id="architecture"></a>
 ## 🏗️ 5-Layer Architectural Coverage
 
-Most frameworks stop at the model. AI SAFE² v2.1 explicitly models and mandates controls across the **entire real-world stack**, securing the tools your developers actually use (*Cursor, Make, LangGraph, AutoGen*).
+Most frameworks stop at the model. AI SAFE² v3.0 explicitly models and mandates controls across the **entire real-world stack**, securing the tools your developers actually use.
 
 | Layer | Scope | Key Controls |
 | :--- | :--- | :--- |
-| **L1: Core Models** | LLMs, Fine-Tuned Weights | **[P1.T1.2_ADV]** OpenSSF Model Signing |
-| **L2: Data Infra** | Vector DBs, Data Lakes | **[P1.T1.5_ADV]** Memory Poisoning Defense |
-| **L3: Patterns** | RAG, MCP, API Integrations | **[P2.T1.4_ADV]** Context Integrity Verification |
-| **L4: Agentic AI** | Swarms, Orchestration (n8n) | **[P3.T1.1_ADV]** Distributed Kill Switches |
-| **L5: NHI Users** | Service Accounts, Agents | **[P1.T2.2_ADV]** Non-Human Identity Governance |
+| **L1: Core Models** | LLMs, Fine-Tuned Weights | A2.3 Model Lineage Provenance Ledger |
+| **L2: Data Infrastructure** | Vector DBs, RAG, Knowledge Bases | S1.5 Memory Governance + A2.6 RAG Corpus Diff Tracking |
+| **L3: System Patterns** | MCP, A2A, API Integrations, Protocol Meshes | CP.5 Platform-Specific Profiles + P2.T3.10 Vuln Scanning |
+| **L4: Agentic AI** | Swarms, Orchestration, n8n, LangGraph, CrewAI | F3.2-F3.5 Fail-Safe Suite + CP.9 Agent Replication Governance |
+| **L5: Non-Human Identities** | Service Accounts, Agents, API Keys | CP.4 Agentic Control Plane + CP.10 HEAR Doctrine |
 
 ---
 
-## 🏗️ The v2.1 Coverage Matrix
+## 🏗️ The v3.0 Coverage Matrix
 
-AI SAFE² isn't just a list; it's a multi-dimensional defense grid.
+| Risk Domain | 🤖 Agentic Swarms | 🆔 Non-Human Identity | 🧠 Memory & RAG | 📦 Supply Chain | 🔄 Replication | ⚖️ Universal GRC |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **P1: Sanitize & Isolate** | ![](https://img.shields.io/badge/Isolation-SUCCESS-green) | ![](https://img.shields.io/badge/Secret_Hygiene-SUCCESS-green) | ![](https://img.shields.io/badge/Memory_Gov-SUCCESS-green) | ![](https://img.shields.io/badge/Model_Signing-SUCCESS-green) | 🔗 | ![](https://img.shields.io/badge/ISO_A.8.4-blue) |
+| **P2: Audit & Inventory** | ![](https://img.shields.io/badge/Traceability-SUCCESS-green) | ![](https://img.shields.io/badge/Discovery-SUCCESS-green) | ![](https://img.shields.io/badge/RAG_Diff-SUCCESS-green) | ![](https://img.shields.io/badge/Provenance-SUCCESS-green) | ![](https://img.shields.io/badge/Lineage-SUCCESS-green) | ![](https://img.shields.io/badge/NIST_MAP-blue) |
+| **P3: Fail-Safe & Recovery** | ![](https://img.shields.io/badge/Kill_Switch-SUCCESS-green) | ![](https://img.shields.io/badge/Revocation-SUCCESS-green) | ![](https://img.shields.io/badge/Rollback-SUCCESS-green) | 🔗 | ![](https://img.shields.io/badge/Cascade_Block-SUCCESS-green) | ![](https://img.shields.io/badge/ISO_A.17-blue) |
+| **P4: Engage & Monitor** | ![](https://img.shields.io/badge/Adversarial-SUCCESS-green) | ![](https://img.shields.io/badge/Behavior-SUCCESS-green) | ![](https://img.shields.io/badge/Integrity-SUCCESS-green) | 🔗 | 🔗 | ![](https://img.shields.io/badge/NIST_MEASURE-blue) |
+| **P5: Evolve & Educate** | ![](https://img.shields.io/badge/Red_Team-SUCCESS-green) | ![](https://img.shields.io/badge/Rotation-SUCCESS-green) | ![](https://img.shields.io/badge/Updates-SUCCESS-green) | ![](https://img.shields.io/badge/Specs-SUCCESS-green) | 🔗 | ![](https://img.shields.io/badge/Continuous-blue) |
+| **Cross-Pillar (CP.1-CP.10)** | ![](https://img.shields.io/badge/Swarm_Gov-SUCCESS-orange) | ![](https://img.shields.io/badge/HEAR_Doctrine-SUCCESS-orange) | ![](https://img.shields.io/badge/Cognitive_Tags-SUCCESS-orange) | ![](https://img.shields.io/badge/Protocol_SC-SUCCESS-orange) | ![](https://img.shields.io/badge/CP.9_ARG-SUCCESS-orange) | ![](https://img.shields.io/badge/CP.1--CP.10-orange) |
 
-| Risk Domain → <br> Pillar ↓ | 🤖 Agentic Swarms | 🆔 Non-Human Identity | 🧠 Memory & RAG | 📦 Supply Chain | ⚖️ Universal GRC |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **P1: Sanitize & Isolate** | ![P1](https://img.shields.io/badge/Isolation-SUCCESS-green) | ![P1](https://img.shields.io/badge/Secret_Hygiene-SUCCESS-green) | ![P1](https://img.shields.io/badge/Poison_Detect-SUCCESS-green) | ![P1](https://img.shields.io/badge/Model_Signing-SUCCESS-green) | ![P1](https://img.shields.io/badge/ISO_A.8.4-blue) |
-| **P2: Audit & Inventory** | ![P2](https://img.shields.io/badge/Traceability-SUCCESS-green) | ![P2](https://img.shields.io/badge/Discovery-SUCCESS-green) | ![P2](https://img.shields.io/badge/Context_Audit-SUCCESS-green) | ![P2](https://img.shields.io/badge/SBOM-SUCCESS-green) | ![P2](https://img.shields.io/badge/NIST_MAP-blue) |
-| **P3: Fail-Safe & Recovery** | ![P3](https://img.shields.io/badge/Kill_Switch-SUCCESS-green) | ![P3](https://img.shields.io/badge/Revocation-SUCCESS-green) | ![P3](https://img.shields.io/badge/Rollback-SUCCESS-green) | 🔗 | ![P3](https://img.shields.io/badge/ISO_A.17-blue) |
-| **P4: ngag & Monitor** | ![P4](https://img.shields.io/badge/Consensus-SUCCESS-green) | ![P4](https://img.shields.io/badge/Behavior-SUCCESS-green) | ![P4](https://img.shields.io/badge/Integrity-SUCCESS-green) | 🔗 | ![P4](https://img.shields.io/badge/NIST_MEASURE-blue) |
-| **P5: Evolve & Educate** | ![P5](https://img.shields.io/badge/Red_Team-SUCCESS-green) | ![P5](https://img.shields.io/badge/Rotation-SUCCESS-green) | ![P5](https://img.shields.io/badge/Updates-SUCCESS-green) | ![P5](https://img.shields.io/badge/Specs-SUCCESS-green) | ![P5](https://img.shields.io/badge/Continuous-blue) |
+> Legend: Green = Dedicated Control | Orange = Cross-Pillar Governance | 🔗 = Inherited Coverage
 
-> *Legend: Green = Dedicated Control | 🔗 = Inherited Coverage*
 ---
 
-### 🧠 The Logic Flow (Infrastructure as Code)
+### 🧠 The Logic Flow
 
 ```mermaid
 graph LR;
@@ -169,84 +148,109 @@ graph LR;
     B -- "Clean" --> D{Pillar 2: Policy Check};
     D -- "Violation" --> C;
     D -- "Approved" --> E[Model Inference];
-    E --> F{Pillar 3: Output Scan};
-    F -- "Secret Leaked" --> G[Redact & Alert];
-    F -- "Safe" --> H[Execute Action];
- 
+    E --> F{Pillar 3: Fail-Safe Governor};
+    F -- "Recursion / Drift" --> G[Contain & Alert];
+    F -- "Safe" --> H{Pillar 4: Monitor & Detect};
+    H -- "Anomaly" --> G;
+    H -- "Clear" --> I[Execute Action];
+    I --> J{Cross-Pillar: HEAR / Replication};
+    J -- "Class-H Action" --> K[HEAR Authorization Required];
+    J -- "Standard" --> L[Complete + Log];
+
 style C fill:#B80000,stroke:#333,stroke-width:2px;
-style H fill:#006400,stroke:#333,stroke-width:2px;
-``` 
+style L fill:#006400,stroke:#333,stroke-width:2px;
+style K fill:#cc6600,stroke:#333,stroke-width:2px;
+```
+
 ---
+
 ## 🎯 Interactive Dashboard
- 
-**Explore all 128 AI SAFE² controls through our live, interactive taxonomy explorer.**
- 
+
+**Explore all 161 AI SAFE² controls through our live, interactive taxonomy explorer.**
+
 ### 👉 **[Launch Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)** 👈
- 
-The AI SAFE² Dashboard provides security architects, GRC officers, and AI engineers with a dynamic, filterable interface to navigate the framework's complete control catalog.
- 
+
 **Features:**
 - 🔍 **Real-time search** across all control metadata
-- 🎨 **Pillar-based filtering** for strategic domain focus  
+- 🎨 **Pillar-based filtering** for strategic domain focus
 - 📊 **Risk-level visualization** (Critical, High, Medium, Low)
 - 💼 **Executive summaries** with business impact statements
-- 🏷️ **Framework mappings** to OWASP, MITRE, NIST, ISO standards
-- 🆕 **v2.1 highlights** for next-generation controls (Agents, Memory, NHI)
+- 🏷️ **Framework mappings** to all 32 compliance standards
+- 🆕 **v3.0 highlights** including CP.1-CP.10 Cross-Pillar controls
 - 📱 **Responsive design** optimized for all devices
- 
-**No installation required** — the dashboard runs entirely in your browser with zero dependencies.
- 
-<div align="center">
-<img src="assets/AI SAFE² Dashboard.png" alt="AI SAFE2 Framework Visual Map" width="100%" /> 
-</div>
-
-*Interactive taxonomy explorer with 128 controls across 5 strategic pillars*
 
 ---
-<br>
+
 <a id="grc"></a>
+## 🏛️ The "Universal Rosetta Stone" — 32 Frameworks
 
-## 🏛️ The "Universal Rosetta Stone"
+A single AI SAFE² v3.0 implementation satisfies the requirements of all 32 frameworks simultaneously, eliminating the need for fragmented governance initiatives.
 
-The framework is engineered for **simultaneous compliance reporting**. A single implementation of AI SAFE² controls satisfies the requirements of multiple global standards, eliminating the need for fragmented governance initiatives.
+### AI-Specific Frameworks
 
-| Standard | Coverage | Why It Matters |
+| Standard | Coverage | Key Mapping |
 | :--- | :--- | :--- |
-| **NIST AI RMF** | **100%** | Maps to all 4 dimensions: *Govern, Map, Measure, Manage*. |
-| **ISO/IEC 42001** | **100%** | Covers all key clauses (§ 8.1–8.6) and Annex A/B for AI Management Systems. |
-| **MIT AI Risk Repo** | **100%** | Integrates all 7 domains and **1,600+ risks** (April 2025), including new multi-agent vectors. |
-| **OWASP LLM** | **100%** | Complete alignment with LLM01–LLM10 (Prompt Injection, Excessive Agency). |
-| **MITRE ATLAS** | **98%** | Covers 10 tactics + **14 new agent-focused techniques** (Oct 2025). |
-| **Google SAIF** | **95%** | AI SAFE² is **superior** in Swarm Security, NHI Governance, and Memory Poisoning. |
-| **CSETv1 Harm** | **92%** | Maps to all 8 harm types (Physical Safety, Financial Loss, Democratic Norms). |
-| **SOC 2 Type II** | **Aligned** | Direct mapping for *CC.7.1 (Monitoring)*, *CC.6.1 (Access)*, and *A.1.2 (Availability)*. |
-| **ISO 27001:2022** | **Aligned** | Maps to Annex A controls for Access (A.9.2), Logging (A.12.4), and Resilience (A.17.2). |
-| **NIST CSF** | **Aligned** | Pillars map directly to the Core: *Identify (P2), Protect (P1), Detect (P4), Recover (P3)*. |
-| **HIPAA** | **Aligned** | Enforces **PHI Redaction [P1.T1.5]** and **Disaster Recovery [P3.T6]** (§ 164.308). |
-| **GDPR** | **Aligned** | Enforces Data Minimization, Storage Limitation, and Lawful Processing. |
-| **CVE / CVSS** | **Integrated** | **Combined Risk Score Formula:** `CVSS + (100 - Pillar Score) / 10`. |
-| **Zero Trust** | **Native** | Built on "Never Trust, Always Verify" for **Non-Human Identities**. |
+| **NIST AI RMF 1.0 / 2.0** | **100%** | GOVERN: CP.3, CP.4, CP.8 / MAP: A2.3, A2.4 / MEASURE: M4.x, E5.1 / MANAGE: F3.x |
+| **ISO/IEC 42001:2023** | **100%** | Sec 8.1: P1 / Sec 8.2: P2 / Sec 8.3: P4 / Sec 8.4: P5 / Sec 9: CP.6 |
+| **OWASP AIVSS v0.8** | **100% (NEW)** | All 10 core risks + AAF scoring formula integrated — first framework to do this |
+| **OWASP Top 10 LLM** | **100%** | LLM01-LLM10 all mapped including new agentic variants |
+| **OWASP Agentic Top 10 (ASI)** | **100% (NEW)** | ASI01-ASI10; CP.9 uniquely addresses ASI03 Identity Abuse; CP.10 addresses ASI09 |
+| **MITRE ATLAS (Oct 2025)** | **100%** | All 14 new agent-specific techniques fully mapped |
+| **MIT AI Risk Repository v4** | **100%** | 7 domains, catastrophic risk pathways (CP.8), CBRN risks |
+| **Google SAIF** | **97%** | Exceeds SAIF in swarm security, NHI governance, and memory poisoning |
+| **CSA Agentic Control Plane** | **85%** | CP.4 covers identity, authorization, orchestration, and runtime trust |
+| **CSA Zero Trust for LLMs (NEW)** | **90%** | S1.3 micro-perimeter per agent, CP.4 policy-as-code, A2.5 output trace |
+| **MAESTRO (CSA 7-Layer)** | **95%** | Layers 1-7 fully covered via pillars and CP controls |
+| **Arcanum PI Taxonomy** | **95%** | Evasion techniques in P1.T1.2, indirect injection in P1.T1.10, cognitive layer S1.6 |
+| **AIDEFEND (7 Tactics)** | **90%** | Deceive tactic (CP.7), Evict (F3.5), Harden shift-left (S1.4) |
+| **AIID Agentic Incidents** | **90%** | CP.6 incident feedback loop; M4.8 platform monitoring |
+| **EU AI Act (2024)** | **Aligned** | High-risk AI: CP.3 / GPAI: A2.3 / Transparency: A2.5 / Human oversight: CP.10 |
+| **International AI Safety Report 2026 (NEW)** | **Aligned** | Catastrophic risk: CP.8 / Loss of control: F3.2-F3.5 / Evaluation: E5.1-E5.4 |
+| **CSETv1 Harm** | **92%** | All 8 harm types including physical safety, financial loss, and democratic norms |
+
+### Enterprise Compliance Frameworks
+
+| Standard | Coverage | Key Mapping |
+| :--- | :--- | :--- |
+| **HIPAA** | **Aligned+** | P1.T1.5 PHI masking / P3.T6 disaster recovery §164.308 / S1.5 cross-session PHI |
+| **PCI-DSS v4.0** | **Aligned+** | P1.T1.5 PAN masking / P1.T2 network segmentation Req 1.3 / M4.8 cloud AI Req 6.4 |
+| **SOC 2 Type II** | **Aligned+** | CC.6.1-6.6: P1.T2, CP.4 / CC.7.x: P4, M4.x / C.1: S1.5 / CC.7.4: CP.10 HEAR |
+| **ISO 27001:2022** | **Aligned+** | A.5.15 access: P1.T2 / A.8.8 vuln mgmt: M4.8 / A.12.4 logging: A2.5 |
+| **NIST CSF 2.0** | **Aligned+** | GOVERN: CP.x / IDENTIFY: P2 / PROTECT: P1 / DETECT: P4 / RESPOND: P3 + CP.6 |
+| **NIST SP 800-53 Rev 5** | **Aligned+** | AC: P1.T2, CP.4 / AU: P2.T3, A2.5 / IR: CP.6, F3.x / RA: CP.2, CP.3 |
+| **FedRAMP** | **Aligned+** | High baseline: full ACT-3/ACT-4 controls / S1.7 for no-code interconnections |
+| **CMMC 2.0** | **Aligned+** | Level 1: P1-P2 / Level 2: P1-P5 + CP.3-CP.4 / Level 3: E5.x + CP.8 |
+| **CIS Controls v8** | **Aligned+** | CIS-1: A2.4 / CIS-3: S1.5 / CIS-6: CP.4 / CIS-8: A2.5 / CIS-17: CP.6 |
+| **GDPR** | **Aligned+** | Art.22 automated decisions: E5.2 + P4.T7 / Art.25 design: S1.5 / Art.33: CP.6 |
+| **CCPA / CPRA** | **Aligned+** | P1.T1.5 PII in AI inputs / S1.5 cross-session memory / M4.6 decision bias |
+| **SEC Cyber Disclosure** | **Aligned+** | Material incident: CP.6 IICR / Board accountability: CP.3, CP.4, CP.10 |
+| **DORA** | **Aligned+** | ICT risk: CP.2 / Incident reporting: CP.6 / Resilience testing: E5.1 |
+| **CVE / CVSS** | **Integrated** | Combined Risk Score: `CVSS + (100 - Pillar Score) / 10 + (AAF / 10)` |
+| **Zero Trust** | **Native** | Built on "Never Trust, Always Verify" for Non-Human Identities |
 
 ### 🧠 Architectural Insights
-*   **MIT AI Risk Repository:** v2.1 is the first framework to achieve **100% mapping** to the repository's 1,600+ cataloged risks.
-*   **CVE/CVSS Integration:** Unlike static frameworks, AI SAFE² uses technical vulnerability scores to adjust organizational risk. (e.g., A High CVSS (8.5) combined with Medium Control Effectiveness results in a **Critical Risk**).
-*   **Google SAIF Superiority:** While SAIF provides a baseline, AI SAFE² provides explicit **"Gap Filler"** sub-domains for Agentic AI and RAG Security that SAIF only implies.
-*   **Foundational Security:** We treat **ISO 27001 & NIST CSF** as the general security foundation, mapping the AI-specific S-A-F-E-E pillars directly into standard enterprise operations.
+- **OWASP AIVSS v0.8:** AI SAFE² v3.0 is the first framework to integrate all 10 core agentic risks and the AAF amplification factor into a composite GRC risk formula.
+- **OWASP Agentic Top 10:** CP.9 (Agent Replication Governance) and CP.10 (HEAR Doctrine) address ASI03 and ASI09 — controls no other framework currently provides.
+- **CVE/CVSS Integration:** Unlike static frameworks, AI SAFE² uses technical vulnerability scores adjusted for agentic deployment context. A CVSS 7.5 in an ACT-4 orchestrator with high AAF is a materially different risk than CVSS 7.5 in an ACT-1 read-only agent.
+- **Foundational Security:** ISO 27001 and NIST CSF are treated as the general security foundation, with the AI-specific SAFE² pillars mapping directly into standard enterprise operations.
 
 ---
+
 <a id="comparison"></a>
 ## 🆚 Why The Race Is Over (Comparison Matrix)
 
-Why use AI SAFE² vs. trying to patch together legacy tools?
-
-| Feature / Capability | **AI SAFE² v2.1 (The OS)** | **Legacy GRC** <br>*(Vanta, Archer)* | **AI Point Tools** <br>*(Guardrails)* |
+| Feature / Capability | **AI SAFE² v3.0 (The OS)** | **Legacy GRC** | **AI Point Tools** |
 | :--- | :--- | :--- | :--- |
-| **Universal Mapping** | **✅ 1-to-Many**<br>One control satisfies ISO, NIST, SOC2, HIPAA, PCI-DSS & GDPR instantly. | **⚠️ Fragmented**<br>Strong on SOC2, but zero-coverage for AI-specific frameworks (e.g. MITRE ATLAS or MIT AI Risk). You have to manually bridge the gap. | **❌ None**<br>Technical blocks only. No compliance evidence. Useless for an auditor. |
-| **Agentic Awareness** | **✅ Native**<br>Governs Swarms, n8n loops, and "Vibe Coding" IDEs (Cursor). | **❌ Blind**<br>Treats AI as generic software. No concept of autonomous decision loops or multi-agent risks. | **⚠️ Partial**<br>Can monitor LLM I/O, but lacks context on the orchestration or workflow logic (e.g., n8n loops). |
-| **Non-Human Identity** | **✅ First-Class Citizen**<br>Dedicated governance for the 100x explosion of Agent API keys. | **❌ Human-Centric**<br>Focuses on SSO/MFA for people, Completely misses the 100x explosion of Service Accounts and Agent API keys. | **⚠️ Weak**<br>Scans for secrets, but doesn't govern lifecycle or privilege of the Agent identity. |
-| **Supply Chain** | **✅ Cryptographic**<br>Mandates OpenSSF Model Signing & SBOMs. Blocks "Model Pickling" attacks. | **⚠️ Questionnaire**<br>Relies on vendor trust vs. technical verification. | **✅ Strong**<br>Good scanning, but lacks policy enforcement. |
-| **Cognitive Security (Memory)** | **✅ Anti-Poisoning Architecture**<br>Specific controls for RAG Poisoning (AgentPoison/MINJA). Mandates cryptographic state verification & semantic drift detection. | **❌ Zero Coverage**<br>Legacy tools do not understand Vector Databases or Embedding integrity. Let alone why memory systems like RAG, CAG or fine tuning are important. | **⚠️ Reactive**<br>Can filter bad inputs, but rarely monitors the long-term memory state of the Vector DB for corruption. |
-| **Implementation** | **✅ 60 Minutes**<br>Download the Toolkit. Audit-ready immediately. | **❌ 6-12 Months**<br>Requires expensive sales cycles and manual config of custom controls. | **❌ High Friction**<br>Requires code integration before value is realized. |
+| **Universal Mapping** | ✅ **32 frameworks, one implementation** | ⚠️ Strong on SOC2, zero agentic coverage | ❌ No compliance evidence |
+| **Agentic Awareness** | ✅ Native: swarms, loops, orchestration | ❌ Treats AI as generic software | ⚠️ LLM I/O only |
+| **Agent Replication Governance** | ✅ CP.9 — first in any framework | ❌ Not defined | ❌ Not defined |
+| **Named Kill-Switch Authority** | ✅ CP.10 HEAR Doctrine | ❌ No individual accountability | ❌ No process defined |
+| **AIVSS Scoring Integrated** | ✅ AAF in risk formula — first | ❌ None | ❌ None |
+| **Active Deception Defense** | ✅ CP.7 canary tokens + honeypots | ❌ None | ❌ None |
+| **No-Code Platform Security** | ✅ S1.7 — first, CVE-2026-25049 covered | ❌ None | ❌ None |
+| **Non-Human Identity** | ✅ First-class citizen with lifecycle | ❌ Human SSO only | ⚠️ Secret scanning only |
+| **Memory & RAG Governance** | ✅ Full lifecycle controls | ❌ Zero coverage | ⚠️ Input filtering only |
+| **Implementation** | ✅ 60 minutes with Toolkit | ❌ 6-12 months | ❌ Code integration first |
 
 > **The Verdict:** You can keep looking for a tool that catches up to AI SAFE², or you can adopt the standard that defined the race.
 
@@ -254,90 +258,66 @@ Why use AI SAFE² vs. trying to patch together legacy tools?
 
 <div align="center">
 
+<a id="toolkit"></a>
 ## 🚀 Fast-Track Implementation (The Toolkit)
 
-<p>This repository contains the definitions (The "What"). To operationalize this in an Enterprise (The "How"), use the Implementation Toolkit.</p>
+<p>This repository contains the definitions (the "What"). To operationalize this in an enterprise (the "How"), use the Implementation Toolkit.</p>
 
-<table>
-  <thead>
-    <tr>
-      <th align="left">Asset</th>
-      <th align="left">Description</th>
-      <th align="left">Access</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td align="left"><strong>Taxonomy Definitions</strong></td>
-      <td align="left">Full Markdown descriptions of controls.</td>
-      <td align="left">✅ <strong>Free (This Repo)</strong></td>
-    </tr>
-    <tr>
-      <td align="left"><strong>Audit Scorecard</strong></td>
-      <td align="left">Excel-based calculator with 128 controls & risk formulas.</td>
-      <td align="left">🔒 <a href="https://cyberstrategyinstitute.com/AI-Safe2/"><strong>Get Toolkit</strong></a></td>
-    </tr>
-    <tr>
-      <td align="left"><strong>Governance Policy</strong></td>
-      <td align="left">MS Word Legal Template mapped to ISO 42001.</td>
-      <td align="left">🔒 <a href="https://cyberstrategyinstitute.com/AI-Safe2/"><strong>Get Toolkit</strong></a></td>
-    </tr>
-    <tr>
-      <td align="left"><strong>Engineering SOPs</strong></td>
-      <td align="left">CLI commands and configs for Sanitize & Isolate (P1).</td>
-      <td align="left">🔒 <a href="https://cyberstrategyinstitute.com/AI-Safe2/"><strong>Get Toolkit</strong></a></td>
-    </tr>
-    <tr>
-      <td align="left"><strong>Dev-Ready Pack</strong></td>
-      <td align="left">JSON Schemas & Local MCP Server Scripts.</td>
-      <td align="left">🔒 <a href="https://cyberstrategyinstitute.com/AI-Safe2/"><strong>Get Toolkit</strong></a></td>
-    </tr>
-  </tbody>
-</table>
+| Asset | Description | Access |
+| :--- | :--- | :--- |
+| **Framework Taxonomy** | Full Markdown definitions of all 151 controls across 5 pillars + 10 cross-pillar governance controls (CP.1-CP.10) | ✅ **Free (This Repo)** |
+| **161-Point Audit Scorecard** | Excel calculator with auto-calculated risk scores including the v3.0 AAF formula | 🔒 [Get Toolkit](https://cyberstrategyinstitute.com/ai-safe2/) |
+| **Enterprise Governance Policy** | Word template with ACT tier assignments, HEAR designation, and CP.9 replication language | 🔒 [Get Toolkit](https://cyberstrategyinstitute.com/ai-safe2/) |
+| **AI SAFE² v3.0 Framework Document** | Complete framework with all 161 controls, cross-pillar governance, and 32-framework crosswalk | 🔒 [Get Toolkit](https://cyberstrategyinstitute.com/ai-safe2/) |
+| **Vendor Risk Questionnaire** | Updated for v3.0 protocol-layer supply chain assessment (CP.5) | 🔒 [Get Toolkit](https://cyberstrategyinstitute.com/ai-safe2/) |
+| **30-Day Implementation Roadmap** | Week-by-week path from greenfield or v2.1 to full v3.0 compliance | 🔒 [Get Toolkit](https://cyberstrategyinstitute.com/ai-safe2/) |
+| **Risk Command Center Dashboard** | Interactive v3.0 scorecard with ACT tier visualization and board-ready exports | 🔒 [Get Toolkit](https://cyberstrategyinstitute.com/ai-safe2/) |
 
 <br>
 
-<a href="https://cyberstrategyinstitute.com/AI-Safe2/">
-  <img src="https://img.shields.io/badge/🚀_DOWNLOAD_THE_OFFICIAL_TOOLKIT_($97)-F6921e?style=for-the-badge&logo=rocket&logoColor=white" alt="Download Toolkit" />
+<a href="https://cyberstrategyinstitute.com/ai-safe2/">
+  <img src="https://img.shields.io/badge/DOWNLOAD_THE_OFFICIAL_TOOLKIT_($97)-cc6600?style=for-the-badge&logo=rocket&logoColor=white" alt="Download Toolkit" />
 </a>
-<p><i>Includes Excel Scorecards, Legal Policies, and the Risk Command Center Dashboard.</i></p>
+<p><i>Consultants charge $5,000-$15,000 for equivalent implementation work. One time. $97.</i></p>
 
 </div>
-
 
 ---
 
 ## 📈 Framework Evolution
+
 AI SAFE² is a living standard that adapts to the threat landscape.
 
-| Version | Focus | Key Metaphor | Control Depth |
+| Version | Focus | Key Additions | Controls |
 | :--- | :--- | :--- | :--- |
-| **v2.1** | **Agentic & Distributed** | Mission Control | **128 Controls** (Swarm, NHI, Memory) |
-| **v2.0** | Enterprise Operations | Building Security | **99 Controls** (NIST/ISO Mapping) |
-| **v1.0** | Foundational Concepts | The Blueprint | **10 Topics** (Conceptual) |
+| **v3.0** | **Swarm Governance + Production Evidence** | 23 new pillar controls, 10 cross-pillar governance controls (CP.1-CP.10), AIVSS scoring integration, HEAR Doctrine, Agent Replication Governance | **161** |
+| **v2.1** | Agentic & Distributed | NHI governance, swarm controls, memory vaccine, OpenSSF OMS | **128** |
+| **v2.0** | Enterprise Operations | NIST/ISO mapping | **99** |
+| **v1.0** | Foundational Concepts | 10 core topics | **10** |
 
 👉 **[Read the Full Evolution History & Changelog](EVOLUTION.md)**
+
+---
 
 ## 📂 Repository Structure
 
 ```text
-## 📂 Repository Structure
-
 /
 ├── .github/                   # CI/CD Workflows & Dependabot Config
+├── 00-cross-pillar/           # Governance OS: CP.1-CP.10 (ACT Tiers, HEAR Doctrine, Replication)
 ├── 01-sanitize-isolate/       # Pillar 1: Input Filters & Boundaries
 ├── 02-audit-inventory/        # Pillar 2: Logging & Asset Tracking
 ├── 03-fail-safe-recovery/     # Pillar 3: Circuit Breakers & Kill Switches
 ├── 04-engage-monitor/         # Pillar 4: Human-in-the-Loop
 ├── 05-evolve-educate/         # Pillar 5: Red Teaming & Updates
-├── AISM/                      # AI Security Management Layer defining Governance, Control Mapping, and Operational Oversight
+├── AISM/                      # AI Security Management Layer: Governance, Control Mapping, Operational Oversight
 ├── FORGE-Act/                 # The American Marshall Plan for AI economic engine in all 435 congressional districts
 ├── assets/                    # Visual Maps, Badges & Diagrams
 ├── config/                    # Security Configurations (default.yaml)
 ├── examples/                  # 🧪 Real-world usage examples
 ├── gateway/                   # 🛡️ The AI SAFE² Gateway (Runtime Enforcement Layer)
 ├── guides/                    # 📚 Implementation Guides (Python & No-Code)
-├── research/                  # 🧠 Threat intelligence & Deep Dive Evidence (001-014)
+├── research/                  # 🧠 Threat Intelligence & Deep Dive Evidence (001-014)
 ├── resources/                 # Community Tools & Checklists
 ├── scanner/                   # 🕵️ The Audit Scanner CLI (Assessment Engine)
 ├── ADVANCED_AGENT_THREATS.md  # Guide: Swarm & RAG Vulnerabilities
@@ -348,66 +328,55 @@ AI SAFE² is a living standard that adapts to the threat landscape.
 ├── pyproject.toml             # Python Dependencies
 ├── README.md                  # The Universal GRC Standard (You are here)
 └── skill.md                   # 🧠 The Brain (Context for AI Agents/IDEs)
+```
 
-``` 
+---
+
 <a id="contributing"></a>
 ## 🤝 Join the Vanguard (Community)
 
-This isn't just a repo; it's a mission. We recognize and reward the top 1% of security engineers who contribute to the standard.
+This isn't just a repo — it's a mission. We recognize and reward the top 1% of security engineers who contribute to the standard.
 
-*   **⭐ Star the Repo:** Unlock the "Supporter" role.
-*   **💡 Contribute:** Submit a PR to earn "Contributor" status.
-*   **🏆 The Vanguard:** Earn Priority Beta Access to **Agentic Shield (SaaS)** by helping us harden the framework.
+- **⭐ Star the Repo:** Unlock the "Supporter" role
+- **💡 Contribute:** Submit a PR to earn "Contributor" status
+- **🏆 The Vanguard:** Earn Priority Beta Access to **Agentic Shield (SaaS)** by helping harden the framework
 
 [**Read the Vanguard Program Details**](VANGUARD_PROGRAM.md)
 
----
 ---
 
 ## 🧠 Companion Framework: Cognitive Sovereignty Framework (CSF)
 
 AI SAFE² secures the AI system. It does not secure the human operating it.
 
-An operator who has experienced sufficient attention capture, cognitive offloading, or decision automation capture can be fully compromised — regardless of how well-hardened their AI infrastructure is. The AI system is secure. The human operating it is not. This is the gap AI SAFE² was designed to acknowledge but not address.
-
-That gap now has a companion framework.
+An operator who has experienced sufficient cognitive offloading or decision automation capture can be fully compromised — regardless of how well-hardened the AI infrastructure is. That gap has a companion framework.
 
 | | AI SAFE² | CSF |
 |---|---|---|
 | **Layer** | Machine | Human |
 | **Defends** | The AI system | The human operator |
-| **Governs** | The tool | The capacity to govern the tool |
-| **Prevents** | Prompt injection, data leakage, unsafe autonomy | Cognitive offloading, attention capture, decision automation capture, identity fragmentation |
+| **Prevents** | Prompt injection, data leakage, unsafe autonomy | Cognitive offloading, attention capture, decision automation capture |
 | **Ensures** | AI stays in its lane | The human stays capable of defining the lane |
 
-**The shared principle:** Both frameworks enforce the same core commitment — AI is always a tool, never a moral agent. Human authority is non-negotiable. AI SAFE²'s runtime governors enforce this at the technical layer. The CSF's E7 Protocol Stack enforces it as an architectural guarantee at the human-AI system layer.
-
-**If you are an AI SAFE² user:**
-- Review the [CSF Six-Domain Assessment](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/#six-domains) alongside your existing AI SAFE² implementation. Domain 6 (Digital & AI Symbiosis) is the direct human-layer complement to your AI governance work.
-- Substrate threats in the CSF taxonomy — particularly ST-003 (Cognitive Offloading) and ST-006 (Guardrail Alignment Drift) — require human behavioral interventions that no technical control can substitute for.
-- Use the [live CTSS Calculator](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/csf-explorer.html) to score the cognitive threat posture of your operating environment alongside your AI SAFE² risk assessments.
-
-> **Neither framework is sufficient without the other. AI SAFE² without CSF secures the tool while the operator degrades. CSF without AI SAFE² builds human resilience while the AI infrastructure remains exploitable.**
-
-→ **[CSF Learning Hub](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/)** — What it is, why it exists, how to use it  
-→ **[Threat Explorer](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/csf-explorer.html)** — Interactive taxonomy, CTSS scoring, swarm threat phases, human outcome indicators  
-→ **[Command Center](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/csf-command-center.html)** — Full framework in a single operational dashboard  
-→ **[Full Repository](https://github.com/CyberStrategyInstitute/cognitive-sovereignty)** — Source files, taxonomy registry, assessment templates
+→ **[CSF Learning Hub](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/)**
+→ **[Threat Explorer](https://cyberstrategyinstitute.github.io/cognitive-sovereignty/csf-explorer.html)**
+→ **[Full Repository](https://github.com/CyberStrategyInstitute/cognitive-sovereignty)**
 
 ---
 
 ## ✏️ Citation
-If you use AI SAFE² in research or commercial tooling, please cite the Cyber Strategy Institute:
+
 ```text
 @misc{aisafe2_framework,
-  title = {AI SAFE² Framework v2.1: The Universal GRC Standard for Agentic AI},
+  title = {AI SAFE² Framework v3.0: The Universal GRC Standard for Agentic AI},
   author = {Sullivan, Vincent and {Cyber Strategy Institute}},
-  year = {2025-2026},
+  year = {2026},
   publisher = {Cyber Strategy Institute},
-  url = {https://github.com/CyberStrategy1/ai-safe2-framework},
-  note = {Version 2.1. Agentic & Distributed Edition}
+  url = {https://github.com/CyberStrategyInstitute/ai-safe2-framework},
+  note = {Version 3.0. Swarm Governance and Production Evidence Edition. 161 Controls, 32 Frameworks.}
 }
 ```
+
 ## Star History
 
 <a href="https://www.star-history.com/?repos=CyberStrategyInstitute%2Fai-safe2-framework&type=date&legend=top-left">
@@ -418,21 +387,13 @@ If you use AI SAFE² in research or commercial tooling, please cite the Cyber St
  </picture>
 </a>
 
+---
 
 ## ⚖️ Licensing & Usage Rights
-This project uses a Dual-License Model to support both open innovation and standardized governance.
 
-## 💻 A. The Code: MIT License
-Applies to: MCP Server scripts, JSON schemas, HTML dashboards, and code snippets.
-You Can: Use this code commercially, modify it, close-source your modifications, and sell software built with it.
-The Intent: Build products on top of this. We want this to be the infrastructure of the AI industry.
+**Code (MIT License):** Applies to MCP Server scripts, JSON schemas, HTML dashboards, and code snippets. Use commercially, modify freely, close-source your modifications.
 
-## 📘 B. The Framework/Docs: CC-BY-SA 4.0
-Applies to: The "AI SAFE²" methodology text, pillar definitions, and PDF manuals.
-You Can: Share, copy, and redistribute the material. You can adapt it for your internal needs.
-You Must:
-Attribution: Give credit to Cyber Strategy Institute.
-ShareAlike: If you create a public derivative (e.g., "AI SAFE v3.0"), you must share those improvements back to the community under this same license.
+**Framework/Docs (CC-BY-SA 4.0):** Applies to the AI SAFE² methodology text, pillar definitions, and PDF manuals. Share with attribution; public derivatives must share back under this same license.
 
 <div align="center">
 <sub>Managed by <a href="https://cyberstrategyinstitute.com">Cyber Strategy Institute</a>.</sub><br>
