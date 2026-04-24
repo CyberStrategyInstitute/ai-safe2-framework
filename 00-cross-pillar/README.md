@@ -109,11 +109,40 @@ This captures time-shifted attacks — latent prompt poisoning, slow memory cond
 
 **What it governs:** Platform-by-platform security guidance with version-pinned CVE coverage and monitoring telemetry sources.
 
-**Platforms covered:** AWS Bedrock Agents, Azure AI Foundry, n8n, LangGraph, AutoGen, CrewAI, and protocol-layer meshes.
+**Platforms covered:** AWS Bedrock Agents, Azure AI Foundry, n8n, LangGraph, AutoGen, CrewAI, MCP Servers, and protocol-layer meshes.
 
 **Key requirement:** Protocol-layer meshes (A2A, MCP, ACP, and equivalents) must be assessed as first-class supply chain components with the same depth as SaaS vendors — including identity, delegation, logging, and update channels.
 
 **Why it matters:** Platform-specific attack paths (Bedrock UpdateGuardrail API poisoning, Azure AI Foundry configuration changes) are not covered by generic cloud monitoring. CP.5 defines what to watch.
+
+### CP.5.MCP — MCP Server Security Profile
+
+MCP is the de facto standard for AI agent tool integration. Its STDIO transport model eliminates the network boundary that separates tool execution from host process space. Tool response data flows directly into LLM context — making the return path a first-class prompt injection surface. OX Security research (April 2026) documented RCE exposure propagating from Anthropic's official MCP SDKs to all downstream implementations. Generic platform guidance does not cover this threat class. MCP requires an explicit profile.
+
+**Required controls:**
+
+| ID | Control | Requirement |
+| :--- | :--- | :--- |
+| MCP-1 | No Dynamic Command Construction | Never pass user-controlled or tool-response-controlled input into `StdioServerParameters`, `subprocess`, `os.system`, or equivalents. Enforce via static analysis in CI/CD. |
+| MCP-2 | Output Sanitization Before LLM Return | Scan all MCP tool results for prompt injection patterns — instruction-override phrases, role-confusion markers, zero-width characters, and target LLM special tokens — before returning to calling clients. Log and redact matches. |
+| MCP-3 | Registry Provenance Verification | Verify all third-party MCP servers against the official GitHub MCP Registry before adding to any agent configuration. Enforce a manifest-based allowlist for approved server commands. Reject unverified sources. |
+| MCP-4 | STDIO Transport Integrity Binding | For STDIO-mode deployments, verify source file hash before granting elevated tier access. Fail closed on integrity failure. |
+| MCP-5 | Tool Invocation Audit Log | Every MCP tool call generates an immutable audit record (tool name, parameters, response hash, timestamp, calling agent identity) consistent with A2.5 Semantic Execution Trace Logging. Cross-reference against behavioral baseline (F3.4) to detect unexpected invocations. |
+| MCP-6 | MCP Server Network Isolation | MCP servers must not have unrestricted outbound network access unless explicitly required for their defined function. Apply allowlist-based egress filtering. Block exfiltration paths to unknown external URLs. |
+| MCP-7 | Zero-Trust Client Configuration | Any MCP server configuration sourced from a repository the operator does not control is treated as an untrusted artifact. Apply proxy wrapping to all third-party STDIO connections. |
+
+**ACT tier applicability:**
+
+- **ACT-2+:** MCP-1, MCP-2, MCP-5 mandatory
+- **ACT-3+:** All 7 controls mandatory
+- **ACT-4:** All 7 controls + CP.9 lineage token propagation through MCP delegation chains
+
+**MITRE ATLAS:** AML.T0002, AML.T0005, AML.T0051
+**OWASP LLM:** LLM05 (Supply Chain Vulnerabilities), LLM10 (Model Theft / Exfiltration)
+
+> Full research foundation and implementation rationale: [Research Note 023 — MCP Server Security Profile](../research/023_mcp-server-security-profile.md)
+
+---
 
 ---
 
