@@ -7,8 +7,10 @@ Codex, and any MCP-compatible client to live control lookup, risk scoring, compl
 mapping, and governance resources.
 
 **Two transports — both secure:**
-- `stdio`: local use, inherently secure (OS process pipe), no auth required
-- `streamable-http` over HTTPS: remote access via Caddy TLS termination, bearer token auth
+- `stdio`: local use, inherently secure (OS process pipe), startup security verified
+- `streamable-http` over HTTPS: remote access via Caddy TLS termination, bearer token auth + rate limiting
+
+**Version 3.0.1** — Security patch release. See [Security Architecture](#security-architecture) for details.
 
 ---
 
@@ -25,7 +27,7 @@ Tokens are issued at **cyberstrategyinstitute.com/ai-safe2/** — the server onl
 | Code review | No | Yes |
 | Agent classification | ACT-1/ACT-2 only | Full ACT-1 through ACT-4 |
 | Policy templates | 3 resources | All resources |
-| Rate limit | 30 req/hour | 1000 req/hour |
+| Rate limit | 30 req/hour | 1,000 req/hour |
 | Local stdio | Yes (always Pro access) | Yes |
 
 ---
@@ -73,10 +75,7 @@ Add to Claude Code settings (`~/.cursor/settings.json` or equivalent):
 ### Connect via Docker (stdio)
 
 ```bash
-# Build the image
 docker build -t ai-safe2-mcp .
-
-# Run stdio (works as a subprocess for any MCP client)
 docker run --rm -i -e MCP_TRANSPORT=stdio ai-safe2-mcp
 ```
 
@@ -98,256 +97,253 @@ Docker config for Claude Code:
 
 Railway provides Docker-native deployment with automatic HTTPS and a public URL.
 
-### Deploy steps
+### Steps
 
-1. **Fork or push this repo to GitHub**
-
-2. **Create a new Railway project**
-   - Go to railway.app, create project, select "Deploy from GitHub repo"
-   - Point to your fork of ai-safe2-framework
-
-3. **Set the root directory** to `skills/mcp` in Railway settings
-
-4. **Set environment variables in Railway dashboard:**
+1. Fork or clone the repository
+2. Create a new Railway project → Deploy from GitHub repo
+3. Set environment variables in Railway dashboard:
    ```
    MCP_TRANSPORT=streamable-http
    MCP_HOST=0.0.0.0
    MCP_PORT=8000
-   LOG_LEVEL=INFO
-   LOG_FORMAT=json
-   TOKENS=free_yourtoken123:free,pro_yourtoken456:pro
+   TOKENS=free_yourtoken:free,pro_yourtoken:pro
    ```
+4. Railway exposes HTTPS automatically. Your server URL will be:
+   `https://your-project.railway.app/mcp`
 
-5. **Railway provides automatic HTTPS** — your endpoint will be:
-   `https://your-app.up.railway.app/mcp`
+### Connect Claude Code to Railway
 
-6. **Test the health endpoint:**
-   ```bash
-   curl https://your-app.up.railway.app/health
-   ```
-   Expected: `{"status": "healthy", "controls_loaded": 161, ...}`
-
-### Note on Caddy with Railway
-Railway handles TLS automatically — you do not need the Caddy sidecar.
-The `docker-compose.yml` with Caddy is for self-hosted VPS deployments.
-On Railway, set `MCP_HOST=0.0.0.0` so Railway can forward traffic to the container.
+```json
+{
+  "mcpServers": {
+    "ai-safe2": {
+      "type": "http",
+      "url": "https://your-project.railway.app/mcp",
+      "headers": {
+        "Authorization": "Bearer your-pro-token"
+      }
+    }
+  }
+}
+```
 
 ---
 
-## Option 3: Self-Hosted VPS with Caddy (HTTPS, full control)
-
-For production self-hosting with your own domain.
-
-### Prerequisites
-- VPS with Docker and Docker Compose installed
-- Domain DNS A record pointing to your VPS IP
-
-### Setup
+## Option 3: Self-Hosted with Caddy (Production)
 
 ```bash
-# Clone the repo
-git clone https://github.com/CyberStrategyInstitute/ai-safe2-framework.git
-cd ai-safe2-framework/skills/mcp
+# Install Caddy
+curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+# ... (follow Caddy installation for your OS)
 
-# Configure environment
+# Copy and edit .env
 cp .env.example .env
-# Edit .env:
-#   DOMAIN=mcp.yourdomain.com
-#   TOKENS=free_abc:free,pro_xyz:pro
+# Edit .env: set MCP_TRANSPORT=streamable-http, TOKENS=...
 
-# Build and start (Caddy handles HTTPS automatically)
-docker compose up -d
+# Run uvicorn (behind Caddy)
+MCP_TRANSPORT=streamable-http python -m mcp_server.app &
 
-# Verify health
-curl https://mcp.yourdomain.com/health
-```
-
-Caddy automatically obtains a Let's Encrypt certificate for your domain.
-First startup takes ~30 seconds for certificate provisioning.
-
----
-
-## Token Management
-
-Tokens follow the format: `{tier_prefix}_{random_string}`
-- Free prefix: `free_`
-- Pro prefix: `pro_`
-
-Set in the server via the `TOKENS` environment variable:
-```
-TOKENS=free_abc123def:free,pro_xyz789uvw:pro,pro_another:pro
-```
-
-For production with many users, replace the `TOKEN_MAP` in `config.py` with
-a database lookup or external token service. The auth middleware in `auth.py`
-calls `TOKEN_MAP.get(token)` — swap this for any validation backend.
-
-**The server never issues tokens.** All token issuance happens at
-cyberstrategyinstitute.com/ai-safe2/ — this keeps the MCP server stateless
-and simple.
-
----
-
-## Connect Codex
-
-```toml
-# ~/.codex/config.toml
-experimental_use_rmcp_client = true
-
-[mcp_servers.ai-safe2]
-url = "https://your-domain.example/mcp"
-bearer_token = "YOUR_TOKEN_HERE"
-startup_timeout_sec = 20
-tool_timeout_sec = 60
-```
-
-For local stdio with Codex:
-```toml
-[mcp_servers.ai-safe2-local]
-command = "python"
-args = ["-m", "mcp_server.app"]
-env = { MCP_TRANSPORT = "stdio", PYTHONPATH = "/path/to/skills/mcp/src" }
+# Run Caddy
+caddy run --config Caddyfile
 ```
 
 ---
 
-## Available Tools (Quick Reference)
+## Security Architecture
 
-### `lookup_control`
-```
-query: str          — keyword search across name, description, tags, builder_problem
-control_id: str     — exact ID lookup (e.g., "CP.10", "S1.5", "F3.2")
-pillar: str         — "P1" through "P5" or "CP"
-priority: str       — "CRITICAL", "HIGH", "MEDIUM", "LOW"
-framework: str      — e.g., "EU_AI_Act", "SOC2_Type2", "OWASP_Agentic_Top10"
-version_added: str  — "v2.0", "v2.1", "v3.0"
-act_tier: str       — "ACT-1", "ACT-2", "ACT-3", "ACT-4"
+Version 3.0.1 addresses four security risks identified in the April 2026 OX Security
+research on MCP supply chain vulnerabilities. The AI SAFE2 MCP server was already
+substantially safer than affected platforms due to its read-only architecture and
+absence of dynamic command construction. This release closes the remaining residual
+exposures.
+
+### What was never vulnerable (architecture-level)
+
+The primary OX Security exploit — Arbitrary RCE via unsanitized input into
+`StdioServerParameters` — does **not apply** to this server. A full code audit
+confirmed zero instances of `subprocess`, `os.system`, `shell=True`, `exec()`,
+or `eval()` anywhere in the codebase. User input never enters a command-construction
+function. The server is a read-only index over a static JSON file.
+
+### Fixes applied in v3.0.1
+
+**RISK-0 (HIGH — pre-existing bug, not in OX research): Tier auth broken for HTTP transport**
+
+The original code used `_current_request: Request | None = None` as a module-level
+global that was never set. All HTTP-transport tool calls silently fell back to
+`"free"` tier regardless of the authenticated token — Pro users were being served
+free-tier responses.
+
+Fix: `mcp_server/context.py` introduces a `contextvars.ContextVar` for tier
+propagation. `BearerAuthMiddleware` calls `set_tier(tier)` after token validation.
+Tool functions call `get_tier()` which reads from the ContextVar. Each asyncio
+coroutine (request) gets its own ContextVar copy — no cross-request contamination.
+
+**RISK-1 (MODERATE): No output sanitization before returning to LLM clients**
+
+If `ai-safe2-controls-v3.0.json` is compromised (supply chain attack, malicious
+PR merge), the server could return prompt injection payloads embedded in control
+descriptions to Claude Code, Codex, or Cursor as trusted tool-response content.
+The `code_review` tool was highest-risk as it directly injects control text as
+LLM reasoning context.
+
+Fix: `mcp_server/sanitize.py` implements `sanitize_output()` — a recursive
+scanner that detects and redacts 7 injection pattern families:
+instruction override, role confusion, permission escalation, system prompt
+exfiltration, LLM special tokens, zero-width characters, and role separator injection.
+All 7 tool functions in `app.py` wrap their return values with `sanitize_output()`.
+Every redaction generates a structured audit log event (`sanitize.injection_detected`)
+with pattern family, field path, and a truncated preview.
+
+**RISK-2 (LOW-MODERATE): STDIO unconditionally grants Pro with no identity binding**
+
+STDIO transport bypassed auth and granted Pro tier with zero verification.
+Combined with OX Security's finding that zero-click IDE injection auto-executes
+MCP servers from project-level configs (Windsurf CVE-2026-30615), a malicious
+repo `.claude/settings.json` could trigger the STDIO trust bypass.
+
+Fix: `verify_stdio_security()` in `mcp_server/auth.py` runs at STDIO startup
+before any requests are accepted. Two checks:
+
+1. **Command + module allowlist**: Verifies `sys.executable` is in `ALLOWED_STDIO_COMMANDS`
+   and `sys.argv` matches an expected module pattern (e.g., `mcp_server.app`).
+   Blocks a tampered settings.json that swaps `mcp_server.app` for a rogue module
+   while still using a recognized Python binary.
+
+2. **Source integrity hash** (opt-in): Set `MCP_SOURCE_HASH` in env to enable.
+   On startup, SHA-256 of all `.py` files in the package + `ai-safe2-controls-v3.0.json`
+   is computed and compared. Mismatch → `sys.exit(1)` (fail-closed).
+   Generate hash at release: `PYTHONPATH=src python -c "from mcp_server.auth import _compute_source_hash; print(_compute_source_hash())"`
+
+3. **Install path verification** (opt-in): Set `MCP_INSTALL_PATH`. Verifies
+   `__file__` resolves inside the expected directory.
+
+**Known limitation**: These checks cannot block a malicious settings.json that
+points to a completely different binary (e.g., `command: /tmp/evil`). That threat
+requires IDE-level MCP config signing (Claude Code roadmap) or OS-level process
+isolation (Warden kernel containment). The server-side checks are defense-in-depth
+for the case where the correct server binary is running but source has been tampered.
+
+**RISK-3 (LOW): Rate limiting declared but not wired**
+
+`slowapi` was listed in `pyproject.toml` but never imported or initialized in `app.py`.
+Rate limiting was 100% Caddy-dependent. Direct uvicorn connections and Railway
+deployments without Caddy had no application-layer rate limiting.
+
+Fix: `mcp_server/ratelimit.py` implements a thread-safe token bucket rate limiter.
+Applied inside `BearerAuthMiddleware` after tier resolution. Key format: `{tier}:{ip}`
+— free and pro buckets are isolated. Rate limit state headers (`X-RateLimit-Limit`,
+`X-RateLimit-Remaining`, `X-RateLimit-Window`, `Retry-After`) are attached to
+every response.
+
+### Multi-Instance Rate Limiting
+
+The token bucket limiter uses in-process memory. This is correct for single-instance
+deployments (single Railway dyno, single Docker container).
+
+For multi-instance (horizontal scale), replace with a Redis-backed implementation:
+
+```python
+# In mcp_server/ratelimit.py — Redis upgrade
+import redis
+r = redis.Redis(host=os.getenv("REDIS_HOST", "localhost"), decode_responses=True)
+
+def check(self, key: str) -> RateLimitResult:
+    limit = self._limit_for_key(key)
+    now = int(time.time())
+    window_key = f"rl:{key}:{now // 3600}"
+    pipe = r.pipeline()
+    pipe.incr(window_key)
+    pipe.expire(window_key, 7200)
+    count, _ = pipe.execute()
+    allowed = count <= limit
+    remaining = max(0, limit - count)
+    retry_after = (3600 - (now % 3600)) if not allowed else 0
+    return RateLimitResult(allowed, limit, remaining, retry_after,
+                           self._build_headers(allowed, limit, remaining, retry_after))
 ```
 
-### `risk_score`
-```
-cvss_base: float       — CVSS base score (0-10)
-pillar_score: float    — AI SAFE2 compliance score (0-100)
-aaf_factors: dict      — OWASP AIVSS v0.8 factors (Pro only)
+Add `redis>=5.0` to `pyproject.toml` dependencies and set `REDIS_URL` in env.
+
+### Enabling Source Integrity Verification (Recommended)
+
+After deploying or updating the server:
+
+```bash
+# 1. Generate hash from your installed copy
+PYTHONPATH=src python -c "from mcp_server.auth import _compute_source_hash; print(_compute_source_hash())"
+
+# 2. Store in environment
+echo "MCP_SOURCE_HASH=<hash-output>" >> .env
+
+# 3. Restart server — startup will now verify source integrity
+MCP_TRANSPORT=stdio python -m mcp_server.app
 ```
 
-### `compliance_map`
-```
-requirement: str       — e.g., "EU AI Act Article 14", "GDPR Article 22", "SOC 2 CC.7.4"
-framework_ids: list    — filter to specific frameworks (optional)
-```
+If the hash check fails on startup (hash mismatch detected), the server exits
+immediately with code 1 and logs `auth.stdio_integrity_failure`. Do not ignore this.
 
-### `code_review` (Pro)
-```
-code: str              — code to review
-language: str          — "python", "javascript", "typescript", etc.
-context: str           — what this code does (optional)
-focus_pillar: str      — "P1" through "P5" (optional, reviews all if omitted)
-```
+---
 
-### `agent_classify`
-```
-description: str                — what the agent does
-human_review_required: bool     — must human review all outputs?
-spawns_sub_agents: bool         — can this agent spawn other agents?
-has_persistent_memory: bool     — cross-session state?
-tool_access: list               — tools the agent can call
-operates_unattended: bool       — runs without human presence?
-deployment_environment: str     — "production", "enterprise", etc.
-```
+## Available Tools
 
-### `get_governance_resource`
-```
-resource_name: str    — resource ID, or empty string to list available resources
-                        Free: quick_start_checklist, pillar_overview, act_tier_reference
-                        Pro: governance_policy_template, audit_scorecard_schema,
-                             hear_designation_template
-```
-
-### `get_workflow_prompt`
-```
-prompt_name: str      — or empty to list all prompts
-arguments: dict       — template variables (see prompt definitions)
-Available: security_architecture_review, compliance_gap_analysis,
-           incident_response_runbook, agent_deployment_checklist
-```
+| Tool | Description | Tier |
+|------|-------------|------|
+| `lookup_control` | Search 161 controls by keyword, pillar, priority, framework, ACT tier, or ID | Free + Pro |
+| `risk_score` | Calculate AI SAFE2 Combined Risk Score with optional OWASP AIVSS AAF | Free (basic) + Pro (full) |
+| `compliance_map` | Map requirement to controls across up to 32 frameworks | Free (5 fw) + Pro (32 fw) |
+| `code_review` | Return control taxonomy context for model-based code review | Pro only |
+| `agent_classify` | Classify agent by ACT tier, return HEAR/CP.9 requirements | Free (ACT-1/2) + Pro (all) |
+| `get_governance_resource` | Retrieve policy templates, audit schemas, checklists | Free (3) + Pro (all) |
+| `get_workflow_prompt` | Get reusable AI SAFE2 workflow prompts | Free + Pro |
 
 ---
 
 ## Running Tests
 
 ```bash
-cd skills/mcp
+# All tests (137 total: 51 functional + 86 security)
+PYTHONPATH=src python -m pytest tests/ -v
 
-# Unit tests (no server needed)
-pytest tests/test_tools.py -v
+# Security tests only
+PYTHONPATH=src python -m pytest tests/test_security.py -v
 
-# HTTPS smoke tests (requires deployed instance)
-MCP_SERVER_URL=https://your-domain.example \
-MCP_PRO_TOKEN=pro_your_token \
-MCP_FREE_TOKEN=free_your_token \
-pytest tests/test_smoke_https.py -v
+# Functional tests only
+PYTHONPATH=src python -m pytest tests/test_tools.py -v
 ```
 
-Expected unit test result: all tests pass, including:
-- `test_loads_161_controls` — confirms JSON integrity
-- `test_loads_32_frameworks` — confirms framework count
-- `test_pro_gate_on_aaf` — confirms tier enforcement
+Tests cover:
+- ContextVar tier propagation and thread isolation (RISK-0)
+- Injection pattern detection across all 7 families (RISK-1)
+- Sanitization of nested dicts, lists, and edge cases (RISK-1)
+- False positive validation against real control descriptions (RISK-1)
+- Command allowlist and module pattern verification (RISK-2)
+- Source hash computation, determinism, and tamper detection (RISK-2)
+- Token bucket limits, tier isolation, refill, GC, and headers (RISK-3)
+- End-to-end pipeline: middleware → ContextVar → tool → sanitize (all risks)
+- Full 161-control data integrity and all original tool functionality (regression)
 
 ---
 
-## Security Architecture
+## Framework Mapping
 
-```
-Internet
-    │ HTTPS (443)
-    ▼
-Caddy (TLS termination, HSTS, security headers, rate limiting)
-    │ HTTP (127.0.0.1:8000, internal only)
-    ▼
-MCP Server (BearerAuthMiddleware → FastMCP tools)
-    │
-    ├── stdio transport: local process pipe, no network, no auth
-    └── HTTP transport: binds to 127.0.0.1 only, Caddy is the only caller
-```
+The AI SAFE2 MCP server implements CP.5.MCP — the MCP Server Security Profile
+added to AI SAFE2 v3.0 in response to the OX Security research. The seven
+required controls are implemented as follows:
 
-**Key security properties:**
-- MCP server never exposed on a public port — Caddy is the only gateway
-- Bearer tokens validated on every request — middleware, not optional
-- stdio mode: no network, no credentials needed, scoped to local process
-- Non-root Docker user (UID 1001)
-- No code execution on server — code review is model-based only
-- Tokens never stored in code — environment variables only
+| CP.5.MCP Requirement | Implementation |
+|---------------------|---------------|
+| No dynamic command construction | Zero subprocess/shell/exec in codebase |
+| Output sanitization before LLM return | `sanitize.py` — all 7 tools |
+| STDIO transport identity binding | `verify_stdio_security()` — command + path + hash |
+| MCP tool invocation audit log | `structlog` structured events on every tool call |
+| Application-layer rate limiting | Token bucket in `BearerAuthMiddleware` |
+| Network isolation | Container binds to 127.0.0.1; Caddy handles external TLS |
+| Zero-trust client config guidance | `client-config/` examples use verified paths |
 
 ---
 
-## Updating the Controls
+## License
 
-To update the control taxonomy:
-
-```bash
-cd skills/mcp/data
-
-# Edit generate_controls.py to add or modify controls
-# Then regenerate:
-python generate_controls.py
-
-# Verify count
-python -c "
-import json
-with open('ai-safe2-controls-v3.0.json') as f:
-    d = json.load(f)
-print('Total:', d['metadata']['total_controls'])
-"
-
-# Run tests
-cd .. && pytest tests/test_tools.py -v
-```
-
-The `ControlsDB` class reloads on startup — no code changes needed when
-the JSON is updated, just restart the server.
-
----
-
-*AI SAFE2 v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com/ai-safe2/*
-*github.com/CyberStrategyInstitute/ai-safe2-framework*
+MIT — Cyber Strategy Institute. Use freely. Attribute appropriately.
+Tokens at **cyberstrategyinstitute.com/ai-safe2/**
