@@ -1,0 +1,6 @@
+interface:
+  display_name: "AI SAFE2 Secure Build Copilot"
+  short_description: "Govern AI agents with AI SAFE2 v3.0 controls"
+  default_prompt: "Use $ai-safe2-secure-build-copilot to review this AI agent design against AI SAFE2 v3.0."
+policy:
+  allow_implicit_invocation: true
