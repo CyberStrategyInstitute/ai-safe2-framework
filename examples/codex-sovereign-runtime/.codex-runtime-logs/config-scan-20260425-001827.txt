@@ -1,0 +1,10 @@
+AI SAFE2 Codex Config Scanner
+Scan root: C:\Users\CyberStrategy1\Documents\Cyber Strategy Institute\Codex
+Report path: C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\ac80d175874f4761\.codex-runtime-logs\config-scan-20260425-001827.txt
+
+Checking: C:\Users\CyberStrategy1\Documents\Cyber Strategy Institute\Codex\everything-claude-code-main\.codex\config.toml
+  [WARN] approval_policy = never
+  [WARN] multi_agent enabled. ACT-4 / CP.9 governance required.
+  [INFO] MCP servers configured. Validate against allowlist.
+
+Summary: critical=0 warnings=2

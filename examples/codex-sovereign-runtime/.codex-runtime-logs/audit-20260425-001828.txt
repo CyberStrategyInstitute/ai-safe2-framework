@@ -1,0 +1,20 @@
+AI SAFE2 Codex Installation Audit
+Generated: 2026-04-25T04:18:28.3797058Z
+Host: DESKTOP-MFMPMIP
+User: CyberStrategy1
+
+--- Codex Binary Locations ---
+Found: C:\Program Files\WindowsApps\OpenAI.Codex_26.422.3464.0_x64__2p2nqsd0c76g0\app\resources\codex
+Found: C:\Program Files\WindowsApps\OpenAI.Codex_26.422.3464.0_x64__2p2nqsd0c76g0\app\resources\codex.exe
+[WARN] Multiple Codex binary locations detected.
+
+[WARN] Unable to read codex version.
+Resolved path: C:\Users\CyberStrategy1\AppData\Local\OpenAI\Codex\bin\codex.exe
+
+--- Config Files ---
+Found: C:\Users\CyberStrategy1\.codex\config.toml
+
+--- Shell Aliases And Functions ---
+No PowerShell profile found at C:\Users\CyberStrategy1\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+
+Summary: issues=2

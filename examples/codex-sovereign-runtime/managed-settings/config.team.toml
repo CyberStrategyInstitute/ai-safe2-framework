@@ -1,0 +1,38 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "live"
+
+persistent_instructions = "Follow the project AGENTS.md security policy. Use only approved MCP servers. Never use dangerous bypass mode."
+
+notify = [
+  "powershell",
+  "-ExecutionPolicy",
+  "Bypass",
+  "-File",
+  "$HOME/.codex/monitoring/codex-notify.ps1",
+]
+
+[features]
+multi_agent = false
+
+[profiles.strict]
+approval_policy = "untrusted"
+sandbox_mode = "read-only"
+web_search = "cached"
+
+[profiles.team]
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+web_search = "live"
+
+[mcp_servers.github]
+command = "npx"
+args = ["-y", "@modelcontextprotocol/server-github"]
+startup_timeout_sec = 30
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp@latest"]
+startup_timeout_sec = 30
