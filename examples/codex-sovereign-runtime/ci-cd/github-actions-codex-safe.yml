@@ -1,0 +1,32 @@
+name: codex-safe-review
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  codex-safe-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Codex
+        run: npm install -g @openai/codex
+
+      - name: Install managed config
+        run: |
+          mkdir -p "$HOME/.codex"
+          cp codex-sovereign-runtime/managed-settings/config.strict.toml "$HOME/.codex/config.toml"
+
+      - name: Review with Codex under fail-closed settings
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          codex review \
+            --sandbox workspace-write \
+            --ask-for-approval never \
+            -c 'features.multi_agent=false'
