@@ -255,6 +255,11 @@ class TestRatingThresholds:
 
 class TestAttestationBonus:
     def test_full_attestation_gives_25_points(self):
+        """All 11 attested fields (full CP.5.MCP coverage) earns 25 points.
+        Note: original 5-field attestation now earns 13pts under the risk-weighted rubric.
+        Full bonus requires implementing MCP-8 through MCP-13 in addition to MCP-1/2/4/5/6.
+        See TestAttestationBonusRiskWeighted for the detailed rubric tests.
+        """
         assessor = MCPAssessor("https://example.com/mcp")
         att = AttestationData(
             present=True,
@@ -264,6 +269,12 @@ class TestAttestationBonus:
             rate_limiting=True,
             audit_logging=True,
             network_isolation="127.0.0.1 only",
+            session_economics=True,
+            context_tool_isolation="aisafe2-mcp-tools>=1.0.0",
+            multi_agent_provenance=True,
+            schema_temporal_profiling=True,
+            swarm_c2_controls=True,
+            failure_taxonomy=True,
         )
         bonus = assessor._compute_attestation_bonus(att)
         assert bonus == 25
@@ -275,14 +286,17 @@ class TestAttestationBonus:
         assert bonus == 0
 
     def test_partial_attestation_partial_bonus(self):
+        """MCP-1 (5pts) + MCP-5 (2pts) = 7pts under risk-weighted rubric.
+        Old rubric: MCP-1(8) + MCP-5(4) = 12. New rubric redistributes weights.
+        """
         assessor = MCPAssessor("https://example.com/mcp")
         att = AttestationData(
             present=True,
-            no_dynamic_commands=True,   # +8
-            audit_logging=True,          # +4
+            no_dynamic_commands=True,   # +5 (was +8 under old rubric)
+            audit_logging=True,          # +2 (was +4 under old rubric)
         )
         bonus = assessor._compute_attestation_bonus(att)
-        assert bonus == 12
+        assert bonus == 7
 
     def test_attestation_capped_at_25(self):
         assessor = MCPAssessor("https://example.com/mcp")
@@ -843,3 +857,505 @@ class TestEndToEndScoring:
     def test_ssrf_blocklist_size_reasonable(self):
         """SSRF blocklist must cover all major cloud metadata endpoints."""
         assert len(SSRF_BLOCKED_PATTERNS) >= 8
+
+
+# =============================================================================
+# MCP-8 through MCP-13: Control coverage, false positive, and scoring tests
+# =============================================================================
+
+
+class TestAttestationBonusRiskWeighted:
+    """
+    Validates the risk-weighted attestation rubric (AI SAFE2 v3.0 CP.5.MCP).
+
+    Risk tier 1 (RCE / confirmed attack surface):
+      MCP-1 (5pts): OX Security RCE, biggest remote blind spot
+      MCP-9 (4pts): MCP-UPD 92.9% attack surface
+
+    Risk tier 2 (confirmed financial/behavioral impact):
+      MCP-2 (3pts): core injection defense
+      MCP-8 (3pts): $47K confirmed incident, 658x amplification
+
+    Risk tier 3 (stealth / tamper / forensic):
+      MCP-11 (2pts): rug pull, delayed_weeks temporal profile
+      MCP-4 (2pts): source tamper detection
+      MCP-5 (2pts): forensic audit foundation
+
+    Risk tier 4 (architectural / emerging):
+      MCP-10 (1pt): multi-agent lateral movement
+      MCP-6 (1pt): egress control
+      MCP-12 (1pt): Swarm C2 detection
+      MCP-13 (1pt): CP.1 taxonomy correctness
+
+    Total: 5+4+3+3+2+2+2+1+1+1+1 = 25 (verified in scorer.py)
+    """
+
+    def test_all_11_fields_earns_25(self):
+        """Full 11-field attestation earns the 25-point cap."""
+        att = AttestationData(
+            present=True,
+            no_dynamic_commands=True,
+            output_sanitization="aisafe2-mcp-tools>=1.0.0",
+            source_hash="abc123def456",
+            rate_limiting=True,
+            audit_logging=True,
+            network_isolation="127.0.0.1 only",
+            session_economics=True,
+            context_tool_isolation="aisafe2-mcp-tools>=1.0.0",
+            multi_agent_provenance=True,
+            schema_temporal_profiling=True,
+            swarm_c2_controls=True,
+            failure_taxonomy=True,
+        )
+        bonus = MCPAssessor("https://example.com/mcp")._compute_attestation_bonus(att)
+        assert bonus == 25, f"Full 11-field attestation must give 25. Got {bonus}"
+
+    def test_high_risk_controls_earn_more_than_low_risk(self):
+        """MCP-1 + MCP-9 (risk tier 1) earns more than MCP-10 + MCP-12 + MCP-13 (tier 4)."""
+        assessor = MCPAssessor("https://example.com/mcp")
+
+        tier1_att = AttestationData(
+            present=True,
+            no_dynamic_commands=True,   # +5
+            context_tool_isolation="aisafe2-mcp-tools>=1.0.0",  # +4
+        )
+        tier4_att = AttestationData(
+            present=True,
+            multi_agent_provenance=True,  # +1
+            swarm_c2_controls=True,        # +1
+            failure_taxonomy=True,         # +1
+        )
+        tier1_bonus = assessor._compute_attestation_bonus(tier1_att)
+        tier4_bonus = assessor._compute_attestation_bonus(tier4_att)
+        assert tier1_bonus > tier4_bonus, (
+            f"Risk tier 1 ({tier1_bonus}pts) must exceed tier 4 ({tier4_bonus}pts)"
+        )
+        assert tier1_bonus == 9   # 5+4
+        assert tier4_bonus == 3   # 1+1+1
+
+    def test_mcp8_session_economics_earns_3_points(self):
+        """MCP-8 (session economics) earns 3 points — confirmed incident risk tier."""
+        att = AttestationData(present=True, session_economics=True)
+        bonus = MCPAssessor("https://example.com/mcp")._compute_attestation_bonus(att)
+        assert bonus == 3
+
+    def test_mcp9_context_isolation_earns_4_points(self):
+        """MCP-9 (context-tool isolation) earns 4 points — 92.9% attack surface."""
+        att = AttestationData(present=True, context_tool_isolation="aisafe2-mcp-tools>=1.0.0")
+        bonus = MCPAssessor("https://example.com/mcp")._compute_attestation_bonus(att)
+        assert bonus == 4
+
+    def test_original_5_fields_earn_13_not_25(self):
+        """
+        Servers that only implemented the original 5 fields now earn 13/25.
+        This is intentional: implementing MCP-8-13 is required for full bonus.
+        MCP-1(5) + MCP-2(3) + MCP-4(2) + MCP-5(2) + MCP-6(1) = 13
+        """
+        att = AttestationData(
+            present=True,
+            no_dynamic_commands=True,
+            output_sanitization="aisafe2-mcp-tools>=1.0.0",
+            source_hash="abc123",
+            audit_logging=True,
+            network_isolation="127.0.0.1 only",
+        )
+        bonus = MCPAssessor("https://example.com/mcp")._compute_attestation_bonus(att)
+        assert bonus == 13, f"Original 5 fields should give 13pts with new rubric. Got {bonus}"
+
+    def test_risk_weighted_sum_equals_25(self):
+        """ATTESTATION_POINTS values must sum to exactly 25."""
+        from aisafe2_mcp_tools.score.scorer import ATTESTATION_POINTS
+        total = sum(ATTESTATION_POINTS.values())
+        assert total == 25, f"ATTESTATION_POINTS must sum to 25. Got {total}"
+        assert len(ATTESTATION_POINTS) == 11, (
+            f"Must have 11 attested controls. Got {len(ATTESTATION_POINTS)}"
+        )
+
+    def test_attestation_cap_still_25(self):
+        """Even with all 11 fields set, bonus never exceeds 25."""
+        att = AttestationData(
+            present=True, no_dynamic_commands=True, output_sanitization="lib",
+            source_hash="hash", audit_logging=True, network_isolation="localhost",
+            session_economics=True, context_tool_isolation="lib",
+            multi_agent_provenance=True, schema_temporal_profiling=True,
+            swarm_c2_controls=True, failure_taxonomy=True,
+        )
+        bonus = MCPAssessor("https://example.com/mcp")._compute_attestation_bonus(att)
+        assert bonus <= 25
+
+    def test_no_attestation_gives_zero(self):
+        """Empty AttestationData gives zero bonus."""
+        att = AttestationData(present=True)
+        bonus = MCPAssessor("https://example.com/mcp")._compute_attestation_bonus(att)
+        assert bonus == 0
+
+
+class TestMCP8SessionEconomicsMapping:
+    """RL-002 maps to MCP-8; RL-001 stays on MCP-6."""
+
+    def test_rl002_maps_to_mcp8(self):
+        assert Finding.control_for("RL-002") == "MCP-8"
+
+    def test_rl001_maps_to_mcp6(self):
+        assert Finding.control_for("RL-001") == "MCP-6"
+
+    def test_rl002_detected_on_llm_api_usage(self, tmp_path):
+        code = (tmp_path / "server.py")
+        code.write_text("import anthropic\nclient = anthropic.AsyncAnthropic()\n")
+        findings = list(MCPScanner(str(tmp_path)).scan())
+        ids = [f.finding_id for f in findings]
+        assert "RL-002" in ids
+
+    def test_rl002_finding_has_verify_language(self, tmp_path):
+        """RL-002 title must say 'verify' not 'detected billing amplification'."""
+        code = (tmp_path / "server.py")
+        code.write_text("import anthropic\nclient = anthropic.AsyncAnthropic()\n")
+        findings = list(MCPScanner(str(tmp_path)).scan())
+        rl002 = next(f for f in findings if f.finding_id == "RL-002")
+        assert "verify" in rl002.title.lower(), (
+            "RL-002 is an absence-class finding; title must use 'verify' language"
+        )
+
+
+class TestMCP9ContextToolIsolation:
+    """CTI-001: Proximity-based retrieval-to-disclosure detection."""
+
+    def _scan(self, code: str, tmp_path) -> list:
+        (tmp_path / "server.py").write_text(code)
+        return list(MCPScanner(str(tmp_path)).scan())
+
+    # ── Detection tests ──────────────────────────────────────────────────────
+    def test_detect_unsanitized_chain(self, tmp_path):
+        """get_file followed immediately by send_email without sanitize_value is flagged."""
+        findings = self._scan(
+            "result = get_file(path)\nsend_email(to=addr, body=result)\n", tmp_path
+        )
+        assert any(f.finding_id == "CTI-001" for f in findings)
+
+    def test_detect_search_to_webhook_chain(self, tmp_path):
+        """search_db to post_webhook without sanitization is flagged."""
+        findings = self._scan(
+            "data = search_db(query)\npost_webhook(url=hook, payload=data)\n", tmp_path
+        )
+        assert any(f.finding_id == "CTI-001" for f in findings)
+
+    def test_cti001_maps_to_mcp9(self):
+        assert Finding.control_for("CTI-001") == "MCP-9"
+
+    def test_cti001_has_verify_language(self, tmp_path):
+        """CTI-001 description must say 'verify' — it flags for review, not confirms compromise."""
+        findings = self._scan(
+            "result = get_file(path)\nsend_email(to=addr, body=result)\n", tmp_path
+        )
+        cti = next(f for f in findings if f.finding_id == "CTI-001")
+        assert "verify" in cti.description.lower() or "verify" in cti.title.lower()
+
+    # ── False positive tests ─────────────────────────────────────────────────
+    def test_no_false_positive_when_sanitized(self, tmp_path):
+        """Code that sanitizes between retrieval and disclosure must NOT fire CTI-001."""
+        findings = self._scan(
+            "result = get_file(path)\n"
+            "sanitized, _ = sanitize_value(result, 'get_file')\n"
+            "send_email(to=addr, body=sanitized)\n",
+            tmp_path,
+        )
+        assert not any(f.finding_id == "CTI-001" for f in findings)
+
+    def test_no_false_positive_no_chain(self, tmp_path):
+        """Code with neither retrieval nor disclosure does not fire CTI-001."""
+        findings = self._scan("result = compute_local()\nreturn result\n", tmp_path)
+        assert not any(f.finding_id == "CTI-001" for f in findings)
+
+    def test_no_false_positive_too_far_apart(self, tmp_path):
+        """Retrieval and disclosure more than 15 lines apart are not flagged."""
+        code = "result = get_file(path)\n" + "x = 1\n" * 16 + "send_email(body='fixed')\n"
+        findings = self._scan(code, tmp_path)
+        assert not any(f.finding_id == "CTI-001" for f in findings)
+
+    def test_no_false_positive_disclosure_before_retrieval(self, tmp_path):
+        """Disclosure before retrieval (wrong order) is not flagged."""
+        findings = self._scan(
+            "send_email(to=addr, body='scheduled notice')\nresult = get_file(path)\n",
+            tmp_path,
+        )
+        assert not any(f.finding_id == "CTI-001" for f in findings)
+
+
+class TestMCP11SchemaTemporalProfiling:
+    """STP-001: tools/list calls without schema hash pinning."""
+
+    def test_detect_tools_list_call(self, tmp_path):
+        (tmp_path / "server.py").write_text(
+            'response = await client.request("tools/list", {})\n'
+        )
+        findings = list(MCPScanner(str(tmp_path)).scan())
+        assert any(f.finding_id == "STP-001" for f in findings)
+
+    def test_stp001_maps_to_mcp11(self):
+        assert Finding.control_for("STP-001") == "MCP-11"
+
+    def test_stp001_has_verify_language(self, tmp_path):
+        """STP-001 title/description must say 'verify' — it flags presence, not absence."""
+        (tmp_path / "server.py").write_text(
+            'resp = await client.request("tools/list", {})\n'
+        )
+        findings = list(MCPScanner(str(tmp_path)).scan())
+        stp = next(f for f in findings if f.finding_id == "STP-001")
+        assert "verify" in stp.title.lower() or "verify" in stp.description.lower()
+
+    def test_fix_template_exists(self):
+        """STP-001.template fix file must exist."""
+        fixes_dir = Path(__file__).parent.parent / "src" / "aisafe2_mcp_tools" / "scan" / "fixes"
+        assert (fixes_dir / "STP-001.template").exists()
+
+
+class TestMCP12SwarmC2Detection:
+    """SWM-001: Multi-agent orchestration without topology monitoring."""
+
+    def _scan(self, code: str, tmp_path) -> list:
+        (tmp_path / "orchestrator.py").write_text(code)
+        return list(MCPScanner(str(tmp_path)).scan())
+
+    # ── Detection tests ──────────────────────────────────────────────────────
+    def test_detect_spawn_agent(self, tmp_path):
+        findings = self._scan("agents = [spawn_agent(cfg) for cfg in cfgs]\n", tmp_path)
+        assert any(f.finding_id == "SWM-001" for f in findings)
+
+    def test_detect_multi_agent_class(self, tmp_path):
+        findings = self._scan("class MultiAgentOrchestrator:\n    pass\n", tmp_path)
+        assert any(f.finding_id == "SWM-001" for f in findings)
+
+    def test_detect_orchestrate_function(self, tmp_path):
+        findings = self._scan("result = orchestrate_pipeline(steps)\n", tmp_path)
+        assert any(f.finding_id == "SWM-001" for f in findings)
+
+    def test_swm001_maps_to_mcp12(self):
+        assert Finding.control_for("SWM-001") == "MCP-12"
+
+    def test_swm001_has_verify_language(self, tmp_path):
+        """SWM-001 must use verify language — topology monitoring requires human review."""
+        findings = self._scan("result = orchestrate_pipeline(steps)\n", tmp_path)
+        swm = next(f for f in findings if f.finding_id == "SWM-001")
+        assert "verify" in swm.title.lower() or "verify" in swm.description.lower()
+
+    # ── False positive tests ─────────────────────────────────────────────────
+    def test_no_false_positive_on_comment_orchestrate(self, tmp_path):
+        """Comment-only lines with orchestration keywords must NOT fire SWM-001."""
+        findings = self._scan(
+            "# This server orchestrates data from multiple sources\n", tmp_path
+        )
+        assert not any(f.finding_id == "SWM-001" for f in findings)
+
+    def test_no_false_positive_on_comment_swarm(self, tmp_path):
+        """Comment mentioning swarm must NOT fire SWM-001."""
+        findings = self._scan(
+            "# Swarm intelligence patterns are documented separately\n", tmp_path
+        )
+        assert not any(f.finding_id == "SWM-001" for f in findings)
+
+    def test_no_false_positive_on_comment_multiagent(self, tmp_path):
+        """Comment mentioning multi-agent must NOT fire SWM-001."""
+        findings = self._scan(
+            "# MultiAgent patterns for future consideration\n", tmp_path
+        )
+        assert not any(f.finding_id == "SWM-001" for f in findings)
+
+
+class TestLOG002Implementation:
+    """LOG-002: logging.basicConfig detection (MCP-5 audit compliance flag)."""
+
+    def test_detect_basic_config(self, tmp_path):
+        (tmp_path / "server.py").write_text(
+            "import logging\nlogging.basicConfig(level=logging.INFO)\n"
+        )
+        findings = list(MCPScanner(str(tmp_path)).scan())
+        assert any(f.finding_id == "LOG-002" for f in findings)
+
+    def test_no_false_positive_structlog(self, tmp_path):
+        """structlog setup does not trigger LOG-002."""
+        (tmp_path / "server.py").write_text(
+            "import structlog\nlog = structlog.get_logger()\n"
+        )
+        findings = list(MCPScanner(str(tmp_path)).scan())
+        assert not any(f.finding_id == "LOG-002" for f in findings)
+
+    def test_log002_maps_to_mcp5(self):
+        assert Finding.control_for("LOG-002") == "MCP-5"
+
+    def test_log002_in_valid_finding_ids(self):
+        from aisafe2_mcp_tools.scan.findings import VALID_FINDING_IDS
+        assert "LOG-002" in VALID_FINDING_IDS
+
+    def test_log002_has_verify_language(self, tmp_path):
+        (tmp_path / "server.py").write_text(
+            "import logging\nlogging.basicConfig(level=logging.DEBUG)\n"
+        )
+        findings = list(MCPScanner(str(tmp_path)).scan())
+        log2 = next(f for f in findings if f.finding_id == "LOG-002")
+        assert "verify" in log2.title.lower() or "verify" in log2.description.lower()
+
+
+class TestMCP13AuditTaxonomy:
+    """CP.1 taxonomy tags auto-injected into audit records (MCP-13)."""
+
+    def test_injection_event_gets_taxonomy(self, tmp_path):
+        import json as _json
+        from aisafe2_mcp_tools.wrap.audit import AuditLog
+        log = AuditLog(str(tmp_path / "audit.jsonl"))
+        log.write({"event": "output_injection_detected", "tool_name": "search"})
+        record = _json.loads((tmp_path / "audit.jsonl").read_text().strip())
+        assert record["cp1_cognitive_surface"] == "model"
+        assert record["cp1_memory_persistence"] == "session"
+
+    def test_ssrf_event_gets_taxonomy(self, tmp_path):
+        import json as _json
+        from aisafe2_mcp_tools.wrap.audit import AuditLog
+        log = AuditLog(str(tmp_path / "audit.jsonl"))
+        log.write({"event": "ssrf_blocked", "field_path": "params.url"})
+        record = _json.loads((tmp_path / "audit.jsonl").read_text().strip())
+        assert record["cp1_cognitive_surface"] == "model"
+        assert record["cp1_memory_persistence"] == "session"
+
+    def test_schema_changed_gets_delayed_weeks(self, tmp_path):
+        """schema_changed events carry delayed_weeks — rug pull temporal profile."""
+        import json as _json
+        from aisafe2_mcp_tools.wrap.audit import AuditLog
+        log = AuditLog(str(tmp_path / "audit.jsonl"))
+        log.write_schema_changed("abc123", "def456")
+        record = _json.loads((tmp_path / "audit.jsonl").read_text().strip())
+        assert record["event"] == "schema_changed"
+        assert record["cp1_cognitive_surface"] == "model"
+        assert record["cp1_memory_persistence"] == "delayed_weeks"
+
+    def test_tool_invocation_no_taxonomy(self, tmp_path):
+        """tool_invocation is informational — no taxonomy tags."""
+        import json as _json
+        from aisafe2_mcp_tools.wrap.audit import AuditLog
+        log = AuditLog(str(tmp_path / "audit.jsonl"))
+        log.write_tool_invocation("tools/call", "search")
+        record = _json.loads((tmp_path / "audit.jsonl").read_text().strip())
+        assert "cp1_cognitive_surface" not in record
+
+
+class TestMCP11SchemaPinning:
+    """Schema pinning produces correct audit events."""
+
+    def test_schema_pinned_event(self, tmp_path):
+        import json as _json
+        from aisafe2_mcp_tools.wrap.audit import AuditLog
+        log = AuditLog(str(tmp_path / "audit.jsonl"))
+        log.write_schema_pinned("abc123def456")
+        record = _json.loads((tmp_path / "audit.jsonl").read_text().strip())
+        assert record["event"] == "schema_pinned"
+        assert record["schema_hash"] == "abc123def456"
+
+    def test_schema_changed_event(self, tmp_path):
+        import json as _json
+        from aisafe2_mcp_tools.wrap.audit import AuditLog
+        log = AuditLog(str(tmp_path / "audit.jsonl"))
+        log.write_schema_changed("baseline_hash", "current_hash")
+        record = _json.loads((tmp_path / "audit.jsonl").read_text().strip())
+        assert record["event"] == "schema_changed"
+        assert record["baseline_hash"] == "baseline_hash"
+        assert record["current_hash"] == "current_hash"
+        assert "ALERT" in record["action"]
+
+
+class TestAttestationNewFieldsModel:
+    """AttestationData accepts and defaults MCP-8-13 fields correctly."""
+
+    def test_new_fields_default_false(self):
+        att = AttestationData(present=True)
+        assert att.session_economics is False
+        assert att.context_tool_isolation == ""
+        assert att.multi_agent_provenance is False
+        assert att.schema_temporal_profiling is False
+        assert att.swarm_c2_controls is False
+        assert att.failure_taxonomy is False
+
+    def test_new_fields_accepted(self):
+        att = AttestationData(
+            present=True,
+            session_economics=True,
+            context_tool_isolation="aisafe2-mcp-tools>=1.0.0",
+            multi_agent_provenance=True,
+            schema_temporal_profiling=True,
+            swarm_c2_controls=True,
+            failure_taxonomy=True,
+        )
+        assert att.session_economics is True
+        assert att.context_tool_isolation == "aisafe2-mcp-tools>=1.0.0"
+
+
+class TestFixTemplatesCompleteness:
+    """All HIGH auto-fixable findings and new medium controls have fix templates."""
+
+    def test_cti001_fix_template_exists(self):
+        fixes_dir = Path(__file__).parent.parent / "src" / "aisafe2_mcp_tools" / "scan" / "fixes"
+        assert (fixes_dir / "CTI-001.template").exists()
+
+    def test_stp001_fix_template_exists(self):
+        fixes_dir = Path(__file__).parent.parent / "src" / "aisafe2_mcp_tools" / "scan" / "fixes"
+        assert (fixes_dir / "STP-001.template").exists()
+
+    def test_critical_templates_still_complete(self):
+        """Existing critical template coverage is intact."""
+        fixes_dir = Path(__file__).parent.parent / "src" / "aisafe2_mcp_tools" / "scan" / "fixes"
+        templates = {f.stem for f in fixes_dir.glob("*.template")}
+        from aisafe2_mcp_tools.scan.pattern_scanner import CRITICAL_PATTERNS
+        critical_ids = {p[0] for p in CRITICAL_PATTERNS} | {"RCE-001"}
+        missing = critical_ids - templates
+        assert not missing, f"Missing critical templates: {missing}"
+
+    def test_well_known_template_has_all_13_controls(self):
+        """generate_well_known_template output includes all 13 MCP control fields."""
+        import json
+        from aisafe2_mcp_tools.score.badge import generate_well_known_template
+        template_str = generate_well_known_template(
+            server_name="test", score=85, assessment_timestamp="2026-04-27T00:00:00Z"
+        )
+        controls = json.loads(template_str)["controls"]
+        for key in [
+            "MCP-1_no_dynamic_commands", "MCP-2_output_sanitization",
+            "MCP-4_source_hash", "MCP-5_audit_logging",
+            "MCP-6_network_isolation", "MCP-6_rate_limiting",
+            "MCP-8_session_economics", "MCP-9_context_tool_isolation",
+            "MCP-10_multi_agent_provenance", "MCP-11_schema_temporal_profiling",
+            "MCP-12_swarm_c2_controls", "MCP-13_failure_taxonomy",
+        ]:
+            assert key in controls, f"Missing: {key}"
+
+
+class TestAbsenceDetectionLanguage:
+    """
+    P2: Absence-class findings must use 'verify' language, not 'detected' language.
+    These findings flag presence of related code for human review.
+    They do NOT confirm a control is missing.
+    """
+
+    def _get_finding(self, finding_id: str, tmp_path, code: str) -> "Finding":
+        (tmp_path / "server.py").write_text(code)
+        findings = list(MCPScanner(str(tmp_path)).scan())
+        return next(f for f in findings if f.finding_id == finding_id)
+
+    def test_rl002_uses_verify_language(self, tmp_path):
+        f = self._get_finding("RL-002", tmp_path,
+                              "import anthropic\nclient = anthropic.AsyncAnthropic()\n")
+        assert "verify" in f.title.lower() or "verify" in f.description.lower()
+
+    def test_mem001_uses_verify_language(self, tmp_path):
+        f = self._get_finding("MEM-001", tmp_path, "memory_store = {}\n")
+        assert "verify" in f.title.lower() or "verify" in f.description.lower()
+
+    def test_stp001_uses_verify_language(self, tmp_path):
+        f = self._get_finding("STP-001", tmp_path, 'resp = client.request("tools/list", {})\n')
+        assert "verify" in f.title.lower() or "verify" in f.description.lower()
+
+    def test_swm001_uses_verify_language(self, tmp_path):
+        f = self._get_finding("SWM-001", tmp_path, "agents = [spawn_agent(c) for c in cfgs]\n")
+        assert "verify" in f.title.lower() or "verify" in f.description.lower()
+
+    def test_log002_uses_verify_language(self, tmp_path):
+        f = self._get_finding("LOG-002", tmp_path,
+                              "import logging\nlogging.basicConfig(level=logging.INFO)\n")
+        assert "verify" in f.title.lower() or "verify" in f.description.lower()

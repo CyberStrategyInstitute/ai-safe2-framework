@@ -8,11 +8,18 @@ Covers all CVE classes from the CSI MCP Threat Intelligence Report
 Organization:
   CRITICAL_PATTERNS — RCE-002 through RCE-006
   HIGH_PATTERNS     — INJ-001 through INJ-005, SEC-001 through SEC-006
-  MEDIUM_PATTERNS   — RL-001, RL-002, LOG-001, LOG-002, MEM-001
+  MEDIUM_PATTERNS   — RL-001, RL-002, LOG-001, LOG-002, MEM-001, STP-001, SWM-001
+  MEDIUM_CUSTOM     — CTI-001 (proximity-based, not regex; handled in _scan_medium)
   LOW_PATTERNS      — AUTH-001, DEP-001, CONF-001
 
 Each pattern tuple: (finding_id, compiled_regex, title, description, cve_refs, remediation)
 HIGH/MEDIUM add: auto_fixable bool
+
+Detection limits (documented per P2 requirement):
+  Absence-class findings (RL-002, MEM-001, STP-001, SWM-001) detect PRESENCE of
+  related code and flag it for manual verification. They do NOT confirm that a
+  control is missing — that requires human review. Finding descriptions use
+  "verify" language to communicate this distinction.
 """
 from __future__ import annotations
 
@@ -20,6 +27,20 @@ import re
 from typing import Iterator
 
 from aisafe2_mcp_tools.scan.findings import Finding
+
+# ── Retrieval / disclosure verb sets used by CTI-001 proximity check ──────────
+_RETRIEVAL_VERBS = re.compile(
+    r'\b(get_file|read_document|search_db|fetch_url|read_email|query_db)\s*\(',
+    re.IGNORECASE,
+)
+_DISCLOSURE_VERBS = re.compile(
+    r'\b(send_email|post_webhook|write_file|upload|post_slack)\s*\(',
+    re.IGNORECASE,
+)
+_SANITIZE_CALL = re.compile(r'\bsanitize_value\s*\(', re.IGNORECASE)
+
+# Maximum line gap between retrieval and disclosure to be considered a chain
+_CTI_MAX_LINE_GAP = 15
 
 
 # ── Critical patterns — RCE class ─────────────────────────────────────────────
@@ -101,13 +122,13 @@ HIGH_PATTERNS: list[tuple[str, re.Pattern, str, str, list[str], str, bool]] = [
      True),  # auto_fixable
 
     ("INJ-003",
-     re.compile(r'(?:requests|httpx|aiohttp)\s*\.\s*(?:get|post|put|delete|request)\s*\([^\)]*'
+     re.compile(r'(?:requests|httpx|aiohttp)\s*\.\s*(?:get|post|put|delete|request)\s*\([^\'\"]*'
                 r'(?:url|endpoint|href|uri|target|webhook|callback)',
                 re.IGNORECASE | re.DOTALL),
      "HTTP request to URL from tool parameter — SSRF risk",
      "Making HTTP requests with URLs sourced from tool parameters enables SSRF. "
-     "CVE-2026-26118 (Azure MCP → AWS credential theft via IMDS). "
-     "RAXE-2026-034 (Atlassian SSRF → prompt injection chain via Jira/Confluence).",
+     "CVE-2026-26118 (Azure MCP to AWS credential theft via IMDS). "
+     "RAXE-2026-034 (Atlassian SSRF to prompt injection chain via Jira/Confluence).",
      ["CVE-2026-26118", "RAXE-2026-034", "CVE-2025-6607"],
      "Validate URL against SSRF blocklist before making request. "
      "from aisafe2_mcp_tools.shared.patterns import SSRF_BLOCKED_PATTERNS. "
@@ -197,6 +218,8 @@ HIGH_PATTERNS: list[tuple[str, re.Pattern, str, str, list[str], str, bool]] = [
 
 
 # ── Medium patterns ───────────────────────────────────────────────────────────
+# Note: CTI-001 is NOT in this list — it uses proximity-based detection
+# in PatternScanner._check_cti001() and is called from _scan_medium().
 
 MEDIUM_PATTERNS: list[tuple[str, re.Pattern, str, str, list[str], str, bool]] = [
 
@@ -219,6 +242,7 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern, str, str, list[str], str, bool]] = 
      "Agents calling LLM APIs without session-level cost budgets are vulnerable to "
      "billing amplification (Phantom framework — 658x amplification, 97% miss rate). "
      "November 2025 incident: $47,000 API bill from 4-agent infinite retry loop. "
+     "Verify per-session token budget and cost ceiling are implemented. "
      "AI SAFE2 v3.0 CP.5.MCP-8.",
      [],
      "Implement per-session token budget and cost ceiling. "
@@ -238,6 +262,22 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern, str, str, list[str], str, bool]] = 
      "See fixes/LOG-001.template",
      True),
 
+    ("LOG-002",
+     re.compile(r'\blogging\.basicConfig\s*\(', re.IGNORECASE),
+     "Standard Python logging configured — verify MCP-5 audit compliance",
+     "logging.basicConfig() produces human-readable logs that lack the response hash, "
+     "calling agent identity, and immutable append-only guarantees required by MCP-5. "
+     "Standard Python logging does not satisfy MCP-5 Tool Invocation Audit Log compliance. "
+     "Verify that a structured, immutable JSONL audit trail is also implemented. "
+     "AI SAFE2 v3.0 CP.5.MCP-5.",
+     [],
+     "Implement immutable JSONL audit logging alongside standard logging. "
+     "Use aisafe2_mcp_tools.wrap.audit.AuditLog or equivalent. "
+     "Every tool invocation record must include: tool name, parameters, "
+     "response hash, timestamp, and calling agent identity. "
+     "See fixes/LOG-001.template for implementation pattern.",
+     False),
+
     ("MEM-001",
      re.compile(r'\bpersist\b|\blong.?term.?memory\b|\bcross.?session\b|'
                 r'\bmemory_store\b|\bremember\b', re.IGNORECASE),
@@ -246,11 +286,51 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern, str, str, list[str], str, bool]] = 
      "Claude Code March 2026 source exposure confirmed: tool results treated as "
      "trusted persistent context without guardrails. "
      "Poisoned tool results in persistent memory influence all future sessions. "
+     "Verify memory contents are sanitized on read and that expiry is enforced. "
      "AI SAFE2 v3.0 CP.5.MCP-10.",
      [],
      "Implement memory decay/expiry. Validate memory contents on read "
      "using sanitize_value(). Provide a clear-memory endpoint. "
      "Document cross-session persistence in your security attestation.",
+     False),
+
+    # ── Schema Temporal Profiling (MCP-11) ────────────────────────────────────
+    ("STP-001",
+     re.compile(r'tools[/_]list|tools\.list|"tools/list"|list_tools', re.IGNORECASE),
+     "tools/list call — verify schema hash pinning at session startup",
+     "MCP clients that call tools/list without recording and comparing the response "
+     "hash are vulnerable to rug pull attacks (temporal profile: delayed_weeks). "
+     "A server with established trust can mutate its tool descriptions between sessions "
+     "with no native client detection mechanism. "
+     "Verify that tools/list responses are hashed and compared on each session startup. "
+     "AI SAFE2 v3.0 CP.5.MCP-11.",
+     [],
+     "Record the tools/list response hash at deployment (baseline). "
+     "Compare the hash at every session startup. "
+     "Alert on any hash change not accompanied by a documented release event. "
+     "Use mcp-safe-wrap --pin-schema for consumer-side enforcement. "
+     "See AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling).",
+     False),
+
+    # ── Swarm C2 Detection (MCP-12) — comment lines excluded in _scan_medium ──
+    ("SWM-001",
+     re.compile(
+         r'\b(spawn_agent|create_agent|invoke_agent|agent_pool|orchestrat\w*|swarm\w*|'
+         r'multi.?agent\w*|agent_network|delegate_to)\b',
+         re.IGNORECASE,
+     ),
+     "Multi-agent orchestration detected — verify Swarm C2 controls",
+     "Code orchestrates multiple agents or spawns sub-agents. "
+     "Vectra AI February 2026: MCP can be weaponized as a C2 fabric for offensive "
+     "agent swarms. MCP-based C2 traffic is semantically indistinguishable from "
+     "legitimate agent coordination at the per-request level. "
+     "Verify that behavioral topology monitoring and CP.7 honeypot endpoints are deployed. "
+     "AI SAFE2 v3.0 CP.5.MCP-12.",
+     [],
+     "Establish behavioral baselines for inter-agent communication topology. "
+     "Deploy CP.7 honeypot tool endpoints as canaries. "
+     "Implement semantic traffic analysis at the orchestration layer. "
+     "See AI SAFE2 v3.0 CP.5.MCP-12 (Swarm C2 Detection Controls).",
      False),
 ]
 
@@ -299,6 +379,12 @@ class PatternScanner:
     """
     Regex-based vulnerability scanner for MCP server source code.
     Works on per-file source strings.
+
+    CTI-001 uses proximity-based detection (_check_cti001) rather than a
+    DOTALL regex to avoid false positives from file-wide matching.
+
+    SWM-001 excludes comment-only lines to avoid false positives from
+    documentation strings that mention orchestration.
     """
 
     def scan_file(
@@ -344,6 +430,36 @@ class PatternScanner:
             manual_required=(severity == "critical"),
         )
 
+    def _make_finding(
+        self,
+        finding_id: str,
+        severity: str,
+        title: str,
+        description: str,
+        remediation: str,
+        filepath: str,
+        line_no: int,
+        lines: list[str],
+        cve_refs: list[str] | None = None,
+        auto_fixable: bool = False,
+    ) -> Finding:
+        """Build a Finding directly from components (used by custom checks)."""
+        snippet = lines[line_no - 1].strip()[:120] if line_no <= len(lines) else ""
+        return Finding(
+            finding_id=finding_id,
+            severity=severity,
+            cp5_control=Finding.control_for(finding_id),
+            title=title,
+            description=description,
+            file=filepath,
+            line=line_no,
+            code_snippet=snippet,
+            remediation=remediation,
+            cve_refs=cve_refs or [],
+            auto_fixable=auto_fixable,
+            manual_required=(severity == "critical"),
+        )
+
     def _scan_critical(
         self, source: str, filepath: str, lines: list[str]
     ) -> Iterator[Finding]:
@@ -373,17 +489,27 @@ class PatternScanner:
                     m, source, filepath, lines,
                     finding_id, "high", title, desc, cves, remediation, auto_fix,
                 )
-                break  # One high finding per pattern per file (avoid flooding)
+                break  # One high finding per pattern per file
 
     def _scan_medium(
         self, source: str, filepath: str, lines: list[str]
     ) -> Iterator[Finding]:
-        # BUG-4 fix: use per-(finding_id, line) deduplication instead of break
-        # This ensures multiple different MEDIUM findings on different lines are all reported
+        """
+        Scan medium-severity patterns. Includes two special-case controls:
+          SWM-001: Skips comment-only lines to reduce false positives.
+          CTI-001: Uses proximity-based detection instead of DOTALL regex.
+        """
         seen: set[tuple] = set()
         for finding_id, pattern, title, desc, cves, remediation, auto_fix in MEDIUM_PATTERNS:
             for m in pattern.finditer(source):
                 line_no = source[:m.start()].count("\n") + 1
+
+                # SWM-001: skip matches on comment-only lines
+                if finding_id == "SWM-001":
+                    line_text = lines[line_no - 1].lstrip() if line_no <= len(lines) else ""
+                    if line_text.startswith("#"):
+                        continue
+
                 key = (finding_id, line_no)
                 if key in seen:
                     continue
@@ -391,6 +517,80 @@ class PatternScanner:
                 yield self._match_to_finding(
                     m, source, filepath, lines,
                     finding_id, "medium", title, desc, cves, remediation, auto_fix,
+                )
+
+        # CTI-001: proximity-based retrieval-to-disclosure chain detection
+        yield from self._check_cti001(source, filepath, lines)
+
+    def _check_cti001(
+        self, source: str, filepath: str, lines: list[str]
+    ) -> Iterator[Finding]:
+        """
+        Detect MCP-UPD retrieval-to-disclosure chains (MCP-9).
+
+        Fires only when:
+          - A retrieval call (get_file, search_db, etc.) and a disclosure call
+            (send_email, post_webhook, etc.) appear within _CTI_MAX_LINE_GAP lines.
+          - sanitize_value() does NOT appear between the retrieval and disclosure.
+
+        This avoids the false positives of a file-wide DOTALL regex, which would
+        match retrieval and disclosure calls in completely unrelated functions.
+        """
+        _TITLE = "Unguarded retrieval-to-disclosure chain — verify MCP-UPD protection"
+        _DESC = (
+            "A retrieval tool call is followed by a disclosure tool call within "
+            f"{_CTI_MAX_LINE_GAP} lines without an intervening sanitize_value() call. "
+            "MCP-UPD (Zhao et al. September 2025): 92.9% of MCP server categories can "
+            "participate as attack capabilities in a parasitic toolchain attack. "
+            "The attack requires zero direct victim interaction. "
+            "Verify that externally retrieved data is classified as untrusted data-plane "
+            "content and processed through a semantic firewall before any disclosure tool. "
+            "AI SAFE2 v3.0 CP.5.MCP-9."
+        )
+        _REMEDIATION = (
+            "Apply sanitize_value() from aisafe2_mcp_tools.shared.patterns to all "
+            "externally retrieved content before passing it to any disclosure tool. "
+            "Ensure the Agentic Control Plane (CP.4) enforces context-tool isolation "
+            "at the orchestration layer, not per-tool. "
+            "See AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation) and fixes/CTI-001.template."
+        )
+
+        retrieval_hits = [
+            (m, source[:m.start()].count("\n") + 1)
+            for m in _RETRIEVAL_VERBS.finditer(source)
+        ]
+        disclosure_hits = [
+            (m, source[:m.start()].count("\n") + 1)
+            for m in _DISCLOSURE_VERBS.finditer(source)
+        ]
+
+        seen_lines: set[int] = set()
+        for r_match, r_line in retrieval_hits:
+            for d_match, d_line in disclosure_hits:
+                if d_line <= r_line:
+                    continue  # disclosure before retrieval — not the attack pattern
+                gap = d_line - r_line
+                if gap > _CTI_MAX_LINE_GAP:
+                    continue  # too far apart to be the same logical chain
+
+                # Check for sanitize_value between retrieval and disclosure
+                between = source[r_match.end():d_match.start()]
+                if _SANITIZE_CALL.search(between):
+                    continue  # sanitized — no finding
+
+                if r_line in seen_lines:
+                    continue
+                seen_lines.add(r_line)
+
+                yield self._make_finding(
+                    finding_id="CTI-001",
+                    severity="medium",
+                    title=_TITLE,
+                    description=_DESC,
+                    remediation=_REMEDIATION,
+                    filepath=filepath,
+                    line_no=r_line,
+                    lines=lines,
                 )
 
     def _scan_low(

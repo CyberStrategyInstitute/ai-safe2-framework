@@ -36,11 +36,20 @@ CONTROL_MAP: dict[str, str] = {
     "INJ": "MCP-2",   # Output Sanitization Before LLM Return
     "SEC": "MCP-4",   # STDIO Transport Integrity / Auth
     "AUTH": "MCP-4",
-    "RL": "MCP-6",    # Network Isolation / Rate Limiting
-    "LOG": "MCP-5",   # Tool Invocation Audit Log
-    "MEM": "MCP-10",  # Multi-Agent Provenance
+    "RL": "MCP-6",    # Network Isolation / Rate Limiting (default; RL-002 overridden below)
+    "LOG": "MCP-5",   # Tool Invocation Audit Log (LOG-002 also maps here)
+    "MEM": "MCP-10",  # Multi-Agent Provenance and Delegation Edge Monitoring
     "DEP": "MCP-3",   # Registry Provenance Verification
     "CONF": "MCP-6",
+    "CTI": "MCP-9",   # Context-Tool Isolation
+    "STP": "MCP-11",  # Schema Temporal Profiling
+    "SWM": "MCP-12",  # Swarm C2 Detection Controls
+}
+
+# Finding-ID-level overrides applied before class prefix lookup.
+# Use when a single prefix class spans multiple CP.5.MCP controls.
+FINDING_CONTROL_OVERRIDE: dict[str, str] = {
+    "RL-002": "MCP-8",  # LLM API cost budget — Session Economics, not Network Isolation
 }
 
 # All valid finding IDs — used for ID format validation
@@ -52,6 +61,7 @@ VALID_FINDING_IDS: set[str] = {
     "SEC-001", "SEC-002", "SEC-003", "SEC-004", "SEC-005", "SEC-006",
     # Medium — Operational
     "RL-001", "RL-002", "LOG-001", "LOG-002", "MEM-001",
+    "CTI-001", "STP-001", "SWM-001",
     # Low — Hygiene
     "AUTH-001", "DEP-001", "DEP-002", "CONF-001",
 }
@@ -116,6 +126,12 @@ class Finding:
 
     @staticmethod
     def control_for(finding_id: str) -> str:
-        """Return the CP.5.MCP control for a finding ID prefix."""
+        """Return the CP.5.MCP control for a finding ID.
+
+        Checks FINDING_CONTROL_OVERRIDE first (finding-ID-level precision),
+        then falls back to the class prefix in CONTROL_MAP.
+        """
+        if finding_id in FINDING_CONTROL_OVERRIDE:
+            return FINDING_CONTROL_OVERRIDE[finding_id]
         prefix = finding_id.split("-")[0]
         return CONTROL_MAP.get(prefix, "MCP-2")

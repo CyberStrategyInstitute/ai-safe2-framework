@@ -37,6 +37,24 @@ EVENT_TYPES = {
     "rate_limited",             # Request rate-limited
     "proxy_start",              # Proxy started (with target URL)
     "proxy_stop",               # Proxy stopped
+    "schema_changed",           # tools/list hash changed vs baseline (MCP-11)
+    "schema_pinned",            # tools/list hash recorded at session start (MCP-11)
+}
+
+# CP.1 taxonomy tags for MCP failure classes (MCP-13).
+# Applied to audit records so incident response teams classify correctly.
+# cognitive_surface: "model" | "memory" | "both"
+# memory_persistence: "session" | "cross_session" | "chronic" | "delayed_days" | "delayed_weeks"
+CP1_TAXONOMY: dict[str, dict[str, str]] = {
+    "output_injection_detected": {"cognitive_surface": "model",  "memory_persistence": "session"},
+    "input_injection_detected":  {"cognitive_surface": "model",  "memory_persistence": "session"},
+    "ssrf_blocked":              {"cognitive_surface": "model",  "memory_persistence": "session"},
+    "schema_changed":            {"cognitive_surface": "model",  "memory_persistence": "delayed_weeks"},
+    "tool_invocation":           {},  # No taxonomy tag — informational event only
+    "proxy_start":               {},
+    "proxy_stop":                {},
+    "schema_pinned":             {},
+    "rate_limited":              {},
 }
 
 
@@ -59,10 +77,20 @@ class AuditLog:
                 self._path = None  # Disable logging if path is inaccessible
 
     def write(self, record: dict[str, Any]) -> None:
-        """Append a record to the audit log. Silent on failure."""
+        """Append a record to the audit log. Silent on failure.
+
+        Automatically enriches the record with CP.1 taxonomy tags (MCP-13)
+        based on the event type, so incident response teams classify correctly.
+        """
         if self._path is None:
             return
         record.setdefault("timestamp", _iso_now())
+        # MCP-13: Inject CP.1 taxonomy tags where applicable
+        event = record.get("event", "")
+        taxonomy = CP1_TAXONOMY.get(event, {})
+        if taxonomy:
+            record.setdefault("cp1_cognitive_surface", taxonomy.get("cognitive_surface", ""))
+            record.setdefault("cp1_memory_persistence", taxonomy.get("memory_persistence", ""))
         try:
             with self._path.open("a", encoding="utf-8") as fh:
                 fh.write(json.dumps(record) + "\n")
@@ -109,6 +137,22 @@ class AuditLog:
             "event": "ssrf_blocked",
             "field_path": field_path,
             "client_ip": client_ip,
+        })
+
+    def write_schema_pinned(self, schema_hash: str) -> None:
+        """Record tools/list baseline hash at session startup (MCP-11)."""
+        self.write({
+            "event": "schema_pinned",
+            "schema_hash": schema_hash,
+        })
+
+    def write_schema_changed(self, baseline_hash: str, current_hash: str) -> None:
+        """Alert on tools/list hash change vs. pinned baseline (MCP-11 + MCP-13)."""
+        self.write({
+            "event": "schema_changed",
+            "baseline_hash": baseline_hash,
+            "current_hash": current_hash,
+            "action": "ALERT — schema change without documented release event",
         })
 
     def write_proxy_start(self, target_url: str, local_port: int) -> None:

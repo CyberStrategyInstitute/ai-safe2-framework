@@ -70,7 +70,9 @@ def stdio(command, audit_log, scan_inputs, scan_outputs, block, rate_limit):
 @click.option("--audit-log", default="~/.mcp-safe-wrap/audit.jsonl")
 @click.option("--rate-limit", default=100, type=int,
               help="Max requests per hour per IP (default: 100)")
-def proxy(target_url, token, local_port, scan_inputs, scan_outputs, audit_log, rate_limit):
+@click.option("--pin-schema", is_flag=True, default=False,
+              help="MCP-11: Record tools/list hash at startup and alert on changes (schema temporal profiling)")
+def proxy(target_url, token, local_port, scan_inputs, scan_outputs, audit_log, rate_limit, pin_schema):
     """
     Run a local HTTP proxy wrapping a remote MCP server.
 
@@ -93,6 +95,7 @@ def proxy(target_url, token, local_port, scan_inputs, scan_outputs, audit_log, r
             scan_outputs=scan_outputs,
             audit_log_path=audit_log,
             rate_limit=rate_limit,
+            pin_schema=pin_schema,
         ))
     except KeyboardInterrupt:
         pass

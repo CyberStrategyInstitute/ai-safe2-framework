@@ -151,6 +151,12 @@ def generate_well_known_template(
             "MCP-5_audit_logging": audit_logging,
             "MCP-6_network_isolation": network_isolation,
             "MCP-6_rate_limiting": rate_limiting,
+            "MCP-8_session_economics": False,
+            "MCP-9_context_tool_isolation": "",
+            "MCP-10_multi_agent_provenance": False,
+            "MCP-11_schema_temporal_profiling": False,
+            "MCP-12_swarm_c2_controls": False,
+            "MCP-13_failure_taxonomy": False,
         },
         "attestation_note": (
             "These controls are builder-attested. "

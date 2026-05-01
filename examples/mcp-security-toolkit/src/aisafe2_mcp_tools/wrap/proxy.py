@@ -18,6 +18,8 @@ Limitation: SSE streaming not supported (roadmap item for v1.1)
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import sys
 from collections import defaultdict
 
@@ -38,6 +40,7 @@ async def run_proxy(
     scan_outputs: bool,
     audit_log_path: str | None,
     rate_limit: int,
+    pin_schema: bool = False,
 ) -> None:
     """
     Start the HTTP proxy server.
@@ -71,6 +74,8 @@ async def run_proxy(
     ip_buckets: dict[str, AsyncTokenBucket] = defaultdict(
         lambda: make_async_bucket(rate_limit)
     )
+    # MCP-11: Schema temporal profiling — pinned hash of tools/list response
+    _schema_baseline: dict[str, str] = {}  # {"hash": "<sha256>"}
 
     upstream_headers: dict[str, str] = {"Content-Type": "application/json"}
     if token:
@@ -141,6 +146,23 @@ async def run_proxy(
         # Audit tool invocations (MCP-5)
         if "tool" in method.lower() or method == "tools/call":
             audit.write_tool_invocation(method, scanner.extract_tool_name(body), client_ip)
+
+        # MCP-11: Schema temporal profiling — detect tools/list hash changes
+        if pin_schema and method == "tools/list":
+            response_hash = hashlib.sha256(
+                json.dumps(response_data, sort_keys=True).encode()
+            ).hexdigest()
+            if not _schema_baseline:
+                _schema_baseline["hash"] = response_hash
+                audit.write_schema_pinned(response_hash)
+                log.info("proxy.schema_pinned", hash=response_hash[:16])
+            elif _schema_baseline["hash"] != response_hash:
+                log.warning(
+                    "proxy.schema_changed",
+                    baseline=_schema_baseline["hash"][:16],
+                    current=response_hash[:16],
+                )
+                audit.write_schema_changed(_schema_baseline["hash"], response_hash)
 
         return JSONResponse(response_data)
 
