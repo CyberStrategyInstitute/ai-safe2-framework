@@ -46,6 +46,13 @@ class AttestationData:
     rate_limiting: bool = False
     audit_logging: bool = False
     network_isolation: str = ""
+    # MCP-8 through MCP-13 attestation fields (schema v1.1)
+    session_economics: bool = False         # MCP-8: token budget + cost ceiling declared
+    context_tool_isolation: str = ""        # MCP-9: isolation library/method reference
+    multi_agent_provenance: bool = False    # MCP-10: CP.9 lineage tokens in use
+    schema_temporal_profiling: bool = False # MCP-11: tools/list hash pinned
+    swarm_c2_controls: bool = False         # MCP-12: topology monitoring deployed
+    failure_taxonomy: bool = False          # MCP-13: CP.1 tags in audit events
     last_assessed: str = ""
     raw: dict = field(default_factory=dict)
 

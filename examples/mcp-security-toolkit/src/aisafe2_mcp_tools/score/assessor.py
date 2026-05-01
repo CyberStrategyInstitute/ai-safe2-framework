@@ -584,6 +584,12 @@ class MCPAssessor:
                 rate_limiting=bool(controls.get("MCP-6_rate_limiting")),
                 audit_logging=bool(controls.get("MCP-5_audit_logging")),
                 network_isolation=str(controls.get("MCP-6_network_isolation", "")),
+                session_economics=bool(controls.get("MCP-8_session_economics")),
+                context_tool_isolation=str(controls.get("MCP-9_context_tool_isolation", "")),
+                multi_agent_provenance=bool(controls.get("MCP-10_multi_agent_provenance")),
+                schema_temporal_profiling=bool(controls.get("MCP-11_schema_temporal_profiling")),
+                swarm_c2_controls=bool(controls.get("MCP-12_swarm_c2_controls")),
+                failure_taxonomy=bool(controls.get("MCP-13_failure_taxonomy")),
                 last_assessed=str(raw.get("last_assessed", "")),
                 raw=raw,
             )
@@ -592,23 +598,54 @@ class MCPAssessor:
 
     def _compute_attestation_bonus(self, att: AttestationData) -> int:
         """
-        Attestation bonus for controls not verifiable remotely (max 25, total capped at 100).
-          +8 MCP-1: no dynamic commands — biggest remote blind spot
-          +5 MCP-2: output sanitization library reference
-          +4 MCP-4: source integrity hash
-          +4 MCP-5: audit logging
-          +4 MCP-6: localhost network isolation
+        Attestation bonus — risk-weighted across all 13 CP.5.MCP controls (max 25).
+
+        Points are weighted by threat likelihood and confirmed incident impact.
+        Higher-risk controls earn more points per ATTESTATION_POINTS in scorer.py.
+
+          +5 MCP-1: no_dynamic_commands  — RCE tier, OX Security confirmed
+          +4 MCP-9: context_tool_isolation — 92.9% attack surface (MCP-UPD)
+          +3 MCP-2: output_sanitization  — core injection defense
+          +3 MCP-8: session_economics    — $47K confirmed, 658x amplification
+          +2 MCP-11: schema_temporal_profiling — rug pull, delayed_weeks
+          +2 MCP-4: source_hash          — tamper detection
+          +2 MCP-5: audit_logging        — forensic foundation
+          +1 MCP-10: multi_agent_provenance — lateral movement detection
+          +1 MCP-6: network_isolation    — egress control
+          +1 MCP-12: swarm_c2_controls   — Swarm C2 detection
+          +1 MCP-13: failure_taxonomy    — CP.1 taxonomy correctness
+          ─────────────────────────────────────────
+          25 total (sum of all 11 fields)
+
+        Total score is capped at 100 regardless of bonus.
         """
+        from aisafe2_mcp_tools.score.scorer import ATTESTATION_POINTS
         bonus = 0
-        if att.no_dynamic_commands:  bonus += 8
-        if att.output_sanitization:   bonus += 5
-        if att.source_hash:           bonus += 4
-        if att.audit_logging:         bonus += 4
+        if att.no_dynamic_commands:
+            bonus += ATTESTATION_POINTS["no_dynamic_commands"]
+        if att.context_tool_isolation:
+            bonus += ATTESTATION_POINTS["context_tool_isolation"]
+        if att.output_sanitization:
+            bonus += ATTESTATION_POINTS["output_sanitization"]
+        if att.session_economics:
+            bonus += ATTESTATION_POINTS["session_economics"]
+        if att.schema_temporal_profiling:
+            bonus += ATTESTATION_POINTS["schema_temporal_profiling"]
+        if att.source_hash:
+            bonus += ATTESTATION_POINTS["source_hash"]
+        if att.audit_logging:
+            bonus += ATTESTATION_POINTS["audit_logging"]
+        if att.multi_agent_provenance:
+            bonus += ATTESTATION_POINTS["multi_agent_provenance"]
         if att.network_isolation and (
             "localhost" in att.network_isolation.lower()
             or "127.0.0.1" in att.network_isolation
         ):
-            bonus += 4
+            bonus += ATTESTATION_POINTS["network_isolation"]
+        if att.swarm_c2_controls:
+            bonus += ATTESTATION_POINTS["swarm_c2_controls"]
+        if att.failure_taxonomy:
+            bonus += ATTESTATION_POINTS["failure_taxonomy"]
         return min(25, bonus)
 
 

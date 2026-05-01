@@ -1,0 +1,46 @@
+# Fix Template: CTI-001 — Unguarded Retrieval-to-Disclosure Chain
+# AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation)
+#
+# Threat: MCP-UPD (Parasitic Toolchain Attack)
+# External data retrieved via MCP tools can carry injected instructions
+# into the LLM context as trusted content. 92.9% of MCP server categories
+# can participate as attack capabilities in an MCP-UPD chain.
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────────────────
+@mcp.tool(description="Summarize document and notify owner")
+async def summarize_and_notify(doc_path: str, owner_email: str) -> str:
+    # Retrieval: external data enters here — untrusted by default
+    content = get_file(doc_path)
+    # Disclosure: external data flows directly to disclosure tool
+    send_email(to=owner_email, subject="Summary", body=content)
+    return "Notification sent."
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────────────────
+from aisafe2_mcp_tools.shared.patterns import sanitize_value
+
+@mcp.tool(description="Summarize document and notify owner")
+async def summarize_and_notify(doc_path: str, owner_email: str) -> str:
+    # Retrieval: classify as untrusted data-plane content
+    raw_content = get_file(doc_path)
+
+    # Sanitize: scan for injection patterns before any disclosure
+    sanitized_content, findings = sanitize_value(raw_content, "get_file.content")
+    if findings:
+        log.warning(
+            "cti.injection_blocked",
+            path=doc_path,
+            finding_count=len(findings),
+            families=[f.get("family") for f in findings],
+        )
+        return "Document contained unsafe content and was not forwarded."
+
+    # Disclosure: only sanitized content reaches disclosure tool
+    send_email(to=owner_email, subject="Summary", body=sanitized_content)
+    return "Notification sent."
+#
+# ── ARCHITECTURAL NOTE ────────────────────────────────────────────────────────
+# Per AI SAFE2 v3.0 CP.5.MCP-9, the Agentic Control Plane (CP.4) MUST enforce
+# the isolation boundary at the orchestration layer. Per-tool sanitization is a
+# defense-in-depth measure, not a substitute for CP.4 enforcement.
+#
+# Full specification: AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation)
