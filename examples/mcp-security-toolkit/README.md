@@ -1,10 +1,10 @@
 # AI SAFE2 MCP Security Toolkit
 
 > **Score. Scan. Wrap. Any MCP server. In minutes.**
-> AI SAFE2 v3.0 CP.5.MCP — open-source, 160 tests passing.
+> AI SAFE2 v3.0 CP.5.MCP — open-source, 195 tests passing.
 
 [![AI SAFE2](https://img.shields.io/badge/AI_SAFE2-v3.0-orange)](https://cyberstrategyinstitute.com/ai-safe2/)
-[![Tests](https://img.shields.io/badge/Tests-160_passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/Tests-195_passing-brightgreen)]()
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue)]()
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)]()
 
@@ -125,10 +125,27 @@ mcp-score https://server.example/mcp --ci-fail-below 70
 
 Controls that cannot be verified remotely (like `shell=True` in source code) can be attested via `/.well-known/mcp-security.json`. This file is publicly readable (no auth) and adds up to +25 bonus points.
 
+The bonus is risk-weighted across all 11 attested CP.5.MCP controls. Servers that only attest the original five controls (MCP-1/2/4/5/6) earn 13 of 25 — full bonus requires attesting MCP-8 through MCP-13.
+
+| Attested Field | MCP Control | Points | Risk Basis |
+|---|---|:---:|---|
+| `no_dynamic_commands` | MCP-1 | 5 | OX Security confirmed RCE |
+| `context_tool_isolation` | MCP-9 | 4 | MCP-UPD 92.9% attack surface |
+| `output_sanitization` | MCP-2 | 3 | Core injection defense |
+| `session_economics` | MCP-8 | 3 | $47K confirmed, 658x amplification |
+| `schema_temporal_profiling` | MCP-11 | 2 | Rug pull — delayed_weeks profile |
+| `source_hash` | MCP-4 | 2 | Post-install tamper detection |
+| `audit_logging` | MCP-5 | 2 | Forensic foundation |
+| `multi_agent_provenance` | MCP-10 | 1 | Lateral movement via delegation |
+| `network_isolation` | MCP-6 | 1 | Egress control |
+| `swarm_c2_controls` | MCP-12 | 1 | Swarm C2 detection |
+| `failure_taxonomy` | MCP-13 | 1 | CP.1 taxonomy correctness |
+| **Total** | | **25** | |
+
 Create at your server root:
 ```json
 {
-  "mcp_security_version": "1.1",
+  "mcp_security_version": "2.0",
   "framework": "AI SAFE2 v3.0 CP.5.MCP",
   "server_name": "your-server-name",
   "controls": {
@@ -401,6 +418,12 @@ The AI SAFE2 MCP Server (v3.0.1) is the reference implementation of CP.5.MCP. It
 ---
 
 **AI SAFE2 Framework:** [github.com/CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+
+**Full CP.5.MCP Specification:** [00-cross-pillar/MCP.md](../../00-cross-pillar/MCP.md)
+
+**Pro tokens and Toolkit:** [cyberstrategyinstitute.com/ai-safe2/](https://cyberstrategyinstitute.com/ai-safe2/)
+
+**License:** MIT — Cyber Strategy Institute
 
 **Full CP.5.MCP Specification:** [00-cross-pillar/MCP.md](../../00-cross-pillar/MCP.md)
 
