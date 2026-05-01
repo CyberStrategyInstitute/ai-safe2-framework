@@ -1,0 +1,21 @@
+# mcp-safe-wrap configuration example
+# Copy to ~/.mcp-safe-wrap/config.toml or .mcp-safe-wrap.toml in your project
+
+[defaults]
+scan_inputs = true
+scan_outputs = true
+block_on_match = true
+audit_log = "~/.mcp-safe-wrap/audit.jsonl"
+rate_limit = 0           # 0 = disabled
+
+[proxy]
+local_port = 8080
+rate_limit = 200         # requests per hour per IP
+
+# Per-server overrides (use server name as section key)
+[servers.external-mcp-example]
+url = "https://external-mcp.example/mcp"
+token_env = "EXTERNAL_MCP_TOKEN"   # reads from env var
+scan_inputs = true
+scan_outputs = true
+rate_limit = 100

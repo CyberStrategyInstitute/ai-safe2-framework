@@ -1,0 +1,39 @@
+# Fix Template: RCE-006 — kubectl via subprocess
+# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-39884
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+import subprocess
+def port_forward(namespace, pod, port):
+    cmd = f"kubectl port-forward {namespace}/{pod} {port}"
+    subprocess.run(cmd, shell=True)
+#
+# ── AFTER (safe, option 1 — kubernetes client library) ────────────
+from kubernetes import client, config as k8s_config
+from kubernetes.stream import portforward
+
+def port_forward(namespace: str, pod: str, port: int):
+    k8s_config.load_incluster_config()  # or load_kube_config()
+    v1 = client.CoreV1Api()
+    # Use the official Kubernetes Python client — no shell involved
+    pf = portforward(
+        v1.connect_get_namespaced_pod_portforward,
+        pod, namespace,
+        ports=str(port)
+    )
+    return pf
+#
+# ── AFTER (safe, option 2 — subprocess with validated args list) ───
+ALLOWED_NAMESPACES = {"default", "kube-system", "app-production"}
+ALLOWED_PORTS = {8080, 8443, 3000}
+
+def port_forward_safe(namespace: str, pod: str, port: int):
+    if namespace not in ALLOWED_NAMESPACES:
+        raise ValueError(f"Namespace not allowed: {namespace}")
+    if port not in ALLOWED_PORTS:
+        raise ValueError(f"Port not allowed: {port}")
+    # Safe: args as list, validated inputs, no shell
+    subprocess.run(
+        ["kubectl", "port-forward", f"{namespace}/{pod}", str(port)],
+        shell=False,
+        check=True,
+    )

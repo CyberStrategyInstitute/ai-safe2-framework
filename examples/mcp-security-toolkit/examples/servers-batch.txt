@@ -1,0 +1,10 @@
+# servers-batch.txt — list of MCP servers for batch scoring
+# Run: mcp-score servers-batch.txt --batch --output json
+#
+# Format: one URL per line. Lines starting with # are comments.
+# Optionally append a token with space separator:
+#   https://server.example/mcp pro_token_here
+
+https://server1.example/mcp
+https://server2.example/mcp
+# https://server3.example/mcp  pro_token_here

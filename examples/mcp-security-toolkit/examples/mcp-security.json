@@ -1,0 +1,19 @@
+{
+  "_comment": "Copy to /.well-known/mcp-security.json at your server root",
+  "_docs": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/mcp-security-toolkit#earning-the-ai-safe2-mcp-badge",
+  "mcp_security_version": "1.0",
+  "framework": "AI SAFE2 v3.0 CP.5.MCP",
+  "server_name": "your-server-name",
+  "aisafe2_score": 0,
+  "last_assessed": "YYYY-MM-DDTHH:MM:SSZ",
+  "controls": {
+    "MCP-1_no_dynamic_commands": false,
+    "MCP-2_output_sanitization": "",
+    "MCP-4_source_hash": "",
+    "MCP-5_audit_logging": false,
+    "MCP-6_rate_limiting": false,
+    "MCP-6_network_isolation": ""
+  },
+  "source_code": "https://github.com/your-org/your-mcp-server",
+  "contact": "security@your-org.example"
+}
