@@ -123,25 +123,45 @@ MCP is the de facto standard for AI agent tool integration. Its STDIO transport 
 
 | ID | Control | Requirement |
 | :--- | :--- | :--- |
-| MCP-1 | No Dynamic Command Construction | Never pass user-controlled or tool-response-controlled input into `StdioServerParameters`, `subprocess`, `os.system`, or equivalents. Enforce via static analysis in CI/CD. |
-| MCP-2 | Output Sanitization Before LLM Return | Scan all MCP tool results for prompt injection patterns — instruction-override phrases, role-confusion markers, zero-width characters, and target LLM special tokens — before returning to calling clients. Log and redact matches. |
-| MCP-3 | Registry Provenance Verification | Verify all third-party MCP servers against the official GitHub MCP Registry before adding to any agent configuration. Enforce a manifest-based allowlist for approved server commands. Reject unverified sources. |
-| MCP-4 | STDIO Transport Integrity Binding | For STDIO-mode deployments, verify source file hash before granting elevated tier access. Fail closed on integrity failure. |
-| MCP-5 | Tool Invocation Audit Log | Every MCP tool call generates an immutable audit record (tool name, parameters, response hash, timestamp, calling agent identity) consistent with A2.5 Semantic Execution Trace Logging. Cross-reference against behavioral baseline (F3.4) to detect unexpected invocations. |
-| MCP-6 | MCP Server Network Isolation | MCP servers must not have unrestricted outbound network access unless explicitly required for their defined function. Apply allowlist-based egress filtering. Block exfiltration paths to unknown external URLs. |
-| MCP-7 | Zero-Trust Client Configuration | Any MCP server configuration sourced from a repository the operator does not control is treated as an untrusted artifact. Apply proxy wrapping to all third-party STDIO connections. |
+| MCP-1 | No Dynamic Command Construction | Never pass user-controlled or tool-response-controlled input into `StdioServerParameters`, `subprocess`, `os.system`, or equivalents. Server command parameters must be statically defined. Enforce via static analysis in CI/CD; fail the build on any dynamic command construction pattern. |
+| MCP-2 | Output Sanitization Before LLM Return | Scan all MCP tool results for prompt injection patterns — instruction-override phrases, role-confusion markers, zero-width characters, and target LLM special tokens — before returning to calling clients. Apply `sanitize_value()` from `aisafe2_mcp_tools.shared.patterns` or equivalent. Log and redact matches. |
+| MCP-3 | Registry Provenance Verification | Verify all third-party MCP servers against the official GitHub MCP Registry before adding to any agent configuration. Enforce a manifest-based allowlist for approved server commands. Treat allowlist updates as change management events. Reject unverified sources before they reach agent configuration. |
+| MCP-4 | STDIO Transport Integrity Binding | For STDIO-mode deployments, verify source file hash against a manifest maintained outside the server process before granting elevated tier access. Fail closed on integrity failure — an unverifiable binary must not execute. |
+| MCP-5 | Tool Invocation Audit Log | Every MCP tool call generates an immutable audit record (tool name, parameters, response hash, timestamp, calling agent identity) consistent with A2.5 Semantic Execution Trace Logging. Store outside the agent process and outside any filesystem path accessible to MCP server processes. Cross-reference against behavioral baseline (F3.4) to detect unexpected invocations. |
+| MCP-6 | MCP Server Network Isolation | MCP servers must not have unrestricted outbound network access unless explicitly required for their defined function. Apply allowlist-based egress filtering. Block exfiltration paths to unknown external URLs. For STDIO deployments, apply process-level network namespace isolation where the host OS supports it. |
+| MCP-7 | Zero-Trust Client Configuration | Any MCP server configuration sourced from a repository the operator does not control is treated as an untrusted artifact. Apply proxy wrapping to all third-party STDIO connections. Record tool schema hashes at initial trust establishment and compare at each subsequent session startup; schema changes without a documented release event require human authorization before the new schema is trusted. |
+| MCP-8 | Session Economics Controls | Declare a token budget and cost ceiling per session. Halt execution and require human authorization when either threshold is exceeded. Maintain per-tool rolling call frequency baselines; deviations exceeding 3 standard deviations trigger CP.8 review. API billing events exceeding 3x expected daily spend are classified as potential Phantom amplification (ATPA) and tagged via CP.1 with `cognitive_surface = model`, `memory_persistence = session`. |
+| MCP-9 | Context-Tool Isolation | Classify all externally retrieved data (documents, web pages, database records, API responses, email content) as untrusted data-plane content. Process through a semantic firewall before reaching the model's instruction context. Enforce isolated context segments for tool metadata and retrieved content at the Agentic Control Plane (CP.4). Monitor for the MCP-UPD three-phase pattern: retrieval tool invocation followed by disclosure tool invocation without an explicit human-authorized workflow connecting them. |
+| MCP-10 | Multi-Agent Provenance and Delegation Edge Monitoring | Every MCP tool call in multi-agent deployments must carry a CP.9 cryptographic lineage token identifying originating agent, full delegation path, and hop count. Instrument delegation edges, not individual agents. Tool server invocations without a traceable originating agent request are flagged as anomalous. ACT-4: maximum 3 delegation hops; kill switch must sever the full delegation tree within 500ms. |
+| MCP-11 | Schema Temporal Profiling | Record the `tools/list` response hash at deployment. Alert on any change at session startup not accompanied by a documented release event. CP.2 threat model entries must include MCP-specific temporal profiles for six threat classes: rug pull (`delayed_weeks`), persistent memory injection (`chronic`), ATPA (`immediate`), billing amplification (`immediate or delayed_days`), supply chain compromise (`delayed_days`), Swarm C2 establishment (`immediate`). |
+| MCP-12 | Swarm C2 Detection Controls | Implement semantic traffic analysis to distinguish legitimate agent-to-agent coordination from adversarial Swarm C2 patterns. Deploy CP.7 honeypot tool endpoints as canaries within multi-agent environments; any invocation by an unexpected agent is an immediate CP.8 threshold event. Communication topology deviations trigger CP.1 incident tagging with `cognitive_surface = both`, `memory_persistence = cross_session`. Requires coordination with CP.4, CP.7, and CP.8; cannot be implemented in isolation. |
+| MCP-13 | MCP Failure Mode Taxonomy Extension | Tag all MCP failure events with CP.1 cross-cutting dimensions (`cognitive_surface`, `memory_persistence`). Seven failure classes have defined taxonomy mappings and remediation paths. The `cross_session` classification for MCP-UPD and persistent memory injection mandates full memory flush across all agents in the chain, not session-level remediation. Without this tag, incident response addresses the wrong layer. |
 
 **ACT tier applicability:**
 
-- **ACT-2+:** MCP-1, MCP-2, MCP-5 mandatory
-- **ACT-3+:** All 7 controls mandatory
-- **ACT-4:** All 7 controls + CP.9 lineage token propagation through MCP delegation chains
+| Control | ACT-1 | ACT-2 | ACT-3 | ACT-4 |
+| :--- | :---: | :---: | :---: | :---: |
+| MCP-1 No Dynamic Commands | Recommended | **Mandatory** | Mandatory | Mandatory |
+| MCP-2 Output Sanitization | Recommended | **Mandatory** | Mandatory | Mandatory |
+| MCP-3 Registry Provenance | Recommended | **Mandatory** | Mandatory | Mandatory |
+| MCP-4 STDIO Integrity | Recommended | **Mandatory** | Mandatory | Mandatory |
+| MCP-5 Tool Audit Log | Recommended | **Mandatory** | Mandatory | Mandatory |
+| MCP-6 Network Isolation | -- | Recommended | **Mandatory** | Mandatory |
+| MCP-7 Zero-Trust Config | -- | Recommended | **Mandatory** | Mandatory |
+| MCP-8 Session Economics | -- | **Mandatory** | Mandatory | Mandatory |
+| MCP-9 Context-Tool Isolation | -- | **Mandatory** | Mandatory | Mandatory |
+| MCP-10 Delegation Edge Monitoring | -- | -- | **Mandatory** | Mandatory + CP.9 |
+| MCP-11 Schema Temporal Profiling | -- | **Mandatory** | Mandatory | Mandatory |
+| MCP-12 Swarm C2 Detection | -- | -- | **Mandatory** | Mandatory |
+| MCP-13 Failure Taxonomy Extension | -- | **Mandatory** | Mandatory | Mandatory |
 
-**MITRE ATLAS:** AML.T0002, AML.T0005, AML.T0051
-**OWASP LLM:** LLM05 (Supply Chain Vulnerabilities), LLM10 (Model Theft / Exfiltration)
+**MITRE ATLAS:** AML.T0002, AML.T0005, AML.T0008, AML.T0015, AML.T0043, AML.T0048, AML.T0051
+**OWASP LLM:** LLM01 (Prompt Injection), LLM02 (Insecure Output Handling), LLM05 (Supply Chain Vulnerabilities), LLM08 (Excessive Agency), LLM10 (Model Theft / Exfiltration)
 
-> Full research foundation and implementation rationale: [Research Note 023 — MCP Server Security Profile](../research/023_mcp-server-security-profile.md)
-
+- **Full control specifications:** [CP.5 MCP Full Specification](./MCP.md)
+- **Research foundation:** [Research Note 023 — MCP Server Security Profile](../research/023_mcp-server-security-profile.md) | [Research Note 024 — MCP Consumer Protection](../research/024_mcp_consumer_protection.md)
+- **Reference implementation:** [AI SAFE2 MCP Security Toolkit](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/mcp-security-toolkit)
+  
 ---
 
 ---
