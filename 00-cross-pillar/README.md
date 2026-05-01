@@ -133,7 +133,7 @@ MCP is the de facto standard for AI agent tool integration. Its STDIO transport 
 | MCP-8 | Session Economics Controls | Declare a token budget and cost ceiling per session. Halt execution and require human authorization when either threshold is exceeded. Maintain per-tool rolling call frequency baselines; deviations exceeding 3 standard deviations trigger CP.8 review. API billing events exceeding 3x expected daily spend are classified as potential Phantom amplification (ATPA) and tagged via CP.1 with `cognitive_surface = model`, `memory_persistence = session`. |
 | MCP-9 | Context-Tool Isolation | Classify all externally retrieved data (documents, web pages, database records, API responses, email content) as untrusted data-plane content. Process through a semantic firewall before reaching the model's instruction context. Enforce isolated context segments for tool metadata and retrieved content at the Agentic Control Plane (CP.4). Monitor for the MCP-UPD three-phase pattern: retrieval tool invocation followed by disclosure tool invocation without an explicit human-authorized workflow connecting them. |
 | MCP-10 | Multi-Agent Provenance and Delegation Edge Monitoring | Every MCP tool call in multi-agent deployments must carry a CP.9 cryptographic lineage token identifying originating agent, full delegation path, and hop count. Instrument delegation edges, not individual agents. Tool server invocations without a traceable originating agent request are flagged as anomalous. ACT-4: maximum 3 delegation hops; kill switch must sever the full delegation tree within 500ms. |
-| MCP-11 | Schema Temporal Profiling | Record the `tools/list` response hash at deployment. Alert on any change at session startup not accompanied by a documented release event. CP.2 threat model entries must include MCP-specific temporal profiles for six threat classes: rug pull (`delayed_weeks`), persistent memory injection (`chronic`), ATPA (`immediate`), billing amplification (`immediate|delayed_days`), supply chain compromise (`delayed_days`), Swarm C2 establishment (`immediate`). |
+| MCP-11 | Schema Temporal Profiling | Record the `tools/list` response hash at deployment. Alert on any change at session startup not accompanied by a documented release event. CP.2 threat model entries must include MCP-specific temporal profiles for six threat classes: rug pull (`delayed_weeks`), persistent memory injection (`chronic`), ATPA (`immediate`), billing amplification (`immediate or delayed_days`), supply chain compromise (`delayed_days`), Swarm C2 establishment (`immediate`). |
 | MCP-12 | Swarm C2 Detection Controls | Implement semantic traffic analysis to distinguish legitimate agent-to-agent coordination from adversarial Swarm C2 patterns. Deploy CP.7 honeypot tool endpoints as canaries within multi-agent environments; any invocation by an unexpected agent is an immediate CP.8 threshold event. Communication topology deviations trigger CP.1 incident tagging with `cognitive_surface = both`, `memory_persistence = cross_session`. Requires coordination with CP.4, CP.7, and CP.8; cannot be implemented in isolation. |
 | MCP-13 | MCP Failure Mode Taxonomy Extension | Tag all MCP failure events with CP.1 cross-cutting dimensions (`cognitive_surface`, `memory_persistence`). Seven failure classes have defined taxonomy mappings and remediation paths. The `cross_session` classification for MCP-UPD and persistent memory injection mandates full memory flush across all agents in the chain, not session-level remediation. Without this tag, incident response addresses the wrong layer. |
 
@@ -158,11 +158,10 @@ MCP is the de facto standard for AI agent tool integration. Its STDIO transport 
 **MITRE ATLAS:** AML.T0002, AML.T0005, AML.T0008, AML.T0015, AML.T0043, AML.T0048, AML.T0051
 **OWASP LLM:** LLM01 (Prompt Injection), LLM02 (Insecure Output Handling), LLM05 (Supply Chain Vulnerabilities), LLM08 (Excessive Agency), LLM10 (Model Theft / Exfiltration)
 
-> Full control specifications, threat model, and implementation rationale: [CP.5 MCP Full Specification](./MCP.md)
-
-> Research foundation: [Research Note 023 — MCP Server Security Profile](../research/023_mcp-server-security-profile.md) | [Research Note 024 — MCP Consumer Protection](../research/024_mcp_consumer_protection.md)
-
-> Reference implementation and consumer tooling: [AI SAFE2 MCP Security Toolkit](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/mcp-security-toolkit)
+- **Full control specifications:** [CP.5 MCP Full Specification](./MCP.md)
+- **Research foundation:** [Research Note 023 — MCP Server Security Profile](../research/023_mcp-server-security-profile.md) | [Research Note 024 — MCP Consumer Protection](../research/024_mcp_consumer_protection.md)
+- **Reference implementation:** [AI SAFE2 MCP Security Toolkit](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/mcp-security-toolkit)
+  
 ---
 
 ---
