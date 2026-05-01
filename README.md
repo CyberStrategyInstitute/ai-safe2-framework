@@ -66,6 +66,26 @@ The framework is organized around **5 Operational Pillars** plus a **Cross-Pilla
 
 ---
 
+## 🛡️ MCP Security Toolkit
+
+Three open-source tools implementing AI SAFE2 v3.0 CP.5.MCP.
+One install. Works against any MCP server, yours or external.
+
+```bash
+pip install aisafe2-mcp-tools
+```
+
+| Tool | What it does |
+|------|-------------|
+| **`mcp-score`** | Remote black-box CP.5.MCP assessment — score any MCP HTTP server |
+| **`mcp-scan`** | Static code analysis across the full MCP CVE taxonomy |
+| **`mcp-safe-wrap`** | Consumer-side injection scanning and audit proxy |
+
+→ [**examples/mcp-security-toolkit/**](examples/mcp-security-toolkit/) · 134 tests · badge system
+
+
+---
+
 <a id="5-min-plan"></a>
 ## 🚀 Start Securing in 5 Minutes
 
