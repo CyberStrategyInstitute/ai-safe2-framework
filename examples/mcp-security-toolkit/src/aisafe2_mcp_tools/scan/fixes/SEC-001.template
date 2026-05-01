@@ -1,0 +1,24 @@
+# Fix Template: SEC-001 — Server bound to 0.0.0.0
+# AI SAFE2 v3.0 CP.5.MCP-6
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+uvicorn.run(app, host="0.0.0.0", port=8000)
+# or in config:
+MCP_HOST=0.0.0.0
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+# Bind to localhost only. Let Caddy/nginx handle external access.
+uvicorn.run(app, host="127.0.0.1", port=8000)
+# In .env:
+MCP_HOST=127.0.0.1
+#
+# Caddy reverse proxy (Caddyfile):
+# your-domain.example {
+#     reverse_proxy 127.0.0.1:8000
+#     header {
+#         Strict-Transport-Security "max-age=31536000"
+#         X-Frame-Options "DENY"
+#         X-Content-Type-Options "nosniff"
+#         -Server
+#     }
+# }

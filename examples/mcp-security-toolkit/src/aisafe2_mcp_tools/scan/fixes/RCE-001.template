@@ -1,0 +1,26 @@
+# Fix Template: RCE-001 — Dynamic Command in StdioServerParameters
+# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-30623, CVE-2026-30615
+#
+# CRITICAL: This fix requires manual review. The correct replacement
+# depends on what command your server is intended to run.
+# DO NOT blindly apply this template. Read and understand first.
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+params = StdioServerParameters(command=user_input, args=[])
+params = StdioServerParameters(command=config.get("cmd"), args=[])
+params = StdioServerParameters(command=f"{base} {extra}", args=[])
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+# The command MUST be a string literal constant, not a variable.
+params = StdioServerParameters(command="python", args=["-m", "your_mcp_server"])
+# or
+params = StdioServerParameters(command="node", args=["dist/server.js"])
+# or
+params = StdioServerParameters(command="your-mcp-binary", args=[])
+#
+# If you need different commands for different environments, use
+# an explicit allowlist — not a variable from user/external input:
+ALLOWED_COMMANDS = {"dev": "python", "prod": "python3"}
+env = os.getenv("DEPLOY_ENV", "prod")
+cmd = ALLOWED_COMMANDS.get(env, "python3")  # safe: enum, not user input
+params = StdioServerParameters(command=cmd, args=["-m", "server"])

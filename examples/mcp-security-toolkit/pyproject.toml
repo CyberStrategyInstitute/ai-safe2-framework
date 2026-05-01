@@ -1,0 +1,69 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aisafe2-mcp-tools"
+version = "1.0.0"
+description = "AI SAFE2 v3.0 MCP Security Toolkit — score, scan, and wrap any MCP server"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "Cyber Strategy Institute", email = "info@cyberstrategyinstitute.com" }]
+keywords = ["mcp", "ai-safety", "security", "governance", "aisafe2"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Security",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "httpx>=0.27.0",
+    "structlog>=24.0.0",
+    "rich>=13.7.0",
+    "click>=8.1.0",
+    "pydantic>=2.6.0",
+    "anyio>=4.3.0",
+]
+
+[project.optional-dependencies]
+scan = [
+    "ast-grep-py>=0.12.0",
+    "packaging>=24.0",
+]
+proxy = [
+    "starlette>=0.40.0",
+    "uvicorn>=0.29.0",
+]
+all = [
+    "ast-grep-py>=0.12.0",
+    "packaging>=24.0",
+    "starlette>=0.40.0",
+    "uvicorn>=0.29.0",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-httpx>=0.30.0",
+    "respx>=0.21.0",
+]
+
+[project.scripts]
+mcp-score  = "aisafe2_mcp_tools.score.__main__:cli"
+mcp-scan   = "aisafe2_mcp_tools.scan.__main__:cli"
+mcp-safe-wrap = "aisafe2_mcp_tools.wrap.__main__:cli"
+
+[project.urls]
+Homepage = "https://cyberstrategyinstitute.com/ai-safe2/"
+Repository = "https://github.com/CyberStrategyInstitute/ai-safe2-framework"
+Documentation = "https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/tools"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aisafe2_mcp_tools"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
