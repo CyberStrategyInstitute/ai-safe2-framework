@@ -1,6 +1,10 @@
-# QUICKSTART -- 15-Minute Codex Sovereign Runtime Setup
+# QUICKSTART -- 15-Minute Codex Sovereign Runtime v2 Setup
 
 This guide deploys the highest-priority AI SAFE2 controls for Codex with the current Codex runtime surface.
+
+Default deployment mode: **wrapper-first**.
+
+Do **not** start by replacing your live global `~/.codex/config.toml` unless you are explicitly testing global integration on a non-production machine.
 
 ---
 
@@ -16,29 +20,45 @@ If `codex` resolves from more than one location, treat that as inventory drift a
 
 ---
 
-## Step 1: Install The Managed Codex Config
+## Step 1: Install Monitoring And Governance Files
 
-Back up your current user config, then copy a hardened baseline:
+Install the external monitoring sink:
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$HOME\\.codex" | Out-Null
-Copy-Item "$HOME\\.codex\\config.toml" "$HOME\\.codex\\config.toml.bak" -ErrorAction SilentlyContinue
-Copy-Item ".\\managed-settings\\config.strict.toml" "$HOME\\.codex\\config.toml" -Force
+New-Item -ItemType Directory -Force -Path "$HOME\\.codex\\monitoring" | Out-Null
+Copy-Item ".\\monitoring\\codex-notify.ps1" "$HOME\\.codex\\monitoring\\codex-notify.ps1" -Force
 ```
 
-If you need team MCP servers, start from `managed-settings/config.team.toml` instead of weakening `config.strict.toml` ad hoc.
-
----
-
-## Step 2: Install The Hardened Project Policy
-
-Copy the Codex-focused `AGENTS.md` into the project you want to protect:
+Install the project governance files into the repo you want to protect:
 
 ```powershell
 Copy-Item ".\\AGENTS.md" "C:\\path\\to\\your-project\\AGENTS.md" -Force
+Copy-Item ".\\IDENTITY.md" "C:\\path\\to\\your-project\\IDENTITY.md" -Force
+Copy-Item ".\\SOUL.md" "C:\\path\\to\\your-project\\SOUL.md" -Force
+Copy-Item ".\\USER.md" "C:\\path\\to\\your-project\\USER.md" -Force
+Copy-Item ".\\TOOLS.md" "C:\\path\\to\\your-project\\TOOLS.md" -Force
+Copy-Item ".\\SUBAGENT-POLICY.md" "C:\\path\\to\\your-project\\SUBAGENT-POLICY.md" -Force
+Copy-Item ".\\EVALUATION.md" "C:\\path\\to\\your-project\\EVALUATION.md" -Force
 ```
 
-This is the project-local behavioral policy layer. It does not replace sandboxing or approvals; it constrains the reasoning layer above them.
+This is the project-local governance layer. It does not replace sandboxing or approvals; it shapes behavior and gives reviewers concrete artifacts to inspect.
+
+---
+
+## Step 2: Confirm The Codex Binary Path
+
+On Windows, do not assume `codex` resolves from `PATH`.
+
+```powershell
+& "C:\Users\CyberStrategy1\AppData\Local\OpenAI\Codex\bin\codex.exe" --version
+```
+
+If that path differs on your machine, update the wrapper or use the detected path from:
+
+```powershell
+Get-ChildItem "$env:LOCALAPPDATA\OpenAI\Codex\bin"
+```
 
 ---
 
@@ -59,6 +79,8 @@ Optional:
 ```
 
 The wrapper blocks dangerous startup flags, creates session logs, enforces a timeout, and injects a notification sink for external evidence.
+
+Current Windows note: timeout enforcement may be disabled in favor of stable launch behavior. Use session review and CI gates as the stronger enforcement layer for now.
 
 ---
 
@@ -92,6 +114,7 @@ Expected outputs:
 - a session log under `%USERPROFILE%\\.codex\\logs`
 - a notification log entry
 - a summary file you can retain as audit evidence
+- if home-directory logging is blocked, fallback logs under `.codex-runtime-logs` in the workspace
 
 ---
 
@@ -99,12 +122,12 @@ Expected outputs:
 
 | Control | What It Does |
 |---|---|
-| `config.strict.toml` | Keeps Codex in `workspace-write` with `on-request` approvals and minimal MCP exposure |
-| `AGENTS.md` | Hardens the reasoning layer against prompt injection and unsafe execution norms |
-| `codex-jit-wrapper.ps1` | Blocks dangerous launch flags, adds timeout, injects notification logging |
+| Governance files (`IDENTITY.md`, `SOUL.md`, `AGENTS.md`, `USER.md`, `TOOLS.md`, `SUBAGENT-POLICY.md`) | Define identity, constraints, tool surface, user data handling, and delegation rules |
+| `codex-jit-wrapper.ps1` | Blocks dangerous launch flags, enforces approval/sandbox mode, injects notification logging |
 | `audit-codex-install.ps1` | Inventories binaries, aliases, configs, and MCP surfaces |
 | `scan-dangerous-config.ps1` | Flags unsafe approvals, sandbox modes, and config overrides |
 | `codex-notify.ps1` | Captures external completion metadata for audit evidence |
+| `EVALUATION.md` | Defines the verification model and known platform caveats |
 
 ---
 
@@ -127,4 +150,8 @@ Then:
 
 ---
 
-*This quickstart is intentionally stricter than convenience defaults.*
+## Optional: Global Config Integration
+
+If you explicitly want to test global Codex config integration, use files in `managed-settings/`, but treat that as advanced deployment. Validate on a non-production machine first.
+
+*This quickstart documents the v2 wrapper-first deployment model.*

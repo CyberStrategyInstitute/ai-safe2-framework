@@ -19,6 +19,31 @@ function Resolve-LogRoot {
     }
 }
 
+function Resolve-CodexPath {
+    $candidates = @()
+
+    try {
+        $cmd = Get-Command codex -ErrorAction Stop
+        if ($cmd.Source) {
+            $candidates += $cmd.Source
+        }
+    } catch {
+    }
+
+    $candidates += @(
+        (Join-Path $env:LOCALAPPDATA "OpenAI\Codex\bin\codex.exe"),
+        "C:\Program Files\WindowsApps\OpenAI.Codex_26.422.3464.0_x64__2p2nqsd0c76g0\app\resources\codex.exe"
+    )
+
+    foreach ($candidate in $candidates | Select-Object -Unique) {
+        if ($candidate -and (Test-Path -LiteralPath $candidate)) {
+            return $candidate
+        }
+    }
+
+    return $null
+}
+
 function Write-Log {
     param(
         [string]$Path,
@@ -26,7 +51,14 @@ function Write-Log {
     )
 
     $timestamp = (Get-Date).ToUniversalTime().ToString("o")
-    Add-Content -LiteralPath $Path -Value "$timestamp | $Message"
+    try {
+        Add-Content -LiteralPath $Path -Value "$timestamp | $Message"
+    } catch {
+        $fallbackDir = Join-Path (Get-Location) ".codex-runtime-logs"
+        New-Item -ItemType Directory -Force -Path $fallbackDir | Out-Null
+        $fallbackPath = Join-Path $fallbackDir (Split-Path -Leaf $Path)
+        Add-Content -LiteralPath $fallbackPath -Value "$timestamp | $Message"
+    }
 }
 
 $logRoot = Resolve-LogRoot
@@ -38,8 +70,22 @@ $sessionLog = Join-Path $logRoot "wrapper-sessions.log"
 $summaryPath = Join-Path $logRoot "$sessionId.summary.txt"
 $notifyScript = Join-Path $monitoringRoot "codex-notify.ps1"
 
-if (-not (Get-Command codex -ErrorAction SilentlyContinue)) {
-    throw "codex is not available in PATH."
+function Write-Summary {
+    param([string]$Content)
+
+    try {
+        Set-Content -LiteralPath $summaryPath -Value $Content
+    } catch {
+        $fallbackDir = Join-Path (Get-Location) ".codex-runtime-logs"
+        New-Item -ItemType Directory -Force -Path $fallbackDir | Out-Null
+        $fallbackSummary = Join-Path $fallbackDir (Split-Path -Leaf $summaryPath)
+        Set-Content -LiteralPath $fallbackSummary -Value $Content
+    }
+}
+
+$codexPath = Resolve-CodexPath
+if (-not $codexPath) {
+    throw "Unable to locate codex.exe. Use the local OpenAI Codex install path or refresh PATH in a new shell."
 }
 
 $joinedArgs = ($AdditionalArgs -join " ")
@@ -56,8 +102,13 @@ $configOverride = @(
 )
 
 $codexArgs = @()
-if ($Profile) {
-    $codexArgs += @("-p", $Profile)
+switch ($Profile) {
+    "sovereign_strict" {
+        $codexArgs += @("-a", "untrusted", "-s", "read-only")
+    }
+    default {
+        $codexArgs += @("-a", "on-request", "-s", "workspace-write")
+    }
 }
 $codexArgs += $configOverride
 $codexArgs += $AdditionalArgs
@@ -69,21 +120,11 @@ $env:CODEX_SOVEREIGN_LOG_ROOT = $logRoot
 Write-Log -Path $sessionLog -Message "SESSION_START | id=$sessionId | profile=$Profile | timeout=$SessionTimeoutSeconds | args=$joinedArgs"
 
 try {
-    $process = Start-Process -FilePath "codex" -ArgumentList $codexArgs -NoNewWindow -PassThru
-    $completed = $process.WaitForExit($SessionTimeoutSeconds * 1000)
-
-    if (-not $completed) {
-        try {
-            Stop-Process -Id $process.Id -ErrorAction Stop
-        } catch {
-        }
-        Write-Log -Path $sessionLog -Message "SESSION_TIMEOUT | id=$sessionId | pid=$($process.Id)"
-        throw "Blocked by AI SAFE2: Codex session exceeded timeout of $SessionTimeoutSeconds seconds."
-    }
-
-    $exitCode = $process.ExitCode
-    Write-Log -Path $sessionLog -Message "SESSION_END | id=$sessionId | exit_code=$exitCode"
-    "SessionId=$sessionId`nExitCode=$exitCode`nProfile=$Profile" | Set-Content -LiteralPath $summaryPath
+    Write-Log -Path $sessionLog -Message "SESSION_EXEC | id=$sessionId | codex_path=$codexPath | timeout_enforcement=disabled | mode=wrapper-first-v2"
+    & $codexPath @codexArgs
+    $exitCode = $LASTEXITCODE
+    Write-Log -Path $sessionLog -Message "SESSION_END | id=$sessionId | codex_path=$codexPath | exit_code=$exitCode"
+    Write-Summary -Content "SessionId=$sessionId`nExitCode=$exitCode`nProfile=$Profile"
     exit $exitCode
 } finally {
 }
