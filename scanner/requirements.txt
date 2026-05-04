@@ -1,2 +1,2 @@
-pydantic>=2.7.0
+pydantic>=2.13.3
 click>=8.3.3
