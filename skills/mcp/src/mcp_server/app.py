@@ -69,12 +69,7 @@ structlog.configure(
 log = structlog.get_logger()
 
 # ── MCP Server ────────────────────────────────────────────────────────────────
-mcp = FastMCP(
-    name=SERVER_NAME,
-    version=SERVER_VERSION,
-    description=SERVER_DESCRIPTION,
-)
-
+mcp = FastMCP(f"{SERVER_NAME} v{SERVER_VERSION}")
 
 # ── Tier resolution (RISK-0 FIX) ─────────────────────────────────────────────
 # Reads from ContextVar set by BearerAuthMiddleware.
@@ -338,6 +333,7 @@ def main() -> None:
         "server.start",
         name=SERVER_NAME,
         version=SERVER_VERSION,
+        DESCRIPTION=SERVER_DESCRIPTION,
         transport=TRANSPORT,
         controls=db.count()["total"],
     )
@@ -370,7 +366,7 @@ def main() -> None:
             host=HOST,
             port=PORT,
             note=(
-                "Binding to localhost only. "
+                "Binding to localhost only. If not review your deployment infrastructure requirements."
                 "Caddy handles TLS termination on the public HTTPS port. "
                 "Do NOT expose this port directly."
             ),
