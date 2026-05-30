@@ -1,0 +1,74 @@
+# Hermes Sovereign Runtime — Skill Provenance Manifest
+# AI SAFE² v3.0 · P2.A-C01
+# Complete ALL fields. No skill enters the sovereign runtime without a complete manifest.
+
+# ─── Identity ────────────────────────────────────────────────────────────────
+
+skill_name: ""                    # Canonical name (matches filename without extension)
+skill_version: ""                 # Version string or commit SHA
+skill_file: ""                    # filename.py
+skill_sha256: ""                  # sha256sum filename.py — verify before install
+
+# ─── Source ──────────────────────────────────────────────────────────────────
+
+source:
+  origin: ""                      # agentskills.io | github | internal | custom
+  source_url: ""                  # Direct download URL or repository link
+  author: ""                      # Skill author (name/handle)
+  author_verified: false          # Is the author identity verifiable?
+  license: ""                     # MIT | Apache-2.0 | Unknown | Proprietary
+
+# ─── Static Analysis ─────────────────────────────────────────────────────────
+
+static_analysis:
+  scanner_version: "3.0.0"        # HSR scanner version
+  scan_date: ""                   # ISO 8601
+  critical_findings: 0            # Must be 0
+  high_findings: 0                # Target 0; document exceptions below
+  passed: false                   # true only if critical_findings == 0
+  findings_exceptions: []         # List high findings with documented justification
+  # Example:
+  # findings_exceptions:
+  #   - pattern: "outbound_http"
+  #     justification: "Skill fetches public weather data; URL hardcoded, not user-controlled"
+  #     accepted_by: "security-lead-name"
+
+# ─── Code Review ─────────────────────────────────────────────────────────────
+
+code_review:
+  reviewed_by: ""                 # Reviewer name/handle
+  reviewed_at: ""                 # ISO 8601
+  review_notes: ""                # Summary of what the skill does
+  dangerous_patterns_found: false
+  credentials_access: false       # Does the skill read credentials? (should be false)
+  subprocess_calls: false         # Does the skill spawn subprocesses? (should be false)
+  external_network: false         # Does the skill make outbound calls? (document URL if yes)
+  file_writes: false              # Does the skill write files? (document paths if yes)
+
+# ─── Sandbox Testing ─────────────────────────────────────────────────────────
+
+sandbox:
+  tested: false                   # Was behavior analysis run?
+  test_date: ""                   # ISO 8601
+  test_environment: ""            # e.g., "Docker, no-network, Python 3.12"
+  sandbox_log_path: ""            # Path to sandbox output log (kept for audit)
+  observed_behavior: ""           # What did it do? (file reads, network calls, output)
+  unexpected_behavior: false      # Did anything unexpected occur?
+  unexpected_behavior_notes: ""
+
+# ─── Approval ─────────────────────────────────────────────────────────────────
+
+approval:
+  approved_by: ""                 # Security lead name
+  approved_at: ""                 # ISO 8601
+  approved_for_scope: ""          # What scope is this skill approved for? (read-only, network, etc.)
+  approval_expiry: ""             # ISO 8601 — when re-review is required (recommend: 90 days)
+  notes: ""
+
+# ─── Installation Record ──────────────────────────────────────────────────────
+
+installation:
+  installed_at: ""                # ISO 8601
+  installed_by: ""                # Who installed it
+  install_path: ""                # Full path in sovereign runtime
+  hermes_skills_dir: ""           # ~/.hermes/skills/ or Docker volume path
