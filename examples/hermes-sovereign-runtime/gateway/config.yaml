@@ -1,0 +1,101 @@
+# AI SAFE² Gateway Configuration — Hermes Sovereign Runtime
+# Cyber Strategy Institute · AI SAFE² v3.0
+#
+# Configure this file before starting the gateway.
+# See gateway/README.md for full documentation.
+
+gateway:
+  host: "127.0.0.1"
+  port: 8000
+  # Maximum request size in bytes (32KB default — tune up for large context windows)
+  max_request_size_bytes: 32768
+  # Anomaly score to trigger automatic kill switch (0.0–1.0)
+  circuit_breaker_threshold: 0.85
+  # Kill switch file path (checked on every request)
+  kill_switch_file: "/tmp/hsr_kill_switch"
+
+provider:
+  # Active upstream provider: anthropic | openai | openrouter | gemini | ollama | nim
+  active: "anthropic"
+  # Optional custom base URL override (e.g., Azure OpenAI, self-hosted)
+  # base_url: "https://my-azure-endpoint.openai.azure.com/openai"
+
+filters:
+  # Block PII patterns (SSN, credit cards) from LLM context
+  block_pii: true
+  # Block credential/secret patterns (API keys, private keys, AWS keys)
+  block_secrets: true
+  # Block prompt injection pattern signatures
+  block_injection_patterns: true
+  # Maximum context tokens (soft limit — enforced via request size)
+  max_context_tokens: 8192
+
+tools:
+  # Tools the agent is permitted to invoke (allowlist)
+  # Remove tools the agent doesn't need — principle of least privilege
+  allowed:
+    - read_file
+    - web_search
+    - write_file
+    - terminal
+    - memory_search
+    - memory_write
+    - web_fetch
+  # Tools requiring explicit approval before execution
+  require_approval:
+    - terminal
+    - write_file
+    - web_search  # Remove from require_approval if search is frequent
+  # Tools that are explicitly blocked regardless of request
+  blocked:
+    - system_exec
+    - raw_bash
+    - eval
+    - exec
+
+audit:
+  # Primary audit log path (must be writable)
+  log_path: "/var/log/hsr/audit.jsonl"
+  # Fallback if primary path not writable
+  fallback_log_path: "/tmp/hsr_audit.jsonl"
+  hash_algorithm: "sha256"
+  # Rotate audit log when it exceeds this size (bytes)
+  rotation_size_bytes: 104857600  # 100MB
+
+# NEXUS-A2A compatibility hooks (for multi-agent sovereign deployments)
+nexus_a2a:
+  enabled: false
+  # Enable cryptographic attestation on inter-agent calls
+  require_attestation: true
+  attestation_key_path: "/etc/hsr/nexus.key"
+
+# Taint tracking — tag content from external surfaces
+taint_tracking:
+  enabled: true
+  # Sources that receive taint tags
+  taint_sources:
+    - telegram
+    - discord
+    - slack
+    - whatsapp
+    - signal
+    - email
+    - web
+    - mcp
+  # Strip executable-like strings from tainted content before LLM injection
+  strip_executables: true
+
+# Provider failover — FM-08
+# Without this, single LLM provider outage halts all operations
+provider_failover:
+  enabled: true
+  strategy: "ordered"    # Try providers in order; first success wins
+  # Order matches gateway/provider_adapters.py PROVIDER_PRIORITY
+  # Set each provider key to enable; remove to disable failover to that provider
+  providers:
+    - anthropic
+    - openrouter   # Often has multiple backend models
+    - openai
+  max_attempts: 3
+  timeout_seconds: 30
+  on_all_fail: "return_503"    # return_503 | queue | suspend_and_alert

@@ -1,0 +1,84 @@
+# =============================================================================
+# Prometheus Configuration — Hermes Sovereign Runtime
+# AI SAFE² v3.0 Observability Stack
+# =============================================================================
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: "hsr-production"
+    framework: "ai-safe2-v3"
+
+# Load alert rules
+rule_files:
+  - "/etc/prometheus/alerts.yaml"
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - "alertmanager:9093"
+
+scrape_configs:
+  # ---------------------------------------------------------------------------
+  # AI SAFE² Gateway Metrics
+  # ---------------------------------------------------------------------------
+  - job_name: "safe2-gateway"
+    static_configs:
+      - targets: ["safe2-gateway:8000"]
+    metrics_path: "/hsr/metrics"
+    scrape_interval: 10s
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: "hsr_.*"
+        action: keep
+
+  # ---------------------------------------------------------------------------
+  # Hermes Agent Core Metrics
+  # ---------------------------------------------------------------------------
+  - job_name: "hermes-agent"
+    static_configs:
+      - targets: ["hermes:8001"]
+    metrics_path: "/metrics"
+    scrape_interval: 15s
+
+  # ---------------------------------------------------------------------------
+  # Ishi Supervisor Metrics
+  # ---------------------------------------------------------------------------
+  - job_name: "ishi-supervisor"
+    static_configs:
+      - targets: ["ishi:9090"]
+    metrics_path: "/metrics"
+    scrape_interval: 10s
+
+  # ---------------------------------------------------------------------------
+  # Memory Auditor Metrics
+  # ---------------------------------------------------------------------------
+  - job_name: "memory-auditor"
+    static_configs:
+      - targets: ["memory-auditor:9091"]
+    metrics_path: "/metrics"
+    scrape_interval: 30s
+
+  # ---------------------------------------------------------------------------
+  # OPA Policy Engine Metrics
+  # ---------------------------------------------------------------------------
+  - job_name: "opa"
+    static_configs:
+      - targets: ["opa:8181"]
+    metrics_path: "/metrics"
+    scrape_interval: 30s
+
+  # ---------------------------------------------------------------------------
+  # HashiCorp Vault Metrics
+  # ---------------------------------------------------------------------------
+  - job_name: "vault"
+    static_configs:
+      - targets: ["vault:8200"]
+    metrics_path: "/v1/sys/metrics"
+    params:
+      format: ["prometheus"]
+    bearer_token_file: "/etc/prometheus/vault_token"
+    scrape_interval: 30s
