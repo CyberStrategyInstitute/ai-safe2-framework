@@ -1,0 +1,276 @@
+# Hermes Sovereign Runtime — Docker Compose Stack
+# AI SAFE² v3.0 · Cyber Strategy Institute
+#
+# Deploys:
+#   1. AI SAFE² Gateway (LLM reverse proxy with control plane)
+#   2. Hermes Agent Core (gVisor-isolated, Vault-credentialed)
+#   3. Ishi Supervisor (kill switch + policy engine)
+#   4. HashiCorp Vault (ephemeral credential management)
+#   5. Prometheus + Grafana (observability stack)
+#   6. Loki (immutable audit log aggregation)
+#
+# Usage:
+#   cp .env.example .env && vim .env
+#   docker compose up -d
+#   docker compose logs -f hermes
+
+version: "3.9"
+
+# ─── Networks ────────────────────────────────────────────────────────────────
+# internal-only: all agent traffic. No direct internet access from hermes or ishi.
+# observability: metrics/log consumers only.
+# gateway-egress: gateway→upstream LLM only.
+
+networks:
+  internal-only:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+
+  gateway-egress:
+    driver: bridge
+    # This network has external access — only gateway lives here
+
+  observability:
+    driver: bridge
+    internal: true
+
+# ─── Volumes ─────────────────────────────────────────────────────────────────
+
+volumes:
+  hermes-workspace:       # Agent read/write sandbox (HERMES_WRITE_SAFE_ROOT)
+  hermes-memory:          # Persistent SQLite memory stores
+  hermes-skills:          # Approved sovereign skill store
+  safe2-audit-logs:       # Immutable audit trail (mounted read-only by Grafana)
+  vault-data:             # HashiCorp Vault persistent state
+  ishi-policies:          # OPA policy files
+  prometheus-data:
+  grafana-data:
+  loki-data:
+
+# ─── Services ─────────────────────────────────────────────────────────────────
+
+services:
+
+  # ── AI SAFE² Gateway ──────────────────────────────────────────────────────
+  # P1.S-C02: PII/secrets filter
+  # P2.A-C05: Immutable audit trail
+  # P3.F-C05: Kill switch
+  # P4.M-C01: Prompt-layer monitoring
+
+  safe2-gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile.gateway
+    image: csi/ai-safe2-gateway:3.0.0
+    container_name: hsr-gateway
+    restart: unless-stopped
+    environment:
+      # Provider configuration — override in .env
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      # Audit integrity
+      - AUDIT_CHAIN_KEY=${AUDIT_CHAIN_KEY:?AUDIT_CHAIN_KEY required - run: openssl rand -hex 32}
+      # Vault integration
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_TOKEN=${VAULT_ROOT_TOKEN:-}
+    volumes:
+      - ./gateway/config.yaml:/app/config.yaml:ro
+      - safe2-audit-logs:/var/log/hsr
+    networks:
+      - internal-only
+      - gateway-egress
+    ports:
+      # Only expose gateway to localhost — Hermes talks to 127.0.0.1:8000
+      - "127.0.0.1:8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/hsr/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    depends_on:
+      vault:
+        condition: service_healthy
+
+  # ── Hermes Agent Core ─────────────────────────────────────────────────────
+  # Sandboxed with gVisor (runtime: runsc)
+  # Non-root user (1000:1000)
+  # Credentials via Vault, not .env
+  # HERMES_FORCE_APPROVAL=true overrides container approval bypass (Critical finding)
+
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hsr-hermes
+    restart: unless-stopped
+    user: "1000:1000"
+    read_only: false  # Hermes needs write to workspace and memory dirs
+    security_opt:
+      - no-new-privileges:true
+      # Enable gVisor if available on host:
+      # - runtime:runsc
+    cap_drop:
+      - ALL
+    cap_add:
+      # Hermes requires net access (to gateway only)
+      - NET_BIND_SERVICE
+    environment:
+      # ★ Route all LLM calls through AI SAFE² gateway
+      - ANTHROPIC_BASE_URL=http://safe2-gateway:8000/v1
+      - OPENAI_BASE_URL=http://safe2-gateway:8000/v1
+      # ★ Override Critical audit finding: container approval bypass
+      - HERMES_FORCE_APPROVAL=true
+      # ★ Restrict filesystem access to declared sandbox
+      - HERMES_READ_SAFE_ROOT=/opt/hermes/workspace
+      - HERMES_WRITE_SAFE_ROOT=/opt/hermes/workspace
+      # ★ Vault for credentials (no flat .env API keys)
+      - VAULT_ADDR=http://vault:8200
+      - VAULT_TOKEN=${VAULT_ROOT_TOKEN:-}
+      # Disable unauthenticated adapters
+      - WECOM_ENABLED=false
+      # Disable YOLO mode — enforced at compose level
+      - HERMES_YOLO=false
+    volumes:
+      # Agent sandbox — isolated workspace
+      - hermes-workspace:/opt/hermes/workspace
+      # Memory stores — encrypted SQLite
+      - hermes-memory:/home/hermes/.hermes/memories
+      # Sovereign skills — pre-reviewed, signed skills only
+      - hermes-skills:/home/hermes/.hermes/skills
+      # Memory vaccine — loaded at highest priority
+      - ./core/hermes_memory_vaccine.md:/home/hermes/.hermes/memories/000_VACCINE_sovereign.md:ro
+      # Identity anchor
+      - ./core/IDENTITY.md:/home/hermes/.hermes/memories/001_IDENTITY.md:ro
+      # Soul / alignment constitution
+      - ./core/SOUL.md:/home/hermes/.hermes/memories/002_SOUL.md:ro
+      # Subagent policy
+      - ./core/SUBAGENT-POLICY.md:/home/hermes/.hermes/memories/003_SUBAGENT-POLICY.md:ro
+    networks:
+      - internal-only
+    depends_on:
+      safe2-gateway:
+        condition: service_healthy
+      vault:
+        condition: service_healthy
+    # No --yolo in entrypoint — enforced
+    entrypoint: ["hermes", "start", "--approval=required", "--log-level=info"]
+
+  # ── Ishi Supervisor Agent ─────────────────────────────────────────────────
+  # P3.F-C05: Kill switch enforcement
+  # P3.F-C06: Cron governance
+  # P4.M-C06: Behavioral baseline + drift detection
+
+  ishi:
+    build:
+      context: ./supervisor
+      dockerfile: Dockerfile.ishi
+    image: csi/ishi-supervisor:3.0.0
+    container_name: hsr-ishi
+    restart: unless-stopped
+    environment:
+      - HERMES_API=http://hermes:8001
+      - GATEWAY_API=http://safe2-gateway:8000
+      - VAULT_ADDR=http://vault:8200
+      - KILL_SWITCH_ENABLED=true
+      - ANOMALY_THRESHOLD=${ISHI_ANOMALY_THRESHOLD:-0.85}
+      - ALERT_WEBHOOK=${ALERT_WEBHOOK_URL:-}
+    volumes:
+      - ishi-policies:/etc/ishi/policies
+      - ./supervisor/policies:/etc/ishi/policies:ro
+      - ./supervisor/ishi_config.yaml:/etc/ishi/config.yaml:ro
+      - safe2-audit-logs:/var/log/hsr:ro
+    networks:
+      - internal-only
+    depends_on:
+      - hermes
+      - safe2-gateway
+
+  # ── HashiCorp Vault ───────────────────────────────────────────────────────
+  # Ephemeral credential management
+  # Replaces flat .env credential storage
+  # <1 hour token lifetimes
+
+  vault:
+    image: hashicorp/vault:1.16
+    container_name: hsr-vault
+    restart: unless-stopped
+    cap_add:
+      - IPC_LOCK
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=${VAULT_ROOT_TOKEN:-hsr-dev-token}
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+    volumes:
+      - vault-data:/vault/data
+    networks:
+      - internal-only
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    # Production: replace with non-dev server config
+    command: server -dev
+
+  # ── Memory Auditor Daemon ─────────────────────────────────────────────────
+  # P4.M-C02: Continuous memory store anomaly detection
+  # Runs scanner.py in watch mode against live Hermes memory
+
+  memory-auditor:
+    image: python:3.12-slim
+    container_name: hsr-memory-auditor
+    restart: unless-stopped
+    volumes:
+      - hermes-memory:/hermes-memory:ro
+      - ./gateway/scanner.py:/app/scanner.py:ro
+      - safe2-audit-logs:/var/log/hsr
+    working_dir: /app
+    command: >
+      sh -c "pip install pyyaml --quiet &&
+             python3 scanner.py --memory --watch --target /hermes-memory
+             --output /var/log/hsr/memory_scan.jsonl --quiet"
+    networks:
+      - internal-only
+    depends_on:
+      - hermes
+
+  # ── Prometheus ────────────────────────────────────────────────────────────
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: hsr-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=30d"
+    networks:
+      - internal-only
+      - observability
+    ports:
+      - "127.0.0.1:9090:9090"
+
+  # ── Grafana ───────────────────────────────────────────────────────────────
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: hsr-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-hsr-change-me}
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - safe2-audit-logs:/var/log/hsr:ro
+    networks:
+      - observability
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - prometheus

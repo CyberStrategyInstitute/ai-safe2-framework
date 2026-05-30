@@ -1,0 +1,223 @@
+# =============================================================================
+# Ishi Supervisor Agent Configuration
+# Hermes Sovereign Runtime (HSR) — AI SAFE² v3.0
+# Cyber Strategy Institute
+# =============================================================================
+#
+# Ishi is the AI SAFE² supervisor agent. It sits between the operator and Hermes,
+# enforcing policy, reviewing high-risk tool invocations, and maintaining
+# sovereign oversight over autonomous operations.
+#
+# Design principle: Ishi never blocks legitimate work. It gates, inspects,
+# and escalates. Speed is a feature; governance is non-negotiable.
+#
+# AI SAFE² Classification:
+#   - Agent under governance: Hermes Agent ACT-3 (Autonomous Complex Task)
+#   - HEAR Doctrine (CP.10): Ishi is the designated Human Ethical Agent of Record
+#     enforcement mechanism. The operator email (ISHI_ALERT_EMAIL) is the named
+#     human of record. HITL timeout defaults to DENY (fail-closed per HEAR).
+#   - CP.9 (Agent Replication Governance): subagent depth limit enforced at 1.
+# =============================================================================
+
+ishi:
+  version: "2.0"
+  instance_id: "ishi-hsр-prod-001"
+  hermes_api_endpoint: "http://hermes:8001"
+  gateway_endpoint: "http://safe2-gateway:8000"
+  vault_endpoint: "http://vault:8200"
+  policy_path: "/etc/ishi/policies"
+  opa_endpoint: "http://opa:8181"
+
+  # ---------------------------------------------------------------------------
+  # OPA Failure Handling (FM-06)
+  # ---------------------------------------------------------------------------
+  opa_failure_policy:
+    # What to do if OPA sidecar is unreachable
+    behavior: "deny"          # deny | allow | suspend
+    # NEVER set to "allow" — unreachable OPA must not grant permissions
+    escalate_on_failure: true # Alert operator on OPA unavailability
+    retry_attempts: 3
+    retry_delay_ms: 500
+    fallback_log: "/var/log/ishi/opa_failures.jsonl"
+
+  # ---------------------------------------------------------------------------
+  # Kill Switch Configuration
+  # ---------------------------------------------------------------------------
+  kill_switch:
+    enabled: true
+    signal_file: "/var/run/hsr/kill.signal"
+    check_interval_seconds: 5
+    broadcast_to_all_instances: true
+    auto_revive: false  # Require manual operator action to re-enable
+    audit_log: "/var/log/ishi/kill_switch_events.jsonl"
+
+  # ---------------------------------------------------------------------------
+  # Anomaly Detection Thresholds
+  # ---------------------------------------------------------------------------
+  anomaly_detection:
+    enabled: true
+    score_threshold: 0.85           # Suspend on scores above this
+    escalation_threshold: 0.70      # Escalate to human review above this
+    window_seconds: 300             # 5-minute rolling window for scoring
+    metrics:
+      tool_call_rate_baseline: 10   # calls/minute baseline
+      tool_call_rate_max: 50        # Hard ceiling before suspension
+      unique_destinations_max: 20   # Unique outbound IPs per window
+      memory_write_rate_max: 30     # Memory writes per window
+      credential_access_count: 0    # Any credential path access = alert
+      subagent_spawn_rate_max: 5    # Subagent spawns per window
+
+  # ---------------------------------------------------------------------------
+  # HITL (Human-in-the-Loop) Gate Configuration
+  # ---------------------------------------------------------------------------
+  hitl:
+    enabled: true
+    timeout_seconds: 300            # Auto-deny if no human response in 5 min
+    timeout_action: "deny"          # deny | suspend | allow (never use allow)
+    notification:
+      slack_webhook_env: "ISHI_SLACK_WEBHOOK"
+      email_env: "ISHI_ALERT_EMAIL"
+      pagerduty_env: "ISHI_PD_KEY"
+
+  # ---------------------------------------------------------------------------
+  # High-Risk Tool Approval Requirements
+  # ---------------------------------------------------------------------------
+  # Tools in this list always require Ishi pre-approval before execution.
+  # Approval routes to human operator if Ishi alignment score < GREEN threshold.
+  approval_required:
+    unconditional:
+      # These ALWAYS require human approval regardless of alignment score
+      - tool: "terminal"
+        reason: "Arbitrary shell execution; highest risk tier"
+      - tool: "write_file"
+        path_pattern: "/etc/*"
+        reason: "System configuration modification"
+      - tool: "write_file"
+        path_pattern: "/home/*/.ssh/*"
+        reason: "SSH credential modification"
+      - tool: "execute_skill"
+        skill_source: "community"
+        reason: "Community skills are untrusted by default"
+      - tool: "spawn_subagent"
+        tool_inheritance: "full"
+        reason: "Full capability inheritance violates least-privilege"
+      - tool: "install_plugin"
+        reason: "Plugin execution runs arbitrary Python"
+      - tool: "cron_create"
+        reason: "Unattended automation requires explicit approval"
+
+    alignment_gated:
+      # These require Ishi review; auto-approve if alignment score >= GREEN
+      - tool: "web_fetch"
+        domain_pattern: "*.onion"
+        reason: "Tor exit node access is anomalous"
+      - tool: "send_message"
+        platform: ["telegram", "discord", "slack", "email"]
+        content_length_bytes_min: 10000
+        reason: "Large outbound message may indicate data exfiltration"
+      - tool: "read_file"
+        path_pattern: ["~/.aws/*", "~/.gcp/*", "~/.azure/*", "~/.kube/*"]
+        reason: "Cloud credential file access"
+      - tool: "git_push"
+        reason: "Outbound code push requires verification"
+      - tool: "pip_install"
+        reason: "Package installation modifies execution environment"
+
+  # ---------------------------------------------------------------------------
+  # Subagent Delegation Governance
+  # ---------------------------------------------------------------------------
+  subagent_governance:
+    enabled: true
+    max_active_subagents: 5
+    capability_inheritance: "explicit_only"   # never | explicit_only | filtered
+    # explicit_only: subagents get ONLY tools listed in spawn call
+    # filtered: subagents get parent tools MINUS the exclusion list below
+    excluded_tools_from_inheritance:
+      - "terminal"
+      - "install_plugin"
+      - "spawn_subagent"    # Prevent recursive subagent spawning
+      - "cron_create"
+      - "write_file"        # Unless explicitly granted
+    scope_isolation:
+      memory: true          # Subagents cannot read parent memory
+      credentials: false    # Subagents use vault-issued ephemeral tokens only
+      workspace: "child"    # Subagents get isolated workspace directory
+    inter_agent_attestation:
+      required: true
+      algorithm: "HMAC-SHA256"
+      key_rotation_hours: 24
+
+  # ---------------------------------------------------------------------------
+  # Cron Automation Governance
+  # ---------------------------------------------------------------------------
+  cron_governance:
+    require_approval: true
+    approval_expiry_days: 30    # Re-approval required every 30 days
+    allowed_operations:
+      - "read_file"
+      - "web_fetch"
+      - "memory_search"
+    blocked_operations:
+      - "terminal"
+      - "spawn_subagent"
+      - "install_plugin"
+    network_access: false       # Cron jobs isolated from external network by default
+    max_runtime_seconds: 300    # 5-minute ceiling on any cron job
+
+  # ---------------------------------------------------------------------------
+  # Audit & Logging
+  # ---------------------------------------------------------------------------
+  audit:
+    log_path: "/var/log/ishi/audit.jsonl"
+    siem_forward: "${SIEM_ENDPOINT}"
+    append_only: true
+    integrity_chain: "HMAC-SHA256"  # Each entry chained to previous
+    fields:
+      - timestamp
+      - instance_id
+      - tool_name
+      - tool_parameters_hash
+      - decision
+      - decision_reason
+      - operator_id
+      - alignment_score_at_decision
+      - chain_hash
+    retention_days: 365
+
+  # ---------------------------------------------------------------------------
+  # Compliance Mapping
+  # ---------------------------------------------------------------------------
+  compliance:
+    frameworks:
+      - "NIST-AI-RMF"
+      - "CSA-AICM-v1.0"
+      - "MAESTRO-L3"
+      - "CMMC-2.0-L2"
+      - "ISO-42001"
+    evidence_path: "/var/log/ishi/compliance_evidence/"
+    report_schedule: "0 0 1 * *"  # Monthly on 1st
+
+  # ---------------------------------------------------------------------------
+  # Love Equation Alignment Integration
+  # ---------------------------------------------------------------------------
+  alignment:
+    enabled: true
+    evaluator_endpoint: "http://safe2-gateway:8000/alignment/score"
+    beta: 0.1
+    beta_I: 0.08
+    E_initial: 7.0    # Start in Green band
+    I_initial: 6.0
+    bands:
+      green:
+        E_min: 6.0
+        I_min: 5.0
+        policy: "standard_approval"
+      yellow:
+        E_min: 4.0
+        I_min: 3.5
+        policy: "elevated_review"
+      red:
+        policy: "suspend_and_escalate"
+    drift_monitoring:
+      deterministic_schedule: "0 2 * * *"    # Daily
+      probabilistic_schedule: "0 2 * * 0"    # Weekly

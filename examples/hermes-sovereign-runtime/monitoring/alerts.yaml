@@ -1,0 +1,203 @@
+# =============================================================================
+# Alert Rules — Hermes Sovereign Runtime
+# AI SAFE² v3.0 Security & Governance Alerts
+# =============================================================================
+#
+# Severity levels:
+#   critical — Immediate operator action required; potential active compromise
+#   warning  — Investigation required within 1 hour
+#   info     — Logged for audit; no immediate action required
+# =============================================================================
+
+groups:
+  # ---------------------------------------------------------------------------
+  # ALIGNMENT & GOVERNANCE
+  # ---------------------------------------------------------------------------
+  - name: alignment_governance
+    rules:
+      - alert: AlignmentRedBand
+        expr: hsr_alignment_score_E < 4.0 OR hsr_alignment_score_I < 3.5
+        for: 1m
+        labels:
+          severity: critical
+          pillar: fail-safe-recovery
+        annotations:
+          summary: "Hermes agent entered Red alignment band — operations suspended"
+          description: "E={{ $value }} has fallen below threshold. Agent autonomy suspended. Investigate cooperation/defection event log immediately."
+          runbook: "docs/INCIDENT-RESPONSE.md#red-band-suspension"
+
+      - alert: AlignmentYellowBand
+        expr: hsr_alignment_score_E < 6.0 AND hsr_alignment_score_E >= 4.0
+        for: 5m
+        labels:
+          severity: warning
+          pillar: engage-monitor
+        annotations:
+          summary: "Hermes agent in Yellow alignment band — elevated oversight active"
+          description: "E={{ $value }}. All high-risk tool calls now require human approval."
+
+      - alert: KillSwitchActivated
+        expr: hsr_kill_switch_active == 1
+        for: 0m
+        labels:
+          severity: critical
+          pillar: fail-safe-recovery
+        annotations:
+          summary: "HSR Kill Switch ACTIVATED — all tool execution suspended"
+          description: "Kill switch was triggered. No tool execution is possible until manually revived. Check kill switch signal file and audit log."
+          runbook: "docs/INCIDENT-RESPONSE.md#kill-switch-activation"
+
+  # ---------------------------------------------------------------------------
+  # PROMPT INJECTION & MEMORY INTEGRITY
+  # ---------------------------------------------------------------------------
+  - name: injection_detection
+    rules:
+      - alert: PromptInjectionDetected
+        expr: increase(hsr_gateway_injection_blocks_total[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          pillar: sanitize-isolate
+        annotations:
+          summary: "Prompt injection attempt detected and blocked"
+          description: "{{ $value }} injection attempts blocked in last 5 minutes. Review gateway audit log for source and pattern."
+          runbook: "docs/INCIDENT-RESPONSE.md#prompt-injection"
+
+      - alert: MemoryAnomalyDetected
+        expr: hsr_memory_anomaly_score > 0.7
+        for: 2m
+        labels:
+          severity: critical
+          pillar: engage-monitor
+        annotations:
+          summary: "Memory store anomaly detected — potential injection artifact"
+          description: "Memory anomaly score {{ $value }} exceeds threshold. Memory may contain adversarial instructions from poisoned external content."
+          runbook: "docs/INCIDENT-RESPONSE.md#memory-quarantine"
+
+      - alert: CredentialPatternInMemory
+        expr: hsr_memory_credential_patterns_found > 0
+        for: 0m
+        labels:
+          severity: critical
+          pillar: sanitize-isolate
+        annotations:
+          summary: "CRITICAL: Credential pattern found in agent memory store"
+          description: "{{ $value }} credential patterns detected in memory. Immediate quarantine and rotation required."
+          runbook: "docs/INCIDENT-RESPONSE.md#credential-exfiltration"
+
+  # ---------------------------------------------------------------------------
+  # TOOL CALL ANOMALIES
+  # ---------------------------------------------------------------------------
+  - name: tool_anomalies
+    rules:
+      - alert: ToolCallRateSpike
+        expr: rate(hsr_tool_calls_total[5m]) > 50
+        for: 2m
+        labels:
+          severity: warning
+          pillar: engage-monitor
+        annotations:
+          summary: "Abnormal tool call rate detected"
+          description: "Tool call rate {{ $value }}/min exceeds baseline (10/min). May indicate runaway automation or active exploit."
+
+      - alert: CredentialFileAccessAttempt
+        expr: increase(hsr_credential_path_access_attempts[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          pillar: sanitize-isolate
+        annotations:
+          summary: "CRITICAL: Attempt to access credential files detected"
+          description: "{{ $value }} attempts to read credential paths (SSH keys, cloud creds) in last 5 minutes."
+          runbook: "docs/INCIDENT-RESPONSE.md#credential-exfiltration"
+
+      - alert: UnsignedSkillInstallAttempt
+        expr: increase(hsr_unsigned_skill_installs_blocked[1h]) > 0
+        for: 0m
+        labels:
+          severity: warning
+          pillar: audit-inventory
+        annotations:
+          summary: "Unsigned skill installation attempt blocked"
+          description: "{{ $value }} unsigned skill installs blocked. Review supply chain — may indicate skill injection attack."
+
+      - alert: SubagentSpawnAnomaly
+        expr: rate(hsr_subagent_spawns_total[10m]) > 5
+        for: 5m
+        labels:
+          severity: warning
+          pillar: sanitize-isolate
+        annotations:
+          summary: "Abnormal subagent spawn rate"
+          description: "{{ $value }} subagents spawned/10min. Verify orchestration is operator-initiated."
+
+  # ---------------------------------------------------------------------------
+  # SECRETS & CREDENTIAL HYGIENE
+  # ---------------------------------------------------------------------------
+  - name: credential_hygiene
+    rules:
+      - alert: SecretPatternInRequest
+        expr: increase(hsr_gateway_secret_blocks_total[5m]) > 0
+        for: 0m
+        labels:
+          severity: critical
+          pillar: sanitize-isolate
+        annotations:
+          summary: "Secret/API key detected in LLM request — blocked"
+          description: "{{ $value }} requests containing secret patterns blocked. Credential in context window indicates exfiltration attempt or misconfiguration."
+
+      - alert: VaultTokenExpiredOrMissing
+        expr: hsr_vault_token_valid == 0
+        for: 5m
+        labels:
+          severity: warning
+          pillar: fail-safe-recovery
+        annotations:
+          summary: "Vault token expired or invalid"
+          description: "Hermes cannot obtain fresh credentials from Vault. Agent may fall back to .env file — rotate immediately."
+
+      - alert: CredentialAgeExceedsLimit
+        expr: hsr_credential_age_days > 30
+        for: 0m
+        labels:
+          severity: warning
+          pillar: audit-inventory
+        annotations:
+          summary: "API credential exceeds 30-day rotation limit"
+          description: "Credential {{ $labels.credential_id }} is {{ $value }} days old. Rotate immediately."
+
+  # ---------------------------------------------------------------------------
+  # GATEWAY & INFRASTRUCTURE
+  # ---------------------------------------------------------------------------
+  - name: infrastructure_health
+    rules:
+      - alert: GatewayDown
+        expr: up{job="safe2-gateway"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          pillar: fail-safe-recovery
+        annotations:
+          summary: "AI SAFE² Gateway is DOWN — agent requests unfiltered"
+          description: "The gateway control plane is unreachable. All LLM requests are bypassing security controls. Restore immediately or shut down Hermes."
+          runbook: "docs/INCIDENT-RESPONSE.md#gateway-down"
+
+      - alert: AuditLogIntegrityFailure
+        expr: hsr_audit_chain_valid == 0
+        for: 0m
+        labels:
+          severity: critical
+          pillar: audit-inventory
+        annotations:
+          summary: "CRITICAL: Audit log integrity chain broken"
+          description: "HMAC chain verification failed. Audit trail may have been tampered with. Treat as active security incident."
+
+      - alert: IshiSupervisorDown
+        expr: up{job="ishi-supervisor"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          pillar: fail-safe-recovery
+        annotations:
+          summary: "Ishi supervisor agent is DOWN — no policy enforcement"
+          description: "Ishi is unreachable. High-risk tool calls are ungated. Consider activating kill switch until Ishi is restored."
