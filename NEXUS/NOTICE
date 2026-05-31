@@ -1,0 +1,33 @@
+NEXUS-A2A
+Copyright 2026 Cyber Strategy Institute
+
+This product includes software developed by Cyber Strategy Institute
+(https://cyberstrategyinstitute.com).
+
+---
+
+Licensed under the Apache License, Version 2.0 (the "License").
+You may not use this software except in compliance with the License.
+You may obtain a copy of the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+---
+
+NEXUS-A2A incorporates design patterns from or is intended to interoperate with:
+
+- SPIFFE/SPIRE (Apache 2.0) -- https://github.com/spiffe/spire
+- Open Policy Agent (Apache 2.0) -- https://github.com/open-policy-agent/opa
+- OpenTelemetry (Apache 2.0) -- https://github.com/open-telemetry
+- CycloneDX (Apache 2.0) -- https://cyclonedx.org
+- W3C Decentralized Identifiers (W3C Document License) -- https://www.w3.org/TR/did-core/
+- OWASP Agentic AI Security Top 10 -- https://owasp.org
+
+NEXUS-A2A complies with and maps to the following standards and frameworks.
+No rights in those standards are granted by this license:
+
+- NIST AI Risk Management Framework (AI RMF)
+- ISO/IEC 42001:2023
+- EU AI Act
+- NIST FIPS 203 (ML-KEM) and FIPS 204 (ML-DSA)
+- OCSF (Open Cybersecurity Schema Framework)

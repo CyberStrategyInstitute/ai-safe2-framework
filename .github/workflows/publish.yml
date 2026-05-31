@@ -1,0 +1,91 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write   # Required for OIDC trusted publishing (no API key needed)
+
+jobs:
+  build:
+    name: Build distribution
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        run: pip install build
+
+      - name: Run tests before publish
+        run: |
+          pip install -e "sdk/python[dev]"
+          cd sdk/python && python -m pytest tests/ -q
+
+      - name: Run compliance checks before publish
+        run: |
+          cd sdk/python
+          PYTHONPATH=. python ../../compliance/scoring/nexus-score.py --v03-checks
+
+      - name: Build wheel and sdist
+        run: python -m build --outdir dist/
+
+      - name: Verify distribution
+        run: |
+          pip install twine
+          twine check dist/*
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish-pypi:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/nexus-a2a-sdk/
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI (OIDC trusted publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No API token needed -- uses OIDC trusted publishing
+        # Configure at: https://pypi.org/manage/project/nexus-a2a-sdk/settings/publishing/
+
+  publish-testpypi:
+    name: Publish to TestPyPI (pre-release)
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event.release.prerelease == true
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/project/nexus-a2a-sdk/
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/

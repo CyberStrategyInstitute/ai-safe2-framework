@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/nexus/schemas/guardian-v0.3.schema.json",
+  "title": "NEXUS Guardian Integration Profile v0.3",
+  "description": "Wire format for the NEXUS-ACS Bridge Specification v0.1. Extends AOS (Agent Operating Standard) JSON-RPC 2.0 with NEXUS DID identity, cryptographic provenance, and AISM invariant context. Defined in NEXUS-A2A Specification v0.3 Part III.",
+  "type": "object",
+  "required": ["jsonrpc", "method", "params", "id"],
+  "properties": {
+    "jsonrpc": {
+      "type": "string",
+      "const": "2.0",
+      "description": "JSON-RPC protocol version. Always 2.0 per AOS specification."
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "steps/agentTrigger",
+        "steps/knowledgeRetrieval",
+        "steps/memoryStore",
+        "steps/memoryContextRetrieval",
+        "steps/message",
+        "steps/toolCallRequest",
+        "steps/toolCallResult",
+        "protocols/mcp",
+        "a2a/message",
+        "nexus/guardianPing",
+        "nexus/invariantCheck"
+      ],
+      "description": "AOS step method. nexus/* methods are NEXUS-A2A extensions not present in base AOS."
+    },
+    "id": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "integer" }
+      ],
+      "description": "JSON-RPC request ID. Used to correlate Guardian response to original request."
+    },
+    "params": {
+      "$ref": "#/$defs/StepContext"
+    }
+  },
+  "$defs": {
+    "StepContext": {
+      "type": "object",
+      "required": ["step_id", "agent"],
+      "properties": {
+        "step_id": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Unique identifier for this Guardian evaluation step."
+        },
+        "agent": {
+          "$ref": "#/$defs/NEXUSAgentContext"
+        },
+        "action": {
+          "$ref": "#/$defs/ActionContext",
+          "description": "The action being evaluated. Required for toolCallRequest and toolCallResult."
+        },
+        "memory": {
+          "$ref": "#/$defs/MemoryContext",
+          "description": "Memory operation context. Required for memoryStore and memoryContextRetrieval."
+        },
+        "reasoning": {
+          "type": "string",
+          "description": "Agent's reasoning chain that produced this action. Hash is included in NOR fingerprint when present."
+        },
+        "reasoning_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of the reasoning field. Computed by the SDK. Enables non-repudiation of reasoning chains."
+        },
+        "nexus_extension": {
+          "$ref": "#/$defs/NEXUSExtension",
+          "description": "NEXUS-specific context. ACS-only Guardians SHOULD ignore unknown fields in this block."
+        }
+      },
+      "additionalProperties": true
+    },
+    "NEXUSAgentContext": {
+      "type": "object",
+      "required": ["id", "did"],
+      "description": "NEXUS agent identity. The id field satisfies ACS string compatibility; did, spiffe_id, and act_tier are NEXUS extensions.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ACS-compatible string agent ID. Set to agent_did for NEXUS agents."
+        },
+        "did": {
+          "type": "string",
+          "pattern": "^did:[a-z]+:.+",
+          "description": "Decentralized Identifier (DID) of the agent. Cryptographically bound to AIM."
+        },
+        "spiffe_id": {
+          "type": "string",
+          "pattern": "^spiffe://.+",
+          "description": "SPIFFE SVID for workload attestation. Provides process-level cryptographic binding."
+        },
+        "act_tier": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "ACT Capability Tier (1=supervised, 2=conditionally autonomous, 3=autonomous-bounded, 4=autonomous-unbounded). ACT-3/4 triggers HEAR Doctrine requirements."
+        },
+        "aim_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of the agent's current AIM. Enables Guardian to verify capability manifest integrity."
+        },
+        "granted_scopes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "VCC-granted capability scopes for this agent. Used for I-2 monotonic scope enforcement."
+        }
+      },
+      "additionalProperties": true
+    },
+    "ActionContext": {
+      "type": "object",
+      "required": ["method", "arguments"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "Name of the tool or function being called."
+        },
+        "arguments": {
+          "type": "object",
+          "description": "Tool call arguments as key-value pairs. Inspected by Guardian for path traversal, IMDS access, and credential exfiltration patterns."
+        },
+        "arguments_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of canonical JSON of arguments. Included in NOR fingerprint."
+        },
+        "server_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "MCP server URL when method routes through protocols/mcp."
+        }
+      },
+      "additionalProperties": true
+    },
+    "MemoryContext": {
+      "type": "object",
+      "required": ["content", "zone"],
+      "properties": {
+        "content": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Memory content being written or retrieved."
+        },
+        "zone": {
+          "type": "string",
+          "enum": ["SESSION", "CROSS_SESSION", "PERMANENT", "SWARM_SHARED"],
+          "description": "Memory zone classification. SESSION writes exempt from provenance requirement per I-3."
+        },
+        "provenance": {
+          "$ref": "#/$defs/MemoryProvenance",
+          "description": "Cryptographic provenance. Required for all non-SESSION zones per I-3."
+        },
+        "drift_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Cosine distance from agent's established belief embedding. Scores above 0.3 blocked by Memory Vaccine; Guardian threshold is 0.25."
+        }
+      },
+      "additionalProperties": true
+    },
+    "MemoryProvenance": {
+      "type": "object",
+      "required": ["source_did", "timestamp_utc", "embedding_hash", "zone_class"],
+      "properties": {
+        "source_did": {
+          "type": "string",
+          "pattern": "^did:[a-z]+:.+",
+          "description": "DID of the agent that wrote this memory."
+        },
+        "timestamp_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "embedding_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of the embedding vector at write time. Enables drift detection at retrieval."
+        },
+        "zone_class": {
+          "type": "string",
+          "enum": ["SESSION", "CROSS_SESSION", "PERMANENT", "SWARM_SHARED"]
+        },
+        "checkpoint_id": {
+          "type": "string",
+          "description": "ID of the 24-hour signed checkpoint this write belongs to."
+        }
+      },
+      "additionalProperties": false
+    },
+    "NEXUSExtension": {
+      "type": "object",
+      "description": "NEXUS-specific fields in the nexus: namespace. ACS Guardians that do not implement NEXUS SHOULD ignore unknown properties.",
+      "properties": {
+        "cael_envelope_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of the authorizing CAEL envelope."
+        },
+        "delegation_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "parent_scopes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Scopes inherited from the delegation parent. Used for I-2 scope attenuation verification."
+        },
+        "aism_violations": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "AISM invariant violations detected by the NEXUS layer before forwarding to Guardian."
+        },
+        "joulework_balance": {
+          "type": "number",
+          "description": "Current JouleWork economic account balance. Guardian can deny actions when balance approaches zero."
+        }
+      },
+      "additionalProperties": true
+    },
+    "GuardianVerdict": {
+      "type": "object",
+      "required": ["jsonrpc", "id", "result"],
+      "description": "Guardian response to a StepContext evaluation request.",
+      "properties": {
+        "jsonrpc": { "type": "string", "const": "2.0" },
+        "id": {
+          "oneOf": [{ "type": "string" }, { "type": "integer" }]
+        },
+        "result": {
+          "type": "object",
+          "required": ["decision", "step_id"],
+          "properties": {
+            "decision": {
+              "type": "string",
+              "enum": ["allow", "deny", "modify"],
+              "description": "Guardian verdict. deny must include deny_reason. modify must include modified_request."
+            },
+            "step_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Echo of the request step_id for correlation."
+            },
+            "deny_reason": {
+              "type": "string",
+              "description": "Human-readable explanation. Required when decision=deny."
+            },
+            "reason_codes": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Machine-readable reason codes. NEXUS prefixes: NEXUS_I1 through NEXUS_I6 for invariant violations."
+            },
+            "modified_request": {
+              "type": "object",
+              "description": "Replacement action when decision=modify. Schema matches ActionContext."
+            },
+            "nor_fingerprint": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "description": "SHA-256 fingerprint used to generate the NOR for this verdict."
+            },
+            "policy_id": {
+              "type": "string",
+              "description": "ID of the policy rule that produced the verdict."
+            }
+          },
+          "if": { "properties": { "decision": { "const": "deny" } } },
+          "then": { "required": ["deny_reason"] },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

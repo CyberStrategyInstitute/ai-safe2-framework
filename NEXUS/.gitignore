@@ -1,0 +1,110 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.pyo
+*.pyd
+.python-version
+pip-wheel-metadata/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Testing
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+htmlcov/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytype/
+
+# Linting
+.ruff_cache/
+
+# Distribution / packaging
+*.tar.gz
+*.zip
+!sdk/python/nexus_sdk/
+
+# Docker
+docker/.env
+docker/certs/
+docker/spire/agent.conf
+docker/spire/server.conf
+
+# SPIRE data (generated at runtime)
+docker/spire-data/
+spire-data/
+
+# OTel traces (runtime output)
+docker/otel/traces/
+
+# Secrets and keys (NEVER commit these)
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.der
+id_rsa
+id_ed25519
+*.asc
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Logs
+*.log
+logs/
+
+# Local dev overrides
+.env.local
+.env.*.local
+local_settings.py

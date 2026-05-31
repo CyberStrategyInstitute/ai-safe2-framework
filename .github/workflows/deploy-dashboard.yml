@@ -1,45 +1,87 @@
-name: Deploy Dashboard
+version: 2
 
-on:
-  push:
-    branches:
-      - main
+updates:
+  # Root Python dependencies (existing root pyproject.toml)
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+    commit-message:
+      prefix: "deps(root-python)"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
 
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
+  # NEXUS protocol Python dependencies
+  - package-ecosystem: "pip"
+    directory: "/NEXUS"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:15"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+      - "nexus"
+    commit-message:
+      prefix: "deps(nexus)"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
 
-      - name: Install markdownlint
-        run: npm install -g markdownlint-cli
+  # Python SDK dependencies
+  - package-ecosystem: "pip"
+    directory: "/sdk/python"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:30"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "python"
+      - "sdk"
+    commit-message:
+      prefix: "deps(python)"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - "version-update:semver-major"
 
-      - name: Run markdownlint (ignore MD045)
-        run: markdownlint "**/*.md" --disable MD045
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:45"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci(actions)"
 
-  build-and-deploy:
-    needs: lint
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        working-directory: dashboard
-        run: npm install
-
-      - name: Build Dashboard
-        working-directory: dashboard
-        run: npm run build
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          personal_token: ${{ secrets.GH_PAGES_PAT }}
-          publish_dir: ./dashboard/dist
+  # NEXUS Docker base images
+  - package-ecosystem: "docker"
+    directory: "/NEXUS/docker"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "06:00"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "docker"
+      - "nexus"
+    commit-message:
+      prefix: "deps(nexus-docker)"

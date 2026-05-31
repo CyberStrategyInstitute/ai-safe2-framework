@@ -1,0 +1,98 @@
+name: Bug Report
+description: Report a defect in the NEXUS SDK, OPA policies, or reference deployment.
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Before filing a bug:** If this is a security vulnerability (CVE-potential, cryptographic weakness, Guardian bypass), please follow the process in [SECURITY.md](../SECURITY.md) instead of opening a public issue.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Affected Component
+      options:
+        - "nexus_sdk/cael.py (CAEL envelope)"
+        - "nexus_sdk/memory.py (Memory Vaccine)"
+        - "nexus_sdk/guardian.py (Guardian Integration Profile)"
+        - "nexus_sdk/otel.py (NOR / OTel export)"
+        - "nexus_sdk/agbom.py (AgBOM)"
+        - "nexus_sdk/bridges/ (Protocol bridges)"
+        - "opa/nexus-authz.rego (OPA authorization)"
+        - "opa/nexus-aism-invariants.rego (AISM invariants)"
+        - "docker/ (Sovereign gateway deployment)"
+        - "compliance/scoring/nexus-score.py"
+        - "examples/"
+        - "schemas/"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: sdk-version
+    attributes:
+      label: SDK Version
+      placeholder: "0.3.0"
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      placeholder: "3.11.9"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Clear description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Minimal code or sequence of commands that reproduces the issue.
+      render: python
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: Include full stack trace if applicable.
+    validations:
+      required: true
+
+  - type: textarea
+    id: safe2-impact
+    attributes:
+      label: AI SAFE2 v3.0 Impact (if applicable)
+      description: Does this bug affect a specific SAFE2 control? E.g., S1.3 Guardian enforcement, A2.5 NOR audit trail.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This is not a security vulnerability (if it is, I will use the security disclosure process).
+          required: true
+        - label: I can reproduce this with the latest version of the SDK.
+          required: true

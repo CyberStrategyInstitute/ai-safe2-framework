@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/nexus/schemas/agbom-v0.3.schema.json",
+  "title": "NEXUS Agent Bill of Materials (AgBOM) v0.3",
+  "description": "Real-time, hash-chained Agent Bill of Materials. Extends CycloneDX v1.6 and SPDX 2.3 with NEXUS-native cryptographic provenance. Every tool discovery, MCP server connection, and capability change produces a new signed version. Defined in NEXUS-A2A Specification v0.3 Part III.",
+  "type": "object",
+  "required": ["agent_did", "agbom_version", "components", "versions", "chain_head_hash"],
+  "properties": {
+    "agent_did": {
+      "type": "string",
+      "pattern": "^did:[a-z]+:.+",
+      "description": "DID of the agent that owns this AgBOM."
+    },
+    "agbom_version": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Monotonic version counter. Increments on every component add or remove."
+    },
+    "aim_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of the agent's AIM at AgBOM creation time. Links AgBOM to the static capability declaration."
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of AgBOM initialization."
+    },
+    "updated_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of most recent version."
+    },
+    "components": {
+      "type": "array",
+      "description": "Current active component inventory. Reflects the live tool surface.",
+      "items": {
+        "$ref": "#/$defs/AgBOMComponent"
+      }
+    },
+    "versions": {
+      "type": "array",
+      "description": "Hash-chained version history. Every entry is signed and linked to its predecessor.",
+      "items": {
+        "$ref": "#/$defs/AgBOMVersion"
+      }
+    },
+    "chain_head_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 hash of the most recent version. The chain anchor for integrity verification."
+    },
+    "unsigned_component_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Count of components lacking a NEXUS-signed capability manifest. Non-zero = supply chain risk."
+    }
+  },
+  "$defs": {
+    "AgBOMComponent": {
+      "type": "object",
+      "required": ["bom_ref", "type", "name", "version"],
+      "properties": {
+        "bom_ref": {
+          "type": "string",
+          "description": "Unique reference within this AgBOM. Format: {type}:{name}:{version}."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "tool",
+            "model",
+            "memory_backend",
+            "mcp_server",
+            "knowledge_source",
+            "sub_agent",
+            "code_executor",
+            "external_api"
+          ],
+          "description": "Component category. mcp_server components are automatically tracked for supply chain risk scoring."
+        },
+        "name": {
+          "type": "string",
+          "description": "Component name."
+        },
+        "version": {
+          "type": "string",
+          "description": "Component version string."
+        },
+        "purl": {
+          "type": "string",
+          "description": "Package URL (purl) per ECMA-376. Format: pkg:{type}/{name}@{version}. Used for CycloneDX compatibility."
+        },
+        "description": {
+          "type": "string"
+        },
+        "added_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "nexus_signed": {
+          "type": "boolean",
+          "description": "True if the component has a NEXUS NCA-issued capability manifest with verified capabilityDigest. False = unsigned supply chain component."
+        },
+        "capability_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of the component capability manifest. Present only when nexus_signed=true."
+        },
+        "mcp_server_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "MCP server endpoint URL. Present only for type=mcp_server."
+        }
+      },
+      "additionalProperties": false
+    },
+    "AgBOMVersion": {
+      "type": "object",
+      "required": ["version_number", "agent_did", "version_hash", "signature"],
+      "properties": {
+        "version_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "agent_did": {
+          "type": "string",
+          "pattern": "^did:[a-z]+:.+"
+        },
+        "parent_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 hash of the previous version. Null for version 1. Forms the hash chain."
+        },
+        "version_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256(parent_hash + agent_did + version_number + components_digest). Chain integrity anchor."
+        },
+        "components_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of the canonical JSON of the component list at this version."
+        },
+        "change_type": {
+          "type": "string",
+          "enum": ["add", "remove", "initial"],
+          "description": "Nature of the change that created this version."
+        },
+        "changed_component": {
+          "type": "string",
+          "description": "bom_ref of the component that was added or removed. Absent for initial."
+        },
+        "timestamp_utc": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "signature": {
+          "type": "string",
+          "description": "Ed25519 signature over version_hash using agent's AIM signing key. Base64url encoded."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

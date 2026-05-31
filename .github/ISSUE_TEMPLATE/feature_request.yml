@@ -1,0 +1,89 @@
+name: Feature Request
+description: Propose an addition or improvement to the NEXUS protocol or SDK.
+title: "[FEAT] "
+labels: ["enhancement", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Standard vs Constitutional Amendment:** If your proposal modifies the six AISM Invariants or the HEAR Doctrine constitutional constraints, it requires the constitutional amendment process defined in [governance/GOVERNANCE.md](../governance/GOVERNANCE.md). Flag it below.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Protocol Area
+      options:
+        - "L1 Transport Security (mTLS, SPIFFE, PQC)"
+        - "L2 Identity and Delegation (AIM, VCC, ANS)"
+        - "L3 Policy Enforcement (OPA, Guardian, AISM Invariants)"
+        - "L4 Memory and Context (Memory Vaccine, AgBOM)"
+        - "L5 Economic Governance (JouleWork, ZHC)"
+        - "L6 Governance Plane (amendment pipeline)"
+        - "Protocol Bridge (MCP, ACS, A2A, LangChain, etc.)"
+        - "Reference Deployment (Docker, OTel, SPIRE)"
+        - "SDK Developer Experience"
+        - "Compliance and Framework Mapping"
+        - "Documentation"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What security gap, interoperability problem, or developer friction does this address?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: What should change? Be as specific as possible -- include proposed API signatures, Rego rules, or normative language if relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: safe2-mapping
+    attributes:
+      label: AI SAFE2 v3.0 Control Mapping
+      description: Which SAFE2 controls does this address or enable? E.g., CP.9 (Agent Replication Governance), S1.3 (Guardian per-call enforcement).
+
+  - type: textarea
+    id: compliance-impact
+    attributes:
+      label: Compliance Impact
+      description: Does this affect any of the 32 mapped compliance frameworks (ISO 42001, NIST AI RMF, EU AI Act, etc.)?
+
+  - type: dropdown
+    id: amendment-type
+    attributes:
+      label: Amendment Type
+      description: Would this require a governance amendment?
+      options:
+        - "No amendment required (implementation detail)"
+        - "Standard Amendment (14-day comment period)"
+        - "Constitutional Amendment (AISM Invariant or HEAR Doctrine change)"
+        - "Unsure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches did you consider? Why is this the right one?
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and discussions and this is not a duplicate.
+          required: true
+        - label: I have read the contribution guide (CONTRIBUTING.md).
+          required: true
+        - label: I am willing to submit a PR implementing this, or to help review one.
