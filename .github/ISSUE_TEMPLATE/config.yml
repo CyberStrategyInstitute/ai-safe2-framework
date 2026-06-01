@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Security Vulnerability
+    url: https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/nexus-a2a/SECURITY.md
+    about: Do NOT open a public issue for security vulnerabilities. See SECURITY.md for responsible disclosure.
+
+  - name: Governance Nomination (NEXUS-TGC)
+    url: https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/nexus-a2a/governance/GOVERNANCE.md
+    about: Interested in joining the NEXUS Technical Governance Committee? See governance/GOVERNANCE.md.
+
+  - name: Community Discussion
+    url: https://github.com/CyberStrategyInstitute/ai-safe2-framework/discussions
+    about: General questions, ideas, and community discussion.

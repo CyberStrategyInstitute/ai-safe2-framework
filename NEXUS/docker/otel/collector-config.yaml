@@ -1,0 +1,79 @@
+# NEXUS OTel Collector Configuration
+# Receives NOR spans from the NEXUS gateway and routes to SIEM backends.
+# OCSF event class mapping applied by the gateway (nor_to_otel_attributes).
+#
+# Backends: file (default), Splunk HEC, Elasticsearch, Datadog
+# To enable a backend, uncomment the relevant section and set env vars.
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 512
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 256
+  # Filter: only forward NOR spans (nexus.nor.* attributes)
+  filter/nexus_nor:
+    traces:
+      span:
+        - 'attributes["nexus.nor.receipt_id"] == nil'
+  # Attribute enrichment: add OCSF fields for SIEM correlation
+  attributes/ocsf_enrich:
+    actions:
+      - key: "ocsf.product.name"
+        value: "NEXUS-A2A"
+        action: insert
+      - key: "ocsf.product.version"
+        value: "0.3.0"
+        action: insert
+      - key: "ocsf.product.vendor_name"
+        value: "Cyber Strategy Institute"
+        action: insert
+
+exporters:
+  # Default: file export (JSONL) for dev/audit review
+  file:
+    path: /tmp/traces/nexus-nor.jsonl
+    rotation:
+      max_megabytes: 100
+      max_days: 30
+      max_backups: 5
+
+  # Uncomment to enable Splunk HEC export:
+  # splunk_hec/nexus:
+  #   token: "${SPLUNK_HEC_TOKEN}"
+  #   endpoint: "${SPLUNK_HEC_ENDPOINT}"
+  #   source: "nexus-a2a"
+  #   sourcetype: "nexus:nor:ocsf"
+  #   index: "ai_agent_security"
+
+  # Uncomment to enable Elasticsearch export:
+  # elasticsearch:
+  #   endpoint: "${ELASTIC_ENDPOINT}"
+  #   index: "nexus-nor-%{[ocsf.class_uid]}"
+
+  # Debug: logs all spans (disable in production)
+  debug:
+    verbosity: detailed
+
+extensions:
+  health_check:
+    endpoint: "0.0.0.0:13133"
+  pprof:
+    endpoint: "localhost:1888"
+
+service:
+  extensions: [health_check, pprof]
+  pipelines:
+    traces/nexus_nor:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, attributes/ocsf_enrich]
+      exporters: [file, debug]

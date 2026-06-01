@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nexus-protocol.csi.gov/schemas/aim/v0.2.json",
+  "title": "NEXUS Agent Identity Manifest (AIM) v0.2",
+  "description": "Canonical identity document for every NEXUS agent. Signed with ML-DSA-65 (FIPS 204) and published to ANS.",
+  "type": "object",
+  "required": ["agentDID", "spiffeID", "agentClass", "maturityLevel", "ownerChain", "purposeDeclaration", "jurisdictionProfile", "pqcPublicKeys", "signature"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "agentDID": {
+      "type": "string",
+      "pattern": "^did:",
+      "description": "W3C DID of the agent. Required. Must start with did:"
+    },
+    "spiffeID": {
+      "type": "string",
+      "pattern": "^spiffe://",
+      "description": "SPIFFE workload identity URI. Required. Format: spiffe://{trust-domain}/agents/{class}/{tenant}/{agent-id}/{maturity}"
+    },
+    "agentClass": {
+      "type": "string",
+      "enum": ["personal", "orchestrator", "swarm-member", "ot-device", "external"],
+      "description": "Deployment class determines profile tier and governance requirements"
+    },
+    "maturityLevel": {
+      "type": "string",
+      "enum": ["intern", "member", "associate", "senior", "principal"],
+      "description": "ATF maturity level with behavioral track record. Maps to ACT tiers in AI SAFE2 v3.0 CP.3"
+    },
+    "ownerChain": {
+      "type": "string",
+      "pattern": "^did:",
+      "description": "DID of the human sponsor (owner_of_record). Required per AI SAFE2 v3.0 A2.4"
+    },
+    "purposeDeclaration": {
+      "type": "string",
+      "minLength": 20,
+      "description": "Specific operational purpose. Used as baseline for Memory Vaccine drift detection. Must be specific enough to enable embedding comparison."
+    },
+    "jurisdictionProfile": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Applicable jurisdiction tags. Examples: GDPR, FedRAMP_HIGH, FedRAMP_MOD, ITAR, CMMC_L3"
+    },
+    "pqcPublicKeys": {
+      "type": "object",
+      "properties": {
+        "mlKem1024": { "type": "string", "description": "ML-KEM-1024 public key (FIPS 203). Required for NEXUS-Full" },
+        "mlDsa65": { "type": "string", "description": "ML-DSA-65 signing key (FIPS 204). Primary signing algorithm" },
+        "ed25519": { "type": "string", "description": "Ed25519 classical fallback signing key" }
+      },
+      "required": ["mlDsa65"],
+      "description": "Post-quantum cryptographic public keys. ml-DSA-65 required. ML-KEM-1024 required for NEXUS-Full profile."
+    },
+    "capabilityDigest": {
+      "type": "string",
+      "pattern": "^sha256:",
+      "description": "SHA-256 hash of the CAD (Capability Assertion Document). Supply chain integrity check."
+    },
+    "memoryGovernance": {
+      "type": "object",
+      "properties": {
+        "persistenceScope": {
+          "type": "string",
+          "enum": ["session", "cross-session", "permanent"]
+        },
+        "rollbackEnabled": { "type": "boolean" },
+        "driftThreshold": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 0.30,
+          "description": "Cosine distance threshold. Writes exceeding this trigger HARD_BRAKE."
+        },
+        "poisoningDetection": {
+          "type": "string",
+          "enum": ["embedding-distance", "disabled"]
+        }
+      },
+      "required": ["persistenceScope"]
+    },
+    "swarmProfile": {
+      "type": "object",
+      "properties": {
+        "swarmEligible": { "type": "boolean" },
+        "maxSwarmDepth": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "quorumRequired": { "type": "boolean" },
+        "quorumThreshold": { "type": "number", "minimum": 0.51, "maximum": 1.0 }
+      }
+    },
+    "jouleWorkProfile": {
+      "type": "object",
+      "properties": {
+        "accountDID": { "type": "string", "pattern": "^did:" },
+        "baseRatePerPeriod": { "type": "integer", "minimum": 0 },
+        "efficiencyFloor": { "type": "number", "minimum": 0.0, "maximum": 1.0, "default": 0.85 },
+        "circuitBreakOnNegativeBalance": { "type": "boolean" }
+      }
+    },
+    "fleetManagement": {
+      "type": "object",
+      "description": "Orchestrator-only. Required when agentClass = orchestrator.",
+      "properties": {
+        "maxFleetSize": { "type": "integer", "minimum": 1 },
+        "heartbeatIntervalSeconds": { "type": "integer" },
+        "heartbeatMissedThreshold": { "type": "integer" },
+        "orgChartDID": { "type": "string", "pattern": "^did:" }
+      }
+    },
+    "a2asMigration": {
+      "type": "object",
+      "description": "Backward compatibility bridge for A2AS-certified agents.",
+      "properties": {
+        "a2asBehaviorCertURL": { "type": "string", "format": "uri" },
+        "a2asCertDigest": { "type": "string", "pattern": "^sha256:" }
+      }
+    },
+    "signature": {
+      "type": "string",
+      "description": "Base64-encoded ML-DSA-65 signature over canonical JSON of all other fields."
+    }
+  }
+}

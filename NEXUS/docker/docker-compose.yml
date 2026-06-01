@@ -1,0 +1,228 @@
+# NEXUS-A2A Sovereign Gateway -- Docker Compose Reference Deployment
+# Cyber Strategy Institute | NEXUS-A2A v0.3 | AI SAFE2 v3.0
+#
+# WHAT THIS DEPLOYS:
+#   A NEXUS sovereign gateway that wraps any MCP server or agentic workload.
+#   All agent traffic passes through Guardian policy enforcement, AISM invariant
+#   checking, NOR fingerprinting, and JouleWork economic accounting -- without
+#   modifying the underlying MCP servers.
+#
+# SECURITY PROPERTIES:
+#   - mTLS 1.3 enforced on all inter-service communication
+#   - OPA runs as isolated policy sidecar (agents cannot read or modify policies)
+#   - SPIFFE/SPIRE workload attestation via local trust anchor (dev mode)
+#   - Guardian inline verdict on every tool call, memory write, and sub-agent delegation
+#   - NOR records exported to OpenTelemetry Collector (OCSF-mapped to SIEM)
+#
+# QUICK START:
+#   cp .env.example .env
+#   docker compose up -d
+#   # Test the gateway:
+#   curl http://localhost:8080/health
+#
+# PRODUCTION HARDENING:
+#   - Replace dev SPIRE server with enterprise SPIRE deployment
+#   - Configure real MCP server URLs in UPSTREAM_MCP_URLS
+#   - Set proper TLS certificates in ./certs/
+#   - Enable FAIL_CLOSED mode (default in this config)
+#   - Review opa/nexus-authz.rego and opa/nexus-aism-invariants.rego for your policy baseline
+#
+# SERVICES:
+#   nexus-gateway   - Core NEXUS sovereign gateway (FastAPI, Python 3.11)
+#   opa             - Open Policy Agent sidecar (NEXUS authz + AISM invariants)
+#   otel-collector  - OpenTelemetry Collector (NOR -> OCSF -> SIEM)
+#   spire-server    - SPIFFE/SPIRE workload identity (dev mode, local CA)
+#   redis           - JouleWork economic account store + rate limiting
+
+version: "3.9"
+
+services:
+
+  # --------------------------------------------------------------------------
+  # NEXUS SOVEREIGN GATEWAY
+  # Wraps any MCP server with CAEL envelope governance, Guardian policy
+  # enforcement, NOR fingerprinting, and JouleWork accounting.
+  # --------------------------------------------------------------------------
+  nexus-gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    image: csi/nexus-gateway:0.3.0
+    container_name: nexus-gateway
+    restart: unless-stopped
+    ports:
+      - "8080:8080"     # HTTP gateway (for dev; use mTLS in production)
+      - "8443:8443"     # mTLS gateway endpoint
+    environment:
+      NEXUS_VERSION: "0.3.0"
+      NEXUS_TRUST_DOMAIN: "${NEXUS_TRUST_DOMAIN:-nexus.local}"
+      OPA_URL: "http://opa:8181"
+      SPIRE_AGENT_SOCKET: "/run/spire/agent.sock"
+      REDIS_URL: "redis://redis:6379/0"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+      OTEL_SERVICE_NAME: "nexus-gateway"
+      OTEL_RESOURCE_ATTRIBUTES: "service.version=0.3.0,deployment.environment=${NEXUS_ENV:-development}"
+      GUARDIAN_FAIL_MODE: "${GUARDIAN_FAIL_MODE:-FAIL_CLOSED}"
+      UPSTREAM_MCP_URLS: "${UPSTREAM_MCP_URLS:-}"
+      JOULEWORK_INITIAL_CREDIT: "${JOULEWORK_INITIAL_CREDIT:-10000}"
+      LOG_LEVEL: "${LOG_LEVEL:-INFO}"
+      # PQC: set to 1 to enable ML-KEM-1024 + ML-DSA-65 in NEXUS-Full mode
+      NEXUS_PQC_ENABLED: "${NEXUS_PQC_ENABLED:-0}"
+    volumes:
+      - ./opa:/app/opa:ro
+      - ./schemas:/app/schemas:ro
+      - spire-agent-socket:/run/spire:ro
+      - nexus-logs:/app/logs
+    depends_on:
+      opa:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      spire-server:
+        condition: service_started
+    networks:
+      - nexus-internal
+      - nexus-external
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    labels:
+      com.cyberstrategyinstitute.component: "nexus-gateway"
+      com.cyberstrategyinstitute.version: "0.3.0"
+      com.cyberstrategyinstitute.safe2-tier: "P1-P5"
+
+  # --------------------------------------------------------------------------
+  # OPEN POLICY AGENT -- NEXUS POLICY SIDECAR
+  # Runs as isolated sidecar. Agents cannot reach this container directly.
+  # Only the gateway can query OPA. Policies load from ./opa/ at startup.
+  # --------------------------------------------------------------------------
+  opa:
+    image: openpolicyagent/opa:0.65.0-static
+    container_name: nexus-opa
+    restart: unless-stopped
+    command:
+      - "run"
+      - "--server"
+      - "--addr=0.0.0.0:8181"
+      - "--log-level=${OPA_LOG_LEVEL:-error}"
+      - "--log-format=json"
+      - "--bundle"
+      - "/policies"
+    volumes:
+      - ./opa:/policies:ro
+    networks:
+      - nexus-internal
+    expose:
+      - "8181"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8181/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    labels:
+      com.cyberstrategyinstitute.component: "opa-policy-sidecar"
+
+  # --------------------------------------------------------------------------
+  # OPENTELEMETRY COLLECTOR -- NOR EXPORT + OCSF SIEM INTEGRATION
+  # Receives NOR spans from the gateway, maps to OCSF, and forwards to
+  # configured SIEM backends (Splunk/Elastic/Datadog/file export).
+  # --------------------------------------------------------------------------
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.101.0
+    container_name: nexus-otel-collector
+    restart: unless-stopped
+    command: ["--config=/etc/otel/config.yaml"]
+    volumes:
+      - ./otel/collector-config.yaml:/etc/otel/config.yaml:ro
+      - nexus-traces:/tmp/traces
+    ports:
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "13133:13133" # Health check
+    networks:
+      - nexus-internal
+    depends_on:
+      - nexus-gateway
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:13133/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    labels:
+      com.cyberstrategyinstitute.component: "otel-collector"
+
+  # --------------------------------------------------------------------------
+  # SPIFFE/SPIRE SERVER -- WORKLOAD IDENTITY (DEV MODE)
+  # Provides SVID issuance for NEXUS workload attestation.
+  # DEV MODE: uses in-memory CA. Replace with enterprise SPIRE for production.
+  # --------------------------------------------------------------------------
+  spire-server:
+    image: ghcr.io/spiffe/spire-server:1.9.4
+    container_name: nexus-spire-server
+    restart: unless-stopped
+    command:
+      - "-config"
+      - "/run/spire/config/server.conf"
+    volumes:
+      - ./spire/server.conf:/run/spire/config/server.conf:ro
+      - spire-data:/run/spire/data
+      - spire-sockets:/tmp/spire-server
+    networks:
+      - nexus-internal
+    expose:
+      - "8081"
+    labels:
+      com.cyberstrategyinstitute.component: "spire-server"
+
+  # --------------------------------------------------------------------------
+  # REDIS -- JOULEWORK ECONOMIC ACCOUNTS + RATE LIMITING
+  # --------------------------------------------------------------------------
+  redis:
+    image: redis:7.2-alpine
+    container_name: nexus-redis
+    restart: unless-stopped
+    command: redis-server --save 60 1 --loglevel warning --requirepass "${REDIS_PASSWORD:-nexus-dev-password}"
+    volumes:
+      - redis-data:/data
+    networks:
+      - nexus-internal
+    expose:
+      - "6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-nexus-dev-password}", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    labels:
+      com.cyberstrategyinstitute.component: "joulework-store"
+
+networks:
+  nexus-internal:
+    internal: true
+    driver: bridge
+    labels:
+      com.cyberstrategyinstitute.network: "nexus-internal"
+  nexus-external:
+    driver: bridge
+    labels:
+      com.cyberstrategyinstitute.network: "nexus-external"
+
+volumes:
+  redis-data:
+    labels:
+      com.cyberstrategyinstitute.data: "joulework-accounts"
+  nexus-logs:
+    labels:
+      com.cyberstrategyinstitute.data: "audit-logs"
+  nexus-traces:
+    labels:
+      com.cyberstrategyinstitute.data: "nor-traces"
+  spire-data:
+    labels:
+      com.cyberstrategyinstitute.data: "spire-identity"
+  spire-sockets:
+  spire-agent-socket:

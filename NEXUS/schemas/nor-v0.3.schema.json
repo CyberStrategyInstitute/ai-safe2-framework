@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/nexus/schemas/nor-v0.3.schema.json",
+  "title": "NEXUS Output Receipt (NOR) v0.3",
+  "description": "Cryptographic audit receipt for every NEXUS agent action. Provides non-repudiable, chain-of-custody evidence compatible with OpenTelemetry and OCSF SIEM integration. Defined in NEXUS-A2A Specification v0.3 Part III.",
+  "type": "object",
+  "required": [
+    "receipt_id",
+    "agent_did",
+    "action_type",
+    "tool_name",
+    "outcome",
+    "timestamp_utc",
+    "receipt_hash"
+  ],
+  "properties": {
+    "receipt_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Globally unique receipt identifier (UUID v4). Immutable after issuance."
+    },
+    "agent_did": {
+      "type": "string",
+      "pattern": "^did:[a-z]+:.+",
+      "description": "DID of the agent that executed this action. Bound to AIM at registration."
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "tool_call",
+        "memory_write",
+        "memory_read",
+        "identity_assertion",
+        "delegation",
+        "swarm_coordination",
+        "guardian_verdict"
+      ],
+      "description": "Semantic category of the action. Drives OCSF event class assignment."
+    },
+    "tool_name": {
+      "type": "string",
+      "description": "Name of the tool, function, or resource accessed."
+    },
+    "tool_arguments_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of the serialized tool arguments. Enables tamper detection without exposing argument values."
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["allow", "deny", "modify"],
+      "description": "Guardian verdict applied to this action. deny always maps to OCSF POLICY_VIOLATION (6002)."
+    },
+    "guardian_policy_id": {
+      "type": "string",
+      "description": "Identifier of the policy rule that produced the outcome. Omit on allow with no policy rule triggered."
+    },
+    "deny_reason": {
+      "type": "string",
+      "description": "Human-readable explanation for deny or modify outcomes. Required when outcome != allow."
+    },
+    "delegation_depth": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4,
+      "description": "Depth in the delegation graph at which this action was executed. 0 = root agent."
+    },
+    "cael_envelope_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of the CAEL envelope that authorized this action. Enables end-to-end correlation across delegation hops."
+    },
+    "reasoning_chain_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of the agent reasoning chain submitted with the Guardian step context. Supports OWASP ASI10 (Rogue Agent) forensics."
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp at which the Guardian verdict was recorded."
+    },
+    "receipt_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of the canonical JSON of all other NOR fields. Signs the receipt content."
+    },
+    "signature": {
+      "type": "string",
+      "description": "Ed25519 signature over receipt_hash, using agent's AIM signing key. Base64url encoded."
+    },
+    "ocsf_class_uid": {
+      "type": "integer",
+      "enum": [6001, 6002, 6003, 6004, 6005, 6006, 6007],
+      "description": "OCSF event class UID. 6002=POLICY_VIOLATION (any deny), 6003=API_ACTIVITY (allow tool_call), 6004=DATA_ACTIVITY (memory ops). Set by nor_to_otel_attributes()."
+    },
+    "ocsf_severity_id": {
+      "type": "integer",
+      "enum": [1, 2, 3, 4, 5],
+      "description": "OCSF severity. 1=Informational (allow), 2=Low (modify), 4=High (deny)."
+    }
+  },
+  "if": {
+    "properties": { "outcome": { "const": "deny" } }
+  },
+  "then": {
+    "required": ["deny_reason"],
+    "properties": {
+      "ocsf_class_uid": { "const": 6002 }
+    }
+  },
+  "additionalProperties": false,
+  "examples": [
+    {
+      "receipt_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+      "agent_did": "did:nexus:agent:filesystem-agent-v1",
+      "action_type": "tool_call",
+      "tool_name": "read_file",
+      "tool_arguments_hash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+      "outcome": "deny",
+      "deny_reason": "I-2 VIOLATED: path traversal detected in file_path argument",
+      "guardian_policy_id": "nexus.aism.invariant_3",
+      "delegation_depth": 1,
+      "timestamp_utc": "2026-05-30T18:00:00Z",
+      "receipt_hash": "b94f6f125c79e3a5ffaa826f584c10d52ada669e6762051b826b55776d05a8f7",
+      "ocsf_class_uid": 6002,
+      "ocsf_severity_id": 4
+    }
+  ]
+}

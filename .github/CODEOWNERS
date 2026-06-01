@@ -1,0 +1,40 @@
+# NEXUS-A2A CODEOWNERS
+# Defines required reviewers per path.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default: CSI maintainers review everything
+*                                   @CyberStrategyInstitute/nexus-maintainers
+
+# Constitutional constraints and AISM invariants require founding seat sign-off
+opa/nexus-aism-invariants.rego      @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+governance/GOVERNANCE.md            @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+
+# SDK core: maintainer review required
+sdk/python/nexus_sdk/cael.py        @CyberStrategyInstitute/nexus-maintainers
+sdk/python/nexus_sdk/memory.py      @CyberStrategyInstitute/nexus-maintainers
+sdk/python/nexus_sdk/guardian.py    @CyberStrategyInstitute/nexus-maintainers
+sdk/python/nexus_sdk/otel.py        @CyberStrategyInstitute/nexus-maintainers
+
+# Bridges: interoperability team
+sdk/python/nexus_sdk/bridges/       @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-interop
+
+# AgBOM: supply chain team
+sdk/python/nexus_sdk/agbom.py       @CyberStrategyInstitute/nexus-maintainers
+
+# JSON schemas: any schema change is a breaking protocol change
+schemas/                            @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+
+# CI/CD: maintainers only
+.github/                            @CyberStrategyInstitute/nexus-maintainers
+
+# Docker deployment
+docker/                             @CyberStrategyInstitute/nexus-maintainers
+
+# Compliance scorer
+compliance/                         @CyberStrategyInstitute/nexus-maintainers
+
+# Governance docs require founding seat
+governance/                         @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+
+# IETF draft: standards team
+governance/ietf-draft-nexus-l1-l2.md @CyberStrategyInstitute/nexus-founding

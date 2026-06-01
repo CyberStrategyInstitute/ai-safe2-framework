@@ -1,0 +1,73 @@
+name: OPA Policy Lint
+
+on:
+  push:
+    paths:
+      - "opa/**"
+      - ".github/workflows/opa.yml"
+  pull_request:
+    paths:
+      - "opa/**"
+
+jobs:
+  opa-check:
+    name: OPA Format and Parse Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install OPA
+        run: |
+          curl -L -o opa https://openpolicyagent.org/downloads/v0.65.0/opa_linux_amd64_static
+          chmod +x opa
+          sudo mv opa /usr/local/bin/opa
+          opa version
+
+      - name: Check Rego formatting
+        run: |
+          for f in opa/*.rego; do
+            echo "Checking format: $f"
+            opa fmt --diff "$f"
+          done
+
+      - name: Parse check (syntax validation)
+        run: |
+          for f in opa/*.rego; do
+            echo "Parsing: $f"
+            opa parse "$f"
+          done
+
+      - name: Test AISM invariants with example inputs
+        run: |
+          echo "Testing I-1 (Authenticated Borders) -- valid DID + SPIFFE..."
+          echo '{
+            "agent": {
+              "did": "did:nexus:agent:test",
+              "spiffe_id": "spiffe://nexus.local/agent/test",
+              "aim_digest": "abc123"
+            }
+          }' | opa eval -I -d opa/nexus-aism-invariants.rego \
+              "data.nexus.aism.invariant_1_authenticated_borders" | grep -q "true" \
+              && echo "  PASS" || { echo "  FAIL"; exit 1; }
+
+          echo "Testing I-1 -- missing DID (should violate)..."
+          echo '{
+            "agent": {
+              "spiffe_id": "spiffe://nexus.local/agent/test",
+              "aim_digest": "abc123"
+            }
+          }' | opa eval -I -d opa/nexus-aism-invariants.rego \
+              "data.nexus.aism.invariant_1_authenticated_borders" | grep -q "false" \
+              && echo "  PASS (correctly identified violation)" || { echo "  FAIL"; exit 1; }
+
+          echo "Testing I-2 (Monotonic Scope) -- depth=0 root agent..."
+          echo '{
+            "delegation": {"depth": 0},
+            "agent": {"vcc": {"granted_scopes": ["read", "write"]}}
+          }' | opa eval -I -d opa/nexus-aism-invariants.rego \
+              "data.nexus.aism.invariant_2_monotonic_scope" | grep -q "true" \
+              && echo "  PASS" || { echo "  FAIL"; exit 1; }
+
+          echo "All OPA policy checks passed."

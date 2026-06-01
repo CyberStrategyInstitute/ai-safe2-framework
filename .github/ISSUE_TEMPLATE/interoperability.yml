@@ -1,0 +1,76 @@
+name: Interoperability Report
+description: Report a compatibility issue or gap with ACS, MCP, A2A, or another agent protocol.
+title: "[INTEROP] "
+labels: ["interoperability", "needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to report compatibility issues between NEXUS and other agent protocols (ACS, MCP, A2A, LangChain, CrewAI, etc.), or to propose bridge improvements.
+
+  - type: dropdown
+    id: protocol
+    attributes:
+      label: External Protocol
+      options:
+        - "ACS (Agent Control Standard)"
+        - "MCP (Model Context Protocol)"
+        - "Google A2A"
+        - "OpenAI function calling"
+        - "LangChain / LangGraph"
+        - "CrewAI"
+        - "AutoGen"
+        - "Semantic Kernel"
+        - "n8n"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: protocol-version
+    attributes:
+      label: External Protocol Version
+      placeholder: "ACS v0.1.0, MCP 2025-03-26, etc."
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      options:
+        - "NEXUS bridge produces non-compliant output for this protocol"
+        - "This protocol's output is not parseable by the NEXUS bridge"
+        - "Security property is lost at the bridge boundary"
+        - "Missing bridge for this protocol"
+        - "Performance or latency issue at bridge layer"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Describe the interoperability problem precisely.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Code or packet captures demonstrating the issue.
+      render: python
+
+  - type: textarea
+    id: security-impact
+    attributes:
+      label: Security Impact
+      description: Does this interoperability gap degrade any NEXUS security property? E.g., does it allow scope amplification at the bridge boundary, or does it lose NOR provenance?
+
+  - type: textarea
+    id: proposed-fix
+    attributes:
+      label: Proposed Fix (optional)
+      description: If you have a proposed bridge fix or normative language change, include it here.

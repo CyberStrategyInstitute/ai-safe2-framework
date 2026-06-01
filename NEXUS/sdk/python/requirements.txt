@@ -1,0 +1,22 @@
+# nexus_sdk/requirements.txt
+# Core (no-dep mode): All unit tests pass with just these.
+pytest>=7.0
+
+# Production add-ons (install what you need for your deployment phase):
+
+# P0 Identity + P1 Transport:
+# cryptography>=42.0     # ML-DSA-65 / Ed25519 signing (stub replaced in production)
+# pyspiffe>=0.3          # SPIFFE SVID handling
+
+# P4 Memory Vaccine (production embeddings):
+# sentence-transformers>=2.7
+# numpy>=1.24
+
+# P3 CAEL protocol bridges (async HTTP):
+# httpx>=0.27            # MCP + A2A async bridge invocation
+
+# P2 OPA policy engine (external process):
+# No Python dep; OPA runs as a sidecar. Install: https://openpolicyagent.org/docs/latest/#running-opa
+
+# Optional: JSON Schema validation
+# jsonschema>=4.22       # Validate AIMs/VCCs against schemas in /schemas/
