@@ -39,4 +39,4 @@ When utilizing the `run_command` tool, only the following command prefixes are a
 3. `git diff` / `git status` - Safe version control inspection.
 4. `agy-node` - Local verified Node.js executor.
 
-*Any command containing un-whitelisted executable binaries (e.g. `curl`, `wget`, `bash`, `ssh`, `cmd.exe`) will trigger a manual verification prompt.*
+_Any command containing un-whitelisted executable binaries (e.g. `curl`, `wget`, `bash`, `ssh`, `cmd.exe`) will trigger a manual verification prompt._
