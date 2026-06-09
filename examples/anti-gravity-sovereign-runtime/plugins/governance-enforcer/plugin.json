@@ -1,0 +1,17 @@
+{
+  "name": "governance-enforcer",
+  "version": "1.0.0",
+  "displayName": "AI SAFE² Governance Enforcer",
+  "description": "Automatically loads AI SAFE² v3.0 sovereign governance constraints into every Antigravity session. Enforces identity lock, hard security limits, tool authorization, and HITL controls as system-level instructions before any tool execution.",
+  "author": "Cyber Strategy Institute",
+  "homepage": "https://github.com/CyberStrategyInstitute/ai-safe2-framework",
+  "type": "governance",
+  "autoLoad": true,
+  "loadPriority": 1,
+  "systemPromptFile": "prompts/system-governance.md",
+  "skills": [
+    "skills/governance/SKILL.md"
+  ],
+  "tags": ["security", "governance", "ai-safe2", "sovereign-runtime"],
+  "minAntigravityVersion": "2.0"
+}

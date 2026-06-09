@@ -1,0 +1,420 @@
+# AI SAFE² Policy Manifest
+# Source of truth for all controls in the Anti-Gravity Sovereign Runtime
+#
+# Maturity levels:
+#   attested    - cryptographically verified with evidence hash in CI
+#   tested      - verified by automated test with pass/fail result
+#   implemented - code exists and covers the control
+#   documented  - policy defined but not yet enforced in code
+#   planned     - roadmap item, not yet built
+
+schema_version: "1.0"
+framework: "AI SAFE² v3.0"
+profile: "Antigravity 2.0 Sovereign Runtime"
+last_updated: "2026-06-09"
+maintainer: "Cyber Strategy Institute"
+repo: "https://github.com/CyberStrategyInstitute/ai-safe2-framework"
+
+controls:
+  # ─── Pillar 1: Sanitize & Isolate ──────────────────────────────────────────
+
+  - id: P1.INJECT
+    name: Indirect Prompt Injection Defense
+    pillar: 1
+    category: input-sanitization
+    maturity: tested
+    description: >
+      Detects and neutralizes IPI payloads in raw string ingestion before
+      they reach the LLM processor. Matches known injection signatures and
+      replaces them with tagged neutralization markers.
+    implementation:
+      file: enforcement/safe_gateway.js
+      class: SafeGateway
+      method: sanitizeInput
+      line_approx: 90
+    tests:
+      - file: smoke_test.js
+        case: T1.01
+        scenario: Indirect Prompt Injection Filtering
+    gaps: []
+
+  - id: P1.SECRET
+    name: Cleartext Credential / Secret Leak Prevention
+    pillar: 1
+    category: data-loss-prevention
+    maturity: tested
+    description: >
+      Scans all file write and replace streams for known credential patterns
+      (GitHub PAT, AWS, Stripe, OpenAI, Anthropic, generic secret assignments).
+      Blocks writes on detection.
+    implementation:
+      file: enforcement/safe_gateway.js
+      class: SafeGateway
+      method: _verifyFileWrite
+      line_approx: 152
+    tests:
+      - file: smoke_test.js
+        case: T1.04
+        scenario: Cleartext Stripe Key in Write Stream
+    gaps:
+      - Pattern coverage does not include all cloud providers (e.g. GCP SA keys)
+
+  - id: P1.PATH
+    name: Path Traversal & Symlink Escape Prevention
+    pillar: 1
+    category: filesystem-containment
+    maturity: tested
+    description: >
+      Resolves file paths against workspace root and blocks traversal escapes
+      including ../ sequences, encoded variants (%2e%2e), Windows device names
+      (NUL, CON, AUX), and symbolic links detected via lstatSync.
+    implementation:
+      file: enforcement/safe_gateway.js
+      class: SafeGateway
+      method: _verifyFileRead
+      line_approx: 172
+    tests:
+      - file: smoke_test.js
+        case: T2.01
+        scenario: Path Traversal via ../
+      - file: smoke_test.js
+        case: T2.02
+        scenario: Encoded %2e%2e Sequence
+      - file: smoke_test.js
+        case: T2.03
+        scenario: Windows Device Path NUL
+    gaps:
+      - Junction detection requires Windows-specific API; best-effort on Linux
+
+  - id: P1.DOMAIN
+    name: Outbound Domain Allowlist & SSRF Prevention
+    pillar: 1
+    category: network-containment
+    maturity: tested
+    description: >
+      Validates all outbound URL requests against an explicit domain allowlist.
+      Blocks private/loopback IP addresses (RFC 1918, IPv6), raw IP literals,
+      non-HTTP schemes (file://, ftp://, etc.), and domain-confusion tricks
+      (whitelisted-domain.attacker.tld patterns).
+    implementation:
+      file: enforcement/safe_gateway.js
+      class: SafeGateway
+      method: _verifyUrl
+      line_approx: 100
+    tests:
+      - file: smoke_test.js
+        case: T1.02
+        scenario: Non-Whitelisted Domain
+      - file: smoke_test.js
+        case: T2.04
+        scenario: Private IP SSRF 127.0.0.1
+      - file: smoke_test.js
+        case: T2.05
+        scenario: RFC 1918 Internal Network
+      - file: smoke_test.js
+        case: T2.06
+        scenario: Domain Confusion Attack
+      - file: smoke_test.js
+        case: T2.07
+        scenario: Non-HTTP Scheme file://
+    gaps: []
+
+  - id: P1.CMD
+    name: Shell Command Allowlist & Chain Injection Prevention
+    pillar: 1
+    category: command-execution-control
+    maturity: tested
+    description: >
+      Enforces a strict command prefix allowlist. Blocks chaining operators
+      (;, &&, ||, |, $(), backtick, >> ), interactive/admin binaries
+      (sudo, su, bash, ssh, powershell, net, reg, attrib), and unknown binaries.
+    implementation:
+      file: enforcement/safe_gateway.js
+      class: SafeGateway
+      method: _verifyCommand
+      line_approx: 135
+    tests:
+      - file: smoke_test.js
+        case: T1.03
+        scenario: Shell Command Chaining via &&
+      - file: smoke_test.js
+        case: T3.01
+        scenario: Interactive Command sudo
+    gaps: []
+
+  - id: P1.SUBAGENT
+    name: Subagent Privilege Boundary Enforcement
+    pillar: 1
+    category: subagent-governance
+    maturity: tested
+    description: >
+      Validates subagent spawn requests against privilege escalation signals.
+      Denies unsandboxed mode, root access requests, and specific disallowed
+      permission tokens (bypass_policy, override_soul, disable_gateway, etc.).
+    implementation:
+      file: enforcement/circuit_breaker.js
+      class: CircuitBreaker
+      method: validateSubagentSpawn
+      line_approx: 100
+    tests:
+      - file: smoke_test.js
+        case: T3.02
+        scenario: Subagent Unsandboxed Mode
+      - file: smoke_test.js
+        case: T3.03
+        scenario: Subagent Disallowed Permission
+    gaps:
+      - Subagent identity verification (cryptographic signing) is planned, not implemented
+
+  - id: P1.MEMORY
+    name: Memory Poisoning Prevention
+    pillar: 1
+    category: state-hygiene
+    maturity: tested
+    description: >
+      Scans proposed memory writes for injection payloads targeting identity
+      and policy files. Blocks writes containing override/ignore patterns
+      before persistence to MEMORY.md or anchor-memory.json.
+    implementation:
+      file: enforcement/circuit_breaker.js
+      class: CircuitBreaker
+      method: validateMemoryWrite
+      line_approx: 130
+    tests:
+      - file: smoke_test.js
+        case: T3.04
+        scenario: Memory Poisoning Payload
+    gaps: []
+
+  # ─── Pillar 2: Audit & Inventory ───────────────────────────────────────────
+
+  - id: A2.2
+    name: Structured Audit Trail & Evidence Ledger
+    pillar: 2
+    category: audit
+    maturity: tested
+    description: >
+      All enforcement events are logged as structured JSON with control_id,
+      category, level, timestamp, and evidence fields. The audit logger
+      generates an evidence JSON file with SHA-256 hashes for tamper-evidence.
+      SARIF output enables CI/CD security toolchain integration.
+    implementation:
+      file: enforcement/audit_logger.js
+      class: AuditLogger
+      method: generateReport
+      line_approx: 60
+    tests:
+      - file: smoke_test.js
+        case: all
+        scenario: Log integrity validated after each test run
+    gaps:
+      - True tamper-evidence (cryptographic log chaining, WORM storage) is planned
+
+  # ─── Pillar 3: Fail-Safe & Recovery ────────────────────────────────────────
+
+  - id: F3.2
+    name: Recursion Depth Circuit Breaker
+    pillar: 3
+    category: fail-safe
+    maturity: tested
+    description: >
+      Counts identical tool calls (by toolName + argHash) within a sliding
+      time window. Trips at configurable threshold and permanently marks the
+      tool as tripped for the session. Supports manual reset for recovery.
+    implementation:
+      file: enforcement/circuit_breaker.js
+      class: CircuitBreaker
+      method: registerCall
+      line_approx: 52
+    tests:
+      - file: smoke_test.js
+        case: T1.05
+        scenario: Runaway Loop Detection
+    gaps: []
+
+  - id: F3.4
+    name: Cascade Containment & Workspace Rollback
+    pillar: 3
+    category: fail-safe
+    maturity: documented
+    description: >
+      Rollback stub calls triggerRollback() which logs the event and returns
+      a rollback status. In production this should execute git reset --hard HEAD
+      or restore from a workspace snapshot.
+    implementation:
+      file: enforcement/circuit_breaker.js
+      class: CircuitBreaker
+      method: triggerRollback
+      line_approx: 160
+    tests: []
+    gaps:
+      - Actual git/filesystem rollback is a stub — production wiring required
+
+  # ─── Pillar 4: Engage & Monitor ────────────────────────────────────────────
+
+  - id: P4.EXFIL
+    name: Exfiltration Monitoring & HITL Engagement
+    pillar: 4
+    category: monitoring
+    maturity: tested
+    description: >
+      All agent actions are intercepted at the gateway. Blocked exfiltration
+      attempts are logged with ALERT level and P4.EXFIL control reference.
+      HITL review is triggered by ALERT-level log entries.
+    implementation:
+      file: enforcement/safe_gateway.js
+      class: SafeGateway
+      method: verifyAction
+      line_approx: 73
+    tests:
+      - file: smoke_test.js
+        case: T1.02
+        scenario: Outbound Exfiltration Block
+    gaps:
+      - Real-time HITL notification (webhook, email) is planned, not implemented
+
+  # ─── Cross-Pillar Controls ──────────────────────────────────────────────────
+
+  - id: CP.4
+    name: Non-Human Identity Registration & Profile Governance
+    pillar: cross-pillar
+    category: identity
+    maturity: documented
+    loaded_at_runtime: via_plugin_or_config  # requires governance-enforcer plugin OR Option 3 config
+    description: >
+      IDENTITY.md defines the agent's registered NHI profile (ID, role, trust class,
+      communication protocol). Identity override attempts constitute a Category 1 IPI event.
+      NOTE: core/IDENTITY.md is a project file — not auto-loaded by the platform unless
+      the governance-enforcer plugin or system_prompt config injection is active.
+      The governance constraint is active at 'tested' maturity only when one of those
+      wiring options is confirmed installed.
+    implementation:
+      file: core/IDENTITY.md
+      plugin_mirror: plugins/governance-enforcer/prompts/system-governance.md
+      agent_rule_mirror: .agent/rules/governance-identity-tools.md
+    tests: []
+    gaps:
+      - core/IDENTITY.md is not auto-loaded by Antigravity without plugin or config wiring
+      - Cryptographic signature of IDENTITY.md is planned (not yet implemented)
+
+  - id: S1.3
+    name: Tool Authorization Whitelist
+    pillar: 1
+    category: tool-governance
+    maturity: documented
+    loaded_at_runtime: via_plugin_or_config
+    description: >
+      TOOLS.md defines permitted tools with sandbox policies and authorized use cases.
+      The enforcement gateway independently enforces command prefix allowlist at runtime
+      (that layer is 'tested'). The TOOLS.md policy document itself requires plugin or
+      config wiring to be active as agent-level instruction.
+    implementation:
+      file: core/TOOLS.md
+      plugin_mirror: plugins/governance-enforcer/prompts/system-governance.md
+      agent_rule_mirror: .agent/rules/governance-identity-tools.md
+      runtime_enforcement: enforcement/safe_gateway.js  # this layer IS tested
+    tests:
+      - file: smoke_test.js
+        case: T1.03
+        scenario: Unwhitelisted binary blocked (gateway layer — independent of doc loading)
+    gaps:
+      - core/TOOLS.md is not auto-loaded without plugin or config wiring
+
+  - id: S1.4
+    name: Behavioral Containment & Hard Limits
+    pillar: 1
+    category: behavioral-boundary
+    maturity: documented
+    loaded_at_runtime: via_plugin_or_config
+    description: >
+      SOUL.md defines core values, hard security boundaries, and escalation protocol.
+      NOTE: core/SOUL.md is a project file — Antigravity confirmed it is NOT pre-loaded
+      at session start. It requires governance-enforcer plugin OR system_prompt config
+      injection to be active as a system-level constraint. Without that wiring, SOUL.md
+      is advisory documentation, not active enforcement.
+    implementation:
+      file: core/SOUL.md
+      plugin_mirror: plugins/governance-enforcer/prompts/system-governance.md
+      agent_rule_mirror: .agent/rules/governance-soul.md
+    tests: []
+    gaps:
+      - core/SOUL.md is not auto-loaded without plugin or config wiring (GAP-06)
+      - No machine-readable assertion that behavioral limits are active before tool execution
+
+  - id: S1.5
+    name: Memory Governance & State Hygiene
+    pillar: 1
+    category: state-hygiene
+    maturity: documented
+    loaded_at_runtime: via_plugin_or_config
+    description: >
+      MEMORY.md defines the sovereign memory model, ephemeral vs persistent memory
+      separation, and sanitization rules. The circuit breaker enforces runtime memory
+      write validation independently (that layer is 'tested'). MEMORY.md policy
+      document requires plugin or config wiring to be active as agent instruction.
+    implementation:
+      file: core/MEMORY.md
+      plugin_mirror: plugins/governance-enforcer/prompts/system-governance.md
+      agent_rule_mirror: .agent/rules/governance-memory-context.md
+      runtime_enforcement: enforcement/circuit_breaker.js  # this layer IS tested
+    tests:
+      - file: smoke_test.js
+        case: T3.04
+        scenario: Memory poisoning blocked (circuit breaker layer — independent of doc loading)
+    gaps:
+      - core/MEMORY.md is not auto-loaded without plugin or config wiring
+
+# ─── Known Gaps Summary ────────────────────────────────────────────────────────
+known_gaps:
+  - id: GAP-01
+    severity: medium
+    description: >
+      F3.4 rollback is a stub. Production deployment requires wiring to
+      git reset or workspace snapshot restore.
+    priority: p2
+
+  - id: GAP-02
+    severity: medium
+    description: >
+      CP.4 identity file has no cryptographic signature. An attacker with
+      filesystem write access could tamper with IDENTITY.md.
+    priority: p2
+
+  - id: GAP-03
+    severity: low
+    description: >
+      Audit log is append-only text without cryptographic chaining.
+      Sufficient for demos and debugging; insufficient for formal assurance.
+    priority: p3
+
+  - id: GAP-04
+    severity: low
+    description: >
+      P4.EXFIL HITL notification exists as log entries only; no
+      real-time webhook/alert wiring.
+    priority: p3
+
+  - id: GAP-05
+    severity: medium
+    description: >
+      Subagent identity verification (cryptographic signing of spawn requests)
+      is documented in GOVERNANCE.md but not enforced in code.
+    priority: p2
+
+  - id: GAP-06
+    severity: high
+    status: mitigated  # Plugin + config wiring closes this gap
+    description: >
+      Core governance files (core/SOUL.md, IDENTITY.md, TOOLS.md, MEMORY.md, USER.md)
+      are project files — Antigravity confirmed they are NOT pre-loaded at session start.
+      Without explicit wiring, the internal governance layer is documentation only,
+      not active enforcement.
+    mitigation: >
+      Three complementary wiring mechanisms are now provided:
+        1. plugins/governance-enforcer/ — native Antigravity plugin, auto-loads for every session
+        2. config/install-option3-system-prompt.ps1 — injects into global system_prompt config
+        3. .agent/rules/governance-*.md — workspace-level auto-load rules
+      Install Option 1 (plugin) as primary. Options 2+3 provide defense-in-depth.
+      Once any wiring option is confirmed active, affected controls upgrade from
+      'documented' to 'tested' maturity.
+    priority: p1
