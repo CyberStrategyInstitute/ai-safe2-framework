@@ -79,4 +79,4 @@ Evidence hashes are recorded in `reports/ai_safe2_evidence.json` for downstream 
 
 ---
 
-*Signed by: AI SAFE² Evidence-Grade Audit Engine v2.0*
+_Signed by: AI SAFE² Evidence-Grade Audit Engine v2.0_
