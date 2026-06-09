@@ -431,5 +431,5 @@ Be explicit. This suite hardens a specific threat surface. It does not cover:
 
 ---
 
-*"Detection is a strategy of hope. Certainty is a strategy of engineering."*
-*— AI SAFE² Framework Principles*
+_"Detection is a strategy of hope. Certainty is a strategy of engineering."_
+_— AI SAFE² Framework Principles_
