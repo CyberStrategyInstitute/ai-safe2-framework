@@ -52,7 +52,7 @@ jobs:
             --cov-report=term-missing --cov-report=xml
 
       - name: Upload coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: matrix.python-version == '3.11'
         with:
           name: coverage-report
