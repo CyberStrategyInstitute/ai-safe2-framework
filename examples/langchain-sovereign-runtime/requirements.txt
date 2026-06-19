@@ -1,0 +1,16 @@
+# AI SAFE² v3.0 — LangChain Sovereign Runtime
+# The enforcement engine (ai_safe2_engine.py) has ZERO external dependencies.
+# It uses Python stdlib only: re, hashlib, json, datetime, pathlib, sys, time, uuid, enum
+
+# LangChain core — required for SovereignCallbackHandler
+langchain-core>=0.3.0,<0.4.0
+langchain>=0.3.0,<0.4.0
+
+# Optional: community tools (required only if using LangChain community tools)
+# langchain-community>=0.3.0,<0.4.0
+
+# Optional: OpenAI integration (for running with ChatOpenAI)
+# langchain-openai>=0.2.0
+
+# Optional: LangSmith tracing integration
+# langsmith>=0.1.0

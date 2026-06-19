@@ -1,0 +1,245 @@
+# AI SAFE² v3.0 — LangChain Sovereign Runtime Control Registry
+# Machine-readable. Used by CI/CD gate to verify coverage.
+# All control IDs verified from github.com/CyberStrategyInstitute/ai-safe2-framework
+
+framework_version: "AI SAFE² v3.0"
+package: "langchain-sovereign-runtime"
+package_version: "1.0.0"
+test_coverage: "15/15"
+
+controls:
+
+  # ── Pillar 1: Sanitize & Isolate ──────────────────────────────────────────
+
+  - id: P1.T1.2
+    name: "Malicious Prompt Filtering"
+    pillar: "P1 — Sanitize & Isolate"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT1: log_only
+      ACT2: log_only
+      ACT3: raise_violation
+      ACT4: raise_violation
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "scan_content(check_injection=True)"
+    langchain_hooks:
+      - "SovereignCallbackHandler.on_llm_start"
+      - "SovereignCallbackHandler.on_chat_model_start"
+      - "AISAFE2Engine.check_path_safety"
+    test_ids: [T1-01, T2-04]
+    owasp_lllm: LLM01
+    mitre_atlas: AML.T0051
+
+  - id: P1.T1.5
+    name: "Sensitive Data Masking (PII/PHI/Credentials)"
+    pillar: "P1 — Sanitize & Isolate"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT1: log_only
+      ACT2: log_only
+      ACT3: raise_violation
+      ACT4: raise_violation
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "scan_content(check_credentials=True)"
+    langchain_hooks:
+      - "SovereignCallbackHandler.on_chain_end"
+      - "SovereignCallbackHandler.on_llm_end"
+    test_ids: [T1-03]
+    owasp_llm: LLM02
+    mitre_atlas: AML.T0048
+
+  - id: P1.T1.10
+    name: "Indirect Injection Surface Coverage"
+    pillar: "P1 — Sanitize & Isolate"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT1: log_only
+      ACT2: log_only
+      ACT3: raise_violation
+      ACT4: raise_violation
+    implementation_file: "enforcement/sovereign_langchain.py"
+    implementation_fn: "SovereignCallbackHandler.on_tool_end"
+    langchain_hooks:
+      - "SovereignCallbackHandler.on_tool_end"
+      - "SovereignLangChain.wrap_tool"
+    test_ids: [T1-02]
+    owasp_llm: LLM01
+    mitre_atlas: AML.T0051
+    note: "Primary IPI surface in LangChain — tool returns flow directly into context"
+
+  - id: P1.T2.3
+    name: "API Gateway Restrictions (Domain Allowlist + SSRF Block)"
+    pillar: "P1 — Sanitize & Isolate"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_violation
+      ACT3: raise_violation
+      ACT4: raise_violation
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "check_domain()"
+    langchain_hooks:
+      - "SovereignLangChain.wrap_tool (URL args)"
+    test_ids: [T2-05]
+    owasp_llm: LLM08
+
+  # ── Pillar 1: S1 Advanced Controls ───────────────────────────────────────
+
+  - id: S1.3
+    name: "Semantic Isolation Boundary Enforcement"
+    pillar: "P1 — Sanitize & Isolate (v3.0)"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+      ACT4: raise_violation
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "isolate_context(source_type='tool_output')"
+    langchain_hooks:
+      - "SovereignCallbackHandler.on_tool_end (via scan_content)"
+    test_ids: [T1-05]
+    owasp_llm: LLM01
+
+  - id: S1.5
+    name: "Memory Governance Boundary Controls"
+    pillar: "P1 — Sanitize & Isolate (v3.0)"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+      ACT4: raise_violation
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "protect_memory_write()"
+    langchain_hooks:
+      - "SovereignLangChain.protect_memory (wraps save_context)"
+    test_ids: [T1-04]
+    owasp_llm: LLM02
+
+  # ── Pillar 3: Fail-Safe & Recovery ───────────────────────────────────────
+
+  - id: F3.2
+    name: "Agent Recursion Limit Governor"
+    pillar: "P3 — Fail-Safe & Recovery (v3.0)"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_circuit_tripped
+      ACT3: raise_circuit_tripped
+      ACT4: raise_circuit_tripped
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "record_tool_call() — ceiling check"
+    langchain_hooks:
+      - "SovereignCallbackHandler.on_tool_start"
+    test_ids: [T2-01]
+    note: "Hard ceiling at gateway layer — not a system-prompt hint the agent can reason around"
+
+  - id: F3.5
+    name: "Multi-Agent Cascade Containment"
+    pillar: "P3 — Fail-Safe & Recovery (v3.0)"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_circuit_tripped
+      ACT4: raise_circuit_tripped
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "record_chain_error()"
+    langchain_hooks:
+      - "SovereignCallbackHandler.on_chain_error"
+    test_ids: [T2-03]
+
+  # ── Pillar 2: Audit & Inventory ───────────────────────────────────────────
+
+  - id: A2.5
+    name: "Semantic Execution Trace Logging"
+    pillar: "P2 — Audit & Inventory (v3.0)"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT1: always_emit
+      ACT2: always_emit
+      ACT3: always_emit
+      ACT4: always_emit
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "_emit_event() — OCSF 1.1, SHA-256 chain"
+    test_ids: [T3-03]
+    note: "Append-only. Agent cannot modify. run_id-linked."
+
+  - id: P2.T3.6
+    name: "Compliance Validation"
+    pillar: "P2 — Audit & Inventory"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT1: on_demand
+      ACT2: on_demand
+      ACT3: on_demand
+      ACT4: on_demand
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "compliance_report() + get_status()"
+    test_ids: [T3-05]
+
+  # ── Pillar 4: Engage & Monitor ────────────────────────────────────────────
+
+  - id: M4.5
+    name: "Tool-Misuse Detection Controls"
+    pillar: "P4 — Engage & Monitor (v3.0)"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_circuit_tripped
+      ACT3: raise_circuit_tripped
+      ACT4: raise_circuit_tripped
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "record_tool_call() — loop and frequency detection"
+    langchain_hooks:
+      - "SovereignCallbackHandler.on_tool_start"
+    test_ids: [T2-02]
+    mitre_atlas: AML.T0015
+
+  # ── Cross-Pillar Governance ───────────────────────────────────────────────
+
+  - id: CP.3
+    name: "ACT Capability Tiers 1-4"
+    pillar: "Cross-Pillar Governance"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "ACTTier enum — gates all enforcement decisions"
+    test_ids: [T3-01]
+
+  - id: CP.4
+    name: "Agentic Control Plane Governance"
+    pillar: "Cross-Pillar Governance"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "register_nhi()"
+    governance_file: "core/IDENTITY.md"
+    test_ids: [T3-02]
+
+  - id: CP.8
+    name: "Catastrophic Risk Threshold Controls"
+    pillar: "Cross-Pillar Governance"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "emit_cp8_event()"
+    note: "FATAL severity events. Triggers immediate compliance score impact."
+
+  - id: CP.10
+    name: "HEAR Doctrine"
+    pillar: "Cross-Pillar Governance"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_class_h_action
+      ACT4: raise_class_h_action
+    implementation_file: "enforcement/ai_safe2_engine.py"
+    implementation_fn: "check_hear_gate()"
+    langchain_hooks:
+      - "SovereignCallbackHandler.on_tool_start"
+    test_ids: [T3-04]
+    note: "Class-H: irreversible, financially material, security-modifying, or cross-org actions"
