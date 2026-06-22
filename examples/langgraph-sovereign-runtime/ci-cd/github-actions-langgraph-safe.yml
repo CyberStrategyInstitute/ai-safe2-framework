@@ -1,0 +1,80 @@
+name: AI SAFE² — LangGraph Sovereign Baseline
+
+on:
+  push:
+    branches: [main, develop]
+    paths: ['examples/langgraph-sovereign-runtime/**']
+  pull_request:
+    branches: [main]
+    paths: ['examples/langgraph-sovereign-runtime/**']
+  workflow_dispatch:
+
+env:
+  PACKAGE_DIR: examples/langgraph-sovereign-runtime
+  PYTHON_VERSION: "3.11"
+
+jobs:
+  static-validation:
+    name: Pass 1 — Static Validation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PACKAGE_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: bash validation/pass1_static.sh
+
+  smoke-tests:
+    name: Pass 2 — Adversarial Smoke Tests (15/15 required)
+    runs-on: ubuntu-latest
+    needs: static-validation
+    defaults:
+      run:
+        working-directory: ${{ env.PACKAGE_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python smoke_test.py
+      - run: bash validation/pass2_runtime.sh
+      - name: Upload audit logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aisafe2-lg-audit-${{ github.run_id }}
+          path: ~/.ai_safe2/audit/
+          retention-days: 30
+
+  control-coverage:
+    name: Control Coverage Gate
+    runs-on: ubuntu-latest
+    needs: smoke-tests
+    defaults:
+      run:
+        working-directory: ${{ env.PACKAGE_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Verify 15 controls in policy.yaml
+        run: |
+          for ctrl in P1.T1.2 P1.T1.5 P1.T1.10 P1.T2.3 S1.3 S1.5 F3.2 F3.5 \
+                      A2.5 M4.5 P2.T3.6 CP.3 CP.4 CP.9 CP.10; do
+            grep -q "$ctrl" controls/policy.yaml || { echo "❌ Missing: $ctrl"; exit 1; }
+          done
+          echo "✅ All 15 control IDs present"
+      - name: CP.9 depth limits present
+        run: |
+          for d in "ACT2: 5" "ACT3: 2" "ACT4: 3"; do
+            grep -q "$d" controls/policy.yaml || { echo "❌ Missing CP.9 depth: $d"; exit 1; }
+          done
+          echo "✅ CP.9 depth limits verified"
