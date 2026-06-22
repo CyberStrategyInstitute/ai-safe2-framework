@@ -1,0 +1,161 @@
+# AI SAFE² v3.0 — LangGraph Sovereign Runtime Control Registry
+# All IDs verified from github.com/CyberStrategyInstitute/ai-safe2-framework
+
+framework_version: "AI SAFE² v3.0"
+package: "langgraph-sovereign-runtime"
+package_version: "1.0.0"
+test_coverage: "15/15"
+
+controls:
+
+  - id: P1.T1.2
+    name: "Malicious Prompt Filtering"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+      ACT4: raise_violation
+    implementation_fn: "SovereignStateGraph.wrap_node — StateGuard.scan_state_update"
+    test_ids: [T1-01]
+    owasp_llm: LLM01
+    mitre_atlas: AML.T0051
+
+  - id: P1.T1.5
+    name: "Sensitive Data Masking"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "StateGuard.scan_state_update (credential patterns)"
+    test_ids: [T1-03]
+
+  - id: P1.T1.10
+    name: "Indirect Injection Surface Coverage"
+    pillar: "P1"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "StateGuard.scan_state_update — diff-only scan"
+    note: "Scans ONLY the partial state update (the diff), not the full state dict"
+    test_ids: [T1-02]
+    owasp_llm: LLM01
+    mitre_atlas: AML.T0051
+
+  - id: P1.T2.3
+    name: "API Gateway Restrictions (SSRF + Domain Allowlist)"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "SovereignStateGraph.wrap_node — URL state value check"
+    test_ids: [T2-04]
+
+  - id: S1.3
+    name: "Semantic Isolation Boundary Enforcement"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "RoutingGuard.validate — routing key injection + inventory check"
+    note: "Primary LangGraph surface: supervisor routing key hijack"
+    test_ids: [T1-04]
+
+  - id: S1.5
+    name: "Memory Governance Boundary Controls"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "SovereignStateGraph.protect_state_write"
+    note: "Gates checkpointer writes — LangGraph equivalent of S1.5 memory governance"
+    test_ids: [T1-05]
+
+  - id: F3.2
+    name: "Agent Recursion Limit Governor"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_circuit_tripped
+      ACT3: raise_circuit_tripped
+    implementation_fn: "AISAFE2Engine.record_tool_call — node:name ceiling"
+    test_ids: [T2-01]
+
+  - id: F3.5
+    name: "Multi-Agent Cascade Containment"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_circuit_tripped
+    implementation_fn: "AISAFE2Engine.record_chain_error — node error threshold"
+    test_ids: [T2-03]
+
+  - id: A2.5
+    name: "Semantic Execution Trace Logging"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      all: always_emit
+    implementation_fn: "wrap_node — NODE_COMPLETED event with state update hash"
+    note: "Each node completion logged with state diff hash. OCSF 1.1, SHA-256 chain."
+    test_ids: [T3-03]
+
+  - id: M4.5
+    name: "Tool-Misuse Detection Controls"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_circuit_tripped
+      ACT3: raise_circuit_tripped
+    implementation_fn: "SovereignStateGraph._node_call_counts — per-node ceiling"
+    note: "Per-node call count ceiling (not tool args based — nodes have fewer distinct inputs)"
+    test_ids: [T2-02]
+
+  - id: P2.T3.6
+    name: "Compliance Validation"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.compliance_report() + get_status()"
+    test_ids: [T3-05]
+
+  - id: CP.3
+    name: "ACT Capability Tiers 1-4"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "ACTTier enum — gates all enforcement decisions"
+    test_ids: [T3-01]
+
+  - id: CP.4
+    name: "Agentic Control Plane Governance"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.register_nhi()"
+    governance_file: "core/IDENTITY.md"
+    test_ids: [T3-02]
+
+  - id: CP.9
+    name: "Subgraph Replication Governance"
+    pillar: "Cross-Pillar Governance"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_circuit_tripped  # depth > 5
+      ACT3: raise_circuit_tripped  # depth > 2
+      ACT4: raise_circuit_tripped  # depth > 3
+    implementation_fn: "SovereignStateGraph.enter_subgraph() / exit_subgraph()"
+    note: "PRIMARY LangGraph-specific control. Limits child-agent recursion depth."
+    max_depth:
+      ACT2: 5
+      ACT3: 2
+      ACT4: 3
+    test_ids: [T2-05]
+
+  - id: CP.10
+    name: "HEAR Doctrine"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_class_h_action
+      ACT4: raise_class_h_action
+    implementation_fn: "AISAFE2Engine.check_hear_gate — called on each node output string"
+    test_ids: [T3-04]

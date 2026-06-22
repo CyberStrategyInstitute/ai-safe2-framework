@@ -1,0 +1,12 @@
+# AI SAFE² v3.0 — LangGraph Sovereign Runtime
+# The enforcement engine has ZERO external dependencies (stdlib only).
+
+# LangGraph — required for SovereignStateGraph.wrap_node() in production
+langgraph>=0.2.0,<0.3.0
+langchain-core>=0.3.0,<0.4.0
+
+# Optional: LangGraph Cloud async streaming (request separately)
+# langgraph-sdk>=0.1.0
+
+# Optional: LangSmith tracing
+# langsmith>=0.1.0
