@@ -1,0 +1,162 @@
+# .github/workflows/ai-safe2-langflow-gate.yml
+# AI SAFE2 v3.0 CI/CD Gate — Langflow Sovereign Runtime
+# Cyber Strategy Institute
+
+name: AI SAFE2 Langflow Sovereign Gate
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'examples/langflow-sovereign-runtime/**'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'examples/langflow-sovereign-runtime/**'
+  workflow_dispatch:
+
+env:
+  PYTHONPATH: examples/langflow-sovereign-runtime/enforcement
+
+jobs:
+  smoke-test:
+    name: AI SAFE2 Smoke Test (21/21 Required)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify stdlib-only enforcement
+        working-directory: examples/langflow-sovereign-runtime
+        run: |
+          python3 -c "
+          import ast, pathlib, sys
+          STDLIB   = sys.stdlib_module_names
+          INTERNAL = {'ai_safe2_engine', 'sovereign_langflow'}
+          ok = True
+          for f in pathlib.Path('enforcement').glob('*.py'):
+              tree = ast.parse(f.read_text())
+              for node in ast.walk(tree):
+                  if isinstance(node, ast.Import):
+                      for alias in node.names:
+                          base = alias.name.split('.')[0]
+                          if base not in STDLIB and base not in INTERNAL:
+                              print(f'EXTERNAL: {f.name}: {alias.name}'); ok = False
+                  elif isinstance(node, ast.ImportFrom):
+                      mod = (node.module or '').split('.')[0]
+                      if mod and mod not in STDLIB and mod not in INTERNAL and mod != '__future__':
+                          print(f'EXTERNAL: {f.name}: from {node.module}'); ok = False
+          print('OK: stdlib-only' if ok else 'FAIL: external deps'); 
+          if not ok: sys.exit(1)
+          "
+
+      - name: Run 21/21 smoke test
+        working-directory: examples/langflow-sovereign-runtime
+        run: python3 smoke_test.py
+
+  scan-flow-imports:
+    name: Scan Flow JSON Files for Dangerous Nodes
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Scan changed .json files for CustomComponent nodes
+        working-directory: examples/langflow-sovereign-runtime
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | \
+                    grep -E '\.json$' | grep -v 'policy.yaml' || true)
+          if [ -z "$CHANGED" ]; then echo "No JSON files changed."; exit 0; fi
+          python3 - << 'EOF'
+          import sys, pathlib
+          sys.path.insert(0, 'enforcement')
+          from sovereign_langflow import LangflowSovereignRuntime
+          guard = LangflowSovereignRuntime()
+          failed = []
+          import subprocess
+          changed = subprocess.check_output(
+              ['git', 'diff', '--name-only', 'origin/${{ github.base_ref }}', 'HEAD'],
+              text=True
+          ).strip().split('\n')
+          for rel in changed:
+              if not rel.endswith('.json'):
+                  continue
+              p = pathlib.Path('../../' + rel)
+              if not p.exists():
+                  continue
+              try:
+                  guard.scan_flow_json(p.read_text(), p.name)
+                  print(f'[OK] {rel}')
+              except ValueError as e:
+                  print(f'[BLOCKED] {rel}: {str(e)[:100]}')
+                  failed.append(rel)
+          if failed:
+              print(f'::error::Flow JSON files BLOCKED: {failed}')
+              sys.exit(1)
+          EOF
+
+  validate-mcp-config:
+    name: Validate MCP Server Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Check MCP environment defaults
+        working-directory: examples/langflow-sovereign-runtime
+        run: |
+          python3 - << 'EOF'
+          import sys, os
+          sys.path.insert(0, 'enforcement')
+          from sovereign_langflow import LangflowSovereignRuntime
+
+          # Check env vars if .env is present
+          auto_add = os.getenv('LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS', 'true').lower()
+          auto_login = os.getenv('LANGFLOW_AUTO_LOGIN', 'true').lower()
+
+          guard = LangflowSovereignRuntime(
+              auto_login_allowed=(auto_login == 'true')
+          )
+
+          if auto_add == 'true' and auto_login == 'true':
+              print('::warning::LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS=true with AUTO_LOGIN=true')
+              print('::warning::Set LANGFLOW_AUTO_LOGIN=false before enabling MCP')
+          else:
+              print('MCP config OK: authentication enforced')
+          EOF
+
+  love-equation-gate:
+    name: Love Equation Gate (GREEN Required)
+    runs-on: ubuntu-latest
+    needs: [smoke-test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Assert GREEN band
+        working-directory: examples/langflow-sovereign-runtime
+        run: |
+          python3 - << 'EOF'
+          import sys
+          sys.path.insert(0, 'enforcement')
+          from sovereign_langflow import LangflowSovereignRuntime
+          guard = LangflowSovereignRuntime()
+          status = guard.get_status()
+          band  = status['alignment_band']
+          score = status['love_score']
+          print(f'Love Score: {score} | Band: {band}')
+          if band != 'GREEN':
+              print('::error::Band not GREEN. Langflow deployment blocked.')
+              sys.exit(1)
+          print('AI SAFE2 Langflow gate: GREEN — cleared.')
+          EOF

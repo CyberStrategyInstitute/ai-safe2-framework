@@ -1,0 +1,205 @@
+# controls/policy.yaml
+# AI SAFE2 v3.0 Control Registry — Langflow Sovereign Runtime
+# Cyber Strategy Institute
+#
+# Source verification:
+#   docs.langflow.org/webhook                    → LF-WHK
+#   docs.langflow.org/mcp-server                 → LF-MCP (LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS)
+#   docs.langflow.org/configuration-global-variables → LF-GVAR
+#   docs.langflow.org/concepts-flows-import      → LF-FLOW (CustomComponent, API key export)
+#   docs.langflow.org/agents                     → LF-INST (system_prompt)
+
+runtime:
+  name: langflow-sovereign-runtime
+  framework_version: "3.0"
+  platform: Langflow (Visual DAG Builder + Webhook + MCP Server + RAG)
+  act_tier: ACT-3
+  hear_required: true
+  cp9_required: false
+  aism_level: 4
+  architectural_note: >
+    Langflow is a visual DAG builder, not a Python runtime framework.
+    There is no callback hook to intercept execution.
+    Enforcement requires an EXTERNAL API PROXY pattern (scan before
+    forwarding to Langflow HTTP endpoints) PLUS an inline DAG node
+    (safe2_guardian_component.py) for LF-COMP chain interception.
+
+surfaces:
+  - id: LF-WHK
+    name: Webhook Payload Injection
+    description: >
+      Confirmed from docs.langflow.org/webhook: webhook response is
+      {"message":"Task started in the background","status":"in progress"} — 
+      asynchronous. No synchronous output gate exists. When 
+      LANGFLOW_WEBHOOK_AUTH_ENABLE=False, "requests to the webhook endpoint
+      are treated as being sent by the flow owner." One injected payload
+      = one background DAG run under owner privileges with no audit gate.
+    method: scan_webhook_payload()
+    source_verification: docs.langflow.org/webhook
+    controls:
+      - {id: P1.T1.2,    pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10,   pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.4_ADV, pillar: P1, severity: CRITICAL}
+      - {id: P1.T2.5,    pillar: P1, severity: CRITICAL}
+      - {id: S1.3,       pillar: P1, severity: CRITICAL}
+    confirmed_env_var: LANGFLOW_WEBHOOK_AUTH_ENABLE
+    safe_default: "True (authentication enabled)"
+    dangerous_override: "False = requests treated as flow owner (no auth)"
+
+  - id: LF-RUN
+    name: Run Request Tweaks + Session ID
+    description: >
+      The tweaks parameter in /run and /predict requests overrides ANY
+      component field at request time — including system_prompt, template,
+      code fields, database_url, and connection strings. Default session_id
+      equals flow ID, meaning ALL users share one chat history and memory.
+    method: scan_run_request()
+    controls:
+      - {id: P1.T1.2, pillar: P1, severity: CRITICAL}
+      - {id: P1.T2.5, pillar: P1, severity: CRITICAL}
+      - {id: S1.5,    pillar: P1, severity: HIGH}
+    dangerous_tweaks_fields:
+      - system_prompt
+      - template
+      - code
+      - python_code
+      - database_url
+      - connection_string
+    session_risk: "Default session_id = flow_id = shared memory across all users"
+
+  - id: LF-GVAR
+    name: Global Variable Header Injection
+    description: >
+      The X-LANGFLOW-GLOBAL-VAR-* header prefix allows any request to set
+      global variables at runtime. Setting
+      X-LANGFLOW-GLOBAL-VAR-LANGFLOW_DATABASE_URL redirects your production
+      database to an attacker-controlled host for the duration of the request.
+    method: scan_global_var_headers()
+    source_verification: docs.langflow.org/configuration-global-variables
+    controls:
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: P1.T2.5,  pillar: P1, severity: CRITICAL}
+      - {id: M4.5,     pillar: P4, severity: HIGH}
+    always_blocked_vars:
+      - LANGFLOW_DATABASE_URL
+      - LANGFLOW_SECRET_KEY
+      - LANGFLOW_SUPERUSER_PASSWORD
+      - LANGFLOW_WEBHOOK_AUTH_ENABLE
+      - LANGFLOW_AUTO_LOGIN
+      - LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS
+
+  - id: LF-KNOW
+    name: RAG Knowledge Document Injection
+    description: >
+      Langflow uses Chroma (default) or OpenSearch for knowledge bases.
+      A poisoned document is chunked into vectors and persists in the vector
+      DB permanently. It is retrieved for ALL future queries matching its
+      content — cross-user, cross-session contamination.
+      Hidden Unicode (U+200B/U+200C/FEFF) is invisible in the Langflow UI
+      but preserved in vector representation and readable by the LLM.
+    method: scan_knowledge_document()
+    source_verification: docs.langflow.org/knowledge
+    controls:
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: S1.5,     pillar: P1, severity: CRITICAL}
+      - {id: S1.6,     pillar: P1, severity: HIGH}
+    vector_stores: ["Chroma (default)", "OpenSearch", "Pinecone", "Astra DB"]
+    hidden_unicode_detected:
+      - "U+200B (zero-width space)"
+      - "U+200C (zero-width non-joiner)"
+      - "U+200D (zero-width joiner)"
+      - "U+FEFF (byte order mark)"
+      - "U+00AD (soft hyphen)"
+
+  - id: LF-MCP
+    name: MCP Auto-Exposure (Default-On)
+    description: >
+      Confirmed from docs.langflow.org/mcp-server: LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS
+      defaults to True. "When you create a Langflow project, Langflow automatically
+      adds the project to your MCP server's configuration and makes the project's
+      flows available as MCP tools." Every new project = all flows instantly
+      exposed as MCP tools. If AUTO_LOGIN=true (no auth), MCP server has no
+      authentication — any client can invoke all flows.
+    method: scan_mcp_config()
+    source_verification: docs.langflow.org/mcp-server
+    controls:
+      - {id: P1.T2.5, pillar: P1, severity: CRITICAL}
+      - {id: CP.4,    pillar: CP, severity: HIGH}
+      - {id: M4.5,    pillar: P4, severity: CRITICAL}
+    confirmed_env_var: LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS
+    safe_config: "LANGFLOW_ADD_PROJECTS_TO_MCP_SERVERS=false + LANGFLOW_AUTO_LOGIN=false"
+    auth_requirement: "AUTO_LOGIN=false required for MCP API key generation"
+
+  - id: LF-FLOW
+    name: Flow JSON Import (CustomComponent Raw Python)
+    description: >
+      Confirmed from docs.langflow.org/concepts-flows-import: flows can be
+      imported via drag-and-drop from any Langflow page, or via API.
+      CustomComponent nodes embed raw Python executed by Langflow's build engine.
+      "Save with my API keys" exports literal API key values in the JSON.
+    method: scan_flow_json()
+    source_verification: docs.langflow.org/concepts-flows-import
+    controls:
+      - {id: P1.T1.9,    pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10,   pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.4_ADV, pillar: P1, severity: CRITICAL}
+    dangerous_node_types:
+      - CustomComponent
+      - PythonFunction
+      - PythonREPL
+      - ShellTool
+    api_key_export_risk: "'Save with my API keys' embeds literal key values in JSON"
+
+  - id: LF-INST
+    name: Agent System Prompt Injection
+    description: >
+      The system_prompt field is saved in the flow JSON and applied to
+      EVERY user's session for every future run of that flow.
+      Poisoning it once affects all future invocations permanently.
+      Shared across all team members with access to the flow.
+    method: scan_agent_instructions()
+    controls:
+      - {id: P1.T1.2,  pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: S1.3,     pillar: P1, severity: CRITICAL}
+      - {id: S1.5,     pillar: P1, severity: HIGH}
+
+  - id: LF-COMP
+    name: DAG Component Output Chain
+    description: >
+      A URL fetcher, file reader, or API caller early in the DAG can inject
+      content that reaches an Agent node several hops downstream — passing
+      through Parser, Prompt Template, and Memory nodes with no native gate.
+      Deploy safe2_guardian_component.py inline in the DAG to intercept.
+    method: scan_component_output()
+    inline_component: langflow-component/safe2_guardian_component.py
+    controls:
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.5,  pillar: P1, severity: CRITICAL}
+      - {id: S1.3,     pillar: P1, severity: CRITICAL}
+    dag_chain_risk: "Injection travels multiple hops with no native gate"
+
+nexus_integration:
+  shared_engine: true
+  love_equation:
+    max_score: 100.0
+    deduction_per_violation: 2.0
+    green_threshold: 80.0
+    yellow_threshold: 60.0
+    red_threshold: 0.0
+  proxy_pattern: true
+  inline_dag_node: langflow-component/safe2_guardian_component.py
+  audit_chain: sha256_jsonl
+
+compliance_frameworks:
+  - NIST AI RMF
+  - ISO 42001
+  - OWASP AIVSS v0.8
+  - OWASP LLM Top 10 (LLM01 Prompt Injection)
+  - OWASP Agentic Top 10
+  - MITRE ATLAS (AML.T0051)
+  - EU AI Act
+  - SOC 2 (CC.6.1, CC.7.2)
+  - CMMC 2.0
+  - FedRAMP
+  - Zero Trust

@@ -1,0 +1,14 @@
+# requirements.txt — Langflow Sovereign Runtime
+# AI SAFE2 v3.0 | Cyber Strategy Institute
+#
+# enforcement/ is stdlib-only. No install required for core enforcement.
+
+# ── Optional: Langflow client for API proxy integration ───────
+# langflow-client>=1.0.0    # For programmatic Langflow API calls
+# httpx>=0.27.0             # For proxy HTTP calls with AI SAFE2 pre-scan
+
+# ── Optional: Langflow inline DAG component ───────────────────
+# langflow>=1.10.0          # Required to use safe2_guardian_component.py
+
+# ── Development only ─────────────────────────────────────────
+# pytest>=8.0.0             # pytest smoke_test.py -v
