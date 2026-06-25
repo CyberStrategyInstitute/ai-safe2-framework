@@ -1,60 +1,145 @@
-# CP.5.MCP: MCP Server Security Profile
-**Full Control Specification | April 2026 | AI SAFE2 v3.0**
 
-**Status:** `Active` &nbsp;|&nbsp; **Priority:** `HIGH` &nbsp;|&nbsp; **Pillar:** Cross-Pillar Governance OS (CP.5)
 
-**Research foundation:**
-[Research Note 023 — MCP Server Security Profile](../research/023_mcp-server-security-profile.md) &nbsp;|&nbsp;
-[Research Note 024 — MCP Consumer Protection](../research/024_mcp_consumer_protection.md)
+<div align="center">
+  
+# 🛡️ CP.5.MCP — MCP Server Security Profile
+  
+## AI SAFE² Framework v3.0
 
-**Reference implementation:** [AI SAFE2 MCP Security Toolkit](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/mcp-security-toolkit)
+### Production Security Baseline for Model Context Protocol (MCP)
 
----
+Secure MCP servers against prompt injection, supply-chain compromise, transport abuse, multi-agent delegation, context poisoning, and emerging autonomous AI threats.
 
-## Navigation
-
-**Controls**
-
-[MCP-1: No Dynamic Command Construction](#mcp-1-no-dynamic-command-construction) &nbsp;|&nbsp;
-[MCP-2: Output Sanitization](#mcp-2-output-sanitization-before-llm-return) &nbsp;|&nbsp;
-[MCP-3: Registry Provenance](#mcp-3-registry-provenance-verification) &nbsp;|&nbsp;
-[MCP-4: STDIO Integrity](#mcp-4-stdio-transport-integrity-binding) &nbsp;|&nbsp;
-[MCP-5: Tool Audit Log](#mcp-5-tool-invocation-audit-log) &nbsp;|&nbsp;
-[MCP-6: Network Isolation](#mcp-6-mcp-server-network-isolation) &nbsp;|&nbsp;
-[MCP-7: Zero-Trust Config](#mcp-7-zero-trust-client-configuration) &nbsp;|&nbsp;
-[MCP-8: Session Economics](#mcp-8-session-economics-controls) &nbsp;|&nbsp;
-[MCP-9: Context-Tool Isolation](#mcp-9-context-tool-isolation) &nbsp;|&nbsp;
-[MCP-10: Delegation Edge Monitoring](#mcp-10-multi-agent-provenance-and-delegation-edge-monitoring) &nbsp;|&nbsp;
-[MCP-11: Schema Temporal Profiling](#mcp-11-schema-temporal-profiling) &nbsp;|&nbsp;
-[MCP-12: Swarm C2 Detection](#mcp-12-swarm-c2-detection-controls) &nbsp;|&nbsp;
-[MCP-13: Failure Taxonomy Extension](#mcp-13-mcp-failure-mode-taxonomy-extension)
-
-**Reference**
-
-[ACT Tier Applicability](#act-tier-applicability) &nbsp;|&nbsp;
-[Compliance Mapping](#compliance-mapping) &nbsp;|&nbsp;
-[Consumer Protection Controls](#consumer-protection-controls) &nbsp;|&nbsp;
-[Reference Implementation](#reference-implementation) &nbsp;|&nbsp;
-[Cross-Pillar Dependencies](#cross-pillar-dependencies)
+![Version](https://img.shields.io/badge/Version-v3.0-blue)
+![Controls](https://img.shields.io/badge/Security_Controls-13-success)
+![Priority](https://img.shields.io/badge/Priority-HIGH-red)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
 ---
 
-## Overview
+### **Operational Security Coverage**
 
-CP.5 requires that protocol-layer meshes be assessed as first-class supply chain components. MCP's threat profile is materially different from every other platform currently covered in CP.5. The differences are not superficial — they change which controls apply, where they apply, and what failure looks like.
+🟢 **Foundational** → 🔵 **Managed** → 🟣 **Autonomous** → 🔴 **Critical Infrastructure**
 
-Three structural conditions drive the distinct profile:
-
-**The STDIO transport model eliminates the network boundary.** Every other platform in CP.5 operates with a network boundary between the agent execution environment and external tool services. MCP's default transport runs the server as a subprocess of the host agent process. No network hop exists. The tool service and the agent runtime share the same process space boundary. Network-layer controls provide no coverage here.
-
-**The return path is a first-class injection surface.** Standard agentic architectures treat the input path as the injection surface. MCP inverts this. Tool responses are returned into the LLM's context window as trusted output. The agent has no native mechanism to distinguish a legitimate response from a crafted payload embedded in a response body. The OX Security April 2026 disclosure demonstrated working exploits against this surface across 200,000+ instances.
-
-**SDK-level vulnerability propagation is structural, not versioned.** The RCE pattern in `StdioServerParameters` exists wherever the unsafe dynamic command construction pattern is used, across every downstream implementation built on the official SDKs. At 150M+ downloads, a single widely distributed MCP server using this pattern has enterprise-scale blast radius.
-
-The 13 controls in this profile address these conditions as a unified posture. Controls MCP-1 through MCP-7 address the foundational supply chain, injection, and transport surfaces established at v3.0 release. Controls MCP-8 through MCP-13 address four threat classes confirmed post-release: API billing amplification, context-tool isolation failure, multi-agent lateral movement, schema mutation, Swarm C2, and failure taxonomy gaps. Both sets are mandatory at their respective ACT tiers.
+</div>
 
 ---
 
+## 📚 Research Foundation
+
+| Resource | Description |
+|----------|-------------|
+| 📄 Research Note 023 | MCP Server Security Profile |
+| 📄 Research Note 024 | MCP Consumer Protection |
+| 🔧 Reference Implementation | AI SAFE² MCP Security Toolkit |
+
+---
+
+## 🚦 Complete Security Control Matrix
+
+|  #  | Security Control                                                                                         | Primary Risk Mitigated        |
+| :-: | -------------------------------------------------------------------------------------------------------- | ----------------------------- |
+|  ✅  | **[MCP-1 — No Dynamic Command Construction](#mcp-1-no-dynamic-command-construction)**                    | Remote Code Execution         |
+|  ✅  | **[MCP-2 — Output Sanitization](#mcp-2-output-sanitization-before-llm-return)**                          | Prompt Injection              |
+|  ✅  | **[MCP-3 — Registry Provenance Verification](#mcp-3-registry-provenance-verification)**                  | Supply Chain                  |
+|  ✅  | **[MCP-4 — STDIO Transport Integrity](#mcp-4-stdio-transport-integrity-binding)**                        | Process Boundary              |
+|  ✅  | **[MCP-5 — Tool Invocation Audit Logging](#mcp-5-tool-invocation-audit-log)**                            | Accountability                |
+|  ✅  | **[MCP-6 — Network Isolation](#mcp-6-mcp-server-network-isolation)**                                     | Lateral Movement              |
+|  ✅  | **[MCP-7 — Zero-Trust Client Configuration](#mcp-7-zero-trust-client-configuration)**                    | Least Privilege               |
+|  ✅  | **[MCP-8 — Session Economics Controls](#mcp-8-session-economics-controls)**                              | API Cost Amplification        |
+|  ✅  | **[MCP-9 — Context-Tool Isolation](#mcp-9-context-tool-isolation)**                                      | Context Poisoning             |
+|  ✅  | **[MCP-10 — Delegation Edge Monitoring](#mcp-10-multi-agent-provenance-and-delegation-edge-monitoring)** | Multi-Agent Trust             |
+|  ✅  | **[MCP-11 — Schema Temporal Profiling](#mcp-11-schema-temporal-profiling)**                              | Schema Mutation               |
+|  ✅  | **[MCP-12 — Swarm C2 Detection Controls](#mcp-12-swarm-c2-detection-controls)**                          | Coordinated Autonomous Agents |
+|  ✅  | **[MCP-13 — Failure Taxonomy Extension](#mcp-13-mcp-failure-mode-taxonomy-extension)**                   | Operational Resilience        |
+
+
+---
+
+## 🏛 ACT Tier Applicability
+
+> **Every higher ACT Tier inherits all controls from the tiers below it.**
+
+| Control | 🟢 ACT-1<br>Foundational | 🔵 ACT-2<br>Managed | 🟣 ACT-3<br>Autonomous | 🔴 ACT-4<br>Critical Infrastructure |
+|----------|:-----------------------:|:------------------:|:----------------------:|:----------------------------------:|
+| MCP-1 | ✅ | ✅ | ✅ | ✅ |
+| MCP-2 | ✅ | ✅ | ✅ | ✅ |
+| MCP-3 | ✅ | ✅ | ✅ | ✅ |
+| MCP-4 | ✅ | ✅ | ✅ | ✅ |
+| MCP-5 | ✅ | ✅ | ✅ | ✅ |
+| MCP-6 | ✅ | ✅ | ✅ | ✅ |
+| MCP-7 | ✅ | ✅ | ✅ | ✅ |
+| MCP-8 | ⬜ | ✅ | ✅ | ✅ |
+| MCP-9 | ⬜ | ✅ | ✅ | ✅ |
+| MCP-10 | ⬜ | ⬜ | ✅ | ✅ |
+| MCP-11 | ⬜ | ⬜ | ✅ | ✅ |
+| MCP-12 | ⬜ | ⬜ | ⬜ | ✅ |
+| MCP-13 | ⬜ | ⬜ | ⬜ | ✅ |
+
+### Tier Definitions
+
+| Tier | Operational Objective |
+|------|-----------------------|
+| 🟢 **ACT-1 — Foundational** | Secure individual AI systems and developer environments. |
+| 🔵 **ACT-2 — Managed** | Secure organizational AI deployments with governance and operational controls. |
+| 🟣 **ACT-3 — Autonomous** | Secure multi-agent systems capable of autonomous task execution and delegation. |
+| 🔴 **ACT-4 — Critical Infrastructure** | Secure mission-critical, regulated, safety-critical, and national security AI deployments. |
+
+---
+
+## 🎯 Threat Coverage
+
+| 🟥 Critical Threats | 🟧 High-Risk Threats | 🟨 Governance Risks |
+|---------------------|----------------------|---------------------|
+| Remote Code Execution | Prompt Injection | Configuration Drift |
+| Supply-Chain Compromise | Context Poisoning | Runtime Visibility |
+| Privilege Escalation | Multi-Agent Delegation | Audit Completeness |
+| Swarm Command & Control | API Billing Abuse | Failure Classification |
+| Schema Mutation | Tool Abuse | Governance Consistency |
+
+---
+
+## 📖 Quick Navigation
+
+| Control | Description |
+|----------|-------------|
+| MCP-1 | No Dynamic Command Construction |
+| MCP-2 | Output Sanitization |
+| MCP-3 | Registry Provenance Verification |
+| MCP-4 | STDIO Transport Integrity |
+| MCP-5 | Tool Invocation Audit Logging |
+| MCP-6 | Network Isolation |
+| MCP-7 | Zero-Trust Client Configuration |
+| MCP-8 | Session Economics Controls |
+| MCP-9 | Context-Tool Isolation |
+| MCP-10 | Delegation Edge Monitoring |
+| MCP-11 | Schema Temporal Profiling |
+| MCP-12 | Swarm C2 Detection Controls |
+| MCP-13 | Failure Taxonomy Extension |
+
+---
+
+## Why this profile exists
+
+Modern Model Context Protocol (MCP) deployments fundamentally change the AI attack surface. Unlike traditional API integrations, MCP servers execute inside an AI agent's trust boundary, where tool responses become trusted model context and server processes often execute as local subprocesses.
+
+The AI SAFE² MCP Security Profile establishes **thirteen mandatory security controls** that collectively defend against remote code execution, prompt injection, supply-chain compromise, context poisoning, schema manipulation, multi-agent lateral movement, autonomous command-and-control behaviors, API billing abuse, and operational governance failures.
+
+---
+
+### Technical Overview
+
+CP.5 requires protocol-layer meshes to be assessed as first-class supply-chain components.
+
+Three architectural characteristics distinguish MCP from every other AI integration model:
+
+- **No network boundary.** MCP's default STDIO transport executes the server as a subprocess of the host agent.
+- **Trusted return-path injection.** Tool responses become trusted LLM context, creating a unique prompt injection surface.
+- **Structural SDK propagation.** Unsafe implementation patterns propagate across downstream implementations built on common SDKs.
+
+Together, the thirteen controls provide a comprehensive security baseline for production MCP deployments across every ACT maturity tier.
+
+---
 ## MCP Controls
 
 ---
