@@ -1,0 +1,155 @@
+# AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime Control Registry
+# AutoGen 0.4 (autogen_agentchat) only. 0.2 = redirect to upgrade.
+# All IDs verified from github.com/CyberStrategyInstitute/ai-safe2-framework
+
+framework_version: "AI SAFE² v3.0"
+package: "autogen-sovereign-runtime"
+package_version: "1.0.0"
+autogen_version: "0.4.x (autogen_agentchat)"
+test_coverage: "15/15"
+
+critical_note: >
+  This is the ONLY package in the sovereign runtime series with a direct RCE surface.
+  CodeExecutorAgent runs code on the host. CP.8 is MANDATORY for this agent type.
+  CodeBlockGuard must scan every code block BEFORE it reaches the executor.
+
+controls:
+
+  - id: P1.T1.2
+    name: "Malicious Prompt Filtering"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: block_catastrophic_only
+      ACT3: block_all_dangerous
+      ACT4: block_all_dangerous
+    implementation_fn: "CodeBlockGuard.protect_code_block — Python + shell patterns"
+    note: "PRIMARY AutoGen surface — scans code before execution, not output"
+    dangerous_python: [eval, exec, __import__, subprocess, os.system, os.popen, shutil.rmtree]
+    dangerous_shell: [rm_rf, sudo, curl_pipe_bash, wget_pipe_bash, dd_zero, shutdown]
+    test_ids: [T1-02, T1-03, T2-04]
+    owasp_llm: LLM01
+    mitre_atlas: AML.T0051
+
+  - id: P1.T1.5
+    name: "Sensitive Data Masking"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "SovereignRuntime.scan_message_content — credential patterns"
+    test_ids: [T1-04]
+
+  - id: P1.T1.10
+    name: "Indirect Injection Surface Coverage"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "SovereignAssistantProxy.on_messages — message content scan"
+    note: "Message handoff chain: AssistantAgent output → CodeExecutorAgent input"
+    test_ids: [T1-01]
+
+  - id: P1.T2.3
+    name: "API Gateway Restrictions"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    implementation_fn: "CodeBlockGuard.scan_network — network patterns in code blocks"
+    note: "Detects requests.get/post, urllib, paramiko in code before execution"
+    test_ids: [T1-05]
+
+  - id: S1.3
+    name: "Semantic Isolation Boundary Enforcement"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    implementation_fn: "SovereignAssistantProxy.on_messages — untrusted message classification"
+    test_ids: [T1-01]
+
+  - id: S1.5
+    name: "Memory Governance Boundary Controls"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.protect_memory_write — agent state governance"
+
+  - id: F3.2
+    name: "Agent Recursion Limit Governor"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_circuit_tripped
+      ACT3: raise_circuit_tripped
+    implementation_fn: "AISAFE2Engine.record_tool_call — message exchange ceiling"
+    test_ids: [T2-01]
+
+  - id: F3.5
+    name: "Multi-Agent Cascade Containment"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.record_chain_error — agent error threshold"
+    test_ids: [T2-03]
+
+  - id: A2.5
+    name: "Semantic Execution Trace Logging"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      all: always_emit
+    implementation_fn: "SovereignAssistantProxy.on_messages — MESSAGE_EXCHANGE event"
+    note: "Async-native: logged in on_messages() before delegation to wrapped agent"
+    test_ids: [T3-03, T3-04]
+
+  - id: M4.5
+    name: "Tool-Misuse Detection Controls"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.record_tool_call — identical call detection"
+    note: "Detects same agent:name with identical message exchange pattern"
+    test_ids: [T2-02]
+
+  - id: P2.T3.6
+    name: "Compliance Validation"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.compliance_report() + SovereignRuntime.get_status()"
+    test_ids: [T3-05]
+
+  - id: CP.3
+    name: "ACT Capability Tiers 1-4"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "ACTTier enum — gates all enforcement decisions"
+    test_ids: [T3-01]
+
+  - id: CP.4
+    name: "Agentic Control Plane Governance"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.register_nhi() in wrap_assistant() + wrap_code_executor()"
+    governance_file: "core/IDENTITY.md"
+    test_ids: [T3-02]
+
+  - id: CP.8
+    name: "Catastrophic Risk Threshold Controls"
+    mandatory_for: CodeExecutorAgent
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: emit_fatal_event_and_block
+      ACT3: emit_fatal_event_and_block
+      ACT4: emit_fatal_event_and_block
+    implementation_fn: "CodeBlockGuard.is_catastrophic() + AISAFE2Engine.emit_cp8_event()"
+    catastrophic_patterns: ["rm -rf /", "dd if=/dev/zero of=/dev/sd*", "kill -9 -1"]
+    note: >
+      MANDATORY for CodeExecutorAgent. Cannot be disabled.
+      CP.8 fires BEFORE P1.T1.2 block for catastrophic patterns.
+      FATAL audit event emitted. Compliance score -20 points.
+    test_ids: [T1-03]
+
+  - id: CP.10
+    name: "HEAR Doctrine"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_class_h_action
+      ACT4: raise_class_h_action
+    implementation_fn: "AISAFE2Engine.check_hear_gate() in protect_code_block()"
+    note: "MANDATORY for ACT-3+ when CodeExecutorAgent is present"
+    test_ids: [T2-05]
