@@ -1,0 +1,11 @@
+# AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime
+# AutoGen 0.4 ONLY. 0.2 is end-of-life — upgrade.
+# Enforcement engine: stdlib only, no external deps.
+
+# AutoGen 0.4 (autogen_agentchat)
+autogen-agentchat>=0.4.0
+autogen-core>=0.4.0
+
+# Code executor (choose one based on your isolation requirements)
+# autogen-ext[docker]>=0.4.0   # Docker-isolated execution (recommended for prod)
+# autogen-ext[local]>=0.4.0    # Local execution (dev only)
