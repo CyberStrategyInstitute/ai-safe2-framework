@@ -1,0 +1,154 @@
+# AI SAFE² v3.0 — CrewAI Sovereign Runtime Control Registry
+# All IDs verified from github.com/CyberStrategyInstitute/ai-safe2-framework
+
+framework_version: "AI SAFE² v3.0"
+package: "crewai-sovereign-runtime"
+package_version: "1.0.0"
+test_coverage: "15/15"
+
+controls:
+
+  - id: P1.T1.2
+    name: "Malicious Prompt Filtering"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+      ACT4: raise_violation
+    implementation_fn: "AgentGuard.validate_agent_identity — role/goal/backstory scan"
+    note: "PRIMARY CrewAI surface: scans at agent CONSTRUCTION time, not call time"
+    test_ids: [T1-01, T1-02]
+    owasp_llm: LLM01
+    mitre_atlas: AML.T0051
+
+  - id: P1.T1.5
+    name: "Sensitive Data Masking"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "TaskContextGuard.scan_task_output — credential patterns"
+    test_ids: [T1-04]
+
+  - id: P1.T1.10
+    name: "Indirect Injection Surface Coverage"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "SovereignCrew.protect_task_output — task cascade boundary"
+    note: "Scans task output BEFORE it cascades into downstream task context"
+    test_ids: [T1-03]
+    owasp_llm: LLM01
+    mitre_atlas: AML.T0051
+
+  - id: P1.T2.3
+    name: "API Gateway Restrictions"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_violation
+      ACT3: raise_violation
+    implementation_fn: "AISAFE2Engine.check_domain — via _wrap_tool() on agent tools"
+    test_ids: [T2-04]
+
+  - id: S1.3
+    name: "Semantic Isolation Boundary Enforcement"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "TaskContextGuard.scan_task_output — untrusted data-plane classification"
+    note: "Task output = untrusted data-plane. Must be scanned before entering next task context."
+    test_ids: [T1-05]
+
+  - id: S1.5
+    name: "Memory Governance Boundary Controls"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_violation
+    implementation_fn: "SovereignCrew.protect_task_output — gate before context write"
+    test_ids: [T1-03]
+
+  - id: F3.2
+    name: "Agent Recursion Limit Governor"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_circuit_tripped
+      ACT3: raise_circuit_tripped
+    implementation_fn: "AISAFE2Engine.record_tool_call — task:name ceiling"
+    test_ids: [T2-01]
+
+  - id: F3.5
+    name: "Multi-Agent Cascade Containment"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_circuit_tripped
+    implementation_fn: "AISAFE2Engine.record_chain_error — task error threshold"
+    test_ids: [T2-03]
+
+  - id: A2.5
+    name: "Semantic Execution Trace Logging"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    enforcement_mode:
+      all: always_emit
+    implementation_fn: "protect_task_output — TASK_OUTPUT_AUTHORIZED event + output hash"
+    test_ids: [T3-03]
+
+  - id: M4.5
+    name: "Tool-Misuse Detection Controls"
+    status: active
+    act_tiers: [ACT2, ACT3, ACT4]
+    enforcement_mode:
+      ACT2: raise_circuit_tripped
+      ACT3: raise_circuit_tripped
+    implementation_fn: "SovereignCrew._task_call_counts — per-task repetition ceiling"
+    test_ids: [T2-02]
+
+  - id: P2.T3.6
+    name: "Compliance Validation"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.compliance_report() + SovereignCrew.get_status()"
+    test_ids: [T3-05]
+
+  - id: CP.3
+    name: "ACT Capability Tiers 1-4"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "ACTTier enum — gates all enforcement decisions"
+    test_ids: [T3-01]
+
+  - id: CP.4
+    name: "Agentic Control Plane Governance"
+    status: active
+    act_tiers: [ACT1, ACT2, ACT3, ACT4]
+    implementation_fn: "AISAFE2Engine.register_nhi() — called in wrap_agent()"
+    note: "Every wrapped agent is registered as an NHI with tool inventory"
+    governance_file: "core/IDENTITY.md"
+    test_ids: [T3-02]
+
+  - id: CP.8
+    name: "Catastrophic Risk Threshold Controls"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: emit_fatal_event
+      ACT4: emit_fatal_event
+    implementation_fn: "AISAFE2Engine.emit_cp8_event() — FATAL severity, -20 compliance score"
+    note: "CrewAI orchestrators can initiate cross-org or irreversible actions — CP.8 is the tripwire"
+    test_ids: [T2-05]
+
+  - id: CP.10
+    name: "HEAR Doctrine"
+    status: active
+    act_tiers: [ACT3, ACT4]
+    enforcement_mode:
+      ACT3: raise_class_h_action
+      ACT4: raise_class_h_action
+    implementation_fn: "AISAFE2Engine.check_hear_gate() — called in protect_task_output()"
+    test_ids: [T3-04]
