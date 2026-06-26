@@ -1,0 +1,8 @@
+# AI SAFE² v3.0 — CrewAI Sovereign Runtime
+# Enforcement engine has ZERO external dependencies (stdlib only).
+
+# CrewAI — required for production use with real Crew/Agent/Task objects
+crewai>=0.70.0
+
+# Optional: LangChain tool compatibility (CrewAI supports LangChain tools)
+# langchain-core>=0.3.0,<0.4.0
