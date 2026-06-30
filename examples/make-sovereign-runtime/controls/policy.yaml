@@ -1,0 +1,192 @@
+# controls/policy.yaml
+# AI SAFE2 v3.0 Control Registry — Make.com Sovereign Runtime
+# Cyber Strategy Institute
+#
+# Source verification:
+#   help.make.com/manage-ai-agents       → MK-INST, MK-SCEN
+#   help.make.com/knowledge              → MK-KNOW (RAG, chunking, file types)
+#   developers.make.com/mcp-server       → MK-MCP (scopes, management tools)
+#   help.make.com/data-stores            → MK-DS
+
+runtime:
+  name: make-sovereign-runtime
+  framework_version: "3.0"
+  platform: Make.com (visual automation canvas + AI Agents + MCP Server)
+  act_tier: ACT-3   # Autonomous — agents chain modules with 3000+ connectors
+  hear_required: true
+  cp9_required: false   # Make agents do not spawn sub-agents
+  aism_level: 4
+  unique_architecture: >
+    Make is a visual no-code canvas where automation logic is built by
+    connecting modules in sequence. AI Agents live inside this canvas
+    with access to 3000+ app connectors. The MCP Server exposes every
+    active scenario as a callable tool for external LLMs (Claude, ChatGPT).
+    Every surface is a different entry point for an attack that travels
+    silently down the module chain.
+
+surfaces:
+  - id: MK-WHK
+    name: Webhook Payload Injection
+    description: >
+      Any external system can POST arbitrary JSON to a Make webhook.
+      Make has no built-in input validation. The recursive scanner is
+      critical — a flat string scan misses payload.customer.notes.nested_injection.
+      Restricted operation strings ("delete scenario", "disable scenario")
+      must also be detected in payload fields.
+    method: scan_webhook_payload()
+    controls:
+      - {id: P1.T1.2,    pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10,   pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.4_ADV, pillar: P1, severity: CRITICAL}
+      - {id: S1.3,       pillar: P1, severity: CRITICAL}
+      - {id: P3.T5.5,    pillar: P3, severity: HIGH}
+    attack_chain: >
+      External system POSTs JSON to Make webhook. Payload field contains
+      injection or restricted operation. AI Agent module downstream
+      processes the injected field. Agent follows instructions or
+      triggers a destructive connector action.
+
+  - id: MK-SCEN
+    name: Module Output Chain Gate
+    description: >
+      Make chains modules — output of module 3 is input to module 4.
+      Untrusted email or Slack content retrieved in module 2 can reach
+      an AI Agent in module 5 carrying injected instructions.
+      The SilentBridge pattern: external content → AI Agent → Gmail send.
+    method: scan_module_output()
+    controls:
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: S1.3,     pillar: P1, severity: CRITICAL}
+      - {id: P4.T7.1,  pillar: P4, severity: HIGH}
+      - {id: F3.2,     pillar: P3, severity: HIGH}
+    attack_chain: >
+      Gmail MCP retrieves external email (module 2). Email contains
+      hidden instructions. AI Agent (module 5) processes email content
+      — injection survived module chaining. Agent triggers Gmail connector
+      to send all emails to attacker. SilentBridge pattern on Make canvas.
+
+  - id: MK-HTTP
+    name: HTTP Module Domain Restriction
+    description: >
+      Make's HTTP module has no built-in domain allowlist. When triggered
+      by external content, it is a direct SSRF or exfiltration vector.
+      Private IP ranges (10.x, 172.16-31.x, 192.168.x) accessible from
+      Make's execution environment. DELETE/PATCH methods during
+      external-content context require special scrutiny.
+    method: scan_http_module()
+    controls:
+      - {id: P1.T2.5, pillar: P1, severity: CRITICAL}
+      - {id: S1.3,    pillar: P1, severity: CRITICAL}
+      - {id: M4.5,    pillar: P4, severity: CRITICAL}
+      - {id: P4.T7.1, pillar: P4, severity: HIGH}
+    ssrf_blocked_ranges:
+      - 10.0.0.0/8
+      - 172.16.0.0/12
+      - 192.168.0.0/16
+      - 127.0.0.0/8
+      - 169.254.0.0/16
+      - localhost
+
+  - id: MK-INST
+    name: AI Agent Instruction Field
+    description: >
+      The agent's instruction field (system prompt) defines its purpose
+      and constraints for EVERY run. Instructions are shared across all
+      team members. One poisoned instruction save affects ALL future
+      invocations of that agent — persistent account-wide contamination.
+    method: scan_agent_instructions()
+    source_verification: help.make.com/manage-ai-agents
+    controls:
+      - {id: P1.T1.2,  pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: S1.3,     pillar: P1, severity: CRITICAL}
+      - {id: S1.5,     pillar: P1, severity: HIGH}
+
+  - id: MK-KNOW
+    name: Knowledge File RAG Injection
+    description: >
+      Confirmed from live docs: Knowledge files are chunked and converted
+      to vectors in a RAG database. The agent retrieves only relevant chunks
+      — meaning a covertly injected chunk may be retrieved selectively.
+      Hidden Unicode (U+200B/U+200C/FEFF) is invisible in the Make UI
+      and standard diff views, but is included in the vector representation
+      and readable by the LLM during retrieval.
+      Supported file types: txt, pdf, docx, csv, md, json.
+    method: scan_knowledge_file()
+    source_verification: help.make.com/knowledge
+    controls:
+      - {id: P1.T1.2,  pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: S1.5,     pillar: P1, severity: CRITICAL}
+      - {id: S1.6,     pillar: P1, severity: HIGH}
+    hidden_unicode_detected:
+      - "U+200B (zero-width space)"
+      - "U+200C (zero-width non-joiner)"
+      - "U+200D (zero-width joiner)"
+      - "U+FEFF (byte order mark)"
+      - "U+00AD (soft hyphen)"
+      - "U+2028/U+2029 (line/paragraph separator)"
+
+  - id: MK-MCP
+    name: MCP Server Scope and Scenario Allowlist
+    description: >
+      Confirmed from live Make MCP docs: Make MCP Server allows LLMs to
+      "run scenarios and manage the contents of your Make account."
+      Management scopes include "View and modify teams and organizations."
+      scenarios:write without a scenario allowlist = LLM can delete/modify
+      ALL scenarios in the account. organizations:write = full account
+      takeover. Scenario run tools available to all plans; management tools
+      require paid plans but carry the highest blast radius.
+    method: scan_mcp_scope()
+    source_verification: developers.make.com/mcp-server
+    controls:
+      - {id: P1.T2.5, pillar: P1, severity: CRITICAL}
+      - {id: CP.4,    pillar: CP, severity: HIGH}
+      - {id: M4.5,    pillar: P4, severity: CRITICAL}
+    critical_scopes:
+      - "teams:write (full team management)"
+      - "organizations:write (full account takeover)"
+      - "users:write (user management)"
+    high_risk_scopes:
+      - "scenarios:write (modify all scenarios)"
+      - "connections:write (modify all integrations)"
+      - "data-stores:write (cross-run contamination)"
+
+  - id: MK-DS
+    name: Data Store Write (Cross-Run Contamination)
+    description: >
+      Make Data Stores persist between scenario runs. An AI agent writing
+      a poisoned value to a Data Store contaminates all future scenario
+      executions that read that key — cross-run contamination that survives
+      scenario restarts and is shared across all team members with access.
+      Sensitive key names (api_key, secret, token) and injection patterns
+      in values are the primary risk vectors.
+    method: scan_data_store_write()
+    controls:
+      - {id: P1.T2.5, pillar: P1, severity: HIGH}
+      - {id: S1.5,    pillar: P1, severity: HIGH}
+
+nexus_integration:
+  shared_engine: true
+  love_equation:
+    max_score: 100.0
+    deduction_per_violation: 2.0
+    green_threshold: 80.0
+    yellow_threshold: 60.0
+    red_threshold: 0.0
+  external_context_tracking: true
+  audit_chain: sha256_jsonl
+  siem_format: jsonl
+
+compliance_frameworks:
+  - NIST AI RMF
+  - ISO 42001
+  - OWASP AIVSS v0.8
+  - OWASP LLM Top 10 (LLM01 Prompt Injection)
+  - OWASP Agentic Top 10
+  - MITRE ATLAS (AML.T0051)
+  - EU AI Act
+  - SOC 2 (CC.6.1, CC.7.2)
+  - CMMC 2.0
+  - FedRAMP
+  - Zero Trust

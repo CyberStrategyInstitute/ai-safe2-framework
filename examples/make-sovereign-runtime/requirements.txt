@@ -1,0 +1,11 @@
+# requirements.txt — Make.com Sovereign Runtime
+# AI SAFE2 v3.0 | Cyber Strategy Institute
+#
+# enforcement/ is stdlib-only. No install required for core enforcement.
+# All scanning uses Python standard library only.
+
+# ── Optional: Make API integration ───────────────────────────
+# httpx>=0.27.0       # For Make API calls with AI SAFE2 pre-scan
+
+# ── Development only ─────────────────────────────────────────
+# pytest>=8.0.0       # pytest smoke_test.py -v
