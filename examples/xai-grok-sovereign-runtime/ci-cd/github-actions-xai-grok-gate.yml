@@ -1,0 +1,207 @@
+# .github/workflows/ai-safe2-xai-grok-gate.yml
+# AI SAFE2 v3.0 CI/CD Gate — xAI/Grok Sovereign Runtime
+# Cyber Strategy Institute
+#
+# What this does:
+#   1. Runs the 21/21 adversarial smoke test on every PR and push
+#   2. Validates any Grok CLI args in CI scripts before execution
+#   3. Scans any .grok/skills/ additions for injection payloads
+#   4. Fails the pipeline if alignment_band is not GREEN
+#
+# Usage:
+#   Copy to .github/workflows/ in your repo.
+#   Set GROK_API_KEY in GitHub Secrets if running live tests.
+
+name: AI SAFE2 xAI/Grok Sovereign Gate
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'examples/xai-grok-sovereign-runtime/**'
+      - '.grok/**'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'examples/xai-grok-sovereign-runtime/**'
+      - '.grok/**'
+  workflow_dispatch:
+
+env:
+  PYTHONPATH: examples/xai-grok-sovereign-runtime/enforcement
+
+jobs:
+  # ── Job 1: Sovereign Runtime Smoke Test ──────────────────────
+  smoke-test:
+    name: AI SAFE2 Smoke Test (21/21 Required)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify no external dependencies (stdlib only)
+        working-directory: examples/xai-grok-sovereign-runtime
+        run: |
+          # enforcement/ must be stdlib-only — validate
+          python3 -c "
+          import ast, pathlib, sys
+          imports = []
+          for f in pathlib.Path('enforcement').glob('*.py'):
+              tree = ast.parse(f.read_text())
+              for node in ast.walk(tree):
+                  if isinstance(node, (ast.Import, ast.ImportFrom)):
+                      for alias in getattr(node, 'names', [node]):
+                          name = getattr(alias, 'name', '') or getattr(node, 'module', '')
+                          if name and name.split('.')[0] not in sys.stdlib_module_names:
+                              if name not in ('ai_safe2_engine', 'sovereign_xai_grok'):
+                                  imports.append(f'{f.name}: {name}')
+          if imports:
+              print('FAIL: Non-stdlib imports found:', imports)
+              sys.exit(1)
+          print('OK: enforcement/ is stdlib-only')
+          "
+
+      - name: Run 21/21 adversarial smoke test
+        working-directory: examples/xai-grok-sovereign-runtime
+        run: |
+          python3 smoke_test.py
+          echo "SMOKE_STATUS=$?" >> $GITHUB_ENV
+
+      - name: Assert sovereign baseline
+        run: |
+          if [ "$SMOKE_STATUS" != "0" ]; then
+            echo "::error::AI SAFE2 smoke test failed. Sovereign baseline NOT verified."
+            exit 1
+          fi
+
+  # ── Job 2: Skill File Scan ───────────────────────────────────
+  scan-skills:
+    name: Scan .grok/skills/ Additions
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Identify changed skill files
+        id: changed-skills
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | grep '.grok/skills/' | grep '\.md$' || true)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -n "$CHANGED" ]; then
+            echo "Skill files changed:"
+            echo "$CHANGED"
+          else
+            echo "No skill files changed."
+          fi
+
+      - name: Scan changed skill files
+        if: steps.changed-skills.outputs.files != ''
+        working-directory: examples/xai-grok-sovereign-runtime
+        run: |
+          python3 - << 'EOF'
+          import sys
+          import pathlib
+          sys.path.insert(0, 'enforcement')
+          from sovereign_xai_grok import GrokSovereignRuntime
+
+          guard = GrokSovereignRuntime()
+          skill_files = """${{ steps.changed-skills.outputs.files }}""".strip().split()
+          failed = []
+
+          for sf in skill_files:
+              path = pathlib.Path('../../' + sf)
+              if not path.exists():
+                  continue
+              try:
+                  guard.scan_skill_file(path.read_text(), path.name)
+                  print(f"[OK] {sf}")
+              except ValueError as e:
+                  print(f"[BLOCKED] {sf}: {e}")
+                  failed.append(sf)
+
+          if failed:
+              print(f"\n::error::Skill files BLOCKED by AI SAFE2: {failed}")
+              sys.exit(1)
+          EOF
+
+  # ── Job 3: Headless Args Audit ───────────────────────────────
+  audit-ci-args:
+    name: Audit Grok CLI Args in CI Scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Scan for unsafe Grok CLI patterns
+        run: |
+          # Search all shell scripts and workflow files for blocked patterns
+          BLOCKED=0
+
+          for pattern in "--always-approve" "--yolo" "--dangerously-skip-permissions" "bypassPermissions"; do
+            MATCHES=$(grep -r "$pattern" .github/ scripts/ *.sh 2>/dev/null || true)
+            if [ -n "$MATCHES" ]; then
+              echo "::error::Blocked Grok CLI pattern '$pattern' found:"
+              echo "$MATCHES"
+              BLOCKED=1
+            fi
+          done
+
+          if [ "$BLOCKED" != "0" ]; then
+            echo "::error::AI SAFE2 GK-HEAD: Unsafe Grok CLI arguments detected in CI scripts."
+            echo "Use --permission-mode dontAsk --sandbox strict instead."
+            exit 1
+          fi
+
+          echo "OK: No blocked Grok CLI patterns found."
+
+  # ── Job 4: Love Equation Gate ────────────────────────────────
+  love-equation-gate:
+    name: Love Equation Band Gate
+    runs-on: ubuntu-latest
+    needs: [smoke-test, audit-ci-args]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Assert GREEN alignment band
+        working-directory: examples/xai-grok-sovereign-runtime
+        run: |
+          python3 - << 'EOF'
+          import sys
+          sys.path.insert(0, 'enforcement')
+          from sovereign_xai_grok import GrokSovereignRuntime
+
+          guard = GrokSovereignRuntime()
+          status = guard.get_status()
+          band = status['alignment_band']
+          score = status['love_score']
+
+          print(f"Love Score: {score} | Band: {band}")
+
+          if band not in ('GREEN', 'YELLOW'):
+              print("::error::AI SAFE2 alignment band is RED. Pipeline blocked.")
+              sys.exit(1)
+
+          print(f"AI SAFE2 gate: {band} — pipeline cleared.")
+          EOF

@@ -1,0 +1,207 @@
+# controls/policy.yaml
+# AI SAFE2 v3.0 Control Registry — xAI/Grok Sovereign Runtime
+# Cyber Strategy Institute
+#
+# Machine-readable surface → control mapping.
+# Import into SIEM, policy engines, or NEXUS dashboard.
+# All control IDs verified against live AI SAFE2 v3.0 framework.
+
+runtime:
+  name: xai-grok-sovereign-runtime
+  framework_version: "3.0"
+  platform: xAI Grok (CLI + API + Multi-Agent)
+  act_tier: ACT-3   # Autonomous — post-hoc review; HEAR required
+  hear_required: true
+  cp9_required: true  # Can spawn sub-agents (multi-agent mode)
+  aism_level: 4
+
+surfaces:
+  - id: GK-SKILL
+    name: Skill File Injection
+    description: >
+      Skill .md files inject into every future session context.
+      One poisoned skill = persistent indirect prompt injection
+      on every Grok session until manually removed.
+    method: scan_skill_file()
+    controls:
+      - id: P1.T1.2
+        pillar: P1
+        name: Malicious Prompt Filtering
+        severity: CRITICAL
+      - id: P1.T1.10
+        pillar: P1
+        name: Indirect Injection Surface Coverage
+        severity: CRITICAL
+      - id: P1.T1.4_ADV
+        pillar: P1
+        name: NHI Secret Validation
+        severity: CRITICAL
+      - id: S1.3
+        pillar: P1
+        name: Semantic Isolation Boundary Enforcement
+        severity: CRITICAL
+      - id: S1.6
+        pillar: P1
+        name: Cognitive Injection Sanitization (hidden unicode)
+        severity: HIGH
+    attack_chain: >
+      Attacker distributes a .md file via GitHub, npm, or social engineering.
+      Developer installs to .grok/skills/. On next Grok session: skill
+      content is injected into system context. Agent follows embedded
+      instructions silently across all subsequent requests.
+
+  - id: GK-HOOK
+    name: Hook Script Exfiltration
+    description: >
+      Hooks receive GROK_HOOK_EVENT, GROK_SESSION_ID, and
+      GROK_WORKSPACE_ROOT as environment variables and execute before/after
+      every tool call. A curl command in a hook script = silent exfiltration
+      of every tool input and output for the entire session.
+    method: scan_hook_script()
+    controls:
+      - id: P1.T1.10
+        pillar: P1
+        name: Indirect Injection Surface Coverage
+        severity: CRITICAL
+      - id: M4.5
+        pillar: P4
+        name: Tool-Misuse Detection Controls
+        severity: CRITICAL
+      - id: P1.T1.4_ADV
+        pillar: P1
+        name: NHI Secret Validation
+        severity: CRITICAL
+    attack_chain: >
+      Malicious hook distributed via tutorial, dotfile repo, or supply chain.
+      Before any tool call: hook runs and sends $GROK_HOOK_EVENT to attacker
+      C2. Complete session exfiltration with zero agent awareness.
+
+  - id: GK-PERM
+    name: Permission Mode Hardening
+    description: >
+      permission_mode = "always-approve" in ~/.grok/config.toml disables
+      ALL human-in-the-loop prompts organization-wide. The only safe
+      location for this setting is /etc/grok/requirements.toml
+      (root-owned, tamper-resistant).
+    method: scan_config()
+    controls:
+      - id: CP.10
+        pillar: CP
+        name: HEAR Doctrine (named kill-switch authority)
+        severity: CRITICAL
+      - id: P3.T5.2
+        pillar: P3
+        name: Emergency Shutdown (operator kill switches)
+        severity: CRITICAL
+      - id: P1.T2.5
+        pillar: P1
+        name: Function Access Control
+        severity: HIGH
+    attack_chain: >
+      IPI instructs agent to write always-approve to ~/.grok/config.toml.
+      All future sessions: zero HITL, full autonomous tool execution.
+      Persists across reboots until manually detected and removed.
+
+  - id: GK-SAND
+    name: Sandbox Profile Enforcement
+    description: >
+      Grok has five sandbox profiles (off, workspace, devbox, read-only, strict).
+      A sandbox.toml with extends = "off" drops all write restrictions.
+      This surface enforces a minimum profile floor that cannot be downgraded.
+    method: scan_sandbox_profile()
+    controls:
+      - id: P1.T2.1
+        pillar: P1
+        name: Agent Sandboxing
+        severity: CRITICAL
+      - id: F3.2
+        pillar: P3
+        name: Agent Recursion Limit Governor
+        severity: CRITICAL
+    sandbox_floor: workspace
+    profiles_ordered: ["off", "workspace", "devbox", "read-only", "strict"]
+
+  - id: GK-MULTI
+    name: Multi-Agent Request Validation
+    description: >
+      grok-4.x-multi-agent runs 4–16 sub-agents in parallel from a single
+      leader prompt. One injection in the leader propagates to ALL sub-agents
+      simultaneously. The code_execution built-in tool runs server-side
+      with no client-controlled sandbox.
+    method: scan_multi_agent_request()
+    controls:
+      - id: S1.3
+        pillar: P1
+        name: Semantic Isolation Boundary Enforcement
+        severity: CRITICAL
+      - id: P1.T2.5
+        pillar: P1
+        name: Function Access Control (tool allowlist)
+        severity: CRITICAL
+      - id: F3.2
+        pillar: P3
+        name: Agent Recursion Limit Governor (turn ceiling)
+        severity: CRITICAL
+      - id: CP.9
+        pillar: CP
+        name: Agent Replication Governance
+        severity: HIGH
+    blocked_tools: ["code_execution", "computer_use", "bash", "shell"]
+    max_agent_count: 4
+    max_turns: 50
+
+  - id: GK-HEAD
+    name: Headless/CI Argument Hardening
+    description: >
+      grok -p "..." --always-approve in CI = zero HITL, full autonomous
+      tool execution. AI SAFE2 rule: headless CI must use
+      --permission-mode dontAsk with explicit narrow --allow rules
+      plus --sandbox strict.
+    method: scan_headless_args()
+    controls:
+      - id: CP.10
+        pillar: CP
+        name: HEAR Doctrine
+        severity: CRITICAL
+      - id: P3.T5.2
+        pillar: P3
+        name: Emergency Shutdown
+        severity: CRITICAL
+      - id: F3.2
+        pillar: P3
+        name: Agent Recursion Limit Governor
+        severity: HIGH
+      - id: P1.T2.1
+        pillar: P1
+        name: Agent Sandboxing
+        severity: HIGH
+    blocked_flags: ["--always-approve", "--yolo", "--dangerously-skip-permissions"]
+    blocked_values: ["bypassPermissions", "alwaysAllow", "always-approve"]
+    safe_pattern: >
+      grok -p "..." --permission-mode dontAsk --sandbox strict
+        --allow "Bash(git *)" --allow "Read" --allow "Bash(npm test)"
+
+nexus_integration:
+  shared_engine: true
+  love_equation:
+    max_score: 100.0
+    deduction_per_violation: 2.0
+    green_threshold: 80.0
+    yellow_threshold: 60.0
+    red_threshold: 0.0
+  audit_chain: sha256_jsonl
+  siem_format: jsonl
+  audit_log_path: reports/
+
+compliance_frameworks:
+  - NIST AI RMF
+  - ISO 42001
+  - OWASP AIVSS v0.8
+  - OWASP LLM Top 10 (LLM01 Prompt Injection)
+  - OWASP Agentic Top 10
+  - MITRE ATLAS (AML.T0051)
+  - EU AI Act
+  - SOC 2 (CC.6.1, CC.6.2)
+  - CMMC 2.0
+  - FedRAMP
+  - Zero Trust
