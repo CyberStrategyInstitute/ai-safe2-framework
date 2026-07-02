@@ -1,0 +1,24 @@
+# requirements.txt — xAI/Grok Sovereign Runtime
+# AI SAFE2 v3.0 | Cyber Strategy Institute
+#
+# The enforcement/ package (ai_safe2_engine.py + sovereign_xai_grok.py)
+# is stdlib-only. No install required for core enforcement.
+#
+# Optional: install xAI SDK and OpenAI-compatible client if running
+# live Grok API calls. The sovereign runtime wraps either.
+
+# ── Optional: xAI SDK ─────────────────────────────────────────
+# Uncomment when running live Grok API calls:
+# xai-sdk>=0.0.1            # xAI official SDK (if released)
+# openai>=1.0.0             # OpenAI-compatible client for Grok API
+
+# ── Optional: mTLS enterprise setup ──────────────────────────
+# httpx[http2]>=0.27.0      # For mTLS client (see integrations/mtls-enterprise.md)
+
+# ── CI/CD: YAML linting ──────────────────────────────────────
+# pyyaml>=6.0.1             # For policy.yaml validation in CI
+
+# ── Development only ─────────────────────────────────────────
+# pytest>=8.0.0             # Run: pytest smoke_test.py -v
+
+# Zero runtime dependencies for enforcement/. Deploy with confidence.
