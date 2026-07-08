@@ -1,3 +1,6 @@
+<!-- stack: Claude Code -->
+<!-- description: Hardens agentic coding sessions against unsafe tool execution, scope creep, and drift. -->
+
 <div align="center">
 <img src="/assets/Engineering-External-Security-Guardrails.png" alt="Claude Code Sovereign Runtime Defense" width="100%" />
 </div>
