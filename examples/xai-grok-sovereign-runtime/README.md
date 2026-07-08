@@ -29,7 +29,7 @@ specific xAI capability that creates it and the AI SAFE2 v3.0 control that block
 | Surface | xAI/Grok-Specific Threat | AI SAFE2 Control | Method |
 |---|---|---|---|
 | **GK-SKILL** | Skill `.md` files inject into every future session context permanently | `P1.T1.10`, `S1.3` | `scan_skill_file()` |
-| **GK-HOOK** | Hook receives `$GROK_HOOK_EVENT` — exfiltrates every tool I/O silently | `P1.T1.10`, `M4.5` | `scan_hook_script()` |
+| **GK-HOOK** | Hook receives `$GROK_HOOK_EVENT` — exfiltrates every tool I/O silently | `P1.T1.10`, `M4.5` | `scan_hook_script()` · `scan_hook_json()` |
 | **GK-PERM** | `always-approve` in `~/.grok/config.toml` disables all HITL org-wide | `CP.10`, `P3.T5.2` | `scan_config()` |
 | **GK-SAND** | Sandbox profile downgrade → `off` drops all write restrictions | `P1.T2.1`, `F3.2` | `scan_sandbox_profile()` |
 | **GK-MULTI** | Leader prompt fans to 16 sub-agents; `code_execution` runs server-side | `S1.3`, `F3.2`, `CP.9` | `scan_multi_agent_request()` |
@@ -145,9 +145,13 @@ examples/xai-grok-sovereign-runtime/
 │
 ├── reports/                        Audit logs (gitignore this directory)
 │
-├── smoke_test.py                   21/21 adversarial test suite
+├── smoke_test.py                   23/23 adversarial test suite (incl. field-validated cases)
 ├── requirements.txt                stdlib-only; optional SDK listed
 ├── QUICKSTART.md
+├── QUICKSTART-WINDOWS.md           PowerShell / Windows operator guide
+├── field-reports/                  Independent field test reports
+│   ├── TEMPLATE.md
+│   └── 2026-07-08-grok-usb-memory-sync.md
 └── README.md
 ```
 
@@ -161,7 +165,7 @@ cd examples/xai-grok-sovereign-runtime
 
 # 2. Verify baseline
 PYTHONPATH=enforcement python3 smoke_test.py
-# Expected: 21/21 -- SOVEREIGN BASELINE VERIFIED
+# Expected: 23/23 -- SOVEREIGN BASELINE VERIFIED
 
 # 3. Integrate — one line
 from enforcement.sovereign_xai_grok import GrokSovereignRuntime
@@ -266,6 +270,28 @@ These surfaces exist but are not yet enforced by this package (documented for tr
 1. **Grok Web UI** — Browser-based Grok sessions bypass CLI enforcement entirely. Enforce at the enterprise network layer or use xAI's enterprise SAML SSO with `requirements.toml`.
 2. **xAI API direct calls** — If your code calls `api.x.ai` directly without going through `sovereign_xai_grok.py`, the enforcement is bypassed. Use the mTLS gateway pattern in `integrations/mtls-enterprise.md` to close this gap.
 3. **Sandbox custom profiles** — `sandbox.toml` files with `extends = "workspace"` that add overly broad allow-rules are not deeply parsed. Validated profiles are the named standard profiles only.
+
+---
+
+## Field Deployments
+
+### Production-adjacent validation · July 8, 2026
+**Operator:** Daniel J. Comp · Intelligent Netware / Scotomaville  
+**Platform:** Lenovo IdeaPad (Windows/PowerShell) · Grok Build  
+**Artifact:** USB memory sync hook — `SessionStart` pull / `SessionEnd` push via robocopy  
+
+**Results:**
+- Smoke test: `21/21 SOVEREIGN BASELINE VERIFIED`
+- Custom artifact scan: `4/4` artifacts passed
+- Real finding caught: pre-existing `permission_mode = "always-approve"` in `config.toml` — blocked before propagation to multi-client production machine
+- Love Score before fix: `98.0 GREEN` · After fix: `100.0 GREEN`
+
+**Key validation:** GK-HOOK produces zero false positives on legitimate lifecycle automation (local robocopy, no network egress) while GK-PERM catches real operational config drift. This is HEAR Doctrine in practice.
+
+> *"The scanner blocked the stack from being declared compliant until config was corrected. That is HEAR Doctrine in practice: named authority before autonomous tool execution."*
+> — Daniel J. Comp, Carbon Steward
+
+[Full report → `field-reports/2026-07-08-grok-usb-memory-sync.md`](./field-reports/2026-07-08-grok-usb-memory-sync.md)
 
 ---
 

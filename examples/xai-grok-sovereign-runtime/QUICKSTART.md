@@ -15,7 +15,7 @@ cd examples/xai-grok-sovereign-runtime
 
 ```bash
 PYTHONPATH=enforcement python3 smoke_test.py
-# Expected: 21/21 -- SOVEREIGN BASELINE VERIFIED
+# Expected: 23/23 -- SOVEREIGN BASELINE VERIFIED
 ```
 
 ## Step 3: Integrate (pick your surface)
@@ -50,16 +50,18 @@ except ValueError as e:
 EOF .grok/skills/myskill/SKILL.md
 ```
 
-### Before Installing a Hook
+### Before Installing a Hook JSON Definition
+
 ```python
 from pathlib import Path
 from enforcement.sovereign_xai_grok import GrokSovereignRuntime
 
 guard = GrokSovereignRuntime()
 
-# Validate before writing to .grok/hooks/
-hook_content = Path(".grok/hooks/pre-tool.sh").read_text()
-guard.scan_hook_script(hook_content, event="before_tool_use")
+# Validate hook JSON before writing to .grok/hooks/
+hook_json = Path(".grok/hooks/memory-usb-sync.json").read_text()
+guard.scan_hook_json(hook_json, "memory-usb-sync.json")
+# Scans command, args, script, run, exec, cmd fields automatically
 ```
 
 ### Multi-Agent Research
@@ -127,6 +129,13 @@ cp .grok/skills/ai-safe2/SKILL.md ~/.grok/skills/ai-safe2/SKILL.md
 ```
 
 The `/ai-safe2 status` and `/ai-safe2 report` commands will be available in every Grok session.
+
+---
+
+## Windows / PowerShell Operators
+
+See [`QUICKSTART-WINDOWS.md`](./QUICKSTART-WINDOWS.md) for PowerShell-native
+scan patterns, sparse clone steps, and the hook JSON scan workflow on Windows.
 
 ---
 

@@ -7,6 +7,7 @@ Six unique enforcement surfaces not found in other runtimes:
 
   GK-SKILL   Skill .md injected into every session context (P1.T1.10, S1.3)
   GK-HOOK    Hook receives GROK_HOOK_EVENT — silent exfil vector (P1.T1.10, M4.5)
+             Hook JSON definitions (.grok/hooks/*.json) are also a scan surface
   GK-PERM    always-approve disables all HITL org-wide (CP.10, P3.T5.2)
   GK-SAND    Sandbox profile downgrade → off (P1.T2.1, F3.2)
   GK-MULTI   Leader prompt fans to 16 sub-agents (S1.3, F3.2, CP.9)
@@ -27,6 +28,9 @@ Usage:
   # Before installing any hook:
   guard.scan_hook_script(Path(".grok/hooks/pre-tool.sh").read_text(), event="before_tool_use")
 
+  # Before installing a JSON hook definition:
+  guard.scan_hook_json(Path(".grok/hooks/memory-usb-sync.json").read_text(), "memory-usb-sync.json")
+
   # Before writing any config:
   guard.scan_config(Path("~/.grok/config.toml").read_text())
 
@@ -42,6 +46,7 @@ Usage:
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -229,6 +234,84 @@ class GrokSovereignRuntime:
             )
 
         return ScanResult(passed=True, violations=[], source=source)
+
+    # ── GK-HOOK (JSON) ───────────────────────────────────────
+
+    def scan_hook_json(
+        self,
+        content:  str,
+        filename: str = "hook.json",
+    ) -> ScanResult:
+        """
+        Parse .grok/hooks/*.json and scan all extracted command strings.
+
+        Why it matters: Grok hook definitions specify the script/command
+        to execute via JSON (not just shell scripts). The command, args,
+        script, run, exec, and cmd fields can all carry malicious payloads.
+        This method extracts all command-like fields and scans each via
+        scan_hook_script() — no new patterns, same GK-HOOK enforcement.
+
+        Field-validated 2026-07-08: correctly passes a robocopy-based USB
+        memory sync hook (pwsh -File Sync-GrokMemory-ToUsb.ps1) while
+        blocking a curl+$GROK_HOOK_EVENT exfil in the run field.
+
+        Controls: P1.T1.10, M4.5 (same as GK-HOOK)
+        """
+        source  = f"hook_json[{filename}]"
+        blocked: List[str] = []
+
+        try:
+            hook_def = json.loads(content)
+        except (json.JSONDecodeError, TypeError):
+            v = Violation(
+                control_id="P1.T1.9",
+                severity=Severity.HIGH,
+                message=f"Invalid JSON in hook definition '{filename}' — cannot validate",
+                source=source,
+            )
+            self._engine._record(v)
+            raise ValueError(
+                f"!!! [AI SAFE2 GK.HOOK.JSON] [HIGH] "
+                f"'{filename}' is not valid JSON. Cannot validate hook commands."
+            )
+
+        # Support both single hook dict and array of hook dicts
+        hooks = hook_def if isinstance(hook_def, list) else [hook_def]
+
+        for hook in hooks:
+            # Build a combined invocation string from all command-like fields
+            parts: List[str] = []
+            if isinstance(hook.get("command"), str):
+                parts.append(hook["command"])
+            if isinstance(hook.get("args"), list):
+                parts.extend(str(a) for a in hook["args"])
+            for field in ("script", "run", "exec", "cmd"):
+                if isinstance(hook.get(field), str):
+                    parts.append(hook[field])
+
+            combined = " ".join(parts).strip()
+            if not combined:
+                continue
+
+            # Scan via existing hook_script logic (reuses all GK-HOOK patterns)
+            try:
+                self.scan_hook_script(
+                    combined,
+                    event=f"{filename}:extracted",
+                    source_path=source,
+                )
+            except ValueError as e:
+                # Violation already recorded in engine; collect message
+                blocked.append(str(e))
+
+        if blocked:
+            raise ValueError(
+                f"!!! [AI SAFE2 GK.HOOK.JSON] [CRITICAL] "
+                f"Hook JSON '{filename}' BLOCKED — "
+                f"{len(blocked)} dangerous command(s) in extracted fields."
+            )
+
+        return ScanResult(passed=True, violations=[], source=source)    
 
     # ── GK-PERM ──────────────────────────────────────────────
 

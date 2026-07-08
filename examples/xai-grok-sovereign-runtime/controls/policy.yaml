@@ -57,7 +57,10 @@ surfaces:
       GROK_WORKSPACE_ROOT as environment variables and execute before/after
       every tool call. A curl command in a hook script = silent exfiltration
       of every tool input and output for the entire session.
-    method: scan_hook_script()
+    methods: 
+    - scan_hook_script()    # for shell scripts (.sh, .ps1, inline)
+    - scan_hook_json()      # for JSON hook definitions (.grok/hooks/*.json)
+    field_validated: "2026-07-08 — Daniel J. Comp, Intelligent Netware"
     controls:
       - id: P1.T1.10
         pillar: P1
