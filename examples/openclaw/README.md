@@ -1,3 +1,6 @@
+<!-- stack: OpenClaw -->
+<!-- description: Full two-layer governance stack, internal identity and memory files plus external scanner and gateway. -->
+
 <!--
   examples/openclaw/README.md
   AI SAFE² OpenClaw Integration — Cyber Strategy Institute

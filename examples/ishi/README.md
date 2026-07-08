@@ -1,3 +1,6 @@
+<!-- stack: Supervisory agent -->
+<!-- description: Reviews agent plans and enforces governance decisions before high-risk actions execute. -->
+
 # AI SAFE² for Ishi
 
 **Complete security toolkit for Ishi desktop agent users**

@@ -1,3 +1,6 @@
+<!-- stack: Alignment research -->
+<!-- description: Drift-scoring model adapted into AI SAFE2 behavioral monitoring. -->
+
 # AI SAFE² × SlowMist OpenClaw Security Practice Guide
 
 ## A Unified Security Architecture for High-Privilege Autonomous AI Agents

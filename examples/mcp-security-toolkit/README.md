@@ -1,3 +1,6 @@
+<!-- stack: MCP (protocol security) -->
+<!-- description: mcp-score, mcp-scan, mcp-safe-wrap. CP.5.MCP toolkit, 134 tests. -->
+
 # AI SAFE2 MCP Security Toolkit
 
 > **Score. Scan. Wrap. Any MCP server. In minutes.**

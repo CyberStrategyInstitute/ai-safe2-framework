@@ -1,3 +1,6 @@
+<!-- stack: xAI Grok -->
+<!-- description: Sovereign runtime defense package for Grok-based agents. -->
+
 <div align="center">
 
 # xAI/Grok Sovereign Runtime

@@ -1,3 +1,6 @@
+<!-- stack: Anti-Gravity -->
+<!-- description: Sovereign runtime defense package for Anti-Gravity agent deployments. -->
+
 # 🛡️ AI SAFE² Sovereign Compliance Suite for Antigravity 2.0
 
 > **Prevention over detection. Engineering over policy. Milliseconds beat committees.**

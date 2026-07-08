@@ -1,3 +1,6 @@
+<!-- stack: LangChain -->
+<!-- description: Runtime controls for LangChain chains and tool-calling agents. -->
+
 <div align="center">
 
 # LangChain Sovereign Runtime

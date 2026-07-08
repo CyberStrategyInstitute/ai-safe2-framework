@@ -1,3 +1,6 @@
+<!-- stack: NousResearch Hermes -->
+<!-- description: Closes four critical audit findings identified in the Hermes agent. -->
+
 # Hermes Sovereign Runtime (HSR)
 ### AI SAFE² v3.0 Defense Package for NousResearch/hermes-agent
 

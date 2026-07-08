@@ -1,3 +1,6 @@
+<!-- stack: OpenAI Codex -->
+<!-- description: Runtime enforcement wrapper for Codex-driven coding agents. -->
+
 # Codex Sovereign Runtime v2
 
 **Framework:** AI SAFE2 / AISM Level 4 (Sovereign Runtime Governance)

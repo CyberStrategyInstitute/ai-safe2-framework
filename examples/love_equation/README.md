@@ -1,3 +1,6 @@
+<!-- stack: Alignment research -->
+<!-- description: Drift-scoring model adapted into AI SAFE2 behavioral monitoring. -->
+
 # Love Equation Implementation for AI SAFE²
 
 Complete implementation of the Love Equation alignment framework for AI agents, including evaluator, schemas, tests, and integration manifests.

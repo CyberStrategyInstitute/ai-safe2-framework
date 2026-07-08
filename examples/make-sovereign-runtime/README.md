@@ -1,3 +1,6 @@
+<!-- stack: Make.com -->
+<!-- description: Sovereign runtime defense package for no-code automation scenarios. -->
+
 <div align="center">
 
 # Make.com Sovereign Runtime

@@ -1,3 +1,6 @@
+<!-- stack: CrewAI -->
+<!-- description: Governance wrapper for CrewAI crew-based orchestration. -->
+
 <div align="center">
 
 # CrewAI Sovereign Runtime

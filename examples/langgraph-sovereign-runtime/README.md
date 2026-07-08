@@ -1,3 +1,6 @@
+<!-- stack: LangGraph -->
+<!-- description: Runtime controls for LangGraph stateful agent graphs. -->
+
 <div align="center">
 
 # LangGraph Sovereign Runtime

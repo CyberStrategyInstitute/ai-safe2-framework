@@ -1,3 +1,6 @@
+<!-- stack: Microsoft AutoGen -->
+<!-- description: Governance wrapper for AutoGen multi-agent orchestration. -->
+
 <div align="center">
 
 # AutoGen 0.4 Sovereign Runtime
