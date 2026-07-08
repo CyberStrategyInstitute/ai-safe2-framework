@@ -1,0 +1,8 @@
+# One folder name per line. Folders listed here are skipped by
+# scripts/generate_examples_table.py entirely, no tags required.
+# Use this for WIP scaffolding, archived examples, or shared libs
+# that live under examples/ but aren't themselves an example.
+#
+# e.g.
+# _shared-utils
+# _archive-v1
