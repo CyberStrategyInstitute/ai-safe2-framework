@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # Use the PAT here too, not just below, so this branch's later
           # push in create-pull-request authenticates as a real account.
