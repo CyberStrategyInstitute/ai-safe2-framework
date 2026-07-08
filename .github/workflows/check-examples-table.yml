@@ -1,0 +1,23 @@
+name: Check Examples Table
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "examples/**"
+      - "scripts/generate_examples_table.py"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate example tags and table freshness
+        run: python scripts/generate_examples_table.py --check
