@@ -1,3 +1,5 @@
+<!-- stack: Cursor -->
+<!-- description: Runtime controls for Cursor IDE chains, .cursor/rules injection surfaces, and AI-generated code execution. -->
 <div align="center">
 
 # Cursor Sovereign Runtime
