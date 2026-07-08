@@ -1,0 +1,42 @@
+name: Update Examples Table
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "examples/**"
+      - "scripts/generate_examples_table.py"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # This step fails the job (and blocks the commit below) on any
+      # missing/empty/malformed stack or description tag. Same script
+      # the PR check uses, so main can never drift from the gate.
+      - name: Regenerate examples table
+        run: python scripts/generate_examples_table.py
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "No changes to README.md"
+            exit 0
+          fi
+          git config user.name "aisafe2-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore: auto-update examples table [skip ci]"
+          git push
