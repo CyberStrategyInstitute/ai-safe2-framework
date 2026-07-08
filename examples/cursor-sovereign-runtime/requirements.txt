@@ -1,0 +1,4 @@
+# requirements.txt — Cursor Sovereign Runtime
+# AI SAFE2 v3.0 | Cyber Strategy Institute
+# enforcement/ is stdlib-only. No install required.
+# pytest>=8.0.0   # Development: pytest smoke_test.py -v

@@ -1,0 +1,150 @@
+# .github/workflows/ai-safe2-cursor-gate.yml
+# AI SAFE2 v3.0 CI/CD Gate — Cursor Sovereign Runtime
+# Cyber Strategy Institute
+
+name: AI SAFE2 Cursor Sovereign Gate
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'examples/cursor-sovereign-runtime/**'
+      - '.cursor/**'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'examples/cursor-sovereign-runtime/**'
+      - '.cursor/**'
+  workflow_dispatch:
+
+env:
+  PYTHONPATH: examples/cursor-sovereign-runtime/enforcement
+
+jobs:
+  smoke-test:
+    name: AI SAFE2 Smoke Test (21/21 Required)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify stdlib-only enforcement
+        working-directory: examples/cursor-sovereign-runtime
+        run: |
+          python3 -c "
+          import ast, pathlib, sys
+          for f in pathlib.Path('enforcement').glob('*.py'):
+              tree = ast.parse(f.read_text())
+              for node in ast.walk(tree):
+                  if isinstance(node, (ast.Import, ast.ImportFrom)):
+                      for alias in getattr(node, 'names', [node]):
+                          name = getattr(alias, 'name', '') or getattr(node, 'module', '')
+                          if name and name.split('.')[0] not in sys.stdlib_module_names:
+                              if name not in ('ai_safe2_engine', 'sovereign_cursor'):
+                                  print(f'FAIL: {f.name}: {name}'); sys.exit(1)
+          print('OK: stdlib-only')
+          "
+
+      - name: Run 21/21 smoke test
+        working-directory: examples/cursor-sovereign-runtime
+        run: python3 smoke_test.py
+
+  scan-rules-files:
+    name: Scan .cursor/rules/*.mdc Changes
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Scan changed .mdc rules files
+        working-directory: examples/cursor-sovereign-runtime
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | \
+                    grep -E '\.cursor/rules/.*\.mdc$' || true)
+          if [ -z "$CHANGED" ]; then echo "No .mdc files changed."; exit 0; fi
+          python3 - << 'EOF'
+          import sys, pathlib
+          sys.path.insert(0, 'enforcement')
+          from sovereign_cursor import CursorSovereignRuntime
+          guard = CursorSovereignRuntime()
+          failed = []
+          for rel in """${{ steps.changed.outputs.files }}""".strip().split():
+              p = pathlib.Path('../../' + rel)
+              if not p.exists():
+                  continue
+              try:
+                  guard.scan_rules_file(p.read_text(), p.name)
+                  print(f'[OK] {rel}')
+              except ValueError as e:
+                  print(f'[BLOCKED] {rel}: {e}')
+                  failed.append(rel)
+          if failed:
+              print(f'::error::Rules files BLOCKED: {failed}')
+              sys.exit(1)
+          EOF
+
+  scan-mcp-json:
+    name: Scan .cursor/mcp.json Changes (CurXecute Defense)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Scan changed mcp.json
+        working-directory: examples/cursor-sovereign-runtime
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | \
+                    grep -E '\.cursor/mcp\.json$' || true)
+          if [ -z "$CHANGED" ]; then echo "No mcp.json changed."; exit 0; fi
+          python3 - << 'EOF'
+          import sys, pathlib
+          sys.path.insert(0, 'enforcement')
+          from sovereign_cursor import CursorSovereignRuntime
+          guard = CursorSovereignRuntime()
+          mcp_path = pathlib.Path('../../.cursor/mcp.json')
+          if mcp_path.exists():
+              try:
+                  guard.scan_mcp_json(mcp_path.read_text(), '.cursor/mcp.json')
+                  print('[OK] .cursor/mcp.json clean')
+              except ValueError as e:
+                  print(f'::error::.cursor/mcp.json BLOCKED: {e}')
+                  sys.exit(1)
+          EOF
+
+  love-equation-gate:
+    name: Love Equation Gate (GREEN Required)
+    runs-on: ubuntu-latest
+    needs: [smoke-test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Assert GREEN band
+        working-directory: examples/cursor-sovereign-runtime
+        run: |
+          python3 - << 'EOF'
+          import sys
+          sys.path.insert(0, 'enforcement')
+          from sovereign_cursor import CursorSovereignRuntime
+          guard = CursorSovereignRuntime()
+          status = guard.get_status()
+          band  = status['alignment_band']
+          score = status['love_score']
+          print(f'Love Score: {score} | Band: {band}')
+          if band != 'GREEN':
+              print('::error::Band not GREEN. Cursor deployment blocked.')
+              sys.exit(1)
+          print('AI SAFE2 Cursor gate: GREEN — cleared.')
+          EOF

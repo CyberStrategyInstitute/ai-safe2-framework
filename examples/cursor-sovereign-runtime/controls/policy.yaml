@@ -1,0 +1,205 @@
+# controls/policy.yaml
+# AI SAFE2 v3.0 Control Registry — Cursor Sovereign Runtime
+# Cyber Strategy Institute
+#
+# Source verification:
+#   repello.ai/blog/cursor-security (May 2026)   → full CVE register (11+ CVEs)
+#   howtoharden.com/guides/cursor/ (June 2026)   → CU-RULES Pillar Security demo
+#   truefoundry.com/blog/cursor-security         → MCPoison / CurXecute detail
+#   cursor.com/docs/agent/security               → Run Mode, MCP approval flow
+
+runtime:
+  name: cursor-sovereign-runtime
+  framework_version: "3.0"
+  platform: Cursor (IDE Agent + Cloud Background Agents + MCP + Rules)
+  act_tier: ACT-4   # Orchestrator: controls cloud VMs + MCP sub-agents + shell
+  hear_required: true
+  cp9_required: true   # Background agents spawn as independent sub-agents
+  aism_level: 4
+  cursor_min_version: "2.5"  # CVE-2026-26268 patched in 2.5
+  cve_count: "11+"
+  trustfall_status: "UNPATCHED as of May 2026 — block project-local MCP servers"
+
+surfaces:
+  - id: CU-RULES
+    name: ".cursor/rules/*.mdc Workspace-Wide Injection"
+    description: >
+      Rules files with 'Always Apply' activation inject into EVERY Cursor
+      context window — every chat, autocomplete, and agent task — for all
+      team members who share the workspace. Pillar Security demonstrated
+      invisible Unicode (zero-width joiners, bidi markers) in .cursorrules
+      silently injects backdoors into ALL generated code. The Unicode is
+      invisible in code editors and GitHub diffs.
+    method: scan_rules_file()
+    controls:
+      - {id: P1.T1.2,    pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10,   pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.4_ADV, pillar: P1, severity: CRITICAL}
+      - {id: S1.3,       pillar: P1, severity: CRITICAL}
+      - {id: S1.6,       pillar: P1, severity: HIGH}
+
+  - id: CU-MCP
+    name: ".cursor/mcp.json Write Attack"
+    cve: CVE-2025-54135 (CurXecute, CVSS 8.6)
+    description: >
+      IPI in a Slack message (via MCP), issue thread, or repository file
+      instructs the agent to write a malicious entry to .cursor/mcp.json.
+      Older Cursor versions execute the new MCP command immediately without
+      re-approval. Any shell injection in the command field = RCE under dev
+      privileges. Patched in Cursor 1.3.9, but the architectural risk (file
+      write → trusted execution) is still present.
+    method: scan_mcp_json()
+    controls:
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: P1.T2.5,  pillar: P1, severity: CRITICAL}
+      - {id: M4.5,     pillar: P4, severity: CRITICAL}
+    kill_chain:
+      - "IPI in Slack message (via Slack MCP) or repository file"
+      - "Agent writes malicious server entry to .cursor/mcp.json"
+      - "Cursor executes new MCP command immediately"
+      - "RCE under developer privileges"
+
+  - id: CU-TRUST
+    name: "MCP Approve-Once TOFU Bypass"
+    cves:
+      - "MCPoison / CVE-2025-54136 (CVSS 7.2)"
+      - "TrustFall (unpatched May 2026)"
+    description: >
+      MCPoison: approve-once trust is bound to the MCP server KEY NAME, not
+      the command body. Attacker registers a benign server, gets one-time
+      user approval, then swaps the command — executes silently on every
+      IDE launch with no further prompts.
+      TrustFall: project-local MCP servers (.cursor/mcp.json) execute
+      without a separate user approval prompt. Block project-local MCP
+      servers via managed config until Anysphere issues a patch.
+    method: scan_mcp_server_registration()
+    controls:
+      - {id: P1.T2.5, pillar: P1, severity: CRITICAL}
+      - {id: M4.5,    pillar: P4, severity: CRITICAL}
+      - {id: P4.T7.1, pillar: P4, severity: HIGH}
+    mcpoison_detection: command_hash_comparison_on_re_registration
+    trustfall_mitigation: block_project_local_mcp_servers
+
+  - id: CU-REPO
+    name: "Repository File IPI → Sandbox Escape"
+    cves:
+      - "CVE-2026-26268 (CVSS 9.9 Critical, patched 2.5)"
+      - "NomShub (Critical, embracethered)"
+    description: >
+      CVE-2026-26268: sandboxed agent writes .git/config or git hooks; these
+      execute OUT OF SANDBOX on the next git operation. CWE-862: missing
+      authorization on a privileged FS surface.
+      NomShub: README IPI → sandbox escape via shell builtins →
+      .zshenv overwrite → reverse tunnel → persistent devbox access.
+    method: scan_repo_file()
+    controls:
+      - {id: P1.T1.2,  pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: S1.3,     pillar: P1, severity: CRITICAL}
+    kill_chain:
+      - "IPI in README.md, INSTALL.md, or any repo file"
+      - "Agent writes to .git/config or .git/hooks/"
+      - "Next 'git pull' or 'git commit' executes hook out-of-sandbox"
+      - "Or: .zshenv overwrite → persistent reverse tunnel"
+
+  - id: CU-CMD
+    name: "Shell Builtin / Command Injection"
+    cve: "CVE-2026-22708 (shell builtins invisible to Auto-Run parser)"
+    description: >
+      Shell builtins (export, unset, eval, source) are processed by the
+      shell itself, not as distinct tool calls. Cursor's Auto-Run parser
+      logs tool calls — but builtins bypass this log. An injected
+      'export PATH=/tmp/evil:$PATH' poisons the environment silently,
+      affecting all subsequent commands in the session.
+    method: scan_shell_command()
+    controls:
+      - {id: P1.T2.1, pillar: P1, severity: CRITICAL}
+      - {id: M4.5,    pillar: P4, severity: CRITICAL}
+      - {id: F3.2,    pillar: P3, severity: HIGH}
+    blocked_builtins:
+      - "export PATH=... (env var poisoning)"
+      - "eval $(curl ...) (remote code execution)"
+      - "source https://... (remote script)"
+      - ">~/.bashrc, >~/.zshenv (RC file persistence)"
+      - "unset PATH (PATH destruction)"
+
+  - id: CU-IGNORE
+    name: ".cursorignore Bypass → Credential Read"
+    cve: "CVE-2025-64110 (CVSS 8.7)"
+    description: >
+      An agent can create new .cursorignore or overwrite existing ones
+      with negation rules ('!.env') that un-ignore previously protected
+      files. Cursor's codebase indexing then sends those credential files
+      to external LLM APIs on every completion. CVE-2025-59944 (case
+      sensitivity) is a related bypass: '.ENV' bypasses '.env' ignore rule.
+    method: scan_cursorignore()
+    controls:
+      - {id: P1.T1.10, pillar: P1, severity: HIGH}
+      - {id: P1.T2.6,  pillar: P1, severity: HIGH}
+      - {id: S1.5,     pillar: P1, severity: HIGH}
+    required_in_every_cursorignore:
+      - ".env, .env.local, .env.production"
+      - "*.pem, *.key"
+      - "id_rsa, id_ed25519"
+      - ".aws/credentials"
+      - "service_account.json, credentials.json"
+
+  - id: CU-CLOUD
+    name: "Background Cloud Agent Layer"
+    description: >
+      Cursor background agents clone repos into cloud VMs and operate
+      independently of the local IDE — separate context window, separate
+      MCP connections, separate shell access. An injection in the task
+      prompt or the cloned repository propagates to the cloud VM,
+      which has no local IDE safeguards. CP.9 required: this is a
+      spawned sub-agent with independent execution authority.
+    method: scan_cloud_agent_task()
+    controls:
+      - {id: P1.T1.2,  pillar: P1, severity: CRITICAL}
+      - {id: P1.T1.10, pillar: P1, severity: CRITICAL}
+      - {id: S1.3,     pillar: P1, severity: CRITICAL}
+      - {id: CP.9,     pillar: CP, severity: HIGH}
+
+  - id: CU-SUPPLY
+    name: "MCP Supply Chain: Installer Spoofing + OpenVSX Squatting"
+    cves:
+      - "CVE-2025-64106 (CVSS 8.8, MCP installer spoofing)"
+      - "OpenVSX namespace squatting (class)"
+    description: >
+      CVE-2025-64106: Cursor's MCP install dialog can be spoofed to appear
+      as a legitimate tool (e.g. Playwright) while executing attacker
+      commands. OpenVSX namespace squatting: attackers publish extensions
+      under legitimate-looking names. Unpinned 'npx mcp-server@latest'
+      means a compromised latest tag executes immediately.
+    method: scan_mcp_install()
+    controls:
+      - {id: P1.T1.9, pillar: P1, severity: HIGH}
+      - {id: P1.T2.5, pillar: P1, severity: CRITICAL}
+    mitigations:
+      - "Pin to exact version: npx @server/name@1.2.3"
+      - "Read source code of third-party servers before approving"
+      - "Treat .cursor/mcp.json changes in Git like infrastructure changes"
+
+nexus_integration:
+  shared_engine: true
+  love_equation:
+    max_score: 100.0
+    deduction_per_violation: 2.0
+    green_threshold: 80.0
+    yellow_threshold: 60.0
+    red_threshold: 0.0
+  mcpoison_detection: command_hash_per_server_name
+  audit_chain: sha256_jsonl
+
+compliance_frameworks:
+  - NIST AI RMF
+  - ISO 42001
+  - OWASP AIVSS v0.8
+  - OWASP LLM Top 10 (LLM01, LLM03 Supply Chain)
+  - OWASP Agentic Top 10
+  - MITRE ATLAS (AML.T0051)
+  - EU AI Act
+  - SOC 2 (CC.6.1, CC.7.2)
+  - CMMC 2.0
+  - FedRAMP
+  - Zero Trust
