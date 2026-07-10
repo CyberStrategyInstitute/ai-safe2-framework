@@ -42,7 +42,7 @@ jobs:
 
       - name: Open PR with updated table
         if: steps.diff.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           # PAT required here. The default GITHUB_TOKEN cannot trigger
           # other workflows (markdown-lint, check-examples-table) on PRs
