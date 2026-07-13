@@ -197,6 +197,7 @@ For full methodology details, see [AISM-Scoring-Matrix-Methodology.md](./AISM-Sc
 | MITRE ATLAS | 98% - 14 agent-specific plus all legacy tactics |
 | EU AI Act | 95%+ - all high-risk AI articles |
 | CSA AICM | 90%+ - 16 of 18 domains mapped |
+| GSAR 552.239-7001 (draft, Notice-MVAC-2026-01) | (j)(1) Unbiased AI Principles, (f)(3), (f)(4), (f)(7)(viii)-(ix) via CP.11 UAS |
 
 ---
 

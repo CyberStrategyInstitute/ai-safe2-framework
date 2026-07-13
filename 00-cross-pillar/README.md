@@ -35,6 +35,7 @@
 | [CP.8](#cp8) | Catastrophic Risk Threshold Controls | 🔴 CRITICAL | Emergency suspension criteria regardless of business continuity |
 | [CP.9](#cp9) | Agent Replication Governance | 🔴 CRITICAL | First governance standard for agent replication and swarm identity |
 | [CP.10](#cp10) | HEAR Doctrine | 🔴 CRITICAL | Human Ethical Agent of Record: named kill-switch authority |
+| [CP.11](#cp11) | Unbiased AI Standard (UAS) | 🟠 HIGH | GSAR 552.239-7001 (j)(1) compliance surface: 27 controls across P1-P5, NEXUS, and CSF |
 
 > Full control specifications — including implementation requirements, enforcement logic, compliance mappings, and ACT-tier applicability — are included in the [AI SAFE² v3.0 Implementation Toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
 
@@ -268,6 +269,26 @@ All four fail at once, at machine speed. NIST, ISO, OWASP, and enterprise IAM ha
 - SOC 2 CC.7.4
 - GDPR Article 22 automated decision safeguards
 - NIST AI RMF GOVERN function
+
+---
+
+<a id="cp11"></a>
+## CP.11: Unbiased AI Standard (UAS)
+
+**Severity: 🟠 HIGH | Pillars: All | NEXUS: Yes | CSF: Yes (first formal integration)**
+
+CP.11 synthesizes controls from all five pillars, NEXUS, and the Cognitive
+Sovereignty Framework into a single auditable compliance surface for "Unbiased
+AI" obligations in federal procurement, specifically GSAR 552.239-7001 (j)(1)
+and the disclosure duties at (f)(7)(viii), (f)(7)(ix), and (f)(3). It defines
+8 bias classes (UAS-B1 to B8), 27 controls (14 system-side, 8 human-side
+sourced from CSF Domains 1-6, 5 bridge), quantified pass thresholds, and a
+five-document due-diligence evidence package.
+
+Unlike CP.1 through CP.10, CP.11 is a full module with its own normative
+standard, taxonomy, test protocol, and attestation templates:
+
+**Full module: [`unbiased-ai/`](./unbiased-ai/README.md)**
 
 ---
 

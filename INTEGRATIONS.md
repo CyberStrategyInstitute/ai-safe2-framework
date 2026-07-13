@@ -412,6 +412,25 @@ services:
 
 ---
 
+## 🤝 Framework Integration: Cognitive Sovereignty Framework (CSF)
+
+AI SAFE² secures the system. CSF protects the human operating it. **CP.11, the Unbiased AI Standard (UAS), is the formal bridge between the two frameworks.**
+
+CP.11 sources 8 of its 27 controls directly from CSF: UAS-H1 through UAS-H8, drawn from CSF Domains 1 through 6. These human-layer controls govern what an AI system does to its operator: dependency induction, emotional state manipulation, social pressure simulation, value drift, attention capture. No system-side control can measure these effects, which is why the integration exists.
+
+| Layer | Framework | Controls | Governs |
+| :--- | :--- | :--- | :--- |
+| System | AI SAFE² P1-P5 + NEXUS | UAS-S1 to S14 | What the AI system does or does not do |
+| Human | CSF Domains 1-6 | UAS-H1 to H8 | What the AI system does to the human operating it |
+| Bridge | CP.11 cross-domain | UAS-X1 to X5 | Escalation gates, influence pathway closure, evidence automation |
+
+Quantitative instrument: CSF's CTSS (Cognitive Threat Severity Score) provides the human-layer measurement that flows into the UAS-SCORE-001 and UAS-HUMAN-001 evidence documents.
+
+**CP.11 module:** [`00-cross-pillar/unbiased-ai/`](00-cross-pillar/unbiased-ai/README.md)
+**CSF repository:** [cognitive-sovereignty](https://github.com/CyberStrategyInstitute/cognitive-sovereignty), see `research/005_uas_federal_standard.md` and `06-digital-ai-symbiosis/federal-procurement-alignment.md`
+
+---
+
 ## 🚀 Upgrade to Enterprise Governance
 
 The tools above provide technical controls. The Implementation Toolkit bridges from technical logs to executive strategy.

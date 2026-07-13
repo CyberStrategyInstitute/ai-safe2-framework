@@ -6,8 +6,8 @@
 # AISM Compliance Crosswalk
 ## AI SAFE2 Framework v3.0 — Cross-Framework Compliance Mapping
 
-**Version:** 1.0  
-**Date:** March 2026  
+**Version:** 1.1  
+**Date:** July 2026  
 **Organization:** Cyber Strategy Institute  
 **Purpose:** Enterprise procurement, audit readiness, and multi-framework compliance reporting
 
@@ -23,6 +23,7 @@ This crosswalk maps every AI SAFE2 v3.0 pillar, topic, and maturity level to:
 - **NIST CSF 2.0** (Functions: Govern, Identify, Protect, Detect, Respond, Recover)
 - **MITRE ATLAS** (Adversarial threat techniques)
 - **OWASP Top 10 for LLM** (LLM01–LLM10)
+- **GSAR 552.239-7001 (Draft)** (Federal LLM data safeguarding and Unbiased AI obligations, via CP.11)
 
 ---
 
@@ -275,7 +276,29 @@ This crosswalk maps every AI SAFE2 v3.0 pillar, topic, and maturity level to:
 
 ---
 
-## 7. Framework Coverage Summary
+## 7. Federal Procurement: GSAR 552.239-7001 (Draft) via CP.11
+
+Draft GSAR clause 552.239-7001 (Notice-MVAC-2026-01, 91 FR 36559, June 17, 2026) establishes contractually enforceable data safeguarding and Unbiased AI obligations for LLMs processing Government Data under GSA government-wide vehicles. AI SAFE2 maps to the clause through CP.11, the Unbiased AI Standard (UAS), which synthesizes controls from all five pillars, NEXUS, and the Cognitive Sovereignty Framework into a single compliance surface.
+
+Because the clause is a draft, this mapping tracks the June 17, 2026 published text and will be updated at finalization.
+
+| Clause Requirement | CP.11 / AISM Mapping | Pillar Source | Evidence Artifact |
+|---|---|---|---|
+| (j)(1) Unbiased AI Principles | UAS-B1 through UAS-B8 bias taxonomy; 27 UAS controls (14 system-side, 8 CSF-sourced human-side, 5 bridge) | All pillars + NEXUS + CSF | UAS-ATTEST-001, UAS-TEST-001 |
+| (j)(1)(i) Truthfulness | UAS-B1, B5, B7, B8; jurisdictional grounding (UAS-S15); factual accuracy corpus testing | P2, P5, CP.8 | UAS-TEST-001 |
+| (j)(1)(ii) Neutrality | UAS-B2, B4, B6; quantified thresholds (85 percent neutral classification, Cohen's kappa 0.7 floor, parity p > 0.05) | P4, P5, NEXUS | UAS-TEST-001, UAS-HUMAN-001 |
+| (j)(1)(iii) Continuous Improvement | Behavioral drift baselines; evaluation gates on model updates; UAS-X2 escalation | P3, P5, CP.6 | UAS-ATTEST-001 |
+| (f)(3) Foreign-compliance modification disclosure | UAS-B8 Foreign Regulatory Embedding; differential testing against attested lineage (Test 8) | P2, P5, CP.8 | UAS-TEST-001 + CP.8 lineage record |
+| (f)(4) Human oversight, intervention, traceability | P2 Ledger audit trails; P4 Command Center intervention workflows; NEXUS audit chain | P2, P4, NEXUS | UAS-ATTEST-001 |
+| (f)(5) 72-hour incident notification | Incident response playbooks; CP.6 incident integration | P3, CP.6 | CP.6 incident log |
+| (f)(7)(viii)-(ix) Bias testing methodology and known-bias disclosure | UAS bias taxonomy; Section 5 test protocol with published pass thresholds | All pillars | UAS-SCORE-001 |
+| (i) Change Notification | Change tracking (P2.T3.9); configuration baselines; UAS-X5 trigger integration with CP.10 | P2, P3, CP.10 | UAS-CHANGE-001 |
+
+**Full standard:** [`00-cross-pillar/unbiased-ai/`](../00-cross-pillar/unbiased-ai/README.md)
+
+---
+
+## 8. Framework Coverage Summary
 
 | Framework | AI SAFE2 v3.0 Coverage | Mapped Subcategories/Clauses |
 |---|---|---|
@@ -286,10 +309,11 @@ This crosswalk maps every AI SAFE2 v3.0 pillar, topic, and maturity level to:
 | **NIST CSF 2.0** | 100% | All 6 Functions (GV, ID, PR, DE, RS, RC) |
 | **MITRE ATLAS** | 98% | 14 agent-specific + all legacy tactics |
 | **OWASP Top 10 LLM** | 100% | LLM01–LLM10 |
+| **GSAR 552.239-7001 (Draft)** | (j)(1), (f)(3), (f)(4), (f)(5), (f)(7)(viii)-(ix), (i) | Via CP.11 UAS; draft clause, mapping tracks 91 FR 36559 |
 
 ---
 
-## 8. References
+## 9. References
 
 1. NIST AI 100-1 (2023). AI Risk Management Framework 1.0.
 2. ISO/IEC 42001:2022. AI Management System — Requirements.
@@ -299,6 +323,7 @@ This crosswalk maps every AI SAFE2 v3.0 pillar, topic, and maturity level to:
 6. MITRE ATLAS (2025). Adversarial Threat Landscape for AI Systems.
 7. OWASP (2025). Top 10 for LLM Applications.
 8. Cyber Strategy Institute (2025). AI SAFE2 Framework v3.0.
+9. General Services Administration (2026). Notice-MVAC-2026-01, Proposed GSAR Clause 552.239-7001, 91 FR 36559 (June 17, 2026).
 
 ---
 
