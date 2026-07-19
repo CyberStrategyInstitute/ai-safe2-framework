@@ -8,23 +8,34 @@ on:
       - "scripts/generate_examples_table.py"
   workflow_dispatch: {}
 
+# The default GITHUB_TOKEN needs nothing here — all writes go through the PAT,
+# which is scoped to exactly the two steps that need it. Do not widen this.
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
+
+# Two rapid pushes to examples/** must not race each other onto the same
+# bot/update-examples-table branch mid-create/merge/delete cycle.
+concurrency:
+  group: update-examples-readme
+  cancel-in-progress: false
 
 jobs:
   update-readme:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
-          # Use the PAT here too, not just below, so this branch's later
-          # push in create-pull-request authenticates as a real account.
-          token: ${{ secrets.README_BOT_PAT }}
+          # CRITICAL: never persist credentials into .git/config here.
+          # The next step executes scripts/generate_examples_table.py — a file
+          # that is itself in this workflow's trigger paths. With persisted
+          # credentials, anyone who lands a change to that script gets code
+          # execution on main with the PAT readable from the workspace.
+          # The PAT is injected ONLY into the two steps below that need it.
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.12"
 
@@ -42,12 +53,16 @@ jobs:
 
       - name: Open PR with updated table
         if: steps.diff.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v8
+        # SHA-pinned: this third-party action receives the PAT. A moved tag
+        # must never be able to swap the code that handles that credential.
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
         with:
-          # PAT required here. The default GITHUB_TOKEN cannot trigger
-          # other workflows (markdown-lint, check-examples-table) on PRs
-          # it opens, so those required checks would never run and the
-          # PR could never merge.
+          # PAT required: the default GITHUB_TOKEN cannot trigger other
+          # workflows (markdown-lint, check-examples-table) on PRs it opens,
+          # so required checks would never run and the PR could never merge.
+          # Use a fine-grained PAT scoped to THIS repo only, with
+          # Contents: read/write + Pull requests: read/write. Never a classic
+          # PAT — classic scope covers every repo the bot account can write.
           token: ${{ secrets.README_BOT_PAT }}
           commit-message: "chore: auto-update examples table"
           title: "chore: auto-update examples table"
@@ -61,5 +76,7 @@ jobs:
         if: steps.diff.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ secrets.README_BOT_PAT }}
-        run: |
-          gh pr merge bot/update-examples-table --squash --auto || true
+        # No `|| true`: if repo auto-merge is disabled or branch protection
+        # rejects the request, this must fail loudly. A silently-stranded bot
+        # PR is a pipeline you believe works and doesn't.
+        run: gh pr merge bot/update-examples-table --squash --auto

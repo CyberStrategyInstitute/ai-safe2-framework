@@ -1,0 +1,310 @@
+name: AI SAFE² Skill Trust Gate
+
+# DEPLOY TO: repo root .github/workflows/ — GitHub does not execute workflows
+# nested inside examples/. This copy under examples/skill-trust-gate/ci-cd/ is
+# the reference template (same convention as lovable-sovereign-runtime/ci-cd/).
+
+on:
+  pull_request:
+    paths:
+      - 'skills/**'
+      - 'examples/**/SKILL.md'
+      - 'examples/**/SKILL-CARD.md'
+      - '**/*.skill.md'
+      # Negative test fixtures are DESIGNED to fail the gate. Without this
+      # exclusion, any PR touching them is permanently blocked by the gate's
+      # own test data.
+      - '!examples/skill-trust-gate/test-fixtures/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'skills/**'
+      - '!examples/skill-trust-gate/test-fixtures/**'
+  workflow_dispatch:
+    inputs:
+      skill_path:
+        description: 'Path to skill directory to scan'
+        required: true
+        type: string
+      strict_mode:
+        description: 'Enable strict mode (treat MEDIUM as HIGH)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: trust-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  SCANNER_VERSION: "1.0.0"
+  FRAMEWORK_VERSION: "v3.0"
+  # Never store API keys in workflow files — use GitHub Secrets only.
+  # ANTHROPIC_API_KEY is intentionally not set; semantic review is opt-in.
+
+jobs:
+  # ── Job 1: Discover skill changes ─────────────────────────────────────────
+  discover-skills:
+    name: Discover Changed Skills
+    runs-on: ubuntu-latest
+    outputs:
+      skill_paths: ${{ steps.find-skills.outputs.paths }}
+      has_skills: ${{ steps.find-skills.outputs.has_skills }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Find changed skill directories
+        id: find-skills
+        env:
+          # Untrusted values enter ONLY via env, never inline ${{ }} in run.
+          EVENT_NAME: ${{ github.event_name }}
+          DISPATCH_SKILL_PATH: ${{ github.event.inputs.skill_path }}
+          BEFORE_SHA: ${{ github.event.before }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            python3 -c 'import json, os; print("paths=" + json.dumps([os.environ["DISPATCH_SKILL_PATH"]]))' >> "$GITHUB_OUTPUT"
+            echo "has_skills=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          ZERO_SHA="0000000000000000000000000000000000000000"
+          if [[ "$EVENT_NAME" == "push" && -n "$BEFORE_SHA" && "$BEFORE_SHA" != "$ZERO_SHA" ]]; then
+            CHANGED_FILES=$(git diff --name-only "$BEFORE_SHA" HEAD)
+          elif [[ -n "$BASE_REF" ]]; then
+            CHANGED_FILES=$(git diff --name-only "origin/${BASE_REF}...HEAD")
+          else
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD 2>/dev/null || find . -name 'SKILL.md' -not -path './.git/*' | head -20)
+          fi
+
+          SKILL_DIRS=$(echo "$CHANGED_FILES" | \
+                       grep -E 'SKILL\.md|SKILL-CARD\.md' | \
+                       grep -v 'examples/skill-trust-gate/test-fixtures/' | \
+                       xargs -r -I{} dirname {} | sort -u | \
+                       python3 -c "import sys,json; paths=[l.strip() for l in sys.stdin if l.strip()]; print(json.dumps(paths))")
+
+          if [[ -z "$SKILL_DIRS" || "$SKILL_DIRS" == "[]" ]]; then
+            echo "has_skills=false" >> "$GITHUB_OUTPUT"
+            echo "paths=[]" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_skills=true" >> "$GITHUB_OUTPUT"
+            echo "paths=$SKILL_DIRS" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ── Job 2: Static trust gate scan ────────────────────────────────────────
+  static-trust-gate:
+    name: Static Trust Gate Scan
+    runs-on: ubuntu-latest
+    needs: discover-skills
+    if: needs.discover-skills.outputs.has_skills == 'true'
+    strategy:
+      matrix:
+        skill_path: ${{ fromJson(needs.discover-skills.outputs.skill_paths) }}
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+
+      - name: Install optional scanner dependencies
+        run: pip install jsonschema --quiet || true
+
+      - name: Run static trust gate scan
+        id: scan
+        env:
+          # Matrix values derive from PR-controlled directory names.
+          # Inline ${{ matrix.skill_path }} in run = shell injection. Env only.
+          SKILL_PATH: ${{ matrix.skill_path }}
+          STRICT_MODE: ${{ github.event.inputs.strict_mode }}
+        run: |
+          SKILL_NAME=$(basename "$SKILL_PATH")
+          # Sanitize for use in artifact names / outputs
+          SKILL_NAME_SAFE=$(echo "$SKILL_NAME" | tr -cd '[:alnum:]._-')
+          REPORT_PREFIX="trust-gate-${SKILL_NAME_SAFE}-$(date +%Y%m%d)"
+
+          echo "Scanning: $SKILL_PATH"
+          echo "skill_name=$SKILL_NAME_SAFE" >> "$GITHUB_OUTPUT"
+          echo "report_prefix=$REPORT_PREFIX" >> "$GITHUB_OUTPUT"
+
+          STRICT_FLAG=""
+          if [[ "$STRICT_MODE" == "true" ]]; then
+            STRICT_FLAG="--strict"
+          fi
+
+          # scan.py exits non-zero for every decision except APPROVE.
+          # GH Actions run steps use bash -e: without the guard below, any
+          # CONSTRAINTS/HOLD/REJECT kills the step before the decision is
+          # extracted, collapsing the 4-tier gate into a binary pass/fail.
+          SCAN_EXIT=0
+          python examples/skill-trust-gate/scripts/scan.py \
+            "$SKILL_PATH" \
+            --output both \
+            --report "$REPORT_PREFIX" \
+            --no-color \
+            $STRICT_FLAG || SCAN_EXIT=$?
+          echo "scan_exit=$SCAN_EXIT" >> "$GITHUB_OUTPUT"
+
+          if [ -f "${REPORT_PREFIX}.json" ]; then
+            DECISION=$(python3 -c "import json; d=json.load(open('${REPORT_PREFIX}.json')); print(d['decision'])")
+            SEVERITY=$(python3 -c "import json; d=json.load(open('${REPORT_PREFIX}.json')); print(d['severity'])")
+            AISM=$(python3 -c "import json; d=json.load(open('${REPORT_PREFIX}.json')); print(d['aism_level'])")
+            echo "decision=$DECISION" >> "$GITHUB_OUTPUT"
+            echo "severity=$SEVERITY" >> "$GITHUB_OUTPUT"
+            echo "aism=$AISM" >> "$GITHUB_OUTPUT"
+          else
+            # Deny-by-default: no report means no evidence.
+            echo "decision=HOLD FOR REVIEW" >> "$GITHUB_OUTPUT"
+            echo "severity=UNKNOWN" >> "$GITHUB_OUTPUT"
+            echo "aism=UNKNOWN" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate SKILL-CARD.md
+        id: validate
+        if: always()
+        env:
+          SKILL_PATH: ${{ matrix.skill_path }}
+        run: |
+          SKILL_CARD="${SKILL_PATH}/SKILL-CARD.md"
+          if [ -f "$SKILL_CARD" ]; then
+            python examples/skill-trust-gate/scripts/validate_manifest.py \
+              "$SKILL_CARD" \
+              --json > skill-card-validation.json 2>&1 || true
+
+            VALID=$(python3 -c "import json; d=json.load(open('skill-card-validation.json')); print(d.get('valid', False))" 2>/dev/null || echo "false")
+            COMPLETENESS=$(python3 -c "import json; d=json.load(open('skill-card-validation.json')); print(d.get('completeness_score', 0))" 2>/dev/null || echo "0")
+            echo "card_valid=$VALID" >> "$GITHUB_OUTPUT"
+            echo "completeness=$COMPLETENESS" >> "$GITHUB_OUTPUT"
+          else
+            echo "card_valid=false" >> "$GITHUB_OUTPUT"
+            echo "completeness=0" >> "$GITHUB_OUTPUT"
+            echo "::warning::No SKILL-CARD.md found — trust gate defaults to HOLD FOR REVIEW"
+          fi
+
+      - name: Upload scan report artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: trust-gate-report-${{ steps.scan.outputs.skill_name }}
+          path: |
+            trust-gate-*.json
+            trust-gate-*.md
+            skill-card-validation.json
+          retention-days: 90
+
+      - name: Post PR comment with trust gate decision
+        if: github.event_name == 'pull_request'
+        # Fork PRs get a read-only token; the comment API call will 403.
+        # The comment is advisory — never let its failure mask the gate result.
+        continue-on-error: true
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        env:
+          # Outputs derive from PR-controlled content. Inline ${{ }} inside a
+          # JS string literal = script injection with a write token. Env only.
+          DECISION: ${{ steps.scan.outputs.decision }}
+          SEVERITY: ${{ steps.scan.outputs.severity }}
+          AISM: ${{ steps.scan.outputs.aism }}
+          SKILL_NAME: ${{ steps.scan.outputs.skill_name }}
+          CARD_VALID: ${{ steps.validate.outputs.card_valid }}
+          COMPLETENESS: ${{ steps.validate.outputs.completeness }}
+        with:
+          script: |
+            const { DECISION, SEVERITY, AISM, SKILL_NAME, CARD_VALID, COMPLETENESS } = process.env;
+
+            const icons = {
+              'APPROVE': '✅',
+              'APPROVE WITH CONSTRAINTS': '⚠️',
+              'HOLD FOR REVIEW': '🔶',
+              'REJECT': '🚫'
+            };
+            const icon = icons[DECISION] || '❓';
+
+            const body = [
+              '## AI SAFE² Skill Trust Gate Report',
+              '',
+              `**Skill:** \`${SKILL_NAME}\``,
+              `**Decision:** ${icon} **${DECISION}**`,
+              `**Severity:** ${SEVERITY}`,
+              `**AISM Level:** ${AISM}`,
+              `**SKILL-CARD Valid:** ${CARD_VALID === 'true' ? '✅' : '❌'} (${COMPLETENESS}% complete)`,
+              '',
+              '<details>',
+              '<summary>View full scan details</summary>',
+              '',
+              'Download the full scan report from the workflow artifacts.',
+              '',
+              `Framework: AI SAFE² ${process.env.FRAMEWORK_VERSION || 'v3.0'}`,
+              `Scanner: Skill Trust Gate v${process.env.SCANNER_VERSION || '1.0.0'}`,
+              '</details>',
+              '',
+              '---',
+              '*[AI SAFE² Skill Trust Gate](https://github.com/CyberStrategyInstitute/ai-safe2-framework)*'
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Enforce gate on REJECT
+        if: steps.scan.outputs.decision == 'REJECT'
+        env:
+          SKILL_PATH: ${{ matrix.skill_path }}
+          SEVERITY: ${{ steps.scan.outputs.severity }}
+        run: |
+          echo "::error::Trust gate REJECTED: $SKILL_PATH"
+          echo "::error::Severity: $SEVERITY"
+          echo "::error::Review the scan report artifact for required remediation."
+          exit 1
+
+      - name: Enforce gate on HOLD (deny-by-default)
+        if: steps.scan.outputs.decision == 'HOLD FOR REVIEW'
+        env:
+          SKILL_PATH: ${{ matrix.skill_path }}
+        run: |
+          echo "::error::Trust gate HOLD: $SKILL_PATH"
+          echo "::error::Evidence incomplete or risk uncertain. A maintainer must review the artifact and merge with an explicit override — HOLD does not self-approve."
+          exit 1
+
+      - name: Warn on missing SKILL-CARD
+        if: steps.validate.outputs.card_valid == 'false'
+        env:
+          SKILL_PATH: ${{ matrix.skill_path }}
+        run: |
+          echo "::warning::SKILL-CARD.md missing or incomplete for: $SKILL_PATH"
+          echo "::warning::Run: python examples/skill-trust-gate/scripts/generate_skill_card.py <skill-path>"
+
+  # ── Job 3: Summary gate ───────────────────────────────────────────────────
+  trust-gate-summary:
+    name: Trust Gate Summary
+    runs-on: ubuntu-latest
+    needs: [discover-skills, static-trust-gate]
+    if: always() && needs.discover-skills.outputs.has_skills == 'true'
+    steps:
+      - name: Evaluate gate results
+        env:
+          SCAN_RESULT: ${{ needs.static-trust-gate.result }}
+        run: |
+          if [[ "$SCAN_RESULT" == "failure" ]]; then
+            echo "::error::One or more skills failed the trust gate (REJECT or HOLD). Review required before merge."
+            exit 1
+          fi
+          echo "All skill scans passed (APPROVE / APPROVE WITH CONSTRAINTS)."
