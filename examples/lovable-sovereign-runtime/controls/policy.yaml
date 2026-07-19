@@ -1,0 +1,254 @@
+# controls/policy.yaml
+# AI SAFE2 v3.0 Control Registry — Lovable Sovereign Runtime
+# Cyber Strategy Institute
+#
+# All surfaces and control IDs verified against:
+#   - live AI SAFE2 v3.0 framework (raw.githubusercontent.com)
+#   - live Lovable documentation (docs.lovable.dev)
+
+runtime:
+  name: lovable-sovereign-runtime
+  framework_version: "3.0"
+  platform: Lovable (Agent mode + MCP server + Supabase/DB)
+  act_tier: ACT-3   # Autonomous — writes + deploys production code without review per-change
+  hear_required: true
+  cp9_required: false  # Does not spawn independent sub-agents (subagents are read-only)
+  aism_level: 4
+  lovable_mcp_url: https://mcp.lovable.dev
+
+surfaces:
+  - id: LV-KNOW
+    name: Workspace / Project Knowledge Injection
+    description: >
+      Workspace knowledge is "always included in context" for EVERY future
+      message across ALL projects in the workspace. Supports up to 10,000
+      characters. One poisoned workspace knowledge entry = persistent IPI
+      across your entire Lovable account until manually removed.
+      Project knowledge adds per-project context — same injection risk,
+      narrower blast radius.
+    method: scan_workspace_knowledge()
+    source_verification: docs.lovable.dev/features/knowledge
+    controls:
+      - id: P1.T1.2
+        pillar: P1
+        name: Malicious Prompt Filtering
+        severity: CRITICAL
+      - id: P1.T1.10
+        pillar: P1
+        name: Indirect Injection Surface Coverage
+        severity: CRITICAL
+      - id: P1.T1.4_ADV
+        pillar: P1
+        name: NHI Secret Validation
+        severity: CRITICAL
+      - id: S1.3
+        pillar: P1
+        name: Semantic Isolation Boundary Enforcement
+        severity: CRITICAL
+      - id: S1.5
+        pillar: P1
+        name: Memory Governance Boundary Controls
+        severity: CRITICAL
+      - id: S1.6
+        pillar: P1
+        name: Cognitive Injection Sanitization (hidden unicode)
+        severity: HIGH
+    attack_chain: >
+      Attacker crafts malicious workspace knowledge via phishing (admin
+      credentials), supply chain (injecting into a shared knowledge template),
+      or social engineering. Knowledge is saved to the workspace. From that
+      point: every Lovable message in every project sees the malicious
+      instruction. Agent builds code containing exfil, backdoors, or
+      auth bypasses silently across all future builds.
+
+  - id: LV-PLAN
+    name: Plan → Agent Mode Immediate Execution
+    description: >
+      Plan mode is for decision-making. Agent mode is for execution.
+      Approving a plan immediately triggers Agent mode with no additional
+      confirmation step. A plan containing destructive steps (delete all users,
+      disable auth) or injected instructions triggers immediate production
+      code modification on approval.
+    method: scan_plan()
+    source_verification: docs.lovable.dev/features/plan-mode
+    controls:
+      - id: P1.T1.2
+        pillar: P1
+        name: Malicious Prompt Filtering
+        severity: CRITICAL
+      - id: P1.T1.10
+        pillar: P1
+        name: Indirect Injection Surface Coverage
+        severity: CRITICAL
+      - id: S1.3
+        pillar: P1
+        name: Semantic Isolation Boundary Enforcement
+        severity: CRITICAL
+      - id: P4.T7.1
+        pillar: P4
+        name: Human Approval Workflows (HITL gate before execution)
+        severity: HIGH
+
+  - id: LV-SQL
+    name: query_database Full Permission Execution
+    description: >
+      Confirmed verbatim from Lovable MCP docs: query_database "runs SQL
+      with your full database permissions. Read, write, and schema changes."
+      Runs as the database owner — no RLS filtering, no read-only mode.
+      DROP TABLE, TRUNCATE, ALTER TABLE, SECURITY DEFINER, GRANT all execute
+      immediately with no additional confirmation.
+    method: scan_sql_query()
+    source_verification: docs.lovable.dev/integrations/lovable-mcp-server
+    controls:
+      - id: P1.T1.1
+        pillar: P1
+        name: Input Validation and Schema Enforcement (SQL)
+        severity: CRITICAL
+      - id: P1.T1.2
+        pillar: P1
+        name: Malicious Prompt Filtering (SQL injection)
+        severity: CRITICAL
+      - id: P1.T2.5
+        pillar: P1
+        name: Function Access Control (destructive SQL blocked)
+        severity: CRITICAL
+      - id: S1.3
+        pillar: P1
+        name: Semantic Isolation Boundary Enforcement
+        severity: CRITICAL
+    blocked_sql_patterns:
+      - DROP TABLE/DATABASE/SCHEMA/INDEX/VIEW
+      - TRUNCATE TABLE
+      - DELETE FROM table (without specific WHERE)
+      - ALTER TABLE
+      - SECURITY DEFINER functions
+      - GRANT/REVOKE privilege escalation
+      - RLS bypass (DISABLE ROW LEVEL SECURITY)
+      - SQL injection signatures (UNION SELECT, OR 1=1, etc.)
+
+  - id: LV-MCP
+    name: Lovable MCP Full-Account OAuth Scope
+    description: >
+      Confirmed from Lovable MCP docs: "Scope is your full account, not
+      one project. Whatever client you connect can list, read, and edit
+      every project you have access to in Lovable. Tool calls use real
+      credits and edit real projects."
+      deploy_project deploys to production. query_database runs live.
+      No per-project scoping available on the OAuth token.
+    method: scan_mcp_scope()
+    source_verification: docs.lovable.dev/integrations/lovable-mcp-server
+    controls:
+      - id: P1.T2.5
+        pillar: P1
+        name: Function Access Control (high-priv scopes blocked)
+        severity: CRITICAL
+      - id: P1.T2.2_ADV
+        pillar: P1
+        name: NHI Access Control (least privilege)
+        severity: HIGH
+      - id: CP.4
+        pillar: CP
+        name: Agentic Control Plane Governance (project allowlist)
+        severity: HIGH
+      - id: M4.5
+        pillar: P4
+        name: Tool-Misuse Detection (destructive MCP tools)
+        severity: CRITICAL
+    blocked_scopes:
+      - database:write
+      - database:admin
+      - database:schema
+      - projects:delete
+      - workspace:admin
+    blocked_tools:
+      - delete_project
+      - delete_workspace
+      - reset_database
+
+  - id: LV-BUILD
+    name: AI-Generated Production Code Security
+    description: >
+      Lovable Agent mode writes and deploys production code directly.
+      eval() in a generated utility function, hardcoded API keys in a
+      service file, process.env exposed to API responses, or NEXT_PUBLIC_
+      variables carrying secrets — all go live on approval with no code
+      review gate between generation and deployment.
+    method: scan_generated_code()
+    source_verification: docs.lovable.dev/features/agent-mode
+    controls:
+      - id: P1.T1.4_ADV
+        pillar: P1
+        name: NHI Secret Validation (hardcoded keys in code)
+        severity: CRITICAL
+      - id: S1.5
+        pillar: P1
+        name: Memory Governance Boundary Controls (code as persistent artifact)
+        severity: HIGH
+      - id: P2.T3.1
+        pillar: P2
+        name: Real-Time Activity Logging (code generation audit)
+        severity: HIGH
+    blocked_patterns:
+      - eval() / new Function()
+      - execSync() / spawnSync() / child_process
+      - console.log(process.env)
+      - Response/res.json(process.env)
+      - Hardcoded API keys (sk-, pk_live-, xai-)
+      - NEXT_PUBLIC_ secret exposure
+
+  - id: LV-SUBAGENT
+    name: Subagent Sensitive File Access
+    description: >
+      Confirmed from live Lovable docs: subagents "can search your project,
+      inspect files, run read-only lookups" and "report their findings back
+      to the main Lovable agent." Subagents read ALL project files including
+      .env, private keys, and service account credentials. Those findings
+      are passed back to the main agent and may appear in responses.
+    method: scan_subagent_file_access()
+    source_verification: docs.lovable.dev/features/subagents
+    controls:
+      - id: P1.T1.4_ADV
+        pillar: P1
+        name: NHI Secret Validation
+        severity: HIGH
+      - id: P1.T2.6
+        pillar: P1
+        name: Data Isolation (sensitive files)
+        severity: HIGH
+      - id: S1.5
+        pillar: P1
+        name: Memory Governance Boundary Controls
+        severity: HIGH
+    blocked_path_patterns:
+      - .env, .env.local, .env.production, .env.staging
+      - id_rsa, id_ed25519, id_ecdsa
+      - *.pem, *.key, *.p12, *.pfx
+      - service_account.json, credentials.json
+      - .aws/credentials, .aws/config
+      - secrets.yaml, secrets.json
+
+nexus_integration:
+  shared_engine: true
+  love_equation:
+    max_score: 100.0
+    deduction_per_violation: 2.0
+    green_threshold: 80.0
+    yellow_threshold: 60.0
+    red_threshold: 0.0
+  audit_chain: sha256_jsonl
+  siem_format: jsonl
+  audit_log_path: reports/
+
+compliance_frameworks:
+  - NIST AI RMF
+  - ISO 42001
+  - OWASP AIVSS v0.8
+  - OWASP LLM Top 10 (LLM01 Prompt Injection)
+  - OWASP Agentic Top 10
+  - MITRE ATLAS
+  - EU AI Act
+  - SOC 2 (CC.6.1, CC.6.2, CC.7.2)
+  - HIPAA (PHI in DB — P1.T1.5)
+  - PCI-DSS v4 (hardcoded keys — LV.BUILD.HARDKEY)
+  - CMMC 2.0
+  - Zero Trust
