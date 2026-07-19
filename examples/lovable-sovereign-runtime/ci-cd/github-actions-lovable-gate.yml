@@ -1,0 +1,166 @@
+# .github/workflows/ai-safe2-lovable-gate.yml
+# AI SAFE2 v3.0 CI/CD Gate — Lovable Sovereign Runtime
+# Cyber Strategy Institute
+
+name: AI SAFE2 Lovable Sovereign Gate
+
+on:
+  push:
+    branches: [main, master, develop]
+    paths:
+      - 'examples/lovable-sovereign-runtime/**'
+      - 'workspace-knowledge/**'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'examples/lovable-sovereign-runtime/**'
+  workflow_dispatch:
+
+env:
+  PYTHONPATH: examples/lovable-sovereign-runtime/enforcement
+
+jobs:
+  # ── Job 1: Sovereign Runtime Smoke Test ──────────────────────
+  smoke-test:
+    name: AI SAFE2 Smoke Test (21/21 Required)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify stdlib-only enforcement
+        working-directory: examples/lovable-sovereign-runtime
+        run: |
+          python3 -c "
+          import ast, pathlib, sys
+          for f in pathlib.Path('enforcement').glob('*.py'):
+              tree = ast.parse(f.read_text())
+              for node in ast.walk(tree):
+                  if isinstance(node, (ast.Import, ast.ImportFrom)):
+                      for alias in getattr(node, 'names', [node]):
+                          name = getattr(alias, 'name', '') or getattr(node, 'module', '')
+                          if name and name.split('.')[0] not in sys.stdlib_module_names:
+                              if name not in ('ai_safe2_engine', 'sovereign_lovable'):
+                                  print(f'FAIL: {f.name}: {name}')
+                                  sys.exit(1)
+          print('OK: stdlib-only enforcement verified')
+          "
+
+      - name: Run 21/21 smoke test
+        working-directory: examples/lovable-sovereign-runtime
+        run: python3 smoke_test.py
+
+  # ── Job 2: Scan Workspace Knowledge Changes ───────────────────
+  scan-knowledge:
+    name: Scan Workspace Knowledge Content
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Scan changed knowledge files
+        working-directory: examples/lovable-sovereign-runtime
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | \
+                    grep -E 'workspace-knowledge/|project-knowledge/' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No knowledge files changed."
+            exit 0
+          fi
+          python3 - << 'EOF'
+          import sys, pathlib
+          sys.path.insert(0, 'enforcement')
+          from sovereign_lovable import LovableSovereignRuntime
+          guard = LovableSovereignRuntime()
+          failed = []
+          for f in pathlib.Path('../../workspace-knowledge').glob('*.md'):
+              try:
+                  guard.scan_workspace_knowledge(f.read_text(), 'workspace')
+                  print(f'[OK] {f.name}')
+              except ValueError as e:
+                  print(f'[BLOCKED] {f.name}: {e}')
+                  failed.append(str(f))
+          if failed:
+              print(f'::error::Knowledge files BLOCKED: {failed}')
+              sys.exit(1)
+          EOF
+
+  # ── Job 3: Scan Generated Code (if present in repo) ──────────
+  scan-generated-code:
+    name: Scan Any AI-Generated Code Additions
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Scan changed TS/JS/Python files
+        working-directory: examples/lovable-sovereign-runtime
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          CHANGED=$(git diff --name-only origin/${{ github.base_ref }} HEAD | \
+                    grep -E '\.(ts|tsx|js|jsx|py)$' | \
+                    grep -v 'enforcement/' | \
+                    grep -v 'smoke_test' || true)
+          if [ -z "$CHANGED" ]; then
+            echo "No application code changed."
+            exit 0
+          fi
+          python3 - << 'EOF'
+          import sys, pathlib
+          sys.path.insert(0, 'enforcement')
+          from sovereign_lovable import LovableSovereignRuntime
+          guard = LovableSovereignRuntime()
+          failed = []
+          for rel in """${{ steps.changed-code.outputs.files }}""".strip().split():
+              p = pathlib.Path('../../' + rel)
+              if not p.exists():
+                  continue
+              try:
+                  guard.scan_generated_code(p.read_text(), p.name)
+                  print(f'[OK] {rel}')
+              except ValueError as e:
+                  print(f'[BLOCKED] {rel}: {e}')
+                  failed.append(rel)
+          if failed:
+              print(f'::error::Code files BLOCKED by AI SAFE2: {failed}')
+              sys.exit(1)
+          EOF
+
+  # ── Job 4: Love Equation Gate ─────────────────────────────────
+  love-equation-gate:
+    name: Love Equation Band Gate (GREEN Required for Deploy)
+    runs-on: ubuntu-latest
+    needs: [smoke-test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Assert GREEN band
+        working-directory: examples/lovable-sovereign-runtime
+        run: |
+          python3 - << 'EOF'
+          import sys
+          sys.path.insert(0, 'enforcement')
+          from sovereign_lovable import LovableSovereignRuntime
+          guard = LovableSovereignRuntime()
+          status = guard.get_status()
+          band  = status['alignment_band']
+          score = status['love_score']
+          print(f'Love Score: {score} | Band: {band}')
+          # Lovable writes + deploys production code — require GREEN
+          if band != 'GREEN':
+              print('::error::Band is not GREEN. Lovable deployment blocked.')
+              sys.exit(1)
+          print('AI SAFE2 Lovable gate: GREEN — pipeline cleared.')
+          EOF

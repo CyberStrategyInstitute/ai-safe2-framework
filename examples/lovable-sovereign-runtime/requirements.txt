@@ -1,0 +1,13 @@
+# requirements.txt — Lovable Sovereign Runtime
+# AI SAFE2 v3.0 | Cyber Strategy Institute
+#
+# enforcement/ is stdlib-only. No install required for core enforcement.
+# Optional: Lovable API client if running programmatic integrations.
+
+# ── Optional: Lovable API / MCP integration ───────────────────
+# httpx>=0.27.0          # For Lovable API calls with AI SAFE2 pre-scan
+
+# ── Development only ─────────────────────────────────────────
+# pytest>=8.0.0          # Run: pytest smoke_test.py -v
+
+# Zero runtime dependencies for enforcement/. Deploy immediately.
