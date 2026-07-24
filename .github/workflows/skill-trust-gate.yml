@@ -213,7 +213,7 @@ jobs:
         # Fork PRs get a read-only token; the comment API call will 403.
         # The comment is advisory — never let its failure mask the gate result.
         continue-on-error: true
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v7
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           # Outputs derive from PR-controlled content. Inline ${{ }} inside a
           # JS string literal = script injection with a write token. Env only.
