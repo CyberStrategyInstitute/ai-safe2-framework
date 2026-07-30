@@ -73,7 +73,7 @@ This captures time-shifted attacks — latent prompt poisoning, slow memory cond
 ---
 
 <a id="cp3"></a>
-## CP.3 — ACT Capability Tiers 1-4
+## CP.3 — Agent Capability Tiers (ACT) Capability Tiers 1-4
 
 **What it governs:** How agents are classified by autonomy level and how mandatory control requirements scale with that classification.
 
