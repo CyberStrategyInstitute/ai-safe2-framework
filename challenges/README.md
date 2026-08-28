@@ -27,6 +27,8 @@ The Challenge Lab is designed to answer six questions:
 |---|---|---|---|
 | 001 | [Anthropic Multi-Agent Turf War](./001-anthropic-multi-agent-turf-war/) | Can externally enforced authority stop destructive multi-agent conflict without blocking legitimate collaboration? | Design and pre-registration |
 
+[Read the Challenge 001 announcement](./001-anthropic-multi-agent-turf-war/ANNOUNCEMENT.md).
+
 ## Claim maturity
 
 | Level | Status | Evidence |
