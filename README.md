@@ -13,7 +13,7 @@
 [![Scope](https://img.shields.io/badge/Scope-161_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm_%7C_CP.1--CP.10-red)](https://cyberstrategyinstitute.com/ai-safe2/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/graphs/commit-activity)
 
-**[Why AI SAFE²](#-what-ai-safe-is-for)** · **[5-Min Start](#-start-securing-in-5-minutes)** · **[Architecture](#️-the-core-architecture)** · **[Examples](#-examples-sovereign-runtimes-in-the-wild)** · **[32 Frameworks](#️-the-universal-rosetta-stone--32-frameworks)** · **[Comparison](#-why-the-race-is-over-comparison-matrix)** · **[Get Toolkit](#-fast-track-implementation-the-toolkit)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
+**[Why AI SAFE²](#-what-ai-safe-is-for)** · **[5-Min Start](#-start-securing-in-5-minutes)** · **[Architecture](#️-the-core-architecture)** · **[Examples](#-examples-sovereign-runtimes-in-the-wild)** · **[Challenge Lab](#-challenge-lab-falsification-before-claims)** · **[32 Frameworks](#️-the-universal-rosetta-stone--32-frameworks)** · **[Comparison](#-why-the-race-is-over-comparison-matrix)** · **[Get Toolkit](#-fast-track-implementation-the-toolkit)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
 
 </div>
 
@@ -111,6 +111,7 @@ The framework is organized around **5 Operational Pillars** plus a **Cross-Pilla
 | Cross-Pillar Governance | [00-cross-pillar/](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/00-cross-pillar/README.md) | CP.1-CP.10: ACT tiers, HEAR doctrine, replication governance |
 | AISM Layer | [AISM/](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/AISM) | Governance, control mapping, operational oversight |
 | Research Notes | [research/](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/research) | Deep-dive evidence for all controls (001-014) |
+| Challenge Lab | [challenges/](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/challenges) | Open experiments that validate, limit, or invalidate control claims |
 | Interactive Dashboard | [Launch Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | Search, filter, and explore all 161 controls live |
 
 ---
@@ -154,6 +155,20 @@ This table regenerates itself. It does not rely on someone remembering to edit t
 3. [`.github/workflows/update-examples-readme.yml`](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/.github/workflows/update-examples-readme.yml) runs that script on every push to `examples/**` and commits the updated README automatically. No PR review needed for the table itself, just for the example.
 
 Add a new folder under `examples/`, give it a `README.md`, push it. The table updates on its own within the same CI run.
+
+---
+
+## 🧪 Challenge Lab: Falsification Before Claims
+
+The [AI SAFE² Challenge Lab](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/challenges) converts public incidents, evaluation findings, and credible agentic threats into reproducible experiments.
+
+Controls receive credit only when an implementation changes observable security outcomes under pre-registered conditions. Every challenge includes credible baselines, explicit invalidation criteria, utility measures, evidence requirements, and an independent-replication path.
+
+| Challenge | Primary question | Status |
+|---|---|---|
+| [001: Anthropic Multi-Agent Turf War](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/challenges/001-anthropic-multi-agent-turf-war) | Can externally enforced authority stop destructive multi-agent conflict without blocking legitimate collaboration? | Design and pre-registration |
+
+**The framework is the subject of the test, not the source of its own proof.**
 
 ---
 
@@ -415,6 +430,7 @@ AI SAFE² is a living standard that adapts to the threat landscape.
 ├── assets/                    # Visual Maps, Badges & Diagrams
 ├── config/                    # Security Configurations (default.yaml)
 ├── examples/                  # 🧪 Real-world usage examples (see Examples section above)
+├── challenges/                # 🧪 Open falsification and replication experiments
 ├── gateway/                   # 🛡️ The AI SAFE² Gateway (Runtime Enforcement Layer)
 ├── guides/                    # 📚 Implementation Guides (Python & No-Code)
 ├── research/                  # 🧠 Threat Intelligence & Deep Dive Evidence (001-014)

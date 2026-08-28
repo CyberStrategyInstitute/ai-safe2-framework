@@ -1,0 +1,67 @@
+name: Challenge Finding
+description: Report a bypass, grader defect, replication, utility failure, or methodological correction for an AI SAFE² challenge.
+title: "[CHALLENGE] "
+labels: ["needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for public, non-sensitive findings about an AI SAFE² Challenge Lab experiment. Report security-sensitive bypasses through the process in SECURITY.md instead.
+
+  - type: input
+    id: challenge
+    attributes:
+      label: Challenge ID
+      placeholder: "001-anthropic-multi-agent-turf-war"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: finding-type
+    attributes:
+      label: Finding type
+      options:
+        - "Control bypass"
+        - "Grader defect"
+        - "False block or utility failure"
+        - "Independent replication"
+        - "Evidence or reproducibility gap"
+        - "Statistical or methodological correction"
+        - "Cheaper or simpler equivalent control"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: claim
+    attributes:
+      label: Affected claim or hypothesis
+      description: Identify the control claim, hypothesis, treatment, scenario, or result affected by the finding.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Provide reproducible steps, manifests, traces, state diffs, grader output, or evidence-package references. Do not include secrets or weaponized payloads.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-impact
+    attributes:
+      label: Expected impact on claim status
+      description: Explain whether the finding validates, limits, invalidates, or leaves the claim unresolved.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I used only systems I was authorized to test and removed secrets, personal data, and weaponized payloads from this report.
+          required: true
