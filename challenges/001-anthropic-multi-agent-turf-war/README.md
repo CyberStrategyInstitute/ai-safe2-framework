@@ -9,7 +9,7 @@
 **Framework under test:** AI SAFE² v3.0 and AISM
 **Reference implementation under test:** NEXUS-A2A v0.3, Guardian, VCC, NOR, Memory Vaccine, Gateway, and selected enforcement adapters
 
-[Challenge Lab](../README.md) | [Incident](#incident-summary) | [Hypothesis](#challenge-hypothesis) | [Treatments](#experimental-treatments) | [Claims](./CONTROL_CLAIMS.md) | [Threat Model](./THREAT_MODEL.md) | [Rules of Engagement](./ROE.md) | [Evidence](./EVIDENCE.md) | [Replication](./REPLICATION.md) | [Sources](#primary-sources)
+[Challenge Lab](../README.md) | [Announcement](./ANNOUNCEMENT.md) | [Incident](#incident-summary) | [Hypothesis](#challenge-hypothesis) | [Treatments](#experimental-treatments) | [Claims](./CONTROL_CLAIMS.md) | [Threat Model](./THREAT_MODEL.md) | [Rules of Engagement](./ROE.md) | [Evidence](./EVIDENCE.md) | [Replication](./REPLICATION.md) | [Sources](#primary-sources)
 
 ---
 
