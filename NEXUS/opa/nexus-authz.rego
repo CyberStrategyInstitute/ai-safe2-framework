@@ -1,14 +1,13 @@
 # nexus-authz.rego
 # NEXUS L3 Core Authorization Policy
+# AI SAFE2 v3.1 compatible | NEXUS-A2A v0.3
+#
 # Deploy: opa run --server --bundle ./opa/
 # Query: POST http://localhost:8181/v1/data/nexus/authz/authorize_tool_call
 #
-# This policy runs OUTSIDE the agent process.
-# The agent cannot read, modify, or override these decisions.
-# Even a successfully prompt-injected agent cannot bypass OPA.
-#
-# Sub-millisecond target: p99 < 0.1ms (per Microsoft Agent Governance Toolkit benchmarks)
-# OPA evaluates from a loaded in-memory data snapshot - no network call per decision.
+# This policy runs outside the agent process. Governance decisions bind to
+# verified identity, capability, delegation, policy context, and explicit
+# persistence scope rather than a transport session.
 
 package nexus.authz
 
@@ -18,8 +17,43 @@ default allow = false
 default mandate_required = false
 default deny_reason = ""
 
-# ── Primary allow rule ────────────────────────────────────────────────────────
-# All conditions must be true simultaneously.
+# ---------------------------------------------------------------------------
+# v3.1 persistence-scope compatibility
+# ---------------------------------------------------------------------------
+
+persistence_scope := scope {
+    input.persistence_scope
+    scope := lower(input.persistence_scope)
+}
+
+persistence_scope := "request" {
+    not input.persistence_scope
+    input.memory_zone in {"SESSION", "SESSION_MEMORY", "request"}
+}
+
+persistence_scope := "handle_scoped" {
+    not input.persistence_scope
+    input.memory_zone in {"CROSS_SESSION", "CROSS_SESSION_MEMORY", "handle_scoped", "cross_session"}
+}
+
+persistence_scope := "durable" {
+    not input.persistence_scope
+    input.memory_zone in {"PERMANENT", "PERMANENT_MEMORY", "durable", "permanent"}
+}
+
+persistence_scope := "swarm_shared" {
+    not input.persistence_scope
+    input.memory_zone in {"SWARM_SHARED", "SWARM_SHARED_MEMORY", "swarm_shared"}
+}
+
+requires_memory_mandate {
+    persistence_scope in {"durable", "swarm_shared"}
+}
+
+# ---------------------------------------------------------------------------
+# Primary allow rule
+# ---------------------------------------------------------------------------
+
 allow {
     has_valid_capability
     not is_mandate_required_op
@@ -27,11 +61,21 @@ allow {
     not is_agent_revoked
     is_valid_context_compartment
     not is_scope_widening
+    not memory_mandate_missing
 }
 
-# ── Mandate required (Class-H operations need HEAR signature) ─────────────────
+# ---------------------------------------------------------------------------
+# Mandate handling
+# ---------------------------------------------------------------------------
+
 mandate_required {
     input.tool_name in input.vcc_mandate_required
+    not valid_mandate_exists
+}
+
+mandate_required {
+    input.performative == "memory_write"
+    requires_memory_mandate
     not valid_mandate_exists
 }
 
@@ -41,13 +85,22 @@ valid_mandate_exists {
     data.nexus.mandates.active[input.mandate_id]
 }
 
-# ── Core condition rules ──────────────────────────────────────────────────────
+# ---------------------------------------------------------------------------
+# Core conditions
+# ---------------------------------------------------------------------------
+
 has_valid_capability {
     input.tool_name in input.vcc_capabilities
 }
 
 is_mandate_required_op {
     input.tool_name in input.vcc_mandate_required
+    not valid_mandate_exists
+}
+
+memory_mandate_missing {
+    input.performative == "memory_write"
+    requires_memory_mandate
     not valid_mandate_exists
 }
 
@@ -67,30 +120,28 @@ is_valid_context_compartment {
     input.context_compartment in {"TASK_CONTEXT", "CREDENTIAL_SURFACE", "AGENT_STATE"}
 }
 
-# Scope widening: requested capabilities exceed parent capabilities
-# This enforces the NEXUS monotonic scope narrowing invariant.
 is_scope_widening {
     some cap in input.requested_new_capabilities
     not cap in input.parent_vcc_capabilities
 }
 
-# ── Context compartment enforcement ──────────────────────────────────────────
-# Credential access is blocked from TASK_CONTEXT (L4 requirement)
+# ---------------------------------------------------------------------------
+# Explicit deny reasons
+# ---------------------------------------------------------------------------
+
 deny {
     input.context_compartment == "TASK_CONTEXT"
     startswith(input.tool_name, "credential:")
     deny_reason := "TASK_CONTEXT cannot access credential: tools"
 }
 
-# AGENT_STATE writes require Memory Mandate
 deny {
     input.performative == "memory_write"
-    input.memory_zone in {"CROSS_SESSION_MEMORY", "PERMANENT_MEMORY"}
+    requires_memory_mandate
     not valid_mandate_exists
-    deny_reason := "Cross-session and permanent memory writes require a Memory Mandate"
+    deny_reason := concat("", [persistence_scope, " memory writes require a Memory Mandate"])
 }
 
-# CONFIG_CHANGE requires out-of-band approval for ACT-2+ (Section 9 APEM)
 deny {
     input.performative == "config_change"
     input.act_tier >= 2
@@ -98,17 +149,21 @@ deny {
     deny_reason := "ConfigChange requires out-of-band approval for ACT-2+ agents"
 }
 
-# ── Combined authorization decision ──────────────────────────────────────────
-# Returns the full decision with audit metadata for NOR chain.
+# ---------------------------------------------------------------------------
+# Combined authorization decision
+# ---------------------------------------------------------------------------
+
 authorize_tool_call := decision {
     decision := {
         "allow": allow,
         "mandate_required": mandate_required,
         "deny_reason": deny_reason,
-        "policy_version": "nexus-authz-v0.2",
+        "policy_version": "nexus-authz-v0.3-v31",
+        "framework_version": "AI SAFE2 v3.1",
         "decision_timestamp": time.now_ns(),
         "agent_id": input.agent_id,
         "tool_name": input.tool_name,
         "delegation_depth": input.delegation_depth,
+        "persistence_scope": persistence_scope,
     }
 }
