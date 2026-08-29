@@ -4,7 +4,7 @@
 This script deliberately does not rewrite technical bodies. It adds or refreshes
 bounded UX blocks so historical findings, publication dates, component versions,
 and implementation details remain intact while repository navigation and current
-framework context stay consistent.
+framework context stay consistent. Existing line-ending style is preserved.
 """
 from __future__ import annotations
 
@@ -25,15 +25,63 @@ BADGE_EXAMPLE = "https://img.shields.io/badge/Surface-Example-820F1A?style=flat-
 BADGE_RESEARCH = "https://img.shields.io/badge/Surface-Research-820F1A?style=flat-square"
 BADGE_CONTEXT = "https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square"
 
+EXAMPLE_METADATA_OVERRIDES = {
+    "langflow-sovereign-runtime": (
+        "Langflow",
+        "Sovereign runtime defense package for the Langflow visual builder.",
+    ),
+    "slowmist-overlay": (
+        "SlowMist / OpenClaw",
+        "Threat-intelligence overlay mapping SlowMist OpenClaw security practices to AI SAFE2 controls.",
+    ),
+}
+
+
+def read_exact(path: Path) -> str:
+    return path.read_bytes().decode("utf-8")
+
+
+def write_exact(path: Path, text: str) -> None:
+    path.write_bytes(text.encode("utf-8"))
+
+
+def newline_for(text: str) -> str:
+    return "\r\n" if "\r\n" in text else "\n"
+
+
+def adapt_newlines(block: str, newline: str) -> str:
+    return block.replace("\r\n", "\n").replace("\n", newline)
+
 
 def replace_or_insert(text: str, start: str, end: str, block: str, *, prepend: bool) -> str:
+    newline = newline_for(text)
+    block = adapt_newlines(block, newline)
     pattern = re.compile(re.escape(start) + r".*?" + re.escape(end), re.DOTALL)
     if pattern.search(text):
-        return pattern.sub(block, text, count=1)
+        return pattern.sub(lambda _: block, text, count=1)
     stripped = text.lstrip("\ufeff")
     if prepend:
-        return block + "\n\n" + stripped
-    return stripped.rstrip() + "\n\n" + block + "\n"
+        return block + newline + newline + stripped
+    return stripped.rstrip() + newline + newline + block + newline
+
+
+def apply_example_metadata_override(path: Path, text: str) -> str:
+    override = EXAMPLE_METADATA_OVERRIDES.get(path.parent.name)
+    if not override:
+        return text
+    stack, description = override
+    newline = newline_for(text)
+    stack_line = f"<!-- stack: {stack} -->"
+    desc_line = f"<!-- description: {description} -->"
+    if re.search(r"<!--\s*stack:\s*.+?\s*-->", text, re.IGNORECASE):
+        text = re.sub(r"<!--\s*stack:\s*.+?\s*-->", stack_line, text, count=1, flags=re.IGNORECASE)
+    else:
+        text = stack_line + newline + text
+    if re.search(r"<!--\s*description:\s*.+?\s*-->", text, re.IGNORECASE):
+        text = re.sub(r"<!--\s*description:\s*.+?\s*-->", desc_line, text, count=1, flags=re.IGNORECASE)
+    else:
+        text = desc_line + newline + text
+    return text
 
 
 def example_top() -> str:
@@ -96,11 +144,12 @@ def research_footer(previous_name: str | None, next_name: str | None) -> str:
 def normalize_examples() -> list[Path]:
     changed: list[Path] = []
     for path in sorted(EXAMPLES.glob("*/README.md")):
-        original = path.read_text(encoding="utf-8")
-        text = replace_or_insert(original, TOP_START, TOP_END, example_top(), prepend=True)
+        original = read_exact(path)
+        text = apply_example_metadata_override(path, original)
+        text = replace_or_insert(text, TOP_START, TOP_END, example_top(), prepend=True)
         text = replace_or_insert(text, BOTTOM_START, BOTTOM_END, example_footer(), prepend=False)
         if text != original:
-            path.write_text(text, encoding="utf-8")
+            write_exact(path, text)
             changed.append(path)
     return changed
 
@@ -113,7 +162,7 @@ def research_notes() -> list[Path]:
 
 
 def extract_title(path: Path) -> str:
-    text = path.read_text(encoding="utf-8", errors="replace")
+    text = read_exact(path)
     match = re.search(r"^#\s+(.+?)\s*$", text, re.MULTILINE)
     if match:
         return match.group(1).strip().replace("|", "-")
@@ -169,7 +218,7 @@ def normalize_research() -> list[Path]:
     for index, path in enumerate(notes):
         previous_name = notes[index - 1].name if index > 0 else None
         next_name = notes[index + 1].name if index + 1 < len(notes) else None
-        original = path.read_text(encoding="utf-8")
+        original = read_exact(path)
         text = replace_or_insert(original, TOP_START, TOP_END, research_top(), prepend=True)
         text = replace_or_insert(
             text,
@@ -179,14 +228,14 @@ def normalize_research() -> list[Path]:
             prepend=False,
         )
         if text != original:
-            path.write_text(text, encoding="utf-8")
+            write_exact(path, text)
             changed.append(path)
 
     index_path = RESEARCH / "README.md"
     index_text = build_research_index(notes)
-    previous = index_path.read_text(encoding="utf-8") if index_path.exists() else ""
+    previous = read_exact(index_path) if index_path.exists() else ""
     if index_text != previous:
-        index_path.write_text(index_text, encoding="utf-8")
+        write_exact(index_path, index_text)
         changed.append(index_path)
     return changed
 
