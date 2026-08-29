@@ -1,13 +1,19 @@
 # Pillar 5: Evolve & Educate (P5)
 ### 🧬 The Feedback Loop
 
-[🔙 Back to Main Framework](../README.md) | [← Pillar 4: Engage & Monitor](../04-engage-monitor/README.md) | [Cross-Pillar Governance →](../cross-pillar/README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Layer](https://img.shields.io/badge/Layer-Pillar_5-820F1A?style=flat-square)](./README.md)
+[![Status](https://img.shields.io/badge/Status-Current-808080?style=flat-square)](../EVOLUTION.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+**Previous:** [← Pillar 4: Engage & Monitor](../04-engage-monitor/README.md) | **Next:** [Cross-Pillar Governance →](../00-cross-pillar/README.md)
 
 ---
 
 ## 🎯 The Problem. The Realization. The Solution.
 
-**Problem:** Most organizations red-team their AI systems once, at launch. Then the model gets updated, the RAG corpus changes, new tools are added, the system prompt is modified — and the system that was tested no longer exists. The red-team report becomes a historical artifact. Security findings from red-team exercises live in a report that gets filed and never referenced again. The next exercise starts from scratch.
+**Problem:** Most organizations red-team their AI systems once, at launch. Then the model gets updated, the RAG corpus changes, new tools are added, the system prompt is modified, and the system that was tested no longer exists. The red-team report becomes a historical artifact. Security findings from red-team exercises live in a report that gets filed and never referenced again. The next exercise starts from scratch.
 
 **Realization:** AI systems change continuously. Their threat surface changes with them. A governance model that evaluates at launch and reviews annually cannot keep pace with a system that updates weekly. The feedback loop must be continuous, automated at the gate level, and institutionally structured so that findings compound rather than disappear.
 
@@ -89,14 +95,14 @@
 
 ### ⚡ v3.0 New Controls
 
-> Full control specifications are included in the [AI SAFE² v3.0 Implementation Toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
+> These controls were introduced in v3.0 and remain part of the current [AI SAFE² v3.1 framework](../README.md). Current implementation resources are available through the [AI SAFE² toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
 
 | Control | Name | Priority | What It Solves |
 | :--- | :--- | :--- | :--- |
-| **[E5.1]** | Continuous Adversarial Evaluation Cadence | 🔴 CRITICAL | Mandatory evaluation gates triggered by model updates, prompt changes, tool additions, and quarterly cadence — tests the current system, not the launch-day system |
-| **[E5.2]** | Capability Emergence Review Process | 🟠 HIGH | Structured governance for emergent agent capabilities: Tier 1 document, Tier 2 security review, Tier 3 board approval, Tier 4 suspend pending investigation |
-| **[E5.3]** | Evaluation-Safe Pattern Library | 🟡 MEDIUM | Validated reference implementations for all AI SAFE² controls with platform-specific variants for Bedrock, Azure AI, LangGraph, AutoGen, n8n, and CrewAI |
-| **[E5.4]** | Red-Team Artifact Repository | 🟠 HIGH | Structured schema for all red-team findings; required deliverable from every exercise; findings automatically feed into E5.1 evaluation cadence |
+| **[E5.1]** | Continuous Adversarial Evaluation Cadence | 🔴 CRITICAL | Mandatory evaluation gates triggered by model updates, prompt changes, tool additions, and quarterly cadence; tests the current system, not the launch-day system |
+| **[E5.2]** | Capability Emergence Review Process | 🟠 HIGH | Structured governance for emergent agent capabilities with escalating review requirements |
+| **[E5.3]** | Evaluation-Safe Pattern Library | 🟡 MEDIUM | Validated reference implementations for AI SAFE² controls with platform-specific variants |
+| **[E5.4]** | Red-Team Artifact Repository | 🟠 HIGH | Structured schema for red-team findings; findings feed directly into the continuous evaluation cadence |
 
 ---
 
@@ -117,12 +123,10 @@
 
 | Previous | Current | Next |
 | :--- | :--- | :--- |
-| [Pillar 4: Engage & Monitor](../04-engage-monitor/README.md) | **Pillar 5: Evolve & Educate** | [Cross-Pillar Governance →](../00-cross-pillar/README.md) |
+| [Pillar 4: Engage & Monitor](../04-engage-monitor/README.md) | **Pillar 5: Evolve & Educate** | [Cross-Pillar Governance](../00-cross-pillar/README.md) |
 
-→ [Cross-Pillar Governance (CP.1-CP.10)](../cross-pillar/README.md)
-→ [Interactive Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
-→ [Get the Full Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | [Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
 
 ---
 
-*Powered by [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
