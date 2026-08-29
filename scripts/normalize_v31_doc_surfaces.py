@@ -112,6 +112,57 @@ def research_notes() -> list[Path]:
     )
 
 
+def extract_title(path: Path) -> str:
+    text = path.read_text(encoding="utf-8", errors="replace")
+    match = re.search(r"^#\s+(.+?)\s*$", text, re.MULTILINE)
+    if match:
+        return match.group(1).strip().replace("|", "-")
+    return path.stem.replace("_", " ")
+
+
+def build_research_index(notes: list[Path]) -> str:
+    rows = []
+    for path in notes:
+        number = path.name.split("_", 1)[0]
+        rows.append(f"| {number} | [{extract_title(path)}](./{path.name}) | Original publication context preserved; interpret current implementation guidance through v3.1 |")
+    table = "\n".join(rows)
+    return f"""# AI SAFE2 Research Index
+### Evidence, threat analysis, and framework foundations
+
+[![AI SAFE2 v3.1]({BADGE_VERSION})](../README.md)
+[![Surface: Research]({BADGE_RESEARCH})](./README.md)
+[![Context: v3.1 Current]({BADGE_CONTEXT})](../docs/REPOSITORY-UX-STANDARD.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Challenge Lab](../challenges/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+---
+
+## How to read the research library
+
+The research library records the evidence and reasoning that informed AI SAFE2 over time. Individual notes retain their original publication dates, terminology, findings, and historical framework references so the evidence trail remains inspectable.
+
+**Current normative context is AI SAFE2 v3.1.** Historical research does not override the current framework, CP.5 profile, MCP specification binding, or current conformance requirements.
+
+For MCP implementation decisions, use the [CP.5.MCP v3.1 profile](../00-cross-pillar/cp5_mcp_server_security.md) and MCP `2026-07-28` semantics.
+
+---
+
+## Research notes
+
+| Note | Research article | Current-use guidance |
+|---|---|---|
+{table}
+
+---
+
+## Repository navigation
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Examples](../examples/) | [Challenge Lab](../challenges/)
+
+*AI SAFE2 v3.1 | Cyber Strategy Institute*
+"""
+
+
 def normalize_research() -> list[Path]:
     changed: list[Path] = []
     notes = research_notes()
@@ -130,6 +181,13 @@ def normalize_research() -> list[Path]:
         if text != original:
             path.write_text(text, encoding="utf-8")
             changed.append(path)
+
+    index_path = RESEARCH / "README.md"
+    index_text = build_research_index(notes)
+    previous = index_path.read_text(encoding="utf-8") if index_path.exists() else ""
+    if index_text != previous:
+        index_path.write_text(index_text, encoding="utf-8")
+        changed.append(index_path)
     return changed
 
 
