@@ -62,7 +62,7 @@ A state handle or legacy `Mcp-Session-Id` is not identity and is not, by itself,
 - `server/discover` is optional under the 2026-07-28 binding. Its absence is not a conformance failure.
 - MCP-19 requires intended-resource, audience, or equivalent evidenced binding.
 - Possession of an opaque bearer token does not by itself prove MCP-19 audience/resource validation.
-- The NEXUS MCP adapter in `NEXUS/adapters/mcp/adapter.py` is fail-closed scaffolding and must not be represented as production-ready.
+- The NEXUS MCP adapter in `NEXUS/adapters/mcp/adapter.py` is fail-closed scaffolding. Status: not production-ready.
 
 ## Recommended machine workflow
 
