@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "profile": "CP.5.MCP",
+    "version": "3.1.0",
+    "mcp_spec_version": "2026-07-28",
+    "legacy_mcp_spec_version": "2025-11-25",
+    "legacy_support_months": 12,
+    "profile_controls": 19,
+    "framework_controls_total": 161,
+    "governance_unit": "verified_principal"
+  },
+  "controls": [
+    {"id":"MCP-1","name":"Command Construction Safety","priority":"CRITICAL","description":"Prevent unsafe executable command construction from untrusted tool arguments.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-2","name":"Return-Path Content Sanitization","priority":"CRITICAL","description":"Treat tool output as untrusted content and inspect it before model-context entry.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-3","name":"Least-Privilege Tool Exposure","priority":"CRITICAL","description":"Expose only explicitly authorized tools and resources to each verified principal.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-4","name":"Server and Binary Integrity","priority":"CRITICAL","description":"Verify local binaries before spawn and remote endpoint identity before protected use.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-5","name":"Tool Invocation Audit","priority":"HIGH","description":"Emit attributable and independently reconstructable evidence for protected tool invocations.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-6","name":"Input Validation","priority":"CRITICAL","description":"Validate tool input against the authorized schema and policy before dispatch.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-7","name":"Trust Establishment","priority":"CRITICAL","description":"Establish a verified principal and policy context before protected tool use.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-8","name":"Economic Ceiling","priority":"CRITICAL","description":"Attribute consumption to a principal and fail closed at the authorized ceiling.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-9","name":"Secret Boundary","priority":"CRITICAL","description":"Keep secrets out of model context, untrusted output, arguments, and inappropriate logs.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-10","name":"Delegation Edge Monitoring","priority":"CRITICAL","description":"Preserve originating delegation lineage across agent-to-tool actions.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-11","name":"Catalog Provenance","priority":"HIGH","description":"Compare catalogs against an authorized provenance baseline at trust establishment and revalidation.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-12","name":"Principal-Scoped State","priority":"CRITICAL","description":"Bind durable or handle-scoped state to the verified principal and policy context.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-13","name":"Revocation and Reauthorization","priority":"CRITICAL","description":"Invalidate prior authorization after revocation or material policy change without relying on a transport session boundary.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-14","name":"Extension Capability Negotiation","priority":"HIGH","description":"Permit extensions only when included in the principal capability grant and recorded at trust establishment.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-15","name":"Header Body Assertion Integrity","priority":"CRITICAL","description":"Reject disagreement between Mcp-Method or Mcp-Name headers and the JSON-RPC body before dispatch.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-16","name":"State Handle Binding and Lifecycle","priority":"CRITICAL","description":"Require unguessable, expiring, principal-bound state handles and never treat possession alone as identity.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-17","name":"MRTR Round-Trip Integrity","priority":"CRITICAL","description":"Bind model-mediated tool responses to the originating request and reject replay or mismatched responses.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-18","name":"Catalog Cache Integrity","priority":"HIGH","description":"Bound cache TTLs, bind cache keys to trust context, and detect catalog or schema provenance drift during revalidation.","mcp_spec_version":"2026-07-28"},
+    {"id":"MCP-19","name":"Authorization Chain Integrity","priority":"CRITICAL","description":"Validate issuer, intended resource or audience, authorization metadata, redirect or resource binding, and SSRF boundaries before protected state change.","mcp_spec_version":"2026-07-28"}
+  ]
+}
