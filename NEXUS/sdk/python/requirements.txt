@@ -1,5 +1,5 @@
-# nexus_sdk/requirements.txt
-# Core (no-dep mode): All unit tests pass with just these.
+# NEXUS Python SDK test/runtime requirements
+# Core test mode: unit tests run with these dependencies.
 pytest>=7.0
 
 # Production add-ons (install what you need for your deployment phase):
@@ -19,4 +19,4 @@ pytest>=7.0
 # No Python dep; OPA runs as a sidecar. Install: https://openpolicyagent.org/docs/latest/#running-opa
 
 # Optional: JSON Schema validation
-# jsonschema>=4.22       # Validate AIMs/VCCs against schemas in /schemas/
+# jsonschema>=4.22       # Validate AIMs/VCCs against schemas in NEXUS/schemas/

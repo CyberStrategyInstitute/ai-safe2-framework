@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "framework": {
+    "name": "AI SAFE2",
+    "display_name": "AI SAFE²",
+    "version": "3.1.0",
+    "publisher": "Cyber Strategy Institute",
+    "core_control_count": 161,
+    "cross_pillar_controls": "CP.1-CP.10",
+    "normative_entrypoint": "README.md",
+    "cross_pillar_entrypoint": "00-cross-pillar/README.md"
+  },
+  "machine_readable": {
+    "core_controls": "skills/mcp/data/ai-safe2-controls-v3.0.json",
+    "mcp_profile": "skills/mcp/data/mcp-profile-v3.1.json",
+    "dashboard_mcp_profile_mirror": "dashboard/public/data/mcp-profile-v3.1.json",
+    "nexus_schemas": "NEXUS/schemas/",
+    "scanner_rules": "scanner/rules/"
+  },
+  "profiles": {
+    "cp5_mcp": {
+      "control_count": 19,
+      "control_range": "MCP-1-MCP-19",
+      "specification": "MCP 2026-07-28",
+      "legacy_compatibility_specification": "MCP 2025-11-25",
+      "normative_document": "00-cross-pillar/cp5_mcp_server_security.md",
+      "machine_readable_data": "skills/mcp/data/mcp-profile-v3.1.json",
+      "server_discover_required": false,
+      "legacy_session_id_is_identity": false
+    }
+  },
+  "enforcement_planes": [
+    {
+      "id": "north-south",
+      "traffic": "agent-to-model-provider",
+      "primary_concerns": ["content", "policy", "consumption", "spend"]
+    },
+    {
+      "id": "east-west",
+      "traffic": "agent-to-agent",
+      "primary_concerns": ["identity", "delegation", "lineage", "authority"]
+    },
+    {
+      "id": "agent-to-tool",
+      "traffic": "agent-to-MCP-server-or-tool",
+      "primary_concerns": ["authorization", "provenance", "tool-reachability", "returned-content-trust"]
+    }
+  ],
+  "persistence": {
+    "canonical_scopes": ["request", "handle_scoped", "durable", "swarm_shared"],
+    "legacy_aliases": {
+      "SESSION": "request",
+      "CROSS_SESSION": "handle_scoped",
+      "PERMANENT": "durable"
+    },
+    "state_handle_is_identity": false
+  },
+  "implementations": {
+    "nexus": {
+      "version": "0.3",
+      "role": "CSI first-party reference implementation",
+      "required_for_framework_conformance": false,
+      "entrypoint": "NEXUS/README.md",
+      "mcp_adapter": "NEXUS/adapters/mcp/adapter.py",
+      "mcp_adapter_status": "fail-closed scaffolding, not production-ready"
+    },
+    "gateway": {
+      "version": "3.0",
+      "role": "reference gateway component",
+      "entrypoint": "gateway/README.md"
+    },
+    "scanner": {
+      "rule_count": 64,
+      "mcp_profile_rule_count": 12,
+      "entrypoint": "scanner/README.md"
+    }
+  },
+  "conformance": {
+    "protocol_independence_rule": "A CP.5 profile MUST NOT bind a control to a construct owned by the protocol it profiles.",
+    "nexus_is_mandatory": false,
+    "mcp19_legacy_bearer_token_proves_audience_binding": false,
+    "maturity_is_conformance": false
+  },
+  "discovery": {
+    "human": "README.md",
+    "agent": "AGENTS.md",
+    "examples": "examples/README.md",
+    "research": "research/README.md",
+    "challenge_lab": "challenges/README.md",
+    "aism": "AISM/README.md",
+    "nexus": "NEXUS/README.md",
+    "dashboard": "dashboard/README.md"
+  }
+}

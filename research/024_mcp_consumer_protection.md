@@ -1,131 +1,196 @@
-# Research Note 024 — MCP Consumer Protection
-## AI SAFE2 v3.0 | April 2026 | New
+<!-- AI-SAFE2-UX:START -->
+[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Surface: Research](https://img.shields.io/badge/Surface-Research-820F1A?style=flat-square)](./README.md)
+[![Context: v3.1 Current](https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square)](../docs/REPOSITORY-UX-STANDARD.md)
 
-**Status:** New | First publication
-**Classification:** TLP:WHITE
-**Author:** The Architect | Cyber Strategy Institute
+[Framework Home](../README.md) | [Research Index](./README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+> **Current framework context:** AI SAFE² v3.1. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.1 normative control and profile documents for implementation or conformance decisions.
+<!-- AI-SAFE2-UX:END -->
+
+# Research Note 024: MCP Consumer Protection
+### Consumer-side controls for untrusted or externally operated MCP servers
+
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Research](https://img.shields.io/badge/Research-024-820F1A?style=flat-square)](./024_mcp_consumer_protection.md)
+[![MCP](https://img.shields.io/badge/MCP-2026--07--28-808080?style=flat-square)](../00-cross-pillar/cp5_mcp_server_security.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Research 023](./023_mcp-server-security-profile.md)
+
+**Current revision:** August 2026  
+**Historical origin:** April 2026 consumer-protection research  
+**Current profile:** CP.5.MCP v3.1, MCP-1 through MCP-19
 
 ---
 
 ## Abstract
 
-Prior MCP security research focused on server-side vulnerabilities and protocol-level design failures. This note addresses the complementary problem: the consumer — the individual, team, or enterprise connecting to MCP servers they do not control — has almost no native protections and no tooling specifically designed for their threat model.
+MCP consumers face a different problem from MCP server operators. A consumer may connect an agent to a server it does not control, cannot inspect continuously, and cannot assume will preserve the same tool catalog, authorization behavior, or returned-content integrity over time.
 
-The consumer's threat model is structurally different from the server builder's: consumers cannot audit server source code, cannot verify what happens to their tool call parameters after they leave the proxy, and cannot inspect the MCP server's internal implementation of output sanitization. They are trusting a black box connected to their most capable AI system.
+Consumer-side defenses therefore remain necessary even when the server claims to be secure.
 
-This note establishes the consumer threat model, documents four confirmed consumer-side incidents, and specifies the consumer protection controls implemented in `mcp-safe-wrap`.
-
----
-
-## The Consumer Threat Model
-
-A consumer connecting to an external MCP server faces five distinct risks that do not affect server operators.
-
-**Supply chain compromise without visible signals.** The September 2025 Postmark incident demonstrated that a consumer can unknowingly connect to a compromised server whose code appears legitimate (the tool invocations work normally), while every processed payload is silently exfiltrated to an attacker-controlled server. The consumer has no direct access to server logs or source code.
-
-**Rug pull without notification.** A server with established trust can mutate its tool descriptions at any time. The consumer's AI client has no mechanism to detect that tool schemas changed between sessions. The injected instructions arrive as trusted tool metadata in the next session.
-
-**Billing amplification as consumer loss.** API costs from Phantom-class attacks accrue to the consumer's account, not the server operator's. The server operator may not be malicious — they may simply not have implemented session cost controls. The consumer carries the financial exposure regardless.
-
-**Cross-server token reuse.** Consumers who use the same OAuth token across multiple MCP connections (the default behavior in many clients) are exposed to CVE-2025-69196 and CVE-2026-27124 class attacks: a malicious server can replay the consumer's token against other services in the consumer's connected stack.
-
-**Persistent memory poisoning.** Tool responses that enter the consumer's agent's persistent memory affect all future sessions. A consumer who processes one malicious tool response may experience degraded agent behavior indefinitely — not just in the session where the injection occurred.
+AI SAFE² v3.1 extends the original consumer threat model to MCP `2026-07-28`, with particular emphasis on returned-content trust, catalog drift, state-handle misuse, replay, intended-resource/audience validation, and SSRF boundaries.
 
 ---
 
-## Confirmed Consumer-Side Incidents
+## Consumer Threat Model
 
-**September 2025 — Postmark MCP supply chain.** Email content exfiltrated silently for an unknown period before detection. Consumers had no indication of compromise because tool behavior was functionally correct.
+### Supply-chain compromise without visible failure
 
-**June 2025 — Asana cross-tenant.** Consumer organizations' data was readable by other tenants' agents. No consumer-side action could prevent or detect this — it was a server-side isolation failure with no consumer-visible signals.
+A compromised server may continue returning apparently correct tool results while exfiltrating data, mutating behavior, or introducing malicious content. Functional correctness is not evidence of server integrity.
 
-**July 2025 — Cursor agent filesystem destruction.** A developer's agent processed a malicious PR, wiped the local filesystem, and deleted AWS resources. The consumer's agent used the consumer's own credentials. The damage was irreversible.
+Relevant controls: MCP-2, MCP-4, MCP-5, MCP-9, MCP-11.
 
-**November 2025 — Billing amplification ($47,000).** Four agents entered an infinite retry loop. The billing accrued to the consumer (the organization running the agents). The server operator bore no financial consequence.
+### Catalog or schema mutation
 
----
+A previously trusted server may change tools, descriptions, schemas, or extensions. The consumer needs a provenance baseline and a revalidation policy rather than assuming that a familiar endpoint still represents the same authority surface.
 
-## Consumer Protection Controls
+Relevant controls: MCP-11, MCP-14, MCP-18.
 
-### Runtime: mcp-safe-wrap
+### Cost and resource amplification
 
-The `mcp-safe-wrap` tool provides three consumer-side protections regardless of what the connected server does:
+Tool loops, retries, or excessive downstream work create economic exposure for the consumer even when the remote server is not intentionally malicious.
 
-**Output scanning** intercepts tool responses before they reach the LLM client. Injection payloads in tool responses are redacted. This defends against both supply chain compromise (poisoned server code) and rug pull attacks (mutated tool schemas injecting via response bodies).
+Relevant control: MCP-8.
 
-**SSRF URL blocking** prevents any string value in tool call parameters that matches a known SSRF target (AWS IMDS, RFC 1918, loopback, file://) from reaching the server. This eliminates the consumer's contribution to SSRF exploitation even if the server lacks its own SSRF controls.
+### Authorization confusion
 
-**Immutable audit log** records every tool invocation and every injection detection to a JSONL file on the consumer's local filesystem. This provides the only reliable forensic record when server-side logs are unavailable, as in a supply chain compromise.
+A credential valid somewhere is not necessarily valid for the intended MCP resource. Consumers and gateways must avoid cross-resource token reuse and validate intended-resource/audience binding where applicable.
 
-### Configuration
+Relevant control: MCP-19.
 
-Connect Claude Code to any external server through `mcp-safe-wrap`:
-```bash
-mcp-safe-wrap proxy https://external-server.example/mcp --token your-token
-```
+### Persistent state poisoning
 
-Connect Claude Code to the proxy instead of the server:
-```json
-{"type": "http", "url": "http://localhost:8080/proxy"}
-```
+A malicious tool response can affect future behavior if it is written into governed memory. v3.1 describes persistence using `request`, `handle_scoped`, and `durable` scopes rather than treating a protocol session as the governance boundary.
 
-### Assessment: mcp-score
+Relevant controls: MCP-2, MCP-12, MCP-13, MCP-16, plus AI SAFE² memory-governance controls.
 
-Before connecting to any external server, consumers can assess its security posture:
-```bash
-mcp-score https://server.example/mcp
-```
+### Local and private-network targeting
 
-A server scoring below 50 should not be connected to any production system. The AI SAFE2 MCP badge (70+ score) is the consumer's signal that a server has implemented the minimum CP.5.MCP standard.
+A tool parameter, redirect, or server-driven resource request can attempt to reach loopback, link-local, metadata, private-network, or file resources that should not be reachable from an untrusted integration.
+
+Relevant control: MCP-19.
 
 ---
 
-## Consumer Configuration Checklist
+## Consumer Protection Tools
 
-This checklist is for consumers connecting to external MCP servers, not server operators.
+### `mcp-safe-wrap`
 
-**Immediate (before next session):**
-- Audit all MCP configuration files (`claude_desktop_config.json`, `.mcp.json`, `.claude/settings.json`)
-- Remove any server not explicitly installed and actively used
-- Rotate GitHub, Slack, email, and database credentials that MCP has accessed since January 2026
-- Set API cost alerts at 2x expected daily spend
+Consumer-side wrapping can provide protections independent of the remote server's implementation, including:
 
-**Before connecting to any new server:**
-- Run `mcp-score https://the-server-url.example/mcp`
-- Do not connect production systems to servers scoring below 50
-- Use `mcp-safe-wrap proxy` for servers scoring below 70
-- Ask the server operator for their `.well-known/mcp-security.json` attestation
+- returned-content inspection before model-context entry;
+- URL/target restrictions for SSRF-sensitive values;
+- consumer-controlled audit evidence;
+- policy checks before forwarding a protected call.
 
-**Default configuration:**
-- Set all MCP connectors to read-only unless write access is explicitly required
-- Do not connect write-capable agents (email, GitHub, database) to sessions that also process external content
-- Exclude `~/.ssh/`, `~/.aws/`, `~/.config/`, and all `.env` directories from filesystem MCP servers
+A wrapper reduces exposure but does not prove that the remote server satisfies all profile controls.
+
+### `mcp-score`
+
+`mcp-score` can help assess observable server posture before connection. A black-box score is a risk signal, not a complete conformance certification, because many requirements depend on internal authorization, provenance, and evidence behavior that cannot be proven externally.
+
+### `mcp-scan`
+
+Static scanning can detect high-value implementation patterns in code that is available for inspection. It cannot establish runtime audience binding, complete mediation, or evidence integrity on its own.
+
+---
+
+## v3.1 Consumer Checklist
+
+### Before connection
+
+- Know who operates the server and what endpoint/binary identity is expected.
+- Define the minimum tools/resources the principal actually requires.
+- Prefer resource- or audience-bound authorization over reusable opaque credentials.
+- Establish a catalog/schema provenance baseline when the client depends on discovered tool metadata.
+- Define cost/rate ceilings.
+- Restrict local/private-network targets and redirects unless explicitly required.
+
+### At trust establishment
+
+- Verify the principal and intended server/resource.
+- Record the capability grant and policy context.
+- Record the tool/resource/prompt catalog hashes that influence authority.
+- Negotiate only extensions the principal is authorized to use.
+- Treat legacy `Mcp-Session-Id` only as a principal-scoped compatibility state handle.
+
+### During operation
+
+- Sanitize returned content before it enters model context or durable memory.
+- Validate tool inputs against the authorized schema.
+- Preserve delegation lineage for agent-originated calls.
+- Detect catalog/schema changes and revalidate before protected use.
+- Reject replayed or mismatched model-mediated tool responses.
+- Enforce the economic ceiling.
+- Produce attributable audit evidence.
+
+### On revocation or material change
+
+- Invalidate prior authorization without waiting for a transport session to end.
+- Expire or revoke affected state handles.
+- Re-establish trust when catalogs, policy, principal authority, or resource binding changes materially.
 
 ---
 
 ## Relationship to CP.5.MCP
 
-The consumer protection controls specified in this note are implemented as:
+The consumer protections map across the current 19-control profile rather than the historical 13-control baseline.
 
-- `mcp-safe-wrap` (MCP-2 output sanitization, MCP-6 SSRF, MCP-5 audit log)
-- `mcp-score` (MCP-7 zero-trust client configuration assessment)
+Representative mappings:
 
-They are complementary to the server-side controls (MCP-1 through MCP-13). Server-side controls reduce the probability of compromise. Consumer-side controls reduce the impact when compromise occurs.
+| Consumer protection | Profile controls |
+|---|---|
+| Returned-content scanning | MCP-2 |
+| Local/server integrity checks | MCP-4 |
+| Consumer-controlled audit | MCP-5 |
+| Cost ceilings | MCP-8 |
+| Secret redaction/brokering | MCP-9 |
+| Catalog/schema pinning | MCP-11, MCP-18 |
+| State-handle discipline | MCP-12, MCP-16 |
+| Extension restrictions | MCP-14 |
+| Replay/request binding | MCP-17 |
+| Resource/audience/SSRF validation | MCP-19 |
 
-The full CP.5.MCP specification: [github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/00-cross-pillar](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/00-cross-pillar)
-
----
-
-## Open Questions for Future Research
-
-1. **Token binding at the consumer level.** Can consumers enforce audience-restricted tokens independently of server-side OAuth implementation?
-
-2. **Schema pinning.** Can consumers detect rug pull attacks by pinning the `tools/list` hash at initial trust establishment and comparing on each subsequent connection?
-
-3. **Cross-session memory hygiene.** What is the effective blast radius of a single persistent memory poisoning event across a consumer's full agent deployment?
-
-4. **Registry consumer protections.** What consumer-accessible signals exist in MCP registries that would allow risk assessment before first connection?
+Normative profile: [CP.5.MCP v3.1](../00-cross-pillar/cp5_mcp_server_security.md)
 
 ---
 
-*AI SAFE2 v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com/ai-safe2/*
+## Open Research Questions
+
+1. How much intended-resource enforcement can a consumer independently verify when the authorization server and MCP server are operated by different parties?
+2. What revalidation cadence best detects catalog drift without creating excessive startup or runtime cost?
+3. How should clients represent a trusted catalog baseline when extensions dynamically add capabilities?
+4. What evidence is sufficient to prove that a state handle is principal-bound without exposing the underlying secret or identifier?
+5. How should consumer-side wrappers measure false positives from returned-content sanitization without weakening injection defenses?
+6. Which profile requirements can be independently assessed black-box versus requiring operator-supplied evidence?
+
+---
+
+## Research Continuity
+
+The original April 2026 consumer-risk findings remain historical evidence for the need for client-side protection. v3.1 extends that model to the current protocol profile and removes session dependence from the governance claim.
+
+Research Note 023 provides the companion server/profile architecture rationale.
+
+---
+
+## 🔗 Navigation
+
+[Framework Home](../README.md) | [Research 023](./023_mcp-server-security-profile.md) | [CP.5.MCP](../00-cross-pillar/cp5_mcp_server_security.md) | [MCP Toolkit](../examples/mcp-security-toolkit/) | [Scanner](../scanner/README.md)
+
+---
+
+*AI SAFE² v3.1 Research Foundation · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+<!-- AI-SAFE2-UX-FOOTER:START -->
+---
+
+### Research navigation
+
+[Previous research note](./023_mcp-server-security-profile.md) | [Research Index](./README.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [NEXUS](../NEXUS/) | [Challenge Lab](../challenges/)
+
+*AI SAFE² v3.1 | Cyber Strategy Institute*
+<!-- AI-SAFE2-UX-FOOTER:END -->

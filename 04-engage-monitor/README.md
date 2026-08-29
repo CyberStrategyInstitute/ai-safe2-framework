@@ -1,13 +1,19 @@
 # Pillar 4: Engage & Monitor (P4)
 ### 📡 The Control Room
 
-[🔙 Back to Main Framework](../README.md) | [← Pillar 3: Fail-Safe & Recovery](../03-fail-safe-recovery/README.md) | [Pillar 5: Evolve & Educate →](../05-evolve-educate/README.md) | [Cross-Pillar Governance →](../cross-pillar/README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Layer](https://img.shields.io/badge/Layer-Pillar_4-820F1A?style=flat-square)](./README.md)
+[![Status](https://img.shields.io/badge/Status-Current-808080?style=flat-square)](../EVOLUTION.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+**Previous:** [← Pillar 3: Fail-Safe & Recovery](../03-fail-safe-recovery/README.md) | **Next:** [Pillar 5: Evolve & Educate →](../05-evolve-educate/README.md)
 
 ---
 
 ## 🎯 The Problem. The Realization. The Solution.
 
-**Problem:** Standard monitoring detects anomalies after they manifest as visible output problems. By then, the injection has succeeded, the memory has been corrupted, and the damage is done. Meanwhile, jailbreak attempts and adversarial probes happen continuously in production and are completely invisible — you see only the ones that succeed, through their effects. Cloud AI platform attacks like Bedrock Guardrail poisoning do not trigger standard CloudTrail alerts. Tool squatting passes through authenticated channels without raising a flag.
+**Problem:** Standard monitoring detects anomalies after they manifest as visible output problems. By then, the injection has succeeded, the memory has been corrupted, and the damage is done. Meanwhile, jailbreak attempts and adversarial probes happen continuously in production and are completely invisible; you see only the ones that succeed, through their effects. Cloud AI platform attacks like Bedrock Guardrail poisoning do not trigger standard CloudTrail alerts. Tool squatting passes through authenticated channels without raising a flag.
 
 **Realization:** Monitoring for agentic AI needs to be adversarially aware. It cannot only watch for performance degradation or error rates. It needs to continuously probe deployed agents for vulnerabilities, maintain behavioral baselines, detect systematic bias as a security signal, and watch platform-specific attack paths that generic cloud monitoring misses entirely.
 
@@ -77,15 +83,15 @@
 
 ### ⚡ v3.0 New Controls
 
-> Full control specifications are included in the [AI SAFE² v3.0 Implementation Toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
+> These controls were introduced in v3.0 and remain part of the current [AI SAFE² v3.1 framework](../README.md). Current implementation resources are available through the [AI SAFE² toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
 
 | Control | Name | Priority | What It Solves |
 | :--- | :--- | :--- | :--- |
-| **[M4.4]** | Adversarial Behavior Detection Pipeline | 🔴 CRITICAL | Continuously probes deployed agents with adversarial inputs; detects attack attempts before they produce anomalous outputs |
+| **[M4.4]** | Adversarial Behavior Detection Pipeline | 🔴 CRITICAL | Continuously probes deployed agents with adversarial inputs and detects attack attempts before they produce anomalous outputs |
 | **[M4.5]** | Tool-Misuse Detection Controls | 🔴 CRITICAL | Establishes tool invocation baselines; detects tool squatting, unexpected tools, and anomalous invocation patterns |
-| **[M4.6]** | Emergent Behavior Anomaly Detection | 🟠 HIGH | Classifies behavioral novelty and systematic decision bias as security-relevant signals, not just ethics concerns |
-| **[M4.7]** | Jailbreak & Injection Telemetry Layer | 🟠 HIGH | Unified logging and classification for all jailbreak attempts by technique; feeds findings into the red-team artifact repository |
-| **[M4.8]** | Cloud AI Platform-Specific Monitoring | 🔴 CRITICAL | Monitors Bedrock UpdateGuardrail and UpdateDataSource APIs; Azure AI Foundry configuration changes; attack paths standard CloudTrail misses |
+| **[M4.6]** | Emergent Behavior Anomaly Detection | 🟠 HIGH | Classifies behavioral novelty and systematic decision bias as security-relevant signals |
+| **[M4.7]** | Jailbreak & Injection Telemetry Layer | 🟠 HIGH | Unified logging and classification for jailbreak and injection attempts by technique |
+| **[M4.8]** | Cloud AI Platform-Specific Monitoring | 🔴 CRITICAL | Monitors platform-specific configuration and security attack paths that generic cloud telemetry can miss |
 
 ---
 
@@ -109,10 +115,8 @@
 | :--- | :--- | :--- |
 | [Pillar 3: Fail-Safe & Recovery](../03-fail-safe-recovery/README.md) | **Pillar 4: Engage & Monitor** | [Pillar 5: Evolve & Educate](../05-evolve-educate/README.md) |
 
-→ [Cross-Pillar Governance (CP.1-CP.10)](../00-cross-pillar/README.md)
-→ [Interactive Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
-→ [Get the Full Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | [Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
 
 ---
 
-*Powered by [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

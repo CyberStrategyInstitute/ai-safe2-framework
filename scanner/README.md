@@ -1,94 +1,134 @@
-# AI SAFE² v3.0 Scanner
+# AI SAFE² Scanner
+### Pre-commit and CI analysis for agentic AI codebases
 
-Static analysis engine for AI agents, agentic workflows, and AI-integrated codebases.
-Scans against 161 AI SAFE² v3.0 controls across 5 pillars and the CP.1-CP.10 Cross-Pillar Governance layer.
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Surface](https://img.shields.io/badge/Surface-Scanner-820F1A?style=flat-square)](./README.md)
+[![Rules](https://img.shields.io/badge/Rules-64-808080?style=flat-square)](./rules/)
 
-## Part of the AI SAFE² v3.0 Ecosystem
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-| Surface | Tool | When |
-| :--- | :--- | :--- |
-| **Design-time** | SKILL.md + MCP Server (`skills/`) | While designing and building |
-| **Pre-commit / CI** | Scanner (`scanner/`) — **you are here** | Before code reaches production |
-| **Runtime** | Gateway (`gateway/`) | In production |
-
-For n8n Logic Guard, GitHub Actions integration, and Docker Compose patterns, see:
-→ [INTEGRATIONS.md](../INTEGRATIONS.md)
+**Previous:** [← NEXUS](../NEXUS/) | **Next:** [Gateway / Runtime Enforcement →](../gateway/)
 
 ---
 
-## What v3.0 Detects
+## Role in the v3.1 Stack
 
-| Category | Controls | Examples |
-| :--- | :--- | :--- |
-| Secrets & NHI | P1.T1.4_ADV | OpenAI/Anthropic/AWS keys, GitHub tokens, private keys, high-entropy strings |
-| Injection surfaces | P1.T1.2, P1.T1.10, S1.6 | Prompt injection, indirect injection (emails, RAG, tool outputs), cognitive injection |
-| Memory governance | S1.5, A2.6 | Vector DB writes without governance wrappers, RAG updates without hash tracking |
-| No-code platforms | S1.7 | n8n expression injection, n8n credential exposure (CVE-2026-25049 class) |
-| Unsafe execution | P1.T2.1 | `shell=True`, `eval()`, `exec()`, `os.system()` |
-| Network exposure | P1.T2.2 | Binding to `0.0.0.0` |
-| Recursion / loops | F3.2, P3.T5.1 | Tool-calling chains and loops without depth limits |
-| Cascade risk | F3.5, P3.T5.8 | Multi-agent pipelines without blast radius containment |
-| Missing HITL | P4.T7.1 | Email send, delete, payment calls without human approval gates |
-| Cloud platforms | M4.8 | Bedrock UpdateGuardrail API without monitoring (confirmed attack path) |
-| Tool misuse | M4.5 | Tool definitions without invocation baseline monitoring |
-| Model supply chain | A2.3, P1.T1.9 | Model loading without hash verification or provenance ledger |
-| Missing logging | A2.5, P4.T8.3 | LLM calls without execution trace logging or SIEM integration |
-| Vulnerable deps | P5.T9.4 | Known-CVE versions of LangChain, OpenAI, Transformers, PyTorch |
-| Agent spawning | CP.9 | Sub-agent creation without lineage tokens or delegation hop limits |
-| Missing HEAR | CP.10 | ACT-3/4 configs without `hear_agent_of_record` field |
-| Missing CRT | CP.8 | Autonomous agents without Catastrophic Risk Threshold definitions |
-| AST structural | CP.9, M4.5, P3.T5.4 | Python AST analysis for agent topology and structural gaps |
+| Surface | Tool | When |
+|---|---|---|
+| **Design-time** | Skills + AI SAFE² MCP Server | While designing and building |
+| **Pre-commit / CI** | **Scanner, you are here** | Before code reaches production |
+| **Runtime** | Gateway / enforcement components | During execution |
+
+The scanner evaluates code and configuration against AI SAFE² patterns. It is a static-analysis aid, not proof of full control conformance.
+
+---
+
+## v3.1 Rule Model
+
+AI SAFE² v3.1 keeps the **161-control core framework taxonomy** and adds a machine-readable **CP.5.MCP profile with MCP-1 through MCP-19**.
+
+The scanner currently exposes **64 detection rules**:
+
+- 52 pre-existing pillar and cross-pillar detection rules;
+- 12 grouped CP.5.MCP v3.1 rules covering the highest-value static indicators across MCP-1 through MCP-19.
+
+Profile rules are grouped because several MCP controls require runtime evidence and cannot be proven by a one-pattern-per-control static check. The v3.1 release preserves existing detections rather than deleting rules merely to satisfy an outdated expected count.
+
+### Important v3.1 guarantees
+
+- `server/discover` is optional under MCP `2026-07-28`; the scanner does **not** require it.
+- Legacy `Mcp-Session-Id` must not be treated as identity or the authorization boundary.
+- MCP-19 intended-resource/audience and SSRF findings are **advisory (`INFO`)** until deployment-specific authorization behavior can be proven.
+- Profile findings do not increase the 161 core framework count.
+
+---
+
+## What the Scanner Detects
+
+| Category | Representative controls |
+|---|---|
+| Secrets and NHI | P1, CP.4, MCP-9 |
+| Injection and untrusted content | P1, S1.6, MCP-2 |
+| Memory and persistence governance | S1.5, A2.6, MCP-12/MCP-16 |
+| Unsafe execution | P1.T2.1, MCP-1 |
+| Server and binary provenance | P1.T1.9, MCP-3/MCP-4 |
+| Audit gaps | A2.5, P4.T8.3, MCP-5 |
+| Tool input validation | P1.T1.1, MCP-6 |
+| Trust establishment | CP.4, MCP-7 |
+| Economic ceilings | F3.2, MCP-8 |
+| Delegation lineage | CP.9, MCP-10 |
+| Catalog/schema drift | A2.6, MCP-11/MCP-18 |
+| Protocol assertion/replay integrity | MCP-15/MCP-17 |
+| Authorization-chain integrity | MCP-19, advisory |
+| Missing HEAR / CRT | CP.10, CP.8 |
+| Agent spawning | CP.9 |
 
 ---
 
 ## Quick Start
 
 ```bash
-# Install
 pip install -r scanner/requirements.txt
 
 # Scan current directory
 python -m scanner.cli scan .
 
-# Scan with tier threshold
+# Scan with a tier threshold
 python -m scanner.cli scan ./my-agent --tier Tier2
 
-# Generate compliance report (JSON + SARIF)
+# JSON and SARIF report
 python -m scanner.cli scan . --report both --output report.json
 
-# Fail CI/CD if score below 80
+# Fail CI when score is below threshold
 python -m scanner.cli scan . --fail-under 80
-
-# Quiet mode (report only, no console output)
-python -m scanner.cli scan . --quiet --report json
 ```
 
 ---
 
-## What the Output Tells You
+## Output
 
-**Score (0-100):** Starts at 100, deducted by severity (CRITICAL -10, HIGH -5, MEDIUM -2, LOW -1).
+**Score:** static-analysis score derived from finding severity.
 
-**Verdict:** PASS (≥90) | AT RISK (≥70) | FAIL (≥50) | CRITICAL FAIL (<50)
+**ACT estimate:** inferred autonomy signals used to surface governance gaps such as HEAR, CRT, and replication governance.
 
-**ACT Tier Estimate:** Inferred from code signals — unattended execution, agent spawning, persistent memory, tool access. HEAR and CP.9 flags appear automatically when the tier warrants them.
+**Governance gaps:** structural indications that required ownership, logging, fail-safe, delegation, or protocol controls may be absent.
 
-**Risk Score:** `CVSS_estimate + ((100 - Pillar_Score) / 10) + (AAF_estimate / 10)`. Static-analysis estimates only — use the MCP server `risk_score` tool for precise AAF calculation.
+**Framework mappings:** findings are enriched from the core control taxonomy when data is available. MCP profile metadata is maintained separately from the 161 core controls.
 
-**Governance Gaps:** Structural gaps detected from code patterns — missing HEAR designation, missing CRT documentation, missing A2.5 trace logging.
+Static findings are evidence inputs. They are not a substitute for runtime conformance testing.
 
-**32-Framework Compliance Map:** Every finding maps to the applicable frameworks. The JSON report shows pass/fail status for all 32 frameworks (NIST AI RMF, ISO 42001, EU AI Act, SOC 2, HIPAA, GDPR, DORA, FedRAMP, CMMC 2.0, PCI-DSS v4, and 22 more).
+---
+
+## MCP Profile Rules
+
+The v3.1 MCP rules live at:
+
+[`scanner/rules/mcp_profile.py`](./rules/mcp_profile.py)
+
+The machine-readable profile they correspond to is:
+
+[`skills/mcp/data/mcp-profile-v3.1.json`](../skills/mcp/data/mcp-profile-v3.1.json)
+
+The canonical normative specification is:
+
+[CP.5.MCP v3.1](../00-cross-pillar/cp5_mcp_server_security.md)
+
+Regression tests enforce:
+
+- 64 total scanner rules;
+- 12 MCP profile rules;
+- MCP-19 remains advisory;
+- no `server/discover` presence rule;
+- coverage reaches the new MCP-16/MCP-18/MCP-19 range.
 
 ---
 
 ## CI/CD Integration
 
-### GitHub Actions
-
 ```yaml
-# .github/workflows/ai-safe2-scan.yml
 name: AI SAFE2 Security Scan
 on: [push, pull_request]
+
 jobs:
   scan:
     runs-on: ubuntu-latest
@@ -98,84 +138,62 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r scanner/requirements.txt
-      - name: AI SAFE2 v3.0 Scan
+      - name: AI SAFE2 v3.1 scan
         run: |
           python -m scanner.cli scan . \
             --tier Tier2 \
             --report both \
             --output ai-safe2-report.json \
             --fail-under 70
-      - name: Upload Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-safe2-report
-          path: ai-safe2-report.json
-      - name: Upload SARIF
-        if: always()
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: ai-safe2-report.sarif.json
 ```
 
 ---
 
-## Controls JSON Integration
+## Data Integration
 
-The scanner automatically locates `ai-safe2-controls-v3.0.json` from `skills/mcp/data/`.
-When found, findings are enriched with:
-- Full control name and description
-- Compliance framework mappings (all 32 frameworks)
-- ACT tier applicability
-- Builder problem framing
+The current data model separates:
 
-If the JSON is not found, the scanner degrades gracefully — it still runs all rules, just with less metadata in the output.
-
-To specify a custom path:
-```bash
-python -m scanner.cli scan . --controls-json /path/to/ai-safe2-controls-v3.0.json
+```text
+skills/mcp/data/ai-safe2-controls-v3.0.json  stable 161-control core taxonomy
+skills/mcp/data/mcp-profile-v3.1.json       CP.5.MCP v3.1 profile overlay
 ```
 
----
-
-## v2.1 to v3.0 Upgrade Summary
-
-| | v2.1 | v3.0 |
-| :--- | :--- | :--- |
-| Patterns | 7 regex | 40+ rules across all 5 pillars + CP |
-| Controls | 4 | 30+ |
-| Analysis | Regex + entropy | Regex + entropy + Python AST |
-| Config files | None | n8n JSON, YAML agent configs, requirements.txt |
-| ACT tier | None | Estimated from code signals |
-| HEAR check | None | CP.10 flags on ACT-3/4 indicators |
-| CP.9 check | None | Lineage and delegation hop detection |
-| Risk formula | `100 - penalty` | v3.0: CVSS + Pillar + AAF |
-| Compliance report | 2 ISO clauses | All 32 frameworks |
-| Output formats | JSON only | JSON + SARIF |
+This is intentional. v3.1 changes the MCP profile without pretending the core framework grew from 161 to 180 controls.
 
 ---
 
 ## File Structure
 
-```
+```text
 scanner/
 ├── README.md
-├── requirements.txt
-├── __init__.py
-├── cli.py           — Command-line interface
-├── scanner.py       — Main scan engine + ACT tier estimation
-├── report.py        — 32-framework compliance report + SARIF
+├── cli.py
+├── scanner.py
+├── report.py
+├── tests/
+│   └── test_v31_mcp_profile.py
 └── rules/
     ├── __init__.py
-    ├── base.py          — Rule dataclass, Finding, utilities
-    ├── p1_sanitize.py   — P1 controls + S1.3-S1.7
-    ├── p2_audit.py      — P2 controls + A2.3-A2.6
-    ├── p3_failsafe.py   — P3 controls + F3.2-F3.5
-    ├── p4_monitor.py    — P4 controls + M4.4-M4.8
-    ├── p5_evolve.py     — P5 controls + E5.1, E5.4
-    └── cross_pillar.py  — CP.3 ACT tier, CP.8, CP.9, CP.10
+    ├── base.py
+    ├── p1_sanitize.py
+    ├── p2_audit.py
+    ├── p3_failsafe.py
+    ├── p4_monitor.py
+    ├── p5_evolve.py
+    ├── cross_pillar.py
+    └── mcp_profile.py
 ```
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | [cyberstrategyinstitute.com/ai-safe2/](https://cyberstrategyinstitute.com/ai-safe2/)*
+## Navigation
+
+| Previous | Current | Next |
+| :--- | :--- | :--- |
+| [NEXUS](../NEXUS/) | **Scanner** | [Gateway](../gateway/) |
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [MCP Profile](../00-cross-pillar/cp5_mcp_server_security.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+---
+
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

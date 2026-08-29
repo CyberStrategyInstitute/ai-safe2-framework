@@ -1,102 +1,173 @@
 # CP.11: Unbiased AI Standard (UAS)
+### Cross-pillar compliance overlay for truthfulness, neutrality, and continuous improvement
 
-**Cross-Pillar Governance Module | AI SAFE² v3.0+ | Cyber Strategy Institute | July 2026**
-**Dual license: MIT (code, tooling, templates) + CC-BY-SA 4.0 (normative text, taxonomy, documentation)**
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![Overlay](https://img.shields.io/badge/Overlay-CP.11_UAS-820F1A?style=flat-square)](./STANDARD.md)
+[![Status](https://img.shields.io/badge/Status-Compliance_Overlay-808080?style=flat-square)](../README.md)
 
-UAS operates as CP.11 in the Cross-Pillar Governance OS, alongside CP.1 through CP.10. Like all CP controls, UAS does not belong to any single pillar. It synthesizes outputs across all five pillars, NEXUS, and the Cognitive Sovereignty Framework (CSF) into a single, auditable compliance surface for "Unbiased AI" obligations in federal procurement, specifically GSAR 552.239-7001 paragraph (j)(1).
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-## Why this module exists
+---
 
-GSA's draft GSAR clause 552.239-7001 (j)(1) makes three "Unbiased AI Principles" contractually enforceable for any LLM processing Government Data:
+## Position in AI SAFE² v3.1
 
-1. **Truthfulness**: factual accuracy, historical accuracy, acknowledgment of uncertainty
-2. **Neutrality**: no manipulation of responses in favor of ideological dogmas, no intentionally embedded partisan judgment via training data, fine-tuning, RAG, or system prompts
-3. **Continuous improvement**: ongoing detection and mitigation of bias and trustworthiness failures
+UAS is maintained as **CP.11, a cross-pillar compliance overlay**. It composes and tests controls drawn from AI SAFE², NEXUS, and the Cognitive Sovereignty Framework (CSF) against Unbiased AI procurement and due-diligence requirements.
 
-The clause attaches suspension rights and decommissioning cost liability to these principles, and provides no test method, no threshold, no measurement standard, and no independent review mechanism. That is a governance vacuum. UAS fills it with an open, inspectable, quantified standard that any contractor, agency, or evaluator can apply today.
+It is **not** counted as 27 new independent controls added to the 161-control AI SAFE² core taxonomy. The module's 27 requirements are an overlay/control-composition surface.
 
-## Why cross-pillar, not a sixth pillar
+This distinction keeps the framework count coherent:
 
-UAS is a governance output layer, not a security domain. Each pillar already contributes controls that feed bias detection, manipulation resistance, and truthfulness assurance:
+- AI SAFE² v3.1 core framework: **161 controls**;
+- core Cross-Pillar Governance: **CP.1 through CP.10**;
+- CP.5.MCP profile: **MCP-1 through MCP-19**;
+- CP.11 UAS: **27 overlay requirements composed from mapped controls**.
 
-| Pillar | Contribution to UAS |
+---
+
+## Why This Module Exists
+
+The UAS module was created to provide an inspectable way to evaluate truthfulness, neutrality, and continuous-improvement obligations in federal AI procurement contexts, including the GSAR 552.239-7001 Unbiased AI requirements that motivated the module.
+
+The module addresses a recurring implementation gap: policy language can define an obligation without specifying how a contractor should measure, test, evidence, challenge, and attest to that obligation.
+
+UAS provides a technical and governance structure for doing that work.
+
+UAS does not claim government recognition or legal safe harbor. Applicability and contractual interpretation remain the responsibility of the relevant parties and counsel.
+
+---
+
+## Why Cross-Pillar, Not a Sixth Pillar
+
+UAS is a governance output layer rather than a new operational security domain. Existing AI SAFE² pillars already provide the technical controls that support the overlay.
+
+| Source | Contribution to UAS |
 |---|---|
-| P1 Sanitize & Isolate | Semantic isolation of adversarial framing; system prompt immutability; injection resistance |
-| P2 Audit & Inventory | RAG corpus provenance; model lineage; cross-session influence tracking; source attribution |
-| P3 Fail-Safe & Recovery | Behavioral drift baselines; automated rollback on threshold breach; change notification triggers |
-| P4 Engage & Monitor | Emotional priming detection; adversarial behavioral telemetry; routing decision audit |
-| P5 Evolve & Educate | Evaluation gates on model updates; demographic parity testing; red-team artifact repository |
-| NEXUS | Memory governance; non-repudiable audit chain; cryptographic agent identity |
-| CSF (companion) | Human-layer influence controls (UAS-H series), Domains 1 through 6 |
+| **P1 Sanitize & Isolate** | Semantic isolation, manipulation resistance, trusted/untrusted boundary controls |
+| **P2 Audit & Inventory** | Corpus/model provenance, evidence, source attribution, change tracking |
+| **P3 Fail-Safe & Recovery** | Drift thresholds, rollback, suspension and recovery |
+| **P4 Engage & Monitor** | Behavioral telemetry, anomaly detection, human intervention |
+| **P5 Evolve & Educate** | Evaluation gates, testing cadence, reusable findings |
+| **Cross-Pillar Governance** | ACT tier, control plane, incident feedback, HEAR, evidence governance |
+| **NEXUS** | Reference implementation for identity, delegation, memory governance, receipts |
+| **CSF** | Human-layer influence and cognitive-sovereignty controls |
 
-## The dual-layer model
+---
 
-Neither layer alone is sufficient. A technically neutral system can still manipulate its operator through interaction patterns. A protected operator cannot compensate for a technically biased system.
+## The Dual-Layer Model
 
-- **System layer** (14 controls, UAS-S1 to S14): what the AI system does or does not do
-- **Human layer** (8 controls, UAS-H1 to H8): what the AI system does to the human operating it, sourced from CSF Domains 1 through 6
-- **Bridge layer** (5 controls, UAS-X1 to X5): the interface, escalation gates, and attestation automation between the two
+A technically neutral system can still influence or degrade the human operating it. A protected operator cannot compensate for a technically biased or manipulated system.
 
-27 controls total. Full definitions in `controls/`. Normative requirements in `STANDARD.md`.
+UAS therefore combines:
 
-## The 7 bias classes
+- **System layer:** 14 requirements, UAS-S1 through UAS-S14;
+- **Human layer:** 8 requirements, UAS-H1 through UAS-H8;
+- **Bridge layer:** 5 requirements, UAS-X1 through UAS-X5.
 
-| ID | Bias class | Primary source | CSF domain | GSAR (j)(1) trigger |
-|---|---|---|---|---|
-| UAS-B1 | Factual Distortion | P5 eval gates | D2 Cognitive | (j)(1)(i) Truthfulness |
-| UAS-B2 | Political/Ideological Framing | P4 monitoring | D4 Social | (j)(1)(ii) Neutrality |
-| UAS-B3 | Commercial Interest Skew | P2 audit trail | D5 Purpose-Moral | (j)(1)(ii) Neutrality |
-| UAS-B4 | Emotional Manipulation | P1 isolation | D3 Emotional | (j)(1)(ii) Neutrality |
-| UAS-B5 | Training Data Contamination | CP.8 lineage | D6 Digital-AI Symbiosis | (j)(1)(i) Truthfulness |
-| UAS-B6 | Cognitive Dependency Induction | NEXUS memory gov | D6 Digital-AI Symbiosis | (j)(1)(ii) Neutrality |
-| UAS-B7 | Adversarial Prompt Steering | CP.2 + P1 | D2 Cognitive | (j)(1)(i) Truthfulness |
+Total: **27 overlay requirements**.
 
-Full taxonomy with definitions, detection controls, and risk levels: `taxonomy/bias-taxonomy.md`.
+Normative text: [STANDARD.md](./STANDARD.md)
 
-## Module structure
+---
 
-```
+## Bias Taxonomy
+
+| ID | Bias class | Primary governance source | Human-layer connection |
+|---|---|---|---|
+| UAS-B1 | Factual Distortion | Evaluation and evidence controls | Cognitive accuracy |
+| UAS-B2 | Political/Ideological Framing | Monitoring and decision traceability | Social influence |
+| UAS-B3 | Commercial Interest Skew | Audit trail and conflict disclosure | Purpose and decision agency |
+| UAS-B4 | Emotional Manipulation | Semantic isolation and interaction controls | Emotional autonomy |
+| UAS-B5 | Training/Data Contamination | Model/data lineage and provenance | Digital/AI symbiosis |
+| UAS-B6 | Cognitive Dependency Induction | Memory and interaction governance | Digital/AI symbiosis |
+| UAS-B7 | Adversarial Prompt Steering | Threat modeling and input governance | Cognitive integrity |
+
+Full taxonomy: [taxonomy/bias-taxonomy.md](./taxonomy/bias-taxonomy.md)
+
+---
+
+## Module Structure
+
+```text
 00-cross-pillar/unbiased-ai/
-├── README.md                          <- this file (CP.11 overview)
-├── STANDARD.md                        <- normative standard, Sections 1-8
+├── README.md
+├── STANDARD.md
 ├── taxonomy/
-│   └── bias-taxonomy.md               <- 7 UAS-B bias classes
+│   └── bias-taxonomy.md
 ├── controls/
-│   ├── uas-controls-system.md         <- 14 AI SAFE² sourced controls
-│   ├── uas-controls-human.md          <- 8 CSF sourced controls
-│   └── uas-controls-crossdomain.md    <- 5 bridge controls
+│   ├── uas-controls-system.md
+│   ├── uas-controls-human.md
+│   └── uas-controls-crossdomain.md
 ├── testing/
-│   └── bias-test-protocol.md          <- 7 test types, quantified pass thresholds
+│   └── bias-test-protocol.md
 ├── compliance/
-│   ├── gsar-552-239-7001-mapping.md   <- clause crosswalk and gap-fill table
-│   └── due-diligence-attestation.md   <- prime contractor attestation template
+│   ├── gsar-552-239-7001-mapping.md
+│   └── due-diligence-attestation.md
 └── examples/
-    └── vendor-attestation-sample.md   <- completed reference example
+    └── vendor-attestation-sample.md
 ```
 
-## Relationship to existing CP controls
+---
 
-| CP | Interaction with CP.11 |
+## Relationship to Core Cross-Pillar Controls
+
+| Core control | UAS interaction |
 |---|---|
-| CP.2 Adversarial ML Threat Model | Supplies adversarial bias vectors (UAS-B7) |
-| CP.3 Governance Roles (ACT tiers) | Scales UAS testing frequency by autonomy tier |
-| CP.4 Control Plane Governance | UAS attestation package is a CP.4 governed artifact |
-| CP.6 Incident Integration | UAS-X2 escalation gate triggers CP.6 workflow |
-| CP.8 Model Lineage | UAS-S8 consumes CP.8 SHA-verified lineage artifacts |
-| CP.9 Delegation Bounds | UAS-H8 enforces minimum human override health |
-| CP.10 HEAR Doctrine | UAS-X5 attestation triggers integrate with HEAR events |
+| **CP.1** | Classifies relevant AI failure modes and evidence context |
+| **CP.2** | Supplies adversarial manipulation and temporal threat analysis |
+| **CP.3** | Scales testing/governance by ACT tier |
+| **CP.4** | Governs ownership, authorization, decision rights, and evidence |
+| **CP.6** | Feeds material findings into incident/control improvement |
+| **CP.8** | Defines emergency suspension thresholds where consequences warrant |
+| **CP.9** | Governs delegated/replicated agents that may inherit behavior or policy |
+| **CP.10** | Connects high-consequence human authority and stop decisions |
 
-## Federal procurement use
+UAS references those controls. It does not replace or renumber them.
 
-A contractor implementing the applicable UAS controls, running the Section 5 test protocol, and producing the five-document attestation package (Section 6) holds documented, inspectable evidence of due diligence with respect to GSAR 552.239-7001 (j)(1) and the bias testing and disclosure obligations at (f)(7)(viii) and (f)(7)(ix). UAS does not claim regulatory recognition. It is built so that if GSA publishes framework-recognition or equivalency criteria, this standard, and any other framework meeting those criteria, can be evaluated against them in the open.
+---
 
-Independent review: STANDARD.md Section 8 defines qualification criteria for independent evaluation bodies (technical AI evaluation capability, no financial interest in the system under review, published methodology). Bodies meeting these criteria may include NIST NCCoE, qualified public-private evaluation programs such as IT-AAC's Tech Proving Ground, or mutually agreed third parties.
+## Federal Procurement Use
 
-## Companion framework: CSF
+A UAS evidence package can help a contractor or agency document how it evaluated applicable truthfulness, neutrality, testing, and disclosure obligations.
 
-CP.11 is the first cross-pillar control with an explicit human-protection companion layer. CSF cross-connections:
+A complete assessment should identify:
 
-- `cognitive-sovereignty/research/005_uas_federal_standard.md`
-- `cognitive-sovereignty/06-digital-ai-symbiosis/federal-procurement-alignment.md`
+- the system/model/version evaluated;
+- applicable UAS requirements;
+- test methodology and thresholds;
+- source and corpus provenance;
+- material findings and remediation;
+- independent-review status where used;
+- limitations and unresolved questions;
+- signed attestation artifacts where contractually required.
 
-AI SAFE² secures the system. CSF protects the human. CP.11 proves both.
+The standard is designed to be independently inspectable and comparable if an agency later publishes formal recognition or equivalency criteria.
+
+---
+
+## Companion Framework: CSF
+
+UAS is the explicit bridge between AI system governance and human cognitive-sovereignty concerns.
+
+AI SAFE² governs the system and its authority. CSF addresses the human operator's capacity to remain capable of governing that system. UAS evaluates obligations that can span both layers.
+
+---
+
+## Start Here
+
+1. [Read the normative UAS standard](./STANDARD.md).
+2. [Review the bias taxonomy](./taxonomy/bias-taxonomy.md).
+3. [Review system controls](./controls/uas-controls-system.md).
+4. [Review human-layer controls](./controls/uas-controls-human.md).
+5. [Run the testing protocol](./testing/bias-test-protocol.md).
+6. [Review the procurement mapping](./compliance/gsar-552-239-7001-mapping.md).
+7. [Prepare the due-diligence attestation](./compliance/due-diligence-attestation.md).
+
+---
+
+## 🔗 Navigation
+
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../README.md) | [UAS Standard](./STANDARD.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+---
+
+*AI SAFE² v3.1 · CP.11 UAS compliance overlay · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

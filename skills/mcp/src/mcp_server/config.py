@@ -1,5 +1,5 @@
 """
-AI SAFE2 MCP Server — Configuration.
+AI SAFE2 MCP Server: configuration.
 All configuration is read from environment variables.
 Never hardcode secrets. See .env.example.
 """
@@ -15,10 +15,15 @@ load_dotenv()
 
 ROOT_DIR = Path(__file__).parent.parent.parent
 DATA_DIR = ROOT_DIR / "data"
-# v3.1 is preferred when installed; v3.0 remains a rollback/compatibility dataset.
-_V31_CONTROLS = DATA_DIR / "ai-safe2-controls-v3.1.json"
-_V30_CONTROLS = DATA_DIR / "ai-safe2-controls-v3.0.json"
-CONTROLS_JSON = _V31_CONTROLS if _V31_CONTROLS.exists() else _V30_CONTROLS
+
+# v3.1 does not add six new top-level framework controls. The 161-control core
+# taxonomy is retained and the CP.5.MCP profile is layered on top explicitly.
+# This avoids duplicating the full core dataset while making MCP-1 through
+# MCP-19 queryable as profile controls.
+CONTROLS_JSON = DATA_DIR / "ai-safe2-controls-v3.0.json"
+MCP_PROFILE_JSON = DATA_DIR / "mcp-profile-v3.1.json"
+FRAMEWORK_VERSION = "3.1.0"
+MCP_SPEC_VERSION = "2026-07-28"
 
 TRANSPORT: Literal["stdio", "streamable-http"] = os.getenv("MCP_TRANSPORT", "stdio")  # type: ignore[assignment]
 HOST = os.getenv("MCP_HOST", "127.0.0.1")
@@ -49,19 +54,27 @@ FREE_RATE_LIMIT = 30
 
 MCP_SOURCE_HASH: str = os.getenv("MCP_SOURCE_HASH", "")
 MCP_INSTALL_PATH: str = os.getenv("MCP_INSTALL_PATH", "")
-_raw_commands = os.getenv("ALLOWED_STDIO_COMMANDS", "python,python3,python3.11,python3.12,python3.13,uvicorn,ai-safe2-mcp")
+_raw_commands = os.getenv(
+    "ALLOWED_STDIO_COMMANDS",
+    "python,python3,python3.11,python3.12,python3.13,uvicorn,ai-safe2-mcp",
+)
 ALLOWED_STDIO_COMMANDS: set[str] = {c.strip() for c in _raw_commands.split(",") if c.strip()}
-ALLOWED_STDIO_MODULE_PATTERNS: list[str] = ["mcp_server.app", "mcp_server", "ai-safe2-mcp", "__main__"]
+ALLOWED_STDIO_MODULE_PATTERNS: list[str] = [
+    "mcp_server.app",
+    "mcp_server",
+    "ai-safe2-mcp",
+    "__main__",
+]
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 LOG_FORMAT = os.getenv("LOG_FORMAT", "json")
 
 SERVER_NAME = "ai-safe2-mcp"
-SERVER_VERSION = "3.1.0"
+SERVER_VERSION = FRAMEWORK_VERSION
 SERVER_DESCRIPTION = (
-    "AI SAFE2 v3.1 MCP Server — 161-control agentic AI governance toolkit, "
-    "aligned to the MCP 2026-07-28 security profile. Provides control lookup, "
-    "risk scoring, compliance mapping, code review, and agent classification tools. "
+    "AI SAFE2 v3.1 MCP Server: 161-control agentic AI governance toolkit with "
+    "a CP.5.MCP profile aligned to MCP 2026-07-28. Provides control lookup, risk "
+    "scoring, compliance mapping, code review, and agent classification tools. "
     "Legacy opaque bearer tokens remain supported for entitlement compatibility but "
     "do not by themselves establish MCP-19 audience-validation conformance."
 )

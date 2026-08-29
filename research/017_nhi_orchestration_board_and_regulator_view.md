@@ -1,3 +1,13 @@
+<!-- AI-SAFE2-UX:START -->
+[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Surface: Research](https://img.shields.io/badge/Surface-Research-820F1A?style=flat-square)](./README.md)
+[![Context: v3.1 Current](https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square)](../docs/REPOSITORY-UX-STANDARD.md)
+
+[Framework Home](../README.md) | [Research Index](./README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+> **Current framework context:** AI SAFE² v3.1. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.1 normative control and profile documents for implementation or conformance decisions.
+<!-- AI-SAFE2-UX:END -->
+
 # Research Note 6: NHI and Orchestration — The Board and Regulator View
 
 **Series:** AI SAFE2 v3.0 Research Foundation  
@@ -199,3 +209,15 @@ AI SAFE2 v3.0 maintains 100% ISO 42001 coverage. For agentic governance specific
 ---
 
 *This research note is part of the AI SAFE2 v3.0 research foundation series. It is written for CISO and board-level audiences. Cyber Strategy Institute, 2026.*
+
+<!-- AI-SAFE2-UX-FOOTER:START -->
+---
+
+### Research navigation
+
+[Previous research note](./016_agent_replication_governance.md) | [Research Index](./README.md) | [Next research note](./018_agentic_bias_as_operational_risk.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [NEXUS](../NEXUS/) | [Challenge Lab](../challenges/)
+
+*AI SAFE² v3.1 | Cyber Strategy Institute*
+<!-- AI-SAFE2-UX-FOOTER:END -->

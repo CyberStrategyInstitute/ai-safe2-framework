@@ -1,7 +1,13 @@
 # Pillar 3: Fail-Safe & Recovery (P3)
 ### 🛑 The Emergency Brakes
 
-[🔙 Back to Main Framework](../README.md) | [← Pillar 2: Audit & Inventory](../02-audit-inventory/README.md) | [Pillar 4: Engage & Monitor →](../04-engage-monitor/README.md) | [Cross-Pillar Governance →](../cross-pillar/README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Layer](https://img.shields.io/badge/Layer-Pillar_3-820F1A?style=flat-square)](./README.md)
+[![Status](https://img.shields.io/badge/Status-Current-808080?style=flat-square)](../EVOLUTION.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+**Previous:** [← Pillar 2: Audit & Inventory](../02-audit-inventory/README.md) | **Next:** [Pillar 4: Engage & Monitor →](../04-engage-monitor/README.md)
 
 ---
 
@@ -51,14 +57,14 @@
 
 ### ⚡ v3.0 New Controls
 
-> Full control specifications are included in the [AI SAFE² v3.0 Implementation Toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
+> These controls were introduced in v3.0 and remain part of the current [AI SAFE² v3.1 framework](../README.md). Current implementation resources are available through the [AI SAFE² toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
 
 | Control | Name | Priority | What It Solves |
 | :--- | :--- | :--- | :--- |
-| **[F3.2]** | Agent Recursion Limit Governor | 🔴 CRITICAL | Hard cap on tool-calling depth enforced at the API gateway layer — not in the system prompt, which the agent can reason around |
-| **[F3.3]** | Swarm Quorum Abort Mechanism | 🟠 HIGH | Decentralized threshold-based shutdown: when a quorum of swarm agents agree to abort, the entire coordinated effort stops without a centralized kill signal |
+| **[F3.2]** | Agent Recursion Limit Governor | 🔴 CRITICAL | Hard cap on tool-calling depth enforced at the API gateway layer, not in the system prompt |
+| **[F3.3]** | Swarm Quorum Abort Mechanism | 🟠 HIGH | Decentralized threshold-based shutdown when a quorum of swarm agents agrees to abort |
 | **[F3.4]** | Behavioral Drift Baseline & Rollback | 🟠 HIGH | Establishes measurable behavioral baselines; automated rollback when drift exceeds configurable thresholds |
-| **[F3.5]** | Multi-Agent Cascade Containment | 🔴 CRITICAL | Limits blast radius of agent failures in pipeline architectures; failed agents are isolated so downstream agents receive clean error signals |
+| **[F3.5]** | Multi-Agent Cascade Containment | 🔴 CRITICAL | Limits blast radius of agent failures in pipeline architectures and returns clean failure signals downstream |
 
 ---
 
@@ -95,7 +101,7 @@
 | Framework | Control | Mapping |
 | :--- | :--- | :--- |
 | OWASP AIVSS v0.8 | Risk #1 Tool Misuse / DoS via Loop | F3.2 Recursion Governor |
-| OWASP AIVSS v0.8 | Risk #3 Cascading Failures (9.4/10) | F3.3, F3.5 |
+| OWASP AIVSS v0.8 | Risk #3 Cascading Failures | F3.3, F3.5 |
 | OWASP LLM | LLM04 Denial of Service | F3.2 |
 | ISO/IEC 42001 | Sec 8.4 Resilience | P3.T6 |
 | ISO 27001 | A.17.2 Availability | P3.T5, P3.T6 |
@@ -111,10 +117,8 @@
 | :--- | :--- | :--- |
 | [Pillar 2: Audit & Inventory](../02-audit-inventory/README.md) | **Pillar 3: Fail-Safe & Recovery** | [Pillar 4: Engage & Monitor](../04-engage-monitor/README.md) |
 
-→ [Cross-Pillar Governance (CP.1-CP.10)](../00-cross-pillar/README.md)
-→ [Interactive Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
-→ [Get the Full Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | [Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
 
 ---
 
-*Powered by [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

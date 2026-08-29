@@ -1,3 +1,13 @@
+<!-- AI-SAFE2-UX:START -->
+[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![Surface: Example](https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square)](../README.md)
+[![Context: v3.1 Current](https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square)](../../docs/REPOSITORY-UX-STANDARD.md)
+
+[Framework Home](../../README.md) | [Examples Index](../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+> **Current framework context:** AI SAFE² v3.1. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
+<!-- AI-SAFE2-UX:END -->
+
 <!-- stack: Cursor -->
 <!-- description: Runtime controls for Cursor IDE chains, .cursor/rules injection surfaces, and AI-generated code execution. -->
 <div align="center">
@@ -157,3 +167,13 @@ examples/
 
 **MIT License — Cyber Strategy Institute**
 *"Engineered Certainty for the Agentic Age."*
+
+<!-- AI-SAFE2-UX-FOOTER:START -->
+---
+
+### Repository navigation
+
+[Examples Index](../README.md) | [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [NEXUS](../../NEXUS/) | [Scanner](../../scanner/README.md) | [MCP Profile](../../00-cross-pillar/cp5_mcp_server_security.md)
+
+*AI SAFE² v3.1 | Cyber Strategy Institute*
+<!-- AI-SAFE2-UX-FOOTER:END -->

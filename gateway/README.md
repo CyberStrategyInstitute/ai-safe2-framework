@@ -1,268 +1,179 @@
-# AI SAFE² Core Gateway — v3.0
+# AI SAFE² Core Gateway v3.0
+### North-south runtime enforcement for the AI SAFE² v3.1 framework
 
-**AI enforcement proxy implementing the full AI SAFE² v3.0 governance stack.**
-Supports multiple LLM providers. Every request is risk-scored, HITL-gated, and immutably logged before it reaches the upstream — regardless of which provider is active.
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Component](https://img.shields.io/badge/Gateway-v3.0-820F1A?style=flat-square)](./main.py)
+[![Plane](https://img.shields.io/badge/Plane-North--South-808080?style=flat-square)](../00-cross-pillar/README.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+**Previous:** [← Scanner](../scanner/README.md) | **Related:** [NEXUS](../NEXUS/) | [MCP Agent-to-Tool Profile](../00-cross-pillar/cp5_mcp_server_security.md)
+
+---
+
+## Version and Conformance Boundary
+
+The current gateway implementation is **Gateway v3.0**. AI SAFE² v3.1 did not silently rename this component.
+
+The gateway remains a compatible reference component for the **north-south enforcement plane** because the v3.1 release primarily changes protocol governance and the MCP agent-to-tool profile. Existing v3.0 gateway audit evidence therefore retains its v3.0 component identity until a separately tested gateway release changes that identity.
+
+This distinction is intentional:
+
+- **AI SAFE² v3.1** is the current framework.
+- **Gateway v3.0** is the current gateway component.
+- **NEXUS v0.3** is the current NEXUS component.
+- Component versions should not be rewritten merely for visual consistency.
 
 ---
 
 ## Architecture
 
-```
-Client Request
-      │
-      ▼
-[HeartbeatMonitor]      ← hard stop if HEARTBEAT.md missing / stale / tampered
-      │
-[RateLimiter]           ← per-identity sliding window (rpm + rph)
-      │
-[ProviderAdapter]       ← normalize request; extract NEXUS-A2A fields if present
-      │
-[RiskScorer]            ← 3-vector composite: action × sensitivity × history
-      │
-[HITLCircuitBreaker]    ← AUTO / MEDIUM / HIGH / CRITICAL tier enforcement
-      │
-[ImmutableAuditLog]     ← HMAC-SHA256 chained JSONL — every decision recorded
-      │
-[Provider Dispatch]     ← forward to active provider
-      │
-[ResponseScanner]       ← exfil + tool_use injection check on upstream response
-      │
-      ▼
+```text
+Client / Agent
+      |
+      v
+HeartbeatMonitor       hard stop on invalid liveness state
+      |
+RateLimiter            per-identity request limits
+      |
+ProviderAdapter        normalized provider boundary
+      |
+RiskScorer             action x sensitivity x history
+      |
+HITLCircuitBreaker     AUTO / MEDIUM / HIGH / CRITICAL
+      |
+ImmutableAuditLog      HMAC-SHA256 chained evidence
+      |
+Provider Dispatch      Anthropic / OpenAI / Gemini / Ollama / OpenRouter
+      |
+ResponseScanner        outbound exfiltration and injection checks
+      |
+      v
 Client Response
 ```
 
-### Enforcement components
+### Enforcement Components
 
 | Component | Function |
-|-----------|----------|
-| `HeartbeatMonitor` | Validates `HEARTBEAT.md` freshness before every request. Missing, empty, or stale → safe mode. Never auto-creates. |
-| `ImmutableAuditLog` | HMAC-SHA256 chained JSONL. Tamper detection on startup. Chain break → safe mode. |
-| `RiskScorer` | 3-vector composite: action\_type (0.40) × target\_sensitivity (0.35) × historical\_context (0.25). +5 injection, +3 A2A. Capped 10.0. |
-| `HITLCircuitBreaker` | 4-tier: AUTO (0–3) / MEDIUM (4–6, token) / HIGH (7–8, token + reason ≥20 chars) / CRITICAL (>8, HMAC 2FA challenge). |
-| `ProviderAdapter` | Normalizes requests across providers for enforcement. Forwards original payload untouched. |
-| `ResponseScanner` | Inspects every upstream response for exfil patterns and tool\_use injection payloads before returning to client. |
-| `SafeMode` | Event-based hard stop. Activated by heartbeat failure or chain break. Operator-key deactivation only. |
+|---|---|
+| `HeartbeatMonitor` | Validates liveness state and activates safe mode on invalid conditions |
+| `RateLimiter` | Bounds request volume per identity |
+| `ProviderAdapter` | Normalizes provider requests while preserving the original upstream payload |
+| `RiskScorer` | Computes the gateway risk vector used for HITL routing |
+| `HITLCircuitBreaker` | Applies tiered human authorization requirements |
+| `ImmutableAuditLog` | Produces HMAC-chained audit evidence and detects tampering |
+| `ResponseScanner` | Inspects upstream output before return to the caller |
+| `SafeMode` | Blocks normal traffic until operator-controlled recovery |
 
 ---
 
-## Files
+## v3.1 Enforcement-Plane Model
 
-```
-gateway/
-├── main.py                 # FastAPI async enforcement proxy
-├── provider_adapters.py    # Multi-provider adapter layer (Anthropic, OpenAI, Gemini, Ollama, OpenRouter)
-├── README.md               # This file
-└── HEARTBEAT.md            # Created on first run via --init-heartbeat (never auto-created)
-```
+| Plane | Primary component/path | Gateway role |
+|---|---|---|
+| **North-south** | Gateway | Primary reference enforcement component |
+| **East-west** | NEXUS | Gateway may carry/record NEXUS context but is not the primary A2A governance layer |
+| **Agent-to-tool** | CP.5.MCP + NEXUS MCP adapter/toolkit | Gateway is not a substitute for MCP-specific authorization/profile enforcement |
 
-`provider_adapters.py` must be in the same directory as `main.py`. If absent, the gateway falls back to Anthropic-only mode with a warning at startup.
+The gateway therefore should not be used as evidence that MCP-14 through MCP-19 are implemented. Those controls must be evaluated on the actual agent-to-tool path.
 
 ---
 
-## Quick start
+## Quick Start
 
-### 1. Prerequisites
+### Dependencies
 
 ```bash
 python3 -m pip install fastapi uvicorn httpx pyyaml requests
 ```
 
-### 2. Environment variables
-
-`AUDIT_CHAIN_KEY` and `OPERATOR_DEACTIVATION_KEY` are always required. Set the API key for your active provider.
+### Required secrets
 
 ```bash
 export AUDIT_CHAIN_KEY="$(openssl rand -hex 32)"
 export OPERATOR_DEACTIVATION_KEY="$(openssl rand -hex 16)"
-export ALERT_WEBHOOK_URL="https://hooks.slack.com/..."     # optional
-
-# Anthropic (default)
-export ANTHROPIC_API_KEY="sk-ant-api..."
-
-# OpenAI
-# export OPENAI_API_KEY="sk-..."
-
-# Gemini
-# export GEMINI_API_KEY="AIza..."
-
-# OpenRouter
-# export OPENROUTER_API_KEY="sk-or-..."
-
-# Ollama (local) — no API key required
 ```
 
-### 3. Set active provider
-
-Edit the default config in `main.py` or pass via environment:
-
-```python
-"provider": {"active": "anthropic"}   # anthropic | openai | gemini | ollama | openrouter
-```
-
-### 4. Initialize heartbeat (first run only)
+Set the credential for the selected provider, for example:
 
 ```bash
-python3 -c "
-from gateway.main import HeartbeatMonitor
-m = HeartbeatMonitor('HEARTBEAT.md')
-m.initialize_once()
-print('Heartbeat initialized.')
-"
+export ANTHROPIC_API_KEY="..."
+# export OPENAI_API_KEY="..."
+# export GEMINI_API_KEY="..."
+# export OPENROUTER_API_KEY="..."
 ```
 
-### 5. Run
+### Run
 
 ```bash
 uvicorn gateway.main:app --host 127.0.0.1 --port 8080
 ```
 
-Point your SDK's `base_url` at `http://localhost:8080/v1/messages`.
+---
+
+## Provider Support
+
+| Provider | Credential/config |
+|---|---|
+| Anthropic | `ANTHROPIC_API_KEY` |
+| OpenAI | `OPENAI_API_KEY` |
+| Gemini | `GEMINI_API_KEY` |
+| Ollama | local endpoint, normally no API key |
+| OpenRouter | `OPENROUTER_API_KEY` |
+
+All providers pass through the same gateway policy stages; provider adapters handle upstream-specific transport details.
 
 ---
 
-## Multi-provider support
+## NEXUS Relationship
 
-All enforcement controls operate identically regardless of provider. The adapter handles auth headers and response format normalization transparently — the original request payload is always forwarded untouched.
+The gateway contains compatibility hooks for NEXUS context and can record NEXUS-related identity/delegation evidence when present.
 
-| Provider | Client format | API key env var |
-|----------|--------------|-----------------|
-| `anthropic` | Anthropic Messages API | `ANTHROPIC_API_KEY` |
-| `openai` | OpenAI Chat Completions | `OPENAI_API_KEY` |
-| `gemini` | Gemini generateContent | `GEMINI_API_KEY` |
-| `ollama` | OpenAI-compatible (local) | none by default |
-| `openrouter` | OpenAI-compatible | `OPENROUTER_API_KEY` |
+That does not make the gateway the NEXUS implementation. NEXUS remains the CSI reference path for east-west governance and the v3.1 agent-to-tool adapter contract.
 
-**Ollama:** pull a model first with `ollama pull llama3`, then set `providers.ollama.model` in config.
-
-**OpenRouter:** supports 100+ models via a single endpoint and billing account. Set `model` to any [OpenRouter model ID](https://openrouter.ai/models), e.g. `"anthropic/claude-sonnet-4-20250514"`, `"openai/gpt-4o"`, `"meta-llama/llama-3.1-70b"`.
+See [NEXUS](../NEXUS/) for the current implementation boundary.
 
 ---
 
-## NEXUS-A2A compatibility
+## Audit Provenance
 
-The gateway includes NEXUS-A2A v0.2 compatibility hooks. No NEXUS runtime required.
+Gateway audit records intentionally identify the **gateway component version** that created them. Existing Gateway v3.0 evidence should remain v3.0 evidence.
 
-**Active now:**
-- NEXUS header detection and logging (`x-nexus-agent-id`, `x-nexus-session-id`, `x-nexus-delegation-chain`, etc.)
-- A2A detection upgraded to NEXUS-aware indicator set (includes NEXUS v0.2 canonical message types)
-- NEXUS identity fields written to every audit log entry when present
+The audit-chain genesis anchor must not be changed merely because the framework version advances. Doing so would break verification of prior chained records.
 
-**When NEXUS ships:** flip one config value — no code changes required.
-
-```python
-"nexus": {"enabled": True, "enforcement": "passthrough"}
-# → "enforcement": "verify"  or  "enforcement": "enforce"
-```
+A future Gateway v3.1 release should define and test an explicit evidence migration/versioning policy rather than silently rewriting the v3.0 anchor.
 
 ---
 
-## HITL tier reference
+## Safe Mode
 
-| Tier | Score | Client requirement |
-|------|-------|--------------------|
-| AUTO | 0–3 | None |
-| MEDIUM | 4–6 | `X-HITL-Token: <token>` (token returned on first 403) |
-| HIGH | 7–8 | `X-HITL-Token` + `X-HITL-Reason` (≥ 20 characters) |
-| CRITICAL | > 8 | Out-of-band 2FA: `HMAC-SHA256(AUDIT_CHAIN_KEY, challenge_token)[:16]` |
+Safe mode blocks governed traffic until explicitly deactivated by the authorized operator path.
 
----
+Typical triggers include:
 
-## Risk vector scoring
+- missing, invalid, or stale heartbeat state;
+- audit-chain verification failure;
+- explicit operator activation.
 
-**Action type** (tool names / message keywords):
-
-| Score | Tier | Examples |
-|-------|------|---------|
-| 0 | Read | `read`, `search`, `get`, `list` |
-| 5 | Write | `write`, `create`, `update`, `send` |
-| 10 | Exec/Delete | `execute`, `delete`, `run`, `deploy`, `kill` |
-
-**Target sensitivity** (content patterns):
-
-| Score | Classification |
-|-------|---------------|
-| 0 | Public / generic |
-| 5 | Personal data (`/home/`, `Documents/`, `private`) |
-| 10 | System / credentials (`/etc/`, `.ssh/`, `SECRET`, `TOKEN`) |
-
-**Historical context** (per user+fingerprint frequency):
-
-| Score | Frequency |
-|-------|-----------|
-| 0 | Frequent (≥ 5 seen) |
-| 5 | Rare (< 5 seen) |
-| 10 | Never seen |
+The safety path remains outside ordinary model authority.
 
 ---
 
-## Audit log
+## Framework References
 
-Entries written to `logs/audit.jsonl` as HMAC-SHA256 chained JSONL. NEXUS identity fields appended when present.
-
-```json
-{
-  "seq": 1,
-  "timestamp": "2025-01-01T00:00:00.000000+00:00",
-  "gateway_version": "3.0.0",
-  "framework": "AI SAFE² v3.0",
-  "user_id": "user@example.com",
-  "request_hash": "sha256:...",
-  "risk_score": 4.25,
-  "risk_vectors": {"action_type": 5.0, "target_sensitivity": 5.0, "historical_context": 5.0},
-  "hitl_tier": "MEDIUM",
-  "blocked": false,
-  "reason": null,
-  "provider": "openai",
-  "nexus_agent_id": "did:nexus:abc123",
-  "entry_hash": "sha256:..."
-}
-```
-
-Verify chain integrity at any time:
-
-```bash
-python3 -c "
-from gateway.main import ImmutableAuditLog
-import os
-log = ImmutableAuditLog('logs/audit.jsonl', os.environ['AUDIT_CHAIN_KEY'])
-ok, count, msg = log.verify_chain()
-print(f'Chain: {\"OK\" if ok else \"BROKEN\"} — {count} entries — {msg}')
-"
-```
+- [AI SAFE² v3.1 Framework](../README.md)
+- [Cross-Pillar Governance](../00-cross-pillar/README.md)
+- [AISM](../AISM/)
+- [NEXUS](../NEXUS/)
+- [Scanner](../scanner/README.md)
+- [MCP v3.1 Profile](../00-cross-pillar/cp5_mcp_server_security.md)
 
 ---
 
-## Safe mode
+## 🔗 Navigation
 
-Safe mode blocks **all** traffic until an operator explicitly deactivates it.
-
-```bash
-curl -X POST http://localhost:8080/emergency/deactivate-safe-mode \
-  -H "X-Operator-Key: $OPERATOR_DEACTIVATION_KEY"
-```
-
-Triggers: missing/empty/stale `HEARTBEAT.md`, audit chain break, operator invocation.
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Scanner](../scanner/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
 
-## Health endpoint
-
-```bash
-curl http://localhost:8080/health
-```
-
-```json
-{
-  "status": "healthy",
-  "safe_mode": false,
-  "heartbeat_valid": true,
-  "active_provider": "anthropic",
-  "framework": "AI SAFE² v3.0"
-}
-```
-
----
-
-## Framework reference
-
-AI SAFE² v3.0 · Cyber Strategy Institute · [github.com/CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+*AI SAFE² v3.1 framework · Gateway v3.0 component · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

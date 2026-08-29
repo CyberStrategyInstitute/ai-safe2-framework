@@ -1,27 +1,46 @@
-# AI SAFE2 v3.0 Skills Ecosystem
+# AI SAFE² Skills Ecosystem
+### Model-facing framework guidance and live MCP control access
 
-This folder contains the complete AI SAFE2 v3.0 skill and MCP server implementation.
-It supersedes the root `skill.md` (v2.1) and is the canonical reference for all
-AI model integrations.
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Surface](https://img.shields.io/badge/Surface-Skills-820F1A?style=flat-square)](./README.md)
+[![Core](https://img.shields.io/badge/Core-161_controls-808080?style=flat-square)](./mcp/data/ai-safe2-controls-v3.0.json)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
 
-## What's Here
+## What This Folder Does
 
+The `skills/` surface packages AI SAFE² guidance for AI assistants and provides the Python MCP server used for live control lookup and governance workflows.
+
+The current v3.1 data model separates the stable core taxonomy from the protocol profile overlay:
+
+```text
+skills/mcp/data/ai-safe2-controls-v3.0.json  161-control core taxonomy
+skills/mcp/data/mcp-profile-v3.1.json       CP.5.MCP profile, MCP-1 through MCP-19
 ```
+
+The v3.0 filename on the core taxonomy is intentional historical provenance. AI SAFE² v3.1 did not add new core controls; it updated the MCP profile and enforcement model.
+
+---
+
+## Repository Map
+
+```text
 skills/
-├── SKILL.md                    ← Claude Projects: upload this to Project Knowledge
-├── skill-spec.md               ← Model-neutral canonical behavior specification
-├── evals.md                    ← Regression tests and expected output patterns
-├── chatgpt/gpt-instructions.md ← ChatGPT Custom GPT instructions
-├── gemini/gem-instructions.md  ← Gemini Gem instructions
-├── perplexity/system-instructions.md ← Perplexity / other LLM system prompt
-└── mcp/                        ← MCP server (Python, Docker, Railway-ready)
-    ├── README.md               ← Setup and deploy guide
-    ├── src/mcp_server/         ← Server source code
-    ├── data/ai-safe2-controls-v3.0.json ← 161-control taxonomy (the backbone)
-    ├── Dockerfile
-    ├── docker-compose.yml      ← With Caddy sidecar for automatic HTTPS
+├── README.md
+├── SKILL.md                         Canonical framework skill
+├── skill-spec.md                    Model-neutral behavior specification
+├── evals.md                         Regression/evaluation expectations
+├── chatgpt/gpt-instructions.md      ChatGPT-facing instructions
+├── gemini/gem-instructions.md       Gemini-facing instructions
+├── perplexity/system-instructions.md
+└── mcp/
+    ├── README.md                    MCP server setup and architecture
+    ├── src/mcp_server/              Server implementation
+    ├── data/
+    │   ├── ai-safe2-controls-v3.0.json
+    │   └── mcp-profile-v3.1.json
     └── tests/
 ```
 
@@ -29,53 +48,67 @@ skills/
 
 ## Quick Start by Use Case
 
-### "I use Claude Projects / Claude Desktop"
-Upload `SKILL.md` to your Claude Project's knowledge base. Done.
-Your Claude instance is now an AI SAFE2 v3.0 architect.
+### AI project or knowledge context
 
-### "I want live control lookup in Claude Code / Codex"
-See `mcp/README.md` for stdio local setup (5 minutes, no token needed).
+Use [`SKILL.md`](./SKILL.md) as the primary framework context and follow the target product's supported method for project or system instructions.
 
-### "I want a shared HTTPS endpoint for my team"
-See `mcp/README.md` for Railway deployment (15 minutes, free tier available).
-Issue tokens at cyberstrategyinstitute.com/ai-safe2/
+### Live control lookup and MCP workflows
 
-### "I use ChatGPT"
-Use `chatgpt/gpt-instructions.md` as the GPT system instructions.
-Attach `mcp/data/ai-safe2-controls-v3.0.json` as a knowledge file.
+Use the [AI SAFE² MCP Server](./mcp/README.md). It exposes core-control lookup plus the separate v3.1 MCP profile.
 
-### "I use Gemini"
-Use `gemini/gem-instructions.md` as the Gem instructions.
-Attach `SKILL.md` and `mcp/data/ai-safe2-controls-v3.0.json` as files.
+### ChatGPT-facing instructions
+
+Use [`chatgpt/gpt-instructions.md`](./chatgpt/gpt-instructions.md) and provide the core taxonomy/profile artifacts required for the use case.
+
+### Gemini-facing instructions
+
+Use [`gemini/gem-instructions.md`](./gemini/gem-instructions.md) together with the relevant framework data artifacts.
 
 ---
 
-## What the MCP Server Provides
+## MCP Server Capabilities
 
-| Tool | Description | Free | Pro |
-|------|-------------|------|-----|
-| `lookup_control` | Search 161 controls by keyword, ID, pillar, framework | 30 results | 500 results |
-| `risk_score` | CVSS + Pillar + AAF combined risk formula | Basic | Full AAF |
-| `compliance_map` | Map requirements to controls across 32 frameworks | 5 frameworks | All 32 |
-| `code_review` | Review code against controls (light, model-based) | No | Yes |
-| `agent_classify` | ACT tier + HEAR + CP.9 + governance evidence | Partial | Full |
-| `get_governance_resource` | Policy templates, checklists, schemas | 3 resources | All |
-| `get_workflow_prompt` | Reusable workflow starters | Yes | Yes |
+| Capability | Purpose |
+|---|---|
+| `lookup_control` | Search the 161 core controls and v3.1 MCP profile controls by ID or text |
+| `risk_score` | Apply the AI SAFE² combined risk model |
+| `compliance_map` | Reuse control evidence across mapped frameworks |
+| `code_review` | Review implementation patterns against applicable controls |
+| `agent_classify` | Estimate ACT tier and surface governance requirements |
+| governance resources | Retrieve policy, schema, and workflow guidance |
 
-**Tokens:** cyberstrategyinstitute.com/ai-safe2/
-Free tier: email registration. Pro tier: Toolkit purchase ($97).
+See [skills/mcp/README.md](./mcp/README.md) for current transport, authentication, compatibility, and MCP-19 limitations.
 
 ---
 
-## Framework Version
+## v3.1 Version Model
 
-| | v2.1 | v3.0 |
-|---|---|---|
-| Controls | 128 pillar | 151 pillar + 10 CP = **161 total** |
-| Frameworks | 14 | **32** |
-| First-in-field | — | CP.9 Replication, CP.10 HEAR, CP.7 Active Defense, AIVSS AAF |
-| Skill location | root skill.md | **skills/SKILL.md** (this folder) |
+| Item | v3.1 state |
+|---|---|
+| Core framework controls | **161** |
+| Core Cross-Pillar controls | **CP.1 through CP.10** |
+| MCP profile controls | **MCP-1 through MCP-19** |
+| Current MCP binding | **2026-07-28** |
+| Legacy MCP binding | **2025-11-25, migration compatibility** |
+| Canonical skill | **skills/SKILL.md** |
+| NEXUS role | **CSI reference implementation, not mandatory dependency** |
+
+CP.11 UAS is a compliance overlay and should not be added to the 161 core count as a set of new independent framework controls.
 
 ---
 
-*Managed by [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+## Conformance Boundary
+
+Skills and MCP tools help users interpret and operationalize AI SAFE². They do not create conformance merely by being installed.
+
+A conformant implementation must satisfy the applicable control outcomes and produce the required evidence. For MCP, this includes the v3.1 profile requirements relevant to the deployment, including authorization/resource binding when MCP-19 applies.
+
+---
+
+## 🔗 Navigation
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [MCP Server](./mcp/README.md) | [Scanner](../scanner/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+---
+
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

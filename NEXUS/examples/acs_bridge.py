@@ -19,14 +19,13 @@ Note: ACS Guardian calls are mocked. In production, replace mock_acs_guardian()
 with HTTP calls to your Guardian endpoint at the configured guardian_url.
 """
 
-import json
 from nexus_sdk.bridges import NEXUSACSBridge
 from nexus_sdk.memory import MemoryVaccine, MemoryZone
-from nexus_sdk.cael import CAELToolCall
 
 # ============================================================================
 # Mock ACS Guardian (replaces real HTTP in this example)
 # ============================================================================
+
 
 def mock_acs_guardian(request: dict) -> dict:
     """
@@ -44,12 +43,12 @@ def mock_acs_guardian(request: dict) -> dict:
                 "step_id": step_id,
                 "deny_reason": "delete operations not permitted by ACS policy",
                 "reason_codes": ["ACS_POLICY_DELETE_BLOCKED"],
-            }
+            },
         }
     return {
         "jsonrpc": "2.0",
         "id": request["id"],
-        "result": {"decision": "allow", "step_id": step_id}
+        "result": {"decision": "allow", "step_id": step_id},
     }
 
 
@@ -76,9 +75,9 @@ print("Tool call requests via ACS Guardian:")
 print("-" * 60)
 
 tool_calls = [
-    ("read_file",   {"path": "/data/input.csv"},  "read operation"),
-    ("write_file",  {"path": "/data/output.csv"}, "write operation"),
-    ("delete_file", {"path": "/data/temp.csv"},   "delete (should be denied)"),
+    ("read_file", {"path": "/data/input.csv"}, "read operation"),
+    ("write_file", {"path": "/data/output.csv"}, "write operation"),
+    ("delete_file", {"path": "/data/temp.csv"}, "delete (should be denied)"),
 ]
 
 for tool_name, arguments, desc in tool_calls:
@@ -103,8 +102,8 @@ for tool_name, arguments, desc in tool_calls:
     assert request["jsonrpc"] == "2.0"
     assert request["method"] == "steps/toolCallRequest"
 
-    acs_agent_id = request["params"]["agent"]["id"]       # bare string for ACS compat
-    nexus_agent_did = request["params"]["agent"]["agent_did"]  # DID in NEXUS extension
+    acs_agent_id = request["params"]["agent"]["id"]
+    nexus_agent_did = request["params"]["agent"]["agent_did"]
 
     # nexus: block carries NEXUS-specific fields; ACS-only Guardian ignores it
     nexus_block = request["params"].get("nexus", {})
@@ -113,12 +112,12 @@ for tool_name, arguments, desc in tool_calls:
     verdict = bridge.parse_verdict(response)
 
     status = "OK " if verdict["allowed"] else "!!!"
-    print(f"  [{status}] {tool_name}: {verdict["decision"].upper()}")
+    print(f"  [{status}] {tool_name}: {verdict['decision'].upper()}")
     print(f"        ACS agent.id      = '{acs_agent_id}'")
     print(f"        NEXUS agent_did   = '{nexus_agent_did}'")
     print(f"        nexus: block keys = {list(nexus_block.keys())}")
     if not verdict["allowed"]:
-        print(f"        deny_reason       = {verdict.get("reasoning")}")
+        print(f"        deny_reason       = {verdict.get('reasoning')}")
     print()
 
 # ============================================================================
@@ -131,12 +130,12 @@ print("-" * 60)
 mv = MemoryVaccine(agent_did, "data processing pipeline", use_stub_embeddings=True)
 write_decision = mv.validate_write(
     content="processed 1024 records from input.csv, 12 anomalies flagged",
-    zone=MemoryZone.CROSS_SESSION,
+    zone=MemoryZone.HANDLE_SCOPED,
     owner_did=agent_did,
 )
 acs_ctx = mv.to_acs_guardian_context(
     content="processed 1024 records from input.csv, 12 anomalies flagged",
-    zone=MemoryZone.CROSS_SESSION,
+    zone=MemoryZone.HANDLE_SCOPED,
     owner_did=agent_did,
     decision=write_decision,
 )
@@ -150,10 +149,11 @@ memory_request = bridge.build_memory_store_request(
 mem_response = mock_acs_guardian(memory_request)
 mem_verdict = bridge.parse_verdict(mem_response)
 
-print(f"  [OK ] memory store: {mem_verdict["decision"].upper()}")
-print(f"        zone            = {acs_ctx['zone']}")
-print(f"        drift_score     = {acs_ctx.get('drift_score', 'n/a')}")
-print(f"        embedding_hash  = {acs_ctx['embedding_hash'][:32]}...")
+print(f"  [OK ] memory store: {mem_verdict['decision'].upper()}")
+print(f"        persistence_scope = {acs_ctx['persistence_scope']}")
+print(f"        state_handle_id   = {acs_ctx['state_handle_id']}")
+print(f"        drift_score       = {acs_ctx.get('drift_score', 'n/a')}")
+print(f"        embedding_hash    = {acs_ctx['embedding_hash'][:32]}...")
 print()
 
 print("=" * 60)

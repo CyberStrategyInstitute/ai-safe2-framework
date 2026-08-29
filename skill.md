@@ -1,34 +1,49 @@
-# AI SAFE2 Secure Build Copilot — v3.0
+# AI SAFE² Secure Build Copilot: v3.1 Redirect
 
-> This file (root `skill.md`) covered AI SAFE2 v2.1 (128 controls, 14 frameworks).
-> It has been superseded by the v3.0 skill ecosystem in the `skills/` folder.
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](README.md)
+[![Surface](https://img.shields.io/badge/Surface-Skill_Redirect-820F1A?style=flat-square)](skills/SKILL.md)
 
-## For Claude Projects / Claude Desktop
+[Framework Home](README.md) | [Cross-Pillar Governance](00-cross-pillar/README.md) | [AISM](AISM/) | [NEXUS](NEXUS/) | [Skills](skills/README.md)
 
-Upload **`skills/SKILL.md`** to your Project Knowledge instead of this file.
+---
 
-AI SAFE2 v3.0: 161 controls, 32 frameworks, CP.1-CP.10 cross-pillar governance,
-HEAR Doctrine, Agent Replication Governance, AIVSS AAF scoring integration.
+## Canonical Skill
 
-## For Live Tool Access (Claude Code, Codex)
+This root file is a compatibility redirect. The canonical AI SAFE² v3.1 skill is:
 
-See **`skills/mcp/README.md`** for the MCP server setup guide.
-Local stdio: 5 minutes, no token. Remote HTTPS: 15 minutes via Railway.
+**[skills/SKILL.md](skills/SKILL.md)**
 
-## What Changed in v3.0
+Use that file for current framework guidance.
 
-| | v2.1 (this file) | v3.0 (skills/) |
-|---|---|---|
-| Controls | 128 | 161 (151 pillar + 10 CP) |
-| Frameworks | 14 | 32 |
-| MCP server | Referenced only | Fully built |
-| HEAR Doctrine | Not defined | CP.10 (first in field) |
-| Agent Replication | Not defined | CP.9 (first in field) |
-| Risk formula | CVSS + Pillar | CVSS + Pillar + AAF |
+AI SAFE² v3.1 retains **161 core controls** and adds the current CP.5.MCP profile overlay with **MCP-1 through MCP-19**, aligned to MCP `2026-07-28`.
 
-## Links
+The core control dataset remains `skills/mcp/data/ai-safe2-controls-v3.0.json` because the v3.1 release did not change the core 161-control taxonomy. The v3.1 MCP overlay is `skills/mcp/data/mcp-profile-v3.1.json`.
 
-- v3.0 Skill: [skills/SKILL.md](skills/SKILL.md)
-- MCP Server: [skills/mcp/README.md](skills/mcp/README.md)
-- Framework: https://github.com/CyberStrategyInstitute/ai-safe2-framework
-- Toolkit: https://cyberstrategyinstitute.com/ai-safe2/
+---
+
+## Live Tool Access
+
+For live control lookup, risk scoring, compliance mapping, and agent classification, see:
+
+**[skills/mcp/README.md](skills/mcp/README.md)**
+
+---
+
+## v3.1 Changes Relevant to the Skill
+
+- Three enforcement planes: north-south, east-west, and agent-to-tool.
+- Protocol-independent governance constructs.
+- MCP `2026-07-28` profile alignment.
+- MCP-14 through MCP-19.
+- Canonical persistence scopes: `request`, `handle_scoped`, `durable`.
+- NEXUS explicitly positioned as CSI's reference implementation rather than a mandatory dependency.
+- MCP-19 intended-resource/audience and SSRF requirements.
+- `server/discover` is optional, not a conformance presence requirement.
+
+Historical v3.0 additions such as CP.1 through CP.10, HEAR, Agent Replication Governance, and the 161-control core taxonomy remain part of v3.1.
+
+---
+
+[Framework Home](README.md) | [Canonical Skill](skills/SKILL.md) | [MCP Server](skills/mcp/README.md) | [Scanner](scanner/README.md) | [Dashboard](dashboard/README.md)
+
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
