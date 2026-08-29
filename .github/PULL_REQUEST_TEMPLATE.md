@@ -6,61 +6,62 @@
 
 - [ ] Bug fix
 - [ ] New feature (non-breaking)
-- [ ] Breaking change (requires CHANGELOG update and migration note)
-- [ ] Protocol specification change (requires AI SAFE2 v3.0 mapping)
-- [ ] Constitutional Amendment (AISM Invariant or HEAR Doctrine -- requires supermajority)
-- [ ] Documentation / governance
+- [ ] Breaking change (requires changelog and migration note)
+- [ ] Protocol or platform-profile change (requires AI SAFE² v3.1 mapping)
+- [ ] Constitutional amendment (AISM invariant or HEAR Doctrine; requires applicable governance review)
+- [ ] Documentation or governance
 - [ ] Dependency update
 
-## AI SAFE2 v3.0 Mapping
+## AI SAFE² v3.1 Mapping
 
-<!-- Which controls does this change affect or enable? -->
-<!-- E.g., S1.3 Guardian per-call enforcement, A2.3 AgBOM provenance -->
+<!-- Which framework controls or platform-profile controls does this change affect or enable? -->
+<!-- For MCP changes, include the applicable MCP-1 through MCP-19 profile controls and protocol version. -->
 
-| Control ID | Control Name | Change |
-|:-----------|:-------------|:-------|
+| Control/Profile ID | Control Name | Change |
+|:-------------------|:-------------|:-------|
 | | | |
+
+### Protocol/Profile Metadata
+
+- AI SAFE² version: `3.1`
+- Protocol/profile version, if applicable: <!-- e.g., MCP 2026-07-28 -->
+- Enforcement plane: <!-- north-south / east-west / agent-to-tool / n/a -->
 
 ## Compliance Framework Impact
 
-<!-- Does this affect any of the 32 mapped compliance frameworks? -->
-<!-- E.g., EU AI Act Article 14, NIST AI RMF Govern 1.2, ISO 42001 -->
+<!-- Does this affect any mapped compliance frameworks? Cite only mappings actually changed. -->
 
-## Testing
+## Evidence and Testing
 
-- [ ] All 189 existing tests pass (`pytest tests/ -q`)
+- [ ] Existing applicable tests pass
 - [ ] New tests added for new behavior
-- [ ] `--v03-checks` compliance checker passes (10/10)
-- [ ] All three examples run clean
-- [ ] Em dash scan clean (no `--` or en/em dashes in prose or code)
+- [ ] Fail-closed behavior is preserved for incomplete enforcement paths
+- [ ] Framework control total remains 161 unless a separately approved framework-level change is intended
+- [ ] Platform-profile controls are not double-counted as top-level framework controls
+- [ ] MCP changes do not require optional `server/discover`
+- [ ] Governance is not bound solely to protocol-owned session or lifecycle constructs
+- [ ] Documentation and generated data are synchronized
+- [ ] No new em/en dashes are introduced where repository checks prohibit them
 
-```
-cd sdk/python
-python -m pytest tests/ -q
-PYTHONPATH=. python ../../compliance/scoring/nexus-score.py --v03-checks
-PYTHONPATH=. python ../../examples/sovereign_gateway.py
-PYTHONPATH=. python ../../examples/acs_bridge.py
-PYTHONPATH=. python ../../examples/personal_agent.py
-```
+## Security Review Notes
 
-## OPA Policy Changes
+<!-- For identity, authorization, delegation, state, tool, or protocol changes, describe the trust boundary and fail-closed behavior. -->
 
-<!-- If opa/ files changed: include example input/expected output -->
+## Changelog / Release Notes
 
-```json
-// Input:
-{}
+- [ ] Changelog or release note updated when externally visible behavior changes
 
-// Expected output:
-{}
-```
+## DCO and License Sign-Off
 
-## CHANGELOG
+By submitting this pull request, I certify that I have the right to contribute the material and agree that it may be distributed under the license applicable to the destination path in this repository.
 
-- [ ] Added entry under `[Unreleased]` in CHANGELOG.md
+Repository licensing is path-dependent:
 
-## DCO Sign-Off
+- code is generally MIT unless a subdirectory states otherwise;
+- framework and documentation material is generally CC BY-SA 4.0 where designated;
+- NEXUS remains Apache 2.0 where explicitly designated.
 
-By submitting this pull request, I certify that my contribution is made under the terms of the Apache 2.0 license and I have read and agree to the Developer Certificate of Origin in CONTRIBUTING.md.
+Do not use this checkbox to relicense material whose destination path has a different existing license.
 
-- [ ] All commits are signed off (`Signed-off-by: Name <email>`)
+- [ ] I have reviewed the applicable license for the files changed by this PR
+- [ ] Required DCO sign-off is present where repository policy requires it
