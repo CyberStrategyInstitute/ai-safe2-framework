@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+"""Normalize AI SAFE2 v3.1 navigation shells for examples and research notes.
+
+This script deliberately does not rewrite technical bodies. It adds or refreshes
+bounded UX blocks so historical findings, publication dates, component versions,
+and implementation details remain intact while repository navigation and current
+framework context stay consistent.
+"""
+from __future__ import annotations
+
+import re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+EXAMPLES = ROOT / "examples"
+RESEARCH = ROOT / "research"
+
+TOP_START = "<!-- AI-SAFE2-UX:START -->"
+TOP_END = "<!-- AI-SAFE2-UX:END -->"
+BOTTOM_START = "<!-- AI-SAFE2-UX-FOOTER:START -->"
+BOTTOM_END = "<!-- AI-SAFE2-UX-FOOTER:END -->"
+
+BADGE_VERSION = "https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square"
+BADGE_EXAMPLE = "https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square"
+BADGE_RESEARCH = "https://img.shields.io/badge/Surface-Research-820F1A?style=flat-square"
+BADGE_CONTEXT = "https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square"
+
+
+def replace_or_insert(text: str, start: str, end: str, block: str, *, prepend: bool) -> str:
+    pattern = re.compile(re.escape(start) + r".*?" + re.escape(end), re.DOTALL)
+    if pattern.search(text):
+        return pattern.sub(block, text, count=1)
+    stripped = text.lstrip("\ufeff")
+    if prepend:
+        return block + "\n\n" + stripped
+    return stripped.rstrip() + "\n\n" + block + "\n"
+
+
+def example_top() -> str:
+    return f"""{TOP_START}
+[![AI SAFE2 v3.1]({BADGE_VERSION})](../../README.md)
+[![Surface: Example]({BADGE_EXAMPLE})](../README.md)
+[![Context: v3.1 Current]({BADGE_CONTEXT})](../../docs/REPOSITORY-UX-STANDARD.md)
+
+[Framework Home](../../README.md) | [Examples Index](../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+> **Current framework context:** AI SAFE2 v3.1. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
+{TOP_END}"""
+
+
+def example_footer() -> str:
+    return f"""{BOTTOM_START}
+---
+
+### Repository navigation
+
+[Examples Index](../README.md) | [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [NEXUS](../../NEXUS/) | [Scanner](../../scanner/README.md) | [MCP Profile](../../00-cross-pillar/cp5_mcp_server_security.md)
+
+*AI SAFE2 v3.1 | Cyber Strategy Institute*
+{BOTTOM_END}"""
+
+
+def research_top() -> str:
+    return f"""{TOP_START}
+[![AI SAFE2 v3.1]({BADGE_VERSION})](../README.md)
+[![Surface: Research]({BADGE_RESEARCH})](./README.md)
+[![Context: v3.1 Current]({BADGE_CONTEXT})](../docs/REPOSITORY-UX-STANDARD.md)
+
+[Framework Home](../README.md) | [Research Index](./README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+> **Current framework context:** AI SAFE2 v3.1. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.1 normative control and profile documents for implementation or conformance decisions.
+{TOP_END}"""
+
+
+def research_footer(previous_name: str | None, next_name: str | None) -> str:
+    sequence = []
+    if previous_name:
+        sequence.append(f"[Previous research note](./{previous_name})")
+    sequence.append("[Research Index](./README.md)")
+    if next_name:
+        sequence.append(f"[Next research note](./{next_name})")
+    sequence_line = " | ".join(sequence)
+    return f"""{BOTTOM_START}
+---
+
+### Research navigation
+
+{sequence_line}
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [NEXUS](../NEXUS/) | [Challenge Lab](../challenges/)
+
+*AI SAFE2 v3.1 | Cyber Strategy Institute*
+{BOTTOM_END}"""
+
+
+def normalize_examples() -> list[Path]:
+    changed: list[Path] = []
+    for path in sorted(EXAMPLES.glob("*/README.md")):
+        original = path.read_text(encoding="utf-8")
+        text = replace_or_insert(original, TOP_START, TOP_END, example_top(), prepend=True)
+        text = replace_or_insert(text, BOTTOM_START, BOTTOM_END, example_footer(), prepend=False)
+        if text != original:
+            path.write_text(text, encoding="utf-8")
+            changed.append(path)
+    return changed
+
+
+def research_notes() -> list[Path]:
+    return sorted(
+        [p for p in RESEARCH.glob("[0-9][0-9][0-9]_*.md") if p.name != "README.md"],
+        key=lambda p: p.name,
+    )
+
+
+def normalize_research() -> list[Path]:
+    changed: list[Path] = []
+    notes = research_notes()
+    for index, path in enumerate(notes):
+        previous_name = notes[index - 1].name if index > 0 else None
+        next_name = notes[index + 1].name if index + 1 < len(notes) else None
+        original = path.read_text(encoding="utf-8")
+        text = replace_or_insert(original, TOP_START, TOP_END, research_top(), prepend=True)
+        text = replace_or_insert(
+            text,
+            BOTTOM_START,
+            BOTTOM_END,
+            research_footer(previous_name, next_name),
+            prepend=False,
+        )
+        if text != original:
+            path.write_text(text, encoding="utf-8")
+            changed.append(path)
+    return changed
+
+
+def main() -> int:
+    changed = normalize_examples() + normalize_research()
+    print(f"Normalized {len(changed)} documentation surface(s).")
+    for path in changed:
+        print(path.relative_to(ROOT).as_posix())
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
