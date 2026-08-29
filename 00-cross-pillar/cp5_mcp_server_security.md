@@ -1,4 +1,4 @@
-# CP.5.MCP — MCP Server Security Profile
+# CP.5.MCP: MCP Server Security Profile
 
 **AI SAFE² version:** 3.1
 **MCP specification:** `2026-07-28` primary; `2025-11-25` legacy compatibility
@@ -45,22 +45,7 @@ Opaque static bearer tokens do not contain an audience claim. Deployments using 
 
 ## Evidence minimum
 
-Evidence for this profile SHOULD identify:
-
-- `framework_version`
-- `control_profile_version`
-- `mcp_spec_version`
-- `principal_id`
-- `capability_grant_id`
-- `delegation_chain_id`
-- `provenance_baseline_id`
-- `trust_establishment_id`
-- `mcp_transport`
-- `mcp_server_identity`
-- `mcp_catalog_hash` and prior hash when revalidated
-- `cache_ttl` and `cache_revalidation_result`
-- `oauth_resource` and `oauth_audience_validation_result` when authorization is used
-- policy, adapter, and grader hashes where applicable
+Evidence for this profile SHOULD identify `framework_version`, `control_profile_version`, `mcp_spec_version`, `principal_id`, `capability_grant_id`, `delegation_chain_id`, `provenance_baseline_id`, `trust_establishment_id`, `mcp_transport`, `mcp_server_identity`, catalog hashes, cache revalidation results, OAuth resource/audience results when applicable, and policy/adapter/grader hashes.
 
 ## Compatibility window
 
@@ -69,7 +54,5 @@ The `2025-11-25` transport binding remains supported for twelve months from the 
 ## Reference implementation
 
 CSI's NEXUS MCP adapter is the first-party reference implementation path for the agent-to-tool plane. The v3.1 adapter contract is fail-closed and currently marked implementation scaffolding. Unimplemented methods raise rather than silently allowing traffic. Production deployments must use an implemented and tested enforcement component.
-
----
 
 AI SAFE² v3.1, Cyber Strategy Institute
