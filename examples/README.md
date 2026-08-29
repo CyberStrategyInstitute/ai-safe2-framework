@@ -40,7 +40,7 @@ Examples demonstrate implementation patterns. They do not create framework confo
 | [`make-sovereign-runtime/`](./make-sovereign-runtime/) | Make.com | Sovereign runtime defense package for no-code automation scenarios. |
 | [`mcp-security-toolkit/`](./mcp-security-toolkit/) | MCP (protocol security) | mcp-score, mcp-scan, mcp-safe-wrap. CP.5.MCP toolkit, 134 tests. |
 | [`openclaw/`](./openclaw/) | OpenClaw | Full two-layer governance stack, internal identity and memory files plus external scanner and gateway. |
-| [`slowmist-overlay/`](./slowmist-overlay/) | SlowMist / OpenClaw | Threat-intelligence overlay mapping SlowMist OpenClaw security practices to AI SAFE2 controls. |
+| [`slowmist-overlay/`](./slowmist-overlay/) | SlowMist / OpenClaw | Threat-intelligence overlay mapping SlowMist OpenClaw security practices to AI SAFE² controls. |
 | [`xai-grok-sovereign-runtime/`](./xai-grok-sovereign-runtime/) | xAI Grok | Sovereign runtime defense package for Grok-based agents. |
 
 <!-- EXAMPLES:END -->
