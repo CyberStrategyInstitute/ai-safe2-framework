@@ -418,5 +418,5 @@ _"Policy is just intent. Engineering is reality."_
 
 [Examples Index](../README.md) | [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [NEXUS](../../NEXUS/) | [Scanner](../../scanner/README.md) | [MCP Profile](../../00-cross-pillar/cp5_mcp_server_security.md)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+_AI SAFE² v3.1 | Cyber Strategy Institute_
 <!-- AI-SAFE2-UX-FOOTER:END -->
