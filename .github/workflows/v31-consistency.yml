@@ -25,6 +25,19 @@ jobs:
       - name: Check examples index
         run: python scripts/generate_examples_table.py --check
 
+  agent-discovery:
+    name: Agent Discovery and Manifest Integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Validate machine-readable repository entry point
+        run: python scripts/check_agent_manifest.py
+
   scanner-v31:
     name: Scanner v3.1 Profile Invariants
     runs-on: ubuntu-latest
