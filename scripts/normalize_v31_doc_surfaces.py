@@ -104,7 +104,7 @@ def example_footer() -> str:
 
 [Examples Index](../README.md) | [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [NEXUS](../../NEXUS/) | [Scanner](../../scanner/README.md) | [MCP Profile](../../00-cross-pillar/cp5_mcp_server_security.md)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+_AI SAFE² v3.1 | Cyber Strategy Institute_
 {BOTTOM_END}"""
 
 
@@ -137,7 +137,7 @@ def research_footer(previous_name: str | None, next_name: str | None) -> str:
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [NEXUS](../NEXUS/) | [Challenge Lab](../challenges/)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+_AI SAFE² v3.1 | Cyber Strategy Institute_
 {BOTTOM_END}"""
 
 
@@ -209,7 +209,7 @@ For MCP implementation decisions, use the [CP.5.MCP v3.1 profile](../00-cross-pi
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Examples](../examples/) | [Challenge Lab](../challenges/)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+_AI SAFE² v3.1 | Cyber Strategy Institute_
 """
 
 
