@@ -31,13 +31,14 @@ REQUIRED_DESTINATIONS = (
     "NEXUS",
 )
 
-# Current-release statements may not advertise v3.0 as current. Historical
-# references such as "introduced in v3.0" remain valid and are deliberately
-# not blocked globally.
+# Current framework-facing statements may not advertise v3.0 as current.
+# Component pages can retain an older component version when they also identify
+# AI SAFE2 v3.1 as the current framework, for example Gateway v3.0.
 STALE_CURRENT_PATTERNS = (
-    re.compile(r"^# .*v3\.0\s*$", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"^#\s+AI SAFE²? Framework v3\.0\s*$", re.MULTILINE | re.IGNORECASE),
     re.compile(r"\bPart of the AI SAFE²? v3\.0 Ecosystem\b", re.IGNORECASE),
-    re.compile(r"\bFramework:\s*AI SAFE2?\s+v3\.0\b", re.IGNORECASE),
+    re.compile(r"\bFramework:\s*AI SAFE²?\s*v3\.0\b", re.IGNORECASE),
+    re.compile(r"\bcurrent framework(?: version)?\s*[:=]?\s*v3\.0\b", re.IGNORECASE),
 )
 
 
@@ -56,11 +57,9 @@ def check_page(path: Path) -> list[str]:
 
     for pattern in STALE_CURRENT_PATTERNS:
         if pattern.search(text):
-            errors.append(f"{rel}: advertises AI SAFE2 v3.0 as the current page/version")
+            errors.append(f"{rel}: advertises AI SAFE2 v3.0 as the current framework")
             break
 
-    # Major pages use the shared CSI version color. The root README may use a
-    # shields.io semantic color name for its primary release badge.
     if rel != "README.md" and "F6921E" not in text.upper():
         errors.append(f"{rel}: missing standard AI SAFE2 release color #F6921E")
 
@@ -76,7 +75,7 @@ def main() -> int:
             continue
         errors.extend(check_page(path))
 
-    # Repo-wide broken-path check for all Markdown, not only major pages.
+    # Broken canonical-path check applies to every Markdown file in the repo.
     for path in ROOT.rglob("*.md"):
         if any(part in {".git", ".venv", "node_modules"} for part in path.parts):
             continue
