@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.0 Scanner — Rule Base Types
+AI SAFE2 v3.1 Scanner rule base types.
 Shared dataclasses and utilities used by all rule modules.
 """
 from __future__ import annotations
@@ -11,21 +11,20 @@ from typing import Callable, Optional
 
 @dataclass(frozen=True)
 class Rule:
-    """
-    A single detection rule mapping a pattern or structural check to an AI SAFE2 v3.0 control.
+    """A detection rule mapped to an AI SAFE2 control or profile control.
 
     Attributes:
-        control_id:  AI SAFE2 v3.0 control ID (e.g. "S1.5", "CP.10", "P1.T1.2")
-        severity:    CRITICAL | HIGH | MEDIUM | LOW | INFO
-        description: What was detected
-        remediation: What to do about it
-        pattern:     Regex string — used for line-by-line scanning (optional)
-        check_fn:    Callable(content: str, lines: list[str], filepath: str) -> list[tuple[int, str]]
-                     Returns list of (line_number, evidence) tuples for structural checks
-        file_exts:   File extensions this rule applies to (None = all supported types)
-        skip_comments: Whether to skip comment lines (default True)
-        min_length:  Minimum line/token length to trigger (avoids false positives)
+        control_id: Framework or profile control ID, for example S1.5, CP.10, MCP-19.
+        severity: CRITICAL | HIGH | MEDIUM | LOW | INFO.
+        description: What was detected.
+        remediation: What to do about it.
+        pattern: Regex used for line-by-line scanning, when applicable.
+        check_fn: Callable(content, lines, filepath) returning (line_number, evidence) tuples.
+        file_exts: Extensions this rule applies to, or None for all supported types.
+        skip_comments: Whether to skip comment lines.
+        min_length: Minimum line/token length to trigger.
     """
+
     control_id: str
     severity: str
     description: str
@@ -45,10 +44,8 @@ class Rule:
 
 @dataclass
 class Finding:
-    """
-    A single scanner finding. Richer than the v2.1 Violation — includes
-    ACT tier applicability, compliance framework hints, and full remediation context.
-    """
+    """A scanner finding enriched with control and governance metadata."""
+
     control_id: str
     severity: str
     file_path: str
@@ -56,7 +53,6 @@ class Finding:
     evidence: str
     description: str
     remediation: str
-    # Populated by the scanner after loading the controls JSON
     control_name: str = ""
     pillar: str = ""
     compliance_frameworks: list = field(default_factory=list)
@@ -80,30 +76,23 @@ class Finding:
         }
 
 
-# ── Comment detection helpers ──────────────────────────────────────────────────
-
 def is_comment_line(line: str, filepath: str = "") -> bool:
     """Return True if the line is a comment in a common language."""
     stripped = line.strip()
     if not stripped:
         return True
-    ext = filepath.rsplit(".", 1)[-1].lower() if "." in filepath else ""
 
-    # Python / Shell / YAML
     if stripped.startswith("#"):
         return True
-    # JavaScript / TypeScript / Java / Go
     if stripped.startswith("//") or stripped.startswith("/*") or stripped.startswith("*"):
         return True
-    # HTML / XML
     if stripped.startswith("<!--"):
         return True
-
     return False
 
 
 def is_test_file(filepath: str) -> bool:
-    """Return True if the file looks like a test file (reduce false positives in tests)."""
+    """Return True if the file looks like a test file."""
     lower = filepath.lower()
     return any(part in lower for part in (
         "/test", "/tests", "/spec", "/specs", "_test.", "_spec.", ".test.", ".spec."
@@ -112,5 +101,9 @@ def is_test_file(filepath: str) -> bool:
 
 def extract_string_values(line: str) -> list[str]:
     """Extract string literals from a line for entropy and pattern checks."""
-    # Match single-quoted, double-quoted, and template literal strings
-    return re.findall(r'["\']([^"\']{8,})["\']|`([^`]{8,})`', line)
+    values: list[str] = []
+    for match in re.finditer(r'(["\'])(.{8,}?)\1|`([^`]{8,})`', line):
+        value = match.group(2) or match.group(3)
+        if value:
+            values.append(value)
+    return values
