@@ -1,0 +1,47 @@
+name: Normalize v3.1 Documentation Surfaces
+
+on:
+  push:
+    branches:
+      - fix/ai-safe2-v3.1-consistency
+    paths:
+      - "scripts/normalize_v31_doc_surfaces.py"
+      - ".github/workflows/normalize-v31-doc-surfaces.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: normalize-v31-doc-surfaces
+  cancel-in-progress: false
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v7
+        with:
+          ref: fix/ai-safe2-v3.1-consistency
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Normalize example and research surfaces
+        run: |
+          python scripts/normalize_v31_doc_surfaces.py
+          python scripts/generate_examples_table.py
+
+      - name: Commit normalized documentation
+        run: |
+          if git diff --quiet -- examples research; then
+            echo "Documentation surfaces already normalized."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add examples research
+          git commit -m "docs: normalize v3.1 examples and research surfaces"
+          git push origin HEAD:fix/ai-safe2-v3.1-consistency
