@@ -1,13 +1,11 @@
 # AI SAFE² v3.1 MCP Server
+### Live framework and CP.5.MCP profile access at the agent-to-tool boundary
 
-> 161 framework controls. 32 mapped frameworks. CP.5.MCP profile aligned to MCP `2026-07-28`.
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![Surface](https://img.shields.io/badge/Surface-MCP_Server-820F1A?style=flat-square)](./README.md)
+[![Profile](https://img.shields.io/badge/CP.5.MCP-19_controls-808080?style=flat-square)](../../00-cross-pillar/cp5_mcp_server_security.md)
 
-[![Version](https://img.shields.io/badge/AI_SAFE2-v3.1.0-orange)](https://cyberstrategyinstitute.com/ai-safe2/)
-[![Framework Controls](https://img.shields.io/badge/Framework_Controls-161-blue)]()
-[![MCP Profile](https://img.shields.io/badge/CP.5.MCP-19_controls-blue)]()
-[![MCP Spec](https://img.shields.io/badge/MCP-2026--07--28-blue)]()
-[![Frameworks](https://img.shields.io/badge/Frameworks-32-blue)]()
-[![License](https://img.shields.io/badge/License-MIT-lightgrey)]()
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Skills](../README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
 
@@ -17,7 +15,7 @@ The AI SAFE² MCP server exposes the framework taxonomy and MCP security profile
 
 AI SAFE² v3.1 separates two counts deliberately:
 
-- **161 framework controls:** the five pillars plus the Cross-Pillar Governance Layer.
+- **161 framework controls:** the five pillars plus the core Cross-Pillar Governance Layer.
 - **19 CP.5.MCP profile controls:** MCP-specific requirements under CP.5. These are profile controls and are not added to the 161 framework total.
 
 The server loads the stable 161-control core taxonomy and overlays the v3.1 MCP profile so MCP-1 through MCP-19 are directly queryable.
@@ -184,4 +182,10 @@ Before a v3.1 release or MCP security change is considered complete, verify at m
 
 ---
 
-AI SAFE² v3.1, Cyber Strategy Institute
+## Navigation
+
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Skills](../README.md) | [Scanner](../../scanner/README.md) | [Dashboard](../../dashboard/README.md)
+
+---
+
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
