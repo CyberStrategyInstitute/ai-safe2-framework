@@ -1,0 +1,86 @@
+name: AI SAFE2 v3.1 Consistency
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  repository-ux:
+    name: Repository UX Consistency
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Check repository navigation and branding
+        run: python scripts/check_repo_ux.py
+      - name: Check examples index
+        run: python scripts/generate_examples_table.py --check
+
+  scanner-v31:
+    name: Scanner v3.1 Profile Invariants
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install scanner test dependency
+        run: python -m pip install pytest
+      - name: Run v3.1 scanner regression tests
+        run: python -m pytest scanner/tests/test_v31_mcp_profile.py -q
+
+  nexus-v31-persistence:
+    name: NEXUS v3.1 Persistence Compatibility
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install NEXUS SDK
+        run: python -m pip install -e NEXUS/sdk/python
+      - name: Run v3.1 persistence compatibility tests
+        run: python -m pytest NEXUS/sdk/python/tests/test_v31_persistence_compat.py -q
+
+  profile-data:
+    name: v3.1 Profile Data Integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Validate profile JSON and dashboard parity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          source = Path("skills/mcp/data/mcp-profile-v3.1.json")
+          dashboard = Path("dashboard/public/data/mcp-profile-v3.1.json")
+          a = json.loads(source.read_text(encoding="utf-8"))
+          b = json.loads(dashboard.read_text(encoding="utf-8"))
+
+          assert a == b, "Dashboard MCP profile must exactly mirror canonical MCP profile data"
+          assert a["metadata"]["framework_controls_total"] == 161
+          assert a["metadata"]["profile_controls"] == 19
+          assert a["metadata"]["mcp_spec_version"] == "2026-07-28"
+          assert len(a["controls"]) == 19
+          assert {c["id"] for c in a["controls"]} == {f"MCP-{i}" for i in range(1, 20)}
+          print("v3.1 profile data integrity passed")
+          PY
