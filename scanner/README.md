@@ -3,7 +3,7 @@
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Scanner-820F1A?style=flat-square)](./README.md)
-[![Rules](https://img.shields.io/badge/Rules-52-808080?style=flat-square)](./rules/)
+[![Rules](https://img.shields.io/badge/Rules-64-808080?style=flat-square)](./rules/)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
@@ -27,12 +27,12 @@ The scanner evaluates code and configuration against AI SAFE² patterns. It is a
 
 AI SAFE² v3.1 keeps the **161-control core framework taxonomy** and adds a machine-readable **CP.5.MCP profile with MCP-1 through MCP-19**.
 
-The scanner currently exposes **52 detection rules**:
+The scanner currently exposes **64 detection rules**:
 
-- 40 existing pillar and cross-pillar rules;
-- 12 grouped CP.5.MCP rules that cover the highest-value static indicators across MCP-1 through MCP-19.
+- 52 pre-existing pillar and cross-pillar detection rules;
+- 12 grouped CP.5.MCP v3.1 rules covering the highest-value static indicators across MCP-1 through MCP-19.
 
-Profile rules are grouped because several MCP controls require runtime evidence and cannot be proven by a one-pattern-per-control static check.
+Profile rules are grouped because several MCP controls require runtime evidence and cannot be proven by a one-pattern-per-control static check. The v3.1 release preserves existing detections rather than deleting rules merely to satisfy an outdated expected count.
 
 ### Important v3.1 guarantees
 
@@ -115,7 +115,7 @@ The canonical normative specification is:
 
 Regression tests enforce:
 
-- 52 total rules;
+- 64 total scanner rules;
 - 12 MCP profile rules;
 - MCP-19 remains advisory;
 - no `server/discover` presence rule;
@@ -186,10 +186,10 @@ scanner/
 
 ---
 
-## 🔗 Navigation
+## Navigation
 
 | Previous | Current | Next |
-|---|---|---|
+| :--- | :--- | :--- |
 | [NEXUS](../NEXUS/) | **Scanner** | [Gateway](../gateway/) |
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [MCP Profile](../00-cross-pillar/cp5_mcp_server_security.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
