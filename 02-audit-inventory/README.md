@@ -1,7 +1,13 @@
 # Pillar 2: Audit & Inventory (P2)
 ### 👁️ The Ledger of Truth
 
-[🔙 Back to Main Framework](../README.md) | [← Pillar 1: Sanitize & Isolate](../01-sanitize-isolate/README.md) | [Pillar 3: Fail-Safe & Recovery →](../03-fail-safe-recovery/README.md) | [Cross-Pillar Governance →](../cross-pillar/README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Layer](https://img.shields.io/badge/Layer-Pillar_2-820F1A?style=flat-square)](./README.md)
+[![Status](https://img.shields.io/badge/Status-Current-808080?style=flat-square)](../EVOLUTION.md)
+
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+**Previous:** [← Pillar 1: Sanitize & Isolate](../01-sanitize-isolate/README.md) | **Next:** [Pillar 3: Fail-Safe & Recovery →](../03-fail-safe-recovery/README.md)
 
 ---
 
@@ -55,13 +61,13 @@
 
 ### ⚡ v3.0 New Controls
 
-> Full control specifications are included in the [AI SAFE² v3.0 Implementation Toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
+> These controls were introduced in v3.0 and remain part of the current [AI SAFE² v3.1 framework](../README.md). Current implementation resources are available through the [AI SAFE² toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
 
 | Control | Name | Priority | What It Solves |
 | :--- | :--- | :--- | :--- |
 | **[A2.3]** | Model Lineage Provenance Ledger | 🟠 HIGH | Cryptographic chain of custody from base model through every fine-tuning stage to production; extends OpenSSF OMS |
 | **[A2.4]** | Dynamic Agent State Inventory | 🟠 HIGH | Real-time registry of every deployed agent with owner_of_record, ACT tier, tool authorizations, and control_plane_id |
-| **[A2.5]** | Semantic Execution Trace Logging | 🔴 CRITICAL | Captures the full execution trace: reasoning chain, every tool call, every memory operation — append-only, agent cannot modify |
+| **[A2.5]** | Semantic Execution Trace Logging | 🔴 CRITICAL | Captures the full execution trace: reasoning chain, every tool call, every memory operation; append-only and agent-immutable |
 | **[A2.6]** | RAG Corpus Diff Tracking | 🟠 HIGH | Hash-verified change log for retrieval layer; correlates behavioral changes to corpus changes automatically |
 
 ---
@@ -104,8 +110,8 @@
 
 | Framework | Control | Mapping |
 | :--- | :--- | :--- |
-| OWASP AIVSS v0.8 | Risk #9 Untraceability (8.3/10) | A2.5 Semantic Execution Trace |
-| OWASP AIVSS v0.8 | Risk #8 Supply Chain (9.7/10) | A2.3 Model Lineage Provenance |
+| OWASP AIVSS v0.8 | Risk #9 Untraceability | A2.5 Semantic Execution Trace |
+| OWASP AIVSS v0.8 | Risk #8 Supply Chain | A2.3 Model Lineage Provenance |
 | NIST AI RMF | MAP function | A2.3, A2.4 |
 | ISO/IEC 42001 | Sec 8.2.4 | A2.3 provenance |
 | SOC 2 | CC.7.1, CC.7.2, CC.8.1 | P2.T3, A2.5 |
@@ -121,10 +127,8 @@
 | :--- | :--- | :--- |
 | [Pillar 1: Sanitize & Isolate](../01-sanitize-isolate/README.md) | **Pillar 2: Audit & Inventory** | [Pillar 3: Fail-Safe & Recovery](../03-fail-safe-recovery/README.md) |
 
-→ [Cross-Pillar Governance (CP.1-CP.10)](../00-cross-pillar/README.md)
-→ [Interactive Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
-→ [Get the Full Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | [Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
 
 ---
 
-*Powered by [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
