@@ -24,6 +24,23 @@ Examples demonstrate implementation patterns. They do not create framework confo
 
 | Example | Stack | What It Governs |
 |---|---|---|
+| [`anti-gravity-sovereign-runtime/`](./anti-gravity-sovereign-runtime/) | Anti-Gravity | Sovereign runtime defense package for Anti-Gravity agent deployments |
+| [`autogen-sovereign-runtime/`](./autogen-sovereign-runtime/) | Microsoft AutoGen | Governance wrapper for AutoGen multi-agent orchestration |
+| [`claude-code-sovereign-runtime/`](./claude-code-sovereign-runtime/) | Claude Code | Hardens agentic coding sessions against unsafe tool execution, scope creep, and drift |
+| [`codex-sovereign-runtime/`](./codex-sovereign-runtime/) | OpenAI Codex | Runtime enforcement wrapper for Codex-driven coding agents |
+| [`crewai-sovereign-runtime/`](./crewai-sovereign-runtime/) | CrewAI | Governance wrapper for CrewAI crew-based orchestration |
+| [`hermes-sovereign-runtime/`](./hermes-sovereign-runtime/) | NousResearch Hermes | Closes four critical audit findings identified in the Hermes agent |
+| [`ishi/`](./ishi/) | Supervisory agent | Reviews agent plans and enforces governance decisions before high-risk actions execute |
+| [`langchain-sovereign-runtime/`](./langchain-sovereign-runtime/) | LangChain | Runtime controls for LangChain chains and tool-calling agents |
+| [`langflow-sovereign-runtime/`](./langflow-sovereign-runtime/) | Langflow | Sovereign runtime defense package for the Langflow visual builder |
+| [`langgraph-sovereign-runtime/`](./langgraph-sovereign-runtime/) | LangGraph | Runtime controls for LangGraph stateful agent graphs |
+| [`lovable-sovereign-runtime/`](./lovable-sovereign-runtime/) | Lovable | Runtime enforcement package for Lovable Agent mode, database actions, deployments, and MCP integrations |
+| [`love_equation/`](./love_equation/) | Alignment research | Drift-scoring model adapted into AI SAFE² behavioral monitoring |
+| [`make-sovereign-runtime/`](./make-sovereign-runtime/) | Make.com | Sovereign runtime defense package for no-code automation scenarios |
+| [`mcp-security-toolkit/`](./mcp-security-toolkit/) | MCP (protocol) | `mcp-score`, `mcp-scan`, `mcp-safe-wrap` CP.5.MCP security toolkit |
+| [`openclaw/`](./openclaw/) | OpenClaw | Full two-layer governance stack with internal controls plus external scanner and gateway |
+| [`slowmist-overlay/`](./slowmist-overlay/) | SlowMist | Threat-intel overlay integrating external audit findings into AI SAFE² controls |
+| [`xai-grok-sovereign-runtime/`](./xai-grok-sovereign-runtime/) | xAI Grok | Sovereign runtime defense package for Grok-based agents |
 
 <!-- EXAMPLES:END -->
 
@@ -40,18 +57,18 @@ Examples demonstrate implementation patterns. They do not create framework confo
 
 ## Adding an Example
 
-Every `examples/<name>/README.md` included in the generated index must contain:
+Every new `examples/<name>/README.md` included in the generated index should contain:
 
 ```text
 <!-- stack: Stack Name -->
 <!-- description: One concise description. -->
 ```
 
-The generator validates those tags and updates the table above.
+The generator validates those tags and updates the table above. The Lovable example has an explicit compatibility metadata entry because it predates this convention.
 
 ---
 
-## 🔗 Navigation
+## Navigation
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [NEXUS](../NEXUS/) | [Scanner](../scanner/README.md) | [Gateway](../gateway/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
