@@ -1,35 +1,47 @@
 # AI SAFE² Challenge Lab
+### Falsification before claims
 
-> Open experiments designed to validate, limit, or invalidate AI SAFE² control claims.
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Surface](https://img.shields.io/badge/Surface-Challenge_Lab-820F1A?style=flat-square)](./README.md)
+[![Method](https://img.shields.io/badge/Method-Falsification--First-808080?style=flat-square)](./README.md)
 
-[Main Framework](../README.md) | [Challenge 001](./001-anthropic-multi-agent-turf-war/) | [Contributing](../CONTRIBUTING.md) | [Security](../SECURITY.md)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
 
-## Why this exists
+## Why This Exists
 
 AI governance controls should not receive credit because they sound appropriate, appear in a policy, or map to a standard. They should receive credit when a reproducible implementation changes a security-relevant outcome under test.
 
-The AI SAFE² Challenge Lab converts public incidents, evaluation findings, and credible agentic threats into open-source experiments. Each challenge publishes the problem, hypotheses, control claims, baselines, graders, evidence requirements, invalidation criteria, and replication path before confirmatory results are released.
+The Challenge Lab converts incidents, evaluation findings, and credible agentic threats into open experiments. Each challenge publishes the problem, hypotheses, control claims, baselines, graders, evidence requirements, invalidation criteria, and replication path before confirmatory results are promoted.
 
-The Challenge Lab is designed to answer six questions:
+**The framework is the subject of the test, not the source of its own proof.**
+
+---
+
+## Challenge Questions
+
+Every challenge should be able to answer:
 
 1. Did the control prevent the prohibited state change?
 2. If prevention failed, did it contain the blast radius?
 3. Was the event detected soon enough to matter?
 4. Can an independent reviewer reconstruct what happened?
 5. Can the system recover to a known-good state?
-6. What useful work, latency, cost, and human effort did the control consume?
+6. What legitimate work, latency, cost, and human effort did the control consume?
+7. Which enforcement plane and control/profile claims were actually exercised?
 
-## Challenge index
+---
+
+## Challenge Index
 
 | ID | Challenge | Primary question | Status |
 |---|---|---|---|
 | 001 | [Anthropic Multi-Agent Turf War](./001-anthropic-multi-agent-turf-war/) | Can externally enforced authority stop destructive multi-agent conflict without blocking legitimate collaboration? | Design and pre-registration |
 
-[Read the Challenge 001 announcement](./001-anthropic-multi-agent-turf-war/ANNOUNCEMENT.md).
+---
 
-## Claim maturity
+## Claim Maturity
 
 | Level | Status | Evidence |
 |---|---|---|
@@ -42,26 +54,47 @@ The Challenge Lab is designed to answer six questions:
 
 Only C3 and above support the phrase **validated in tested conditions**. No maturity level establishes universal prevention.
 
-## Required design for every challenge
+Challenge maturity is separate from framework/profile conformance. A well-designed experiment may invalidate a conformant implementation claim, and a conformant implementation may fail to outperform a simpler baseline.
 
-Every challenge must include:
+---
 
-- primary and secondary source links;
-- a concise incident or threat summary;
+## v3.1 Enforcement-Plane Scoping
+
+AI SAFE² v3.1 distinguishes:
+
+- **north-south** agent-to-model/provider enforcement;
+- **east-west** agent-to-agent enforcement;
+- **agent-to-tool** MCP/tool enforcement.
+
+A challenge result must identify which plane was tested. Evidence from one plane does not automatically validate another.
+
+---
+
+## Required Design for Every Challenge
+
+Every challenge includes:
+
+- source links and threat summary;
 - Rules of Engagement and safety limits;
 - threat model and trust boundaries;
-- pre-registered hypotheses and null hypotheses;
-- prompt-only and conventional-security baselines where applicable;
+- preregistered hypotheses and null hypotheses;
+- exact framework/profile/implementation versions;
+- conventional-security and prompt-only baselines where applicable;
 - AI SAFE² treatment and targeted ablations;
 - deterministic state and trace graders;
-- legitimate-use cases to measure false blocks and utility;
+- legitimate-use cases for false-block and utility measurement;
 - explicit invalidation criteria;
-- signed or tamper-evident evidence manifests;
+- signed/tamper-evident evidence manifests;
+- enforcement-plane designation;
 - statistical analysis and disclosed exclusions;
-- an independent-replication path;
-- a limitations and claim-status report.
+- independent-replication path;
+- limitations and claim-status report.
 
-## Result labels
+Material normative or grader changes after preregistration require a new preregistration version before confirmatory evidence is pooled.
+
+---
+
+## Result Labels
 
 - **Validated in tested conditions**
 - **Partially validated**
@@ -70,7 +103,9 @@ Every challenge must include:
 - **Unresolved due to evidence limits**
 - **Independently reproduced**
 
-An invalidated claim is a useful result. It should generate a control revision, a permanent regression fixture, and a versioned record of what changed.
+An invalidated claim is a useful result. It should create a control revision, permanent regression fixture, or versioned record of why the claim changed.
+
+---
 
 ## Contributing
 
@@ -84,8 +119,16 @@ High-value contributions include:
 - a statistical or methodological correction;
 - documentation that prevents misimplementation.
 
-The most important contribution is not confirmation. It is evidence that changes what the framework can honestly claim.
+The most important contribution is evidence that changes what the framework can honestly claim.
+
+---
+
+## 🔗 Navigation
+
+[Framework Home](../README.md) | [Challenge 001](./001-anthropic-multi-agent-turf-war/) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Contributing](../CONTRIBUTING.md) | [Security](../SECURITY.md)
 
 ---
 
 AI SAFE² principle: **If governance is not enforced at runtime, it is not governance.**
+
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
