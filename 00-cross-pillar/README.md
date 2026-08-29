@@ -1,351 +1,285 @@
 # Cross-Pillar Governance Layer
 ### ⚙️ The Governance OS
 
-[![Cross-Pillar Governance Layer (CP.1–CP.10)](https://img.shields.io/badge/Cross--Pillar-Governance_Layer_CP.1--CP.10-cc6600?style=for-the-badge&labelColor=black)](./README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Layer](https://img.shields.io/badge/Layer-Cross--Pillar-820F1A?style=flat-square)](./README.md)
+[![Core](https://img.shields.io/badge/Core-CP.1--CP.10-808080?style=flat-square)](#cross-pillar-controls)
+[![MCP](https://img.shields.io/badge/MCP-2026--07--28-820F1A?style=flat-square)](./cp5_mcp_server_security.md)
 
-[🔙 Back to Main Framework](../README.md) | [← Pillar 5: Evolve & Educate](../05-evolve-educate/README.md) | [AISM Layer →](../AISM/)
+[Framework Home](../README.md) | [Pillars](../01-sanitize-isolate/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+
+**Previous:** [← Pillar 5: Evolve & Educate](../05-evolve-educate/README.md) | **Next:** [AISM →](../AISM/)
 
 ---
 
 ## 🎯 The Problem. The Realization. The Solution.
 
-**Problem:** AI agents are being deployed with no formal governance contract. No standard defines who can authorize an agent to clone itself. No standard defines who has the authority and the cryptographic capability to stop a misbehaving autonomous agent. No standard tells boards and regulators what governance evidence should look like for autonomous AI. Organizations are building agent swarms where one agent can become a thousand identities before any SIEM alert fires, and there is no defined accountability layer when something goes catastrophically wrong.
+**Problem:** Operational controls are not enough when autonomous systems can delegate authority, spawn agents, call external tools, preserve state, cross protocol boundaries, or take actions whose consequences exceed the scope of one pillar.
 
-**Realization:** The five pillars cover the operational lifecycle of individual agents and agent systems. What was missing was a governance layer that transcends the pillars: one that defines the authority structures, the accountability primitives, the scoring mechanisms, and the catastrophic risk controls that apply across all deployments, all architectures, and all agent types. This layer cannot live inside a single pillar because it governs the interaction between all of them.
+**Realization:** Agentic governance needs a layer that defines authority, accountability, risk, evidence, emergency control, delegation, replication, and protocol-specific security across the entire system.
 
-**Solution:** The Cross-Pillar Governance Layer (CP.1 through CP.10) is the governance operating system for AI SAFE² v3.0. It defines how agents are classified and governed at scale (CP.3 ACT Tiers, CP.4 Agentic Control Plane), how the framework scores risk quantitatively (CP.2, CP.3), how failures are classified and tracked across time (CP.1, CP.6), who is accountable for catastrophic failures (CP.10 HEAR Doctrine), and how agent replication — the first identity-multiplying threat in enterprise AI — is governed (CP.9 ARG).
+**Solution:** The Cross-Pillar Governance Layer is the governance operating system for AI SAFE². **CP.1 through CP.10 are the core cross-pillar controls introduced in v3.0 and retained in v3.1.** Version 3.1 strengthens CP.5 by formalizing protocol-independent security profiles and the three enforcement planes: north-south, east-west, and agent-to-tool.
 
-> **What you get:** A named human with a cryptographic kill switch for every autonomous deployment. A governance tier system that satisfies boards, regulators, and compliance audits. The first formal standard for agent replication governance. A risk formula that tells you whether a vulnerability in your specific deployment context is actually critical.
-
----
-
-## 🏗️ Cross-Pillar Controls Overview
-
-![Cross-Pillar Controls v3.0](https://img.shields.io/badge/New_in_v3.0-10_Cross--Pillar_Controls-cc6600?style=flat-square)
-
-| Control | Name | Priority | Governing |
-| :--- | :--- | :--- | :--- |
-| [CP.1](#cp1) | Agent Failure Mode Taxonomy | 🔴 CRITICAL | How failures are classified across all pillars |
-| [CP.2](#cp2) | Adversarial ML Threat Model Integration | 🔴 CRITICAL | How threats are mapped with temporal profiles |
-| [CP.3](#cp3) | ACT Capability Tiers 1-4 | 🔴 CRITICAL | How agents are classified and control requirements scaled |
-| [CP.4](#cp4) | Agentic Control Plane Governance | 🔴 CRITICAL | Agent identity, delegation, orchestration, runtime trust |
-| [CP.5](#cp5) | Platform-Specific Agent Security Profiles | 🟠 HIGH | Bedrock, Azure AI, n8n, and protocol-layer supply chain |
-| [CP.6](#cp6) | AI Incident Feedback Loop Integration | 🟠 HIGH | AIID incident reviews and 30-day control update process |
-| [CP.7](#cp7) | Deception & Active Defense Layer | 🟠 HIGH | Canary tokens, honeypot endpoints, adversarial misdirection |
-| [CP.8](#cp8) | Catastrophic Risk Threshold Controls | 🔴 CRITICAL | Emergency suspension criteria regardless of business continuity |
-| [CP.9](#cp9) | Agent Replication Governance | 🔴 CRITICAL | First governance standard for agent replication and swarm identity |
-| [CP.10](#cp10) | HEAR Doctrine | 🔴 CRITICAL | Human Ethical Agent of Record: named kill-switch authority |
-| [CP.11](#cp11) | Unbiased AI Standard (UAS) | 🟠 HIGH | GSAR 552.239-7001 (j)(1) compliance surface: 27 controls across P1-P5, NEXUS, and CSF |
-
-> Full control specifications — including implementation requirements, enforcement logic, compliance mappings, and ACT-tier applicability — are included in the [AI SAFE² v3.0 Implementation Toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
+> **What you get:** A common governance contract across the five operational pillars, named human authority for autonomous deployments, bounded delegation and replication, protocol-aware security profiles, and evidence that can be independently reconstructed.
 
 ---
 
-<a id="cp1"></a>
-## CP.1 — Agent Failure Mode Taxonomy
+## v3.1 Governance Model
 
-**What it governs:** How every agentic failure is classified so it can be triaged, remediated, and learned from consistently across all five pillars.
+### Three enforcement planes
 
-**The core addition:** Every agentic incident must be tagged with two cross-cutting dimensions:
+| Plane | Traffic | Primary governance question | Reference path |
+|---|---|---|---|
+| **North-south** | Agent to model/provider | What can cross the provider boundary, under what policy and economic ceiling? | Gateway/runtime controls |
+| **East-west** | Agent to agent | Who delegated what authority, to whom, for how long, and with what lineage? | NEXUS A2A reference implementation |
+| **Agent-to-tool** | Agent to MCP/tool server | Which verified principal may invoke which capability, and how is returned content trusted? | CP.5.MCP + NEXUS MCP adapter contract |
 
-- `cognitive_surface = (model | memory | both)` — did the failure root in model behavior, persistent memory, or their interaction?
-- `memory_persistence = (session | cross_session)` — was the effect limited to one session or did it persist across sessions?
+### Protocol-independence rule
 
-These tags distinguish ordinary prompt failures from belief and memory drift, which have fundamentally different remediation paths.
+> **A CP.5 profile MUST NOT bind a control to a construct owned by the protocol it profiles.**
 
-**Why it matters for builders:** When an incident is tagged correctly, the post-mortem is fast. The right team gets the right alert. The fix addresses the root cause, not the symptom.
-
----
-
-<a id="cp2"></a>
-## CP.2 — Adversarial ML Threat Model Integration
-
-**What it governs:** A mandatory governance artifact for all ACT-2 and above deployments that maps every known threat with a temporal profile.
-
-**The core addition:** For each mapped threat, record:
-
-- `temporal_profile = (immediate | delayed_days | delayed_weeks | chronic)`
-
-This captures time-shifted attacks — latent prompt poisoning, slow memory conditioning, long-horizon RAG corruption — and separates burst exploits from campaigns that play out over weeks or months.
-
-**Why it matters for builders:** An attack planted in your RAG corpus three weeks ago activating today looks like a random agent failure without temporal profiling. With it, the timeline is traceable and the source is findable.
+Governance binds to framework-owned constructs such as verified principals, capability grants, delegation chains, provenance baselines, policy context, trust-establishment events, and state handles. This prevents a protocol lifecycle change from silently invalidating a governance claim.
 
 ---
 
-<a id="cp3"></a>
-## CP.3 — Agent Capability Tiers (ACT) Capability Tiers 1-4
+## Cross-Pillar Controls
 
-**What it governs:** How agents are classified by autonomy level and how mandatory control requirements scale with that classification.
+| Control | Name | Priority | Governs |
+|---|---|---:|---|
+| **CP.1** | Agent Failure Mode Taxonomy | 🔴 CRITICAL | Failure classification across pillars, cognitive surfaces, persistence scope, and remediation path |
+| **CP.2** | Adversarial ML Threat Model Integration | 🔴 CRITICAL | Threat mapping, temporal behavior, and adversarial context |
+| **CP.3** | ACT Capability Tiers 1-4 | 🔴 CRITICAL | Autonomy classification and control scaling |
+| **CP.4** | Agentic Control Plane Governance | 🔴 CRITICAL | Identity, authorization, delegation, orchestration, runtime trust |
+| **CP.5** | Platform and Protocol Security Profiles | 🟠 HIGH | Platform-specific and protocol-specific enforcement profiles |
+| **CP.6** | AI Incident Feedback Loop Integration | 🟠 HIGH | Incident-informed control review and continuous improvement |
+| **CP.7** | Deception & Active Defense Layer | 🟠 HIGH | Canaries, honeypots, and adversarial detection assets |
+| **CP.8** | Catastrophic Risk Threshold Controls | 🔴 CRITICAL | Mandatory stop conditions and emergency suspension |
+| **CP.9** | Agent Replication Governance | 🔴 CRITICAL | Spawn authority, lineage, descendant revocation, delegation depth |
+| **CP.10** | HEAR Doctrine | 🔴 CRITICAL | Named Human Ethical Agent of Record and unilateral kill authority |
 
-| Tier | Name | Definition | Required Controls |
-| :--- | :--- | :--- | :--- |
-| ACT-1 | Assisted | Human reviews all outputs before action | Standard P1-P5 |
-| ACT-2 | Supervised | Agent acts with human checkpoints | AAF scoring + AMLTM (CP.2) |
-| ACT-3 | Autonomous | Agent operates with post-hoc review | F3.2, M4.4, CP.2, owner_of_record, HEAR required |
-| ACT-4 | Orchestrator | Agent controls other agents; enterprise-scale impact | All ACT-3 + CP.4 + CP.8 + CP.9 ARG + CP.10 HEAR |
+### CP.11 Unbiased AI Standard
 
-**Why it matters for builders:** Your security review will ask for ACT tier documentation before approving any autonomous deployment. Build to CP.3 now and the review is a formality.
+**CP.11 is a compliance overlay module, not an additional core framework control for purposes of the 161-control AI SAFE² core count.** It composes and tests existing controls across AI SAFE², NEXUS, and the Cognitive Sovereignty Framework against Unbiased AI procurement and due-diligence requirements.
 
----
-
-<a id="cp4"></a>
-## CP.4 — Agentic Control Plane Governance
-
-**What it governs:** Agent identity, dynamic permission enforcement, orchestration boundaries, and runtime behavioral trust as an explicit governance concept.
-
-**Key requirement:** Boards and regulators should treat the combination of Non-Human Identities (NHI) and agent orchestration as the primary control plane for autonomous AI. ACT tiers and CP.4 controls are the canonical governance evidence.
-
-**Board-level metrics derived from CP.4:**
-- Machine-to-human identity ratio (tracks NHI exposure surface)
-- ACT tier distribution (ACT-3/ACT-4 concentration triggers board review)
-- Owner coverage (percentage of agents with assigned owner_of_record)
-- CP.4 compliance rate for ACT-3/ACT-4 agents
-
-**Protocol assessment:** Protocol-layer meshes (A2A, MCP, ACP, and equivalents) must be evaluated against CP.3 through CP.7, not treated as isolated tools or plugins.
+See the full module: [Unbiased AI Standard](./unbiased-ai/README.md).
 
 ---
 
-<a id="cp5"></a>
-## CP.5 — Platform-Specific Agent Security Profiles
+## CP.1: Agent Failure Mode Taxonomy
 
-**What it governs:** Platform-by-platform security guidance with version-pinned CVE coverage and monitoring telemetry sources.
+Every material agentic incident should be classified in a way that points to the correct remediation layer.
 
-**Platforms covered:** AWS Bedrock Agents, Azure AI Foundry, n8n, LangGraph, AutoGen, CrewAI, MCP Servers, and protocol-layer meshes.
+### Canonical v3.1 persistence vocabulary
 
-**Key requirement:** Protocol-layer meshes (A2A, MCP, ACP, and equivalents) must be assessed as first-class supply chain components with the same depth as SaaS vendors — including identity, delegation, logging, and update channels.
+Use:
 
-**Why it matters:** Platform-specific attack paths (Bedrock UpdateGuardrail API poisoning, Azure AI Foundry configuration changes) are not covered by generic cloud monitoring. CP.5 defines what to watch.
+- `request`: effect is limited to the current request or interaction;
+- `handle_scoped`: effect persists only through an explicitly governed state handle;
+- `durable`: effect persists beyond a request or handle lifecycle and requires durable-state governance.
 
-### CP.5.MCP — MCP Server Security Profile
+Legacy terms such as `session`, `cross_session`, and `permanent` may be accepted as compatibility aliases during migration, but they are not the canonical governance boundary in v3.1.
 
-MCP is the de facto standard for AI agent tool integration. Its STDIO transport model eliminates the network boundary that separates tool execution from host process space. Tool response data flows directly into LLM context — making the return path a first-class prompt injection surface. OX Security research (April 2026) documented RCE exposure propagating from Anthropic's official MCP SDKs to all downstream implementations. Generic platform guidance does not cover this threat class. MCP requires an explicit profile.
+Recommended incident dimensions include:
 
-**Required controls:**
-
-| ID | Control | Requirement |
-| :--- | :--- | :--- |
-| MCP-1 | No Dynamic Command Construction | Never pass user-controlled or tool-response-controlled input into `StdioServerParameters`, `subprocess`, `os.system`, or equivalents. Server command parameters must be statically defined. Enforce via static analysis in CI/CD; fail the build on any dynamic command construction pattern. |
-| MCP-2 | Output Sanitization Before LLM Return | Scan all MCP tool results for prompt injection patterns — instruction-override phrases, role-confusion markers, zero-width characters, and target LLM special tokens — before returning to calling clients. Apply `sanitize_value()` from `aisafe2_mcp_tools.shared.patterns` or equivalent. Log and redact matches. |
-| MCP-3 | Registry Provenance Verification | Verify all third-party MCP servers against the official GitHub MCP Registry before adding to any agent configuration. Enforce a manifest-based allowlist for approved server commands. Treat allowlist updates as change management events. Reject unverified sources before they reach agent configuration. |
-| MCP-4 | STDIO Transport Integrity Binding | For STDIO-mode deployments, verify source file hash against a manifest maintained outside the server process before granting elevated tier access. Fail closed on integrity failure — an unverifiable binary must not execute. |
-| MCP-5 | Tool Invocation Audit Log | Every MCP tool call generates an immutable audit record (tool name, parameters, response hash, timestamp, calling agent identity) consistent with A2.5 Semantic Execution Trace Logging. Store outside the agent process and outside any filesystem path accessible to MCP server processes. Cross-reference against behavioral baseline (F3.4) to detect unexpected invocations. |
-| MCP-6 | MCP Server Network Isolation | MCP servers must not have unrestricted outbound network access unless explicitly required for their defined function. Apply allowlist-based egress filtering. Block exfiltration paths to unknown external URLs. For STDIO deployments, apply process-level network namespace isolation where the host OS supports it. |
-| MCP-7 | Zero-Trust Client Configuration | Any MCP server configuration sourced from a repository the operator does not control is treated as an untrusted artifact. Apply proxy wrapping to all third-party STDIO connections. Record tool schema hashes at initial trust establishment and compare at each subsequent session startup; schema changes without a documented release event require human authorization before the new schema is trusted. |
-| MCP-8 | Session Economics Controls | Declare a token budget and cost ceiling per session. Halt execution and require human authorization when either threshold is exceeded. Maintain per-tool rolling call frequency baselines; deviations exceeding 3 standard deviations trigger CP.8 review. API billing events exceeding 3x expected daily spend are classified as potential Phantom amplification (ATPA) and tagged via CP.1 with `cognitive_surface = model`, `memory_persistence = session`. |
-| MCP-9 | Context-Tool Isolation | Classify all externally retrieved data (documents, web pages, database records, API responses, email content) as untrusted data-plane content. Process through a semantic firewall before reaching the model's instruction context. Enforce isolated context segments for tool metadata and retrieved content at the Agentic Control Plane (CP.4). Monitor for the MCP-UPD three-phase pattern: retrieval tool invocation followed by disclosure tool invocation without an explicit human-authorized workflow connecting them. |
-| MCP-10 | Multi-Agent Provenance and Delegation Edge Monitoring | Every MCP tool call in multi-agent deployments must carry a CP.9 cryptographic lineage token identifying originating agent, full delegation path, and hop count. Instrument delegation edges, not individual agents. Tool server invocations without a traceable originating agent request are flagged as anomalous. ACT-4: maximum 3 delegation hops; kill switch must sever the full delegation tree within 500ms. |
-| MCP-11 | Schema Temporal Profiling | Record the `tools/list` response hash at deployment. Alert on any change at session startup not accompanied by a documented release event. CP.2 threat model entries must include MCP-specific temporal profiles for six threat classes: rug pull (`delayed_weeks`), persistent memory injection (`chronic`), ATPA (`immediate`), billing amplification (`immediate or delayed_days`), supply chain compromise (`delayed_days`), Swarm C2 establishment (`immediate`). |
-| MCP-12 | Swarm C2 Detection Controls | Implement semantic traffic analysis to distinguish legitimate agent-to-agent coordination from adversarial Swarm C2 patterns. Deploy CP.7 honeypot tool endpoints as canaries within multi-agent environments; any invocation by an unexpected agent is an immediate CP.8 threshold event. Communication topology deviations trigger CP.1 incident tagging with `cognitive_surface = both`, `memory_persistence = cross_session`. Requires coordination with CP.4, CP.7, and CP.8; cannot be implemented in isolation. |
-| MCP-13 | MCP Failure Mode Taxonomy Extension | Tag all MCP failure events with CP.1 cross-cutting dimensions (`cognitive_surface`, `memory_persistence`). Seven failure classes have defined taxonomy mappings and remediation paths. The `cross_session` classification for MCP-UPD and persistent memory injection mandates full memory flush across all agents in the chain, not session-level remediation. Without this tag, incident response addresses the wrong layer. |
-
-**ACT tier applicability:**
-
-| Control | ACT-1 | ACT-2 | ACT-3 | ACT-4 |
-| :--- | :---: | :---: | :---: | :---: |
-| MCP-1 No Dynamic Commands | Recommended | **Mandatory** | Mandatory | Mandatory |
-| MCP-2 Output Sanitization | Recommended | **Mandatory** | Mandatory | Mandatory |
-| MCP-3 Registry Provenance | Recommended | **Mandatory** | Mandatory | Mandatory |
-| MCP-4 STDIO Integrity | Recommended | **Mandatory** | Mandatory | Mandatory |
-| MCP-5 Tool Audit Log | Recommended | **Mandatory** | Mandatory | Mandatory |
-| MCP-6 Network Isolation | -- | Recommended | **Mandatory** | Mandatory |
-| MCP-7 Zero-Trust Config | -- | Recommended | **Mandatory** | Mandatory |
-| MCP-8 Session Economics | -- | **Mandatory** | Mandatory | Mandatory |
-| MCP-9 Context-Tool Isolation | -- | **Mandatory** | Mandatory | Mandatory |
-| MCP-10 Delegation Edge Monitoring | -- | -- | **Mandatory** | Mandatory + CP.9 |
-| MCP-11 Schema Temporal Profiling | -- | **Mandatory** | Mandatory | Mandatory |
-| MCP-12 Swarm C2 Detection | -- | -- | **Mandatory** | Mandatory |
-| MCP-13 Failure Taxonomy Extension | -- | **Mandatory** | Mandatory | Mandatory |
-
-**MITRE ATLAS:** AML.T0002, AML.T0005, AML.T0008, AML.T0015, AML.T0043, AML.T0048, AML.T0051
-**OWASP LLM:** LLM01 (Prompt Injection), LLM02 (Insecure Output Handling), LLM05 (Supply Chain Vulnerabilities), LLM08 (Excessive Agency), LLM10 (Model Theft / Exfiltration)
-
-- **Full control specifications:** [CP.5 MCP Full Specification](./MCP.md)
-- **Research foundation:** [Research Note 023 — MCP Server Security Profile](../research/023_mcp-server-security-profile.md) | [Research Note 024 — MCP Consumer Protection](../research/024_mcp_consumer_protection.md)
-- **Reference implementation:** [AI SAFE2 MCP Security Toolkit](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/mcp-security-toolkit)
-  
----
+- `cognitive_surface = model | memory | both`;
+- `persistence_scope = request | handle_scoped | durable`;
+- affected principal or agent identity;
+- delegation lineage;
+- enforcement plane;
+- policy and evidence references.
 
 ---
 
-<a id="cp6"></a>
-## CP.6 — AI Incident Feedback Loop Integration
+## CP.2: Adversarial ML Threat Model Integration
 
-**What it governs:** How external AI incident intelligence flows back into your governance controls on a defined cadence.
+ACT-2 and above deployments maintain a threat model with temporal behavior rather than treating every attack as an instantaneous event.
 
-**Core requirements:**
-- Quarterly review of AIID agentic incident reports
-- 30-day Incident-Informed Control Review (IICR) triggered when a new relevant AIID incident is published
-- Internal Agentic Incident Registry for organizational lessons-learned
+Example temporal classifications include:
 
-**Why it matters:** The threat landscape changes faster than annual governance reviews. CP.6 creates a structured forcing function that keeps controls current without waiting for the next major incident inside your own organization.
+- `immediate`;
+- `delayed_days`;
+- `delayed_weeks`;
+- `chronic`.
 
----
-
-<a id="cp7"></a>
-## CP.7 — Deception & Active Defense Layer
-
-**What it governs:** AI-specific active defense assets that detect and study attackers before they succeed.
-
-**Control components:**
-- **Canary documents in RAG corpora:** Documents that should never appear in legitimate agent outputs; retrieval triggers an immediate alert
-- **Honeypot tool endpoints:** Tools that should never be called in normal operation; invocation indicates adversarial probing or tool squatting
-- **Fake credential traps in agent memory:** Credentials that trigger alerts when exfiltrated
-
-**Why it matters:** Every other AI governance framework is purely defensive — detect and block. CP.7 is the only control that tells you to deceive and catch. It is the only deception-class control in any current AI governance framework.
+This supports investigation of latent prompt poisoning, slow memory conditioning, long-horizon RAG corruption, protocol drift, and delayed supply-chain compromise.
 
 ---
 
-<a id="cp8"></a>
-## CP.8 — Catastrophic Risk Threshold Controls
+## CP.3: Agent Capability Tiers
 
-**What it governs:** Behavioral indicators that trigger emergency agent suspension regardless of business continuity impact.
+| Tier | Operating model | Governance expectation |
+|---|---|---|
+| **ACT-1** | Assisted | Human reviews consequential outputs before action |
+| **ACT-2** | Supervised | Agent acts within bounded workflows and human checkpoints |
+| **ACT-3** | Autonomous | Agent acts within a defined authority envelope with post-action review and HEAR coverage |
+| **ACT-4** | Orchestrator | Agent controls agents or materially broader systems; full control-plane, replication, catastrophic-risk, and HEAR requirements apply |
 
-**Example catastrophic paths:**
-- (a) Agentic ransomware or malicious operator agents abusing NHI and orchestration to execute full kill-chains with legitimate credentials
-- (b) Protocol-layer supply chain compromise of widely deployed A2A or MCP servers
-- (c) Persistent cognitive or bias failures that materially impact safety-critical or financial decisions
-
-**Governance requirement:** CRT documentation is mandatory before any ACT-3 or ACT-4 deployment approval. A CRT review board must hold authority to permanently decommission agents exhibiting threshold-triggering behavior.
-
----
-
-<a id="cp9"></a>
-## CP.9 — Agent Replication Governance (ARG)
-
-![First in Field - Unified Security Control Model](https://img.shields.io/badge/First_in_Field-No_other_framework_has_this_standard-cc6600?style=flat-square)
-
-![First in Field - Cross-Layer Enforcement Requirement](https://img.shields.io/badge/First_in_Field-No_other_framework_requires_this-cc6600?style=flat-square)
-
-**What it governs:** The first formal governance standard for agent replication — the moment one agent can clone itself, four core security assumptions simultaneously collapse.
-
-**The four collapsing assumptions:**
-1. One identity per actor
-2. One permission set per identity
-3. One execution context per session
-4. One audit trail per actor
-
-All four fail at once, at machine speed. NIST, ISO, OWASP, and enterprise IAM have zero standards for this.
-
-**CP.9 requires:**
-- Replication authority must be explicitly declared in deployment manifests and enforced at the gateway layer
-- Every spawned sub-agent receives a new ephemeral credential with scope narrowing at every delegation hop (per research/014 Control Spec 4)
-- A cryptographic lineage token travels with every agent, encoding parent DID, chain ID, delegation depth, and TTL
-- ACT-3 deployments: maximum 2 delegation hops; ACT-4: maximum 3 hops
-- Kill switch severs the full delegation tree at the gateway and revokes all descendant credentials within 500ms
-- A2.4 Dynamic Agent State Inventory is extended with `replication_lineage` field; reconciliation minimum every 60 minutes for ACT-3/ACT-4
-
-**Why it matters:** One agent becoming a thousand identities before your SIEM fires a single alert is not theoretical. It is the natural behavior of production orchestrator agents with no replication governance. CP.9 is the spec that prevents this.
+Higher tiers inherit lower-tier requirements unless an explicit profile states otherwise.
 
 ---
 
-<a id="cp10"></a>
-## CP.10 — The HEAR Doctrine (Human Ethical Agent of Record)
+## CP.4: Agentic Control Plane Governance
 
-![First in Field - Unified Security Control Model](https://img.shields.io/badge/First_in_Field-No_other_framework_has_this_standard-cc6600?style=flat-square)
+CP.4 makes identity, authorization, delegation, orchestration, and runtime trust explicit governance objects.
 
-![First in Field - Cross-Layer Enforcement Requirement](https://img.shields.io/badge/First_in_Field-No_other_framework_requires_this-cc6600?style=flat-square)
+Minimum evidence for ACT-3/ACT-4 should include:
 
-**What it governs:** The requirement that every ACT-3 and ACT-4 deployment has a named Human Ethical Agent of Record with cryptographic signing authority and unilateral kill-switch capability.
+- verified principal or agent identity;
+- `owner_of_record`;
+- ACT tier;
+- capability grants and restrictions;
+- delegation lineage;
+- policy version;
+- revocation status;
+- HEAR assignment where required.
 
-**The HEAR is not:**
-- A governance committee
-- An approval workflow
-- An incident response team
-
-**The HEAR is:** A specific named individual who holds a cryptographic private key, can be reached in real time, and has the unilateral authority to stop any autonomous agent deployment in their designated boundary at any time, for any reason, without prior approval.
-
-**Class-H Action Protocol:** Any irreversible, financially material, security-modifying, or cross-organizational action requires:
-1. Agent pauses execution
-2. Agent presents plain-language semantic consequence to the HEAR (not the technical parameters — the real-world effect)
-3. HEAR signs the authorization with their registered private key
-4. Agent verifies the signature before proceeding
-5. Authorization logged to A2.5 before execution
-
-**Fail-closed requirement:** If the HEAR is unreachable or the signing infrastructure fails, Class-H actions are blocked. No automatic approval path exists for any Class-H category.
-
-**Compliance mappings:**
-- EU AI Act Articles 9 and 14 (human oversight for high-risk AI)
-- SEC Cybersecurity Disclosure accountability requirements
-- SOC 2 CC.7.4
-- GDPR Article 22 automated decision safeguards
-- NIST AI RMF GOVERN function
+Boards and security leaders should be able to measure owner coverage, high-tier agent concentration, machine-to-human identity ratios, and control-plane conformance without reconstructing those facts from application logs.
 
 ---
 
-<a id="cp11"></a>
-## CP.11: Unbiased AI Standard (UAS)
+## CP.5: Platform and Protocol Security Profiles
 
-**Severity: 🟠 HIGH | Pillars: All | NEXUS: Yes | CSF: Yes (first formal integration)**
+CP.5 translates the framework into version-pinned profiles for specific platforms and protocols while preserving the protocol-independence rule.
 
-CP.11 synthesizes controls from all five pillars, NEXUS, and the Cognitive
-Sovereignty Framework into a single auditable compliance surface for "Unbiased
-AI" obligations in federal procurement, specifically GSAR 552.239-7001 (j)(1)
-and the disclosure duties at (f)(7)(viii), (f)(7)(ix), and (f)(3). It defines
-8 bias classes (UAS-B1 to B8), 27 controls (14 system-side, 8 human-side
-sourced from CSF Domains 1-6, 5 bridge), quantified pass thresholds, and a
-five-document due-diligence evidence package.
+### CP.5.MCP: MCP Server Security Profile
 
-Unlike CP.1 through CP.10, CP.11 is a full module with its own normative
-standard, taxonomy, test protocol, and attestation templates:
+The **canonical v3.1 MCP profile contains MCP-1 through MCP-19** and is aligned to MCP `2026-07-28`, with `2025-11-25` retained as a legacy compatibility binding.
 
-**Full module: [`unbiased-ai/`](./unbiased-ai/README.md)**
+Key v3.1 changes include:
 
----
+- no governance dependency on `Mcp-Session-Id`;
+- `server/discover` is optional and not a conformance presence requirement;
+- extension capability negotiation;
+- header/body assertion integrity;
+- state-handle lifecycle and principal binding;
+- MRTR request/response integrity and replay resistance;
+- catalog-cache provenance revalidation;
+- authorization-chain, intended-resource/audience, redirect, metadata, and SSRF validation.
 
-## 📊 Cross-Pillar GRC Mapping
+**Do not maintain a second embedded copy of the MCP control matrix on this page.** The canonical specification is:
 
-| Framework | CP Control | Requirement Satisfied |
-| :--- | :--- | :--- |
-| EU AI Act Art. 9 | CP.10 HEAR | Designated responsible person for high-risk AI |
-| EU AI Act Art. 14 | CP.10 HEAR | Human oversight intervention capability |
-| NIST AI RMF GOVERN | CP.3, CP.4, CP.10 | Organizational accountability for AI risk |
-| SEC Cyber Disclosure | CP.3, CP.4, CP.10 | Board-level AI governance evidence |
-| SOC 2 CC.7.4 | CP.10 HEAR | Incident response documentation |
-| GDPR Art. 22 | CP.10 HEAR | Automated decision safeguards |
-| ISO/IEC 42001 | CP.1-CP.8 | AI management system governance |
-| OWASP Agentic Top 10 | CP.9 | ASI03 Identity Abuse (first framework to address) |
-| OWASP Agentic Top 10 | CP.10 | ASI09 Human-Agent Trust Exploitation (first framework to address) |
-| OWASP AIVSS v0.8 | CP.3, CP.2 | ACT tier scoring integration |
+[CP.5.MCP v3.1: MCP Server Security Profile](./cp5_mcp_server_security.md)
+
+Machine-readable profile data is maintained at:
+
+[`skills/mcp/data/mcp-profile-v3.1.json`](../skills/mcp/data/mcp-profile-v3.1.json)
+
+NEXUS provides CSI's first-party reference implementation path for agent-to-tool enforcement. Alternative implementations may conform when they satisfy the applicable controls and produce independently reconstructable evidence.
 
 ---
 
-## 🚀 Getting Started with Cross-Pillar Governance
+## CP.6: AI Incident Feedback Loop Integration
 
-**For immediate value, implement in this order:**
+External and internal incidents must feed back into the framework on a defined cadence.
 
-1. **Classify all deployed agents by ACT tier** (CP.3) — this takes less than a day and unlocks every subsequent governance conversation
-2. **Assign owner_of_record to every agent** (CP.4, A2.4) — agents without an owner cannot be approved for production at ACT-3/ACT-4
-3. **Designate a HEAR for every ACT-3/ACT-4 deployment** (CP.10) — register in A2.4 before the next security review
-4. **Define Catastrophic Risk Thresholds** (CP.8) — required condition for any new ACT-3/ACT-4 deployment approval
-5. **Audit replication capability** (CP.9) — if any agent can spawn sub-agents, the replication governance spec applies now
+Recommended mechanisms include:
 
-> Full implementation guidance, including the 30-Day Roadmap from greenfield to full v3.0 compliance, is in the [AI SAFE² v3.0 Implementation Toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
+- periodic external incident review;
+- a time-bounded Incident-Informed Control Review for materially relevant incidents;
+- an internal Agentic Incident Registry;
+- traceability from incident to control, test, policy, and remediation change.
 
 ---
 
-<div align="center">
+## CP.7: Deception & Active Defense Layer
 
-<a href="https://cyberstrategyinstitute.com/ai-safe2/">
-  <img src="https://img.shields.io/badge/GET_THE_v3.0_TOOLKIT_($97)-cc6600?style=for-the-badge&logo=rocket&logoColor=white" alt="AI SAFE v3.0 Implementation Toolkit Download" />
-</a>
+AI-specific active defense may include:
 
-<p><i>Full CP.1-CP.10 specifications, implementation requirements, compliance evidence templates, and ACT tier assignment tools.</i></p>
+- canary documents in RAG corpora;
+- honeypot tool endpoints;
+- synthetic credentials or artifacts that should never be used legitimately;
+- telemetry that converts unexpected interaction with those assets into evidence and an escalation event.
 
-</div>
+Deception assets must themselves be governed so that they do not become uncontrolled production behavior.
+
+---
+
+## CP.8: Catastrophic Risk Threshold Controls
+
+ACT-3 and ACT-4 deployments define conditions that require emergency suspension regardless of ordinary business-continuity preference.
+
+Thresholds should cover the deployment's actual consequence surface, including unauthorized state change, uncontrolled replication, destructive tool use, material economic harm, safety impact, protocol supply-chain compromise, or loss of effective human control.
+
+---
+
+## CP.9: Agent Replication Governance
+
+Replication changes identity, permission, execution, and audit assumptions simultaneously.
+
+CP.9 requires:
+
+- explicitly declared spawn authority;
+- narrowed descendant capabilities;
+- cryptographic or otherwise verifiable lineage;
+- bounded delegation depth and lifetime;
+- dynamic inventory of active descendants;
+- revocation that reaches the full descendant tree;
+- evidence connecting each descendant action to its originating authority.
+
+---
+
+## CP.10: HEAR Doctrine
+
+Every ACT-3 and ACT-4 deployment requires a named **Human Ethical Agent of Record (HEAR)** with real authority to halt the governed deployment.
+
+For Class-H actions, the system must pause, present the real-world consequence in understandable terms, obtain valid authorization from the HEAR or designated authority, record the authorization, and only then execute.
+
+If required authorization infrastructure is unavailable, the action fails closed.
+
+---
+
+## CP.11: Unbiased AI Standard
+
+The UAS module defines an auditable compliance surface for Unbiased AI obligations in procurement and due diligence. It includes bias taxonomy, tests, evidence expectations, attestation, and cross-framework mappings.
+
+Because the module composes controls from multiple systems, its module-level control count must not be added to the 161 AI SAFE² core-control total as though those were all new independent core controls.
+
+Full module: [00-cross-pillar/unbiased-ai/](./unbiased-ai/README.md)
+
+---
+
+## Cross-Pillar GRC Mapping
+
+| Framework | Representative CP controls | Governance contribution |
+|---|---|---|
+| EU AI Act | CP.3, CP.8, CP.10 | Risk scaling, emergency thresholds, human oversight |
+| NIST AI RMF | CP.1-CP.6, CP.10 | GOVERN, MAP, MEASURE, MANAGE evidence |
+| NIST CSF 2.0 | CP.3, CP.4, CP.6, CP.8 | Governance, identity, incident feedback, response thresholds |
+| ISO/IEC 42001 | CP.1-CP.8, CP.10 | AI management-system governance and oversight |
+| SOC 2 | CP.4, CP.6, CP.10 | Access, operations, incident response, accountability |
+| OWASP Agentic guidance | CP.4, CP.5, CP.9, CP.10 | Identity, protocol/tool risk, replication, human authority |
+| Zero Trust | CP.4, CP.5, CP.9 | Principal verification, least privilege, delegation and revocation |
+
+Mappings are evidence reuse aids, not substitutes for an organization's independent applicability or certification determination.
+
+---
+
+## Getting Started
+
+Implement in this order for the fastest governance baseline:
+
+1. Classify deployed agents by ACT tier (CP.3).
+2. Assign `owner_of_record` and verified identities (CP.4).
+3. Designate HEAR coverage for ACT-3/ACT-4 deployments (CP.10).
+4. Define catastrophic-risk thresholds (CP.8).
+5. Audit replication and delegation capabilities (CP.9).
+6. Apply platform/protocol profiles, including CP.5.MCP where MCP is used.
+7. Establish incident-to-control feedback (CP.6).
+
+Current implementation resources: [AI SAFE² Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
 
 ---
 
 ## 🔗 Navigation
 
-| | | |
+| Previous | Current | Next |
 | :--- | :--- | :--- |
-| [Main README](../README.md) | [All Five Pillars](#) | **Cross-Pillar Governance** |
-| [Pillar 1](../01-sanitize-isolate/README.md) | [Pillar 2](../02-audit-inventory/README.md) | [Pillar 3](../03-fail-safe-recovery/README.md) |
-| [Pillar 4](../04-engage-monitor/README.md) | [Pillar 5](../05-evolve-educate/README.md) | [AISM Layer](../AISM/) |
+| [Pillar 5: Evolve & Educate](../05-evolve-educate/README.md) | **Cross-Pillar Governance** | [AISM](../AISM/) |
 
-→ [Interactive Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
-→ [Research Notes 001-014](../research/)
+[Framework Home](../README.md) | [Pillar 1](../01-sanitize-isolate/README.md) | [Pillar 2](../02-audit-inventory/README.md) | [Pillar 3](../03-fail-safe-recovery/README.md) | [Pillar 4](../04-engage-monitor/README.md) | [Pillar 5](../05-evolve-educate/README.md)
+
+[NEXUS](../NEXUS/) | [MCP Profile](./cp5_mcp_server_security.md) | [Research](../research/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | [Toolkit](https://cyberstrategyinstitute.com/ai-safe2/)
 
 ---
 
-*Powered by [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
