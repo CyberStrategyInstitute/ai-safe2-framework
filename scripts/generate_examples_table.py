@@ -18,6 +18,15 @@ STACK_RE = re.compile(r"<!--\s*stack:\s*(.+?)\s*-->", re.IGNORECASE)
 DESC_RE = re.compile(r"<!--\s*description:\s*(.+?)\s*-->", re.IGNORECASE)
 MAX_DESCRIPTION_WORDS = 20
 
+# One pre-metadata example is retained explicitly rather than hidden from the
+# index. New examples must use the normal README metadata tags.
+LEGACY_METADATA = {
+    "lovable-sovereign-runtime": {
+        "stack": "Lovable",
+        "description": "Runtime enforcement package for Lovable Agent mode, database actions, deployments, and MCP integrations",
+    },
+}
+
 
 def load_ignore_list() -> set[str]:
     if not IGNORE_FILE.exists():
@@ -39,11 +48,15 @@ def validate_and_read(folder: pathlib.Path, errors: list[str]) -> dict | None:
     text = readme.read_text(encoding="utf-8", errors="ignore")
     stack_match = STACK_RE.search(text)
     desc_match = DESC_RE.search(text)
-    if not stack_match:
-        errors.append(f"{name}: missing <!-- stack: ... --> tag in README.md")
-    if not desc_match:
-        errors.append(f"{name}: missing <!-- description: ... --> tag in README.md")
+
     if not stack_match or not desc_match:
+        legacy = LEGACY_METADATA.get(name)
+        if legacy:
+            return {"name": name, **legacy}
+        if not stack_match:
+            errors.append(f"{name}: missing <!-- stack: ... --> tag in README.md")
+        if not desc_match:
+            errors.append(f"{name}: missing <!-- description: ... --> tag in README.md")
         return None
 
     stack = stack_match.group(1).strip()
