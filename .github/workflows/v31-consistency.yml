@@ -50,9 +50,11 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Install NEXUS SDK
-        run: python -m pip install -e NEXUS/sdk/python
+      - name: Install test dependency
+        run: python -m pip install pytest
       - name: Run v3.1 persistence compatibility tests
+        env:
+          PYTHONPATH: NEXUS/sdk/python
         run: python -m pytest NEXUS/sdk/python/tests/test_v31_persistence_compat.py -q
 
   profile-data:
