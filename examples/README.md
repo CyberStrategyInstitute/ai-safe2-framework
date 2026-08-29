@@ -24,23 +24,24 @@ Examples demonstrate implementation patterns. They do not create framework confo
 
 | Example | Stack | What It Governs |
 |---|---|---|
-| [`anti-gravity-sovereign-runtime/`](./anti-gravity-sovereign-runtime/) | Anti-Gravity | Sovereign runtime defense package for Anti-Gravity agent deployments |
-| [`autogen-sovereign-runtime/`](./autogen-sovereign-runtime/) | Microsoft AutoGen | Governance wrapper for AutoGen multi-agent orchestration |
-| [`claude-code-sovereign-runtime/`](./claude-code-sovereign-runtime/) | Claude Code | Hardens agentic coding sessions against unsafe tool execution, scope creep, and drift |
-| [`codex-sovereign-runtime/`](./codex-sovereign-runtime/) | OpenAI Codex | Runtime enforcement wrapper for Codex-driven coding agents |
-| [`crewai-sovereign-runtime/`](./crewai-sovereign-runtime/) | CrewAI | Governance wrapper for CrewAI crew-based orchestration |
-| [`hermes-sovereign-runtime/`](./hermes-sovereign-runtime/) | NousResearch Hermes | Closes four critical audit findings identified in the Hermes agent |
-| [`ishi/`](./ishi/) | Supervisory agent | Reviews agent plans and enforces governance decisions before high-risk actions execute |
-| [`langchain-sovereign-runtime/`](./langchain-sovereign-runtime/) | LangChain | Runtime controls for LangChain chains and tool-calling agents |
-| [`langflow-sovereign-runtime/`](./langflow-sovereign-runtime/) | Langflow | Sovereign runtime defense package for the Langflow visual builder |
-| [`langgraph-sovereign-runtime/`](./langgraph-sovereign-runtime/) | LangGraph | Runtime controls for LangGraph stateful agent graphs |
+| [`anti-gravity-sovereign-runtime/`](./anti-gravity-sovereign-runtime/) | Anti-Gravity | Sovereign runtime defense package for Anti-Gravity agent deployments. |
+| [`autogen-sovereign-runtime/`](./autogen-sovereign-runtime/) | Microsoft AutoGen | Governance wrapper for AutoGen multi-agent orchestration. |
+| [`claude-code-sovereign-runtime/`](./claude-code-sovereign-runtime/) | Claude Code | Hardens agentic coding sessions against unsafe tool execution, scope creep, and drift. |
+| [`codex-sovereign-runtime/`](./codex-sovereign-runtime/) | OpenAI Codex | Runtime enforcement wrapper for Codex-driven coding agents. |
+| [`crewai-sovereign-runtime/`](./crewai-sovereign-runtime/) | CrewAI | Governance wrapper for CrewAI crew-based orchestration. |
+| [`cursor-sovereign-runtime/`](./cursor-sovereign-runtime/) | Cursor | Runtime controls for Cursor IDE chains, .cursor/rules injection surfaces, and AI-generated code execution. |
+| [`hermes-sovereign-runtime/`](./hermes-sovereign-runtime/) | NousResearch Hermes | Closes four critical audit findings identified in the Hermes agent. |
+| [`ishi/`](./ishi/) | Supervisory agent | Reviews agent plans and enforces governance decisions before high-risk actions execute. |
+| [`langchain-sovereign-runtime/`](./langchain-sovereign-runtime/) | LangChain | Runtime controls for LangChain chains and tool-calling agents. |
+| [`langflow-sovereign-runtime/`](./langflow-sovereign-runtime/) | Langflow | Sovereign runtime defense package for the Langflow visual builder. |
+| [`langgraph-sovereign-runtime/`](./langgraph-sovereign-runtime/) | LangGraph | Runtime controls for LangGraph stateful agent graphs. |
 | [`lovable-sovereign-runtime/`](./lovable-sovereign-runtime/) | Lovable | Runtime enforcement package for Lovable Agent mode, database actions, deployments, and MCP integrations |
-| [`love_equation/`](./love_equation/) | Alignment research | Drift-scoring model adapted into AI SAFE² behavioral monitoring |
-| [`make-sovereign-runtime/`](./make-sovereign-runtime/) | Make.com | Sovereign runtime defense package for no-code automation scenarios |
-| [`mcp-security-toolkit/`](./mcp-security-toolkit/) | MCP (protocol) | `mcp-score`, `mcp-scan`, `mcp-safe-wrap` CP.5.MCP security toolkit |
-| [`openclaw/`](./openclaw/) | OpenClaw | Full two-layer governance stack with internal controls plus external scanner and gateway |
-| [`slowmist-overlay/`](./slowmist-overlay/) | SlowMist | Threat-intel overlay integrating external audit findings into AI SAFE² controls |
-| [`xai-grok-sovereign-runtime/`](./xai-grok-sovereign-runtime/) | xAI Grok | Sovereign runtime defense package for Grok-based agents |
+| [`love_equation/`](./love_equation/) | Alignment research | Drift-scoring model adapted into AI SAFE2 behavioral monitoring. |
+| [`make-sovereign-runtime/`](./make-sovereign-runtime/) | Make.com | Sovereign runtime defense package for no-code automation scenarios. |
+| [`mcp-security-toolkit/`](./mcp-security-toolkit/) | MCP (protocol security) | mcp-score, mcp-scan, mcp-safe-wrap. CP.5.MCP toolkit, 134 tests. |
+| [`openclaw/`](./openclaw/) | OpenClaw | Full two-layer governance stack, internal identity and memory files plus external scanner and gateway. |
+| [`slowmist-overlay/`](./slowmist-overlay/) | SlowMist / OpenClaw | Threat-intelligence overlay mapping SlowMist OpenClaw security practices to AI SAFE2 controls. |
+| [`xai-grok-sovereign-runtime/`](./xai-grok-sovereign-runtime/) | xAI Grok | Sovereign runtime defense package for Grok-based agents. |
 
 <!-- EXAMPLES:END -->
 
