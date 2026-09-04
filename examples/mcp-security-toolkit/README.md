@@ -8,6 +8,15 @@
 > **Current framework context:** AI SAFE² v3.1. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
 <!-- AI-SAFE2-UX:END -->
 
+> **RELOCATED, not an example.** This toolkit's `Surface: Example` badge above
+> is the bug, not a description: `mcp-score`/`mcp-scan`/`mcp-safe-wrap` are a
+> real, 134-test-covered package that was filed under `examples/` and never
+> shipped as a result. The code has moved to `/aisafe2_mcp_tools` at the repo
+> root and is now absorbed into the unified `safe2` CLI (`safe2 scan mcp`,
+> `safe2 score mcp`, `safe2 mcp wrap-stdio` / `wrap-proxy`). See
+> `/MIGRATION.md`. This directory is kept only until that migration is
+> confirmed and can be deleted; don't build new integrations against this path.
+
 <!-- stack: MCP (protocol security) -->
 <!-- description: mcp-score, mcp-scan, mcp-safe-wrap. CP.5.MCP toolkit, 134 tests. -->
 

@@ -3,6 +3,7 @@ AI SAFE2 v3.1 Scanner - Cross-Pillar Governance Rules (CP.1-CP.10).
 Structural analysis for ACT tier estimation, HEAR presence, replication
 governance, catastrophic-risk thresholds, and control-plane awareness.
 """
+
 from __future__ import annotations
 
 import re
@@ -77,11 +78,13 @@ def estimate_act_tier(content: str) -> ACTEstimate:
     act3_hits = [pattern for pattern in ACT3_SIGNALS if re.search(pattern, content, re.IGNORECASE)]
     act2_hits = [pattern for pattern in ACT2_SIGNALS if re.search(pattern, content, re.IGNORECASE)]
 
-    has_llm_call = bool(re.search(
-        r"(openai\.|anthropic\.|\.invoke\(|agent\.run|llm\.predict|client\.messages\.create)",
-        content,
-        re.IGNORECASE,
-    ))
+    has_llm_call = bool(
+        re.search(
+            r"(openai\.|anthropic\.|\.invoke\(|agent\.run|llm\.predict|client\.messages\.create)",
+            content,
+            re.IGNORECASE,
+        )
+    )
 
     if not has_llm_call:
         return ACTEstimate(
@@ -174,7 +177,11 @@ def estimate_act_tier(content: str) -> ACTEstimate:
         "opentelemetry",
         "tracing",
     }
-    if not any(field_name in lower for field_name in trace_fields) and tier in ("ACT-2", "ACT-3", "ACT-4"):
+    if not any(field_name in lower for field_name in trace_fields) and tier in (
+        "ACT-2",
+        "ACT-3",
+        "ACT-4",
+    ):
         gaps.append(
             "A2.5 Semantic Execution Trace Logging: no trace logging detected for an ACT-2+ deployment."
         )
@@ -182,7 +189,17 @@ def estimate_act_tier(content: str) -> ACTEstimate:
     mandatory = {
         "ACT-1": ["P1.T1.2", "P1.T1.5", "P2.T4.1", "P3.T5.1", "P4.T7.1"],
         "ACT-2": ["All ACT-1", "CP.2", "A2.5", "S1.5", "F3.2", "M4.4", "M4.5"],
-        "ACT-3": ["All ACT-2", "CP.3", "CP.4", "CP.8", "CP.10 HEAR", "F3.4", "F3.5", "M4.6", "M4.8"],
+        "ACT-3": [
+            "All ACT-2",
+            "CP.3",
+            "CP.4",
+            "CP.8",
+            "CP.10 HEAR",
+            "F3.4",
+            "F3.5",
+            "M4.6",
+            "M4.8",
+        ],
         "ACT-4": ["All ACT-3", "CP.9 ARG", "F3.3", "P4.T1.1_ADV"],
     }.get(tier, [])
 
@@ -228,12 +245,15 @@ def _check_cp9_replication(content: str, lines: list[str], filepath: str) -> lis
 
     lower = content.lower()
     for index, line in enumerate(lines, start=1):
-        if any(re.search(pattern, line, re.IGNORECASE) for pattern in spawn_patterns):
-            if not any(word in lower for word in lineage_words):
-                findings.append((
+        if any(re.search(pattern, line, re.IGNORECASE) for pattern in spawn_patterns) and not any(
+            word in lower for word in lineage_words
+        ):
+            findings.append(
+                (
                     index,
                     f"Agent spawning without CP.9 lineage governance: {line.strip()[:80]}",
-                ))
+                )
+            )
     return findings
 
 
@@ -262,22 +282,27 @@ def _check_cp10_hear(content: str, lines: list[str], filepath: str) -> list[tupl
     if any(field_name in content.lower() for field_name in hear_fields):
         return []
 
-    return [(
-        1,
-        "ACT-3/4 deployment config missing CP.10 HEAR designation",
-    )]
+    return [
+        (
+            1,
+            "ACT-3/4 deployment config missing CP.10 HEAR designation",
+        )
+    ]
 
 
 def _check_cp8_missing_crt(content: str, lines: list[str], filepath: str) -> list[tuple[int, str]]:
     if not any(filepath.endswith(ext) for ext in (".py", ".js", ".ts", ".yaml", ".yml")):
         return []
 
-    has_autonomous = any(re.search(pattern, content, re.IGNORECASE) for pattern in (
-        r"agent\.run\s*\(",
-        r"\.invoke\s*\(",
-        r"autonomous",
-        r"unattended",
-    ))
+    has_autonomous = any(
+        re.search(pattern, content, re.IGNORECASE)
+        for pattern in (
+            r"agent\.run\s*\(",
+            r"\.invoke\s*\(",
+            r"autonomous",
+            r"unattended",
+        )
+    )
     if not has_autonomous:
         return []
 
@@ -294,10 +319,12 @@ def _check_cp8_missing_crt(content: str, lines: list[str], filepath: str) -> lis
     if any(word in content.lower() for word in crt_words):
         return []
 
-    return [(
-        1,
-        "Autonomous agent without CP.8 Catastrophic Risk Threshold definitions",
-    )]
+    return [
+        (
+            1,
+            "Autonomous agent without CP.8 Catastrophic Risk Threshold definitions",
+        )
+    ]
 
 
 CP_RULES: list[Rule] = [

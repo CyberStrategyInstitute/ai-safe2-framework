@@ -5,7 +5,7 @@
 
 # AISM Agent Threat and Control Matrix
 
-**Framework:** AI SAFE² v3.0
+**Framework:** AI SAFE² v3.1
 **Organization:** Cyber Strategy Institute
 **Version:** April 2026
 
@@ -17,7 +17,7 @@ Agentic AI systems introduce a threat landscape that does not exist in tradition
 
 This document maps the primary threat categories facing agentic AI deployments to the AISM controls that address them, with cross-references to MITRE ATLAS techniques and OWASP LLM vulnerabilities. It is organized by threat category, covering both classic AI security threats and the emerging threat landscape specific to agentic systems.
 
-**v3.0 Update:** This matrix has been updated to reflect the AI SAFE² v3.0 Cross-Pillar Governance OS (CP.1–CP.10). Three first-in-field standards — CP.7 Deception & Active Defense, CP.9 Agent Replication Governance, and CP.10 HEAR Doctrine — are now referenced in the threat categories they directly address. A new threat category, T11 Multi-Turn Behavioral Conditioning, has been added to address the distinct attack class covered by CP controls and S1.6.
+**v3.1 alignment:** This matrix retains the AI SAFE² Cross-Pillar Governance OS (CP.1–CP.10) and adds the v3.1 protocol-governance context: CP.5.MCP profile controls MCP-1 through MCP-19, agent-to-tool enforcement, session-independent state handling, capability and audience binding, catalog/schema provenance, and extension negotiation. CP.7 Deception & Active Defense, CP.9 Agent Replication Governance, and CP.10 HEAR Doctrine remain referenced in the threat categories they directly address. T11 Multi-Turn Behavioral Conditioning covers the distinct attack class addressed by CP controls and S1.6.
 
 This matrix is designed for security engineers, red teams, and governance practitioners who need to understand not just what controls exist, but why they exist and what specific threats they mitigate.
 

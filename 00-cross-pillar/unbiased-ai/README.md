@@ -1,8 +1,8 @@
-# CP.11: Unbiased AI Standard (UAS)
+# Unbiased AI Standard (UAS) Regulatory Profile
 ### Cross-pillar compliance overlay for truthfulness, neutrality, and continuous improvement
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
-[![Overlay](https://img.shields.io/badge/Overlay-CP.11_UAS-820F1A?style=flat-square)](./STANDARD.md)
+[![Profile](https://img.shields.io/badge/Profile-UAS_1.0-820F1A?style=flat-square)](./STANDARD.md)
 [![Status](https://img.shields.io/badge/Status-Compliance_Overlay-808080?style=flat-square)](../README.md)
 
 [Framework Home](../../README.md) | [Cross-Pillar Governance](../README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
@@ -11,7 +11,7 @@
 
 ## Position in AI SAFE² v3.1
 
-UAS is maintained as **CP.11, a cross-pillar compliance overlay**. It composes and tests controls drawn from AI SAFE², NEXUS, and the Cognitive Sovereignty Framework (CSF) against Unbiased AI procurement and due-diligence requirements.
+UAS is maintained as an explicitly identified **regulatory profile extension**. It composes and tests controls drawn from AI SAFE², NEXUS, and the Cognitive Sovereignty Framework (CSF) against Unbiased AI procurement and due-diligence requirements.
 
 It is **not** counted as 27 new independent controls added to the 161-control AI SAFE² core taxonomy. The module's 27 requirements are an overlay/control-composition surface.
 
@@ -20,7 +20,10 @@ This distinction keeps the framework count coherent:
 - AI SAFE² v3.1 core framework: **161 controls**;
 - core Cross-Pillar Governance: **CP.1 through CP.10**;
 - CP.5.MCP profile: **MCP-1 through MCP-19**;
-- CP.11 UAS: **27 overlay requirements composed from mapped controls**.
+- UAS regulatory profile: **27 profile requirements composed from mapped controls**.
+
+AI SAFE² remains 161 controls and CP.1 through CP.10. UAS does not create a
+new core control or extend the Cross-Pillar control range.
 
 ---
 
@@ -170,4 +173,4 @@ AI SAFE² governs the system and its authority. CSF addresses the human operator
 
 ---
 
-*AI SAFE² v3.1 · CP.11 UAS compliance overlay · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.1 · UAS 1.0 regulatory profile extension · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

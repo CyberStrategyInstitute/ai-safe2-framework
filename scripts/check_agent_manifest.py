@@ -1,4 +1,5 @@
 """Validate AI SAFE2 v3.1 machine-discovery metadata and invariants."""
+
 from __future__ import annotations
 
 import json
@@ -26,6 +27,7 @@ def main() -> int:
     framework = manifest.get("framework", {})
     machine = manifest.get("machine_readable", {})
     profile = manifest.get("profiles", {}).get("cp5_mcp", {})
+    uas_profile = manifest.get("profiles", {}).get("uas_regulatory", {})
     persistence = manifest.get("persistence", {})
     implementations = manifest.get("implementations", {})
 
@@ -35,6 +37,15 @@ def main() -> int:
         "cp5_mcp.control_count": (profile.get("control_count"), 19),
         "cp5_mcp.specification": (profile.get("specification"), "MCP 2026-07-28"),
         "cp5_mcp.server_discover_required": (profile.get("server_discover_required"), False),
+        "uas_regulatory.requirement_count": (uas_profile.get("requirement_count"), 27),
+        "uas_regulatory.adds_to_core_control_count": (
+            uas_profile.get("adds_to_core_control_count"),
+            False,
+        ),
+        "uas_regulatory.adds_cross_pillar_control": (
+            uas_profile.get("adds_cross_pillar_control"),
+            False,
+        ),
         "nexus.version": (implementations.get("nexus", {}).get("version"), "0.3"),
         "gateway.version": (implementations.get("gateway", {}).get("version"), "3.0"),
         "scanner.rule_count": (implementations.get("scanner", {}).get("rule_count"), 64),
@@ -53,8 +64,13 @@ def main() -> int:
         machine.get("core_controls"),
         machine.get("mcp_profile"),
         machine.get("dashboard_mcp_profile_mirror"),
+        machine.get("aism_model"),
+        machine.get("aism_assessment_schema"),
+        machine.get("uas_regulatory_profile"),
         profile.get("normative_document"),
         profile.get("machine_readable_data"),
+        uas_profile.get("normative_document"),
+        uas_profile.get("machine_readable_data"),
         implementations.get("nexus", {}).get("entrypoint"),
         implementations.get("nexus", {}).get("mcp_adapter"),
         implementations.get("gateway", {}).get("entrypoint"),
@@ -70,6 +86,7 @@ def main() -> int:
     core = load_json(core_path)
     mcp = load_json(profile_path)
     dashboard = load_json(dashboard_path)
+    uas = load_json(ROOT / uas_profile["machine_readable_data"])
 
     if core.get("metadata", {}).get("total_controls") != 161:
         errors.append("core dataset metadata must declare exactly 161 controls")
@@ -87,6 +104,24 @@ def main() -> int:
         errors.append("MCP profile IDs must be MCP-1 through MCP-19")
     if mcp != dashboard:
         errors.append("dashboard MCP profile mirror must exactly match canonical profile data")
+    uas_requirements = [
+        requirement
+        for layer in uas.get("layers", [])
+        for requirement in layer.get("requirements", [])
+    ]
+    if len(uas_requirements) != 27 or len(set(uas_requirements)) != 27:
+        errors.append("UAS regulatory profile must contain 27 unique profile requirements")
+    catalog = uas.get("requirement_catalog", [])
+    catalog_ids = [item.get("id") for item in catalog]
+    if len(catalog) != 27 or set(catalog_ids) != set(uas_requirements):
+        errors.append("UAS requirement catalog must describe the same 27 profile requirements")
+    for item in catalog:
+        if not all(item.get(field) for field in ("requirement", "control_refs", "evidence_criteria")):
+            errors.append(f"UAS catalog entry is incomplete: {item.get('id')!r}")
+    if uas.get("profile", {}).get("core_control_count_remains") != 161:
+        errors.append("UAS regulatory profile must preserve the 161-control core")
+    if uas.get("profile", {}).get("cross_pillar_range_remains") != "CP.1-CP.10":
+        errors.append("UAS regulatory profile must preserve CP.1 through CP.10")
 
     wanted_scopes = ["request", "handle_scoped", "durable", "swarm_shared"]
     if persistence.get("canonical_scopes") != wanted_scopes:
@@ -106,6 +141,7 @@ def main() -> int:
         "handle_scoped",
         "server/discover",
         "not production-ready",
+        "UAS regulatory profile extension",
     ):
         if token not in agent_text:
             errors.append(f"AGENTS.md missing required machine-consumption guidance: {token}")

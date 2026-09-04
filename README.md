@@ -133,6 +133,7 @@ See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_server_secu
 | [Pillar 5: Evolve & Educate](05-evolve-educate/) | Adversarial evaluation and red-team artifacts |
 | [Cross-Pillar Governance](00-cross-pillar/) | CP.1 through CP.10, ACT tiers, HEAR doctrine, replication governance, CP.5 profiles |
 | [AISM](AISM/) | AI Sovereignty Maturity Model and control mapping |
+| [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
 | [NEXUS](NEXUS/) | CSI reference implementation for governed agent-to-agent and agent-to-tool interactions |
 | [Research](research/) | Threat research and deep-dive control evidence |
 | [Challenge Lab](challenges/) | Open falsification and replication experiments |
@@ -161,10 +162,12 @@ The profile covers:
 
 ### MCP Security Toolkit
 
-The repository includes three open-source MCP security tools:
+The repository includes an agent-facing `safe2` governance CLI and retains the
+three legacy MCP entry points during migration:
 
 ```bash
-pip install aisafe2-mcp-tools
+pip install -e ".[all]"
+safe2 --help
 ```
 
 | Tool | What it does |
@@ -174,6 +177,30 @@ pip install aisafe2-mcp-tools
 | **`mcp-safe-wrap`** | Consumer-side inspection, policy, and audit proxy |
 
 See [examples/mcp-security-toolkit/](examples/mcp-security-toolkit/).
+
+### Agent-facing governance and AISM decisions
+
+The unified CLI makes repository evidence directly callable by agents while
+preserving human decision authority:
+
+```bash
+safe2 scan project .
+safe2 gate skill ./candidate-skill --strict
+safe2 evidence nexus ./NEXUS --output nexus-evidence.json
+safe2 evidence skillspector ./candidate-skill --output skillspector-evidence.json
+safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "NEXUS Local" --output assessment.json
+safe2 aism score assessment.json --format markdown --output decision-card.md
+```
+
+The AISM Decision Card separates facts, assumptions, conflicts, unknowns,
+alternatives, history, and recommendations. Machine-readable JSON remains the
+canonical exchange format. An automated pass is not a claim of full framework
+conformance or organizational maturity.
+
+See the executable [AISM Decision Card example](examples/aism-decision-card/).
+Evidence ingestion is conservative: collectors suggest candidate AISM cells but never invent maturity ratings. Evidence without verification provenance is labeled and capped until a human confirms the mapping.
+
+See the complete [AI SAFE² CLI command and architecture guide](safe2/README.md).
 
 ### MCP-19 and legacy bearer tokens
 
@@ -361,7 +388,8 @@ See [EVOLUTION.md](EVOLUTION.md) for the full history.
 ├── 03-fail-safe-recovery/     # Pillar 3
 ├── 04-engage-monitor/         # Pillar 4
 ├── 05-evolve-educate/         # Pillar 5
-├── AISM/                      # AI Sovereignty Maturity Model
+├── AISM/                      # Normative AI Sovereignty Maturity Model
+├── safe2/                     # Unified agent-facing Python CLI and AISM runtime
 ├── NEXUS/                     # CSI reference implementation
 ├── challenges/                # Falsification and replication experiments
 ├── examples/                  # Governed runtime and integration examples

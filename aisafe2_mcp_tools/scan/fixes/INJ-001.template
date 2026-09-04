@@ -1,0 +1,19 @@
+# Fix Template: INJ-001 — Missing Output Sanitization
+# AI SAFE2 v3.0 CP.5.MCP-2
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+@mcp.tool(description="Search controls")
+def search_controls(query: str) -> dict:
+    result = db.search(query)
+    return result  # Raw data — no injection scanning
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+from aisafe2_mcp_tools.shared.patterns import sanitize_value
+
+@mcp.tool(description="Search controls")
+def search_controls(query: str) -> dict:
+    result = db.search(query)
+    sanitized, findings = sanitize_value(result, "search_controls")
+    if findings:
+        log.warning("tool.injection_detected", count=len(findings), tool="search_controls")
+    return sanitized

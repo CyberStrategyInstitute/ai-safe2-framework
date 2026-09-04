@@ -1,0 +1,30 @@
+# Fix Template: RCE-003 — eval() / exec()
+# AI SAFE2 v3.0 CP.5.MCP-1
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+def process(user_input):
+    return eval(user_input)        # arbitrary code execution
+
+def run_code(code_str):
+    exec(code_str)                 # arbitrary code execution
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+# Replace with safe alternatives specific to your use case:
+
+# For JSON data: use json.loads
+import json
+def process_json(data: str) -> dict:
+    return json.loads(data)        # safe — parses JSON only
+
+# For math expressions: use ast.literal_eval for constants only
+import ast
+def process_constant(expr: str):
+    return ast.literal_eval(expr)  # safe — literals only, no code
+
+# For dispatch: use explicit lookup table
+HANDLERS = {"action1": handler1, "action2": handler2}
+def dispatch(action: str):
+    handler = HANDLERS.get(action)
+    if handler is None:
+        raise ValueError(f"Unknown action: {action}")
+    return handler()

@@ -1,0 +1,22 @@
+# Fix Template: RCE-005 — Path Traversal
+# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2025-68143
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+path = os.path.join(base_dir, user_filename)
+with open(path) as f:
+    return f.read()
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+import os
+
+def safe_open(base_dir: str, user_filename: str) -> str:
+    """Open a file within base_dir, preventing path traversal."""
+    base = os.path.realpath(base_dir)
+    full_path = os.path.realpath(os.path.join(base, user_filename))
+    if not full_path.startswith(base + os.sep) and full_path != base:
+        raise PermissionError(
+            f"Path traversal attempt blocked: '{user_filename}' "
+            f"resolves outside '{base_dir}'"
+        )
+    with open(full_path) as f:
+        return f.read()

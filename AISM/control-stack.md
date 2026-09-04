@@ -5,7 +5,7 @@
 
 # AISM Control Stack
 
-**Framework:** AI SAFE2 v3.0
+**Framework:** AI SAFE2 v3.1
 **Organization:** Cyber Strategy Institute
 **Version:** March 2026
 

@@ -11,33 +11,33 @@ Upgraded from v2.1 (7 patterns, 4 controls) to v3.0:
   - v3.0 Combined Risk Score formula (CVSS + Pillar + AAF estimate)
   - 32-framework compliance mapping via ai-safe2-controls-v3.0.json
 """
+
 from __future__ import annotations
 
 import ast
 import json
+import logging
 import math
 import os
 import re
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+logger = logging.getLogger(__name__)
 
 # Try to load rules; fall back to empty if import fails
-try:
-    from .rules import ALL_RULES
-    from .rules.cross_pillar import ACTEstimate, estimate_act_tier, CP_RULES
-    from .rules.base import Finding, Rule, is_comment_line, is_test_file
-except ImportError:
-    from rules import ALL_RULES
-    from rules.cross_pillar import ACTEstimate, estimate_act_tier, CP_RULES
-    from rules.base import Finding, Rule, is_comment_line, is_test_file
-
+from .rules import ALL_RULES
+from .rules.base import Finding, Rule, is_comment_line, is_test_file
+from .rules.cross_pillar import ACTEstimate, estimate_act_tier
 
 # ── Pydantic models (kept for backward compatibility with v2.1 report.py) ──────
 
+
 class Violation(BaseModel):
     """v2.1 compatible model — wraps Finding."""
+
     control_id: str
     severity: str
     file_path: str
@@ -47,7 +47,7 @@ class Violation(BaseModel):
     # v3.0 extensions
     control_name: str = ""
     pillar: str = ""
-    compliance_frameworks: list = []
+    compliance_frameworks: list[str] = Field(default_factory=list)
     description: str = ""
 
 
@@ -58,12 +58,13 @@ class ScanResult(BaseModel):
     controls_failed: list[str]
     meta: dict[str, Any]
     # v3.0 extensions
-    act_estimate: dict = {}
-    risk_formula_components: dict = {}
-    governance_gaps: list[str] = []
+    act_estimate: dict[str, Any] = Field(default_factory=dict)
+    risk_formula_components: dict[str, Any] = Field(default_factory=dict)
+    governance_gaps: list[str] = Field(default_factory=list)
 
 
 # ── Controls DB (lightweight, standalone) ─────────────────────────────────────
+
 
 class ControlsLoader:
     """
@@ -72,15 +73,23 @@ class ControlsLoader:
     """
 
     def __init__(self, json_path: Path | None = None):
-        self._index: dict[str, dict] = {}
-        self._risk_formula: dict = {}
+        self._index: dict[str, dict[str, Any]] = {}
+        self._risk_formula: dict[str, Any] = {}
         self._loaded = False
 
         if json_path is None:
             # Try common paths relative to this file
             candidates = [
-                Path(__file__).parent.parent / "skills" / "mcp" / "data" / "ai-safe2-controls-v3.0.json",
-                Path(__file__).parent.parent / "skills_output" / "mcp" / "data" / "ai-safe2-controls-v3.0.json",
+                Path(__file__).parent.parent
+                / "skills"
+                / "mcp"
+                / "data"
+                / "ai-safe2-controls-v3.0.json",
+                Path(__file__).parent.parent
+                / "skills_output"
+                / "mcp"
+                / "data"
+                / "ai-safe2-controls-v3.0.json",
                 Path(__file__).parent / "ai-safe2-controls-v3.0.json",
                 Path.cwd() / "ai-safe2-controls-v3.0.json",
             ]
@@ -99,10 +108,10 @@ class ControlsLoader:
                     self._index[ctrl["id"]] = ctrl
                 self._risk_formula = data.get("risk_formula", {})
                 self._loaded = True
-            except Exception:
-                pass  # Degrade gracefully
+            except (OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
+                logger.warning("Unable to load control metadata from %s: %s", json_path, exc)
 
-    def get(self, control_id: str) -> dict:
+    def get(self, control_id: str) -> dict[str, Any]:
         return self._index.get(control_id, {})
 
     def enrich_finding(self, finding: Finding) -> Finding:
@@ -121,6 +130,7 @@ class ControlsLoader:
 
 
 # ── Entropy Detection ─────────────────────────────────────────────────────────
+
 
 def _shannon_entropy(text: str) -> float:
     if not text:
@@ -149,16 +159,22 @@ def _check_entropy(word: str, line: str) -> bool:
         return False
     if "/" in word or "." in word or "\\" in word:
         return False
+    if not re.fullmatch(r"[A-Za-z0-9_+=-]+", word):
+        return False
     # Skip pure hex strings (hashes are not secrets)
     if re.fullmatch(r"[a-fA-F0-9]+", word):
         return False
     # Skip common programming tokens
-    if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{19,}", word):
-        return len(set(word)) > 10  # require character diversity
+    classes = sum(
+        bool(re.search(pattern, word)) for pattern in (r"[a-z]", r"[A-Z]", r"[0-9]", r"[_+=-]")
+    )
+    if classes < 3:
+        return False
     return _shannon_entropy(word) > 4.5
 
 
 # ── AST Structural Analysis ───────────────────────────────────────────────────
+
 
 class AgentStructureVisitor(ast.NodeVisitor):
     """
@@ -166,7 +182,7 @@ class AgentStructureVisitor(ast.NodeVisitor):
     Used for ACT tier estimation enrichment and structural findings.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.tool_definitions: list[str] = []
         self.spawn_calls: list[tuple[int, str]] = []
         self.llm_calls: list[tuple[int, str]] = []
@@ -174,28 +190,43 @@ class AgentStructureVisitor(ast.NodeVisitor):
         self.has_rate_limit: bool = False
         self.has_error_handling: bool = False
 
-    def visit_FunctionDef(self, node: ast.FunctionDef):
+    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
         # Detect tool definitions via decorators
         for decorator in node.decorator_list:
-            if isinstance(decorator, ast.Name) and decorator.id == "tool":
-                self.tool_definitions.append(node.name)
-            elif isinstance(decorator, ast.Attribute) and decorator.attr == "tool":
+            if (
+                isinstance(decorator, ast.Name)
+                and decorator.id == "tool"
+                or isinstance(decorator, ast.Attribute)
+                and decorator.attr == "tool"
+            ):
                 self.tool_definitions.append(node.name)
         self.generic_visit(node)
 
-    def visit_Call(self, node: ast.Call):
+    def visit_Call(self, node: ast.Call) -> None:
         call_str = ast.unparse(node) if hasattr(ast, "unparse") else ""
         lineno = node.lineno
 
         # Spawning signals
-        spawn_patterns = ("spawn_agent", "create_agent", "invoke_agent",
-                          "Process(", "Thread(", "create_task")
+        spawn_patterns = (
+            "spawn_agent",
+            "create_agent",
+            "invoke_agent",
+            "Process(",
+            "Thread(",
+            "create_task",
+        )
         if any(p in call_str for p in spawn_patterns):
             self.spawn_calls.append((lineno, call_str[:60]))
 
         # LLM calls
-        llm_patterns = ("completions.create", "messages.create", "llm.invoke",
-                        "agent.run", "chain.invoke", "generate(")
+        llm_patterns = (
+            "completions.create",
+            "messages.create",
+            "llm.invoke",
+            "agent.run",
+            "chain.invoke",
+            "generate(",
+        )
         if any(p in call_str for p in llm_patterns):
             self.llm_calls.append((lineno, call_str[:60]))
 
@@ -211,14 +242,14 @@ class AgentStructureVisitor(ast.NodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_ExceptHandler(self, node: ast.ExceptHandler):
+    def visit_ExceptHandler(self, node: ast.ExceptHandler) -> None:
         self.has_error_handling = True
         self.generic_visit(node)
 
 
 def _run_ast_analysis(content: str, filepath: str) -> list[Finding]:
     """Run AST structural analysis on Python files."""
-    findings = []
+    findings: list[Finding] = []
     if not filepath.endswith(".py"):
         return []
 
@@ -235,44 +266,50 @@ def _run_ast_analysis(content: str, filepath: str) -> list[Finding]:
         lineage_words = {"lineage", "parent_did", "delegation_depth", "cp9", "chain_id"}
         if not any(w in content.lower() for w in lineage_words):
             for lineno, call in visitor.spawn_calls[:3]:  # max 3 per file
-                findings.append(Finding(
-                    control_id="CP.9",
-                    severity="CRITICAL",
-                    file_path=filepath,
-                    line_number=lineno,
-                    evidence=call,
-                    description="Agent spawning without CP.9 lineage governance (AST detected).",
-                    remediation="Add lineage_token with parent_did, chain_id, delegation_depth, TTL. "
-                                "Enforce max delegation hops at gateway layer.",
-                ))
+                findings.append(
+                    Finding(
+                        control_id="CP.9",
+                        severity="CRITICAL",
+                        file_path=filepath,
+                        line_number=lineno,
+                        evidence=call,
+                        description="Agent spawning without CP.9 lineage governance (AST detected).",
+                        remediation="Add lineage_token with parent_did, chain_id, delegation_depth, TTL. "
+                        "Enforce max delegation hops at gateway layer.",
+                    )
+                )
 
     # Flag LLM calls without error handling
     if visitor.llm_calls and not visitor.has_error_handling:
         lineno, call = visitor.llm_calls[0]
-        findings.append(Finding(
-            control_id="P3.T5.4",
-            severity="HIGH",
-            file_path=filepath,
-            line_number=lineno,
-            evidence=call,
-            description="LLM API calls found with no exception handling in this file (AST detected).",
-            remediation="Wrap LLM API calls in try/except. Define fallback behavior and timeout.",
-        ))
+        findings.append(
+            Finding(
+                control_id="P3.T5.4",
+                severity="HIGH",
+                file_path=filepath,
+                line_number=lineno,
+                evidence=call,
+                description="LLM API calls found with no exception handling in this file (AST detected).",
+                remediation="Wrap LLM API calls in try/except. Define fallback behavior and timeout.",
+            )
+        )
 
     # Flag tool definitions without monitoring
     if visitor.tool_definitions:
         monitoring_words = {"monitor", "baseline", "track", "audit", "m4_5"}
         if not any(w in content.lower() for w in monitoring_words):
-            findings.append(Finding(
-                control_id="M4.5",
-                severity="HIGH",
-                file_path=filepath,
-                line_number=1,
-                evidence=f"Tools: {', '.join(visitor.tool_definitions[:5])}",
-                description=f"{len(visitor.tool_definitions)} tool definition(s) without invocation monitoring (AST detected).",
-                remediation="Establish tool invocation baselines. Monitor for unexpected tools, "
-                            "anomalous parameters, and frequency spikes.",
-            ))
+            findings.append(
+                Finding(
+                    control_id="M4.5",
+                    severity="HIGH",
+                    file_path=filepath,
+                    line_number=1,
+                    evidence=f"Tools: {', '.join(visitor.tool_definitions[:5])}",
+                    description=f"{len(visitor.tool_definitions)} tool definition(s) without invocation monitoring (AST detected).",
+                    remediation="Establish tool invocation baselines. Monitor for unexpected tools, "
+                    "anomalous parameters, and frequency spikes.",
+                )
+            )
 
     return findings
 
@@ -281,47 +318,100 @@ def _run_ast_analysis(content: str, filepath: str) -> list[Finding]:
 
 # File extensions the scanner processes
 SUPPORTED_EXTENSIONS = (
-    ".py", ".js", ".ts", ".env", ".json", ".yaml", ".yml", ".toml",
-    ".md", "requirements.txt", "requirements-dev.txt", "pyproject.toml",
-    "package.json", "setup.cfg",
+    ".py",
+    ".js",
+    ".ts",
+    ".env",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".toml",
+    "requirements.txt",
+    "requirements-dev.txt",
+    "pyproject.toml",
+    "package.json",
+    "setup.cfg",
 )
 
 # Directories to always skip
-SKIP_DIRS = {"node_modules", ".git", "venv", ".venv", "__pycache__",
-             ".pytest_cache", "dist", "build", ".tox", ".eggs"}
+SKIP_DIRS = {
+    "node_modules",
+    ".git",
+    "venv",
+    ".venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".uv-cache",
+    ".uv-tools",
+    ".review-venv",
+    "site-packages",
+    "dist",
+    "build",
+    ".tox",
+    ".eggs",
+    "tests",
+    "test",
+}
 
 
 class StaticScanner:
-
-    def __init__(self, config_path: str | None = None, controls_json: str | None = None):
+    def __init__(
+        self,
+        config_path: str | None = None,
+        controls_json: str | None = None,
+        max_files: int = 10_000,
+    ) -> None:
+        if max_files < 1:
+            raise ValueError("max_files must be at least 1")
         self.config_path = config_path
         self.controls = ControlsLoader(Path(controls_json) if controls_json else None)
         self.rules: list[Rule] = ALL_RULES
+        self.max_files = max_files
 
     def scan_project(self, root_path: str) -> ScanResult:
         findings: list[Finding] = []
         act_estimates: list[tuple[str, ACTEstimate]] = []  # (filepath, estimate)
+        scanned_files = 0
+        scan_truncated = False
 
         for root, dirs, files in os.walk(root_path):
             # Prune skip dirs in-place so os.walk doesn't descend
             dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
 
             for filename in files:
+                if scanned_files >= self.max_files:
+                    scan_truncated = True
+                    break
                 full_path = Path(root) / filename
                 filepath_str = str(full_path)
+                normalized_path = filepath_str.replace("\\", "/").lower()
+                if normalized_path.endswith(
+                    ("scanner/rules/mcp_profile.py", "aisafe2_mcp_tools/scan/pattern_scanner.py")
+                ):
+                    continue
+                if filename.endswith(".schema.json") or filename in {
+                    "ai-safe2-controls-v3.0.json",
+                    "mcp-profile-v3.1.json",
+                    "uas-profile-v1.json",
+                }:
+                    continue
 
                 # Check if extension is supported
                 if not any(
-                    filepath_str.endswith(ext) or filename == ext
-                    for ext in SUPPORTED_EXTENSIONS
+                    filepath_str.endswith(ext) or filename == ext for ext in SUPPORTED_EXTENSIONS
                 ):
                     continue
 
                 try:
                     content = full_path.read_text(encoding="utf-8", errors="ignore")
                     lines = content.split("\n")
-                except Exception:
+                except OSError as exc:
+                    logger.warning("Skipping unreadable source file %s: %s", full_path, exc)
                     continue
+
+                scanned_files += 1
 
                 is_test = is_test_file(filepath_str)
 
@@ -335,40 +425,51 @@ class StaticScanner:
                     if not is_test:
                         for word in line.split():
                             if _check_entropy(word, line):
-                                findings.append(Finding(
-                                    control_id="P1.T1.4_ADV",
-                                    severity="HIGH",
-                                    file_path=filepath_str,
-                                    line_number=i + 1,
-                                    evidence=f"High-entropy token: {word[:12]}... (entropy > 4.5)",
-                                    description="High-entropy string detected — may be an embedded secret or token.",
-                                    remediation="Verify this is not a credential. Move secrets to "
-                                                "environment variables or a secrets manager.",
-                                ))
+                                findings.append(
+                                    Finding(
+                                        control_id="P1.T1.4_ADV",
+                                        severity="HIGH",
+                                        file_path=filepath_str,
+                                        line_number=i + 1,
+                                        evidence=f"High-entropy token: {word[:12]}... (entropy > 4.5)",
+                                        description="High-entropy string detected — may be an embedded secret or token.",
+                                        remediation="Verify this is not a credential. Move secrets to "
+                                        "environment variables or a secrets manager.",
+                                    )
+                                )
 
                     # Regex rule scan
                     for rule in self.rules:
                         if rule.pattern is None:
                             continue  # structural rules handled below
-                        if rule.file_exts and not any(filepath_str.endswith(e) for e in rule.file_exts):
+                        if rule.file_exts and not any(
+                            filepath_str.endswith(e) for e in rule.file_exts
+                        ):
                             continue
                         if rule.skip_comments and is_comment_line(line, filepath_str):
                             continue
                         if len(line.strip()) < rule.min_length:
                             continue
+                        # A function declaration names behavior but does not execute it.
+                        # Treating e.g. ``def load_model()`` as a model-load event
+                        # produced a high-confidence false positive in agent UAT.
+                        if re.match(r"\s*(?:async\s+)?def\s+\w+\s*\(", line):
+                            continue
                         if re.search(rule.pattern, line, re.IGNORECASE):
                             # Reduce noise from test files for non-critical findings
                             if is_test and rule.severity not in ("CRITICAL",):
                                 continue
-                            findings.append(Finding(
-                                control_id=rule.control_id,
-                                severity=rule.severity,
-                                file_path=filepath_str,
-                                line_number=i + 1,
-                                evidence=line.strip()[:80],
-                                description=rule.description,
-                                remediation=rule.remediation,
-                            ))
+                            findings.append(
+                                Finding(
+                                    control_id=rule.control_id,
+                                    severity=rule.severity,
+                                    file_path=filepath_str,
+                                    line_number=i + 1,
+                                    evidence=line.strip()[:80],
+                                    description=rule.description,
+                                    remediation=rule.remediation,
+                                )
+                            )
 
                 # ── Structural / check_fn scan ─────────────────────────────
                 for rule in self.rules:
@@ -381,37 +482,56 @@ class StaticScanner:
                         for line_number, evidence in hits:
                             if is_test and rule.severity not in ("CRITICAL",):
                                 continue
-                            findings.append(Finding(
-                                control_id=rule.control_id,
-                                severity=rule.severity,
-                                file_path=filepath_str,
-                                line_number=line_number,
-                                evidence=evidence[:80],
-                                description=rule.description,
-                                remediation=rule.remediation,
-                            ))
-                    except Exception:
-                        pass  # Never let a rule failure abort the scan
+                            findings.append(
+                                Finding(
+                                    control_id=rule.control_id,
+                                    severity=rule.severity,
+                                    file_path=filepath_str,
+                                    line_number=line_number,
+                                    evidence=evidence[:80],
+                                    description=rule.description,
+                                    remediation=rule.remediation,
+                                )
+                            )
+                    except (ValueError, TypeError, re.error) as exc:
+                        # A defective rule must not abort the scan, but maintainers
+                        # and operators still need an actionable diagnostic.
+                        logger.warning(
+                            "Rule %s failed while scanning %s: %s",
+                            rule.control_id,
+                            full_path,
+                            exc,
+                        )
 
-                # ── AST structural analysis (Python only) ─────────────────
+                # AST structural analysis and ACT estimation run once per Python file.
                 if filepath_str.endswith(".py"):
-                    ast_findings = _run_ast_analysis(content, filepath_str)
-                    findings.extend(ast_findings)
-
-                    # ACT tier estimation for agent files
-                    if any(re.search(p, content, re.IGNORECASE) for p in [
-                        r"openai\.", r"anthropic\.", r"\.invoke\(", r"agent\.run", r"llm\.predict"
-                    ]):
+                    findings.extend(_run_ast_analysis(content, filepath_str))
+                    if any(
+                        re.search(pattern, content, re.IGNORECASE)
+                        for pattern in (
+                            r"openai\.",
+                            r"anthropic\.",
+                            r"\.invoke\(",
+                            r"agent\.run",
+                            r"llm\.predict",
+                        )
+                    ):
                         estimate = estimate_act_tier(content)
                         if estimate.tier != "N/A":
                             act_estimates.append((filepath_str, estimate))
+
+            if scan_truncated:
+                logger.warning(
+                    "Scan stopped after the configured maximum of %d files", self.max_files
+                )
+                break
 
         # ── Enrich findings with controls JSON metadata ────────────────────
         for f in findings:
             self.controls.enrich_finding(f)
 
         # ── Deduplicate findings ───────────────────────────────────────────
-        seen: set[tuple] = set()
+        seen: set[tuple[str, str, int]] = set()
         unique_findings: list[Finding] = []
         for f in findings:
             key = (f.control_id, f.file_path, f.line_number)
@@ -421,10 +541,16 @@ class StaticScanner:
         findings = unique_findings
 
         # ── Score calculation ──────────────────────────────────────────────
-        penalty = sum(
-            {"CRITICAL": 10, "HIGH": 5, "MEDIUM": 2, "LOW": 1, "INFO": 0}.get(f.severity, 0)
-            for f in findings
-        )
+        severity_penalty = {"CRITICAL": 10, "HIGH": 5, "MEDIUM": 2, "LOW": 1, "INFO": 0}
+        # Repeated instances are evidence for one failed control, not independent controls.
+        # Penalizing every line drove large projects to zero regardless of coverage.
+        penalty_by_control: dict[str, int] = {}
+        for finding in findings:
+            penalty_by_control[finding.control_id] = max(
+                penalty_by_control.get(finding.control_id, 0),
+                severity_penalty.get(finding.severity, 0),
+            )
+        penalty = sum(penalty_by_control.values())
         raw_score = max(0.0, 100.0 - penalty)
 
         # Pillar sub-scores
@@ -451,7 +577,9 @@ class StaticScanner:
             tier_order = {"ACT-4": 4, "ACT-3": 3, "ACT-2": 2, "ACT-1": 1, "N/A": 0}
             top = max(act_estimates, key=lambda x: tier_order.get(x[1].tier, 0))
             _, est = top
-            aaf_signals["autonomy_level"] = {"ACT-4": 10, "ACT-3": 8, "ACT-2": 5, "ACT-1": 2}.get(est.tier, 0)
+            aaf_signals["autonomy_level"] = {"ACT-4": 10, "ACT-3": 8, "ACT-2": 5, "ACT-1": 2}.get(
+                est.tier, 0
+            )
             if est.cp9_required:
                 aaf_signals["multi_agent_interactions"] = 9.0
             if est.hear_required:
@@ -511,7 +639,7 @@ class StaticScanner:
             for f in findings
         ]
 
-        controls_failed = sorted(set(f.control_id for f in findings))
+        controls_failed = sorted({f.control_id for f in findings})
 
         # Best ACT estimate summary for meta
         act_summary = {}
@@ -535,6 +663,9 @@ class StaticScanner:
             controls_failed=controls_failed,
             meta={
                 "scanned_path": root_path,
+                "scanned_files": scanned_files,
+                "scan_truncated": scan_truncated,
+                "max_files": self.max_files,
                 "framework": "v3.0",
                 "framework_url": "https://github.com/CyberStrategyInstitute/ai-safe2-framework",
                 "total_files_scanned": len(seen),
@@ -549,7 +680,7 @@ class StaticScanner:
                 "aaf_partial_estimate": round(aaf_partial, 1),
                 "combined_risk_score": combined_risk,
                 "note": "CVSS and AAF are static-analysis estimates. "
-                        "Use the AI SAFE2 MCP risk_score tool for precise calculation.",
+                "Use the AI SAFE2 MCP risk_score tool for precise calculation.",
             },
             governance_gaps=unique_gaps,
         )

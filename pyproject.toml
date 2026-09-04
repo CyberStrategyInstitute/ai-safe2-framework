@@ -3,17 +3,107 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ai-safe2-gateway"
-version = "2.1.0"
-dependencies = [
-  "fastapi",
-  "uvicorn",
-  "redis",
-  "prometheus-client",
-  "pyyaml",
-  "pydantic",
-  "httpx"
+name = "ai-safe2"
+version = "0.1.0"
+description = "Agent-facing governance, evidence, and assessment CLI for AI SAFE2 v3.1"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+    { name = "Cyber Strategy Institute", email = "info@cyberstrategyinstitute.com" }
+]
+keywords = ["ai-safety", "mcp", "governance", "agentic-ai", "grc", "iso42001", "agent-skills"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Security",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 
+# Union of scanner/requirements.txt, skills/mcp/pyproject.toml, and
+# examples/mcp-security-toolkit/pyproject.toml's core deps. gateway/'s deps
+# moved to the optional "gateway" extra below — `safe2 serve` degrades to a
+# clear install hint instead of hard-requiring fastapi/redis/prometheus for
+# everyone who only wants scan/gate/score/report/mcp.
+dependencies = [
+  "click>=8.1.0",
+  "pydantic>=2.7.0",
+  "httpx>=0.27.0",
+  "jsonschema>=4.23.0",
+  "structlog>=24.0.0",
+  "rich>=13.7.0",
+  "anyio>=4.3.0",
+]
+
+[project.optional-dependencies]
+scan = ["ast-grep-py>=0.12.0", "packaging>=24.0"]
+proxy = ["starlette>=0.40.0", "uvicorn>=0.29.0"]
+gateway = ["fastapi", "uvicorn", "redis", "prometheus-client", "pyyaml"]
+all = [
+    "ast-grep-py>=0.12.0",
+    "packaging>=24.0",
+    "starlette>=0.40.0",
+    "fastapi",
+    "uvicorn>=0.29.0",
+    "redis",
+    "prometheus-client",
+    "pyyaml",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-httpx>=0.30.0",
+    "respx>=0.21.0",
+    "ruff>=0.5.0",
+    "mypy>=1.10.0",
+]
+
+[project.scripts]
+safe2 = "safe2.cli:main"
+# Backward-compat aliases: anyone who followed the old README's
+# `pip install aisafe2-mcp-tools` instructions keeps working after this
+# consolidation. New usage should be `safe2 scan mcp` / `safe2 score mcp` /
+# `safe2 mcp wrap-*`; these three are kept but considered deprecated.
+mcp-score = "aisafe2_mcp_tools.score.__main__:cli"
+mcp-scan = "aisafe2_mcp_tools.scan.__main__:cli"
+mcp-safe-wrap = "aisafe2_mcp_tools.wrap.__main__:cli"
+
+[project.urls]
+Homepage = "https://cyberstrategyinstitute.com/ai-safe2/"
+Repository = "https://github.com/CyberStrategyInstitute/ai-safe2-framework"
+
 [tool.hatch.build.targets.wheel]
-packages = ["gateway"]
+packages = ["safe2", "scanner", "aisafe2_mcp_tools", "gateway"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"examples/aism-decision-card" = "safe2/examples/aism-decision-card"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/safe2",
+    "/scanner",
+    "/aisafe2_mcp_tools",
+    "/gateway",
+    "/examples/aism-decision-card",
+    "/LICENSE",
+    "/MIGRATION.md",
+    "/README.md",
+    "/pyproject.toml",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint.per-file-ignores]
+# These files are declarative report/pattern catalogs. Parenthesizing every
+# adjacent literal adds noise without changing scanner behavior or safety.
+"aisafe2_mcp_tools/scan/pattern_scanner.py" = ["ISC004"]
+"aisafe2_mcp_tools/scan/reporter.py" = ["ISC004"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

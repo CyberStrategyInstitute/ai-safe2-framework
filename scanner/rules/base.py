@@ -2,11 +2,15 @@
 AI SAFE2 v3.1 Scanner rule base types.
 Shared dataclasses and utilities used by all rule modules.
 """
+
 from __future__ import annotations
 
 import re
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import Callable, Optional
+from typing import Any
+
+RuleCheck = Callable[[str, list[str], str], list[tuple[int, str]]]
 
 
 @dataclass(frozen=True)
@@ -29,13 +33,13 @@ class Rule:
     severity: str
     description: str
     remediation: str
-    pattern: Optional[str] = None
-    check_fn: Optional[Callable] = None
-    file_exts: Optional[tuple] = None
+    pattern: str | None = None
+    check_fn: RuleCheck | None = None
+    file_exts: tuple[str, ...] | None = None
     skip_comments: bool = True
     min_length: int = 0
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.pattern is None and self.check_fn is None:
             raise ValueError(f"Rule {self.control_id}: must have either pattern or check_fn")
         if self.severity not in ("CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"):
@@ -55,11 +59,11 @@ class Finding:
     remediation: str
     control_name: str = ""
     pillar: str = ""
-    compliance_frameworks: list = field(default_factory=list)
-    act_minimum: list = field(default_factory=list)
+    compliance_frameworks: list[str] = field(default_factory=list)
+    act_minimum: list[str] = field(default_factory=list)
     builder_problem: str = ""
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "control_id": self.control_id,
             "control_name": self.control_name,
@@ -84,19 +88,18 @@ def is_comment_line(line: str, filepath: str = "") -> bool:
 
     if stripped.startswith("#"):
         return True
-    if stripped.startswith("//") or stripped.startswith("/*") or stripped.startswith("*"):
+    if stripped.startswith(("//", "/*", "*")):
         return True
-    if stripped.startswith("<!--"):
-        return True
-    return False
+    return bool(stripped.startswith("<!--"))
 
 
 def is_test_file(filepath: str) -> bool:
     """Return True if the file looks like a test file."""
     lower = filepath.lower()
-    return any(part in lower for part in (
-        "/test", "/tests", "/spec", "/specs", "_test.", "_spec.", ".test.", ".spec."
-    ))
+    return any(
+        part in lower
+        for part in ("/test", "/tests", "/spec", "/specs", "_test.", "_spec.", ".test.", ".spec.")
+    )
 
 
 def extract_string_values(line: str) -> list[str]:

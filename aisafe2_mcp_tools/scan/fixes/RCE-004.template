@@ -1,0 +1,15 @@
+# Fix Template: RCE-004 — Unsafe yaml.load()
+# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2025-68145
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+import yaml
+config = yaml.load(user_data)               # executes Python constructors
+config = yaml.load(request.body)            # executes Python constructors
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+import yaml
+config = yaml.safe_load(user_data)          # parses YAML only, no constructors
+config = yaml.safe_load(request.body)
+
+# If you need full YAML features with trusted data:
+config = yaml.load(trusted_data, Loader=yaml.SafeLoader)  # explicit SafeLoader

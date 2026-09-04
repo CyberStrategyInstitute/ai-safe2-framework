@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/ai-safe2/schemas/aism-assessment-v1.schema.json",
+  "title": "AI SAFE2 AISM Assessment Input v1",
+  "type": "object",
+  "required": ["schema_version", "subject", "cells"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "subject": {
+      "type": "object",
+      "required": ["id", "name", "kind"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["implementation", "environment", "organization"]},
+        "act_tier": {"enum": ["ACT-1", "ACT-2", "ACT-3", "ACT-4"]},
+        "target_score": {"type": "number", "minimum": 1, "maximum": 5},
+        "enforcement_planes": {
+          "type": "array",
+          "items": {"enum": ["north-south", "east-west", "agent-to-tool"]},
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "cells": {
+      "type": "object",
+      "patternProperties": {
+        "^P[1-5]\\.D[1-6]$": {
+          "anyOf": [
+            {"$ref": "#/$defs/cell"},
+            {"type": "null"}
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "maxProperties": 30
+    },
+    "topics": {"type": "object"},
+    "facts": {"type": "array", "items": {"$ref": "#/$defs/statement"}},
+    "assumptions": {"type": "array", "items": {"$ref": "#/$defs/statement"}},
+    "conflicts": {"type": "array", "items": {"$ref": "#/$defs/statement"}},
+    "unknowns": {"type": "array", "items": {"$ref": "#/$defs/statement"}},
+    "impacts": {"type": "array", "items": {"type": "object"}},
+    "alternatives": {"type": "array", "items": {"$ref": "#/$defs/alternative"}},
+    "recommendation": {"type": "object"},
+    "history": {"type": "array", "items": {"type": "object"}}
+  },
+  "$defs": {
+    "rating": {"enum": ["L", "M", "H"]},
+    "evidence": {
+      "type": "object",
+      "required": ["grade", "category", "source"],
+      "properties": {
+        "grade": {"enum": ["E0", "E1", "E2", "E3", "E4", "E5"]},
+        "category": {"enum": ["documentary", "operational", "attestation"]},
+        "source": {"type": "string", "minLength": 1},
+        "artifact_id": {"type": "string", "minLength": 1},
+        "uri": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "collector": {"type": "string", "minLength": 1},
+        "verification": {
+          "enum": ["unverified", "digest_verified", "independently_verified"]
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"verification": {"const": "digest_verified"}}, "required": ["verification"]},
+          "then": {"required": ["artifact_id", "sha256", "observed_at", "collector"]}
+        },
+        {
+          "if": {"properties": {"verification": {"const": "independently_verified"}}, "required": ["verification"]},
+          "then": {"required": ["artifact_id", "observed_at", "collector"]}
+        }
+      ],
+      "additionalProperties": true
+    },
+    "cell": {
+      "type": "object",
+      "required": ["metrics", "evidence"],
+      "properties": {
+        "metrics": {
+          "type": "object",
+          "required": ["coverage", "robustness", "sovereignty_assurance"],
+          "properties": {
+            "coverage": {"$ref": "#/$defs/rating"},
+            "robustness": {"$ref": "#/$defs/rating"},
+            "sovereignty_assurance": {"$ref": "#/$defs/rating"}
+          },
+          "additionalProperties": false
+        },
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      },
+      "additionalProperties": false
+    },
+    "statement": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": {"type": "string"},
+        "statement": {"type": "string"},
+        "question": {"type": "string"},
+        "severity": {"enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]}
+      },
+      "anyOf": [
+        {"required": ["statement"]},
+        {"required": ["question"]}
+      ],
+      "additionalProperties": true
+    },
+    "alternative": {
+      "type": "object",
+      "required": ["name", "outcome_estimate"],
+      "properties": {
+        "name": {"type": "string"},
+        "effort": {"type": "string"},
+        "residual_risk": {"type": "string"},
+        "pros": {"type": "array", "items": {"type": "string"}},
+        "cons": {"type": "array", "items": {"type": "string"}},
+        "why": {"type": "string"},
+        "outcome_estimate": {
+          "type": "object",
+          "required": ["mode"],
+          "properties": {
+            "mode": {"enum": ["observed", "evidence_informed", "not_estimable"]},
+            "range": {"type": "array", "prefixItems": [{"type": "number", "minimum": 0, "maximum": 1}, {"type": "number", "minimum": 0, "maximum": 1}], "minItems": 2, "maxItems": 2},
+            "outcome": {"type": "string"},
+            "time_horizon": {"type": "string"},
+            "method": {"type": "string"},
+            "confidence": {"enum": ["low", "medium", "high"]},
+            "reason": {"type": "string"}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "id": "aism-decision-card",
+  "stack": "AISM Decision Support",
+  "status": "reference-implementation",
+  "framework_version": "3.1.0",
+  "scope": {
+    "act_tier": "ACT-3",
+    "enforcement_planes": ["north-south", "agent-to-tool"]
+  },
+  "validation": [
+    "safe2 aism score assessment.json --format json",
+    "safe2 aism score assessment.json --format markdown"
+  ],
+  "expected": {"decision": "HOLD", "completeness": 1.0},
+  "conformance_claim": false
+}

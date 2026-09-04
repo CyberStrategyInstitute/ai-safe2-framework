@@ -1,0 +1,17 @@
+# Fix Template: RCE-002 — shell=True in subprocess
+# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-30623
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+subprocess.run(f"git clone {repo_url}", shell=True)
+subprocess.Popen(cmd_string, shell=True)
+os.system(f"kubectl apply -f {manifest}")
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+# Pass arguments as a list. Never join user input into a shell string.
+subprocess.run(["git", "clone", repo_url], shell=False, check=True)
+subprocess.Popen(["your-binary", "--flag", arg], shell=False)
+subprocess.run(["kubectl", "apply", "-f", manifest], shell=False, check=True)
+#
+# If you need shell features (pipes, redirects), use them explicitly
+# and never include user-controlled data:
+subprocess.run("echo hello | tee /tmp/out", shell=True)  # OK: no user input

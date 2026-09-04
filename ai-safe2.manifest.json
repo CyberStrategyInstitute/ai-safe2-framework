@@ -14,6 +14,9 @@
     "core_controls": "skills/mcp/data/ai-safe2-controls-v3.0.json",
     "mcp_profile": "skills/mcp/data/mcp-profile-v3.1.json",
     "dashboard_mcp_profile_mirror": "dashboard/public/data/mcp-profile-v3.1.json",
+    "aism_model": "safe2/data/aism-model-v1.json",
+    "aism_assessment_schema": "safe2/data/aism-assessment-v1.schema.json",
+    "uas_regulatory_profile": "00-cross-pillar/unbiased-ai/uas-profile-v1.json",
     "nexus_schemas": "NEXUS/schemas/",
     "scanner_rules": "scanner/rules/"
   },
@@ -27,6 +30,20 @@
       "machine_readable_data": "skills/mcp/data/mcp-profile-v3.1.json",
       "server_discover_required": false,
       "legacy_session_id_is_identity": false
+    },
+    "uas_regulatory": {
+      "id": "UAS-1.0",
+      "name": "Unbiased AI Standard Regulatory Profile",
+      "type": "regulatory_profile_extension",
+      "requirement_count": 27,
+      "requirement_ranges": ["UAS-S1-UAS-S14", "UAS-H1-UAS-H8", "UAS-X1-UAS-X5"],
+      "normative_document": "00-cross-pillar/unbiased-ai/STANDARD.md",
+      "machine_readable_data": "00-cross-pillar/unbiased-ai/uas-profile-v1.json",
+      "adds_to_core_control_count": false,
+      "adds_cross_pillar_control": false,
+      "status": "profile extension",
+      "regulatory_basis": "GSAR 552.239-7001 draft mapping",
+      "legal_safe_harbor_claimed": false
     }
   },
   "enforcement_planes": [
@@ -89,6 +106,14 @@
     "challenge_lab": "challenges/README.md",
     "aism": "AISM/README.md",
     "nexus": "NEXUS/README.md",
-    "dashboard": "dashboard/README.md"
+    "dashboard": "dashboard/README.md",
+    "cli": {
+      "package": "ai-safe2",
+      "command": "safe2",
+      "module": "python -m safe2",
+      "entrypoint": "safe2/README.md",
+      "assessment_schema": "safe2/data/aism-assessment-v1.schema.json",
+      "evidence_workflow": "safe2 evidence ... then safe2 aism ingest ..."
+    }
   }
 }

@@ -57,9 +57,9 @@ Governance binds to framework-owned constructs such as verified principals, capa
 | **CP.9** | Agent Replication Governance | 🔴 CRITICAL | Spawn authority, lineage, descendant revocation, delegation depth |
 | **CP.10** | HEAR Doctrine | 🔴 CRITICAL | Named Human Ethical Agent of Record and unilateral kill authority |
 
-### CP.11 Unbiased AI Standard
+### UAS Regulatory Profile Extension
 
-**CP.11 is a compliance overlay module, not an additional core framework control for purposes of the 161-control AI SAFE² core count.** It composes and tests existing controls across AI SAFE², NEXUS, and the Cognitive Sovereignty Framework against Unbiased AI procurement and due-diligence requirements.
+**UAS is a 27-requirement regulatory profile, not CP.11 and not an additional core framework control.** It composes and tests existing controls across AI SAFE², NEXUS, and the Cognitive Sovereignty Framework against Unbiased AI procurement and due-diligence requirements.
 
 See the full module: [Unbiased AI Standard](./unbiased-ai/README.md).
 
@@ -228,11 +228,11 @@ If required authorization infrastructure is unavailable, the action fails closed
 
 ---
 
-## CP.11: Unbiased AI Standard
+## UAS: Unbiased AI Standard Regulatory Profile
 
 The UAS module defines an auditable compliance surface for Unbiased AI obligations in procurement and due diligence. It includes bias taxonomy, tests, evidence expectations, attestation, and cross-framework mappings.
 
-Because the module composes controls from multiple systems, its module-level control count must not be added to the 161 AI SAFE² core-control total as though those were all new independent core controls.
+Its 27 profile requirements must not be added to the 161 AI SAFE² core-control total, and the profile does not create CP.11.
 
 Full module: [00-cross-pillar/unbiased-ai/](./unbiased-ai/README.md)
 
