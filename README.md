@@ -76,7 +76,6 @@ The governing design rule is:
 
 > A CP.5 profile MUST NOT bind a control to a construct owned by the protocol it profiles.
 
-This allows the security claim to survive protocol lifecycle changes.
 
 ### CP.5.MCP expands from 13 to 19 sub-controls
 
