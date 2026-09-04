@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "subject": {
+    "id": "customer-support-agent",
+    "name": "Customer Support Agent",
+    "kind": "environment",
+    "act_tier": "ACT-3",
+    "target_score": 3.5,
+    "enforcement_planes": ["north-south", "agent-to-tool"]
+  },
+  "cells": {
+    "P1.D1": {"metrics": {"coverage": "H", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E3", "category": "documentary", "source": "governance policy"}]},
+    "P1.D2": {"metrics": {"coverage": "H", "robustness": "H", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E3", "category": "documentary", "source": "threat model"}]},
+    "P1.D3": {"metrics": {"coverage": "H", "robustness": "H", "sovereignty_assurance": "H"}, "evidence": [{"grade": "E4", "category": "operational", "source": "prompt-injection runtime test"}]},
+    "P1.D4": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "training record"}]},
+    "P1.D5": {"metrics": {"coverage": "H", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E3", "category": "operational", "source": "input validation pipeline"}]},
+    "P1.D6": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "H"}, "evidence": [{"grade": "E3", "category": "attestation", "source": "architecture review"}]},
+    "P2.D1": {"metrics": {"coverage": "H", "robustness": "H", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E3", "category": "documentary", "source": "audit RACI"}]},
+    "P2.D2": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "logging strategy"}]},
+    "P2.D3": {"metrics": {"coverage": "H", "robustness": "H", "sovereignty_assurance": "H"}, "evidence": [{"grade": "E4", "category": "operational", "source": "NEXUS NOR receipt"}]},
+    "P2.D4": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "audit training record"}]},
+    "P2.D5": {"metrics": {"coverage": "H", "robustness": "M", "sovereignty_assurance": "H"}, "evidence": [{"grade": "E4", "category": "operational", "source": "telemetry export"}]},
+    "P2.D6": {"metrics": {"coverage": "H", "robustness": "M", "sovereignty_assurance": "H"}, "evidence": [{"grade": "E3", "category": "operational", "source": "AGBOM inventory"}]},
+    "P3.D1": {"metrics": {"coverage": "M", "robustness": "L", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "fail-safe ownership policy"}]},
+    "P3.D2": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "recovery risk register"}]},
+    "P3.D3": {"metrics": {"coverage": "M", "robustness": "L", "sovereignty_assurance": "L"}, "evidence": [{"grade": "E4", "category": "operational", "source": "failed policy interruption test"}]},
+    "P3.D4": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "L"}, "evidence": [{"grade": "E1", "category": "documentary", "source": "operator declaration"}]},
+    "P3.D5": {"metrics": {"coverage": "M", "robustness": "L", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "recovery plan"}]},
+    "P3.D6": {"metrics": {"coverage": "M", "robustness": "L", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "attestation", "source": "internal review"}]},
+    "P4.D1": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "H"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "HEAR policy"}]},
+    "P4.D2": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "monitoring strategy"}]},
+    "P4.D3": {"metrics": {"coverage": "H", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E4", "category": "operational", "source": "runtime audit telemetry"}]},
+    "P4.D4": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "escalation training"}]},
+    "P4.D5": {"metrics": {"coverage": "H", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E3", "category": "operational", "source": "alert workflow"}]},
+    "P4.D6": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "H"}, "evidence": [{"grade": "E3", "category": "attestation", "source": "authority review"}]},
+    "P5.D1": {"metrics": {"coverage": "M", "robustness": "L", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "improvement charter"}]},
+    "P5.D2": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "threat update process"}]},
+    "P5.D3": {"metrics": {"coverage": "M", "robustness": "L", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E2", "category": "operational", "source": "patch history"}]},
+    "P5.D4": {"metrics": {"coverage": "M", "robustness": "L", "sovereignty_assurance": "L"}, "evidence": [{"grade": "E1", "category": "documentary", "source": "training owner declaration"}]},
+    "P5.D5": {"metrics": {"coverage": "M", "robustness": "M", "sovereignty_assurance": "L"}, "evidence": [{"grade": "E2", "category": "documentary", "source": "lessons learned process"}]},
+    "P5.D6": {"metrics": {"coverage": "M", "robustness": "L", "sovereignty_assurance": "M"}, "evidence": [{"grade": "E1", "category": "attestation", "source": "internal declaration"}]}
+  },
+  "topics": {
+    "T1": {"metrics": {"coverage": 4, "robustness": 4, "sovereignty_assurance": 3}, "evidence": [{"grade": "E4", "category": "operational", "source": "prompt-injection runtime test"}]},
+    "T2": {"metrics": {"coverage": 4, "robustness": 3, "sovereignty_assurance": 3}, "evidence": [{"grade": "E3", "category": "operational", "source": "sandbox configuration scan"}]},
+    "T3": {"metrics": {"coverage": 4, "robustness": 4, "sovereignty_assurance": 4}, "evidence": [{"grade": "E4", "category": "operational", "source": "NEXUS NOR receipt"}]},
+    "T4": {"metrics": {"coverage": 4, "robustness": 3, "sovereignty_assurance": 4}, "evidence": [{"grade": "E3", "category": "documentary", "source": "AGBOM inventory"}]},
+    "T5": {"metrics": {"coverage": 3, "robustness": 2, "sovereignty_assurance": 2}, "evidence": [{"grade": "E4", "category": "operational", "source": "policy interruption test"}]},
+    "T6": {"metrics": {"coverage": 2, "robustness": 2, "sovereignty_assurance": 2}, "evidence": [{"grade": "E2", "category": "documentary", "source": "recovery plan"}]},
+    "T7": {"metrics": {"coverage": 3, "robustness": 3, "sovereignty_assurance": 3}, "evidence": [{"grade": "E2", "category": "documentary", "source": "HEAR approval policy"}]},
+    "T8": {"metrics": {"coverage": 4, "robustness": 3, "sovereignty_assurance": 3}, "evidence": [{"grade": "E4", "category": "operational", "source": "runtime audit telemetry"}]},
+    "T9": {"metrics": {"coverage": 2, "robustness": 2, "sovereignty_assurance": 2}, "evidence": [{"grade": "E2", "category": "documentary", "source": "threat update process"}]},
+    "T10": {"metrics": {"coverage": 3, "robustness": 2, "sovereignty_assurance": 2}, "evidence": [{"grade": "E1", "category": "documentary", "source": "training owner declaration"}]}
+  },
+  "facts": [
+    {"id": "FACT-001", "statement": "NEXUS generated an attributable NOR receipt for the denied test action.", "source": "runtime-test-04"},
+    {"id": "FACT-002", "statement": "The agent can reach a customer-record MCP tool with write capability.", "source": "environment inventory"}
+  ],
+  "assumptions": [
+    {"id": "ASSUMPTION-001", "statement": "Production identity policy matches the test environment.", "effect_if_false": "MCP authorization assurance falls to E1."}
+  ],
+  "conflicts": [
+    {"id": "CONFLICT-001", "severity": "CRITICAL", "statement": "Policy declares fail-closed behavior, but the interruption test observed an allowed request.", "resolution": "Runtime evidence takes precedence until corrected."}
+  ],
+  "unknowns": [
+    {"id": "UNKNOWN-001", "question": "No disaster-recovery exercise evidence was supplied."}
+  ],
+  "impacts": [
+    {"perspective": "Technical", "statement": "A policy-service interruption may permit an unauthorized write action."},
+    {"perspective": "Operational", "statement": "Production access should remain read-only until fail-closed behavior is demonstrated."},
+    {"perspective": "Business", "statement": "Incorrect writes could alter customer records and create remediation costs."},
+    {"perspective": "Governance", "statement": "The observed behavior conflicts with the approved human authority boundary."}
+  ],
+  "alternatives": [
+    {"name": "Deploy unchanged", "pros": ["No delivery delay"], "cons": ["Leaves the observed authorization failure exposed", "Conflicts with the approved fail-closed policy"], "why": "Reject: speed does not outweigh the observed critical control failure.", "effort": "immediate", "residual_risk": "high", "outcome_estimate": {"mode": "not_estimable", "reason": "No comparable unchanged production history exists."}},
+    {"name": "Restrict to read-only", "pros": ["Immediately contains write risk", "Reversible while repairs proceed"], "cons": ["Reduces automation capability", "Requires temporary operating controls"], "why": "Use now as the safest reversible containment path.", "effort": "hours", "residual_risk": "low-medium", "outcome_estimate": {"mode": "evidence_informed", "range": [0.86, 0.94], "outcome": "operate for 90 days without a material authorization-control failure", "time_horizon": "90 days", "method": "expert estimate informed by containment tests", "confidence": "low"}},
+    {"name": "Repair fail-closed path and run drills", "pros": ["Addresses the root cause", "Creates stronger operational evidence"], "cons": ["Delays write-enabled deployment", "Requires engineering and test effort"], "why": "Use as the exit path after immediate read-only containment.", "effort": "3-5 days", "residual_risk": "low", "outcome_estimate": {"mode": "evidence_informed", "range": [0.80, 0.89], "outcome": "complete ACT-3 deployment without a material authorization-control failure", "time_horizon": "90 days", "method": "runtime-test-informed estimate", "confidence": "medium"}}
+  ],
+  "recommendation": {
+    "summary": "Hold production write access. Restrict the agent to read-only while repairing and retesting the fail-closed authorization path.",
+    "basis": ["Critical observed conflict", "ACT-3 external action exposure", "Read-only containment remains reversible"],
+    "owner": "Agent platform owner with HEAR approval",
+    "due_date": "Before production write access is enabled",
+    "next_review": "After fail-closed repair and independent interruption drill",
+    "exit_criteria": ["Interruption test denies every write request", "NOR receipt and test artifact are independently verified", "HEAR approves restoration of write access"]
+  },
+  "history": [
+    {"date": "2026-07-15", "score": 2.7, "decision": "RESTRICT", "event": "Guardian introduced"},
+    {"date": "2026-08-20", "score": 3.0, "decision": "RESTRICT", "event": "NOR evidence added"}
+  ]
+}

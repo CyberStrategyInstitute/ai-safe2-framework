@@ -1,11 +1,11 @@
-# CP.11 Due-Diligence Attestation Template
-**UAS-ATTEST-001 | Evidence of due diligence per GSAR 552.239-7001 (d)(3) | AI SAFE² CP.11**
+# UAS Regulatory Profile Due-Diligence Attestation Template
+**UAS-ATTEST-001 | Evidence of due diligence per GSAR 552.239-7001 (d)(3) | UAS regulatory profile**
 
 Contract number: ____ | Contractor: ____ | Contracting Officer: ____ | Date: ____
-AI SAFE² version: v3.0+ (CP.11 UAS v1.0) | ACT Capability Tier (CP.3): ____
+AI SAFE² version: v3.1 (UAS profile v1.0) | ACT Capability Tier (CP.3): ____
 
 ## Attestation statement
-The undersigned attests that the LLM system(s) identified below have been assessed against AI SAFE² CP.11 Unbiased AI Standard v1.0 and that all applicable UAS controls have been implemented or formally mitigated as documented in the attached evidence package. This attestation is provided as evidence of due diligence pursuant to GSAR 552.239-7001 (d)(3)(ii).
+The undersigned attests that the LLM system(s) identified below have been assessed against the AI SAFE² UAS regulatory profile v1.0 and that all applicable UAS profile requirements have been implemented or formally mitigated as documented in the attached evidence package. This attestation is provided as evidence of due diligence pursuant to GSAR 552.239-7001 (d)(3)(ii).
 
 ## System identification
 | Field | Value |

@@ -8,18 +8,21 @@ makes discovery optional, so presence is not a conformance condition.
 MCP-19 remains advisory in the scanner until a deployment-specific resource
 or audience validation path can be proven from code and configuration.
 """
+
 from __future__ import annotations
 
 import re
 
 from .base import Rule
 
-
 _CODE_EXTS = (".py", ".js", ".ts", ".tsx", ".mjs", ".cjs")
 _CONFIG_EXTS = (".json", ".yaml", ".yml", ".toml", ".env")
 _MCP_MARKERS = (
-    "mcp",
     "modelcontextprotocol",
+    "from mcp.",
+    "import mcp.",
+    "@mcp.",
+    "mcpservers",
     "stdioServerParameters".lower(),
     "tools/list",
     "tools/call",
@@ -62,14 +65,25 @@ def _check_dynamic_command(content: str, lines: list[str], filepath: str) -> lis
     return findings
 
 
-def _check_return_sanitization(content: str, lines: list[str], filepath: str) -> list[tuple[int, str]]:
+def _check_return_sanitization(
+    content: str, lines: list[str], filepath: str
+) -> list[tuple[int, str]]:
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
-    has_tool_result = any(token in lower for token in ("tool_result", "toolresult", "call_tool", "tools/call"))
-    has_sanitizer = any(token in lower for token in (
-        "sanitize", "response_scanner", "scan_output", "prompt_injection", "untrusted_content"
-    ))
+    has_tool_result = any(
+        token in lower for token in ("tool_result", "toolresult", "call_tool", "tools/call")
+    )
+    has_sanitizer = any(
+        token in lower
+        for token in (
+            "sanitize",
+            "response_scanner",
+            "scan_output",
+            "prompt_injection",
+            "untrusted_content",
+        )
+    )
     if has_tool_result and not has_sanitizer:
         return [_first_mcp_line(lines)]
     return []
@@ -79,12 +93,26 @@ def _check_server_integrity(content: str, lines: list[str], filepath: str) -> li
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
-    launches_server = any(token in lower for token in (
-        "stdioserverparameters", "mcpservers", "create_subprocess", "subprocess.popen"
-    ))
-    integrity = any(token in lower for token in (
-        "sha256", "checksum", "signature", "allowlist", "manifest", "verify_integrity"
-    ))
+    launches_server = any(
+        token in lower
+        for token in (
+            "stdioserverparameters",
+            "mcpservers",
+            "create_subprocess",
+            "subprocess.popen",
+        )
+    )
+    integrity = any(
+        token in lower
+        for token in (
+            "sha256",
+            "checksum",
+            "signature",
+            "allowlist",
+            "manifest",
+            "verify_integrity",
+        )
+    )
     if launches_server and not integrity:
         return [_first_mcp_line(lines)]
     return []
@@ -94,10 +122,21 @@ def _check_audit(content: str, lines: list[str], filepath: str) -> list[tuple[in
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
-    handles_calls = any(token in lower for token in ("tools/call", "call_tool", "tool_call", "@mcp.tool"))
-    audit = any(token in lower for token in (
-        "audit", "opentelemetry", "otel", "receipt", "nor", "trace_id", "execution_trace"
-    ))
+    handles_calls = any(
+        token in lower for token in ("tools/call", "call_tool", "tool_call", "@mcp.tool")
+    )
+    audit = any(
+        token in lower
+        for token in (
+            "audit",
+            "opentelemetry",
+            "otel",
+            "receipt",
+            "nor",
+            "trace_id",
+            "execution_trace",
+        )
+    )
     if handles_calls and not audit:
         return [_first_mcp_line(lines)]
     return []
@@ -107,23 +146,47 @@ def _check_input_validation(content: str, lines: list[str], filepath: str) -> li
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
-    handles_calls = any(token in lower for token in ("tools/call", "call_tool", "@mcp.tool", "arguments"))
-    validation = any(token in lower for token in (
-        "jsonschema", "pydantic", "model_validate", "validate_input", "schema.validate", "zod"
-    ))
+    handles_calls = any(
+        token in lower for token in ("tools/call", "call_tool", "@mcp.tool", "arguments")
+    )
+    validation = any(
+        token in lower
+        for token in (
+            "jsonschema",
+            "pydantic",
+            "model_validate",
+            "validate_input",
+            "schema.validate",
+            "zod",
+        )
+    )
     if handles_calls and not validation:
         return [_first_mcp_line(lines)]
     return []
 
 
-def _check_trust_establishment(content: str, lines: list[str], filepath: str) -> list[tuple[int, str]]:
+def _check_trust_establishment(
+    content: str, lines: list[str], filepath: str
+) -> list[tuple[int, str]]:
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
-    networked = any(token in lower for token in ("streamable-http", "sse", "authorization", "bearer ", "oauth"))
-    trust = any(token in lower for token in (
-        "principal", "authenticate", "authorization", "capability_grant", "policy_context", "verify_token"
-    ))
+    if "wrap-stdio" in lower and "streamable-http" not in lower:
+        return []
+    networked = any(
+        token in lower for token in ("streamable-http", "sse", "authorization", "bearer ", "oauth")
+    )
+    trust = any(
+        token in lower
+        for token in (
+            "principal",
+            "authenticate",
+            "authorization",
+            "capability_grant",
+            "policy_context",
+            "verify_token",
+        )
+    )
     if networked and not trust:
         return [_first_mcp_line(lines)]
     return []
@@ -134,63 +197,114 @@ def _check_economic_ceiling(content: str, lines: list[str], filepath: str) -> li
         return []
     lower = content.lower()
     handles_calls = any(token in lower for token in ("tools/call", "call_tool", "@mcp.tool"))
-    ceiling = any(token in lower for token in (
-        "rate_limit", "ratelimit", "quota", "budget", "cost_ceiling", "token_limit", "max_calls"
-    ))
+    ceiling = any(
+        token in lower
+        for token in (
+            "rate_limit",
+            "ratelimit",
+            "quota",
+            "budget",
+            "cost_ceiling",
+            "token_limit",
+            "max_calls",
+        )
+    )
     if handles_calls and not ceiling:
         return [_first_mcp_line(lines)]
     return []
 
 
-def _check_delegation_lineage(content: str, lines: list[str], filepath: str) -> list[tuple[int, str]]:
+def _check_delegation_lineage(
+    content: str, lines: list[str], filepath: str
+) -> list[tuple[int, str]]:
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
-    multi_agent = any(token in lower for token in (
-        "delegate", "subagent", "sub-agent", "spawn_agent", "agent_id", "parent_did", "chain_id"
-    ))
-    lineage = any(token in lower for token in (
-        "delegation_chain", "lineage_token", "parent_did", "chain_id", "capability_grant_id"
-    ))
+    multi_agent = any(
+        token in lower
+        for token in (
+            "delegate",
+            "subagent",
+            "sub-agent",
+            "spawn_agent",
+            "agent_id",
+            "parent_did",
+            "chain_id",
+        )
+    )
+    lineage = any(
+        token in lower
+        for token in (
+            "delegation_chain",
+            "lineage_token",
+            "parent_did",
+            "chain_id",
+            "capability_grant_id",
+        )
+    )
     if multi_agent and not lineage:
         return [_first_mcp_line(lines)]
     return []
 
 
-def _check_catalog_provenance(content: str, lines: list[str], filepath: str) -> list[tuple[int, str]]:
+def _check_catalog_provenance(
+    content: str, lines: list[str], filepath: str
+) -> list[tuple[int, str]]:
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
-    uses_catalog = any(token in lower for token in ("tools/list", "list_tools", "resources/list", "prompts/list"))
-    revalidates = any(token in lower for token in (
-        "catalog_hash", "schema_hash", "provenance", "revalidate", "cache_ttl", "baseline_hash"
-    ))
+    uses_catalog = any(
+        token in lower for token in ("tools/list", "list_tools", "resources/list", "prompts/list")
+    )
+    revalidates = any(
+        token in lower
+        for token in (
+            "catalog_hash",
+            "schema_hash",
+            "provenance",
+            "revalidate",
+            "cache_ttl",
+            "baseline_hash",
+        )
+    )
     if uses_catalog and not revalidates:
         return [_first_mcp_line(lines)]
     return []
 
 
-def _check_state_handle_binding(content: str, lines: list[str], filepath: str) -> list[tuple[int, str]]:
+def _check_state_handle_binding(
+    content: str, lines: list[str], filepath: str
+) -> list[tuple[int, str]]:
     if not _is_mcp_target(content, filepath):
         return []
     findings: list[tuple[int, str]] = []
     for index, line in enumerate(lines, start=1):
         lower = line.lower()
-        if "mcp-session-id" in lower and any(token in lower for token in (
-            "identity", "principal", "authenticate", "authorize", "user_id", "owner"
-        )):
+        if "mcp-session-id" in lower and any(
+            token in lower
+            for token in ("identity", "principal", "authenticate", "authorize", "user_id", "owner")
+        ):
             findings.append((index, line.strip()[:180]))
     return findings
 
 
-def _check_protocol_integrity(content: str, lines: list[str], filepath: str) -> list[tuple[int, str]]:
+def _check_protocol_integrity(
+    content: str, lines: list[str], filepath: str
+) -> list[tuple[int, str]]:
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
     uses_assertion_headers = "mcp-method" in lower or "mcp-name" in lower
-    verifies_match = any(token in lower for token in (
-        "header_body", "assertion_integrity", "method_matches", "name_matches", "compare_header"
-    ))
+    verifies_match = any(
+        token in lower
+        for token in (
+            "header_body",
+            "assertion_integrity",
+            "method_matches",
+            "name_matches",
+            "compare_header",
+        )
+    )
     uses_mrtr = "mrtr" in lower or "model-mediated" in lower
     replay = any(token in lower for token in ("nonce", "request_id", "replay", "response_hash"))
     if uses_assertion_headers and not verifies_match:
@@ -205,17 +319,34 @@ def _check_mcp19_auth_chain(content: str, lines: list[str], filepath: str) -> li
     if not _is_mcp_target(content, filepath):
         return []
     lower = content.lower()
-    auth_surface = any(token in lower for token in (
-        "oauth", "authorization", "bearer", "jwt", "jwks", "protected resource"
-    ))
+    auth_surface = any(
+        token in lower
+        for token in ("oauth", "authorization", "bearer", "jwt", "jwks", "protected resource")
+    )
     if not auth_surface:
         return []
-    resource_binding = any(token in lower for token in (
-        "audience", "\"aud\"", "['aud']", "resource_indicator", "intended_resource", "mcp_auth_audience"
-    ))
-    ssrf = any(token in lower for token in (
-        "ssrf", "allowed_hosts", "allowlisted_host", "url_allowlist", "validate_redirect", "validate_resource_url"
-    ))
+    resource_binding = any(
+        token in lower
+        for token in (
+            "audience",
+            '"aud"',
+            "['aud']",
+            "resource_indicator",
+            "intended_resource",
+            "mcp_auth_audience",
+        )
+    )
+    ssrf = any(
+        token in lower
+        for token in (
+            "ssrf",
+            "allowed_hosts",
+            "allowlisted_host",
+            "url_allowlist",
+            "validate_redirect",
+            "validate_resource_url",
+        )
+    )
     if not resource_binding or not ssrf:
         return [_first_mcp_line(lines)]
     return []

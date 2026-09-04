@@ -1,4 +1,4 @@
-# GSAR 552.239-7001 Crosswalk: CP.11 UAS
+# GSAR 552.239-7001 Crosswalk: UAS Regulatory Profile
 **Unbiased AI Standard v1.0 | Compliance module**
 
 | Clause requirement | UAS control(s) | AI SAFE² source | Artifact |
@@ -13,9 +13,9 @@
 | Change notification (i) | UAS-X5 to CP.10 HEAR; UAS-CHANGE-001 | CP.10, P3 | UAS-CHANGE-001 |
 | Incident notification (f)(5) | UAS-X2 escalation to CP.6 | CP.6 | CP.6 incident log |
 
-## What CP.11 provides that the clause does not
+## What the UAS profile provides that the clause does not
 
-| Gap in the clause | CP.11 fill |
+| Gap in the clause | UAS profile response |
 |---|---|
 | No bias class taxonomy | 7-class UAS-B taxonomy |
 | No quantified test thresholds | 85 percent neutrality rate; Cohen's kappa 0.7; parity p > 0.05 |

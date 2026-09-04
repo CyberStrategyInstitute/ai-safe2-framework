@@ -1,0 +1,65 @@
+# Fix Template: STP-001 — Schema Temporal Profiling
+# AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling)
+#
+# Threat: Rug Pull Attack (temporal profile: delayed_weeks)
+# A server with established trust mutates its tool descriptions between sessions.
+# The client has no native mechanism to detect schema changes without explicit
+# baseline-and-diff checking.
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────────────────
+async def connect_to_server(client, server_url: str) -> None:
+    # tools/list called without hash comparison — rug pull undetectable
+    tools_response = await client.request("tools/list", {})
+    tools = tools_response.get("tools", [])
+    print(f"Connected. {len(tools)} tools available.")
+    return tools
+#
+# ── AFTER (safe — client-side schema pinning) ─────────────────────────────────
+import hashlib
+import json
+from pathlib import Path
+
+SCHEMA_BASELINE_FILE = Path("~/.mcp-safe-wrap/schema_baselines.json").expanduser()
+
+def _load_baselines() -> dict:
+    if SCHEMA_BASELINE_FILE.exists():
+        return json.loads(SCHEMA_BASELINE_FILE.read_text())
+    return {}
+
+def _save_baselines(baselines: dict) -> None:
+    SCHEMA_BASELINE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    SCHEMA_BASELINE_FILE.write_text(json.dumps(baselines, indent=2))
+
+async def connect_to_server(client, server_url: str) -> list:
+    tools_response = await client.request("tools/list", {})
+    current_hash = hashlib.sha256(
+        json.dumps(tools_response, sort_keys=True).encode()
+    ).hexdigest()
+
+    baselines = _load_baselines()
+    if server_url not in baselines:
+        # First connection — establish baseline
+        baselines[server_url] = current_hash
+        _save_baselines(baselines)
+        log.info("schema.baseline_recorded", server=server_url, hash=current_hash[:16])
+    elif baselines[server_url] != current_hash:
+        # Schema changed without documented release event — ALERT
+        log.warning(
+            "schema.changed_ALERT",
+            server=server_url,
+            baseline=baselines[server_url][:16],
+            current=current_hash[:16],
+        )
+        raise RuntimeError(
+            f"Schema change detected for {server_url}. "
+            "Verify this is an authorized release before continuing. "
+            "If authorized, delete the baseline entry to re-pin."
+        )
+
+    return tools_response.get("tools", [])
+#
+# ── CONSUMER ALTERNATIVE ──────────────────────────────────────────────────────
+# Use mcp-safe-wrap --pin-schema for automatic schema pinning without code changes:
+#   mcp-safe-wrap proxy https://server.example/mcp --pin-schema
+#
+# Full specification: AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling)

@@ -10,8 +10,14 @@ on:
       - "NEXUS/compliance/**"
       - "NEXUS/examples/**"
       - "scanner/**"
+      - "safe2/**"
+      - "aisafe2_mcp_tools/**"
+      - "tests/**"
+      - "AISM/**"
+      - "00-cross-pillar/unbiased-ai/**"
       - "skills/**"
       - "examples/**"
+      - "pyproject.toml"
       - "AGENTS.md"
       - "ai-safe2.manifest.json"
       - "scripts/check_agent_manifest.py"
@@ -24,6 +30,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  safe2-cli:
+    name: SAFE2 CLI / AISM (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install SAFE2 and test dependencies
+        run: python -m pip install ".[all,dev]" build
+
+      - name: Run SAFE2 tests
+        run: python -m pytest tests/ scanner/tests/ -v --tb=short
+
+      - name: Validate agent manifest and UAS profile
+        run: python scripts/check_agent_manifest.py
+
+      - name: Verify the AISM Decision Card example
+        run: |
+          safe2 example verify aism-decision-card
+          python examples/aism-decision-card/smoke_test.py
+
+      - name: Build distribution
+        run: python -m build
+
   test:
     name: NEXUS Tests (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
@@ -111,6 +153,9 @@ jobs:
             NEXUS/sdk/python/tests/ \
             NEXUS/examples/ \
             scanner/ \
+            safe2/ \
+            aisafe2_mcp_tools/ \
+            tests/ \
             skills/mcp/src/ \
             scripts/
 

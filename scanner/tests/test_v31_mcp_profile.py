@@ -22,11 +22,13 @@ def test_mcp19_is_advisory() -> None:
 def test_no_discover_presence_rule() -> None:
     """MCP 2026-07-28 does not require server/discover for conformance."""
     for rule in MCP_RULES:
-        text = " ".join((
-            rule.description,
-            rule.remediation,
-            rule.pattern or "",
-        )).lower()
+        text = " ".join(
+            (
+                rule.description,
+                rule.remediation,
+                rule.pattern or "",
+            )
+        ).lower()
         assert "server/discover" not in text
 
 

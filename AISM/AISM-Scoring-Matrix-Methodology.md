@@ -9,14 +9,14 @@
 **Version:** 1.0  
 **Date:** March 2026  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE2 v3.0 — AI Sovereignty Matrix (AISM)  
+**Framework:** AI SAFE2 v3.1 — AI Sovereignty Matrix (AISM)
 **Status:** Proposed Methodology
 
 ---
 
 ## 1. Purpose & Scope
 
-This document establishes a rigorous, quantitative scoring methodology for the AI Sovereignty Matrix (AISM), enabling organizations to measure, benchmark, and advance their maturity across all five pillars of the AI SAFE2 Framework v3.0. The methodology is purpose-built for the **agentic AI era** — where autonomous multi-agent systems, non-human identities (NHI), and distributed AI architectures create governance challenges that no existing framework fully addresses.
+This document establishes a rigorous, quantitative scoring methodology for the AI Sovereignty Matrix (AISM), enabling organizations to measure, benchmark, and advance their maturity across all five pillars of the AI SAFE2 Framework v3.1. The methodology is purpose-built for the **agentic AI era** — where autonomous multi-agent systems, non-human identities (NHI), and distributed AI architectures create governance challenges that no existing framework fully addresses.
 
 ### 1.1 Design Principles
 
@@ -118,17 +118,17 @@ Five candidate scoring approaches were evaluated against criteria critical to th
 
 ### 3.1 The AISM Composite Scoring Framework
 
-The recommended methodology — the **AISM Sovereignty Score** — combines the strongest elements from all five approaches into a unified system purpose-built for AI SAFE2 v3.0.
+The recommended methodology — the **AISM Sovereignty Score** — combines the strongest elements from all five approaches into a unified system purpose-built for AI SAFE2 v3.1.
 
 ### 3.2 Maturity Levels (5-Level Scale)
 
 | Level | Name | Description | NIST Tier Equivalent |
 |---|---|---|---|
-| **1** | **Reactive** | Ad-hoc, no formal AI governance; controls are incident-driven | Partial |
-| **2** | **Aware** | AI risks recognized; basic policies exist but inconsistently applied | Risk Informed |
-| **3** | **Controlled** | Formalized controls across all 5 pillars; documented processes; regular audits | Repeatable |
-| **4** | **Sovereign** | Organization has full visibility and control over AI systems; adaptive governance; proactive threat response | Adaptive |
-| **5** | **Autonomous Governance** | Self-improving governance; formal verification of critical controls; continuous measurement mechanisms; AI sovereignty fully realized | Optimizing |
+| **1** | **Chaos** (alias: Reactive) | Ad hoc, no formal AI governance; controls are incident-driven | Partial |
+| **2** | **Visibility** (alias: Aware) | AI risks recognized; basic policies exist but inconsistently applied | Risk Informed |
+| **3** | **Governance** (alias: Controlled) | Formalized controls across all 5 pillars; documented processes; regular audits | Repeatable |
+| **4** | **Control** (alias: Sovereign) | Organization has full visibility and runtime control; adaptive governance; proactive threat response | Adaptive |
+| **5** | **Sovereignty** (alias: Autonomous Governance) | Self-improving governance; formal verification of critical controls; continuous measurement mechanisms; AI sovereignty fully realized | Optimizing |
 
 ### 3.3 Scoring Dimensions (5 Pillars × 6 Dimensions)
 
@@ -236,7 +236,7 @@ Default pillar weights (equal by default, adjustable):
 
 ### 3.6 Combined Risk Score Integration
 
-For organizations also tracking technical vulnerabilities, AISM integrates with CVSS (as defined in AI SAFE2 v3.0):
+For organizations also tracking technical vulnerabilities, AISM integrates with CVSS and the AI SAFE2 v3.1 combined-risk method:
 
 ```
 Combined Risk = CVSS Base Score × ((100 - Pillar Score as %) / 10)
@@ -263,13 +263,16 @@ Additionally, a **heatmap matrix** plots:
 
 ### 4.2 Maturity Classification
 
-| AISM Score Range | Classification | Action Required |
-|---|---|---|
-| 4.50 – 5.00 | **Sovereign** | Maintain excellence; share best practices |
-| 3.50 – 4.49 | **Controlled** | Close specific gaps; advance to sovereign |
-| 2.50 – 3.49 | **Developing** | Prioritize critical pillars; formalize controls |
-| 1.50 – 2.49 | **Emerging** | Establish baseline governance immediately |
-| 1.00 – 1.49 | **Exposed** | Critical risk — immediate intervention required |
+| AISM Score Range | Canonical Maturity Level | Risk Posture | Action Required |
+|---|---|---|---|
+| 4.50 – 5.00 | **Sovereignty** | Sovereign | Maintain excellence; share best practices |
+| 3.50 – 4.49 | **Control** | Controlled | Close specific gaps; advance to Sovereignty |
+| 2.50 – 3.49 | **Governance** | Developing | Prioritize critical pillars; formalize controls |
+| 1.50 – 2.49 | **Visibility** | Emerging | Establish baseline governance immediately |
+| 1.00 – 1.49 | **Chaos** | Exposed | Critical risk — immediate intervention required |
+
+Canonical maturity names come from [maturity-model.md](./maturity-model.md).
+Risk-posture labels describe urgency and must not be emitted as maturity levels.
 
 ---
 
@@ -312,7 +315,7 @@ Every score must be substantiated with verifiable evidence. The AISM requires th
 7. NIST. (2025). "Cybersecurity Framework Profile for Artificial Intelligence." NIST IR 8596 iprd.
 8. NIST. (2023). "AI Risk Management Framework (AI RMF 1.0)." NIST AI 100-1.
 9. Peixoto, E.C., et al. (2025). "Clarifying Core Dimensions in Digital Maturity Models." arXiv:2602.07569v1.
-10. Cyber Strategy Institute. (2025). "AI SAFE2 Framework Version 3.0 — Advanced Agentic Distributed AI Edition."
+10. Cyber Strategy Institute. (2026). "AI SAFE2 Framework Version 3.1 — Protocol Governance and Enforcement Plane Update."
 11. RAI Institute. (2024). "Responsible AI Maturity Model." Five stages: Aware → Transformative.
 12. iQomply. (2026). "ISO 42001 Maturity Model." Five levels: Initial → Mature.
 

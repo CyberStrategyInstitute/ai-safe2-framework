@@ -24,6 +24,7 @@ Examples demonstrate implementation patterns. They do not create framework confo
 
 | Example | Stack | What It Governs |
 |---|---|---|
+| [`aism-decision-card/`](./aism-decision-card/) | AISM Decision Support | Executable assessment demonstrating evidence-aware AISM scoring and a human Decision Card. |
 | [`anti-gravity-sovereign-runtime/`](./anti-gravity-sovereign-runtime/) | Anti-Gravity | Sovereign runtime defense package for Anti-Gravity agent deployments. |
 | [`autogen-sovereign-runtime/`](./autogen-sovereign-runtime/) | Microsoft AutoGen | Governance wrapper for AutoGen multi-agent orchestration. |
 | [`claude-code-sovereign-runtime/`](./claude-code-sovereign-runtime/) | Claude Code | Hardens agentic coding sessions against unsafe tool execution, scope creep, and drift. |
@@ -51,6 +52,7 @@ Examples demonstrate implementation patterns. They do not create framework confo
 
 - The overall framework remains **161 core controls**.
 - MCP implementations should use the [CP.5.MCP v3.1 profile](../00-cross-pillar/cp5_mcp_server_security.md).
+- UAS is a 27-requirement regulatory profile extension; it does not create CP.11 as a core control.
 - NEXUS examples are reference implementations, not mandatory AI SAFE² dependencies.
 - Legacy session-oriented state terminology may appear in older examples during the migration window; new governance-bearing examples should use `request`, `handle_scoped`, and `durable` semantics where applicable.
 

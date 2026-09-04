@@ -1,0 +1,25 @@
+# Fix Template: LOG-001 — Missing tool audit logging
+# AI SAFE2 v3.0 CP.5.MCP-5
+#
+# ── BEFORE (missing log) ──────────────────────────────────────────
+@mcp.tool(description="Lookup control by ID")
+def lookup_control(control_id: str) -> dict:
+    return db.get(control_id)
+#
+# ── AFTER (with audit log) ────────────────────────────────────────
+import structlog
+log = structlog.get_logger()
+
+@mcp.tool(description="Lookup control by ID")
+def lookup_control(control_id: str, tier: str = "free") -> dict:
+    # Immutable audit record: tool name, key params, tier, timestamp
+    # structlog adds timestamp automatically
+    log.info("tool.lookup_control", control_id=control_id, tier=tier)
+    result = db.get(control_id)
+    return result
+#
+# Minimum required fields per AI SAFE2 v3.0 CP.5.MCP-5:
+#   - tool name (in the log event name)
+#   - key parameters
+#   - calling agent identity (tier is a proxy for this)
+#   - timestamp (structlog/logging adds automatically)

@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 """Static trust gate for AI SAFE² skill packages.
 
+DEPRECATED: this logic has been absorbed into the safe2 CLI as
+`safe2 gate skill <path>` / `safe2 scan skill <path>` (see safe2/engines/skill_gate.py
+and MIGRATION.md). This script is kept working, unchanged, for anyone with
+existing automation calling it directly — but new usage should go through
+`safe2`, which has one exit-code contract shared across scan/gate/score/
+report/mcp instead of this script's own narrow 0/2 codes.
+
 The gate is intentionally narrow: it looks for executable or credential-handling
 patterns that should not appear as operational instructions in a distributable
 skill package. Security prose that merely names attack classes is not rejected.
@@ -10,15 +17,16 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 RULES = (
-    ("TG-001", "CRITICAL", re.compile(r"curl\s+[^\n|]+\|\s*(?:sh|bash)\b", re.I), "Remote download piped directly to a shell"),
-    ("TG-002", "CRITICAL", re.compile(r"wget\s+[^\n|]+\|\s*(?:sh|bash)\b", re.I), "Remote download piped directly to a shell"),
-    ("TG-003", "CRITICAL", re.compile(r"\brm\s+-rf\s+/(?:\s|$)", re.I), "Destructive root filesystem command"),
+    ("TG-001", "CRITICAL", re.compile(r"curl\s+[^\n|]+\|\s*(?:sh|bash)\b", re.IGNORECASE), "Remote download piped directly to a shell"),
+    ("TG-002", "CRITICAL", re.compile(r"wget\s+[^\n|]+\|\s*(?:sh|bash)\b", re.IGNORECASE), "Remote download piped directly to a shell"),
+    ("TG-003", "CRITICAL", re.compile(r"\brm\s+-rf\s+/(?:\s|$)", re.IGNORECASE), "Destructive root filesystem command"),
     ("TG-004", "CRITICAL", re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"), "Embedded private key material"),
-    ("TG-005", "HIGH", re.compile(r"(?:cat|type)\s+[^\n]*(?:\.ssh|\.aws|\.env|credentials)", re.I), "Instruction reads credential-bearing local files"),
-    ("TG-006", "HIGH", re.compile(r"(?:powershell|pwsh)\s+[^\n]*(?:-enc|-encodedcommand)\b", re.I), "Encoded PowerShell execution"),
+    ("TG-005", "HIGH", re.compile(r"(?:cat|type)\s+[^\n]*(?:\.ssh|\.aws|\.env|credentials)", re.IGNORECASE), "Instruction reads credential-bearing local files"),
+    ("TG-006", "HIGH", re.compile(r"(?:powershell|pwsh)\s+[^\n]*(?:-enc|-encodedcommand)\b", re.IGNORECASE), "Encoded PowerShell execution"),
 )
 
 TEXT_EXTENSIONS = {".md", ".txt", ".yaml", ".yml", ".json", ".toml"}
@@ -53,6 +61,8 @@ def decision_for(findings: list[dict], strict: bool) -> tuple[str, str]:
 
 
 def main() -> int:
+    print("NOTE: scripts/skill_trust_gate.py is deprecated — use `safe2 gate skill` "
+          "or `safe2 scan skill` instead. Behavior here is unchanged for now.", file=sys.stderr)
     parser = argparse.ArgumentParser()
     parser.add_argument("skill_path")
     parser.add_argument("--output", choices=("json", "markdown", "both"), default="both")
@@ -85,7 +95,7 @@ def main() -> int:
         lines = [
             "# AI SAFE² Skill Trust Gate Report",
             "",
-            f"- Framework: v3.1",
+            "- Framework: v3.1",
             f"- Decision: {decision}",
             f"- Highest severity: {severity}",
             f"- Skill path: `{root.as_posix()}`",

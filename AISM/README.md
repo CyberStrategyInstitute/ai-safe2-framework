@@ -154,6 +154,33 @@ Topic scores roll into pillar scores, then into the overall AISM maturity view. 
 
 For methodology details, see [AISM-Scoring-Matrix-Methodology.md](./AISM-Scoring-Matrix-Methodology.md).
 
+### AISM Decision Card
+
+The `safe2 aism` command operationalizes the documented three-metric, five-pillar
+model without turning missing evidence into a pass. It produces canonical JSON
+for agents and a compact Decision Card for accountable humans:
+
+```bash
+safe2 aism init assessment.json
+safe2 evidence nexus ./NEXUS --output nexus-evidence.json
+safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "NEXUS Local" --output assessment.json
+safe2 aism score assessment.json --format markdown --output decision-card.md
+safe2 aism score assessment.json --format json --output decision.json
+safe2 aism compare previous.json current.json
+```
+
+`ingest` preserves the provider bundle, suggests candidate cells, and requires human confirmation. It never converts scanner presence or endpoint availability directly into maturity ratings. Unverified evidence is explicitly capped in the supplemental decision-support score.
+
+The raw AISM Sovereignty Score remains the normative maturity score. A separately
+labeled evidence-adjusted score discounts weak substantiation for decision
+support. It does not create another maturity level or claim conformance.
+
+Probability ranges must name an outcome, time horizon, method, and confidence.
+When comparable evidence does not exist, the correct result is `NOT ESTIMABLE`,
+not an invented percentage.
+
+See the executable [Decision Card example](../examples/aism-decision-card/).
+
 ---
 
 ## Regulatory and Framework Coverage
@@ -170,7 +197,7 @@ AISM and AI SAFE² maintain mappings across major AI, cybersecurity, privacy, re
 - SOC 2;
 - NIST SP 800-53;
 - FedRAMP and CMMC where applicable;
-- GSAR Unbiased AI requirements through the CP.11 UAS overlay.
+- GSAR Unbiased AI requirements through the UAS regulatory profile extension.
 
 The crosswalk supports evidence reuse. It does not replace an organization's obligation to determine applicability or certification requirements independently.
 
@@ -182,7 +209,7 @@ AISM v3.1 uses the same repository-wide distinctions as the framework:
 
 - **161** is the AI SAFE² core framework control count.
 - **MCP-1 through MCP-19** are CP.5.MCP profile controls and do not increase the core count to 180.
-- **CP.11 UAS** is a compliance overlay that composes mapped controls rather than a reason to blindly increase the core count.
+- **UAS 1.0** is a regulatory profile extension that composes 27 mapped profile requirements. It does not add to the 161-control core or create CP.11 as a core control.
 - **NEXUS** is CSI's reference implementation, not a mandatory dependency for AI SAFE² conformance.
 - Governance should bind to verified principals, capability grants, delegation, policy, and explicit state handles rather than protocol-owned session constructs.
 

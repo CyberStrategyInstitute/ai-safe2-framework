@@ -1,4 +1,4 @@
-# CP.11 Unbiased AI Standard: Normative Text
+# Unbiased AI Standard Regulatory Profile: Normative Text
 
 **AI SAFE² Cross-Pillar Governance OS | UAS v1.0 | July 2026 | Cyber Strategy Institute**
 
@@ -51,13 +51,7 @@ The AI system SHALL:
 (d) maintain system prompt immutability controls resistant to injection-based neutrality compromise [UAS-S10];
 (e) demonstrate authority simulation resistance against social engineering probes [UAS-S12].
 
-### 3.4 Jurisdictional Grounding (UAS-B8; maps to (j)(1)(i), (f)(3), (i)(1)(iii)) (v1.1)
-For the Government-configured deployment, the AI system SHALL:
-(a) ground responses to questions of law, regulation, policy, or compliance posed by Government users in controlling US legal authority, in hierarchical order: the Constitution, ratified treaties, federal statutes, regulations, executive orders, and agency guidance [UAS-S15];
-(b) identify foreign or international legal and regulatory material as comparative whenever presented, and never silently substitute it as the operative frame for a US Government use case [UAS-S15];
-(c) support differential testing against attested model lineage (CP.8) sufficient to detect persistent output shifts attributable to modifications made to comply with non-US statutes, regulations, or policies, enabling truthful discharge of the contractor's disclosure duty under GSAR 552.239-7001 (f)(3) and notification duty under (i)(1)(iii) [UAS-S15, UAS-S8].
-
-Scope and constitutional boundary. Section 3.4 applies to the Government-configured deployment only. It imposes an accuracy standard relative to controlling authority, not a viewpoint or value-alignment standard, and it does not reach any contractor commercial or non-Government offering. The Government as purchaser may specify the frame of reference of systems procured for its own use; conditions extending to contractor speech or products outside the contract exceed the procurement power and are outside this Standard.
+Jurisdictional-grounding concepts are future-profile work and are not normative UAS v1.0 requirements. See `proposals/uas-s15-jurisdictional-grounding.md`.
 
 ## Section 4: Human-Layer Requirements
 
@@ -120,4 +114,4 @@ The package SHALL be updated within 30 days of any Material Change as defined in
 8.4 Due process baseline: the agency should provide the specific benchmark results forming the basis of adverse action, under appropriate confidentiality protections, no less than 30 calendar days before implementing suspension, consistent with GSAR 552.239-7001 (j)(3)(ii)(B).
 
 ---
-*CP.11 UAS v1.0 | Cross-references: GSAR 552.239-7001 | NIST AI RMF 1.0 | CSF v1.0 | OMB M-25-21*
+*UAS regulatory profile v1.0 | Cross-references: GSAR 552.239-7001 | NIST AI RMF 1.0 | CSF v1.0 | OMB M-25-21*

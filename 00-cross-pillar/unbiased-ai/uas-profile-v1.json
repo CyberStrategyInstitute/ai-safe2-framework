@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "profile": {
+    "id": "UAS-1.0",
+    "name": "Unbiased AI Standard Regulatory Profile",
+    "type": "regulatory_profile_extension",
+    "framework": "AI SAFE2 v3.1",
+    "status": "profile extension",
+    "requirement_count": 27,
+    "adds_to_core_control_count": false,
+    "adds_cross_pillar_control": false,
+    "core_control_count_remains": 161,
+    "cross_pillar_range_remains": "CP.1-CP.10",
+    "legal_safe_harbor_claimed": false
+  },
+  "layers": [
+    {"id": "system", "count": 14, "requirements": ["UAS-S1", "UAS-S2", "UAS-S3", "UAS-S4", "UAS-S5", "UAS-S6", "UAS-S7", "UAS-S8", "UAS-S9", "UAS-S10", "UAS-S11", "UAS-S12", "UAS-S13", "UAS-S14"]},
+    {"id": "human", "count": 8, "requirements": ["UAS-H1", "UAS-H2", "UAS-H3", "UAS-H4", "UAS-H5", "UAS-H6", "UAS-H7", "UAS-H8"]},
+    {"id": "bridge", "count": 5, "requirements": ["UAS-X1", "UAS-X2", "UAS-X3", "UAS-X4", "UAS-X5"]}
+  ],
+  "requirement_catalog": [
+    {"id":"UAS-S1","layer":"system","requirement":"Attribute factual claims to verifiable sources in retrieval mode.","control_refs":["P2","P4"],"evidence_criteria":"RAG audit trace"},
+    {"id":"UAS-S2","layer":"system","requirement":"Pass the defined political-neutrality probe.","control_refs":["P5"],"evidence_criteria":"Matched-pair benchmark suite"},
+    {"id":"UAS-S3","layer":"system","requirement":"Prevent commercial interests from influencing factual outputs.","control_refs":["P1"],"evidence_criteria":"Sponsored-content detection results"},
+    {"id":"UAS-S4","layer":"system","requirement":"Enforce behavioral-drift baselines and rollback thresholds.","control_refs":["P3"],"evidence_criteria":"Drift delta and rollback record"},
+    {"id":"UAS-S5","layer":"system","requirement":"Demonstrate resistance to adversarial framing.","control_refs":["P1","CP.2"],"evidence_criteria":"Red-team scenario results"},
+    {"id":"UAS-S6","layer":"system","requirement":"Audit model-routing decisions and rationale.","control_refs":["P4","NEXUS"],"evidence_criteria":"Routing trace review"},
+    {"id":"UAS-S7","layer":"system","requirement":"Test retrieval corpora for representativeness and commercial skew.","control_refs":["P2"],"evidence_criteria":"Corpus representativeness audit"},
+    {"id":"UAS-S8","layer":"system","requirement":"Maintain and examine attested model and fine-tuning lineage.","control_refs":["P2","CP.8"],"evidence_criteria":"SHA-verified lineage review"},
+    {"id":"UAS-S9","layer":"system","requirement":"Demonstrate equivalent response quality across matched demographic or political framings.","control_refs":["P4","P5"],"evidence_criteria":"Parity test with statistical result"},
+    {"id":"UAS-S10","layer":"system","requirement":"Protect system prompts against unauthorized mutation and injection.","control_refs":["P1","NEXUS"],"evidence_criteria":"Prompt immutability and injection-resistance test"},
+    {"id":"UAS-S11","layer":"system","requirement":"Detect emotional priming across multi-turn interactions.","control_refs":["P4"],"evidence_criteria":"Sentiment trajectory analysis"},
+    {"id":"UAS-S12","layer":"system","requirement":"Resist authority-simulation social engineering.","control_refs":["P1"],"evidence_criteria":"Authority simulation probe"},
+    {"id":"UAS-S13","layer":"system","requirement":"Validate historical and factual accuracy against a verified corpus.","control_refs":["P5"],"evidence_criteria":"Quarterly verified-corpus test"},
+    {"id":"UAS-S14","layer":"system","requirement":"Track accumulated influence across sessions.","control_refs":["P4","NEXUS"],"evidence_criteria":"Session delta analysis"},
+    {"id":"UAS-H1","layer":"human","requirement":"Measure cognitive-autonomy preservation indicators.","control_refs":["CSF-D2"],"evidence_criteria":"CTSS scoring delta"},
+    {"id":"UAS-H2","layer":"human","requirement":"Detect manipulation of operator emotional state.","control_refs":["CSF-D3"],"evidence_criteria":"Affect trajectory audit"},
+    {"id":"UAS-H3","layer":"human","requirement":"Detect simulated social pressure and consensus.","control_refs":["CSF-D4"],"evidence_criteria":"Influence pathway trace"},
+    {"id":"UAS-H4","layer":"human","requirement":"Monitor operator value-alignment drift.","control_refs":["CSF-D5"],"evidence_criteria":"Value coherence score"},
+    {"id":"UAS-H5","layer":"human","requirement":"Detect AI dependency-induction markers.","control_refs":["CSF-D6"],"evidence_criteria":"Dependency pattern analysis"},
+    {"id":"UAS-H6","layer":"human","requirement":"Detect attention manipulation.","control_refs":["CSF-D1"],"evidence_criteria":"Attention capture metrics"},
+    {"id":"UAS-H7","layer":"human","requirement":"Preserve identity and role boundaries.","control_refs":["CSF-D4"],"evidence_criteria":"Persona boundary test"},
+    {"id":"UAS-H8","layer":"human","requirement":"Preserve operator decision autonomy.","control_refs":["CSF-D2","CP.9"],"evidence_criteria":"Override-rate analysis"},
+    {"id":"UAS-X1","layer":"bridge","requirement":"Connect output monitoring to human-influence detection.","control_refs":["P4","CSF-D6"],"evidence_criteria":"Linked influence-pathway record"},
+    {"id":"UAS-X2","layer":"bridge","requirement":"Escalate material bias through incident and human-assessment workflows.","control_refs":["CP.6"],"evidence_criteria":"Threshold and incident workflow trace"},
+    {"id":"UAS-X3","layer":"bridge","requirement":"Map operator cognitive load to sovereignty-risk thresholds.","control_refs":["CSF"],"evidence_criteria":"Cognitive-load monitoring record"},
+    {"id":"UAS-X4","layer":"bridge","requirement":"Preserve operator feedback against AI-induced recalibration.","control_refs":["P4","CSF"],"evidence_criteria":"Feedback provenance and integrity test"},
+    {"id":"UAS-X5","layer":"bridge","requirement":"Generate governed evidence packages at milestones and HEAR events.","control_refs":["CP.4","CP.10"],"evidence_criteria":"Timestamped package-generation record"}
+  ],
+  "sources": {
+    "normative": "00-cross-pillar/unbiased-ai/STANDARD.md",
+    "system_requirements": "00-cross-pillar/unbiased-ai/controls/uas-controls-system.md",
+    "human_requirements": "00-cross-pillar/unbiased-ai/controls/uas-controls-human.md",
+    "bridge_requirements": "00-cross-pillar/unbiased-ai/controls/uas-controls-crossdomain.md",
+    "test_protocol": "00-cross-pillar/unbiased-ai/testing/bias-test-protocol.md",
+    "regulatory_mapping": "00-cross-pillar/unbiased-ai/compliance/gsar-552-239-7001-mapping.md"
+  }
+}

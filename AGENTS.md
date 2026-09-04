@@ -9,6 +9,7 @@ This file is the deterministic starting point for software agents, coding assist
 3. Treat `skills/mcp/data/ai-safe2-controls-v3.0.json` as the stable machine-readable dataset for the unchanged 161-control core taxonomy.
 4. Treat `skills/mcp/data/mcp-profile-v3.1.json` as the machine-readable CP.5.MCP v3.1 overlay containing MCP-1 through MCP-19.
 5. Do not add the 19 MCP profile controls to the 161-control framework total.
+6. Treat `00-cross-pillar/unbiased-ai/uas-profile-v1.json` as the UAS regulatory profile extension. Its 27 profile requirements do not add to the 161-control framework total and do not create CP.11 as a core Cross-Pillar control.
 
 ## Version model
 
@@ -17,6 +18,7 @@ This file is the deterministic starting point for software agents, coding assist
 - Gateway: v3.0
 - MCP primary specification binding: 2026-07-28
 - MCP legacy compatibility binding: 2025-11-25
+- UAS regulatory profile extension: v1.0, 27 profile requirements
 
 Component versions are independent. Do not rewrite NEXUS or Gateway evidence as framework v3.1 component evidence unless that component has separately changed version.
 

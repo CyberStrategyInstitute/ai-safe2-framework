@@ -9,7 +9,7 @@
 **Version:** 1.0  
 **Date:** March 2026  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE2 v3.0 — AISM Scoring Methodology  
+**Framework:** AI SAFE2 v3.1 — AISM Scoring Methodology
 **Purpose:** Self-assessment for organizations to determine their AISM maturity level
 
 ---
@@ -32,11 +32,11 @@
 
 | Score | Metrics (Coverage / Robustness / Sovereignty) | Maturity Level |
 |---|---|---|
-| **5** | High / High / High | Autonomous Governance |
-| **4** | High / High / Medium | Sovereign |
-| **3** | Medium combinations (HMM, HHL, MMM, etc.) | Controlled |
-| **2** | Low-medium combinations (MML, MLL, HLL) | Aware |
-| **1** | Low / Low / Low | Reactive |
+| **5** | High / High / High | Sovereignty (alias: Autonomous Governance) |
+| **4** | High / High / Medium | Control (alias: Sovereign) |
+| **3** | Medium combinations (HMM, HHL, MMM, etc.) | Governance (alias: Controlled) |
+| **2** | Low-medium combinations (MML, MLL, HLL) | Visibility (alias: Aware) |
+| **1** | Low / Low / Low | Chaos (alias: Reactive) |
 
 ---
 
@@ -44,12 +44,12 @@
 
 ### Topic 1: Sanitize — Input Validation, Data Filtering, Cleansing
 
-#### Level 1 (Reactive) — Baseline Controls
+#### Level 1 (Chaos; alias: Reactive) — Baseline Controls
 - [ ] P1.T1.1 — Some form of input validation exists for AI systems
 - [ ] P1.T1.4 — Basic content filtering is applied to AI outputs
 - [ ] P1.T1.5 — PII is acknowledged as a concern in AI systems
 
-#### Level 2 (Aware) — Foundation Controls
+#### Level 2 (Visibility; alias: Aware) — Foundation Controls
 - [ ] P1.T1.1 — Input validation schemas are defined for primary AI systems
 - [ ] P1.T1.2 — Basic prompt injection detection is in place
 - [ ] P1.T1.3 — Data quality checks run on training data
@@ -57,7 +57,7 @@
 - [ ] P1.T1.5 — PII/PHI masking is automated for primary systems
 - [ ] P1.T1.6 — Input encoding validation (UTF-8) is enforced
 
-#### Level 3 (Controlled) — Formalized Controls
+#### Level 3 (Governance; alias: Controlled) — Formalized Controls
 - [ ] P1.T1.1 — All AI inputs validated against predefined schemas with rejection of malformed inputs
 - [ ] P1.T1.2 — Adversarial prompt detection with semantic analysis across all endpoints
 - [ ] P1.T1.3 — Statistical anomaly detection on all input data with automated profiling
@@ -68,7 +68,7 @@
 - [ ] P1.T1.8 — Format normalization before tokenization across all pipelines
 - [ ] P1.T1.9 — Cryptographic verification of imported models and datasets (SHA-256)
 
-#### Level 4 (Sovereign) — Advanced Controls
+#### Level 4 (Control; alias: Sovereign) — Advanced Controls
 - [ ] P1.T1.2-GF3 — OpenSSF Model Signing (OMS) verification at model load time
 - [ ] P1.T1.2-GF3 — Provenance chain verification from base model through fine-tuning to deployment
 - [ ] P1.T1.2-GF3 — Automated SBOM scanning with CVE correlation
@@ -80,7 +80,7 @@
 - [ ] P1.T1.5-GF2/5 — RAG poisoning detection with baseline embedding monitoring
 - [ ] P1.T1.5-GF2/5 — Thread injection prevention with per-agent session isolation
 
-#### Level 5 (Autonomous Governance) — Optimizing Controls
+#### Level 5 (Sovereignty; alias: Autonomous Governance) — Optimizing Controls
 - [ ] All Level 4 controls with automated self-healing and continuous verification
 - [ ] Formal verification of input validation logic
 - [ ] Automated model fingerprinting triggers blocking on tampering detection
@@ -97,16 +97,16 @@
 
 ### Topic 2: Isolate — Containment, Sandboxing, Boundary Enforcement
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P1.T2.1 — AI systems run in shared environments with some access controls
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P1.T2.1 — Agents deployed in basic isolated execution environments
 - [ ] P1.T2.2 — AI workloads in dedicated network segments
 - [ ] P1.T2.3 — API gateways with authentication deployed
 - [ ] P1.T2.5 — Basic tool access restrictions for agents
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P1.T2.1 — Containerized agent deployment (Docker/Kubernetes) with resource limits
 - [ ] P1.T2.2 — VLAN segmentation with firewall ACLs for AI systems
 - [ ] P1.T2.3 — Rate limiting and IP/role-based API restrictions
@@ -117,7 +117,7 @@
 - [ ] P1.T2.8 — NGFW with IDS/IPS and egress filtering
 - [ ] P1.T2.9 — Credentials stored in secret vaults with regular rotation
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P1.T2.1-GF1 — Agent-to-agent communications isolated in dedicated network zones
 - [ ] P1.T2.1-GF1 — A2A protocol restrictions with authentication/authorization/encryption
 - [ ] P1.T2.1-GF1 — Automated agent quarantine on behavioral anomaly detection
@@ -127,7 +127,7 @@
 - [ ] P1.T2.2-GF4 — Just-in-time (JIT) privilege elevation
 - [ ] P1.T2.2-GF4 — Automated decommissioning of inactive NHI (>90 days)
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with continuous automated verification
 - [ ] Formal verification of boundary enforcement policies
 - [ ] Self-adapting network segmentation based on threat intelligence
@@ -145,15 +145,15 @@
 
 ### Topic 3: Audit — Verification, Accountability, Tracking
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P2.T3.1 — Some logging exists for AI systems but not centralized
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P2.T3.1 — Activity logging with timestamps for primary AI systems
 - [ ] P2.T3.2 — Basic model performance monitoring (accuracy tracking)
 - [ ] P2.T3.6 — Initial compliance mapping started
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P2.T3.1 — Tamper-proof, centralized logging with cryptographic signing
 - [ ] P2.T3.2 — Automated data drift and concept drift detection with alerts
 - [ ] P2.T3.3 — Behavioral baselines established with statistical anomaly detection
@@ -165,7 +165,7 @@
 - [ ] P2.T3.9 — Version control for all AI artifacts with change documentation
 - [ ] P2.T3.10 — Regular vulnerability scans using MITRE ATLAS framework
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P2.T1.1-GF4 — Dedicated NHI logging channels with real-time anomaly detection
 - [ ] P2.T1.1-GF4 — Automated alerts on NHI credential misuse
 - [ ] P2.T1.2-GF1/2 — Agent decision logs with full context and reasoning traces
@@ -178,7 +178,7 @@
 - [ ] P2.T1.4-GF5 — AgentPoison trigger phrase detection
 - [ ] P2.T1.4-GF5 — Baseline embedding space monitoring
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with AI-driven continuous audit
 - [ ] Formal verification of audit trail integrity
 - [ ] Automated compliance reporting across all frameworks simultaneously
@@ -194,15 +194,15 @@
 
 ### Topic 4: Inventory — Asset Mapping, Dependencies, Documentation
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P2.T4.1 — Some AI systems are informally known but no registry exists
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P2.T4.1 — Basic AI system inventory maintained (spreadsheet or similar)
 - [ ] P2.T4.2 — Model versions tracked informally
 - [ ] P2.T4.8 — Some architecture documentation exists
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P2.T4.1 — Centralized AI system registry with owner, type, criticality, risk class
 - [ ] P2.T4.2 — Model catalog with versions, release dates, training datasets, architectures
 - [ ] P2.T4.3 — Agent capabilities, tools, autonomy levels, decision authority documented
@@ -215,7 +215,7 @@
 - [ ] P2.T4.10 — Configuration baselines with drift detection
 - [ ] P2.T4.11 — SBOM generated for all models/applications
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P2.T2.1-GF4 — Automated NHI discovery across all environments
 - [ ] P2.T2.1-GF4 — Centralized NHI inventory with metadata (owner, purpose, permissions)
 - [ ] P2.T2.1-GF4 — Lifecycle status tracking (active/inactive/decommissioned)
@@ -227,7 +227,7 @@
 - [ ] P2.T2.3-GF3 — SBOM version control and audit trails
 - [ ] P2.T2.3-GF3 — Certificate expiration monitoring for model signing
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with automated continuous discovery and reconciliation
 - [ ] Self-updating inventory via integration with CI/CD pipelines
 - [ ] Dependency graph visualization with automated vulnerability alerting
@@ -244,16 +244,16 @@
 
 ### Topic 5: Fail-Safe — Shutdowns, Error Handling, Resilience
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P3.T5.2 — AI systems can be manually shut down if needed
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P3.T5.1 — Basic circuit breakers in critical AI pipelines
 - [ ] P3.T5.2 — Emergency shutdown documented for primary AI systems
 - [ ] P3.T5.4 — Error handling prevents error propagation in most cases
 - [ ] P3.T5.10 — Initial incident response procedures exist
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P3.T5.1 — Circuit breakers with graceful degradation paths tested regularly
 - [ ] P3.T5.2 — Kill switches accessible to operators with escalation procedures
 - [ ] P3.T5.3 — Failover to simpler models/rule-based systems defined and tested
@@ -265,7 +265,7 @@
 - [ ] P3.T5.9 — Safe defaults enforced for all AI system configurations
 - [ ] P3.T5.10 — Incident response playbooks for all identified AI threat scenarios
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P3.T1.1-GF1 — Centralized kill switch for multi-agent systems
 - [ ] P3.T1.1-GF1 — Automated agent isolation on anomalous behavior
 - [ ] P3.T1.1-GF1 — Consensus failure escalation to human operators
@@ -275,7 +275,7 @@
 - [ ] P3.T1.3-GF5 — Memory poisoning incident response playbook
 - [ ] P3.T1.3-GF5 — RAG content quarantine and restoration procedures
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with automated self-recovery
 - [ ] Formal verification of fail-safe logic
 - [ ] AI-driven predictive failure detection and pre-emptive containment
@@ -291,15 +291,15 @@
 
 ### Topic 6: Recovery — Backups, Restoration, Continuity
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P3.T6.2 — Ad-hoc backup procedures exist for some AI data
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P3.T6.1 — Model state backups exist for critical models
 - [ ] P3.T6.4 — Basic disaster recovery plan includes AI systems
 - [ ] P3.T6.6 — RTO/RPO targets defined for primary AI services
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P3.T6.1 — Automated model state backups with version tracking
 - [ ] P3.T6.2 — Data recovery procedures documented and tested
 - [ ] P3.T6.3 — Automated backup scheduling for all AI artifacts
@@ -311,14 +311,14 @@
 - [ ] P3.T6.9 — Configuration restoration procedures documented
 - [ ] P3.T6.10 — Post-incident forensics with documented post-mortems
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P3.T2.1-GF1 — Agent state and memory backups with version control
 - [ ] P3.T2.1-GF1 — Multi-agent system state snapshots
 - [ ] P3.T2.2-GF4 — NHI credential backup/escrow with automated rotation
 - [ ] P3.T2.2-GF4 — HSM integration for credential key management
 - [ ] P3.T2.2-GF4 — Fallback authentication methods for NHI
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with zero-touch automated recovery
 - [ ] Sub-minute RTO for critical AI services
 - [ ] Self-validating recovery that confirms system integrity post-restoration
@@ -335,15 +335,15 @@
 
 ### Topic 7: Engage — Human Oversight, Intervention, Interaction
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P4.T7.5 — Someone can intervene if an AI system behaves unexpectedly
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P4.T7.1 — Human approval required for some high-risk AI actions
 - [ ] P4.T7.4 — Escalation procedures exist but are informal
 - [ ] P4.T7.6 — User interactions with AI systems are observed sporadically
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P4.T7.1 — Human approval workflows for all critical AI actions
 - [ ] P4.T7.2 — Explainability/reasoning transparency for key decisions
 - [ ] P4.T7.3 — Feedback loops for fine-tuning based on user input
@@ -355,7 +355,7 @@
 - [ ] P4.T7.9 — Cross-functional AI governance collaboration established
 - [ ] P4.T7.10 — Stakeholder transparency reporting implemented
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P4.T1.1-GF1 — Human approval gates for multi-agent consensus decisions
 - [ ] P4.T1.1-GF1 — Consensus failure automatically escalates to human operators
 - [ ] P4.T1.1-GF1 — Human override capability for all agent swarm actions
@@ -363,7 +363,7 @@
 - [ ] P4.T1.2-GF4 — Just-in-time access with anomalous access alerts
 - [ ] P4.T1.2-GF4 — Baseline validation for all NHI privilege changes
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with adaptive human oversight
 - [ ] AI-assisted oversight that surfaces only highest-priority decisions to humans
 - [ ] Continuous stakeholder transparency with real-time dashboards
@@ -379,15 +379,15 @@
 
 ### Topic 8: Monitor — Observation, Anomaly Detection, Logging
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P4.T8.3 — Basic security logs exist for AI infrastructure
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P4.T8.1 — Basic performance dashboards for primary AI systems
 - [ ] P4.T8.3 — SIEM integration for AI security events
 - [ ] P4.T8.5 — Token usage tracked for cost management
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P4.T8.1 — Real-time performance dashboards for all production AI systems
 - [ ] P4.T8.2 — Anomaly detection with automated alerting
 - [ ] P4.T8.3 — Full SIEM integration with AI-specific event correlation
@@ -399,7 +399,7 @@
 - [ ] P4.T8.9 — Data quality metrics tracked for all AI data sources
 - [ ] P4.T8.10 — Compliance audit logs generated automatically
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P4.T2.1-GF1 — Distributed agent health monitoring with consensus validation
 - [ ] P4.T2.1-GF1 — Multi-node anomaly detection with voting consensus
 - [ ] P4.T2.1-GF1 — Agent communication pattern monitoring
@@ -410,7 +410,7 @@
 - [ ] P4.T2.3-GF5 — Embedding space monitoring for semantic drift
 - [ ] P4.T2.3-GF5 — RAG integrity monitoring with baseline comparison
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with self-tuning monitoring thresholds
 - [ ] Predictive monitoring that anticipates issues before they manifest
 - [ ] Automated response to monitoring alerts (containment, escalation, recovery)
@@ -427,15 +427,15 @@
 
 ### Topic 9: Evolve — Threat Adaptation, Continuous Improvement
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P5.T9.4 — Security patches applied when notified by vendors
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P5.T9.1 — Threat intelligence feeds monitored for AI-relevant threats
 - [ ] P5.T9.4 — Patch management process includes AI infrastructure
 - [ ] P5.T9.10 — Some lessons learned captured after incidents
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P5.T9.1 — Threat intelligence integrated into AI risk assessments
 - [ ] P5.T9.2 — Playbooks and controls updated based on new threats
 - [ ] P5.T9.3 — Model retraining scheduled with performance triggers
@@ -447,7 +447,7 @@
 - [ ] P5.T9.9 — Performance optimization processes established
 - [ ] P5.T9.10 — Formal incident lessons learned with action tracking
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P5.T1.1-GF1 — Agent swarm capability evolution tracked and managed
 - [ ] P5.T1.1-GF1 — Multi-agent system security enhancements planned
 - [ ] P5.T1.2-GF3 — OMS specification updates tracked and adopted
@@ -457,7 +457,7 @@
 - [ ] P5.T1.4-GF5 — Memory poisoning defense techniques updated with latest research
 - [ ] P5.T1.4-GF5 — AgentPoison/MINJA/PajaMAS mitigations current
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with automated threat adaptation
 - [ ] AI-driven continuous improvement recommendations
 - [ ] Self-evolving controls that adapt to new threat patterns autonomously
@@ -473,15 +473,15 @@
 
 ### Topic 10: Educate — Training, Culture, Awareness
 
-#### Level 1 (Reactive)
+#### Level 1 (Chaos; alias: Reactive)
 - [ ] P5.T10.2 — General cybersecurity awareness mentions AI risks
 
-#### Level 2 (Aware)
+#### Level 2 (Visibility; alias: Aware)
 - [ ] P5.T10.1 — Basic operator training for primary AI systems
 - [ ] P5.T10.2 — AI security awareness included in annual training
 - [ ] P5.T10.3 — Basic safe prompt engineering guidelines shared
 
-#### Level 3 (Controlled)
+#### Level 3 (Governance; alias: Controlled)
 - [ ] P5.T10.1 — Comprehensive operator training for all AI system types
 - [ ] P5.T10.2 — Dedicated AI security awareness training program
 - [ ] P5.T10.3 — Safe prompt engineering education with hands-on exercises
@@ -493,7 +493,7 @@
 - [ ] P5.T10.9 — Role-based training (developers, operators, leaders)
 - [ ] P5.T10.10 — Culture of AI accountability established with framework
 
-#### Level 4 (Sovereign)
+#### Level 4 (Control; alias: Sovereign)
 - [ ] P5.T2.1-GF1 — Agent operator and swarm manager training programs
 - [ ] P5.T2.1-GF1 — Multi-agent system security training with hands-on labs
 - [ ] P5.T2.1-GF1 — Emerging threat briefings for agentic AI
@@ -505,7 +505,7 @@
 - [ ] P5.T2.4-GF5 — AgentPoison awareness modules with real-world examples
 - [ ] P5.T2.4-GF5 — Prompt injection prevention training with hands-on exercises
 
-#### Level 5 (Autonomous Governance)
+#### Level 5 (Sovereignty; alias: Autonomous Governance)
 - [ ] All Level 4 controls with continuous learning culture
 - [ ] AI-specific certification paths for all AI practitioners
 - [ ] Organization-wide AI safety culture with measurable outcomes
@@ -516,6 +516,33 @@
 - Robustness: ☐ Low ☐ Medium ☐ High
 - Sovereignty Assurance: ☐ Low ☐ Medium ☐ High
 - **Section Score: ___/5**
+
+---
+
+## AI SAFE² v3.1 Protocol Governance Overlay
+
+Complete this overlay for any deployment that exposes MCP or equivalent
+agent-to-tool interfaces. It is a deployment-readiness check and does not add a
+sixth pillar or change the 30-cell AISM scoring formula.
+
+- [ ] CP.5.MCP profile applicability is documented for MCP-1 through MCP-19.
+- [ ] Agent-to-tool authorization binds verified principal, capability grant,
+      delegation lineage, intended resource or audience, and policy decision.
+- [ ] State uses explicit principal-scoped handles; a protocol session ID is
+      not treated as identity or authorization.
+- [ ] Tool catalogs, schemas, extensions, and returned content have provenance,
+      integrity validation, and change controls.
+- [ ] Header/body identity and authorization inputs cannot conflict silently.
+- [ ] Extension negotiation fails closed for unsupported security-critical
+      requirements.
+- [ ] Replay resistance and MRTR/resource binding are tested independently of
+      connection lifetime.
+- [ ] Evidence distinguishes framework conformance from NEXUS or other
+      reference-implementation availability.
+
+**Overlay decision:** ☐ Ready ☐ Ready with restrictions ☐ Hold
+
+**Evidence references:** ________________________________________________
 
 ---
 
@@ -545,11 +572,14 @@
 
 | Score | Level | Classification |
 |---|---|---|
-| 4.50 – 5.00 | 5 | **Autonomous Governance** — AI sovereignty fully realized |
-| 3.50 – 4.49 | 4 | **Sovereign** — Full visibility and adaptive control |
-| 2.50 – 3.49 | 3 | **Controlled** — Formalized controls, documented processes |
-| 1.50 – 2.49 | 2 | **Aware** — Basic policies, inconsistent application |
-| 1.00 – 1.49 | 1 | **Reactive** — Ad-hoc, incident-driven |
+| 4.50 – 5.00 | 5 | **Sovereignty** (alias: Autonomous Governance) — AI sovereignty fully realized |
+| 3.50 – 4.49 | 4 | **Control** (alias: Sovereign) — Runtime control and adaptive oversight |
+| 2.50 – 3.49 | 3 | **Governance** (alias: Controlled) — Formalized controls and documented processes |
+| 1.50 – 2.49 | 2 | **Visibility** (alias: Aware) — Basic controls with inconsistent application |
+| 1.00 – 1.49 | 1 | **Chaos** (alias: Reactive) — Ad hoc, incident-driven governance |
+
+The canonical names are defined in [maturity-model.md](./maturity-model.md).
+Aliases are retained only for compatibility with earlier assessment language.
 
 ---
 
@@ -570,7 +600,7 @@
 
 ## References
 
-1. Cyber Strategy Institute (2025). AI SAFE2 Framework v3.0.
+1. Cyber Strategy Institute (2026). AI SAFE2 Framework v3.1.
 2. Dotan et al. (2024). IEEE/NIST AI RMF Flexible Maturity Model.
 3. Microsoft Research (2023). Responsible AI Maturity Model.
 4. Cloud Security Alliance (2025). AI Controls Matrix (AICM) v1.0.

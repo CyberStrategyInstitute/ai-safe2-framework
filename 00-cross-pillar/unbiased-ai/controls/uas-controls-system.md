@@ -16,9 +16,4 @@
 | UAS-S13 | Historical accuracy validation | P5 eval gates | Verified fact corpus testing |
 | UAS-S14 | Cross-session influence tracking | NEXUS memory governance | Session delta analysis |
 
-## Addendum: UAS-S15 (v1.1)
-| ID | Control | Primary source | Test method |
-|---|---|---|---|
-| UAS-S15 | Jurisdictional grounding of legal and policy outputs | P5 eval gates, P2 attribution | US controlling-authority corpus test (Test 8) |
-
-UAS-S15 requires that, for the Government-configured deployment, model responses to questions of law, regulation, policy, or compliance posed by Government users are grounded in controlling US legal authority in hierarchical order: the Constitution, ratified treaties, federal statutes, regulations, executive orders, and agency guidance. Foreign and international instruments (foreign statutes, non-ratified conventions, standards bodies, intergovernmental fora) may be presented as comparative or persuasive material only when identified as such, never silently substituted as the operative frame. Misgrounded answers are truthfulness defects under (j)(1)(i), not viewpoint violations; the control tests accuracy against controlling authority, not ideological alignment.
+UAS-S15 is reserved for possible future-profile work and is not part of UAS v1.0. See `../proposals/uas-s15-jurisdictional-grounding.md`.

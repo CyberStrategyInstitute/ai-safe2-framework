@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "framework": {
+    "name": "AI SAFE2",
+    "display_name": "AI SAFE²",
+    "version": "3.1.0",
+    "aism_model_version": "1.0",
+    "core_control_count": 161,
+    "cross_pillar_controls": "CP.1-CP.10",
+    "regulatory_profiles": ["UAS-1.0"]
+  },
+  "normative_sources": [
+    "AISM/AISM-Scoring-Matrix-Methodology.md",
+    "AISM/AISM-Self-Assessment-Tool.md",
+    "AISM/maturity-model.md",
+    "AISM/sovereignty-matrix.md"
+  ],
+  "supporting_sources": [
+    "AISM/control-stack.md",
+    "AISM/strategic-architecture.md",
+    "AISM/operational-loop.md",
+    "AISM/agent-threat-control-matrix.md",
+    "AISM/AISM-Compliance-Crosswalk.md"
+  ],
+  "assessment_metrics": ["coverage", "robustness", "sovereignty_assurance"],
+  "dimensions": [
+    {"id": "D1", "name": "Governance Architecture", "weight": 0.20},
+    {"id": "D2", "name": "Risk Strategy and Posture", "weight": 0.18},
+    {"id": "D3", "name": "Technical Controls", "weight": 0.25},
+    {"id": "D4", "name": "Safety Culture and Workforce", "weight": 0.12},
+    {"id": "D5", "name": "Lifecycle Processes", "weight": 0.15},
+    {"id": "D6", "name": "Sovereignty Assurance", "weight": 0.10}
+  ],
+  "pillars": [
+    {"id": "P1", "name": "Sanitize / Isolate", "weight": 0.20, "topics": [
+      {"id": "T1", "name": "Sanitize"}, {"id": "T2", "name": "Isolate"}
+    ]},
+    {"id": "P2", "name": "Audit / Inventory", "weight": 0.20, "topics": [
+      {"id": "T3", "name": "Audit"}, {"id": "T4", "name": "Inventory"}
+    ]},
+    {"id": "P3", "name": "Fail-Safe / Recovery", "weight": 0.20, "topics": [
+      {"id": "T5", "name": "Fail-Safe"}, {"id": "T6", "name": "Recovery"}
+    ]},
+    {"id": "P4", "name": "Engage / Monitor", "weight": 0.20, "topics": [
+      {"id": "T7", "name": "Engage"}, {"id": "T8", "name": "Monitor"}
+    ]},
+    {"id": "P5", "name": "Evolve / Educate", "weight": 0.20, "topics": [
+      {"id": "T9", "name": "Evolve"}, {"id": "T10", "name": "Educate"}
+    ]}
+  ],
+  "maturity_levels": [
+    {"level": 1, "minimum": 1.0, "name": "Chaos", "description": "Ad Hoc Probabilistic", "aliases": ["Reactive"]},
+    {"level": 2, "minimum": 1.5, "name": "Visibility", "description": "Observable and Contained", "aliases": ["Aware"]},
+    {"level": 3, "minimum": 2.5, "name": "Governance", "description": "Defined Semantic Governance", "aliases": ["Controlled"]},
+    {"level": 4, "minimum": 3.5, "name": "Control", "description": "Quantitatively Managed Runtime", "aliases": ["Sovereign"]},
+    {"level": 5, "minimum": 4.5, "name": "Sovereignty", "description": "Autonomous Governance", "aliases": ["Autonomous Governance"]}
+  ],
+  "evidence_categories": ["documentary", "operational", "attestation"],
+  "evidence_grades": {"E0": 0.0, "E1": 0.2, "E2": 0.4, "E3": 0.6, "E4": 0.8, "E5": 1.0},
+  "probability_policy": {
+    "allowed": ["observed", "evidence_informed", "not_estimable"],
+    "requires": ["outcome", "time_horizon", "method", "confidence"],
+    "prohibited_claim": "percent safe"
+  }
+}
