@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/discovery-drift-v1.schema.json",
+  "title": "AI SAFE2 Discovery Drift",
+  "type": "object",
+  "required": ["schema_version", "baseline_integrity", "scope_changed", "changes", "counts", "findings", "interpretation"],
+  "properties": {
+    "schema_version": {"const": "safe2.discovery-drift.v1"},
+    "baseline_collected_at": {"type": ["string", "null"]},
+    "current_collected_at": {"type": ["string", "null"]},
+    "baseline_integrity": {"enum": ["valid", "not_present"]},
+    "scope_changed": {"type": "boolean"},
+    "changes": {"type": "integer", "minimum": 0},
+    "counts": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "interpretation": {"type": "string"}
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "required": ["id", "severity", "category", "title", "facts", "assumptions", "recommendation", "candidate_controls", "verification"],
+      "properties": {"severity": {"enum": ["critical", "high", "medium", "low", "info"]}}
+    }
+  }
+}

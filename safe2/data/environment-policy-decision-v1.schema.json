@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/environment-policy-decision-v1.schema.json",
+  "title": "AI SAFE2 Environment Policy Decision",
+  "type": "object",
+  "required": ["schema_version", "policy_id", "disposition", "exit_code", "violations", "unmet_prerequisites", "facts", "interpretation"],
+  "properties": {
+    "schema_version": {"const": "safe2.environment-policy-decision.v1"},
+    "policy_id": {"type": "string"},
+    "disposition": {"enum": ["ALLOW", "HOLD", "DENY"]},
+    "exit_code": {"enum": [0, 1, 2]},
+    "violations": {"type": "array", "items": {"$ref": "#/$defs/result"}},
+    "unmet_prerequisites": {"type": "array", "items": {"$ref": "#/$defs/result"}},
+    "facts": {"type": "object", "required": ["posture_disposition", "finding_counts", "drift_changes", "baseline_integrity"]},
+    "interpretation": {"type": "string"}
+  },
+  "$defs": {
+    "result": {
+      "type": "object",
+      "required": ["rule", "reason"],
+      "properties": {"rule": {"type": "string"}, "reason": {"type": "string"}},
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

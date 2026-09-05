@@ -12,6 +12,7 @@ names attack classes is not rejected.
 """
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 from typing import NamedTuple
@@ -32,6 +33,11 @@ RULES = (
 )
 
 TEXT_EXTENSIONS = {".md", ".txt", ".yaml", ".yml", ".json", ".toml"}
+EXCLUDED_DIRS = {".git", ".hg", ".svn", ".venv", "venv", "node_modules", "build", "dist", "__pycache__"}
+
+
+class ScanLimitExceeded(RuntimeError):
+    """The skill scan stopped because complete bounded coverage was impossible."""
 
 
 class GateFinding(NamedTuple):
@@ -51,17 +57,35 @@ class GateFinding(NamedTuple):
         }
 
 
-def scan(root: Path) -> list[GateFinding]:
+def scan(root: Path, *, max_files: int = 10_000, max_file_bytes: int = 5_000_000,
+         max_total_bytes: int = 100_000_000) -> list[GateFinding]:
     """Static-scan a skill package directory for trust-gate violations."""
     findings: list[GateFinding] = []
-    for path in sorted(root.rglob("*")):
-        if not path.is_file() or path.suffix.lower() not in TEXT_EXTENSIONS:
-            continue
-        text = path.read_text(encoding="utf-8", errors="replace")
-        for rule_id, severity, pattern, description in RULES:
-            for match in pattern.finditer(text):
-                line = text.count("\n", 0, match.start()) + 1
-                findings.append(GateFinding(rule_id, severity, path.as_posix(), line, description))
+    count = 0
+    total = 0
+    for current, dirs, files in os.walk(root):
+        dirs[:] = sorted(
+            name for name in dirs
+            if name not in EXCLUDED_DIRS and not name.startswith((".test-temp", "pytest-"))
+        )
+        for name in sorted(files):
+            path = Path(current) / name
+            if path.suffix.lower() not in TEXT_EXTENSIONS:
+                continue
+            count += 1
+            if count > max_files:
+                raise ScanLimitExceeded("skill scan exceeded the file-count limit; coverage is incomplete")
+            size = path.stat().st_size
+            if size > max_file_bytes:
+                raise ScanLimitExceeded(f"skill file exceeds the per-file byte limit: {path}")
+            total += size
+            if total > max_total_bytes:
+                raise ScanLimitExceeded("skill scan exceeded the total-byte limit; coverage is incomplete")
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for rule_id, severity, pattern, description in RULES:
+                for match in pattern.finditer(text):
+                    line = text.count("\n", 0, match.start()) + 1
+                    findings.append(GateFinding(rule_id, severity, path.as_posix(), line, description))
     return findings
 
 

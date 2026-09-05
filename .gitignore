@@ -1,0 +1,12 @@
+.safe2/
+__pycache__/
+.test-temp*/
+.uv-cache/
+.venv/
+.release-venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist-final/
+dist-qa*/
+dist-stranger-ready/

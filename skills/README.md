@@ -93,7 +93,7 @@ See [skills/mcp/README.md](./mcp/README.md) for current transport, authenticatio
 | Canonical skill | **skills/SKILL.md** |
 | NEXUS role | **CSI reference implementation, not mandatory dependency** |
 
-CP.11 UAS is a compliance overlay and should not be added to the 161 core count as a set of new independent framework controls.
+UAS is a 27-requirement regulatory profile extension, not CP.11, and does not add new controls to the 161-control core.
 
 ---
 
