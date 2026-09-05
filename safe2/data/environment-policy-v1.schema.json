@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/environment-policy-v1.schema.json",
+  "title": "AI SAFE2 Environment Decision Policy",
+  "type": "object",
+  "required": ["schema_version", "id"],
+  "properties": {
+    "schema_version": {"const": "safe2.environment-policy.v1"},
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9._-]{1,100}$"},
+    "allowed_dispositions": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["BASELINE", "REVIEW"]}},
+    "max_findings": {
+      "type": "object",
+      "properties": {
+        "critical": {"type": "integer", "minimum": 0},
+        "high": {"type": "integer", "minimum": 0},
+        "medium": {"type": "integer", "minimum": 0},
+        "low": {"type": "integer", "minimum": 0},
+        "info": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "require_baseline": {"type": "boolean"},
+    "require_baseline_integrity": {"type": "boolean"},
+    "require_config_inspection": {"type": "boolean"},
+    "require_all_targets_completed": {"type": "boolean"},
+    "max_drift_changes": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}

@@ -355,6 +355,8 @@ SKIP_DIRS = {
     "test",
 }
 
+SKIP_DIR_PREFIXES = (".test-temp", "pytest-")
+
 
 class StaticScanner:
     def __init__(
@@ -378,7 +380,10 @@ class StaticScanner:
 
         for root, dirs, files in os.walk(root_path):
             # Prune skip dirs in-place so os.walk doesn't descend
-            dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+            dirs[:] = [
+                d for d in dirs
+                if d not in SKIP_DIRS and not d.startswith(SKIP_DIR_PREFIXES)
+            ]
 
             for filename in files:
                 if scanned_files >= self.max_files:

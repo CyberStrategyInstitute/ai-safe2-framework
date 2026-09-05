@@ -21,12 +21,15 @@ import click
 
 from safe2 import __version__
 from safe2.commands.aism import aism
+from safe2.commands.doctor import doctor
 from safe2.commands.evidence import evidence
 from safe2.commands.example import example
+from safe2.commands.feedback import feedback
 from safe2.commands.gate import gate
 from safe2.commands.mcp import mcp
 from safe2.commands.report import report
 from safe2.commands.scan import scan
+from safe2.commands.schema import schema
 from safe2.commands.score import score
 
 
@@ -46,6 +49,9 @@ def cli():
     safe2 score mcp https://host/mcp         remote MCP server score
     safe2 report project . --format all      json + sarif + markdown
     safe2 evidence nexus ./NEXUS             attributed implementation evidence
+    safe2 doctor .                            multi-harness environment inventory
+    safe2 feedback record ...                 operational friction evidence
+    safe2 schema list                         machine-readable evidence contracts
     safe2 aism score assessment.json         human Decision Card
     safe2 example verify aism-decision-card  executable reference validation
     safe2 mcp wrap-stdio -- python -m server runtime injection scanning
@@ -57,10 +63,13 @@ cli.add_command(scan)
 cli.add_command(aism)
 cli.add_command(evidence)
 cli.add_command(example)
+cli.add_command(doctor)
+cli.add_command(feedback)
 cli.add_command(gate)
 cli.add_command(score)
 cli.add_command(report)
 cli.add_command(mcp)
+cli.add_command(schema)
 
 
 @cli.command("serve")

@@ -16,13 +16,23 @@ from safe2.cli import cli
 def test_top_level_help():
     result = CliRunner().invoke(cli, ["--help"])
     assert result.exit_code == 0
-    for name in ("scan", "gate", "score", "report", "mcp", "serve"):
+    for name in (
+        "scan",
+        "gate",
+        "score",
+        "report",
+        "mcp",
+        "serve",
+        "doctor",
+        "feedback",
+        "schema",
+    ):
         assert name in result.output
 
 
 def test_every_subcommand_group_has_help():
     runner = CliRunner()
-    for group in ("scan", "gate", "score", "report", "mcp"):
+    for group in ("scan", "gate", "score", "report", "mcp", "feedback", "schema"):
         result = runner.invoke(cli, [group, "--help"])
         assert result.exit_code == 0, f"safe2 {group} --help failed: {result.output}"
 

@@ -90,6 +90,17 @@ def main() -> int:
 
     if core.get("metadata", {}).get("total_controls") != 161:
         errors.append("core dataset metadata must declare exactly 161 controls")
+    pillar_records = core.get("pillar_controls", [])
+    cross_pillar_records = core.get("cross_pillar_controls", [])
+    core_ids = [item.get("id") for item in [*pillar_records, *cross_pillar_records]]
+    if len(pillar_records) != 151 or len(cross_pillar_records) != 10:
+        errors.append("core dataset must contain 151 pillar and 10 Cross-Pillar controls")
+    if len(core_ids) != 161 or len(set(core_ids)) != 161 or any(not item for item in core_ids):
+        errors.append("core dataset must contain exactly 161 unique, non-empty control IDs")
+    if {item.get("id") for item in cross_pillar_records} != {
+        f"CP.{number}" for number in range(1, 11)
+    }:
+        errors.append("core Cross-Pillar IDs must be CP.1 through CP.10")
     if mcp.get("metadata", {}).get("framework_controls_total") != 161:
         errors.append("MCP profile must preserve the 161-control framework total")
     if mcp.get("metadata", {}).get("profile_controls") != 19:

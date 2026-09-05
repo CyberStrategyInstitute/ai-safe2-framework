@@ -31,6 +31,7 @@ Examples demonstrate implementation patterns. They do not create framework confo
 | [`codex-sovereign-runtime/`](./codex-sovereign-runtime/) | OpenAI Codex | Runtime enforcement wrapper for Codex-driven coding agents. |
 | [`crewai-sovereign-runtime/`](./crewai-sovereign-runtime/) | CrewAI | Governance wrapper for CrewAI crew-based orchestration. |
 | [`cursor-sovereign-runtime/`](./cursor-sovereign-runtime/) | Cursor | Runtime controls for Cursor IDE chains, .cursor/rules injection surfaces, and AI-generated code execution. |
+| [`environment-decision-card/`](./environment-decision-card/) | Environment Discovery, Drift, Evidence, and Policy | Privacy-safe baseline-to-decision workflow with human cards and a unified evidence manifest. |
 | [`hermes-sovereign-runtime/`](./hermes-sovereign-runtime/) | NousResearch Hermes | Closes four critical audit findings identified in the Hermes agent. |
 | [`ishi/`](./ishi/) | Supervisory agent | Reviews agent plans and enforces governance decisions before high-risk actions execute. |
 | [`langchain-sovereign-runtime/`](./langchain-sovereign-runtime/) | LangChain | Runtime controls for LangChain chains and tool-calling agents. |

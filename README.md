@@ -185,12 +185,33 @@ preserving human decision authority:
 
 ```bash
 safe2 scan project .
+safe2 doctor . --format json --output environment-inventory.json
+safe2 doctor . --assess --inspect-config --baseline trusted-inventory.json
+safe2 doctor . --assess --card-format markdown --card-output environment-card.md
+safe2 doctor . --assess --policy environment-policy.json --enforce-policy --output environment-decision.json
+safe2 schema list
 safe2 gate skill ./candidate-skill --strict
 safe2 evidence nexus ./NEXUS --output nexus-evidence.json
 safe2 evidence skillspector ./candidate-skill --output skillspector-evidence.json
+safe2 evidence manifest environment-inventory.json nexus-evidence.json --subject-id governed-agent --output run-manifest.json --strict
 safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "NEXUS Local" --output assessment.json
 safe2 aism score assessment.json --format markdown --output decision-card.md
 ```
+
+`safe2 doctor` provides metadata-only discovery for multi-harness workstations,
+including known Codex, Claude Code, Antigravity, Hermes, OpenClaw, and Grok
+indicators, available shells, host details, CI markers, and WSL availability.
+It does not read configuration contents or credential values and does not treat
+inventory as proof of secure configuration. Named WSL distributions and
+explicit SSH-accessible Linux hosts or cloud VMs can use the same fixed,
+non-interactive metadata probe; the command never scans a network. Operational frustrations and false
+completion claims can be captured locally with `safe2 feedback record` and
+measured with `safe2 feedback summary`.
+
+A reviewed `safe2 doctor` inventory can also serve as a trusted baseline.
+Later runs report harness, asset, redacted configuration-hash, target-coverage,
+and assessment-scope drift. Drift remains a review signal rather than proof of
+authorization, compromise, control conformance, or organizational maturity.
 
 The AISM Decision Card separates facts, assumptions, conflicts, unknowns,
 alternatives, history, and recommendations. Machine-readable JSON remains the
@@ -198,9 +219,14 @@ canonical exchange format. An automated pass is not a claim of full framework
 conformance or organizational maturity.
 
 See the executable [AISM Decision Card example](examples/aism-decision-card/).
+See the executable [environment Decision Card workflow](examples/environment-decision-card/).
 Evidence ingestion is conservative: collectors suggest candidate AISM cells but never invent maturity ratings. Evidence without verification provenance is labeled and capped until a human confirms the mapping.
 
 See the complete [AI SAFE² CLI command and architecture guide](safe2/README.md).
+For release boundaries, verified behavior, and external checks that still
+require human or production execution, see the
+[Stranger-Ready CLI Review](docs/STRANGER-READY-CLI-REVIEW.md),
+[Security Policy](SECURITY.md), and [Support Policy](SUPPORT.md).
 
 ### MCP-19 and legacy bearer tokens
 
@@ -399,6 +425,8 @@ See [EVOLUTION.md](EVOLUTION.md) for the full history.
 ├── skills/                    # AI assistant and MCP integration assets
 ├── dashboard/                 # Interactive framework explorer
 ├── EVOLUTION.md               # Release and framework evolution history
+├── SECURITY.md                # Supported versions and vulnerability reporting
+├── SUPPORT.md                 # Support, compatibility, and maintenance policy
 ├── README.md                  # Current framework overview
 └── skill.md                   # Framework context for AI assistants
 ```

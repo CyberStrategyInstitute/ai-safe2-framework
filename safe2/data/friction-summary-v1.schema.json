@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/friction-summary-v1.schema.json",
+  "title": "AI SAFE2 Operational Friction Summary",
+  "type": "object",
+  "required": ["schema_version", "events", "by_category", "by_outcome", "by_severity", "by_harness", "by_environment", "top_categories", "resolution", "time_window", "evidence_attachment_rate", "claimed_completion", "reference_attested_completion", "completion_evidence_gap", "integrity", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.friction-summary.v1"},
+    "events": {"type": "integer", "minimum": 0},
+    "by_category": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "by_outcome": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "by_severity": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "by_harness": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "by_environment": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "top_categories": {"type": "array", "items": {"type": "object", "required": ["category", "events"], "properties": {"category": {"type": "string"}, "events": {"type": "integer", "minimum": 1}}, "additionalProperties": false}},
+    "resolution": {"type": "object", "required": ["resolved", "unresolved", "resolved_rate"], "properties": {"resolved": {"type": "integer", "minimum": 0}, "unresolved": {"type": "integer", "minimum": 0}, "resolved_rate": {"type": "number", "minimum": 0, "maximum": 1}}, "additionalProperties": false},
+    "time_window": {"type": "object", "required": ["first_recorded_at", "last_recorded_at"], "properties": {"first_recorded_at": {"type": ["string", "null"]}, "last_recorded_at": {"type": ["string", "null"]}}, "additionalProperties": false},
+    "evidence_attachment_rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "claimed_completion": {"type": "integer", "minimum": 0},
+    "reference_attested_completion": {"type": "integer", "minimum": 0},
+    "completion_evidence_gap": {"type": "integer", "minimum": 0},
+    "integrity": {
+      "type": "object",
+      "required": ["sealed_events", "unsigned_events", "invalid_events", "coverage", "authenticity"],
+      "properties": {
+        "sealed_events": {"type": "integer", "minimum": 0},
+        "unsigned_events": {"type": "integer", "minimum": 0},
+        "invalid_events": {"const": 0},
+        "coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "authenticity": {"const": "unsigned_sha256"}
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}
