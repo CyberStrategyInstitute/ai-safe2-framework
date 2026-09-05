@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/discovery-v1.schema.json",
+  "title": "AI SAFE2 Environment Discovery",
+  "type": "object",
+  "required": ["schema_version", "collected_at", "scope", "privacy", "harnesses", "environments", "shells", "targets", "summary", "limitations", "integrity"],
+  "properties": {
+    "schema_version": {"const": "safe2.discovery.v1"},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "scope": {"type": "object", "required": ["type", "root"], "properties": {"type": {"const": "local"}, "root": {"type": "string"}}, "additionalProperties": false},
+    "privacy": {
+      "type": "object",
+      "required": ["mode", "secret_values_collected", "configuration_contents_collected"],
+      "properties": {
+        "mode": {"enum": ["metadata_only", "metadata_plus_redacted_structure"]},
+        "secret_values_collected": {"const": false},
+        "configuration_contents_collected": {"const": false},
+        "configuration_contents_read_locally": {"type": "boolean"},
+        "raw_configuration_contents_retained": {"const": false},
+        "configuration_values_emitted": {"const": false}
+        ,"security_asset_contents_read_locally": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    },
+    "harnesses": {"type": "array", "items": {"type": "object", "required": ["id", "detected", "commands", "evidence", "confidence"]}},
+    "environments": {"type": "array", "items": {"type": "object", "required": ["id", "type"]}},
+    "shells": {"type": "array", "items": {"type": "object", "required": ["id", "family", "path"]}},
+    "ci_markers": {"type": "array", "items": {"type": "string"}},
+    "targets": {"type": "array", "items": {"type": "object", "required": ["id", "status"]}},
+    "summary": {"type": "object", "required": ["harnesses_detected", "execution_environments", "shells_detected", "assessment_status"]},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "asset_inventory": {"type": "object"},
+    "configuration_inspection": {"type": "object"},
+    "drift": {"$ref": "discovery-drift-v1.schema.json"},
+    "posture": {"$ref": "environment-posture-v1.schema.json"},
+    "policy_decision": {"$ref": "environment-policy-decision-v1.schema.json"},
+    "integrity": {
+      "type": "object",
+      "required": ["algorithm", "canonicalization", "digest", "verification_scope", "authenticity"],
+      "properties": {
+        "algorithm": {"const": "sha256"},
+        "canonicalization": {"const": "json-sort-keys-compact-utf8-v1"},
+        "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "verification_scope": {"const": "all top-level content except integrity"},
+        "authenticity": {"const": "unsigned"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

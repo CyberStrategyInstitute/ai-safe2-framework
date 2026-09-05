@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/nexus-evidence-v1.schema.json",
+  "title": "AI SAFE2 NEXUS Evidence Bundle",
+  "type": "object",
+  "required": ["schema_version", "provider", "collected_at", "target", "observations", "summary", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.nexus-evidence.v1"},
+    "provider": {"type": "object", "required": ["name", "mode"], "properties": {"name": {"type": "string"}, "mode": {"enum": ["static", "read-only-runtime"]}}},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "target": {"type": "string"},
+    "observations": {"type": "array", "items": {"type": "object", "required": ["id", "status", "control_refs", "evidence_grade"], "properties": {"id": {"type": "string"}, "status": {"enum": ["observed", "missing", "failed", "error"]}, "control_refs": {"type": "array", "items": {"type": "string"}}, "evidence_grade": {"enum": ["E0", "E1", "E2", "E3", "E4"]}}}},
+    "summary": {"type": "object"},
+    "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

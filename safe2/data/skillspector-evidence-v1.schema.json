@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/skillspector-evidence-v1.schema.json",
+  "title": "AI SAFE2 SkillSpector Evidence Bundle",
+  "type": "object",
+  "required": ["schema_version", "provider", "collected_at", "target", "source_contract", "source_result", "source_exit_code", "attribution", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.skillspector-evidence.v1"},
+    "provider": {"type": "object", "required": ["name", "mode", "version", "upstream", "license"], "properties": {"name": {"const": "NVIDIA SkillSpector"}, "mode": {"enum": ["static", "static-and-semantic"]}, "version": {"type": "string"}, "upstream": {"const": "https://github.com/NVIDIA/SkillSpector"}, "license": {"const": "Apache-2.0"}}},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "target": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}},
+    "source_contract": {"type": "string"},
+    "source_result": {},
+    "source_exit_code": {"enum": [0, 1]},
+    "attribution": {"type": "string"},
+    "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

@@ -9,6 +9,7 @@ benchmark's raw numbers.
 from __future__ import annotations
 
 import asyncio
+from pathlib import Path
 
 import click
 
@@ -52,7 +53,10 @@ def score_mcp(ctx, server_url, token, batch, badge, timeout):
         return
 
     async def _run():
-        assessor = MCPAssessor(server_url, token=token, timeout=timeout)
+        try:
+            assessor = MCPAssessor(server_url, token=token, timeout=timeout)
+        except ValueError as exc:
+            raise click.ClickException(str(exc)) from exc
         report = await assessor.assess()
         print_terminal_report(report)
         if badge:
@@ -63,19 +67,27 @@ def score_mcp(ctx, server_url, token, batch, badge, timeout):
 
 
 async def _score_batch(batch_file, token, timeout):
-    from pathlib import Path
-
     from aisafe2_mcp_tools.score.assessor import MCPAssessor
     from aisafe2_mcp_tools.score.reporter import print_terminal_report
 
-    urls = [line.strip() for line in Path(batch_file).read_text().splitlines()
+    path = Path(batch_file)
+    if path.is_symlink() or path.stat().st_size > 1_000_000:
+        raise click.ClickException("batch file must be a regular file no larger than 1 MB")
+    urls = [line.strip() for line in path.read_text(encoding="utf-8").splitlines()
             if line.strip() and not line.startswith("#")]
     if not urls:
         click.echo("No URLs found in batch file", err=True)
         return
+    if len(urls) > 1_000:
+        raise click.ClickException("batch file contains more than 1,000 targets")
 
-    for url in urls:
+    # Validate the complete batch before any network request occurs.
+    try:
+        assessors = [MCPAssessor(url, token=token, timeout=timeout) for url in urls]
+    except ValueError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+    for url, assessor in zip(urls, assessors, strict=True):
         click.echo(f"Scoring {url}...", err=True)
-        assessor = MCPAssessor(url, token=token, timeout=timeout)
         report = await assessor.assess()
         print_terminal_report(report)

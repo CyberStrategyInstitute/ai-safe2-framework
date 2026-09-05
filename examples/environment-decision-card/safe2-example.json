@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.0",
+  "id": "environment-decision-card",
+  "stack": "Environment Discovery, Drift, Evidence, and Policy",
+  "status": "reference-implementation",
+  "framework_version": "3.1.0",
+  "validation": ["python smoke_test.py"],
+  "expected": {"policy_decision": "DENY", "manifest_invalid": 0},
+  "conformance_claim": false
+}

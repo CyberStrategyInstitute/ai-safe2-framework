@@ -67,10 +67,20 @@ def gate_project(path, tier, fail_under, controls_json, quiet):
 @click.argument("path", default=".", type=click.Path(exists=True, file_okay=False))
 @click.option("--strict", is_flag=True, help="Treat HIGH severity as REJECT instead of HOLD FOR REVIEW")
 @click.option("--quiet", is_flag=True)
-def gate_skill(path, strict, quiet):
+@click.option("--max-files", default=10_000, type=click.IntRange(1, 100_000), show_default=True)
+@click.option("--max-file-bytes", default=5_000_000, type=click.IntRange(1), show_default=True)
+@click.option("--max-total-bytes", default=100_000_000, type=click.IntRange(1), show_default=True)
+def gate_skill(path, strict, quiet, max_files, max_file_bytes, max_total_bytes):
     """Gate a skill package on the static trust-gate rules."""
     root = Path(path)
-    findings = skill_gate.scan(root)
+    try:
+        findings = skill_gate.scan(
+            root, max_files=max_files, max_file_bytes=max_file_bytes,
+            max_total_bytes=max_total_bytes,
+        )
+    except skill_gate.ScanLimitExceeded as exc:
+        click.echo(f"GATE: FAIL - {exc}", err=True)
+        sys.exit(EXIT_FAIL)
     decision, severity = skill_gate.decision_for(findings, strict)
 
     if not quiet:
@@ -84,13 +94,19 @@ def gate_skill(path, strict, quiet):
 @click.option("--ci-fail-below", default=70, type=int, help="For a URL target: fail if the remote score is below this")
 @click.option("--token", default=None, help="Bearer token, for a URL target")
 @click.option("--timeout", default=15.0, help="Per-request timeout in seconds, for a URL target")
-def gate_mcp(target, ci_fail_below, token, timeout):
+@click.option("--max-files", default=10_000, type=click.IntRange(1, 100_000), show_default=True)
+@click.option("--max-file-bytes", default=5_000_000, type=click.IntRange(1), show_default=True)
+@click.option("--max-total-bytes", default=100_000_000, type=click.IntRange(1), show_default=True)
+def gate_mcp(target, ci_fail_below, token, timeout, max_files, max_file_bytes, max_total_bytes):
     """Gate an MCP target - a URL is remotely scored, a path is statically scanned."""
     if urlparse(target).scheme in ("http", "https"):
         from aisafe2_mcp_tools.score.assessor import MCPAssessor
         from aisafe2_mcp_tools.score.reporter import print_terminal_report
 
-        assessor = MCPAssessor(target, token=token, timeout=timeout)
+        try:
+            assessor = MCPAssessor(target, token=token, timeout=timeout)
+        except ValueError as exc:
+            raise click.ClickException(str(exc)) from exc
         report = asyncio.run(assessor.assess())
         print_terminal_report(report)
         if report.total_score < ci_fail_below:
@@ -106,8 +122,15 @@ def gate_mcp(target, ci_fail_below, token, timeout):
         click.echo(f"GATE: ERROR - {path} does not exist", err=True)
         sys.exit(EXIT_ERROR)
 
-    scanner = MCPScanner(str(path))
-    findings = scanner.scan()
+    scanner = MCPScanner(
+        str(path), max_files=max_files, max_file_bytes=max_file_bytes,
+        max_total_bytes=max_total_bytes,
+    )
+    try:
+        findings = scanner.scan()
+    except RuntimeError as exc:
+        click.echo(f"GATE: FAIL - {exc}", err=True)
+        sys.exit(EXIT_FAIL)
     click.echo(scanner.terminal_report(findings))
     if any(f.severity in ("critical", "high") for f in findings):
         click.echo("\nGATE: FAIL - critical/high findings present", err=True)
