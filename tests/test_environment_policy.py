@@ -86,14 +86,18 @@ def test_high_coverage_gap_cannot_fail_open_as_allow(tmp_path: Path):
 @pytest.mark.parametrize(
     ("policy", "expected_exit", "expected_disposition"),
     [
-        (_policy(allowed_dispositions=["REVIEW"]), 0, "ALLOW"),
+        (_policy(allowed_dispositions=["BASELINE"]), 0, "ALLOW"),
         (_policy(require_baseline=True), 2, "HOLD"),
-        (_policy(max_findings={"medium": 0}), 1, "DENY"),
+        (_policy(allowed_dispositions=["REVIEW"]), 1, "DENY"),
     ],
 )
 def test_doctor_policy_enforcement_writes_evidence_before_exit(
-    tmp_path: Path, policy: dict, expected_exit: int, expected_disposition: str
+    tmp_path: Path, monkeypatch, policy: dict, expected_exit: int, expected_disposition: str
 ):
+    isolated_home = tmp_path / "empty-home"
+    isolated_home.mkdir()
+    monkeypatch.setattr("safe2.discovery.local.Path.home", lambda: isolated_home)
+    monkeypatch.setattr("safe2.discovery.local.shutil.which", lambda _: None)
     policy_path = tmp_path / "policy.json"
     output = tmp_path / "result.json"
     policy_path.write_text(json.dumps(policy), encoding="utf-8")
