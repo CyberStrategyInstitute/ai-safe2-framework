@@ -106,7 +106,7 @@ AI SAFE² v3.1 retains the **161-control core framework taxonomy**.
 
 CP.5.MCP contains **19 profile controls, MCP-1 through MCP-19**. Those profile controls do not increase the core framework total to 180.
 
-CP.11 UAS is a compliance overlay composed from mapped controls across AI SAFE², NEXUS, and CSF. Its module-level controls must not be added to the core framework total as though they were all independent new AI SAFE² core controls.
+UAS is a 27-requirement regulatory profile extension composed from mapped controls across AI SAFE², NEXUS, and CSF. It does not create CP.11, and its requirements must not be added to the core framework total.
 
 ## Protocol and implementation language
 

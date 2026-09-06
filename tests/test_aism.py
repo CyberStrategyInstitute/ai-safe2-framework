@@ -229,11 +229,12 @@ def test_uas_profile_has_exactly_27_requirements():
 def test_skillspector_adapter_preserves_attribution(monkeypatch, tmp_path):
     monkeypatch.setattr("safe2.evidence.skillspector.shutil.which", lambda _: "skillspector")
     monkeypatch.setattr(
-        "safe2.evidence.skillspector.subprocess.run",
+        "safe2.evidence.skillspector.run_bounded",
         lambda *args, **kwargs: SimpleNamespace(
             returncode=1,
-            stdout=json.dumps({"risk_score": 72, "recommendation": "DO_NOT_INSTALL"}),
-            stderr="",
+            stdout=json.dumps({"risk_score": 72, "recommendation": "DO_NOT_INSTALL"}).encode(),
+            stderr=b"",
+            exceeded=False,
         ),
     )
     target = tmp_path / "candidate-skill"

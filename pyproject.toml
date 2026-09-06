@@ -59,6 +59,7 @@ dev = [
     "respx>=0.21.0",
     "ruff>=0.5.0",
     "mypy>=1.10.0",
+    "types-jsonschema>=4.23.0",
 ]
 
 [project.scripts]
@@ -80,6 +81,7 @@ packages = ["safe2", "scanner", "aisafe2_mcp_tools", "gateway"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "examples/aism-decision-card" = "safe2/examples/aism-decision-card"
+"examples/environment-decision-card" = "safe2/examples/environment-decision-card"
 
 [tool.hatch.build.targets.sdist]
 include = [
@@ -88,6 +90,7 @@ include = [
     "/aisafe2_mcp_tools",
     "/gateway",
     "/examples/aism-decision-card",
+    "/examples/environment-decision-card",
     "/LICENSE",
     "/MIGRATION.md",
     "/README.md",

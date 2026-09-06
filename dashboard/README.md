@@ -93,7 +93,7 @@ The current dashboard is a static browser application and does not require a bui
 | Current MCP specification binding | **2026-07-28** |
 | Legacy MCP compatibility binding | **2025-11-25** |
 
-CP.11 UAS is a compliance overlay composed from mapped controls and should not be added to the 161 core count as though every module-level requirement were a new independent core control.
+UAS is a 27-requirement regulatory profile extension, not CP.11. Its mapped requirements do not increase the 161-control core count.
 
 ---
 

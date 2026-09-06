@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
+import sys
 from pathlib import Path
 
 import click
 
 from safe2.aism.scoring import assess
+from safe2.bounded_process import run_bounded
 
 STACK_RE = re.compile(r"<!--\s*stack:\s*(.+?)\s*-->", re.IGNORECASE)
 DESC_RE = re.compile(r"<!--\s*description:\s*(.+?)\s*-->", re.IGNORECASE)
@@ -100,6 +103,30 @@ def verify_example(name: str):
         for key in ("decision", "completeness"):
             if key in expected and expected[key] != observed[key]:
                 errors.append(f"expected {key}={expected[key]!r}, observed {observed[key]!r}")
+    elif (folder / "smoke_test.py").is_file():
+        try:
+            completed = run_bounded(
+                [sys.executable, str(folder / "smoke_test.py")],
+                timeout=120,
+                max_bytes=1_000_000,
+            )
+            if completed.exceeded:
+                errors.append("smoke test output exceeded the byte limit")
+            elif completed.returncode != 0:
+                errors.append(f"smoke test failed with exit code {completed.returncode}")
+            else:
+                candidate = json.loads(completed.stdout.decode("utf-8"))
+                if not isinstance(candidate, dict):
+                    errors.append("smoke test result must be a JSON object")
+                else:
+                    observed = candidate
+                    for key, value in manifest.get("expected", {}).items():
+                        if observed.get(key) != value:
+                            errors.append(
+                                f"expected {key}={value!r}, observed {observed.get(key)!r}"
+                            )
+        except (OSError, json.JSONDecodeError, subprocess.TimeoutExpired) as exc:
+            errors.append(f"smoke test could not be verified ({type(exc).__name__})")
     if errors:
         raise click.ClickException("; ".join(errors))
     click.echo(json.dumps({"example": name, "status": "verified", "observed": observed}, indent=2))

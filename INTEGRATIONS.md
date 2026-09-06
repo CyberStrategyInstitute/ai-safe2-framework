@@ -75,7 +75,7 @@ Current counts:
 - **161 core framework controls**;
 - **CP.1 through CP.10 core Cross-Pillar Governance controls**;
 - **MCP-1 through MCP-19 profile controls**;
-- **CP.11 UAS as a compliance overlay**, not 27 new independent core controls.
+- **UAS as a 27-requirement regulatory profile extension**, not CP.11 or new core controls.
 
 ---
 

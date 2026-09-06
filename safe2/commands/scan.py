@@ -36,10 +36,19 @@ def scan_project(path, controls_json, max_findings, max_files):
 
 @scan.command("skill")
 @click.argument("path", default=".", type=click.Path(exists=True, file_okay=False))
-def scan_skill(path):
+@click.option("--max-files", default=10_000, type=click.IntRange(1, 100_000), show_default=True)
+@click.option("--max-file-bytes", default=5_000_000, type=click.IntRange(1), show_default=True)
+@click.option("--max-total-bytes", default=100_000_000, type=click.IntRange(1), show_default=True)
+def scan_skill(path, max_files, max_file_bytes, max_total_bytes):
     """Scan a skill package directory for trust-gate violations (no decision)."""
     root = Path(path)
-    findings = skill_gate.scan(root)
+    try:
+        findings = skill_gate.scan(
+            root, max_files=max_files, max_file_bytes=max_file_bytes,
+            max_total_bytes=max_total_bytes,
+        )
+    except skill_gate.ScanLimitExceeded as exc:
+        raise click.ClickException(str(exc)) from exc
     print_skill_findings(root, findings)
 
 
@@ -47,14 +56,23 @@ def scan_skill(path):
 @click.argument("path", default=".", type=click.Path(exists=True))
 @click.option("--severity", "-s", type=click.Choice(["critical", "high", "medium", "low", "all"]), default="all")
 @click.option("--output", "-o", type=click.Choice(["terminal", "json", "html"]), default="terminal")
-def scan_mcp(path, severity, output):
+@click.option("--max-files", default=10_000, type=click.IntRange(1, 100_000), show_default=True)
+@click.option("--max-file-bytes", default=5_000_000, type=click.IntRange(1), show_default=True)
+@click.option("--max-total-bytes", default=100_000_000, type=click.IntRange(1), show_default=True)
+def scan_mcp(path, severity, output, max_files, max_file_bytes, max_total_bytes):
     """Static-analyze MCP server source code (CP.5.MCP threat classes)."""
     from aisafe2_mcp_tools.scan.analyzer import MCPScanner
     from aisafe2_mcp_tools.scan.findings import SEVERITY_ORDER
 
     target = Path(path).resolve()
-    scanner = MCPScanner(str(target))
-    findings = scanner.scan()
+    scanner = MCPScanner(
+        str(target), max_files=max_files, max_file_bytes=max_file_bytes,
+        max_total_bytes=max_total_bytes,
+    )
+    try:
+        findings = scanner.scan()
+    except RuntimeError as exc:
+        raise click.ClickException(str(exc)) from exc
 
     if severity != "all":
         min_rank = SEVERITY_ORDER[severity]

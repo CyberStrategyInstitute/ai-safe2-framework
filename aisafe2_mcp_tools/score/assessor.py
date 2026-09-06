@@ -30,6 +30,7 @@ import json
 import time
 from datetime import UTC
 from typing import Any, ClassVar
+from urllib.parse import urlparse
 
 import httpx
 import structlog
@@ -161,6 +162,13 @@ class MCPAssessor:
         user_agent: str = "aisafe2-mcp-score/1.0 (AI SAFE2 Security Assessment; "
                           "github.com/CyberStrategyInstitute/ai-safe2-framework)",
     ) -> None:
+        parsed = urlparse(server_url)
+        if parsed.scheme not in {"http", "https"} or not parsed.hostname:
+            raise ValueError("MCP server URL must be an absolute HTTP(S) URL")
+        if parsed.username or parsed.password:
+            raise ValueError("MCP server URL must not contain embedded credentials")
+        if token and parsed.scheme != "https":
+            raise ValueError("Bearer tokens require an HTTPS MCP server URL")
         self.server_url = server_url.rstrip("/")
         self.token = token
         self.timeout = timeout
@@ -185,7 +193,9 @@ class MCPAssessor:
 
         async with httpx.AsyncClient(
             timeout=self.timeout,
-            follow_redirects=True,
+            # Redirects are intentionally not followed: an authenticated request
+            # must never move a bearer token to another origin or downgrade TLS.
+            follow_redirects=False,
             verify=True,
         ) as client:
             # Check 1: TLS (BUG-5 fix: try MCP endpoint if /health fails)

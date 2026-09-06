@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/friction-event-v1.schema.json",
+  "title": "AI SAFE2 Operational Friction Event",
+  "type": "object",
+  "required": ["schema_version", "id", "recorded_at", "category", "outcome", "severity", "summary", "evidence_refs", "evidence_count", "resolved", "verification", "privacy", "integrity_sha256"],
+  "properties": {
+    "schema_version": {"const": "safe2.friction.v1"},
+    "id": {"type": "string", "pattern": "^friction-"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "category": {"enum": ["false_completion", "missing_evidence", "silent_tool_failure", "incorrect_from_missing_data", "stuck_loop", "sycophancy", "context_loss", "permission_friction", "integration_failure", "other"]},
+    "outcome": {"enum": ["verified_done", "unverified_done", "failed", "blocked", "stuck"]},
+    "severity": {"enum": ["low", "medium", "high", "critical"]},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "harness": {"type": ["string", "null"]},
+    "environment": {"type": ["string", "null"]},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}},
+    "evidence_count": {"type": "integer", "minimum": 0},
+    "resolved": {"type": "boolean"},
+    "verification": {"enum": ["self_reported", "external_reference_supplied"]},
+    "privacy": {
+      "type": "object",
+      "required": ["prompt_content_collected", "tool_output_collected", "secret_values_collected"],
+      "properties": {
+        "prompt_content_collected": {"const": false},
+        "tool_output_collected": {"const": false},
+        "secret_values_collected": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "integrity_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "additionalProperties": false
+}

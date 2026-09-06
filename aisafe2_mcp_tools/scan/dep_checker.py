@@ -15,6 +15,7 @@ pair with safety, pip-audit, or Snyk.
 """
 from __future__ import annotations
 
+import os
 import re
 from collections.abc import Iterator
 from dataclasses import dataclass
@@ -116,17 +117,38 @@ class DependencyChecker:
       - package.json (dependencies / devDependencies)
     """
 
-    def check_directory(self, directory: str) -> Iterator[Finding]:
+    def check_directory(self, directory: str, *, max_files: int = 10_000,
+                        max_file_bytes: int = 5_000_000,
+                        max_total_bytes: int = 100_000_000) -> Iterator[Finding]:
         """Scan all dependency files in a directory tree."""
         root = Path(directory)
-        for dep_file in self._find_dependency_files(root):
+        total = 0
+        dep_files = self._find_dependency_files(root, max_files=max_files)
+        for dep_file in dep_files:
+            size = dep_file.stat().st_size
+            if size > max_file_bytes:
+                raise RuntimeError(f"dependency file exceeds the per-file byte limit: {dep_file}")
+            total += size
+            if total > max_total_bytes:
+                raise RuntimeError("dependency scan exceeded the total-byte limit")
             yield from self._check_file(dep_file, root)
 
-    def _find_dependency_files(self, root: Path) -> list[Path]:
+    def _find_dependency_files(self, root: Path, *, max_files: int) -> list[Path]:
         """Find all dependency files in directory."""
         candidates: list[Path] = []
-        for pattern in ("pyproject.toml", "requirements*.txt", "package.json"):
-            candidates.extend(root.rglob(pattern))
+        excluded = {".git", ".hg", ".svn", ".venv", "venv", "node_modules", "build", "dist", "__pycache__"}
+        for current, dirs, files in os.walk(root):
+            dirs[:] = sorted(
+                name for name in dirs
+                if name not in excluded and not name.startswith((".test-temp", "pytest-"))
+            )
+            for name in sorted(files):
+                if name == "pyproject.toml" or name == "package.json" or (
+                    name.startswith("requirements") and name.endswith(".txt")
+                ):
+                    candidates.append(Path(current) / name)
+                    if len(candidates) > max_files:
+                        raise RuntimeError("dependency scan exceeded the file-count limit")
         return candidates
 
     def _check_file(self, dep_file: Path, root: Path) -> Iterator[Finding]:

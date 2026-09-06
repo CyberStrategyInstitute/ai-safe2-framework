@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/environment-posture-v1.schema.json",
+  "title": "AI SAFE2 Environment Posture",
+  "type": "object",
+  "required": ["schema_version", "scope", "disposition", "finding_counts", "findings", "coverage", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.environment-posture.v1"},
+    "scope": {"type": "object"},
+    "disposition": {"enum": ["BASELINE", "REVIEW", "INCOMPLETE"]},
+    "finding_counts": {"type": "object", "required": ["critical", "high", "medium", "low", "info"], "additionalProperties": {"type": "integer", "minimum": 0}},
+    "findings": {"type": "array", "items": {"type": "object", "required": ["id", "severity", "category", "title", "facts", "assumptions", "recommendation", "candidate_controls", "verification"]}},
+    "coverage": {"type": "object", "required": ["local_inventory", "explicit_targets_requested", "explicit_targets_completed", "explicit_targets_incomplete", "configuration_inspection_requested", "runtime_behavior_assessed", "cloud_control_planes_assessed"]},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

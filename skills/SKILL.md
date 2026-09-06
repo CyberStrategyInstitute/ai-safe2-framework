@@ -111,7 +111,7 @@ Use the Cross-Pillar layer for:
 - CP.9 agent replication governance;
 - CP.10 HEAR authority.
 
-CP.11 UAS is a compliance overlay composed from mapped controls. Do not add its module-level control count to the 161 core total as though every requirement were a new independent core control.
+UAS is a 27-requirement regulatory profile extension composed from mapped controls. It does not create CP.11; do not add its requirements to the 161-control core total.
 
 ---
 

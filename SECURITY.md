@@ -1,11 +1,16 @@
 # Security Policy
 
 ## Supported Versions
-| Version | Supported |
-| ------- | ------------------ |
-| 2.1.x | :white_check_mark: |
-| 2.0.x | :x: |
-| 1.0.x | :x: |
+
+Framework and CLI package versions are independent: the current framework is
+AI SAFE² v3.1, while the distributable `ai-safe2` CLI is currently in its 0.x
+beta series.
+
+| Surface | Version | Security support |
+| ------- | ------- | ---------------- |
+| AI SAFE² Framework | 3.1.x | Current |
+| `ai-safe2` CLI package | 0.1.x | Current beta |
+| Older framework and package releases | Earlier | No routine fixes |
 
 ## Reporting a Vulnerability
 Since this is a Governance Framework, a "vulnerability" is defined as:

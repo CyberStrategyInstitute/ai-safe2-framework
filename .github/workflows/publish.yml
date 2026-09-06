@@ -15,10 +15,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.11"
 
@@ -33,6 +33,8 @@ jobs:
           python scripts/check_agent_manifest.py
           safe2 example verify aism-decision-card
           python examples/aism-decision-card/smoke_test.py
+          safe2 example verify environment-decision-card
+          python examples/environment-decision-card/smoke_test.py
 
       - name: Build wheel and sdist
         run: python -m build --outdir dist/
@@ -46,9 +48,10 @@ jobs:
           "$GITHUB_WORKSPACE/wheel-smoke/bin/safe2" --version
           "$GITHUB_WORKSPACE/wheel-smoke/bin/python" -m safe2 --version
           "$GITHUB_WORKSPACE/wheel-smoke/bin/safe2" example verify aism-decision-card
+          "$GITHUB_WORKSPACE/wheel-smoke/bin/safe2" example verify environment-decision-card
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: dist
           path: dist/
@@ -64,7 +67,7 @@ jobs:
 
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: dist
           path: dist/
@@ -85,7 +88,7 @@ jobs:
 
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: dist
           path: dist/
