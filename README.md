@@ -274,6 +274,12 @@ Material normative framework, protocol-profile, implementation, policy, or grade
 
 See [Challenge 001](challenges/001-anthropic-multi-agent-turf-war/).
 
+The [Challenge CLI workflow](docs/CHALLENGE-CLI.md) now runs an offline, inert
+shared-state fixture, grades observed outcomes, and translates third-party evidence
+through a versioned contract. A synthetic TENIR example demonstrates interoperability;
+it is not a TENIR execution or independent replication. Live-agent validation remains
+a separate study stage.
+
 ---
 
 ## 5-Layer Architectural Coverage

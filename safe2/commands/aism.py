@@ -61,10 +61,17 @@ def init_assessment(output: str):
 @click.option("--subject-name", required=True)
 @click.option("--output", "-o", required=True)
 def ingest_evidence(evidence_bundles: tuple[str, ...], subject_id: str, subject_name: str, output: str):
-    """Import NEXUS or SkillSpector bundles without inventing AISM ratings."""
-    bundles = [_load(path) for path in evidence_bundles]
-    assessment = create_assessment(bundles, subject_id=subject_id, subject_name=subject_name)
-    Path(output).write_text(json.dumps(assessment, indent=2) + "\n", encoding="utf-8")
+    """Import NEXUS, SkillSpector or Challenge evidence without inventing AISM ratings."""
+    from safe2.challenge.io import read_json, write_json
+
+    try:
+        bundles = [read_json(path) for path in evidence_bundles]
+        assessment = create_assessment(bundles, subject_id=subject_id, subject_name=subject_name)
+        write_json(output, assessment)
+    except (ValueError, TypeError, KeyError, AttributeError, OSError) as exc:
+        raise click.ClickException(
+            "Evidence ingestion failed. Check the input contracts and use a new local output file."
+        ) from exc
     click.echo(f"AISM unscored evidence assessment: {output}")
 
 

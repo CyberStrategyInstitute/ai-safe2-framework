@@ -68,6 +68,25 @@ jobs:
       - name: Build distribution
         run: python -m build
 
+      - name: Challenge Lab offline workflow
+        run: |
+          python -m pip install --force-reinstall --no-deps dist/*.whl
+          fixture_dir=$(mktemp -d)
+          cd "$fixture_dir"
+          safe2 challenge quickstart 001 --output-dir starter
+          safe2 challenge verify-bundle starter
+          safe2 challenge validate 001
+          safe2 challenge run 001 --treatment safe2-reference --output challenge-native.json
+          safe2 challenge example --provider tenir --output challenge-source.json
+          safe2 challenge import challenge-source.json --adapter tenir --output challenge-import.json
+          safe2 challenge compare challenge-native.json challenge-import.json --output challenge-comparison.json
+          safe2 challenge verify challenge-native.json
+          safe2 challenge verify challenge-import.json --source-export challenge-source.json
+          safe2 challenge verify challenge-comparison.json --left-run challenge-native.json --right-run challenge-import.json
+          safe2 challenge report challenge-native.json --format html --output challenge-card.html
+          safe2 evidence manifest challenge-native.json challenge-import.json challenge-comparison.json --subject-id challenge-fixture --output challenge-manifest.json --strict
+          safe2 aism ingest challenge-native.json challenge-import.json --subject-id challenge-fixture --subject-name "Challenge fixture" --output challenge-assessment.json
+
   test:
     name: NEXUS Tests (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest

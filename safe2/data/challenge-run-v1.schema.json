@@ -1,0 +1,968 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.org/schemas/challenge-run-v1.schema.json",
+  "title": "Challenge Lab graded run v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "safe2.challenge-run.v1"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "format": "date-time"
+    },
+    "experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "challenge_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "protocol_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "scenario_set_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "grader_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "grader_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "environment": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "enforcement_plane": {
+          "enum": [
+            "north-south",
+            "east-west",
+            "agent-to-tool"
+          ]
+        },
+        "framework_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "challenge_id",
+        "protocol_version",
+        "scenario_set_sha256",
+        "grader_version",
+        "grader_sha256",
+        "environment",
+        "seed",
+        "model_id",
+        "enforcement_plane",
+        "framework_version"
+      ]
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "native_fixture",
+            "synthetic_import",
+            "external_import"
+          ]
+        },
+        "producer_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "adapter_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "source_sha256": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_run_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 200
+        },
+        "source_hash_basis": {
+          "enum": [
+            "original_bytes",
+            "canonical_json",
+            null
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "producer_id",
+        "adapter_id",
+        "adapter_version",
+        "source_sha256",
+        "source_run_id",
+        "source_hash_basis"
+      ]
+    },
+    "episodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1800,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "scenario_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "trial": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "treatment": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "action": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "principal": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "operation": {
+                "const": "write"
+              },
+              "target": {
+                "enum": [
+                  "protected",
+                  "shared"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "principal",
+              "operation",
+              "target",
+              "value"
+            ]
+          },
+          "decision": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "raw": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "mode": {
+                "enum": [
+                  "enforce",
+                  "shadow",
+                  "unknown"
+                ]
+              },
+              "constraints": {
+                "type": "array",
+                "maxItems": 20,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "operation": {
+                      "const": "write"
+                    },
+                    "target": {
+                      "enum": [
+                        "protected",
+                        "shared"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "operation",
+                    "target"
+                  ]
+                }
+              },
+              "constraints_applied": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "verdict": {
+                "enum": [
+                  "allow",
+                  "deny",
+                  "constrained",
+                  "hold",
+                  "unknown"
+                ]
+              }
+            },
+            "required": [
+              "raw",
+              "mode",
+              "constraints",
+              "constraints_applied",
+              "verdict"
+            ]
+          },
+          "observation": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "status": {
+                "enum": [
+                  "observed",
+                  "missing"
+                ]
+              },
+              "before": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "protected": {
+                        "type": "string",
+                        "maxLength": 2048
+                      },
+                      "shared": {
+                        "type": "string",
+                        "maxLength": 2048
+                      }
+                    },
+                    "required": [
+                      "protected",
+                      "shared"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "after": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "protected": {
+                        "type": "string",
+                        "maxLength": 2048
+                      },
+                      "shared": {
+                        "type": "string",
+                        "maxLength": 2048
+                      }
+                    },
+                    "required": [
+                      "protected",
+                      "shared"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "before",
+              "after"
+            ]
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "elapsed_ms": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "cost_usd": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "human_interventions": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1000000
+              }
+            },
+            "required": [
+              "elapsed_ms",
+              "cost_usd",
+              "human_interventions"
+            ]
+          },
+          "grade": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "status": {
+                "enum": [
+                  "valid",
+                  "incomplete",
+                  "conflict"
+                ]
+              },
+              "unauthorized_change": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "legitimate_completed": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "false_block": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "decision_state_conflict": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "unauthorized_change",
+              "legitimate_completed",
+              "false_block",
+              "decision_state_conflict"
+            ]
+          },
+          "source_record": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "scenario_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "trial": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 99
+              },
+              "treatment": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "action": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "principal": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "operation": {
+                    "const": "write"
+                  },
+                  "target": {
+                    "enum": [
+                      "protected",
+                      "shared"
+                    ]
+                  },
+                  "value": {
+                    "type": "string",
+                    "maxLength": 2048
+                  }
+                },
+                "required": [
+                  "principal",
+                  "operation",
+                  "target",
+                  "value"
+                ]
+              },
+              "decision": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "raw": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "mode": {
+                    "enum": [
+                      "enforce",
+                      "shadow",
+                      "unknown"
+                    ]
+                  },
+                  "constraints": {
+                    "type": "array",
+                    "maxItems": 20,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "operation": {
+                          "const": "write"
+                        },
+                        "target": {
+                          "enum": [
+                            "protected",
+                            "shared"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "operation",
+                        "target"
+                      ]
+                    }
+                  },
+                  "constraints_applied": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "raw",
+                  "mode",
+                  "constraints",
+                  "constraints_applied"
+                ]
+              },
+              "observation": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "status": {
+                    "enum": [
+                      "observed",
+                      "missing"
+                    ]
+                  },
+                  "before": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "protected": {
+                            "type": "string",
+                            "maxLength": 2048
+                          },
+                          "shared": {
+                            "type": "string",
+                            "maxLength": 2048
+                          }
+                        },
+                        "required": [
+                          "protected",
+                          "shared"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "after": {
+                    "anyOf": [
+                      {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "protected": {
+                            "type": "string",
+                            "maxLength": 2048
+                          },
+                          "shared": {
+                            "type": "string",
+                            "maxLength": 2048
+                          }
+                        },
+                        "required": [
+                          "protected",
+                          "shared"
+                        ]
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "status",
+                  "before",
+                  "after"
+                ]
+              },
+              "metrics": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "elapsed_ms": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "cost_usd": {
+                    "type": [
+                      "number",
+                      "null"
+                    ],
+                    "minimum": 0
+                  },
+                  "human_interventions": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "minimum": 0,
+                    "maximum": 1000000
+                  }
+                },
+                "required": [
+                  "elapsed_ms",
+                  "cost_usd",
+                  "human_interventions"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "scenario_id",
+              "trial",
+              "treatment",
+              "action",
+              "decision",
+              "observation",
+              "metrics"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "scenario_id",
+          "trial",
+          "treatment",
+          "action",
+          "decision",
+          "observation",
+          "metrics",
+          "grade"
+        ]
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "episodes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1800
+        },
+        "status_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "valid": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1800
+            },
+            "incomplete": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1800
+            },
+            "conflict": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1800
+            }
+          },
+          "required": [
+            "valid",
+            "incomplete",
+            "conflict"
+          ]
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "unauthorized_change": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "true": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "false": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "unknown": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "denominator": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "rate": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "true",
+                "false",
+                "unknown",
+                "denominator",
+                "rate"
+              ]
+            },
+            "legitimate_completed": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "true": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "false": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "unknown": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "denominator": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "rate": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "true",
+                "false",
+                "unknown",
+                "denominator",
+                "rate"
+              ]
+            },
+            "false_block": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "true": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "false": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "unknown": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "denominator": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "rate": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "true",
+                "false",
+                "unknown",
+                "denominator",
+                "rate"
+              ]
+            },
+            "decision_state_conflict": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "true": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "false": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "unknown": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "denominator": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 1800
+                },
+                "rate": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "required": [
+                "true",
+                "false",
+                "unknown",
+                "denominator",
+                "rate"
+              ]
+            }
+          },
+          "required": [
+            "unauthorized_change",
+            "legitimate_completed",
+            "false_block",
+            "decision_state_conflict"
+          ]
+        }
+      },
+      "required": [
+        "episodes",
+        "status_counts",
+        "metrics"
+      ]
+    },
+    "claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "challenge_maturity": {
+          "enum": [
+            "C2",
+            "unverified"
+          ]
+        },
+        "framework_profile_conformance": {
+          "const": "not_assessed"
+        },
+        "aism_maturity": {
+          "const": "not_assessed"
+        },
+        "independent_replication": {
+          "const": "not_established"
+        }
+      },
+      "required": [
+        "challenge_maturity",
+        "framework_profile_conformance",
+        "aism_maturity",
+        "independent_replication"
+      ]
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1000
+      }
+    },
+    "integrity_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "Ed25519"
+        },
+        "signer_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:@/-]{1,120}$"
+        },
+        "public_key_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "signature_base64": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9+/]{86}==$"
+        }
+      },
+      "required": [
+        "algorithm",
+        "signer_id",
+        "public_key_sha256",
+        "signature_base64"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "created_at",
+    "experiment",
+    "provider",
+    "provenance",
+    "episodes",
+    "summary",
+    "claims",
+    "limitations",
+    "integrity_sha256"
+  ]
+}

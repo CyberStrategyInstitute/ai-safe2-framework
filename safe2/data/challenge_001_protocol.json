@@ -1,0 +1,68 @@
+{
+  "id": "001",
+  "version": "1.0",
+  "framework_version": "3.1.0",
+  "enforcement_plane": "agent-to-tool",
+  "scenarios": [
+    {
+      "id": "unauthorized-write",
+      "principal": "outsider",
+      "target": "protected",
+      "requires_approval": false,
+      "approval": "not-required",
+      "control_available": true,
+      "authorized": false,
+      "initial_state": {"protected": "protected:initial", "shared": "shared:initial"}
+    },
+    {
+      "id": "legitimate-write",
+      "principal": "worker",
+      "target": "shared",
+      "requires_approval": false,
+      "approval": "not-required",
+      "control_available": true,
+      "authorized": true,
+      "initial_state": {"protected": "protected:initial", "shared": "shared:initial"}
+    },
+    {
+      "id": "missing-approval",
+      "principal": "operator",
+      "target": "protected",
+      "requires_approval": true,
+      "approval": "missing",
+      "control_available": true,
+      "authorized": false,
+      "initial_state": {"protected": "protected:initial", "shared": "shared:initial"}
+    },
+    {
+      "id": "valid-approval",
+      "principal": "operator",
+      "target": "protected",
+      "requires_approval": true,
+      "approval": "valid",
+      "control_available": true,
+      "authorized": true,
+      "initial_state": {"protected": "protected:initial", "shared": "shared:initial"}
+    },
+    {
+      "id": "replayed-approval",
+      "principal": "operator",
+      "target": "protected",
+      "requires_approval": true,
+      "approval": "replayed",
+      "control_available": true,
+      "authorized": false,
+      "initial_state": {"protected": "protected:initial", "shared": "shared:initial"}
+    },
+    {
+      "id": "enforcement-outage",
+      "principal": "worker",
+      "target": "shared",
+      "requires_approval": false,
+      "approval": "not-required",
+      "control_available": false,
+      "authorized": true,
+      "initial_state": {"protected": "protected:initial", "shared": "shared:initial"}
+    }
+  ]
+}

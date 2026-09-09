@@ -28,6 +28,11 @@ def create_assessment(bundles: list[dict], *, subject_id: str, subject_name: str
     imports = []
     facts = []
     for index, bundle in enumerate(bundles, start=1):
+        if bundle.get("schema_version") == "safe2.challenge-run.v1":
+            from safe2.challenge.model import verify_run
+
+            if not verify_run(bundle)["valid"]:
+                raise ValueError("Challenge evidence failed verification; no AISM evidence imported")
         provider = bundle.get("provider", {})
         provider_name = provider.get("name", "Unknown evidence provider")
         imports.append(

@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.org/schemas/challenge-source-v1.schema.json",
+  "title": "Challenge Lab provider source contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "safe2.challenge-source.v1"
+    },
+    "adapter_contract": {
+      "enum": [
+        "generic-v1",
+        "tenir-example-v1"
+      ]
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ]
+    },
+    "producer_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "synthetic": {
+      "type": "boolean"
+    },
+    "experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "challenge_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "protocol_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "scenario_set_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "grader_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "grader_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "environment": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "model_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "enforcement_plane": {
+          "enum": [
+            "north-south",
+            "east-west",
+            "agent-to-tool"
+          ]
+        },
+        "framework_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "challenge_id",
+        "protocol_version",
+        "scenario_set_sha256",
+        "grader_version",
+        "grader_sha256",
+        "environment",
+        "seed",
+        "model_id",
+        "enforcement_plane",
+        "framework_version"
+      ]
+    },
+    "episodes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1800,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "scenario_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "trial": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 99
+          },
+          "treatment": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "action": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "principal": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "operation": {
+                "const": "write"
+              },
+              "target": {
+                "enum": [
+                  "protected",
+                  "shared"
+                ]
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 2048
+              }
+            },
+            "required": [
+              "principal",
+              "operation",
+              "target",
+              "value"
+            ]
+          },
+          "decision": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "raw": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "mode": {
+                "enum": [
+                  "enforce",
+                  "shadow",
+                  "unknown"
+                ]
+              },
+              "constraints": {
+                "type": "array",
+                "maxItems": 20,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "operation": {
+                      "const": "write"
+                    },
+                    "target": {
+                      "enum": [
+                        "protected",
+                        "shared"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "operation",
+                    "target"
+                  ]
+                }
+              },
+              "constraints_applied": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "raw",
+              "mode",
+              "constraints",
+              "constraints_applied"
+            ]
+          },
+          "observation": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "status": {
+                "enum": [
+                  "observed",
+                  "missing"
+                ]
+              },
+              "before": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "protected": {
+                        "type": "string",
+                        "maxLength": 2048
+                      },
+                      "shared": {
+                        "type": "string",
+                        "maxLength": 2048
+                      }
+                    },
+                    "required": [
+                      "protected",
+                      "shared"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "after": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "protected": {
+                        "type": "string",
+                        "maxLength": 2048
+                      },
+                      "shared": {
+                        "type": "string",
+                        "maxLength": 2048
+                      }
+                    },
+                    "required": [
+                      "protected",
+                      "shared"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "before",
+              "after"
+            ]
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "elapsed_ms": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "cost_usd": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "human_interventions": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1000000
+              }
+            },
+            "required": [
+              "elapsed_ms",
+              "cost_usd",
+              "human_interventions"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "scenario_id",
+          "trial",
+          "treatment",
+          "action",
+          "decision",
+          "observation",
+          "metrics"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "adapter_contract",
+    "provider",
+    "producer_id",
+    "run_id",
+    "synthetic",
+    "experiment",
+    "episodes"
+  ]
+}

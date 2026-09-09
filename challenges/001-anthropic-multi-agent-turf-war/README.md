@@ -22,6 +22,34 @@
 
 **The framework is the subject of the test, not the source of its own proof.**
 
+## Try the offline evidence workflow
+
+The live study above remains at design/pre-registration. The released CLI capability
+provides a narrower offline fixture you can run and verify without model credentials:
+
+```console
+safe2 challenge quickstart 001 --output-dir my-first-run
+safe2 challenge verify-bundle my-first-run
+```
+
+Install the build containing these commands first; see the [CLI guide](../../docs/CHALLENGE-CLI.md).
+Open the generated `decision-card.html`. It shows safety outcomes, legitimate-work
+costs, evidence gaps and next actions. Verification checks fixture mechanics and
+translation, not full T0–T6 coverage or independent live replication.
+
+Three ways to participate:
+
+1. **Verify:** obtain a complete starter folder and, when available, a manifest
+   fingerprint through a trusted channel; verify without running submitted code.
+2. **Reproduce:** generate your own offline bundle and report installation or
+   interpretation problems. Record your package version, OS, commands and failures.
+3. **Contribute live evidence:** follow the [replication requirements](./REPLICATION.md)
+   and [Rules of Engagement](./ROE.md). The isolated live backend is still to be built.
+
+The TENIR example is synthetic and does not execute TENIR software. Different
+provider names on the same source are not independent evidence. Share only reviewed,
+sanitized artifacts; never upload credentials, private keys or raw sensitive exports.
+
 A NEXUS implementation passing a scenario is not automatically proof that AI SAFE² is universally valid. A successful east-west treatment does not automatically validate the agent-to-tool or north-south enforcement planes.
 
 ---
