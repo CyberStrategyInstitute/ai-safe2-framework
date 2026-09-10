@@ -4,6 +4,8 @@
 
 # AI SAFE² Framework v3.1
 
+[Security advisories](docs/advisories/README.md) · [CLI runtime compatibility](docs/PYTHON-COMPATIBILITY.md)
+
 ### The Universal GRC Standard for Agentic AI, Swarm Governance, and Runtime Enforcement
 
 [![Version](https://img.shields.io/badge/version-3.1.0-orange.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/releases)
@@ -273,6 +275,12 @@ For v3.1, validation claims are scoped to the enforcement planes actually exerci
 Material normative framework, protocol-profile, implementation, policy, or grader changes after preregistration require a new preregistration version before confirmatory evidence is pooled.
 
 See [Challenge 001](challenges/001-anthropic-multi-agent-turf-war/).
+
+The [Challenge CLI workflow](docs/CHALLENGE-CLI.md) now runs an offline, inert
+shared-state fixture, grades observed outcomes, and translates third-party evidence
+through a versioned contract. A synthetic TENIR example demonstrates interoperability;
+it is not a TENIR execution or independent replication. Live-agent validation remains
+a separate study stage.
 
 ---
 

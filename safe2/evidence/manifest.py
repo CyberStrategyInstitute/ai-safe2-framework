@@ -16,6 +16,10 @@ from safe2.discovery.integrity import verify_inventory
 from safe2.evidence.friction import verify_event
 
 SCHEMA_CONTRACTS = {
+    "safe2.challenge-bundle.v1": "challenge-bundle",
+    "safe2.challenge-run.v1": "challenge-run",
+    "safe2.challenge-comparison.v1": "challenge-comparison",
+    "safe2.challenge-source.v1": "challenge-source",
     "safe2.discovery.v1": "discovery-v1",
     "safe2.discovery-drift.v1": "discovery-drift-v1",
     "safe2.environment-posture.v1": "environment-posture-v1",
@@ -89,6 +93,32 @@ def _artifact_record(path: Path, *, max_bytes: int) -> dict[str, Any]:
         record["integrity_verification"] = verify_event(artifact)
     elif declared_version == "safe2.run-manifest.v1":
         record["integrity_verification"] = verify_manifest(artifact)
+    elif declared_version in {
+        "safe2.challenge-run.v1", "safe2.challenge-comparison.v1", "safe2.challenge-source.v1",
+        "safe2.challenge-bundle.v1",
+    }:
+        from safe2.challenge.io import parse_json
+        from safe2.challenge.model import verify_comparison, verify_run
+
+        try:
+            artifact = parse_json(raw)
+            if declared_version == "safe2.challenge-source.v1":
+                record["integrity_verification"] = "not_applicable"
+            elif declared_version == "safe2.challenge-bundle.v1":
+                from safe2.challenge.bundle import verify_bundle
+
+                result = verify_bundle(path.parent)
+                record["integrity_verification"] = (
+                    "valid" if path.name == "bundle.json" and result["valid"] else "invalid"
+                )
+                record["challenge_verification"] = result
+            else:
+                result = (verify_run(artifact) if declared_version == "safe2.challenge-run.v1"
+                          else verify_comparison(artifact))
+                record["integrity_verification"] = "valid" if result["valid"] else "invalid"
+                record["challenge_verification"] = result
+        except ValueError:
+            record["integrity_verification"] = "invalid"
     else:
         record["integrity_verification"] = "not_applicable"
     record["status"] = (

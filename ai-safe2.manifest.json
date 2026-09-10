@@ -16,6 +16,11 @@
     "dashboard_mcp_profile_mirror": "dashboard/public/data/mcp-profile-v3.1.json",
     "aism_model": "safe2/data/aism-model-v1.json",
     "aism_assessment_schema": "safe2/data/aism-assessment-v1.schema.json",
+    "challenge_run_schema": "safe2/data/challenge-run-v1.schema.json",
+    "challenge_bundle_schema": "safe2/data/challenge-bundle-v1.schema.json",
+    "challenge_source_schema": "safe2/data/challenge-source-v1.schema.json",
+    "challenge_comparison_schema": "safe2/data/challenge-comparison-v1.schema.json",
+    "challenge_001_fixture_protocol": "safe2/data/challenge_001_protocol.json",
     "uas_regulatory_profile": "00-cross-pillar/unbiased-ai/uas-profile-v1.json",
     "nexus_schemas": "NEXUS/schemas/",
     "scanner_rules": "scanner/rules/"
@@ -109,10 +114,14 @@
     "dashboard": "dashboard/README.md",
     "cli": {
       "package": "ai-safe2",
+      "version": "0.2.0",
       "command": "safe2",
       "module": "python -m safe2",
       "entrypoint": "safe2/README.md",
       "assessment_schema": "safe2/data/aism-assessment-v1.schema.json",
+      "challenge_workflow": "docs/CHALLENGE-CLI.md",
+      "challenge_quickstart": "safe2 challenge quickstart 001 --output-dir my-first-run",
+      "challenge_verification": "safe2 challenge verify-bundle my-first-run",
       "evidence_workflow": "safe2 evidence ... then safe2 aism ingest ..."
     }
   }

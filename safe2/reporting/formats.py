@@ -100,6 +100,9 @@ def print_project_findings(result, max_findings: int = 50, *, echo=click.echo) -
 
 def print_skill_findings(root, findings, *, echo=click.echo) -> None:
     echo(f"\n{BOLD}Skill Trust Gate - {root}{RESET}")
+    if hasattr(findings, "files_read"):
+        echo(f"Coverage: {findings.text_files}/{findings.files_read} files inspected as text; "
+             f"{findings.bytes_read} bytes read. Static heuristics only, not proof of safety.")
     if not findings:
         echo(f"{color('No findings.', 'LOW')}")
         return

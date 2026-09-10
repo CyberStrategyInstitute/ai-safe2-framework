@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.org/schemas/challenge-bundle-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "safe2.challenge-bundle.v1"
+    },
+    "kind": {
+      "const": "offline-quickstart"
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "format": "date-time"
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "const": "safe2"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ]
+    },
+    "experiment": {
+      "$ref": "https://aisafe2.org/schemas/challenge-run-v1.schema.json#/properties/experiment"
+    },
+    "files": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "enum": [
+              "native-run.json",
+              "reference-run.json",
+              "tenir-source.json",
+              "tenir-import.json",
+              "comparison.json",
+              "decision-card.md",
+              "decision-card.html",
+              "comparison-card.md",
+              "README.md"
+            ]
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5000000
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "name",
+          "bytes",
+          "sha256"
+        ]
+      }
+    },
+    "independent_replication": {
+      "const": "not_established"
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "string",
+        "maxLength": 1000
+      }
+    },
+    "integrity_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "kind",
+    "created_at",
+    "producer",
+    "experiment",
+    "files",
+    "independent_replication",
+    "limitations",
+    "integrity_sha256"
+  ]
+}

@@ -37,7 +37,11 @@ Every challenge should be able to answer:
 
 | ID | Challenge | Primary question | Status |
 |---|---|---|---|
-| 001 | [Anthropic Multi-Agent Turf War](./001-anthropic-multi-agent-turf-war/) | Can externally enforced authority stop destructive multi-agent conflict without blocking legitimate collaboration? | Design and pre-registration |
+| 001 | [Anthropic Multi-Agent Turf War](./001-anthropic-multi-agent-turf-war/) | Can externally enforced authority stop destructive multi-agent conflict without blocking legitimate collaboration? | Live study: design and pre-registration; offline CLI fixture available |
+
+Start with the [executable Challenge CLI guide](../docs/CHALLENGE-CLI.md).
+The offline runner verifies fixture mechanics only. Its synthetic third-party
+example demonstrates translation, not independent evidence of control effectiveness.
 
 ---
 

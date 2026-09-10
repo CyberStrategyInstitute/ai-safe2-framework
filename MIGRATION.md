@@ -69,11 +69,12 @@ fixes — see below).
   it only adds CLI wiring, a shared exit-code contract, and a markdown
   renderer (the one format none of the four originals produced).
 - `scripts/skill_trust_gate.py`'s two functions (`scan`, `decision_for`)
-  were copied into `safe2/engines/skill_gate.py` unchanged, so `safe2 scan
-  skill` / `safe2 gate skill` and the original script share the same rules
-  by construction, not by two copies staying in sync by hand. The original
-  script still works (kept for anyone with existing automation against it)
-  and now prints a deprecation notice.
+  were initially copied into `safe2/engines/skill_gate.py`. CLI 0.2.0 hardens
+  coverage and adds TG-007 through TG-012. The standalone script now exits
+  3 without scanning or writing reports; update automation to
+  `safe2 gate skill PATH --strict`. This intentionally breaks the vulnerable
+  legacy path rather than maintaining a second rule set. See
+  [CSI-2026-001](docs/advisories/2026-09-09-skill-gate-executable-scope.md).
 - Five tests in the migrated `tests/mcp_toolkit/` suite hardcoded a path
   relative to the old `examples/mcp-security-toolkit/tests/` location to
   find the `scan/fixes/*.template` directory. Fixed to resolve the fixes

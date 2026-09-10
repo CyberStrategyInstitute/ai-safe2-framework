@@ -4,7 +4,10 @@
 
 Framework and CLI package versions are independent: the current framework is
 AI SAFE² v3.1, while the distributable `ai-safe2` CLI is currently in its 0.x
-beta series.
+release series. CLI 0.2.0 includes the skill-gate hardening described in
+[CSI-2026-001](docs/advisories/2026-09-09-skill-gate-executable-scope.md).
+See the [advisory index](docs/advisories/README.md) for risks and remediation;
+release status must be verified against the published release, not this branch.
 
 | Surface | Version | Security support |
 | ------- | ------- | ---------------- |

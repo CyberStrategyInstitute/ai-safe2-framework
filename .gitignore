@@ -3,6 +3,8 @@ __pycache__/
 .test-temp*/
 .uv-cache/
 .venv/
+.venv-challenge/
+.uv-challenge-cache/
 .release-venv/
 .pytest_cache/
 .mypy_cache/

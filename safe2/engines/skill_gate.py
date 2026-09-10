@@ -1,9 +1,8 @@
 """Skill Trust Gate engine.
 
 Absorbed from scripts/skill_trust_gate.py as part of the safe2 CLI
-consolidation (PART 3, AI SAFE2/MCP family). Logic is unchanged from the
-original script; it is now an importable engine instead of a standalone
-argparse script, so `safe2 scan skill` and `safe2 gate skill` can share it.
+consolidation. The hardened engine scans content regardless of filename;
+`safe2 scan skill` and `safe2 gate skill` share this implementation.
 
 The gate is intentionally narrow: it looks for executable or
 credential-handling patterns that should not appear as operational
@@ -12,10 +11,15 @@ names attack classes is not rejected.
 """
 from __future__ import annotations
 
-import os
 import re
+from bisect import bisect_right
+from ipaddress import ip_address
 from pathlib import Path
 from typing import NamedTuple
+from urllib.parse import urlsplit
+
+from safe2.bounded_files import inventory
+from safe2.challenge.io import read_bytes, safe_path
 
 RULES = (
     ("TG-001", "CRITICAL", re.compile(r"curl\s+[^\n|]+\|\s*(?:sh|bash)\b", re.IGNORECASE),
@@ -30,11 +34,22 @@ RULES = (
      "Instruction reads credential-bearing local files"),
     ("TG-006", "HIGH", re.compile(r"(?:powershell|pwsh)\s+[^\n]*(?:-enc|-encodedcommand)\b", re.IGNORECASE),
      "Encoded PowerShell execution"),
+    # TG-007..TG-012 close the executable-payload gap. Before these, a byte-identical
+    # payload was CRITICAL as payload.md and invisible as payload.sh, because script
+    # extensions were outside TEXT_EXTENSIONS. See test_skill_gate_engine.py.
+    ("TG-007", "CRITICAL", re.compile(r"\b(?:eval|exec)\s*\(\s*(?:os\.environ|request|input|urlopen|base64\.b64decode)", re.IGNORECASE),
+     "Dynamic execution of externally controlled input"),
+    ("TG-008", "CRITICAL", re.compile(r"(?:ignore|disregard|forget)\s+(?:all\s+)?(?:your\s+|the\s+)?previous\s+instructions", re.IGNORECASE),
+     "Prompt-injection directive embedded in skill content"),
+    ("TG-009", "HIGH", re.compile(r"(?:\.ssh/id_[a-z0-9_]+|\.aws/credentials|\.config/gh/hosts\.yml|\.netrc|\.docker/config\.json)", re.IGNORECASE),
+     "Reference to a credential-bearing local path"),
+    ("TG-010", "HIGH", re.compile(r"https?://(?:\d{1,3}\.){3}\d{1,3}(?::\d+)?/", re.IGNORECASE),
+     "Hardcoded raw-IP network endpoint"),
+    ("TG-011", "HIGH", re.compile(r"\b(?:AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{36}|xox[baprs]-[A-Za-z0-9-]{10,})\b"),
+     "Hardcoded credential or API key material"),
+    ("TG-012", "HIGH", re.compile(r"base64[^\n]{0,40}\|\s*curl|curl[^\n]{0,80}(?:-d\s*@-|--data-binary\s*@-)", re.IGNORECASE),
+     "Encoded local data piped to a network endpoint"),
 )
-
-TEXT_EXTENSIONS = {".md", ".txt", ".yaml", ".yml", ".json", ".toml"}
-EXCLUDED_DIRS = {".git", ".hg", ".svn", ".venv", "venv", "node_modules", "build", "dist", "__pycache__"}
-
 
 class ScanLimitExceeded(RuntimeError):
     """The skill scan stopped because complete bounded coverage was impossible."""
@@ -57,35 +72,74 @@ class GateFinding(NamedTuple):
         }
 
 
+class ScanFindings(list[GateFinding]):
+    """List-compatible findings with explicit inspected-content coverage."""
+
+    files_read: int = 0
+    text_files: int = 0
+    bytes_read: int = 0
+
+
 def scan(root: Path, *, max_files: int = 10_000, max_file_bytes: int = 5_000_000,
-         max_total_bytes: int = 100_000_000) -> list[GateFinding]:
+         max_total_bytes: int = 100_000_000) -> ScanFindings:
     """Static-scan a skill package directory for trust-gate violations."""
-    findings: list[GateFinding] = []
-    count = 0
+    findings = ScanFindings()
+    if min(max_files, max_file_bytes, max_total_bytes) < 1:
+        raise ScanLimitExceeded("scan limits must be positive")
+    try:
+        root = safe_path(root)
+        if not root.is_dir():
+            raise ValueError("root must be a directory")
+    except (OSError, ValueError) as exc:
+        raise ScanLimitExceeded("unsafe or unavailable scan root; coverage is incomplete") from exc
     total = 0
-    for current, dirs, files in os.walk(root):
-        dirs[:] = sorted(
-            name for name in dirs
-            if name not in EXCLUDED_DIRS and not name.startswith((".test-temp", "pytest-"))
-        )
-        for name in sorted(files):
-            path = Path(current) / name
-            if path.suffix.lower() not in TEXT_EXTENSIONS:
-                continue
-            count += 1
-            if count > max_files:
-                raise ScanLimitExceeded("skill scan exceeded the file-count limit; coverage is incomplete")
-            size = path.stat().st_size
-            if size > max_file_bytes:
-                raise ScanLimitExceeded(f"skill file exceeds the per-file byte limit: {path}")
-            total += size
-            if total > max_total_bytes:
-                raise ScanLimitExceeded("skill scan exceeded the total-byte limit; coverage is incomplete")
-            text = path.read_text(encoding="utf-8", errors="replace")
-            for rule_id, severity, pattern, description in RULES:
-                for match in pattern.finditer(text):
-                    line = text.count("\n", 0, match.start()) + 1
-                    findings.append(GateFinding(rule_id, severity, path.as_posix(), line, description))
+    try:
+        paths = inventory(root, max_entries=max_files)
+    except (OSError, ValueError) as exc:
+        raise ScanLimitExceeded("unsafe inventory or entry-count limit; coverage is incomplete") from exc
+    for path in paths:
+        try:
+            data = read_bytes(path, limit=min(max_file_bytes, max_total_bytes - total))
+        except (OSError, ValueError) as exc:
+            raise ScanLimitExceeded("file could not be safely read within byte limits; coverage is incomplete") from exc
+        total += len(data)
+        findings.files_read += 1
+        findings.bytes_read = total
+        if total > max_total_bytes:
+            raise ScanLimitExceeded("skill scan exceeded the total-byte limit; coverage is incomplete")
+        try:
+            encoding = "utf-16" if data.startswith((b"\xff\xfe", b"\xfe\xff")) else "utf-8-sig"
+            text = data.decode(encoding)
+            if "\x00" in text:
+                raise UnicodeError("binary content")
+        except UnicodeError:
+            findings.append(GateFinding("TG-COVERAGE", "HIGH", path.as_posix(), 1,
+                                        "Binary or unsupported encoding: not inspected; manual review required"))
+            continue
+        findings.text_files += 1
+        newlines = [match.start() for match in re.finditer("\n", text)]
+        for rule_id, severity, pattern, description in RULES:
+            for match in pattern.finditer(text):
+                if len(findings) >= 10_000:
+                    raise ScanLimitExceeded("finding-count limit exceeded; coverage is incomplete")
+                line = bisect_right(newlines, match.start()) + 1
+                detail = description
+                relative = path.relative_to(root)
+                if (any(part.lower() in {"tests", "test", "__tests__", "fixtures", "testdata"}
+                        for part in relative.parts[:-1]) or relative.name.lower().startswith("test_")):
+                    detail += " [test-like path: inspect usage; severity retained because paths are untrusted]"
+                if rule_id == "TG-010":
+                    try:
+                        address = ip_address(urlsplit(match.group()).hostname or "")
+                        kind = ("loopback" if address.is_loopback else "link-local" if address.is_link_local
+                                else "private/non-global" if not address.is_global else "public")
+                        detail += f" [{kind} endpoint: context required; address class is not authorization]"
+                    except ValueError:
+                        detail += " [invalid IP literal: inspect context]"
+                findings.append(GateFinding(rule_id, severity, path.as_posix(), line, detail))
+    if findings.text_files == 0 and not findings:
+        findings.append(GateFinding("TG-COVERAGE", "HIGH", root.as_posix(), 1,
+                                    "Empty package: no files inspected; manual review required"))
     return findings
 
 

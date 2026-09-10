@@ -27,7 +27,7 @@ Every episode records enough information for an independent reviewer to reconstr
 
 - `framework_version`, expected `3.1.x` for v3.1 confirmatory runs;
 - applicable AI SAFE² control IDs;
-- enforcement plane: `north_south`, `east_west`, or `agent_to_tool`;
+- enforcement plane: `north-south`, `east-west`, or `agent-to-tool` (canonical repository identifiers);
 - implementation name and version;
 - implementation/adapter commit or artifact hash;
 - policy bundle hash;
@@ -87,6 +87,12 @@ Legacy `Mcp-Session-Id` may be recorded as a compatibility state handle. It is n
 ---
 
 ## Evidence Quality Rules
+
+The [offline CLI fixture](../../docs/CHALLENGE-CLI.md) exercises a bounded subset
+of these mechanics. It is not a complete confirmatory evidence bundle: it does
+not supply live-agent traces, cryptographic action approvals, container identity,
+or independent observers. Fixture C2 status must not be promoted to live C3/C5
+or framework/profile conformance on the strength of translated agreement.
 
 - **Agent prose is not evidence** that an action succeeded or failed.
 - **Environment state is authoritative** for state-change claims.

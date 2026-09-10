@@ -3,39 +3,36 @@
 from __future__ import annotations
 
 import hashlib
-import json
 import shutil
 import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
+from safe2.bounded_files import inventory
 from safe2.bounded_process import run_bounded
+from safe2.challenge.io import parse_json, read_bytes, safe_path
 
 
 def _target_digest(
     target: Path, *, max_files: int = 10_000, max_bytes: int = 100_000_000
 ) -> str:
-    digest = hashlib.sha256()
-    if target.is_symlink():
-        raise RuntimeError("SkillSpector target must not be a symbolic link")
-    paths = [target] if target.is_file() else sorted(path for path in target.rglob("*") if path.is_file())
-    if len(paths) > max_files:
-        raise RuntimeError("SkillSpector target exceeds the file-count limit")
-    total = 0
-    for path in paths:
-        if ".git" in path.parts:
-            continue
-        if path.is_symlink():
-            raise RuntimeError("SkillSpector target contains a symbolic-link file")
-        digest.update(str(path.relative_to(target.parent)).replace("\\", "/").encode())
-        with path.open("rb") as handle:
-            for block in iter(lambda: handle.read(1024 * 1024), b""):
-                total += len(block)
-                if total > max_bytes:
-                    raise RuntimeError("SkillSpector target exceeds the byte limit")
-                digest.update(block)
+    digest = hashlib.sha256(b"safe2-target-v2\\0")
+    try:
+        target = safe_path(target)
+        paths = inventory(target, max_entries=max_files)
+        total = 0
+        for path in paths:
+            name = path.relative_to(target.parent).as_posix().encode("utf-8")
+            data = read_bytes(path, limit=max_bytes - total)
+            total += len(data)
+            # Length framing prevents path/content boundary ambiguity.
+            digest.update(len(name).to_bytes(8, "big"))
+            digest.update(name)
+            digest.update(len(data).to_bytes(8, "big"))
+            digest.update(hashlib.sha256(data).digest())
+    except (OSError, ValueError) as exc:
+        raise RuntimeError("SkillSpector target is unsafe or exceeds inventory/byte limits") from exc
     return digest.hexdigest()
-
 
 def collect(
     target: str,
@@ -49,9 +46,13 @@ def collect(
     if not binary:
         raise RuntimeError(
             "SkillSpector is not installed or not on PATH. Install it separately; "
-            "it is an optional independent evidence provider."
+            "use Python 3.12-3.14 for SkillSpector 2.11.1 and pass --executable. "
+            "No assessment was performed."
         )
-    target_path = Path(target).resolve()
+    try:
+        target_path = safe_path(target)
+    except (OSError, ValueError) as exc:
+        raise RuntimeError("SkillSpector target path is unsafe") from exc
     if not target_path.exists():
         raise RuntimeError(f"SkillSpector target does not exist: {target}")
     digest_before = _target_digest(target_path)
@@ -63,6 +64,8 @@ def collect(
         provider_version = (
             (version_result.stdout or version_result.stderr).decode("utf-8", errors="replace").strip()[:200] or "unknown"
         )
+        if version_result.returncode != 0 or version_result.exceeded:
+            provider_version = "unknown"
         completed = run_bounded(command, timeout=timeout, max_bytes=max_output_bytes)
     except subprocess.TimeoutExpired as exc:
         raise RuntimeError(f"SkillSpector exceeded the {timeout:g}-second timeout") from exc
@@ -71,8 +74,10 @@ def collect(
     if completed.exceeded:
         raise RuntimeError("SkillSpector output exceeds the byte limit")
     try:
-        source = json.loads(completed.stdout.decode("utf-8"))
-    except json.JSONDecodeError as exc:
+        source = parse_json(completed.stdout)
+    except ValueError as exc:
+        if str(exc) == "Artifact must be a JSON object":
+            raise TypeError("SkillSpector JSON output must be an object") from exc
         raise RuntimeError("SkillSpector did not return valid JSON") from exc
     if not isinstance(source, dict):
         raise TypeError("SkillSpector JSON output must be an object")

@@ -1,6 +1,10 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
+[Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
+
+[Try the skill-screening demo](../docs/SKILL-SCREENING-DEMO.md) | [Our own-skill results and lessons](../docs/SKILL-SCREENING-SECOND-PASS.md)
+
 [Framework Home](../README.md) | [AISM](../AISM/README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [Examples](../examples/README.md) | [NEXUS](../NEXUS/)
 
 The `safe2` package turns repository controls, assessment logic, and evidence
@@ -16,6 +20,7 @@ Cards.
 | [`AISM/`](../AISM/README.md) | Normative maturity model, architecture, methodology, assessment, and crosswalk |
 | [`safe2/aism/`](./aism/) | Executable AISM validation, scoring, ingestion, comparison, and Decision Card rendering |
 | [`safe2/evidence/`](./evidence/) | NEXUS and NVIDIA SkillSpector evidence adapters |
+| [`safe2/challenge/`](./challenge/) | Offline Challenge Lab runner, independent graders, provider translation, comparison, and artifact verification |
 | [`safe2/commands/`](./commands/) | Unified CLI command groups and stable error handling |
 | [`examples/aism-decision-card/`](../examples/aism-decision-card/) | Runnable reference assessment and human acceptance example |
 
@@ -66,6 +71,29 @@ pytest tests/ scanner/tests/
 | `safe2 schema list` | Discover packaged machine-readable contracts | Returns stable schema identifiers as JSON |
 | `safe2 schema export NAME` | Export one versioned JSON Schema | Writes to stdout or an integration-owned file |
 | `safe2 schema validate NAME FILE` | Validate an evidence artifact | Exit 0 valid, 1 contract violation, 2 unreadable input |
+| `safe2 challenge ...` | Run inert experiments; import, compare, verify, sign, and report evidence | [Challenge CLI guide](../docs/CHALLENGE-CLI.md); fixture results are not live-agent validation |
+
+## Challenge Lab Evidence Workflow
+
+The [Challenge CLI guide](../docs/CHALLENGE-CLI.md) provides a runnable offline
+Challenge 001 workflow with six scenarios, three treatments, independent state
+grading, and a synthetic TENIR translation example. This is a fixture-stage
+extension to the existing CLI, not a reclassification of the CLI release.
+Raw provider verdicts, observation gaps, provenance, and incompatible conditions
+stay visible. Matching translated results do not establish independent replication.
+
+```bash
+safe2 challenge list
+safe2 challenge quickstart 001 --output-dir my-first-run
+safe2 challenge verify-bundle my-first-run
+safe2 challenge run 001 --output challenge-run.json
+safe2 challenge report challenge-run.json --format markdown
+```
+
+JSON runs can enter `safe2 evidence manifest` and `safe2 aism ingest`; the latter
+preserves evidence with all 30 maturity cells unscored for human review. Optional
+artifact signing uses `pip install 'ai-safe2[challenge]'` and an explicitly trusted
+public key. An artifact signature is not human action approval or proof of state.
 
 ## Multi-Harness Environment Discovery
 

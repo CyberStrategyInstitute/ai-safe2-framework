@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ai-safe2"
-version = "0.1.0"
+version = "0.2.0"
 description = "Agent-facing governance, evidence, and assessment CLI for AI SAFE2 v3.1"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -14,13 +14,13 @@ authors = [
 ]
 keywords = ["ai-safety", "mcp", "governance", "agentic-ai", "grc", "iso42001", "agent-skills"]
 classifiers = [
-    "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Topic :: Security",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 
 # Union of scanner/requirements.txt, skills/mcp/pyproject.toml, and
@@ -41,8 +41,10 @@ dependencies = [
 [project.optional-dependencies]
 scan = ["ast-grep-py>=0.12.0", "packaging>=24.0"]
 proxy = ["starlette>=0.40.0", "uvicorn>=0.29.0"]
+challenge = ["cryptography>=43.0.0"]
 gateway = ["fastapi", "uvicorn", "redis", "prometheus-client", "pyyaml"]
 all = [
+    "cryptography>=43.0.0",
     "ast-grep-py>=0.12.0",
     "packaging>=24.0",
     "starlette>=0.40.0",

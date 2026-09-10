@@ -9,6 +9,10 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 SCHEMAS = {
+    "challenge-bundle": "challenge-bundle-v1.schema.json",
+    "challenge-run": "challenge-run-v1.schema.json",
+    "challenge-source": "challenge-source-v1.schema.json",
+    "challenge-comparison": "challenge-comparison-v1.schema.json",
     "aism-assessment-v1": "aism-assessment-v1.schema.json",
     "discovery-v1": "discovery-v1.schema.json",
     "discovery-drift-v1": "discovery-drift-v1.schema.json",
