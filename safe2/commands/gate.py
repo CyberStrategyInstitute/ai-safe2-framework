@@ -1,7 +1,7 @@
 """`safe2 gate` - the pass/fail decision layer for CI/CD.
 
 Exit-code contract (uniform across every `gate` subcommand):
-  0 = PASS / APPROVE     — safe to proceed
+  0 = PASS / APPROVE     — no blocking finding within this scanner's scope
   1 = FAIL / REJECT      — block the pipeline
   2 = HOLD FOR REVIEW    — needs a human; only emitted by `gate skill` in
                             non-strict mode (a HIGH-severity finding without
@@ -86,6 +86,8 @@ def gate_skill(path, strict, quiet, max_files, max_file_bytes, max_total_bytes):
     if not quiet:
         print_skill_findings(root, findings)
     click.echo(f"\nGATE: {decision} (highest severity: {severity})")
+    click.echo(f"Coverage: {findings.text_files}/{findings.files_read} text files; "
+               "static heuristics only, not proof of safety.")
     sys.exit(skill_gate.DECISION_EXIT_CODES[decision])
 
 

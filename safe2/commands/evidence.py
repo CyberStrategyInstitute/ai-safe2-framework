@@ -62,13 +62,15 @@ def nexus_evidence(target: str, output: str | None, timeout: float, strict: bool
 @click.option("--llm/--no-llm", default=False)
 @click.option("--output", "-o", default=None)
 @click.option("--timeout", default=300.0, type=click.FloatRange(min=1.0))
-def skillspector_evidence(target: str, llm: bool, output: str | None, timeout: float):
+@click.option("--executable", default="skillspector", show_default=True,
+              help="Trusted SkillSpector executable, including a separate environment's absolute path.")
+def skillspector_evidence(target: str, llm: bool, output: str | None, timeout: float, executable: str):
     """Collect SkillSpector JSON while retaining provider attribution."""
     from safe2.evidence.skillspector import collect
 
     try:
-        result = collect(target, no_llm=not llm, timeout=timeout)
-    except (RuntimeError, TypeError) as exc:
+        result = collect(target, no_llm=not llm, timeout=timeout, executable=executable)
+    except (RuntimeError, TypeError, OSError, ValueError) as exc:
         raise click.ClickException(str(exc)) from exc
     _emit(result, output)
 

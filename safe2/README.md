@@ -1,6 +1,10 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
+[Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
+
+[Try the skill-screening demo](../docs/SKILL-SCREENING-DEMO.md) | [Our own-skill results and lessons](../docs/SKILL-SCREENING-SECOND-PASS.md)
+
 [Framework Home](../README.md) | [AISM](../AISM/README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [Examples](../examples/README.md) | [NEXUS](../NEXUS/)
 
 The `safe2` package turns repository controls, assessment logic, and evidence

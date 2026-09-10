@@ -16,7 +16,7 @@ def safe_path(path: str | Path) -> Path:
     target = Path(os.path.abspath(path))
     if os.name == "nt" and (
         str(target).startswith("\\\\")
-        or target.is_reserved()
+        or (os.path.isreserved(target) if hasattr(os.path, "isreserved") else target.is_reserved())
         or any(":" in part for part in target.parts[1:])
     ):
         raise ValueError("Device, network-share, and alternate-stream paths are not allowed")

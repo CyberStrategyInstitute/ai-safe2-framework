@@ -4,6 +4,8 @@
 
 # AI SAFE² Framework v3.1
 
+[Security advisories](docs/advisories/README.md) · [CLI runtime compatibility](docs/PYTHON-COMPATIBILITY.md)
+
 ### The Universal GRC Standard for Agentic AI, Swarm Governance, and Runtime Enforcement
 
 [![Version](https://img.shields.io/badge/version-3.1.0-orange.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/releases)
