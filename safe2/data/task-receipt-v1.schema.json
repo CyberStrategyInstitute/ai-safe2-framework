@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/task-receipt-v1.json",
+  "title": "Local artifact receipt, not completion certification",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "task_id", "parent_task_id", "harness", "observed_at", "input_sha256", "verification_scope", "criteria", "counts", "usage", "usage_verification", "completion_verified", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.task-receipt.v1"},
+    "authentication_policy": {"enum": ["required_for_reports", "optional"]},
+    "task_id": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "parent_task_id": {"anyOf": [{"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"}, {"type": "null"}]},
+    "harness": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "observed_at": {"type": "string", "maxLength": 40},
+    "input_sha256": {"$ref": "#/$defs/hash"},
+    "verification_scope": {"enum": ["local_artifact_byte_identity_only", "local_artifact_and_imported_report_consistency"]},
+    "criteria": {
+      "type": "array", "minItems": 1, "maxItems": 100,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "kind", "status", "reason", "observed_sha256"],
+        "properties": {
+          "id": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+          "kind": {"enum": ["artifact_sha256", "test_report", "tool_report"]},
+          "status": {"enum": ["supported", "contradicted", "unverifiable"]},
+          "authentication": {"enum": ["not_applicable", "not_present", "unverified_no_trusted_key", "authentication_unavailable", "authenticated_trusted_key", "invalid_attestation", "report_digest_mismatch", "invalid_validity_window", "invalid_trusted_key", "untrusted_key", "invalid_signature_or_key", "not_yet_valid", "expired"]},
+          "reason": {"enum": ["digest_matches", "digest_mismatch", "artifact_missing", "artifact_unreadable_unsafe_or_over_limit", "test_report_invalid", "test_report_binding_mismatch", "test_report_inconsistent_counts", "test_report_records_failure", "test_report_no_tests", "test_report_has_skips", "test_report_records_all_passed", "test_report_digest_mismatch", "tool_report_invalid", "tool_report_binding_mismatch", "tool_report_unknown_outcome", "tool_report_conflicts_with_claim", "tool_report_matches_claim", "tool_report_digest_mismatch", "report_authentication_not_established", "tool_report_inconsistent_observation"]},
+          "tool_summary": {
+            "type": "object", "additionalProperties": false,
+            "required": ["claimed_outcome", "reported_outcome", "evidence_basis"],
+            "properties": {
+              "claimed_outcome": {"enum": ["succeeded", "unavailable", "failed"]},
+              "reported_outcome": {"$ref": "https://aisafe2.dev/schemas/tool-result-v1.json#/properties/outcome"},
+              "evidence_basis": {"const": "imported_report_not_authenticated_execution"}
+            }
+          },
+          "test_summary": {
+            "type": "object", "additionalProperties": false,
+            "required": ["counts", "exit_code", "evidence_basis"],
+            "properties": {
+              "counts": {"$ref": "https://aisafe2.dev/schemas/test-result-v1.json#/properties/counts"},
+              "exit_code": {"$ref": "https://aisafe2.dev/schemas/test-result-v1.json#/properties/exit_code"},
+              "evidence_basis": {"const": "imported_report_not_authenticated_execution"}
+            }
+          },
+          "observed_sha256": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]}
+        }
+      }
+    },
+    "counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["supported", "contradicted", "unverifiable"],
+      "properties": {
+        "supported": {"type": "integer", "minimum": 0, "maximum": 100},
+        "contradicted": {"type": "integer", "minimum": 0, "maximum": 100},
+        "unverifiable": {"type": "integer", "minimum": 0, "maximum": 100}
+      }
+    },
+    "usage": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/properties/usage"},
+    "usage_verification": {"const": "unverified_source_declarations"},
+    "completion_verified": {"const": false},
+    "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"type": "string", "maxLength": 500}}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

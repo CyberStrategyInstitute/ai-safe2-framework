@@ -1,0 +1,15 @@
+{
+  "schema_version": "safe2.task-receipt-input.v1",
+  "task_id": "demo-test-report",
+  "parent_task_id": null,
+  "harness": "offline-demo",
+  "criteria": [{
+    "id": "all-tests-passed",
+    "kind": "test_report",
+    "path": "test-result-demo.json",
+    "expected_sha256": "6b6503082d9d5b8160d465c9a9ae266edbdfe8029a9c2fab4735fb49cf1324bb",
+    "expected_revision": "demo-revision-1",
+    "expected_environment": "synthetic-offline"
+  }],
+  "usage": []
+}

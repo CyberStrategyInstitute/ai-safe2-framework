@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/test-result-v1.json",
+  "title": "Imported test result declaration, not execution attestation",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "task_id", "revision", "environment", "source_ref", "exit_code", "counts"],
+  "properties": {
+    "schema_version": {"const": "safe2.test-result.v1"},
+    "task_id": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "revision": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "environment": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "source_ref": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "exit_code": {"type": "integer", "minimum": 0, "maximum": 255},
+    "import_provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["format", "source_sha256", "execution_binding"],
+      "properties": {
+        "format": {"const": "junit-xml"},
+        "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "execution_binding": {"const": "operator_declared"}
+      }
+    },
+    "counts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["total", "passed", "failed", "errors", "skipped"],
+      "properties": {
+        "total": {"$ref": "#/$defs/count"},
+        "passed": {"$ref": "#/$defs/count"},
+        "failed": {"$ref": "#/$defs/count"},
+        "errors": {"$ref": "#/$defs/count"},
+        "skipped": {"$ref": "#/$defs/count"}
+      }
+    }
+  },
+  "$defs": {"count": {"type": "integer", "minimum": 0, "maximum": 10000000}}
+}

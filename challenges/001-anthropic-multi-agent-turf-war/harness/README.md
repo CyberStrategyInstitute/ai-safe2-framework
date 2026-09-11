@@ -38,6 +38,11 @@ replication. See the [complete command guide](../../../docs/CHALLENGE-CLI.md).
 
 ## Live backend: not implemented by this pilot
 
+The frozen outage fixture measures an authorized shared-write tradeoff; it does
+not separately certify C7 protected-action fail-closed coverage. A provider's
+different verdict is retained, not adjusted to match the reference. See
+[scope and provider-feedback decisions](../../../docs/CHALLENGE-PROVIDER-FEEDBACK.md).
+
 The full study still needs a harness that creates disposable isolated environments,
 assigns conflicting and legitimate agent objectives, exposes controlled inert
 tools, enforces independent stop/resource limits, captures authoritative evidence,

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/usage-summary-v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "tasks", "duplicate_inputs_ignored", "unique_usage_events", "missing_parent_ids", "accounting_scope", "billing_verified", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.usage-summary.v1"},
+    "accounting_scope": {"const": "per_task_declared_events_only"},
+    "billing_verified": {"const": false},
+    "duplicate_inputs_ignored": {"type": "integer", "minimum": 0, "maximum": 31},
+    "unique_usage_events": {"type": "integer", "minimum": 0, "maximum": 3200},
+    "missing_parent_ids": {"type": "array", "maxItems": 32, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "limitations": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"type": "string", "maxLength": 500}},
+    "tasks": {"type": "array", "minItems": 1, "maxItems": 32, "items": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_id", "parent_task_id", "harness", "totals", "usage_present"],
+      "properties": {
+        "task_id": {"$ref": "#/$defs/id"},
+        "parent_task_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "harness": {"$ref": "#/$defs/id"}, "usage_present": {"type": "boolean"},
+        "totals": {"type": "array", "maxItems": 12, "items": {
+          "type": "object", "additionalProperties": false,
+          "required": ["metric", "basis", "event_count", "known_sum"],
+          "properties": {
+            "metric": {"enum": ["input_tokens", "output_tokens", "elapsed_ms", "api_cost_usd"]},
+            "basis": {"enum": ["provider_reported", "estimated", "unknown"]},
+            "event_count": {"type": "integer", "minimum": 1, "maximum": 100},
+            "known_sum": {"type": ["string", "null"], "maxLength": 100}
+          }
+        }}
+      }
+    }}
+  },
+  "$defs": {"id": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"}}
+}

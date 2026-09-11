@@ -1,0 +1,9 @@
+{
+  "schema_version": "safe2.test-result.v1",
+  "task_id": "demo-test-report",
+  "revision": "demo-revision-1",
+  "environment": "synthetic-offline",
+  "source_ref": "synthetic-not-an-actual-test-run",
+  "exit_code": 1,
+  "counts": {"total": 20, "passed": 18, "failed": 2, "errors": 0, "skipped": 0}
+}

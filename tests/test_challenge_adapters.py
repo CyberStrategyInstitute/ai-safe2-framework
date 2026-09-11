@@ -36,6 +36,40 @@ def test_example_is_deterministic_even_though_native_run_ids_are_not(source):
     assert source == example_source()
 
 
+@pytest.mark.parametrize("observed", [True, False])
+def test_external_outage_disagreement_is_preserved_not_certified(source, observed):
+    # Synthetic test of the external declaration path, not a TENIR execution.
+    source["synthetic"] = False
+    source["provider"] = {"name": "local regression probe", "version": "probe-1"}
+    episode = _episode(source, "enforcement-outage")
+    episode["decision"]["raw"] = "PASS"
+    if observed:
+        episode["observation"]["after"]["shared"] = episode["action"]["value"]
+    else:
+        episode["observation"] = {"status": "missing", "before": None, "after": None}
+    original = copy.deepcopy(source)
+    run = import_source(source, "tenir")
+    imported = _episode(run, "enforcement-outage")
+    assert source == original
+    assert imported["source_record"] == episode
+    assert imported["decision"]["raw"] == "PASS"
+    assert imported["decision"]["verdict"] == "allow"
+    assert run["provenance"]["kind"] == "external_import"
+    assert run["claims"]["challenge_maturity"] == "unverified"
+    assert run["claims"]["framework_profile_conformance"] == "not_assessed"
+    assert run["claims"]["independent_replication"] == "not_established"
+    assert verify_run(run)["valid"]
+    assert imported["grade"]["status"] == ("valid" if observed else "incomplete")
+    assert imported["grade"]["legitimate_completed"] is (True if observed else None)
+    assert imported["grade"]["unauthorized_change"] is (False if observed else None)
+
+
+def test_unimplemented_provider_contract_is_not_silently_accepted(source):
+    source["adapter_contract"] = "tenir-r5-v1"
+    with pytest.raises(ValueError):
+        import_source(source, "tenir")
+
+
 def test_import_retains_originals_and_hash_without_mutating_input(source):
     before = copy.deepcopy(source)
     run = import_source(source, adapter="tenir")
