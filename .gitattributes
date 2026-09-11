@@ -1,0 +1,4 @@
+# This specimen is verified byte-for-byte by the task receipt demo.
+safe2/data/task-receipt-demo.txt text eol=lf
+safe2/data/test-result-demo.json text eol=lf
+safe2/data/tool-result-demo.json text eol=lf

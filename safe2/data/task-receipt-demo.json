@@ -1,0 +1,19 @@
+{
+  "schema_version": "safe2.task-receipt-input.v1",
+  "task_id": "demo-artifact-check",
+  "parent_task_id": null,
+  "harness": "offline-demo",
+  "criteria": [{
+    "id": "delivered-bytes",
+    "kind": "artifact_sha256",
+    "path": "task-receipt-demo.txt",
+    "expected_sha256": "5891b5b522d5df086d0ff0b110fbd9d21bb4fc7163af34d08286a2e846f6be03"
+  }],
+  "usage": [{
+    "event_id": "demo-usage-unavailable",
+    "metric": "input_tokens",
+    "value": null,
+    "basis": "unknown",
+    "source_ref": null
+  }]
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "safe2.task-receipt-input.v1",
+  "task_id": "demo-tool-report",
+  "parent_task_id": null,
+  "harness": "offline-demo",
+  "criteria": [{
+    "id": "search-succeeded-claim",
+    "kind": "tool_report",
+    "path": "tool-result-demo.json",
+    "expected_sha256": "466fb8ab4e4d9b004f768a8138092dda659d1ffe4826ad8986bb1912be5bde19",
+    "expected_revision": "demo-revision-1",
+    "expected_environment": "synthetic-offline",
+    "expected_call_id": "search-1",
+    "expected_tool": "search",
+    "claimed_outcome": "succeeded"
+  }],
+  "usage": []
+}

@@ -9,6 +9,13 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 SCHEMAS = {
+    "pytest-capture-v1": "pytest-capture-v1.schema.json",
+    "usage-summary-v1": "usage-summary-v1.schema.json",
+    "report-attestation-v1": "report-attestation-v1.schema.json",
+    "tool-result-v1": "tool-result-v1.schema.json",
+    "test-result-v1": "test-result-v1.schema.json",
+    "task-receipt-input-v1": "task-receipt-input-v1.schema.json",
+    "task-receipt-v1": "task-receipt-v1.schema.json",
     "challenge-bundle": "challenge-bundle-v1.schema.json",
     "challenge-run": "challenge-run-v1.schema.json",
     "challenge-source": "challenge-source-v1.schema.json",

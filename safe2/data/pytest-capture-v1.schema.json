@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/pytest-capture-v1.json",
+  "title": "Local process plus fresh pytest JUnit association, not trusted execution attestation",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "process_report", "process_sha256", "test_report", "test_report_sha256", "all_tests_passed_claim", "association", "raw_junit_retained", "completion_verified", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.pytest-capture.v1"},
+    "process_report": {"$ref": "https://aisafe2.dev/schemas/tool-result-v1.json"},
+    "process_sha256": {"$ref": "#/$defs/hash"},
+    "test_report": {"anyOf": [{"type": "null"}, {"$ref": "https://aisafe2.dev/schemas/test-result-v1.json"}]},
+    "test_report_sha256": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/hash"}]},
+    "all_tests_passed_claim": {"type": "object", "additionalProperties": false,
+      "required": ["status", "reason"], "properties": {
+        "status": {"enum": ["supported", "contradicted", "unverifiable"]},
+        "reason": {"enum": ["process_capture_incomplete", "fresh_junit_missing_or_invalid", "test_report_invalid", "test_report_binding_mismatch", "test_report_inconsistent_counts", "test_report_records_failure", "test_report_no_tests", "test_report_has_skips", "test_report_records_all_passed"]}
+      }
+    },
+    "association": {"const": "collector_selected_fresh_junit_path"},
+    "raw_junit_retained": {"const": false},
+    "completion_verified": {"const": false},
+    "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"type": "string", "maxLength": 500}}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

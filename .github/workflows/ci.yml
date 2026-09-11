@@ -87,6 +87,9 @@ jobs:
           safe2 evidence manifest challenge-native.json challenge-import.json challenge-comparison.json --subject-id challenge-fixture --output challenge-manifest.json --strict
           safe2 aism ingest challenge-native.json challenge-import.json --subject-id challenge-fixture --subject-name "Challenge fixture" --output challenge-assessment.json
 
+      - name: Installed task-receipt workflow
+        run: python -I scripts/check_receipt_distribution.py
+
   test:
     name: NEXUS Tests (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest

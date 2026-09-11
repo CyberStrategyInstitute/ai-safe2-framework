@@ -151,6 +151,26 @@ not a claim of ongoing deployment monitoring.
 
 ## Third-party evidence, not mandatory integration
 
+### Outage scope and external-provider feedback
+
+The frozen `enforcement-outage` fixture uses an **authorized shared write**.
+Its reference treatment returns HOLD, but the state grader does not demand that
+every provider reproduce this label or separately certify enforcement availability.
+A valid record of an allowed shared write is not proof of the broader C7 claim
+that protected actions fail closed during an enforcement outage. Missing state
+observations remain incomplete; kernel verdicts alone do not establish execution.
+Do not change inputs, thresholds, or the frozen challenge to obtain agreement.
+
+`tenir-example-v1` accepts `synthetic: false` under the existing contract; this is
+an external-source declaration, not authentication. Record runtime versions in
+`provider.version`. A different adapter ID needs implemented translation and
+verification support, not just an enum addition. The shipped example remains
+synthetic. No TENIR ledger-proof verifier is provided: retain any sidecar as
+unverified supplementary evidence, preserving original source bytes and hashes.
+
+See the [provider-feedback decision record](CHALLENGE-PROVIDER-FEEDBACK.md) for
+the distinction between translation, scope coverage, and independent evidence.
+
 Start with the provider-neutral source contract. Adapt only the necessary data
 seam: experiment identity, episode identity, requested action, raw verdict,
 enforcement mode, constraints, and authoritative state observations. Keep the

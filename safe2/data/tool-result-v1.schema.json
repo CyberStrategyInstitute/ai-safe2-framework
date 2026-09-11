@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/tool-result-v1.json",
+  "title": "Imported tool outcome, not authenticated execution",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "task_id", "revision", "environment", "source_ref", "call_id", "tool", "outcome"],
+  "properties": {
+    "schema_version": {"const": "safe2.tool-result.v1"},
+    "task_id": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "revision": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "environment": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "source_ref": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "call_id": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "tool": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "outcome": {"enum": ["succeeded", "unavailable", "failed", "not_attempted", "unknown"]},
+    "process_observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["collector", "capture_status", "process_exit_code", "duration_ms", "command_sha256", "stdout_sha256", "stderr_sha256", "output_complete", "raw_output_retained"],
+      "properties": {
+        "collector": {"const": "safe2.local-process.v1"},
+        "capture_status": {"enum": ["completed", "output_limit", "drain_incomplete", "launch_unavailable", "timeout", "launch_failed"]},
+        "process_exit_code": {"type": ["integer", "null"]},
+        "duration_ms": {"type": "integer", "minimum": 0},
+        "command_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "stdout_sha256": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^[a-f0-9]{64}$"}]},
+        "stderr_sha256": {"anyOf": [{"type": "null"}, {"type": "string", "pattern": "^[a-f0-9]{64}$"}]},
+        "output_complete": {"type": "boolean"},
+        "raw_output_retained": {"const": false}
+      }
+    }
+  }
+}

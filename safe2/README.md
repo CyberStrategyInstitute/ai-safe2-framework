@@ -5,6 +5,8 @@
 
 [Try the skill-screening demo](../docs/SKILL-SCREENING-DEMO.md) | [Our own-skill results and lessons](../docs/SKILL-SCREENING-SECOND-PASS.md)
 
+[Task receipts: local artifact verification](../docs/TASK-RECEIPTS.md)
+
 [Framework Home](../README.md) | [AISM](../AISM/README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [Examples](../examples/README.md) | [NEXUS](../NEXUS/)
 
 The `safe2` package turns repository controls, assessment logic, and evidence
@@ -63,6 +65,14 @@ pytest tests/ scanner/tests/
 | `safe2 aism score FILE` | Validate and score AISM assessment | Produces agent JSON or human Decision Card |
 | `safe2 aism compare OLD NEW` | Compare score, decision, and coverage history | Rejects malformed inputs cleanly |
 | `safe2 example list` | Discover executable examples | Works in a clone and installed wheel |
+| `safe2 feedback receipt FILE --artifact-root DIR` | Compare artifact hashes and bound test/tool reports; JSON/Markdown receipt | Artifact/report consistency only, not authenticated execution, completion, or billing |
+| `safe2 feedback sign-report FILE --private-key KEY --signer-id ID --output FILE` | Create an expiring detached signature | Signs report bytes, not their truth |
+| `safe2 feedback verify-report FILE SIGNATURE --trusted-public-key KEY` | Check report origin, integrity, and freshness | Does not establish execution or conformance |
+| `safe2 feedback capture-process --execute ... -- ABSOLUTE_EXECUTABLE ARGS` | Directly observe an operator-authorized local process | Not a sandbox, test-success certificate, or task-completion gate |
+| `safe2 feedback import-junit FILE ... --output FILE` | Normalize supported JUnit XML and check testcase totals | Import success is not passing tests or authenticated execution |
+| `safe2 feedback capture-pytest --execute ... TARGET...` | Bind a local pytest process to its fresh JUnit report | Not isolated execution, tamper-proof runner evidence, or task acceptance |
+| `safe2 feedback verify-pytest CAPTURE.json` | Recompute capture hashes, bindings, and test assessment without executing code | Internal consistency only; exit 0 does not mean tests passed or execution is authentic |
+| `safe2 feedback usage INPUT...` | Correlate per-task usage declarations and detect duplicate ownership | Estimates remain separate; no billing verification |
 | `safe2 example verify NAME` | Verify declared example outcomes | Fails on expectation drift |
 | `safe2 mcp wrap ...` | Consumer-side MCP inspection and policy proxy | Applies runtime policy and audit behavior |
 | `safe2 doctor PATH` | Metadata-only harness, shell, host, and WSL discovery | Inventory evidence only; does not claim assessment or conformance |

@@ -1,0 +1,10 @@
+{
+  "schema_version": "safe2.tool-result.v1",
+  "task_id": "demo-tool-report",
+  "revision": "demo-revision-1",
+  "environment": "synthetic-offline",
+  "source_ref": "synthetic-not-an-actual-tool-call",
+  "call_id": "search-1",
+  "tool": "search",
+  "outcome": "unavailable"
+}

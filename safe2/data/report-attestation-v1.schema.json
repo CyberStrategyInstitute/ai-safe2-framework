@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/report-attestation-v1.json",
+  "title": "Expiring report signature; not proof of execution",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "algorithm", "report_sha256", "signer_id", "public_key_sha256", "issued_at", "expires_at", "signature_base64"],
+  "properties": {
+    "schema_version": {"const": "safe2.report-attestation.v1"},
+    "algorithm": {"const": "Ed25519"},
+    "report_sha256": {"$ref": "#/$defs/hash"},
+    "signer_id": {"$ref": "https://aisafe2.dev/schemas/task-receipt-input-v1.json#/$defs/id"},
+    "public_key_sha256": {"$ref": "#/$defs/hash"},
+    "issued_at": {"type": "integer", "minimum": 0, "maximum": 253402214400},
+    "expires_at": {"type": "integer", "minimum": 1, "maximum": 253402300799},
+    "signature_base64": {"type": "string", "minLength": 88, "maxLength": 88, "pattern": "^[A-Za-z0-9+/]{86}==$"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}
