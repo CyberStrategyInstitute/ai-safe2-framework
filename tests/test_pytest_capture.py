@@ -13,9 +13,11 @@ from safe2.cli import cli
 from safe2.contracts import validate_artifact
 from safe2.evidence import pytest_capture
 
+PYTHON = Path(sys.executable).resolve(strict=True)
+
 
 def run(tmp_path):
-    return pytest_capture.capture_pytest(python=Path(sys.executable), cwd=tmp_path,
+    return pytest_capture.capture_pytest(python=PYTHON, cwd=tmp_path,
         targets=("test_specimen.py",), task_id="t", revision="r", environment="e", call_id="c")
 
 
@@ -94,7 +96,7 @@ def test_existing_cli_output_prevents_execution(tmp_path, monkeypatch):
     monkeypatch.setattr(pytest_capture, "capture_pytest", forbidden)
     output = tmp_path / "capture.json"
     output.write_text("existing", encoding="utf-8")
-    result = CliRunner().invoke(cli, ["feedback", "capture-pytest", "--execute", "--python", sys.executable,
+    result = CliRunner().invoke(cli, ["feedback", "capture-pytest", "--execute", "--python", str(PYTHON),
         "--cwd", str(tmp_path), "--task-id", "t", "--revision", "r", "--environment", "e",
         "--call-id", "c", "--output", str(output), "test_specimen.py"])
     assert result.exit_code != 0
@@ -103,7 +105,7 @@ def test_existing_cli_output_prevents_execution(tmp_path, monkeypatch):
 
 def test_outside_target_rejected(tmp_path):
     with pytest.raises(ValueError):
-        pytest_capture.capture_pytest(python=Path(sys.executable), cwd=tmp_path, targets=("../",),
+        pytest_capture.capture_pytest(python=PYTHON, cwd=tmp_path, targets=("../",),
             task_id="t", revision="r", environment="e", call_id="c")
 
 

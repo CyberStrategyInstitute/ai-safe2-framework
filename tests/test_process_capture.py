@@ -4,6 +4,7 @@ import hashlib
 import io
 import json
 import sys
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -15,9 +16,12 @@ from safe2.contracts import validate_artifact
 from safe2.evidence import process_capture
 from safe2.evidence.tool_result import evaluate_tool_report
 
+# Select the real interpreter explicitly; Linux CI exposes a symlink alias.
+PYTHON = str(Path(sys.executable).resolve(strict=True))
+
 
 def capture(tmp_path, script="print('hello')", **kwargs):
-    return process_capture.capture_process((sys.executable, "-I", "-c", script), cwd=tmp_path,
+    return process_capture.capture_process((PYTHON, "-I", "-c", script), cwd=tmp_path,
         task_id="t1", revision="r1", environment="local", call_id="c1", tool="python", **kwargs)
 
 
@@ -85,7 +89,7 @@ def test_invalid_identifiers_never_execute(tmp_path, monkeypatch):
         pytest.fail("Must validate before launching")
     monkeypatch.setattr(process_capture, "run_bounded", forbidden)
     with pytest.raises(ValueError):
-        process_capture.capture_process((sys.executable,), cwd=tmp_path, task_id="bad id",
+        process_capture.capture_process((PYTHON,), cwd=tmp_path, task_id="bad id",
             revision="r", environment="env", call_id="c", tool="t")
 
 
@@ -100,7 +104,21 @@ def arguments(tmp_path):
     return ["feedback", "capture-process", "--execute", "--cwd", str(tmp_path),
             "--task-id", "t1", "--revision", "r1", "--environment", "local", "--call-id", "c1",
             "--tool", "python", "--output", str(tmp_path / "capture.json"), "--",
-            sys.executable, "-I", "-c", "raise SystemExit(3)"]
+            PYTHON, "-I", "-c", "raise SystemExit(3)"]
+
+
+def test_symlink_executable_still_rejected_before_launch(tmp_path, monkeypatch):
+    alias = tmp_path / "python-alias"
+    try:
+        alias.symlink_to(PYTHON)
+    except OSError:
+        pytest.skip("Symlink creation unavailable")
+    def forbidden(*args, **kwargs):
+        pytest.fail("Symlink must not launch")
+    monkeypatch.setattr(process_capture, "run_bounded", forbidden)
+    with pytest.raises(ValueError, match="Symbolic"):
+        process_capture.capture_process((str(alias),), cwd=tmp_path, task_id="t",
+            revision="r", environment="e", call_id="c", tool="python")
 
 
 def test_cli_failure_keeps_report_and_nonzero_exit(tmp_path):

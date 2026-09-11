@@ -10,6 +10,13 @@
 
 ## What works in this increment
 
+Executable paths must not be symbolic links, including interpreter aliases used
+by some Linux installations. Select the real binary explicitly (for example,
+`python -c "import pathlib,sys; print(pathlib.Path(sys.executable).resolve(strict=True))"`).
+Confirm that this interpreter has the required dependencies: resolving a virtual
+environment symlink can select the base interpreter instead. SAFE2 does not
+silently resolve user-supplied executable paths or relax its no-link checks.
+
 Release preparation also verified 684 tests passing with 5 skips across CLI and
 scanner tests on Windows Python 3.12. The 0.3.0 source distribution and wheel
 built successfully, and an installed-wheel smoke run verified receipts, seven

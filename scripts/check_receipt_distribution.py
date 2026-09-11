@@ -28,7 +28,7 @@ def main():
             invoke("schema", "export", contract)
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
-        invoke("feedback", "capture-pytest", "--execute", "--python", sys.executable,
+        invoke("feedback", "capture-pytest", "--execute", "--python", str(Path(sys.executable).resolve(strict=True)),
                "--cwd", str(root), "--task-id", "wheel-demo", "--revision", "synthetic",
                "--environment", "local", "--call-id", "pytest-1", "--output", str(capture), "test_demo.py")
         checked = invoke("feedback", "verify-pytest", str(capture))
