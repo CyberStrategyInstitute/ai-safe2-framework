@@ -1,17 +1,26 @@
-# 🟠 [Component] [Version] — [Outcome-focused title]
+# 🟠 COMPONENT VERSION — OUTCOME-FOCUSED TITLE
 
-**[Capability 1] • [Capability 2] • [Capability 3]**
+**CAPABILITY 1 • CAPABILITY 2 • CAPABILITY 3**
 
-[Component Guide](REPLACE_WITH_URL) · [Quick Start](REPLACE_WITH_URL) · [Validation](REPLACE_WITH_URL) · [Release PR](REPLACE_WITH_URL) · [Framework Home](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+Component Guide: REPLACE_WITH_URL
+
+Quick Start: REPLACE_WITH_URL
+
+Validation: REPLACE_WITH_URL
+
+Release PR: REPLACE_WITH_URL
+
+Framework Home: https://github.com/CyberStrategyInstitute/ai-safe2-framework
 
 ---
 
 <!--
-Copy this file into the GitHub release editor and replace every bracketed or
-REPLACE_WITH value. Delete comments and sections that do not apply. Use HTML
-table markup for release tables: it survives copy paths that collapse Markdown
-pipe-table row breaks. Verify every link against the release tag or merged main
-branch.
+Copy this file into the GitHub release editor and replace every uppercase
+placeholder or REPLACE_WITH value. Delete comments and sections that do not
+apply. Use HTML table markup for release tables: it survives copy paths that
+collapse Markdown pipe-table row breaks. Use labeled plain URLs on separate
+lines; do not use Markdown link syntax because some rich-text copy paths emit
+the label and URL twice. Verify every URL against the release tag or merged main.
 Do not claim a release, test, integration, endorsement, or future capability that
 has not been independently confirmed.
 -->
@@ -79,7 +88,7 @@ than implementation details.]
 
 > **Safety note:** [State any permission, execution, data-retention, or sandbox boundary users must understand before running the example.]
 
-[Link to the complete walkthrough](REPLACE_WITH_URL).
+Complete walkthrough: REPLACE_WITH_URL
 
 ## 🚦 Understand the result
 
@@ -128,4 +137,10 @@ These are roadmap items—not capabilities claimed by this release.
 
 **[One-line call to action.]**
 
-[Get Started](REPLACE_WITH_URL) · [Command Guide](REPLACE_WITH_URL) · [Report an Issue](https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues) · [Framework Home](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+Get Started: REPLACE_WITH_URL
+
+Command Guide: REPLACE_WITH_URL
+
+Report an Issue: https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues
+
+Framework Home: https://github.com/CyberStrategyInstitute/ai-safe2-framework

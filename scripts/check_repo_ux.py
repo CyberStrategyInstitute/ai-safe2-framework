@@ -157,10 +157,14 @@ def check_release_template() -> list[str]:
         return [".github/RELEASE_TEMPLATE.md: release template is missing"]
     text = read(path)
     errors: list[str] = []
-    if "Use HTML\ntable markup" not in text:
+    if "Use HTML table markup" not in text:
         errors.append(".github/RELEASE_TEMPLATE.md: missing copy-safe HTML table guidance")
     if re.search(r"(?m)^\s*\|.*\|\s*$", text):
         errors.append(".github/RELEASE_TEMPLATE.md: Markdown pipe table can collapse during copy/paste")
+    if re.search(r"!?\[[^\]]+\]\([^\)]+\)", text):
+        errors.append(".github/RELEASE_TEMPLATE.md: Markdown link syntax can duplicate during rich-text copy")
+    if "Use labeled plain URLs" not in text:
+        errors.append(".github/RELEASE_TEMPLATE.md: missing copy-safe plain-URL guidance")
     if text.count("<table>") < 3 or text.count("</table>") < 3:
         errors.append(".github/RELEASE_TEMPLATE.md: expected copy-safe HTML release tables")
     for heading in ("## 🔄 Before → After", "## 🧰 What’s new?", "## 🚦 Understand the result"):
