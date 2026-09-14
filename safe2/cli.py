@@ -50,6 +50,7 @@ def cli():
     safe2 score mcp https://host/mcp         remote MCP server score
     safe2 report project . --format all      json + sarif + markdown
     safe2 evidence nexus ./NEXUS             attributed implementation evidence
+    safe2 evidence harness export.json       provider-neutral harness evidence intake
     safe2 doctor .                            multi-harness environment inventory
     safe2 feedback record ...                 operational friction evidence
     safe2 schema list                         machine-readable evidence contracts

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/harness-source-v1.json",
+  "title": "Provider-neutral harness evidence source; all contents remain attributed assertions",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "harness", "task", "producer", "coverage", "events", "usage", "completion_claim"],
+  "properties": {
+    "schema_version": {"const": "safe2.harness-source.v1"},
+    "harness": {
+      "type": "object", "additionalProperties": false, "required": ["name", "version", "instance_id"],
+      "properties": {
+        "name": {"$ref": "#/$defs/id"},
+        "version": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "instance_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}
+      }
+    },
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_id", "parent_task_id", "revision", "environment"],
+      "properties": {
+        "task_id": {"$ref": "#/$defs/id"},
+        "parent_task_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+        "revision": {"$ref": "#/$defs/id"},
+        "environment": {"$ref": "#/$defs/id"}
+      }
+    },
+    "producer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["producer_id", "export_id", "kind", "exported_at"],
+      "properties": {
+        "producer_id": {"$ref": "#/$defs/id"},
+        "export_id": {"$ref": "#/$defs/id"},
+        "kind": {"enum": ["native_export", "hook_export", "wrapper_export", "operator_declaration"]},
+        "exported_at": {"type": "string", "format": "date-time", "maxLength": 50}
+      }
+    },
+    "coverage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_lifecycle", "tool_calls", "artifacts", "tests", "usage", "environment_state", "completion_claim"],
+      "properties": {
+        "task_lifecycle": {"$ref": "#/$defs/coverage"},
+        "tool_calls": {"$ref": "#/$defs/coverage"},
+        "artifacts": {"$ref": "#/$defs/coverage"},
+        "tests": {"$ref": "#/$defs/coverage"},
+        "usage": {"$ref": "#/$defs/coverage"},
+        "environment_state": {"$ref": "#/$defs/coverage"},
+        "completion_claim": {"$ref": "#/$defs/coverage"}
+      }
+    },
+    "events": {
+      "type": "array", "maxItems": 1000,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["event_id", "domain", "status", "outcome", "source_ref"],
+        "properties": {
+          "event_id": {"$ref": "#/$defs/id"},
+          "domain": {"enum": ["task_lifecycle", "tool_calls", "artifacts", "tests", "environment_state", "completion_claim", "error"]},
+          "status": {"enum": ["observed", "declared", "missing"]},
+          "outcome": {"enum": ["succeeded", "failed", "unavailable", "unknown", null]},
+          "source_ref": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}
+        }
+      }
+    },
+    "usage": {
+      "type": "array", "maxItems": 100,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["event_id", "metric", "value", "basis", "source_ref"],
+        "properties": {
+          "event_id": {"$ref": "#/$defs/id"},
+          "metric": {"enum": ["input_tokens", "output_tokens", "elapsed_ms", "api_cost_usd"]},
+          "value": {"anyOf": [{"type": "number", "minimum": 0, "maximum": 1000000000000}, {"type": "null"}]},
+          "basis": {"enum": ["provider_reported", "estimated", "unknown"]},
+          "source_ref": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}
+        }
+      }
+    },
+    "completion_claim": {
+      "type": "object", "additionalProperties": false, "required": ["status", "source_ref"],
+      "properties": {
+        "status": {"enum": ["claimed_complete", "claimed_incomplete", "not_claimed"]},
+        "source_ref": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "coverage": {
+      "type": "object", "additionalProperties": false, "required": ["status", "basis", "source_ref"],
+      "properties": {
+        "status": {"enum": ["complete", "partial", "missing"]},
+        "basis": {"enum": ["observed", "declared", "unknown"]},
+        "source_ref": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}
+      }
+    }
+  }
+}

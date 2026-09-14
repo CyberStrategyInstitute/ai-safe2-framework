@@ -411,6 +411,38 @@ created by the collector, without a caller-supplied exit code or existing XML.
 8. **Harness integrations:** supported hooks/imports first; enforceable pre-action
    gates only with explicit authorization. No universal background interception.
 
+The ranked implementation queue and deliberately pinned work are recorded in the
+[September 2026 security-brief triage](./SECURITY-BRIEF-2026-09-13-TRIAGE.md).
+
+## Provider-neutral harness evidence intake
+
+`safe2 evidence harness` accepts a bounded, normalized export rather than reading
+private harness logs or configuration directories. Start with the packaged example:
+
+```console
+safe2 schema export harness-source-v1
+safe2 evidence harness safe2/data/harness-source-demo.json --output harness-evidence.json
+safe2 evidence manifest harness-evidence.json --subject-id demo-task --output harness-manifest.json --strict
+```
+
+Use `--strict` on `evidence harness` when an automation should exit 1 after writing
+the result if any of the seven coverage domains is partial or missing. A normal
+exit 0 means intake succeeded, not that work completed. The result separates task
+lifecycle, tool calls, artifacts, tests, usage, environment state, and completion
+claim coverage. Each domain records complete/partial/missing and an
+observed/declared/unknown basis.
+
+The source contract intentionally excludes prompts, tool arguments, raw outputs,
+secret values, and filesystem contents. Event and usage identifiers must be unique;
+missing evidence cannot carry a source reference; reported or estimated values need
+one. SAFE2 hashes the exact input bytes and reports authentication as not checked.
+Even a native export whose labels say observed and complete remains attributed
+provider evidence, not independently witnessed execution or verified completion.
+
+This is the common intake seam for later opt-in Codex and Claude Code adapters.
+Those native adapters are not part of this increment and must use supported export
+or hook surfaces rather than scrape undocumented private state.
+
 Headroom's [documented pipeline](https://github.com/headroomlabs-ai/headroom)
 offers a prospective extension seam; its source remains an independent provider,
 not a mandatory dependency or trusted grader. Pin and test its interface before
