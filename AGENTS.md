@@ -91,5 +91,6 @@ For automated assessment or implementation guidance:
 - Research: `research/README.md`
 - Challenge Lab: `challenges/README.md`
 - Repository UX contract: `docs/REPOSITORY-UX-STANDARD.md`
+- Reusable GitHub release-note template: `.github/RELEASE_TEMPLATE.md`
 
 When a machine-readable field and prose appear to conflict, do not silently guess. Preserve the conflict in the output and prefer the current v3.1 normative document identified by the manifest for interpretation.
