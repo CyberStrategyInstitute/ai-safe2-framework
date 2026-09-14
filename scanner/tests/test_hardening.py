@@ -20,6 +20,15 @@ def test_markdown_and_generated_environments_are_skipped(tmp_path: Path) -> None
     generated = tmp_path / ".uv-cache"
     generated.mkdir()
     (generated / "unsafe.py").write_text("eval(user_input)\n", encoding="utf-8")
+    evidence_workspace = tmp_path / ".safe2"
+    evidence_workspace.mkdir()
+    (evidence_workspace / "unsafe.py").write_text("eval(user_input)\n", encoding="utf-8")
+    named_environment = tmp_path / ".venv-acceptance"
+    named_environment.mkdir()
+    (named_environment / "unsafe.py").write_text("eval(user_input)\n", encoding="utf-8")
+    named_cache = tmp_path / ".uv-acceptance-cache"
+    named_cache.mkdir()
+    (named_cache / "unsafe.py").write_text("eval(user_input)\n", encoding="utf-8")
 
     result = StaticScanner().scan_project(str(tmp_path))
 
