@@ -2,29 +2,31 @@
 
 **CAPABILITY 1 • CAPABILITY 2 • CAPABILITY 3**
 
-Component Guide: REPLACE_WITH_URL
-
-Quick Start: REPLACE_WITH_URL
-
-Validation: REPLACE_WITH_URL
-
-Release PR: REPLACE_WITH_URL
-
-Framework Home: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+<p>
+  <a href="#why-this-matters">Why It Matters</a> ·
+  <a href="#before-and-after">Before and After</a> ·
+  <a href="#whats-new">What's New</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#understand-the-result">Results</a> ·
+  <a href="#security-boundaries">Security</a> ·
+  <a href="#validation">Validation</a> ·
+  <a href="REPLACE_WITH_URL">Release PR</a>
+</p>
 
 ---
 
 <!--
 Copy this file into the GitHub release editor and replace every uppercase
 placeholder or REPLACE_WITH value. Delete comments and sections that do not
-apply. Use HTML table markup for release tables: it survives copy paths that
-collapse Markdown pipe-table row breaks. Use labeled plain URLs on separate
-lines; do not use Markdown link syntax because some rich-text copy paths emit
-the label and URL twice. Verify every URL against the release tag or merged main.
+apply. Use HTML markup for navigation, external links and release tables: it
+survives copy paths that collapse Markdown row breaks or duplicate rich links.
+Give every navigated section an explicit HTML id. Do not use Markdown link
+syntax. Verify every URL against the release tag or merged main.
 Do not claim a release, test, integration, endorsement, or future capability that
 has not been independently confirmed.
 -->
 
+<a id="why-this-matters"></a>
 ## 💡 Why should I care—and use this now?
 
 [Describe the user's problem in plain language.]
@@ -38,6 +40,7 @@ than implementation details.]
 - [Immediate agent or automation benefit.]
 - [Evidence, safety, governance, or usability benefit.]
 
+<a id="before-and-after"></a>
 ## 🔄 Before → After
 
 <table>
@@ -51,6 +54,7 @@ than implementation details.]
   </tbody>
 </table>
 
+<a id="whats-new"></a>
 ## 🧰 What’s new?
 
 <table>
@@ -65,6 +69,7 @@ than implementation details.]
 
 [Summarize compatibility and whether existing commands or workflows remain available.]
 
+<a id="quick-start"></a>
 ## 🚀 Quick start
 
 ### 1. Install or upgrade
@@ -88,8 +93,9 @@ than implementation details.]
 
 > **Safety note:** [State any permission, execution, data-retention, or sandbox boundary users must understand before running the example.]
 
-Complete walkthrough: REPLACE_WITH_URL
+<a href="REPLACE_WITH_URL">Read the complete walkthrough</a>.
 
+<a id="understand-the-result"></a>
 ## 🚦 Understand the result
 
 <table>
@@ -105,6 +111,7 @@ Complete walkthrough: REPLACE_WITH_URL
 
 [Explain the most important distinction users must not infer from these results.]
 
+<a id="security-boundaries"></a>
 ## 🛡️ Security and evidence boundaries
 
 [Summarize the protections delivered in this release.]
@@ -115,6 +122,7 @@ Important limits:
 - [What an exit code, signature, hash, scan, or score does not prove.]
 - [Any operational prerequisite or trust assumption.]
 
+<a id="validation"></a>
 ## 🧪 Validation and compatibility
 
 - [Final hosted test result with link.]
@@ -137,10 +145,9 @@ These are roadmap items—not capabilities claimed by this release.
 
 **[One-line call to action.]**
 
-Get Started: REPLACE_WITH_URL
-
-Command Guide: REPLACE_WITH_URL
-
-Report an Issue: https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues
-
-Framework Home: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+<p>
+  <a href="REPLACE_WITH_URL">Get Started</a> ·
+  <a href="REPLACE_WITH_URL">Command Guide</a> ·
+  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues">Report an Issue</a> ·
+  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework">Framework Home</a>
+</p>
