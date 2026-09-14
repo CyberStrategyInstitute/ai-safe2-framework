@@ -8,9 +8,10 @@
 
 <!--
 Copy this file into the GitHub release editor and replace every bracketed or
-REPLACE_WITH value. Delete comments and sections that do not apply. Keep a blank
-line before each table and do not indent table rows, or GitHub may render them as
-paragraphs. Verify every link against the release tag or merged main branch.
+REPLACE_WITH value. Delete comments and sections that do not apply. Use HTML
+table markup for release tables: it survives copy paths that collapse Markdown
+pipe-table row breaks. Verify every link against the release tag or merged main
+branch.
 Do not claim a release, test, integration, endorsement, or future capability that
 has not been independently confirmed.
 -->
@@ -30,18 +31,28 @@ than implementation details.]
 
 ## 🔄 Before → After
 
-| Before this update | With [Component] [Version] |
-| --- | --- |
-| [Previous limitation.] | [New capability and its boundary.] |
-| [Previous manual step.] | [New supported workflow.] |
-| [Previous ambiguity.] | [New evidence or decision support.] |
+<table>
+  <thead>
+    <tr><th>Before this update</th><th>With [Component] [Version]</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>[Previous limitation.]</td><td>[New capability and its boundary.]</td></tr>
+    <tr><td>[Previous manual step.]</td><td>[New supported workflow.]</td></tr>
+    <tr><td>[Previous ambiguity.]</td><td>[New evidence or decision support.]</td></tr>
+  </tbody>
+</table>
 
 ## 🧰 What’s new?
 
-| Command or capability | Purpose |
-| --- | --- |
-| `[command or feature]` | [What it helps the user accomplish.] |
-| `[command or feature]` | [What it helps the user accomplish.] |
+<table>
+  <thead>
+    <tr><th>Command or capability</th><th>Purpose</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>[command or feature]</code></td><td>[What it helps the user accomplish.]</td></tr>
+    <tr><td><code>[command or feature]</code></td><td>[What it helps the user accomplish.]</td></tr>
+  </tbody>
+</table>
 
 [Summarize compatibility and whether existing commands or workflows remain available.]
 
@@ -72,11 +83,16 @@ than implementation details.]
 
 ## 🚦 Understand the result
 
-| Assessment | Meaning |
-| --- | --- |
-| 🟢 **Supported** | [Define the narrow supported claim.] |
-| 🟠 **Contradicted** | [Define applicable conflicting evidence.] |
-| ⚪ **Unverifiable** | [Define missing, incomplete, unsafe, or inapplicable evidence.] |
+<table>
+  <thead>
+    <tr><th>Assessment</th><th>Meaning</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>🟢 <strong>Supported</strong></td><td>[Define the narrow supported claim.]</td></tr>
+    <tr><td>🟠 <strong>Contradicted</strong></td><td>[Define applicable conflicting evidence.]</td></tr>
+    <tr><td>⚪ <strong>Unverifiable</strong></td><td>[Define missing, incomplete, unsafe, or inapplicable evidence.]</td></tr>
+  </tbody>
+</table>
 
 [Explain the most important distinction users must not infer from these results.]
 

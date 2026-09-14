@@ -150,6 +150,25 @@ def check_research() -> list[str]:
     return errors
 
 
+def check_release_template() -> list[str]:
+    """Keep release tables readable through whitespace-collapsing copy paths."""
+    path = ROOT / ".github" / "RELEASE_TEMPLATE.md"
+    if not path.exists():
+        return [".github/RELEASE_TEMPLATE.md: release template is missing"]
+    text = read(path)
+    errors: list[str] = []
+    if "Use HTML\ntable markup" not in text:
+        errors.append(".github/RELEASE_TEMPLATE.md: missing copy-safe HTML table guidance")
+    if re.search(r"(?m)^\s*\|.*\|\s*$", text):
+        errors.append(".github/RELEASE_TEMPLATE.md: Markdown pipe table can collapse during copy/paste")
+    if text.count("<table>") < 3 or text.count("</table>") < 3:
+        errors.append(".github/RELEASE_TEMPLATE.md: expected copy-safe HTML release tables")
+    for heading in ("## 🔄 Before → After", "## 🧰 What’s new?", "## 🚦 Understand the result"):
+        if heading not in text:
+            errors.append(f".github/RELEASE_TEMPLATE.md: missing required section {heading}")
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
     for rel in MAJOR_PAGES:
@@ -161,6 +180,7 @@ def main() -> int:
 
     errors.extend(check_examples())
     errors.extend(check_research())
+    errors.extend(check_release_template())
 
     # Broken canonical-path check applies to every Markdown file in the repo.
     for path in ROOT.rglob("*.md"):
