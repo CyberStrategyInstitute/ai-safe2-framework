@@ -195,6 +195,8 @@ safe2 gate skill ./candidate-skill --strict
 safe2 evidence nexus ./NEXUS --output nexus-evidence.json
 safe2 evidence skillspector ./candidate-skill --output skillspector-evidence.json
 safe2 evidence manifest environment-inventory.json nexus-evidence.json --subject-id governed-agent --output run-manifest.json --strict
+safe2 evidence system safe2/data/system-identity-source-demo.json --output system-identity.json --strict
+safe2 evidence diagnose safe2/data/failure-source-demo.json --system-identity system-identity.json --output failure-diagnosis.json --card failure-card.md --strict
 safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "NEXUS Local" --output assessment.json
 safe2 aism score assessment.json --format markdown --output decision-card.md
 ```
@@ -239,6 +241,11 @@ The [agent system identity manifest](docs/SYSTEM-IDENTITY.md) adds the next laye
 harness, tools, skills, memory, environment, policies, evaluator, authority and
 relationships to one assessment subject without claiming the declared deployment
 was independently verified.
+
+[Failure localization](docs/FAILURE-LOCALIZATION.md) binds task observations and
+competing failure candidates to that complete system identity. It ranks where to
+investigate, exposes assumptions and contradictions, and recommends a repair
+owner and next action without claiming a verified root cause or probability.
 For release boundaries, verified behavior, and external checks that still
 require human or production execution, see the
 [Stranger-Ready CLI Review](docs/STRANGER-READY-CLI-REVIEW.md),

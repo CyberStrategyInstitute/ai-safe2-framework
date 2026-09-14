@@ -13,7 +13,7 @@ def main():
         root = Path(temporary)
         data = files("safe2").joinpath("data")
         for name in ("task-receipt-demo.json", "task-receipt-demo.txt", "harness-source-demo.json",
-                     "system-identity-source-demo.json"):
+                     "system-identity-source-demo.json", "failure-source-demo.json"):
             (root / name).write_bytes(data.joinpath(name).read_bytes())
 
         def invoke(*arguments):
@@ -27,7 +27,7 @@ def main():
         for contract in ("task-receipt-input-v1", "task-receipt-v1", "test-result-v1",
                          "tool-result-v1", "report-attestation-v1", "usage-summary-v1", "pytest-capture-v1",
                          "harness-source-v1", "harness-evidence-v1", "system-identity-source-v1",
-                         "system-identity-manifest-v1"):
+                         "system-identity-manifest-v1", "failure-source-v1", "failure-diagnosis-v1"):
             invoke("schema", "export", contract)
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
@@ -55,7 +55,16 @@ def main():
         identity_manifest = json.loads(identity_output.read_text(encoding="utf-8"))
         assert identity_manifest["summary"]["components"] == 8
         assert identity_manifest["decision_scope"] == "system_identity_inventory_only"
-    print("Installed distribution: receipts, eleven schemas, pytest capture, harness intake, and system identity passed")
+        diagnosis_output = root / "failure-diagnosis.json"
+        card_output = root / "failure-card.md"
+        diagnosis = invoke("evidence", "diagnose", str(root / "failure-source-demo.json"),
+                           "--system-identity", str(identity_output), "--output", str(diagnosis_output),
+                           "--card", str(card_output), "--strict")
+        assert diagnosis["primary_candidate_id"] == "candidate-harness-tool"
+        assert diagnosis["root_cause_verified"] is False
+        assert diagnosis["probability_estimate"] is False
+        assert card_output.is_file()
+    print("Installed distribution: receipts, thirteen schemas, pytest capture, harness intake, system identity, and failure localization passed")
 
 
 if __name__ == "__main__":

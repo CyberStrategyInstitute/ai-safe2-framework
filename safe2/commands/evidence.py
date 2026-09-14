@@ -31,6 +31,47 @@ def evidence():
     """Collect attributed evidence without claiming conformance."""
 
 
+@evidence.command("diagnose")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--card", type=click.Path(path_type=Path), help="Optional human-readable Markdown card.")
+@click.option("--strict", is_flag=True, help="Exit 1 unless one strong/moderate primary candidate is ranked.")
+@click.pass_context
+def diagnose_evidence(
+    ctx: click.Context, source: Path, system_identity: Path, output: Path,
+    card: Path | None, strict: bool,
+) -> None:
+    """Rank attributed failure locations against a system identity."""
+    from safe2.challenge.io import read_bytes, safe_path, write_json, write_text
+    from safe2.evidence.diagnosis import diagnose
+    from safe2.evidence.diagnosis_card import render
+
+    try:
+        destinations = [safe_path(output)] + ([safe_path(card)] if card else [])
+        if len(set(destinations)) != len(destinations) or any(path.exists() for path in destinations):
+            raise ValueError("Output destinations must be distinct and must not already exist")
+        result = diagnose(
+            read_bytes(source, limit=1_000_000),
+            read_bytes(system_identity, limit=1_000_000),
+        )
+        write_json(output, result)
+        if card:
+            write_text(card, render(result))
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException("Failure diagnosis failed: invalid evidence or unsafe/unavailable I/O") from exc
+    click.echo(json.dumps({
+        "output": str(output), "card": str(card) if card else None,
+        "diagnosis_status": result["diagnosis_status"],
+        "primary_candidate_id": result["primary_candidate_id"],
+        "root_cause_verified": False, "probability_estimate": False,
+        "conformance_claim": False,
+    }))
+    top_level = result["candidates"][0]["evidence_assessment"]["level"]
+    if strict and (result["diagnosis_status"] != "ranked_candidate" or top_level not in {"strong", "moderate"}):
+        ctx.exit(1)
+
+
 @evidence.command("system")
 @click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
 @click.option("--output", "-o", required=True, type=click.Path(path_type=Path))

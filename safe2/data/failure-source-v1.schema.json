@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/failure-source-v1.json",
+  "title": "Attributed failure observations and candidate locations",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "failure_id", "recorded_at", "subject", "task", "outcome", "observations", "candidates"],
+  "properties": {
+    "schema_version": {"const": "safe2.failure-source.v1"},
+    "failure_id": {"$ref": "#/$defs/id"},
+    "recorded_at": {"type": "string", "format": "date-time", "maxLength": 50},
+    "subject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["subject_id", "system_fingerprint_sha256"],
+      "properties": {
+        "subject_id": {"$ref": "#/$defs/id"},
+        "system_fingerprint_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_id", "run_id"],
+      "properties": {
+        "task_id": {"$ref": "#/$defs/id"},
+        "run_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}
+      }
+    },
+    "outcome": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "summary"],
+      "properties": {
+        "status": {"enum": ["failed", "partial", "blocked", "unknown"]},
+        "summary": {"$ref": "#/$defs/text"}
+      }
+    },
+    "observations": {
+      "type": "array", "minItems": 1, "maxItems": 500,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["observation_id", "kind", "basis", "directness", "source_id", "source_ref", "component_ids", "statement"],
+        "properties": {
+          "observation_id": {"$ref": "#/$defs/id"},
+          "kind": {"enum": ["completion_claim", "tool_result", "test_result", "artifact_state", "environment_state", "policy_decision", "memory_state", "usage", "error", "human_report", "other"]},
+          "basis": {"enum": ["observed", "declared", "missing"]},
+          "directness": {"enum": ["direct", "indirect", "unknown"]},
+          "source_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+          "source_ref": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+          "component_ids": {"type": "array", "minItems": 1, "maxItems": 20, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+          "statement": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "candidates": {
+      "type": "array", "minItems": 1, "maxItems": 50,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["candidate_id", "primary_component_id", "interacting_component_id", "failure_mode", "description", "supporting_observation_ids", "contradicting_observation_ids", "assumptions", "repair_owner", "recommended_action"],
+        "properties": {
+          "candidate_id": {"$ref": "#/$defs/id"},
+          "primary_component_id": {"$ref": "#/$defs/id"},
+          "interacting_component_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]},
+          "failure_mode": {"enum": ["invalid_output", "context_loss", "tool_unavailable", "tool_misuse", "permission_denied", "state_mismatch", "stale_memory", "policy_block", "evaluator_error", "unsupported_claim", "orchestration_error", "environment_unavailable", "unknown"]},
+          "description": {"$ref": "#/$defs/text"},
+          "supporting_observation_ids": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+          "contradicting_observation_ids": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+          "assumptions": {"type": "array", "maxItems": 20, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+          "repair_owner": {"enum": ["model", "harness", "tool", "skill", "memory", "environment", "policy", "evaluator", "operator", "provider", "shared", "unknown"]},
+          "recommended_action": {"$ref": "#/$defs/text"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 500}
+  }
+}

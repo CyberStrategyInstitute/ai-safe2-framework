@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.4.0-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-0.5.0-F6921E?style=flat-square)](../README.md)
 
 [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
 
@@ -10,6 +10,8 @@
 [Task receipts: local artifact verification](../docs/TASK-RECEIPTS.md)
 
 [Agent system identity manifests](../docs/SYSTEM-IDENTITY.md)
+
+[Failure localization](../docs/FAILURE-LOCALIZATION.md)
 
 [Framework Home](../README.md) | [AISM](../AISM/README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [Examples](../examples/README.md) | [NEXUS](../NEXUS/)
 
@@ -66,6 +68,7 @@ pytest tests/ scanner/tests/
 | `safe2 evidence manifest FILE...` | Bind heterogeneous evidence into one run record | Hashes and validates artifacts without claiming conformance |
 | `safe2 evidence harness SOURCE --output FILE` | Import a provider-neutral harness evidence export and expose coverage gaps | Source-attributed inventory only; does not verify execution, completion, billing, or conformance |
 | `safe2 evidence system SOURCE --output FILE [--strict]` | Normalize model, harness, tool, skill, memory, environment, policy and evaluator identity | Declared/observed inventory only; does not verify deployed configuration or conformance |
+| `safe2 evidence diagnose SOURCE --system-identity FILE --output FILE [--card FILE] [--strict]` | Rank evidence-backed failure locations across the complete agent system | Diagnostic support only; never claims a verified root cause, probability, or conformance |
 | `safe2 aism init FILE` | Create a 30-cell unscored assessment | Missing evidence remains unscored |
 | `safe2 aism ingest BUNDLE...` | Import evidence conservatively | Suggests mappings; requires human confirmation |
 | `safe2 aism score FILE` | Validate and score AISM assessment | Produces agent JSON or human Decision Card |
