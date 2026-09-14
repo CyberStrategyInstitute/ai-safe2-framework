@@ -58,6 +58,12 @@ Relative paths must be adjusted for nesting depth.
 
 ## Standard repository destinations
 
+GitHub release announcements should start from
+[`RELEASE_TEMPLATE.md`](../.github/RELEASE_TEMPLATE.md). Its structure prioritizes
+the user outcome, a GitHub-safe before/after table, copyable quick start, evidence
+boundaries, validation, invariants, and clearly separated roadmap items. Preview
+the completed Markdown in GitHub before publishing and verify every link.
+
 Major landing pages should make these destinations easy to reach:
 
 - Framework Home
