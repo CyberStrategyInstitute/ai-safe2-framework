@@ -14,6 +14,7 @@ Adds a local evidence workflow for declared task outcomes and resource use. This
 - Declared task usage correlation, parent-cycle detection, duplicate-event ownership rejection, and separate reported/estimated/unknown quantities.
 - Shared process capture completeness tracking, adversarial regression tests, packaged examples, and LF-stable demo fixtures.
 - Root/CLI documentation, task-receipt guide, release notes, and held announcement copy.
+- Reusable GitHub release-note template with outcome-first sections, copy-safe tables, quick start, evidence boundaries, and roadmap separation.
 - CLI version 0.3.0 and an installed-distribution workflow in the Python 3.11–3.14 CI matrix.
 
 ## Validation
