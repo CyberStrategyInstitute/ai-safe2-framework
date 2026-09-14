@@ -411,6 +411,9 @@ created by the collector, without a caller-supplied exit code or existing XML.
 8. **Harness integrations:** supported hooks/imports first; enforceable pre-action
    gates only with explicit authorization. No universal background interception.
 
+The ranked implementation queue and deliberately pinned work are recorded in the
+[September 2026 security-brief triage](./SECURITY-BRIEF-2026-09-13-TRIAGE.md).
+
 Headroom's [documented pipeline](https://github.com/headroomlabs-ai/headroom)
 offers a prospective extension seam; its source remains an independent provider,
 not a mandatory dependency or trusted grader. Pin and test its interface before
