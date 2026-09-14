@@ -50,6 +50,7 @@
 ## Changelog / Release Notes
 
 - [ ] Changelog or release note updated when externally visible behavior changes
+- [ ] Release announcement follows [the readable release-note template](./RELEASE_TEMPLATE.md) when applicable
 
 ## DCO and License Sign-Off
 
