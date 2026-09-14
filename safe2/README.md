@@ -60,6 +60,7 @@ pytest tests/ scanner/tests/
 | `safe2 evidence nexus PATH` | Collect NEXUS implementation/runtime evidence | Does not infer maturity |
 | `safe2 evidence skillspector PATH` | Run optional NVIDIA SkillSpector adapter | Preserves upstream output and attribution |
 | `safe2 evidence manifest FILE...` | Bind heterogeneous evidence into one run record | Hashes and validates artifacts without claiming conformance |
+| `safe2 evidence harness SOURCE --output FILE` | Import a provider-neutral harness evidence export and expose coverage gaps | Source-attributed inventory only; does not verify execution, completion, billing, or conformance |
 | `safe2 aism init FILE` | Create a 30-cell unscored assessment | Missing evidence remains unscored |
 | `safe2 aism ingest BUNDLE...` | Import evidence conservatively | Suggests mappings; requires human confirmation |
 | `safe2 aism score FILE` | Validate and score AISM assessment | Produces agent JSON or human Decision Card |

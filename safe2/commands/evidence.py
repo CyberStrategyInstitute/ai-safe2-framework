@@ -31,6 +31,27 @@ def evidence():
     """Collect attributed evidence without claiming conformance."""
 
 
+@evidence.command("harness")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--strict", is_flag=True, help="Exit 1 after writing when any coverage domain is not complete.")
+@click.pass_context
+def harness_evidence(ctx: click.Context, source: Path, output: Path, strict: bool) -> None:
+    """Import a normalized harness export; no native logs or target code are read."""
+    from safe2.challenge.io import read_bytes, write_json
+    from safe2.evidence.harness import ingest
+
+    try:
+        result = ingest(read_bytes(source, limit=1_000_000))
+        write_json(output, result)
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException("Harness intake failed: invalid source or unsafe/unavailable I/O") from exc
+    click.echo(json.dumps({"output": str(output), "summary": result["summary"],
+                           "completion_verified": False, "conformance_claim": False}))
+    if strict and (result["summary"]["coverage_partial"] or result["summary"]["coverage_missing"]):
+        ctx.exit(1)
+
+
 @evidence.command("nexus")
 @click.argument("target")
 @click.option("--output", "-o", default=None)

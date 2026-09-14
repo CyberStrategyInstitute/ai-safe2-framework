@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/harness-evidence-v1.json",
+  "title": "SAFE2 provider-neutral harness evidence intake result",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "collected_at", "provider", "source", "harness", "task", "coverage", "summary", "completion_claim", "usage", "recommendations", "decision_scope", "completion_verified", "billing_verified", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.harness-evidence.v1"},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "provider": {"type": "object", "additionalProperties": false, "required": ["name", "mode"], "properties": {"name": {"const": "SAFE2 harness evidence intake"}, "mode": {"const": "offline-import"}}},
+    "source": {"type": "object", "additionalProperties": false, "required": ["sha256", "bytes", "producer_id", "export_id", "kind", "authentication"], "properties": {
+      "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "bytes": {"type": "integer", "minimum": 1, "maximum": 1000000},
+      "producer_id": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/$defs/id"},
+      "export_id": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/$defs/id"},
+      "kind": {"enum": ["native_export", "hook_export", "wrapper_export", "operator_declaration"]},
+      "authentication": {"const": "not_checked"}
+    }},
+    "harness": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/properties/harness"},
+    "task": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/properties/task"},
+    "coverage": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/properties/coverage"},
+    "summary": {"type": "object", "additionalProperties": false, "required": ["coverage_complete", "coverage_partial", "coverage_missing", "observed_events", "declared_events", "missing_events", "total_events"], "properties": {
+      "coverage_complete": {"type": "integer", "minimum": 0, "maximum": 7}, "coverage_partial": {"type": "integer", "minimum": 0, "maximum": 7}, "coverage_missing": {"type": "integer", "minimum": 0, "maximum": 7},
+      "observed_events": {"type": "integer", "minimum": 0}, "declared_events": {"type": "integer", "minimum": 0}, "missing_events": {"type": "integer", "minimum": 0}, "total_events": {"type": "integer", "minimum": 0}
+    }},
+    "completion_claim": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/properties/completion_claim"},
+    "usage": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/properties/usage"},
+    "recommendations": {"type": "array", "maxItems": 10, "items": {"type": "string", "maxLength": 300}},
+    "decision_scope": {"const": "evidence_inventory_only"}, "completion_verified": {"const": false}, "billing_verified": {"const": false}, "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 1, "maxItems": 10, "items": {"type": "string", "maxLength": 500}}
+  }
+}

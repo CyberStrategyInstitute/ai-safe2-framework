@@ -229,6 +229,11 @@ CLI 0.3.0 adds [task receipts and usage evidence](docs/TASK-RECEIPTS.md):
 check artifact and test/tool claims, capture explicit local runs, recheck fresh
 pytest evidence, authenticate report bytes, and correlate declared per-task
 resource use. These checks do not establish task completion or verified billing.
+
+The next-release work adds a provider-neutral
+[harness evidence intake](docs/TASK-RECEIPTS.md#provider-neutral-harness-evidence-intake)
+that makes declared, observed, partial, and missing coverage visible before native
+harness adapters are introduced.
 For release boundaries, verified behavior, and external checks that still
 require human or production execution, see the
 [Stranger-Ready CLI Review](docs/STRANGER-READY-CLI-REVIEW.md),

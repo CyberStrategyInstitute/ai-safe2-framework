@@ -1,0 +1,24 @@
+{
+  "schema_version": "safe2.harness-source.v1",
+  "harness": {"name": "generic-agent", "version": "1.0", "instance_id": "local-demo"},
+  "task": {"task_id": "demo-task", "parent_task_id": null, "revision": "working-tree", "environment": "local-demo"},
+  "producer": {"producer_id": "demo-exporter", "export_id": "demo-export-1", "kind": "operator_declaration", "exported_at": "2026-09-14T00:00:00Z"},
+  "coverage": {
+    "task_lifecycle": {"status": "complete", "basis": "declared", "source_ref": "event-start"},
+    "tool_calls": {"status": "partial", "basis": "declared", "source_ref": "event-tool"},
+    "artifacts": {"status": "missing", "basis": "unknown", "source_ref": null},
+    "tests": {"status": "missing", "basis": "unknown", "source_ref": null},
+    "usage": {"status": "partial", "basis": "declared", "source_ref": "usage-elapsed"},
+    "environment_state": {"status": "missing", "basis": "unknown", "source_ref": null},
+    "completion_claim": {"status": "complete", "basis": "declared", "source_ref": "event-complete"}
+  },
+  "events": [
+    {"event_id": "event-start", "domain": "task_lifecycle", "status": "declared", "outcome": null, "source_ref": "operator-note-1"},
+    {"event_id": "event-tool", "domain": "tool_calls", "status": "declared", "outcome": "succeeded", "source_ref": "operator-note-1"},
+    {"event_id": "event-complete", "domain": "completion_claim", "status": "declared", "outcome": "succeeded", "source_ref": "operator-note-1"}
+  ],
+  "usage": [
+    {"event_id": "usage-elapsed", "metric": "elapsed_ms", "value": 1200, "basis": "estimated", "source_ref": "operator-note-1"}
+  ],
+  "completion_claim": {"status": "claimed_complete", "source_ref": "event-complete"}
+}
