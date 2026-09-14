@@ -419,6 +419,10 @@ The ranked implementation queue and deliberately pinned work are recorded in the
 `safe2 evidence harness` accepts a bounded, normalized export rather than reading
 private harness logs or configuration directories. Start with the packaged example:
 
+Use the separate [agent system identity manifest](./SYSTEM-IDENTITY.md) to bind
+the model, harness, tools, skills, memory, environment, policy and evaluator that
+produced or provide context for this task evidence.
+
 ```console
 safe2 schema export harness-source-v1
 safe2 evidence harness safe2/data/harness-source-demo.json --output harness-evidence.json

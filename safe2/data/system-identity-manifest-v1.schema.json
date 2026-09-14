@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/system-identity-manifest-v1.json",
+  "title": "SAFE2 normalized agent system identity manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "created_at", "source", "subject", "components", "bindings", "coverage", "evidence_refs", "summary", "system_fingerprint_sha256", "recommendations", "decision_scope", "identity_verified", "configuration_verified", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.system-identity-manifest.v1"},
+    "created_at": {"type": "string", "format": "date-time", "maxLength": 50},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["manifest_id", "declared_at", "sha256", "bytes", "authentication"],
+      "properties": {
+        "manifest_id": {"$ref": "https://aisafe2.dev/schemas/system-identity-source-v1.json#/$defs/id"},
+        "declared_at": {"type": "string", "format": "date-time", "maxLength": 50},
+        "sha256": {"$ref": "https://aisafe2.dev/schemas/system-identity-source-v1.json#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 1, "maximum": 1000000},
+        "authentication": {"const": "not_checked"}
+      }
+    },
+    "subject": {"$ref": "https://aisafe2.dev/schemas/system-identity-source-v1.json#/properties/subject"},
+    "components": {"$ref": "https://aisafe2.dev/schemas/system-identity-source-v1.json#/properties/components"},
+    "bindings": {"$ref": "https://aisafe2.dev/schemas/system-identity-source-v1.json#/properties/bindings"},
+    "coverage": {"$ref": "https://aisafe2.dev/schemas/system-identity-source-v1.json#/properties/coverage"},
+    "evidence_refs": {"$ref": "https://aisafe2.dev/schemas/system-identity-source-v1.json#/properties/evidence_refs"},
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["components", "bindings", "evidence_refs", "observed_components", "declared_components", "unknown_components", "unversioned_components", "unbound_components", "coverage_complete", "coverage_partial", "coverage_missing", "coverage_not_applicable", "categories"],
+      "properties": {
+        "components": {"type": "integer", "minimum": 0, "maximum": 1000},
+        "bindings": {"type": "integer", "minimum": 0, "maximum": 2000},
+        "evidence_refs": {"type": "integer", "minimum": 0, "maximum": 200},
+        "observed_components": {"type": "integer", "minimum": 0, "maximum": 1000},
+        "declared_components": {"type": "integer", "minimum": 0, "maximum": 1000},
+        "unknown_components": {"type": "integer", "minimum": 0, "maximum": 1000},
+        "unversioned_components": {"type": "integer", "minimum": 0, "maximum": 1000},
+        "unbound_components": {"type": "integer", "minimum": 0, "maximum": 1000},
+        "coverage_complete": {"type": "integer", "minimum": 0, "maximum": 8},
+        "coverage_partial": {"type": "integer", "minimum": 0, "maximum": 8},
+        "coverage_missing": {"type": "integer", "minimum": 0, "maximum": 8},
+        "coverage_not_applicable": {"type": "integer", "minimum": 0, "maximum": 8},
+        "categories": {
+          "type": "object", "additionalProperties": false,
+          "required": ["model", "harness", "tool", "skill", "memory", "environment", "policy", "evaluator"],
+          "properties": {
+            "model": {"type": "integer", "minimum": 0, "maximum": 1000},
+            "harness": {"type": "integer", "minimum": 0, "maximum": 1000},
+            "tool": {"type": "integer", "minimum": 0, "maximum": 1000},
+            "skill": {"type": "integer", "minimum": 0, "maximum": 1000},
+            "memory": {"type": "integer", "minimum": 0, "maximum": 1000},
+            "environment": {"type": "integer", "minimum": 0, "maximum": 1000},
+            "policy": {"type": "integer", "minimum": 0, "maximum": 1000},
+            "evaluator": {"type": "integer", "minimum": 0, "maximum": 1000}
+          }
+        }
+      }
+    },
+    "system_fingerprint_sha256": {"$ref": "https://aisafe2.dev/schemas/system-identity-source-v1.json#/$defs/sha256"},
+    "recommendations": {"type": "array", "maxItems": 50, "items": {"type": "string", "minLength": 1, "maxLength": 300}},
+    "decision_scope": {"const": "system_identity_inventory_only"},
+    "identity_verified": {"const": false},
+    "configuration_verified": {"const": false},
+    "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 4, "maxItems": 10, "items": {"type": "string", "minLength": 1, "maxLength": 300}}
+  }
+}
