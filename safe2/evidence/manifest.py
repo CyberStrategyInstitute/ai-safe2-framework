@@ -16,6 +16,8 @@ from safe2.discovery.integrity import verify_inventory
 from safe2.evidence.friction import verify_event
 
 SCHEMA_CONTRACTS = {
+    "safe2.system-identity-source.v1": "system-identity-source-v1",
+    "safe2.system-identity-manifest.v1": "system-identity-manifest-v1",
     "safe2.harness-source.v1": "harness-source-v1",
     "safe2.harness-evidence.v1": "harness-evidence-v1",
     "safe2.challenge-bundle.v1": "challenge-bundle",

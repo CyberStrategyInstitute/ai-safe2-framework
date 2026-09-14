@@ -12,7 +12,8 @@ def main():
     with tempfile.TemporaryDirectory(prefix="safe2-receipt-wheel-") as temporary:
         root = Path(temporary)
         data = files("safe2").joinpath("data")
-        for name in ("task-receipt-demo.json", "task-receipt-demo.txt", "harness-source-demo.json"):
+        for name in ("task-receipt-demo.json", "task-receipt-demo.txt", "harness-source-demo.json",
+                     "system-identity-source-demo.json"):
             (root / name).write_bytes(data.joinpath(name).read_bytes())
 
         def invoke(*arguments):
@@ -25,7 +26,8 @@ def main():
         assert receipt["completion_verified"] is False
         for contract in ("task-receipt-input-v1", "task-receipt-v1", "test-result-v1",
                          "tool-result-v1", "report-attestation-v1", "usage-summary-v1", "pytest-capture-v1",
-                         "harness-source-v1", "harness-evidence-v1"):
+                         "harness-source-v1", "harness-evidence-v1", "system-identity-source-v1",
+                         "system-identity-manifest-v1"):
             invoke("schema", "export", contract)
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
@@ -45,7 +47,15 @@ def main():
         evidence = json.loads(harness_output.read_text(encoding="utf-8"))
         assert evidence["decision_scope"] == "evidence_inventory_only"
         assert evidence["source"]["authentication"] == "not_checked"
-    print("Installed distribution: receipts, nine schemas, pytest capture, verification, and harness intake passed")
+        identity_output = root / "system-identity.json"
+        identity = invoke("evidence", "system", str(root / "system-identity-source-demo.json"),
+                          "--output", str(identity_output), "--strict")
+        assert identity["identity_verified"] is False
+        assert identity["configuration_verified"] is False
+        identity_manifest = json.loads(identity_output.read_text(encoding="utf-8"))
+        assert identity_manifest["summary"]["components"] == 8
+        assert identity_manifest["decision_scope"] == "system_identity_inventory_only"
+    print("Installed distribution: receipts, eleven schemas, pytest capture, harness intake, and system identity passed")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,43 @@
+{
+  "schema_version": "safe2.system-identity-source.v1",
+  "manifest_id": "demo-system-identity-1",
+  "declared_at": "2026-09-14T00:00:00Z",
+  "subject": {
+    "subject_id": "demo-agent-system",
+    "name": "Demonstration agent system",
+    "deployment_id": "local-demo"
+  },
+  "components": [
+    {"component_id": "model-1", "category": "model", "name": "example-model", "provider": "example-provider", "version": "2026-09", "artifact_sha256": null, "role": "worker-model", "authority": [], "basis": "declared", "source_ref": "config-1"},
+    {"component_id": "harness-1", "category": "harness", "name": "example-harness", "provider": "example-provider", "version": "1.0.0", "artifact_sha256": null, "role": "orchestrator", "authority": ["read", "write", "execute"], "basis": "declared", "source_ref": "config-1"},
+    {"component_id": "tool-1", "category": "tool", "name": "test-runner", "provider": null, "version": "8.0", "artifact_sha256": null, "role": "verification-tool", "authority": ["read", "execute"], "basis": "declared", "source_ref": "tool-list-1"},
+    {"component_id": "skill-1", "category": "skill", "name": "safe-change-workflow", "provider": "example-team", "version": "1.0", "artifact_sha256": "1111111111111111111111111111111111111111111111111111111111111111", "role": "workflow", "authority": [], "basis": "declared", "source_ref": "skill-index-1"},
+    {"component_id": "memory-1", "category": "memory", "name": "session-memory", "provider": null, "version": null, "artifact_sha256": null, "role": "session", "authority": ["read", "write"], "basis": "declared", "source_ref": "config-1"},
+    {"component_id": "environment-1", "category": "environment", "name": "local-workspace", "provider": null, "version": null, "artifact_sha256": null, "role": "execution-environment", "authority": ["read", "write", "execute", "network"], "basis": "declared", "source_ref": "environment-export-1"},
+    {"component_id": "policy-1", "category": "policy", "name": "project-policy", "provider": "example-team", "version": "1.0", "artifact_sha256": "2222222222222222222222222222222222222222222222222222222222222222", "role": "enforced-policy", "authority": [], "basis": "declared", "source_ref": "policy-export-1"},
+    {"component_id": "evaluator-1", "category": "evaluator", "name": "independent-test-oracle", "provider": "example-team", "version": "1.0", "artifact_sha256": null, "role": "test-evaluator", "authority": ["read", "execute"], "basis": "declared", "source_ref": "evaluator-config-1"}
+  ],
+  "bindings": [
+    {"binding_id": "binding-model", "from_component_id": "harness-1", "to_component_id": "model-1", "relationship": "uses", "basis": "declared", "source_ref": "config-1"},
+    {"binding_id": "binding-environment", "from_component_id": "harness-1", "to_component_id": "environment-1", "relationship": "runs_on", "basis": "declared", "source_ref": "environment-export-1"},
+    {"binding_id": "binding-tool", "from_component_id": "harness-1", "to_component_id": "tool-1", "relationship": "invokes", "basis": "declared", "source_ref": "tool-list-1"},
+    {"binding_id": "binding-skill", "from_component_id": "harness-1", "to_component_id": "skill-1", "relationship": "uses", "basis": "declared", "source_ref": "skill-index-1"},
+    {"binding_id": "binding-memory", "from_component_id": "harness-1", "to_component_id": "memory-1", "relationship": "reads_from", "basis": "declared", "source_ref": "config-1"},
+    {"binding_id": "binding-policy", "from_component_id": "harness-1", "to_component_id": "policy-1", "relationship": "governed_by", "basis": "declared", "source_ref": "policy-export-1"},
+    {"binding_id": "binding-evaluator", "from_component_id": "harness-1", "to_component_id": "evaluator-1", "relationship": "evaluated_by", "basis": "declared", "source_ref": "evaluator-config-1"}
+  ],
+  "coverage": {
+    "model": {"status": "complete", "basis": "declared", "source_ref": "config-1"},
+    "harness": {"status": "complete", "basis": "declared", "source_ref": "config-1"},
+    "tool": {"status": "complete", "basis": "declared", "source_ref": "tool-list-1"},
+    "skill": {"status": "complete", "basis": "declared", "source_ref": "skill-index-1"},
+    "memory": {"status": "complete", "basis": "declared", "source_ref": "config-1"},
+    "environment": {"status": "complete", "basis": "declared", "source_ref": "environment-export-1"},
+    "policy": {"status": "complete", "basis": "declared", "source_ref": "policy-export-1"},
+    "evaluator": {"status": "complete", "basis": "declared", "source_ref": "evaluator-config-1"}
+  },
+  "evidence_refs": [
+    {"evidence_id": "evidence-config-1", "schema_version": "example.config.v1", "sha256": "3333333333333333333333333333333333333333333333333333333333333333", "relationship": "supports_identity", "source_ref": "config-1"},
+    {"evidence_id": "evidence-environment-1", "schema_version": "example.environment.v1", "sha256": "4444444444444444444444444444444444444444444444444444444444444444", "relationship": "describes_environment", "source_ref": "environment-export-1"}
+  ]
+}
