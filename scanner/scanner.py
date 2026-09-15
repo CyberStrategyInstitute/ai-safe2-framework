@@ -345,6 +345,7 @@ SKIP_DIRS = {
     ".ruff_cache",
     ".uv-cache",
     ".uv-tools",
+    ".safe2",
     ".review-venv",
     "site-packages",
     "dist",
@@ -355,7 +356,7 @@ SKIP_DIRS = {
     "test",
 }
 
-SKIP_DIR_PREFIXES = (".test-temp", "pytest-")
+SKIP_DIR_PREFIXES = (".test-temp", "pytest-", ".venv-", "venv-", ".uv-")
 
 
 class StaticScanner:

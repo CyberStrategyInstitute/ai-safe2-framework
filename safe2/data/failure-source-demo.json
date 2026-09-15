@@ -1,0 +1,46 @@
+{
+  "schema_version": "safe2.failure-source.v1",
+  "failure_id": "demo-failure-1",
+  "recorded_at": "2026-09-14T00:00:00Z",
+  "subject": {
+    "subject_id": "demo-agent-system",
+    "system_fingerprint_sha256": "9269ffdee75ed5cd0f83e2ef0e854e1fe1b1c39428d3627b5179cfea2b00ddae"
+  },
+  "task": {"task_id": "demo-task", "run_id": "demo-run-1"},
+  "outcome": {
+    "status": "failed",
+    "summary": "The harness claimed completion but the required artifact was absent."
+  },
+  "observations": [
+    {"observation_id": "obs-tool-success", "kind": "tool_result", "basis": "observed", "directness": "direct", "source_id": "tool-log", "source_ref": "tool-call-7", "component_ids": ["harness-1", "tool-1"], "statement": "The tool returned a successful exit status."},
+    {"observation_id": "obs-artifact-missing", "kind": "artifact_state", "basis": "observed", "directness": "direct", "source_id": "workspace-snapshot", "source_ref": "snapshot-after", "component_ids": ["harness-1", "environment-1"], "statement": "The required output artifact was absent after execution."},
+    {"observation_id": "obs-completion-claim", "kind": "completion_claim", "basis": "declared", "directness": "direct", "source_id": "harness-export", "source_ref": "completion-event", "component_ids": ["harness-1"], "statement": "The harness declared the task complete."},
+    {"observation_id": "obs-environment-healthy", "kind": "environment_state", "basis": "observed", "directness": "direct", "source_id": "environment-monitor", "source_ref": "health-7", "component_ids": ["environment-1"], "statement": "The execution environment remained available during the task."}
+  ],
+  "candidates": [
+    {
+      "candidate_id": "candidate-harness-tool",
+      "primary_component_id": "harness-1",
+      "interacting_component_id": "tool-1",
+      "failure_mode": "unsupported_claim",
+      "description": "The harness treated tool success as task completion without verifying the required artifact.",
+      "supporting_observation_ids": ["obs-tool-success", "obs-artifact-missing", "obs-completion-claim"],
+      "contradicting_observation_ids": [],
+      "assumptions": [],
+      "repair_owner": "harness",
+      "recommended_action": "Require artifact-state verification before the harness can emit a completion claim."
+    },
+    {
+      "candidate_id": "candidate-environment",
+      "primary_component_id": "environment-1",
+      "interacting_component_id": null,
+      "failure_mode": "environment_unavailable",
+      "description": "An environment outage may have prevented the artifact from being persisted.",
+      "supporting_observation_ids": ["obs-artifact-missing"],
+      "contradicting_observation_ids": ["obs-environment-healthy"],
+      "assumptions": ["The health observation may not cover the artifact storage path."],
+      "repair_owner": "environment",
+      "recommended_action": "Verify storage-path availability during the exact artifact write interval."
+    }
+  ]
+}

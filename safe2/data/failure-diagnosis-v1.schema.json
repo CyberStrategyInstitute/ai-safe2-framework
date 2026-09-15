@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/failure-diagnosis-v1.json",
+  "title": "SAFE2 evidence-bounded failure localization",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "created_at", "source", "system_identity", "task", "outcome", "observations", "evidence_summary", "candidates", "primary_candidate_id", "diagnosis_status", "recommendations", "decision_scope", "root_cause_verified", "probability_estimate", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.failure-diagnosis.v1"},
+    "created_at": {"type": "string", "format": "date-time", "maxLength": 50},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["failure_id", "sha256", "bytes", "authentication"],
+      "properties": {
+        "failure_id": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/id"},
+        "sha256": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 1, "maximum": 1000000},
+        "authentication": {"const": "not_checked"}
+      }
+    },
+    "system_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["subject_id", "system_fingerprint_sha256", "manifest_sha256", "configuration_verified"],
+      "properties": {
+        "subject_id": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/id"},
+        "system_fingerprint_sha256": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/sha256"},
+        "manifest_sha256": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/sha256"},
+        "configuration_verified": {"const": false}
+      }
+    },
+    "task": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/properties/task"},
+    "outcome": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/properties/outcome"},
+    "observations": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/properties/observations"},
+    "evidence_summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observed", "declared", "missing", "direct", "indirect", "unknown_directness", "distinct_attributed_sources"],
+      "properties": {
+        "observed": {"type": "integer", "minimum": 0, "maximum": 500},
+        "declared": {"type": "integer", "minimum": 0, "maximum": 500},
+        "missing": {"type": "integer", "minimum": 0, "maximum": 500},
+        "direct": {"type": "integer", "minimum": 0, "maximum": 500},
+        "indirect": {"type": "integer", "minimum": 0, "maximum": 500},
+        "unknown_directness": {"type": "integer", "minimum": 0, "maximum": 500},
+        "distinct_attributed_sources": {"type": "integer", "minimum": 0, "maximum": 500}
+      }
+    },
+    "candidates": {
+      "type": "array", "minItems": 1, "maxItems": 50,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["rank", "candidate_id", "location", "failure_mode", "description", "supporting_observation_ids", "contradicting_observation_ids", "assumptions", "repair_owner", "recommended_action", "evidence_assessment"],
+        "properties": {
+          "rank": {"type": "integer", "minimum": 1, "maximum": 50},
+          "candidate_id": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/id"},
+          "location": {
+            "type": "object", "additionalProperties": false,
+            "required": ["primary_component_id", "primary_category", "interacting_component_id", "interacting_category"],
+            "properties": {
+              "primary_component_id": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/id"},
+              "primary_category": {"enum": ["model", "harness", "tool", "skill", "memory", "environment", "policy", "evaluator"]},
+              "interacting_component_id": {"anyOf": [{"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/id"}, {"type": "null"}]},
+              "interacting_category": {"anyOf": [{"enum": ["model", "harness", "tool", "skill", "memory", "environment", "policy", "evaluator"]}, {"type": "null"}]}
+            }
+          },
+          "failure_mode": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/properties/candidates/items/properties/failure_mode"},
+          "description": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/text"},
+          "supporting_observation_ids": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/properties/candidates/items/properties/supporting_observation_ids"},
+          "contradicting_observation_ids": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/properties/candidates/items/properties/contradicting_observation_ids"},
+          "assumptions": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/properties/candidates/items/properties/assumptions"},
+          "repair_owner": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/properties/candidates/items/properties/repair_owner"},
+          "recommended_action": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/text"},
+          "evidence_assessment": {
+            "type": "object", "additionalProperties": false,
+            "required": ["level", "observed_direct_support", "observed_indirect_support", "declared_support", "missing_support", "observed_contradictions", "distinct_support_sources"],
+            "properties": {
+              "level": {"enum": ["strong", "moderate", "limited", "contradicted", "insufficient"]},
+              "observed_direct_support": {"type": "integer", "minimum": 0, "maximum": 100},
+              "observed_indirect_support": {"type": "integer", "minimum": 0, "maximum": 100},
+              "declared_support": {"type": "integer", "minimum": 0, "maximum": 100},
+              "missing_support": {"type": "integer", "minimum": 0, "maximum": 100},
+              "observed_contradictions": {"type": "integer", "minimum": 0, "maximum": 100},
+              "distinct_support_sources": {"type": "integer", "minimum": 0, "maximum": 100}
+            }
+          }
+        }
+      }
+    },
+    "primary_candidate_id": {"anyOf": [{"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/id"}, {"type": "null"}]},
+    "diagnosis_status": {"enum": ["ranked_candidate", "competing_candidates", "insufficient_evidence"]},
+    "recommendations": {"type": "array", "minItems": 1, "maxItems": 50, "items": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/text"}},
+    "decision_scope": {"const": "failure_localization_support_only"},
+    "root_cause_verified": {"const": false},
+    "probability_estimate": {"const": false},
+    "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 5, "maxItems": 10, "items": {"$ref": "https://aisafe2.dev/schemas/failure-source-v1.json#/$defs/text"}}
+  }
+}
