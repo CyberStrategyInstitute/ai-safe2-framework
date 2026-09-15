@@ -54,6 +54,7 @@ def cli():
     safe2 evidence diagnose failure.json     evidence-bounded failure localization
     safe2 evidence scope scope.json          deployment-boundary path inventory
     safe2 evidence attribute change.json     baseline-to-revision finding attribution
+    safe2 evidence readiness release.json   technical release-readiness card
     safe2 evidence harness export.json       provider-neutral harness evidence intake
     safe2 doctor .                            multi-harness environment inventory
     safe2 feedback record ...                 operational friction evidence

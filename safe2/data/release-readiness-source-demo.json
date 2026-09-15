@@ -1,0 +1,18 @@
+{
+  "schema_version": "safe2.release-readiness-source.v1",
+  "assessment_id": "safe2-cli-0.6-release-candidate",
+  "declared_at": "2026-09-15T00:00:00Z",
+  "target": {"name": "AI SAFE2 CLI", "version": "0.6.0", "revision": "replace-with-tested-revision"},
+  "decision_owner": {"owner_id": "release-maintainer", "role": "Named human release authority"},
+  "required_checks": ["full-tests", "python-compatibility", "security-review", "installed-wheel"],
+  "checks": [
+    {"check_id": "full-tests", "provider": "replace-with-provider", "status": "pending", "evidence_ref": "replace-with-run-or-artifact"},
+    {"check_id": "python-compatibility", "provider": "replace-with-provider", "status": "pending", "evidence_ref": "replace-with-run-or-artifact"},
+    {"check_id": "security-review", "provider": "replace-with-provider", "status": "pending", "evidence_ref": "replace-with-run-or-artifact"},
+    {"check_id": "installed-wheel", "provider": "replace-with-provider", "status": "pending", "evidence_ref": "replace-with-run-or-artifact"}
+  ],
+  "residual_risks": [{"risk_id": "RR-001", "title": "Replace with a real residual risk or remove this example row", "severity": "low", "disposition": "open", "owner_id": "release-maintainer", "action": "Record the evidence-backed treatment."}],
+  "actions": [{"action_id": "review", "priority": "before_release", "owner_id": "release-maintainer", "description": "Review the complete card and make the human release decision."}],
+  "assumptions": ["Replace this text with explicit assumptions supported by the evidence record."],
+  "rollback": {"available": true, "procedure": "Replace with the tested rollback or recovery procedure."}
+}

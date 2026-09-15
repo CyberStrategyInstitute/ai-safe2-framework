@@ -259,6 +259,10 @@ against an explicitly trusted baseline, binds both revisions to their assessment
 scope artifacts, and separates inherited, introduced, changed, resolved, and
 unknown states without claiming causation or conformance.
 
+[Release readiness](docs/RELEASE-READINESS.md) combines identity, scope, change
+attribution, required checks, risks, ownership, next actions, and rollback into
+agent JSON plus a human card while preserving human release authority.
+
 For release boundaries, verified behavior, and external checks that still
 require human or production execution, see the
 [Stranger-Ready CLI Review](docs/STRANGER-READY-CLI-REVIEW.md),

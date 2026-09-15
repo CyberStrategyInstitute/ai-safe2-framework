@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://aisafe2.dev/schemas/release-readiness-source-v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "assessment_id", "declared_at", "target", "decision_owner", "required_checks", "checks", "residual_risks", "actions", "assumptions", "rollback"],
+  "properties": {
+    "schema_version": {"const": "safe2.release-readiness-source.v1"}, "assessment_id": {"$ref": "#/$defs/id"}, "declared_at": {"type": "string", "format": "date-time", "maxLength": 50},
+    "target": {"type": "object", "additionalProperties": false, "required": ["name", "version", "revision"], "properties": {"name": {"type": "string", "minLength": 1, "maxLength": 200}, "version": {"type": "string", "minLength": 1, "maxLength": 100}, "revision": {"type": "string", "minLength": 1, "maxLength": 200}}},
+    "decision_owner": {"type": "object", "additionalProperties": false, "required": ["owner_id", "role"], "properties": {"owner_id": {"$ref": "#/$defs/id"}, "role": {"type": "string", "minLength": 1, "maxLength": 200}}},
+    "required_checks": {"type": "array", "minItems": 1, "maxItems": 200, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+    "checks": {"type": "array", "maxItems": 500, "items": {"type": "object", "additionalProperties": false, "required": ["check_id", "provider", "status", "evidence_ref"], "properties": {"check_id": {"$ref": "#/$defs/id"}, "provider": {"type": "string", "minLength": 1, "maxLength": 200}, "status": {"enum": ["passed", "failed", "pending", "cancelled", "unavailable"]}, "evidence_ref": {"type": "string", "minLength": 1, "maxLength": 500}}}},
+    "residual_risks": {"type": "array", "maxItems": 200, "items": {"type": "object", "additionalProperties": false, "required": ["risk_id", "title", "severity", "disposition", "owner_id", "action"], "properties": {"risk_id": {"$ref": "#/$defs/id"}, "title": {"type": "string", "minLength": 1, "maxLength": 500}, "severity": {"enum": ["critical", "high", "medium", "low", "info"]}, "disposition": {"enum": ["open", "mitigated", "accepted"]}, "owner_id": {"$ref": "#/$defs/id"}, "action": {"type": "string", "minLength": 1, "maxLength": 500}}}},
+    "actions": {"type": "array", "maxItems": 200, "items": {"type": "object", "additionalProperties": false, "required": ["action_id", "priority", "owner_id", "description"], "properties": {"action_id": {"$ref": "#/$defs/id"}, "priority": {"enum": ["now", "before_release", "after_release"]}, "owner_id": {"$ref": "#/$defs/id"}, "description": {"type": "string", "minLength": 1, "maxLength": 500}}}},
+    "assumptions": {"type": "array", "maxItems": 100, "items": {"type": "string", "minLength": 1, "maxLength": 500}},
+    "rollback": {"type": "object", "additionalProperties": false, "required": ["available", "procedure"], "properties": {"available": {"type": "boolean"}, "procedure": {"type": "string", "minLength": 1, "maxLength": 1000}}}
+  },
+  "$defs": {"id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"}}
+}

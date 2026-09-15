@@ -31,6 +31,31 @@ def evidence():
     """Collect attributed evidence without claiming conformance."""
 
 
+@evidence.command("readiness")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--assessment-scope", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--change-attribution", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--card", required=True, type=click.Path(path_type=Path))
+@click.option("--strict", is_flag=True, help="Exit 1 unless evidence is ready for a human decision.")
+@click.pass_context
+def readiness_evidence(ctx: click.Context, source: Path, system_identity: Path, assessment_scope: Path, change_attribution: Path, output: Path, card: Path, strict: bool) -> None:
+    """Create agent JSON and a human technical release-readiness card."""
+    from safe2.challenge.io import read_bytes, safe_path, write_json, write_text
+    from safe2.evidence.readiness import build
+    from safe2.evidence.readiness_card import render
+    try:
+        destinations = [safe_path(output), safe_path(card)]
+        if len(set(destinations)) != 2 or any(path.exists() for path in destinations): raise ValueError("Outputs must be distinct and new")
+        result = build(read_bytes(source, limit=5_000_000), read_bytes(system_identity, limit=1_000_000), read_bytes(assessment_scope, limit=5_000_000), read_bytes(change_attribution, limit=5_000_000))
+        write_json(output, result); write_text(card, render(result))
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException("Release-readiness synthesis failed: invalid, mismatched, ambiguous, or unsafe evidence") from exc
+    click.echo(json.dumps({"output": str(output), "card": str(card), "status": result["gate"]["status"], "release_authorized": False, "conformance_claim": False}))
+    if strict and result["gate"]["status"] != "ready_for_human_decision": ctx.exit(1)
+
+
 @evidence.command("attribute")
 @click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
 @click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))

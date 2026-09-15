@@ -13,6 +13,8 @@ SCHEMAS = {
     "assessment-scope-manifest-v1": "assessment-scope-manifest-v1.schema.json",
     "change-attribution-source-v1": "change-attribution-source-v1.schema.json",
     "change-attribution-manifest-v1": "change-attribution-manifest-v1.schema.json",
+    "release-readiness-source-v1": "release-readiness-source-v1.schema.json",
+    "release-readiness-manifest-v1": "release-readiness-manifest-v1.schema.json",
     "failure-source-v1": "failure-source-v1.schema.json",
     "failure-diagnosis-v1": "failure-diagnosis-v1.schema.json",
     "system-identity-source-v1": "system-identity-source-v1.schema.json",
