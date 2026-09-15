@@ -29,7 +29,8 @@ def main():
                          "tool-result-v1", "report-attestation-v1", "usage-summary-v1", "pytest-capture-v1",
                          "harness-source-v1", "harness-evidence-v1", "system-identity-source-v1",
                          "system-identity-manifest-v1", "failure-source-v1", "failure-diagnosis-v1",
-                         "assessment-scope-source-v1", "assessment-scope-manifest-v1"):
+                         "assessment-scope-source-v1", "assessment-scope-manifest-v1",
+                         "change-attribution-source-v1", "change-attribution-manifest-v1"):
             invoke("schema", "export", contract)
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
@@ -76,7 +77,21 @@ def main():
         assert scope["summary"]["included"] == 1
         assert scope["scope_verified"] is False
         assert scope["content_inspected"] is False
-    print("Installed distribution: receipts, fifteen schemas, pytest capture, harness intake, system identity, failure localization, and assessment scope passed")
+        scope_bytes = scope_output.read_bytes()
+        import hashlib
+        attribution_source = {
+            "schema_version": "safe2.change-attribution-source.v1",
+            "comparison_id": "wheel-comparison", "declared_at": "2026-09-15T00:00:00Z",
+            "subject": {"subject_id": identity_manifest["subject"]["subject_id"], "system_fingerprint_sha256": identity_manifest["system_fingerprint_sha256"]},
+            "baseline": {"revision_id": "base", "scope_manifest_sha256": hashlib.sha256(scope_bytes).hexdigest(), "coverage_complete": True, "findings": [], "trusted": True, "trust_basis": "wheel smoke fixture"},
+            "current": {"revision_id": "head", "scope_manifest_sha256": hashlib.sha256(scope_bytes).hexdigest(), "coverage_complete": True, "findings": []}}
+        attribution_source_path = root / "change-source.json"
+        attribution_source_path.write_text(json.dumps(attribution_source), encoding="utf-8")
+        attribution_output = root / "change-attribution.json"
+        attribution = invoke("evidence", "attribute", str(attribution_source_path), "--system-identity", str(identity_output), "--baseline-scope", str(scope_output), "--current-scope", str(scope_output), "--output", str(attribution_output), "--strict")
+        assert attribution["summary"]["total"] == 0
+        assert attribution["change_verified"] is False
+    print("Installed distribution: receipts, seventeen schemas, pytest capture, harness intake, system identity, failure localization, assessment scope, and change attribution passed")
 
 
 if __name__ == "__main__":

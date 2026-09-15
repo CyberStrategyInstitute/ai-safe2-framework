@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/change-attribution-source-v1.json",
+  "title": "Provider-neutral change attribution source",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "comparison_id", "declared_at", "subject", "baseline", "current"],
+  "properties": {
+    "schema_version": {"const": "safe2.change-attribution-source.v1"},
+    "comparison_id": {"$ref": "#/$defs/id"},
+    "declared_at": {"type": "string", "format": "date-time", "maxLength": 50},
+    "subject": {"type": "object", "additionalProperties": false, "required": ["subject_id", "system_fingerprint_sha256"], "properties": {"subject_id": {"$ref": "#/$defs/id"}, "system_fingerprint_sha256": {"$ref": "#/$defs/sha"}}},
+    "baseline": {"allOf": [{"$ref": "#/$defs/revision"}], "required": ["trusted", "trust_basis"], "properties": {"trusted": {"const": true}, "trust_basis": {"type": "string", "minLength": 1, "maxLength": 500}}},
+    "current": {"allOf": [{"$ref": "#/$defs/revision"}]}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "finding": {"type": "object", "additionalProperties": false, "required": ["finding_key", "provider", "rule_id", "component_ids", "severity", "title", "evidence_sha256", "control_ids"], "properties": {"finding_key": {"$ref": "#/$defs/id"}, "provider": {"$ref": "#/$defs/id"}, "rule_id": {"$ref": "#/$defs/id"}, "component_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}, "severity": {"enum": ["critical", "high", "medium", "low", "info", "unknown"]}, "title": {"type": "string", "minLength": 1, "maxLength": 500}, "evidence_sha256": {"$ref": "#/$defs/sha"}, "control_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}},
+    "revision": {"type": "object", "additionalProperties": false, "required": ["revision_id", "scope_manifest_sha256", "coverage_complete", "findings"], "properties": {"revision_id": {"type": "string", "minLength": 1, "maxLength": 200}, "scope_manifest_sha256": {"$ref": "#/$defs/sha"}, "coverage_complete": {"type": "boolean"}, "trusted": {"type": "boolean"}, "trust_basis": {"type": "string", "minLength": 1, "maxLength": 500}, "findings": {"type": "array", "maxItems": 10000, "items": {"$ref": "#/$defs/finding"}}}}
+  }
+}
