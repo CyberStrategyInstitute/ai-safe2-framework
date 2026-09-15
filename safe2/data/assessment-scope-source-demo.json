@@ -1,0 +1,73 @@
+{
+  "schema_version": "safe2.assessment-scope-source.v1",
+  "scope_id": "scope-demo-001",
+  "declared_at": "2026-09-15T00:00:00Z",
+  "subject": {
+    "subject_id": "demo-agent-system",
+    "system_fingerprint_sha256": "9269ffdee75ed5cd0f83e2ef0e854e1fe1b1c39428d3627b5179cfea2b00ddae"
+  },
+  "deployment_subject": {
+    "name": "AI SAFE2 CLI package",
+    "type": "application",
+    "component_ids": ["harness-1", "tool-1", "skill-1", "policy-1", "evaluator-1"],
+    "basis": "declared",
+    "source_ref": "scope-owner-declaration"
+  },
+  "rules": [
+    {
+      "rule_id": "product-package",
+      "patterns": ["safe2/**"],
+      "classification": "product",
+      "disposition": "included",
+      "component_ids": ["harness-1", "tool-1"],
+      "rationale": "The safe2 package is the declared deployable application boundary.",
+      "basis": "declared",
+      "source_ref": "package-layout"
+    },
+    {
+      "rule_id": "tests-excluded",
+      "patterns": ["tests/**", "scanner/tests/**"],
+      "classification": "test",
+      "disposition": "excluded",
+      "component_ids": ["evaluator-1"],
+      "rationale": "Test code supplies evaluation evidence but is not shipped application behavior.",
+      "basis": "declared",
+      "source_ref": "test-layout"
+    },
+    {
+      "rule_id": "examples-excluded",
+      "patterns": ["examples/**"],
+      "classification": "example",
+      "disposition": "excluded",
+      "component_ids": [],
+      "rationale": "Examples are reference material outside this deployment subject.",
+      "basis": "declared",
+      "source_ref": "example-layout"
+    },
+    {
+      "rule_id": "docs-excluded",
+      "patterns": ["docs/**", "README.md", "AGENTS.md", "SECURITY.md", "SUPPORT.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md"],
+      "classification": "documentation",
+      "disposition": "excluded",
+      "component_ids": [],
+      "rationale": "Documentation explains behavior but is not executable application content.",
+      "basis": "declared",
+      "source_ref": "documentation-layout"
+    },
+    {
+      "rule_id": "generated-excluded",
+      "patterns": [".safe2/**", "dist/**", "build/**"],
+      "classification": "generated",
+      "disposition": "excluded",
+      "component_ids": [],
+      "rationale": "Generated evidence and build output are not source deployment components.",
+      "basis": "declared",
+      "source_ref": "generated-layout"
+    }
+  ],
+  "default": {
+    "classification": "unknown",
+    "disposition": "partial",
+    "rationale": "No declared rule establishes this path's relationship to the deployment subject."
+  }
+}

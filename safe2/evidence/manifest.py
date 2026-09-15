@@ -16,6 +16,8 @@ from safe2.discovery.integrity import verify_inventory
 from safe2.evidence.friction import verify_event
 
 SCHEMA_CONTRACTS = {
+    "safe2.assessment-scope-source.v1": "assessment-scope-source-v1",
+    "safe2.assessment-scope-manifest.v1": "assessment-scope-manifest-v1",
     "safe2.failure-source.v1": "failure-source-v1",
     "safe2.failure-diagnosis.v1": "failure-diagnosis-v1",
     "safe2.system-identity-source.v1": "system-identity-source-v1",

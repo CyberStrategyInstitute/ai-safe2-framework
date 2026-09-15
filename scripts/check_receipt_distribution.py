@@ -13,7 +13,8 @@ def main():
         root = Path(temporary)
         data = files("safe2").joinpath("data")
         for name in ("task-receipt-demo.json", "task-receipt-demo.txt", "harness-source-demo.json",
-                     "system-identity-source-demo.json", "failure-source-demo.json"):
+                     "system-identity-source-demo.json", "failure-source-demo.json",
+                     "assessment-scope-source-demo.json"):
             (root / name).write_bytes(data.joinpath(name).read_bytes())
 
         def invoke(*arguments):
@@ -27,7 +28,8 @@ def main():
         for contract in ("task-receipt-input-v1", "task-receipt-v1", "test-result-v1",
                          "tool-result-v1", "report-attestation-v1", "usage-summary-v1", "pytest-capture-v1",
                          "harness-source-v1", "harness-evidence-v1", "system-identity-source-v1",
-                         "system-identity-manifest-v1", "failure-source-v1", "failure-diagnosis-v1"):
+                         "system-identity-manifest-v1", "failure-source-v1", "failure-diagnosis-v1",
+                         "assessment-scope-source-v1", "assessment-scope-manifest-v1"):
             invoke("schema", "export", contract)
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
@@ -64,7 +66,17 @@ def main():
         assert diagnosis["root_cause_verified"] is False
         assert diagnosis["probability_estimate"] is False
         assert card_output.is_file()
-    print("Installed distribution: receipts, thirteen schemas, pytest capture, harness intake, system identity, and failure localization passed")
+        scope_root = root / "scope-project"
+        (scope_root / "safe2").mkdir(parents=True)
+        (scope_root / "safe2" / "app.py").write_text("value = 1\n", encoding="utf-8")
+        scope_output = root / "assessment-scope.json"
+        scope = invoke("evidence", "scope", str(root / "assessment-scope-source-demo.json"),
+                       "--project-root", str(scope_root), "--system-identity", str(identity_output),
+                       "--output", str(scope_output), "--strict")
+        assert scope["summary"]["included"] == 1
+        assert scope["scope_verified"] is False
+        assert scope["content_inspected"] is False
+    print("Installed distribution: receipts, fifteen schemas, pytest capture, harness intake, system identity, failure localization, and assessment scope passed")
 
 
 if __name__ == "__main__":

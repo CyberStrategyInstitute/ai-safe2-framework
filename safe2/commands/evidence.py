@@ -31,6 +31,54 @@ def evidence():
     """Collect attributed evidence without claiming conformance."""
 
 
+@evidence.command("scope")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--project-root", required=True, type=click.Path(path_type=Path, exists=True, file_okay=False))
+@click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--max-entries", default=10_000, type=click.IntRange(1, 10_000), show_default=True)
+@click.option("--strict", is_flag=True, help="Exit 1 after writing when scope gaps or conflicts remain.")
+@click.pass_context
+def scope_evidence(
+    ctx: click.Context,
+    source: Path,
+    project_root: Path,
+    system_identity: Path,
+    output: Path,
+    max_entries: int,
+    strict: bool,
+) -> None:
+    """Inventory declared deployment scope without reading file contents."""
+    from safe2.challenge.io import read_bytes, write_json
+    from safe2.evidence.scope import build
+
+    try:
+        result = build(
+            read_bytes(source, limit=1_000_000),
+            read_bytes(system_identity, limit=1_000_000),
+            project_root,
+            max_entries=max_entries,
+        )
+        write_json(output, result)
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException(
+            "Assessment scope failed: invalid declaration, identity, project root, or unsafe/unavailable I/O"
+        ) from exc
+    click.echo(json.dumps({
+        "output": str(output),
+        "summary": result["summary"],
+        "scope_verified": False,
+        "content_inspected": False,
+        "conformance_claim": False,
+    }))
+    summary = result["summary"]
+    if strict and any((
+        summary["unsafe_links"], summary["conflicts"], summary["truncated"],
+        summary["partial"], summary["unclassified"], not summary["included"],
+    )):
+        ctx.exit(1)
+
+
 @evidence.command("diagnose")
 @click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
 @click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))

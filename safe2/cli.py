@@ -52,6 +52,7 @@ def cli():
     safe2 evidence nexus ./NEXUS             attributed implementation evidence
     safe2 evidence system identity.json      system composition and relationship manifest
     safe2 evidence diagnose failure.json     evidence-bounded failure localization
+    safe2 evidence scope scope.json          deployment-boundary path inventory
     safe2 evidence harness export.json       provider-neutral harness evidence intake
     safe2 doctor .                            multi-harness environment inventory
     safe2 feedback record ...                 operational friction evidence
