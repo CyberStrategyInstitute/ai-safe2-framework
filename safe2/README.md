@@ -15,6 +15,8 @@
 
 [Assessment scope](../docs/ASSESSMENT-SCOPE.md)
 
+[Change attribution](../docs/CHANGE-ATTRIBUTION.md)
+
 [Framework Home](../README.md) | [AISM](../AISM/README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [Examples](../examples/README.md) | [NEXUS](../NEXUS/)
 
 The `safe2` package turns repository controls, assessment logic, and evidence
@@ -72,6 +74,7 @@ pytest tests/ scanner/tests/
 | `safe2 evidence system SOURCE --output FILE [--strict]` | Normalize model, harness, tool, skill, memory, environment, policy and evaluator identity | Declared/observed inventory only; does not verify deployed configuration or conformance |
 | `safe2 evidence diagnose SOURCE --system-identity FILE --output FILE [--card FILE] [--strict]` | Rank evidence-backed failure locations across the complete agent system | Diagnostic support only; never claims a verified root cause, probability, or conformance |
 | `safe2 evidence scope SOURCE --project-root PATH --system-identity FILE --output FILE [--strict]` | Inventory the declared deployment relationship of repository paths | Metadata-only attributed scope; does not verify build inclusion, execution, or conformance |
+| `safe2 evidence attribute SOURCE --system-identity FILE --baseline-scope FILE --current-scope FILE --output FILE [--strict]` | Attribute normalized findings across a trusted baseline and current revision | Comparison support only; does not prove causation, deployment state, or conformance |
 | `safe2 aism init FILE` | Create a 30-cell unscored assessment | Missing evidence remains unscored |
 | `safe2 aism ingest BUNDLE...` | Import evidence conservatively | Suggests mappings; requires human confirmation |
 | `safe2 aism score FILE` | Validate and score AISM assessment | Produces agent JSON or human Decision Card |
