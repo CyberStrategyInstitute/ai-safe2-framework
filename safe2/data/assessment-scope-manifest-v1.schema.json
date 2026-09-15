@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/assessment-scope-manifest-v1.json",
+  "title": "Bounded assessment scope inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "created_at", "source", "subject", "deployment_subject", "root", "entries", "conflicts", "summary", "recommendations", "decision_scope", "scope_verified", "content_inspected", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.assessment-scope-manifest.v1"},
+    "created_at": {"type": "string", "format": "date-time", "maxLength": 50},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["scope_id", "declared_at", "sha256", "bytes", "system_identity_sha256", "authentication"],
+      "properties": {
+        "scope_id": {"$ref": "#/$defs/id"}, "declared_at": {"type": "string", "maxLength": 50},
+        "sha256": {"$ref": "#/$defs/sha256"}, "bytes": {"type": "integer", "minimum": 1, "maximum": 1000000},
+        "system_identity_sha256": {"$ref": "#/$defs/sha256"}, "authentication": {"const": "not_checked"}
+      }
+    },
+    "subject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["subject_id", "system_fingerprint_sha256"],
+      "properties": {"subject_id": {"$ref": "#/$defs/id"}, "system_fingerprint_sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "deployment_subject": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "type", "component_ids", "basis", "source_ref"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 500},
+        "type": {"enum": ["application", "service", "agent_system", "workstation", "repository", "component"]},
+        "component_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "basis": {"enum": ["observed", "declared"]},
+        "source_ref": {"$ref": "#/$defs/id"}
+      }
+    },
+    "root": {"type": "object", "additionalProperties": false, "required": ["display_name", "path_disclosed"], "properties": {"display_name": {"type": "string", "minLength": 1, "maxLength": 200}, "path_disclosed": {"const": false}}},
+    "entries": {"type": "array", "maxItems": 10000, "items": {"$ref": "#/$defs/entry"}},
+    "conflicts": {
+      "type": "array", "maxItems": 10000,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["path", "rule_ids"],
+        "properties": {
+          "path": {"$ref": "#/$defs/path"},
+          "rule_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+        }
+      }
+    },
+    "summary": {"type": "object", "additionalProperties": false, "required": ["files", "unsafe_links", "conflicts", "truncated", "included", "excluded", "partial", "not_applicable", "unclassified", "classifications"], "properties": {"files": {"type": "integer", "minimum": 0}, "unsafe_links": {"type": "integer", "minimum": 0}, "conflicts": {"type": "integer", "minimum": 0}, "truncated": {"type": "boolean"}, "included": {"type": "integer", "minimum": 0}, "excluded": {"type": "integer", "minimum": 0}, "partial": {"type": "integer", "minimum": 0}, "not_applicable": {"type": "integer", "minimum": 0}, "unclassified": {"type": "integer", "minimum": 0}, "classifications": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}}}},
+    "recommendations": {"type": "array", "items": {"type": "string", "minLength": 1, "maxLength": 500}},
+    "decision_scope": {"const": "assessment_scope_inventory_only"},
+    "scope_verified": {"const": false}, "content_inspected": {"const": false}, "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1, "maxLength": 500}}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "path": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "classification": {"enum": ["product", "test", "adversarial_fixture", "example", "research", "generated", "dependency", "third_party", "configuration", "documentation", "unknown"]},
+    "disposition": {"enum": ["included", "excluded", "partial", "not_applicable"]},
+    "entry": {"type": "object", "additionalProperties": false, "required": ["path", "kind", "classification", "disposition", "component_ids", "rule_ids", "rationale", "metadata_only"], "properties": {"path": {"$ref": "#/$defs/path"}, "kind": {"enum": ["file", "unsafe_link"]}, "classification": {"$ref": "#/$defs/classification"}, "disposition": {"$ref": "#/$defs/disposition"}, "component_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}}, "rule_ids": {"type": "array", "items": {"$ref": "#/$defs/id"}}, "rationale": {"type": "string", "minLength": 1, "maxLength": 500}, "metadata_only": {"const": true}}}
+  }
+}
