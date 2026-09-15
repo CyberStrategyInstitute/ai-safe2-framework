@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://aisafe2.dev/schemas/change-attribution-manifest-v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "created_at", "source", "subject", "revisions", "changes", "summary", "decision_scope", "change_verified", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.change-attribution-manifest.v1"}, "created_at": {"type": "string", "format": "date-time"},
+    "source": {"type": "object"}, "subject": {"type": "object"}, "revisions": {"type": "object"},
+    "changes": {"type": "array", "maxItems": 20000, "items": {"type": "object", "additionalProperties": false, "required": ["finding_key", "status", "baseline", "current", "component_ids", "control_ids"], "properties": {"finding_key": {"type": "string"}, "status": {"enum": ["inherited", "introduced", "changed", "resolved", "unknown"]}, "baseline": {"type": ["object", "null"]}, "current": {"type": ["object", "null"]}, "component_ids": {"type": "array", "items": {"type": "string"}}, "control_ids": {"type": "array", "items": {"type": "string"}}}}},
+    "summary": {"type": "object", "additionalProperties": {"type": "integer", "minimum": 0}},
+    "decision_scope": {"const": "change_attribution_support_only"}, "change_verified": {"const": false}, "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1}}
+  }
+}

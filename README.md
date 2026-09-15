@@ -253,6 +253,12 @@ are declared product, tests, adversarial fixtures, examples, research, generated
 artifacts, dependencies, third-party content, configuration, documentation, or
 unknown. It binds that declaration to system identity without reading file
 contents or claiming the declared boundary was independently verified.
+
+[Change attribution](docs/CHANGE-ATTRIBUTION.md) compares normalized findings
+against an explicitly trusted baseline, binds both revisions to their assessment
+scope artifacts, and separates inherited, introduced, changed, resolved, and
+unknown states without claiming causation or conformance.
+
 For release boundaries, verified behavior, and external checks that still
 require human or production execution, see the
 [Stranger-Ready CLI Review](docs/STRANGER-READY-CLI-REVIEW.md),

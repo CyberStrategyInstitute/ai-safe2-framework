@@ -31,6 +31,29 @@ def evidence():
     """Collect attributed evidence without claiming conformance."""
 
 
+@evidence.command("attribute")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--baseline-scope", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--current-scope", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--strict", is_flag=True, help="Exit 1 after writing when attribution remains unknown.")
+@click.pass_context
+def attribute_evidence(ctx: click.Context, source: Path, system_identity: Path, baseline_scope: Path, current_scope: Path, output: Path, strict: bool) -> None:
+    """Attribute findings between a trusted baseline and current revision."""
+    from safe2.challenge.io import read_bytes, write_json
+    from safe2.evidence.attribution import build
+
+    try:
+        result = build(read_bytes(source, limit=5_000_000), read_bytes(system_identity, limit=1_000_000), read_bytes(baseline_scope, limit=5_000_000), read_bytes(current_scope, limit=5_000_000))
+        write_json(output, result)
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException("Change attribution failed: invalid, mismatched, ambiguous, or unsafe evidence") from exc
+    click.echo(json.dumps({"output": str(output), "summary": result["summary"], "change_verified": False, "conformance_claim": False}))
+    if strict and result["summary"]["unknown"]:
+        ctx.exit(1)
+
+
 @evidence.command("scope")
 @click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
 @click.option("--project-root", required=True, type=click.Path(path_type=Path, exists=True, file_okay=False))
