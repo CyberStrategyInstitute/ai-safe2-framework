@@ -13,6 +13,8 @@
 
 [Failure localization](../docs/FAILURE-LOCALIZATION.md)
 
+[CLI roadmap to 1.0](../docs/CLI-ROADMAP-TO-1.0.md)
+
 [Framework Home](../README.md) | [AISM](../AISM/README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [Examples](../examples/README.md) | [NEXUS](../NEXUS/)
 
 The `safe2` package turns repository controls, assessment logic, and evidence
