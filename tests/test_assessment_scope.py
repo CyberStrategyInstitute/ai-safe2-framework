@@ -97,6 +97,21 @@ def test_build_classifies_paths_without_reading_content(tmp_path: Path):
     assert result["conformance_claim"] is False
 
 
+def test_cli_release_scope_is_bound_to_release_identity(tmp_path: Path):
+    identity_value = ingest((DATA / "cli-0.6-system-identity-source.json").read_bytes())
+    source_value = json.loads((DATA / "cli-0.6-assessment-scope-source.json").read_text())
+    assert source_value["subject"]["system_fingerprint_sha256"] == identity_value[
+        "system_fingerprint_sha256"
+    ]
+    root = tmp_path / "wheel"
+    root.mkdir()
+    (root / "package.py").write_text("value = 1", encoding="utf-8")
+    result = build(payload(source_value), payload(identity_value), root)
+    assert result["summary"]["included"] == 1
+    assert result["summary"]["partial"] == 0
+    assert result["summary"]["unclassified"] == 0
+
+
 def test_unmatched_path_remains_partial_and_unknown(tmp_path: Path):
     root = project(tmp_path)
     (root / "NOTICE.txt").write_text("notice")

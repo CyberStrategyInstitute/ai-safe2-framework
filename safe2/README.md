@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.5.0-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-0.6.0-F6921E?style=flat-square)](../README.md)
 
 [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
 

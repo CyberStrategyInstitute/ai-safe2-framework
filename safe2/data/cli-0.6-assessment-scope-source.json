@@ -1,0 +1,9 @@
+{
+  "schema_version": "safe2.assessment-scope-source.v1",
+  "scope_id": "safe2-cli-0.6-wheel-scope",
+  "declared_at": "2026-09-15T00:00:00Z",
+  "subject": {"subject_id": "safe2-cli-0.6", "system_fingerprint_sha256": "190dca3ce4ca32df5fc336a0d3022d4c64c9571ffcddbc6b51fbb1c83da053bf"},
+  "deployment_subject": {"name": "AI SAFE2 CLI wheel contents under version comparison", "type": "application", "component_ids": ["safe2-cli", "safe2-scanner", "safe2-evidence", "safe2-policy"], "basis": "declared", "source_ref": "built-wheel"},
+  "rules": [{"rule_id": "wheel-contents", "patterns": ["**"], "classification": "product", "disposition": "included", "component_ids": ["safe2-cli", "safe2-scanner", "safe2-evidence"], "rationale": "Every regular file extracted from the built wheel is inside the release-candidate deployment boundary.", "basis": "observed", "source_ref": "wheel-extraction"}],
+  "default": {"classification": "unknown", "disposition": "partial", "rationale": "An unclassified path would make the wheel boundary incomplete."}
+}
