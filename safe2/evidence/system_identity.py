@@ -63,10 +63,6 @@ def ingest(payload: bytes) -> dict[str, Any]:
         _attribution(component["basis"], component["source_ref"], "component identity")
         if "unknown" in component["authority"] and len(component["authority"]) != 1:
             raise ValueError("Unknown authority cannot be combined with asserted authority")
-    for required in ("model", "harness", "environment"):
-        if not counts[required]:
-            raise ValueError(f"System identity requires at least one {required} component")
-
     binding_ids: set[str] = set()
     relationship_edges: set[tuple[str, str, str]] = set()
     bound_ids: set[str] = set()

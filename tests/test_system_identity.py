@@ -45,6 +45,17 @@ def test_demo_binds_complete_composition_without_verifying_it():
     assert validate_artifact("system-identity-manifest-v1", result) == []
 
 
+def test_cli_release_identity_is_valid_and_complete_for_applicable_categories():
+    source = files("safe2.data").joinpath("cli-0.6-system-identity-source.json").read_bytes()
+    result = ingest(source)
+    assert result["summary"]["components"] == 6
+    assert result["summary"]["coverage_complete"] == 6
+    assert result["summary"]["coverage_not_applicable"] == 2
+    assert result["summary"]["coverage_missing"] == 0
+    assert result["summary"]["coverage_partial"] == 0
+    assert result["summary"]["unversioned_components"] == 0
+
+
 def test_system_fingerprint_is_order_and_provenance_independent():
     first = demo()
     second = copy.deepcopy(first)
@@ -77,8 +88,20 @@ def test_not_applicable_is_distinct_from_missing():
     assert result["summary"]["coverage_missing"] == 0
 
 
+def test_non_model_system_can_declare_model_not_applicable():
+    value = demo()
+    value["components"] = [item for item in value["components"] if item["category"] != "model"]
+    value["bindings"] = [item for item in value["bindings"] if item["to_component_id"] != "model-1"]
+    value["coverage"]["model"] = {
+        "status": "not_applicable", "basis": "declared", "source_ref": "non-model-package"
+    }
+    result = ingest(payload(value))
+    assert result["summary"]["coverage_not_applicable"] == 1
+    assert result["summary"]["categories"]["model"] == 0
+
+
 @pytest.mark.parametrize("mutation", [
-    "duplicate_component", "missing_model", "unknown_with_ref", "declared_without_ref",
+    "duplicate_component", "unknown_with_ref", "declared_without_ref",
     "mixed_unknown_authority", "duplicate_binding", "duplicate_relationship", "missing_endpoint", "self_binding",
     "missing_with_component", "not_applicable_with_component", "complete_without_component",
     "complete_unknown_component", "duplicate_evidence",
@@ -87,10 +110,6 @@ def test_ambiguous_or_contradictory_identity_is_rejected(mutation: str):
     value = demo()
     if mutation == "duplicate_component":
         value["components"][1]["component_id"] = value["components"][0]["component_id"]
-    elif mutation == "missing_model":
-        value["components"] = [item for item in value["components"] if item["category"] != "model"]
-        value["bindings"] = [item for item in value["bindings"] if item["to_component_id"] != "model-1"]
-        value["coverage"]["model"] = {"status": "missing", "basis": "unknown", "source_ref": None}
     elif mutation == "unknown_with_ref":
         value["components"][0].update(basis="unknown", source_ref="x")
     elif mutation == "declared_without_ref":
