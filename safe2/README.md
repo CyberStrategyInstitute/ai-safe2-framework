@@ -13,6 +13,8 @@
 
 [Failure localization](../docs/FAILURE-LOCALIZATION.md)
 
+[CLI roadmap to 1.0](../docs/CLI-ROADMAP-TO-1.0.md)
+
 [Assessment scope](../docs/ASSESSMENT-SCOPE.md)
 
 [Change attribution](../docs/CHANGE-ATTRIBUTION.md)

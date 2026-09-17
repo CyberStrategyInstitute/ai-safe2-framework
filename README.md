@@ -227,6 +227,7 @@ See the executable [environment Decision Card workflow](examples/environment-dec
 Evidence ingestion is conservative: collectors suggest candidate AISM cells but never invent maturity ratings. Evidence without verification provenance is labeled and capped until a human confirms the mapping.
 
 See the complete [AI SAFE² CLI command and architecture guide](safe2/README.md).
+See the capability-gated [CLI roadmap to 1.0](docs/CLI-ROADMAP-TO-1.0.md).
 
 CLI 0.3.0 adds [task receipts and usage evidence](docs/TASK-RECEIPTS.md):
 check artifact and test/tool claims, capture explicit local runs, recheck fresh
