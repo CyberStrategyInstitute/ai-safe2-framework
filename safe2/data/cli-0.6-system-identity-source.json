@@ -1,0 +1,32 @@
+{
+  "schema_version": "safe2.system-identity-source.v1",
+  "manifest_id": "safe2-cli-0.6-release-candidate",
+  "declared_at": "2026-09-15T00:00:00Z",
+  "subject": {"subject_id": "safe2-cli-0.6", "name": "AI SAFE2 CLI 0.6.0", "deployment_id": "python-package"},
+  "components": [
+    {"component_id": "safe2-cli", "category": "harness", "name": "safe2", "provider": "Cyber Strategy Institute", "version": "0.6.0", "artifact_sha256": null, "role": "governance-evidence-cli", "authority": ["read", "write", "execute", "network"], "basis": "declared", "source_ref": "pyproject"},
+    {"component_id": "safe2-scanner", "category": "tool", "name": "AI SAFE2 scanner and gates", "provider": "Cyber Strategy Institute", "version": "0.6.0", "artifact_sha256": null, "role": "static-assessment-tool", "authority": ["read", "execute"], "basis": "declared", "source_ref": "package-layout"},
+    {"component_id": "safe2-evidence", "category": "skill", "name": "AI SAFE2 evidence workflows", "provider": "Cyber Strategy Institute", "version": "0.6.0", "artifact_sha256": null, "role": "evidence-normalization-workflow", "authority": ["read", "write"], "basis": "declared", "source_ref": "package-layout"},
+    {"component_id": "python-runtime", "category": "environment", "name": "CPython", "provider": "Python Software Foundation", "version": "3.11-3.14", "artifact_sha256": null, "role": "supported-runtime", "authority": ["read", "write", "execute", "network"], "basis": "declared", "source_ref": "pyproject"},
+    {"component_id": "safe2-policy", "category": "policy", "name": "AI SAFE2 v3.1 evidence boundaries", "provider": "Cyber Strategy Institute", "version": "3.1.0", "artifact_sha256": null, "role": "governance-policy", "authority": [], "basis": "declared", "source_ref": "repository-manifest"},
+    {"component_id": "release-evaluator", "category": "evaluator", "name": "pytest, hosted CI, Bandit, and stranger acceptance", "provider": null, "version": "release-candidate", "artifact_sha256": null, "role": "release-evaluation", "authority": ["read", "execute", "network"], "basis": "declared", "source_ref": "release-validation"}
+  ],
+  "bindings": [
+    {"binding_id": "cli-scanner", "from_component_id": "safe2-cli", "to_component_id": "safe2-scanner", "relationship": "invokes", "basis": "declared", "source_ref": "package-layout"},
+    {"binding_id": "cli-evidence", "from_component_id": "safe2-cli", "to_component_id": "safe2-evidence", "relationship": "uses", "basis": "declared", "source_ref": "package-layout"},
+    {"binding_id": "cli-python", "from_component_id": "safe2-cli", "to_component_id": "python-runtime", "relationship": "runs_on", "basis": "declared", "source_ref": "pyproject"},
+    {"binding_id": "cli-policy", "from_component_id": "safe2-cli", "to_component_id": "safe2-policy", "relationship": "governed_by", "basis": "declared", "source_ref": "repository-manifest"},
+    {"binding_id": "cli-evaluator", "from_component_id": "safe2-cli", "to_component_id": "release-evaluator", "relationship": "evaluated_by", "basis": "declared", "source_ref": "release-validation"}
+  ],
+  "coverage": {
+    "model": {"status": "not_applicable", "basis": "declared", "source_ref": "non-model-package"},
+    "harness": {"status": "complete", "basis": "declared", "source_ref": "pyproject"},
+    "tool": {"status": "complete", "basis": "declared", "source_ref": "package-layout"},
+    "skill": {"status": "complete", "basis": "declared", "source_ref": "package-layout"},
+    "memory": {"status": "not_applicable", "basis": "declared", "source_ref": "stateless-cli"},
+    "environment": {"status": "complete", "basis": "declared", "source_ref": "pyproject"},
+    "policy": {"status": "complete", "basis": "declared", "source_ref": "repository-manifest"},
+    "evaluator": {"status": "complete", "basis": "declared", "source_ref": "release-validation"}
+  },
+  "evidence_refs": []
+}

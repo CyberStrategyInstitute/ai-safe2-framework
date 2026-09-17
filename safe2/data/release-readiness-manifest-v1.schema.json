@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://aisafe2.dev/schemas/release-readiness-manifest-v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "created_at", "source", "target", "subject", "evidence", "gate", "checks", "change_summary", "scope_summary", "residual_risks", "actions", "assumptions", "rollback", "decision_owner", "recommendation", "decision_scope", "release_authorized", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.release-readiness-manifest.v1"}, "created_at": {"type": "string", "format": "date-time"}, "source": {"type": "object"}, "target": {"type": "object"}, "subject": {"type": "object"}, "evidence": {"type": "object"},
+    "gate": {"type": "object", "additionalProperties": false, "required": ["status", "reasons", "facts", "gaps"], "properties": {"status": {"enum": ["hold", "review", "ready_for_human_decision"]}, "reasons": {"type": "array", "items": {"type": "string"}}, "facts": {"type": "array", "items": {"type": "string"}}, "gaps": {"type": "array", "items": {"type": "string"}}}},
+    "checks": {"type": "object"}, "change_summary": {"type": "object"}, "scope_summary": {"type": "object"}, "residual_risks": {"type": "array"}, "actions": {"type": "array"}, "assumptions": {"type": "array"}, "rollback": {"type": "object"}, "decision_owner": {"type": "object"}, "recommendation": {"type": "string", "minLength": 1},
+    "decision_scope": {"const": "technical_release_readiness_support_only"}, "release_authorized": {"const": false}, "conformance_claim": {"const": false}, "limitations": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1}}
+  }
+}

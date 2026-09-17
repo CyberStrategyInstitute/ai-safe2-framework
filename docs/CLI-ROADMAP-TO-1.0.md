@@ -27,26 +27,40 @@ capabilities until their implementation, validation, and release evidence exist.
   security boundaries, validation evidence, residual risks, and rollback path.
 - A passing automated score is evidence, not release authority. Required checks
   and named human acceptance remain distinct.
+- Open implementation changes as draft pull requests after local pre-push gates
+  pass. Run the repository's first-party hosted checks and the configured
+  attributed review provider before marking the pull request ready.
+- For Greptile-enabled repositories, use `check-pr` to inspect checks, the pull
+  request description, general comments, and inline threads. Use `greploop` only
+  when Greptile is installed and producing current-revision results. Resolve
+  valid findings, rerun affected first-party checks, and cap the loop at five
+  review cycles.
+- If an external reviewer is absent, unavailable, or degraded, record that fact
+  explicitly. Never invent a provider score, treat silence as approval, or let a
+  third-party score override tests, security gates, evidence gaps, or human
+  release ownership.
 
 ## Current foundation
 
-The released CLI foundation through 0.5.0 includes project and MCP assessment,
+The CLI foundation through 0.6.0 includes project and MCP assessment,
 skill gating, AISM decision support, local environment discovery, NEXUS and
 NVIDIA SkillSpector evidence adapters, provider-neutral harness intake, task
 receipts, usage evidence, unified manifests, Challenge Lab fixture workflows,
-complete agent-system identity, and evidence-bounded failure localization.
+complete agent-system identity, evidence-bounded failure localization,
+deployment assessment scope, trusted-baseline change attribution, and technical
+release-readiness cards.
 
 These capabilities retain their documented limits. They do not by themselves
 prove execution, root cause, billing, control effectiveness, organizational
 maturity, or framework conformance.
 
-## CLI 0.6: assess the correct change and deployment boundary
+## CLI 0.6: assess the correct change and deployment boundary (delivered)
 
 **User outcome:** Determine what system is being assessed, what a change
 affected, and which findings are inherited, introduced, resolved, excluded, or
 unknown.
 
-Planned engineering sequence:
+Delivered engineering sequence:
 
 1. **Assessment scope contract**
    - Define deployable subjects and component boundaries.

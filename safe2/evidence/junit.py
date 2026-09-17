@@ -6,6 +6,9 @@ import hashlib
 import xml.etree.ElementTree as ET
 from typing import Any
 
+from defusedxml import ElementTree as SafeET
+from defusedxml.common import DefusedXmlException
+
 from safe2.contracts import validate_artifact
 
 
@@ -23,8 +26,8 @@ def import_junit(payload: bytes, *, task_id: str, revision: str, environment: st
         source = payload.decode("utf-8-sig")
         if "\x00" in source or "<!DOCTYPE" in source.upper() or "<!ENTITY" in source.upper():
             raise ValueError("DTD, entities, and non-UTF-8 XML are not supported")
-        root = ET.fromstring(source)
-    except (UnicodeError, ET.ParseError) as exc:
+        root = SafeET.fromstring(source)
+    except (UnicodeError, ET.ParseError, DefusedXmlException) as exc:
         raise ValueError("Invalid UTF-8 JUnit XML") from exc
     if root.tag not in {"testsuites", "testsuite"}:
         raise ValueError("Expected testsuites or testsuite root")

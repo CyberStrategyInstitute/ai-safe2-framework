@@ -31,6 +31,102 @@ def evidence():
     """Collect attributed evidence without claiming conformance."""
 
 
+@evidence.command("readiness")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--assessment-scope", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--change-attribution", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--card", required=True, type=click.Path(path_type=Path))
+@click.option("--strict", is_flag=True, help="Exit 1 unless evidence is ready for a human decision.")
+@click.pass_context
+def readiness_evidence(ctx: click.Context, source: Path, system_identity: Path, assessment_scope: Path, change_attribution: Path, output: Path, card: Path, strict: bool) -> None:
+    """Create agent JSON and a human technical release-readiness card."""
+    from safe2.challenge.io import read_bytes, safe_path, write_json, write_text
+    from safe2.evidence.readiness import build
+    from safe2.evidence.readiness_card import render
+    try:
+        destinations = [safe_path(output), safe_path(card)]
+        if len(set(destinations)) != 2 or any(path.exists() for path in destinations): raise ValueError("Outputs must be distinct and new")
+        result = build(read_bytes(source, limit=5_000_000), read_bytes(system_identity, limit=1_000_000), read_bytes(assessment_scope, limit=5_000_000), read_bytes(change_attribution, limit=5_000_000))
+        write_json(output, result); write_text(card, render(result))
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException("Release-readiness synthesis failed: invalid, mismatched, ambiguous, or unsafe evidence") from exc
+    click.echo(json.dumps({"output": str(output), "card": str(card), "status": result["gate"]["status"], "release_authorized": False, "conformance_claim": False}))
+    if strict and result["gate"]["status"] != "ready_for_human_decision": ctx.exit(1)
+
+
+@evidence.command("attribute")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--baseline-scope", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--current-scope", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--strict", is_flag=True, help="Exit 1 after writing when attribution remains unknown.")
+@click.pass_context
+def attribute_evidence(ctx: click.Context, source: Path, system_identity: Path, baseline_scope: Path, current_scope: Path, output: Path, strict: bool) -> None:
+    """Attribute findings between a trusted baseline and current revision."""
+    from safe2.challenge.io import read_bytes, write_json
+    from safe2.evidence.attribution import build
+
+    try:
+        result = build(read_bytes(source, limit=5_000_000), read_bytes(system_identity, limit=1_000_000), read_bytes(baseline_scope, limit=5_000_000), read_bytes(current_scope, limit=5_000_000))
+        write_json(output, result)
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException("Change attribution failed: invalid, mismatched, ambiguous, or unsafe evidence") from exc
+    click.echo(json.dumps({"output": str(output), "summary": result["summary"], "change_verified": False, "conformance_claim": False}))
+    if strict and result["summary"]["unknown"]:
+        ctx.exit(1)
+
+
+@evidence.command("scope")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--project-root", required=True, type=click.Path(path_type=Path, exists=True, file_okay=False))
+@click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--max-entries", default=10_000, type=click.IntRange(1, 10_000), show_default=True)
+@click.option("--strict", is_flag=True, help="Exit 1 after writing when scope gaps or conflicts remain.")
+@click.pass_context
+def scope_evidence(
+    ctx: click.Context,
+    source: Path,
+    project_root: Path,
+    system_identity: Path,
+    output: Path,
+    max_entries: int,
+    strict: bool,
+) -> None:
+    """Inventory declared deployment scope without reading file contents."""
+    from safe2.challenge.io import read_bytes, write_json
+    from safe2.evidence.scope import build
+
+    try:
+        result = build(
+            read_bytes(source, limit=1_000_000),
+            read_bytes(system_identity, limit=1_000_000),
+            project_root,
+            max_entries=max_entries,
+        )
+        write_json(output, result)
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException(
+            "Assessment scope failed: invalid declaration, identity, project root, or unsafe/unavailable I/O"
+        ) from exc
+    click.echo(json.dumps({
+        "output": str(output),
+        "summary": result["summary"],
+        "scope_verified": False,
+        "content_inspected": False,
+        "conformance_claim": False,
+    }))
+    summary = result["summary"]
+    if strict and any((
+        summary["unsafe_links"], summary["conflicts"], summary["truncated"],
+        summary["partial"], summary["unclassified"], not summary["included"],
+    )):
+        ctx.exit(1)
+
+
 @evidence.command("diagnose")
 @click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
 @click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))

@@ -13,7 +13,8 @@ def main():
         root = Path(temporary)
         data = files("safe2").joinpath("data")
         for name in ("task-receipt-demo.json", "task-receipt-demo.txt", "harness-source-demo.json",
-                     "system-identity-source-demo.json", "failure-source-demo.json"):
+                     "system-identity-source-demo.json", "failure-source-demo.json",
+                     "assessment-scope-source-demo.json", "release-readiness-source-demo.json"):
             (root / name).write_bytes(data.joinpath(name).read_bytes())
 
         def invoke(*arguments):
@@ -27,7 +28,10 @@ def main():
         for contract in ("task-receipt-input-v1", "task-receipt-v1", "test-result-v1",
                          "tool-result-v1", "report-attestation-v1", "usage-summary-v1", "pytest-capture-v1",
                          "harness-source-v1", "harness-evidence-v1", "system-identity-source-v1",
-                         "system-identity-manifest-v1", "failure-source-v1", "failure-diagnosis-v1"):
+                         "system-identity-manifest-v1", "failure-source-v1", "failure-diagnosis-v1",
+                         "assessment-scope-source-v1", "assessment-scope-manifest-v1",
+                         "change-attribution-source-v1", "change-attribution-manifest-v1",
+                         "release-readiness-source-v1", "release-readiness-manifest-v1"):
             invoke("schema", "export", contract)
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
@@ -64,7 +68,39 @@ def main():
         assert diagnosis["root_cause_verified"] is False
         assert diagnosis["probability_estimate"] is False
         assert card_output.is_file()
-    print("Installed distribution: receipts, thirteen schemas, pytest capture, harness intake, system identity, and failure localization passed")
+        scope_root = root / "scope-project"
+        (scope_root / "safe2").mkdir(parents=True)
+        (scope_root / "safe2" / "app.py").write_text("value = 1\n", encoding="utf-8")
+        scope_output = root / "assessment-scope.json"
+        scope = invoke("evidence", "scope", str(root / "assessment-scope-source-demo.json"),
+                       "--project-root", str(scope_root), "--system-identity", str(identity_output),
+                       "--output", str(scope_output), "--strict")
+        assert scope["summary"]["included"] == 1
+        assert scope["scope_verified"] is False
+        assert scope["content_inspected"] is False
+        scope_bytes = scope_output.read_bytes()
+        import hashlib
+        attribution_source = {
+            "schema_version": "safe2.change-attribution-source.v1",
+            "comparison_id": "wheel-comparison", "declared_at": "2026-09-15T00:00:00Z",
+            "subject": {"subject_id": identity_manifest["subject"]["subject_id"], "system_fingerprint_sha256": identity_manifest["system_fingerprint_sha256"]},
+            "baseline": {"revision_id": "base", "scope_manifest_sha256": hashlib.sha256(scope_bytes).hexdigest(), "coverage_complete": True, "findings": [], "trusted": True, "trust_basis": "wheel smoke fixture"},
+            "current": {"revision_id": "head", "scope_manifest_sha256": hashlib.sha256(scope_bytes).hexdigest(), "coverage_complete": True, "findings": []}}
+        attribution_source_path = root / "change-source.json"
+        attribution_source_path.write_text(json.dumps(attribution_source), encoding="utf-8")
+        attribution_output = root / "change-attribution.json"
+        attribution = invoke("evidence", "attribute", str(attribution_source_path), "--system-identity", str(identity_output), "--baseline-scope", str(scope_output), "--current-scope", str(scope_output), "--output", str(attribution_output), "--strict")
+        assert attribution["summary"]["total"] == 0
+        assert attribution["change_verified"] is False
+        readiness_source = {"schema_version": "safe2.release-readiness-source.v1", "assessment_id": "wheel-release", "declared_at": "2026-09-15T00:00:00Z", "target": {"name": "SAFE2 CLI", "version": "next", "revision": "wheel"}, "decision_owner": {"owner_id": "maintainer", "role": "release owner"}, "required_checks": ["wheel"], "checks": [{"check_id": "wheel", "provider": "local acceptance", "status": "passed", "evidence_ref": "this run"}], "residual_risks": [], "actions": [{"action_id": "decide", "priority": "before_release", "owner_id": "maintainer", "description": "Review the evidence and decide."}], "assumptions": [], "rollback": {"available": True, "procedure": "Revert the release commit."}}
+        readiness_source_path = root / "readiness-source.json"
+        readiness_source_path.write_text(json.dumps(readiness_source), encoding="utf-8")
+        readiness_output, readiness_card = root / "readiness.json", root / "readiness.md"
+        readiness = invoke("evidence", "readiness", str(readiness_source_path), "--system-identity", str(identity_output), "--assessment-scope", str(scope_output), "--change-attribution", str(attribution_output), "--output", str(readiness_output), "--card", str(readiness_card), "--strict")
+        assert readiness["status"] == "ready_for_human_decision"
+        assert readiness["release_authorized"] is False
+        assert readiness_card.is_file()
+    print("Installed distribution: receipts, nineteen schemas, pytest capture, harness intake, system identity, failure localization, assessment scope, change attribution, and release readiness passed")
 
 
 if __name__ == "__main__":

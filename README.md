@@ -197,6 +197,7 @@ safe2 evidence skillspector ./candidate-skill --output skillspector-evidence.jso
 safe2 evidence manifest environment-inventory.json nexus-evidence.json --subject-id governed-agent --output run-manifest.json --strict
 safe2 evidence system safe2/data/system-identity-source-demo.json --output system-identity.json --strict
 safe2 evidence diagnose safe2/data/failure-source-demo.json --system-identity system-identity.json --output failure-diagnosis.json --card failure-card.md --strict
+safe2 evidence scope safe2/data/assessment-scope-source-demo.json --project-root . --system-identity system-identity.json --output assessment-scope.json
 safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "NEXUS Local" --output assessment.json
 safe2 aism score assessment.json --format markdown --output decision-card.md
 ```
@@ -247,6 +248,22 @@ was independently verified.
 competing failure candidates to that complete system identity. It ranks where to
 investigate, exposes assumptions and contradictions, and recommends a repair
 owner and next action without claiming a verified root cause or probability.
+
+[Assessment scope](docs/ASSESSMENT-SCOPE.md) inventories which repository paths
+are declared product, tests, adversarial fixtures, examples, research, generated
+artifacts, dependencies, third-party content, configuration, documentation, or
+unknown. It binds that declaration to system identity without reading file
+contents or claiming the declared boundary was independently verified.
+
+[Change attribution](docs/CHANGE-ATTRIBUTION.md) compares normalized findings
+against an explicitly trusted baseline, binds both revisions to their assessment
+scope artifacts, and separates inherited, introduced, changed, resolved, and
+unknown states without claiming causation or conformance.
+
+[Release readiness](docs/RELEASE-READINESS.md) combines identity, scope, change
+attribution, required checks, risks, ownership, next actions, and rollback into
+agent JSON plus a human card while preserving human release authority.
+
 For release boundaries, verified behavior, and external checks that still
 require human or production execution, see the
 [Stranger-Ready CLI Review](docs/STRANGER-READY-CLI-REVIEW.md),

@@ -79,6 +79,12 @@ and executable evidence take priority over model confidence or reviewer scores.
 5. Do not optimize for a vendor's numeric score or loop forever. Resolve valid
    findings, document accepted residual risk, and stop when defined acceptance
    gates pass or a decision owner must intervene.
+6. For GitHub changes, complete local pre-push gates, then open a draft pull
+   request. When Greptile is configured, run `check-pr`, address valid findings,
+   rerun affected first-party checks, and use `greploop` for no more than five
+   review cycles before marking the pull request ready. If Greptile is absent,
+   unavailable, or degraded, record that state explicitly; never manufacture a
+   confidence score or treat missing provider output as approval.
 
 ### 5. Ship with receipts
 
