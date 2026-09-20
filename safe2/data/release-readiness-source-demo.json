@@ -2,7 +2,7 @@
   "schema_version": "safe2.release-readiness-source.v1",
   "assessment_id": "safe2-cli-0.6-release-candidate",
   "declared_at": "2026-09-15T00:00:00Z",
-  "target": {"name": "AI SAFE2 CLI", "version": "0.6.0", "revision": "replace-with-tested-revision"},
+  "target": {"name": "AI SAFE2 CLI", "version": "0.7.0", "revision": "replace-with-tested-revision"},
   "decision_owner": {"owner_id": "release-maintainer", "role": "Named human release authority"},
   "required_checks": ["full-tests", "python-compatibility", "security-review", "installed-wheel"],
   "checks": [

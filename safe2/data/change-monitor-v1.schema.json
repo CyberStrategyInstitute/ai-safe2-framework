@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/change-monitor-v1.json",
+  "title": "Bounded local skill and agent configuration change monitor",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "created_at", "root", "baseline", "inventory", "changes", "skill_gates", "summary", "decision", "telemetry", "content_exported", "conformance_claim", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.change-monitor.v1"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "root": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "baseline": {"enum": ["not_supplied", "validated"]},
+    "inventory": {"type": "array", "maxItems": 10000, "items": {"type": "object", "additionalProperties": false, "required": ["path", "kind", "sha256", "bytes"], "properties": {"path": {"type": "string"}, "kind": {"enum": ["skill", "agent_config"]}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "bytes": {"type": "integer", "minimum": 0, "maximum": 1000000}}}},
+    "changes": {"type": "array", "maxItems": 20000, "items": {"type": "object", "additionalProperties": false, "required": ["path", "kind", "change"], "properties": {"path": {"type": "string"}, "kind": {"enum": ["skill", "agent_config"]}, "change": {"enum": ["added", "changed", "removed"]}}}},
+    "skill_gates": {"type": "array", "maxItems": 10000, "items": {"type": "object", "additionalProperties": false, "required": ["path", "decision", "highest_severity", "findings", "coverage"], "properties": {"path": {"type": "string"}, "decision": {"enum": ["APPROVE", "HOLD FOR REVIEW", "REJECT"]}, "highest_severity": {"type": "string"}, "findings": {"type": "integer", "minimum": 0}, "coverage": {"type": "object"}}}},
+    "summary": {"type": "object", "additionalProperties": false, "required": ["tracked", "added", "changed", "removed", "skills_evaluated"], "properties": {"tracked": {"type": "integer", "minimum": 0}, "added": {"type": "integer", "minimum": 0}, "changed": {"type": "integer", "minimum": 0}, "removed": {"type": "integer", "minimum": 0}, "skills_evaluated": {"type": "integer", "minimum": 0}}},
+    "decision": {"enum": ["approve", "hold", "reject"]},
+    "telemetry": {"const": "none"}, "content_exported": {"const": false}, "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}

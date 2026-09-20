@@ -87,12 +87,12 @@ Release gate:
 - At least one real repository and the AI SAFE² repository complete stranger-run
   acceptance from documented commands.
 
-## CLI 0.7: continuous task evidence and operational truth
+## CLI 0.7: continuous task evidence and operational truth (delivered)
 
 **User outcome:** Understand what agent work consumed, what it produced, what
 was verified, and where evidence disappeared across harness boundaries.
 
-Planned capabilities:
+Delivered engineering sequence:
 
 - Normalize task identity and lifecycle events across supported harness exports.
 - Correlate receipts, artifacts, tests, tool calls, usage declarations, failures,
@@ -104,6 +104,11 @@ Planned capabilities:
   capture.
 - Preserve provider attribution and native records through a stable adapter
   boundary.
+
+The delivered continuous surface is an explicit bounded one-shot command for
+operator-controlled local schedulers and CI. It does not install a daemon or
+claim native integrations that do not yet exist. Provider-specific adapters
+remain post-1.0 integration work unless a core abstraction requires them.
 
 Release gate:
 

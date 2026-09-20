@@ -31,6 +31,79 @@ def evidence():
     """Collect attributed evidence without claiming conformance."""
 
 
+@evidence.command("truth")
+@click.argument("policy", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.argument("artifacts", nargs=-1, required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--card", required=True, type=click.Path(path_type=Path))
+@click.option("--strict", is_flag=True, help="Exit 1 unless evidence is ready for a human decision.")
+@click.pass_context
+def operational_truth(ctx: click.Context, policy: Path, artifacts: tuple[Path, ...], output: Path, card: Path, strict: bool) -> None:
+    """Correlate task evidence across one or more agent harnesses."""
+    from safe2.challenge.io import read_bytes, safe_path, write_json, write_text
+    from safe2.evidence.operational_truth import build
+    from safe2.evidence.operational_truth_card import render
+
+    try:
+        destinations = [safe_path(output), safe_path(card)]
+        if len(set(destinations)) != 2 or any(path.exists() for path in destinations):
+            raise ValueError("Outputs must be distinct and new")
+        if len(artifacts) > 100:
+            raise ValueError("At most 100 evidence artifacts are accepted")
+        result = build(
+            read_bytes(policy, limit=1_000_000),
+            [read_bytes(path, limit=5_000_000) for path in artifacts],
+        )
+        write_json(output, result)
+        write_text(card, render(result))
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException(
+            "Operational-truth synthesis failed: invalid, conflicting, duplicate, or unsafe evidence"
+        ) from exc
+    click.echo(json.dumps({
+        "output": str(output), "card": str(card), "gate": result["gate"],
+        "completion_verified": False, "billing_verified": False,
+        "conformance_claim": False,
+    }))
+    if strict and result["gate"] != "ready_for_human_decision":
+        ctx.exit(1)
+
+
+@evidence.command("changes")
+@click.argument("root", type=click.Path(path_type=Path, exists=True, file_okay=False))
+@click.option("--baseline", type=click.Path(path_type=Path, exists=True, dir_okay=False),
+              help="Prior change-monitor JSON. Omit for the first explicit baseline run.")
+@click.option("--output", "-o", required=True, type=click.Path(path_type=Path))
+@click.option("--max-files", default=10_000, type=click.IntRange(1, 10_000), show_default=True,
+              help="Maximum filesystem entries traversed in the explicit root.")
+@click.option("--max-file-bytes", default=1_000_000, type=click.IntRange(1, 1_000_000), show_default=True)
+@click.option("--strict", is_flag=True, help="Exit 1 on hold or reject after preserving the report.")
+@click.pass_context
+def changed_agent_inputs(ctx: click.Context, root: Path, baseline: Path | None, output: Path,
+                         max_files: int, max_file_bytes: int, strict: bool) -> None:
+    """One-shot local/CI check for changed skills and agent configuration."""
+    from safe2.challenge.io import parse_json, read_bytes, safe_path, write_json
+    from safe2.evidence.change_monitor import monitor
+
+    try:
+        destination = safe_path(output)
+        if destination.exists():
+            raise ValueError("Output must be new")
+        previous = parse_json(read_bytes(baseline, limit=5_000_000)) if baseline else None
+        result = monitor(root, previous, max_files=max_files, max_file_bytes=max_file_bytes)
+        write_json(output, result)
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException(
+            "Agent-input monitoring failed: invalid baseline, unsafe path, or incomplete bounded coverage"
+        ) from exc
+    click.echo(json.dumps({
+        "output": str(output), "summary": result["summary"], "decision": result["decision"],
+        "telemetry": "none", "content_exported": False, "conformance_claim": False,
+    }))
+    if strict and result["decision"] != "approve":
+        ctx.exit(1)
+
+
 @evidence.command("readiness")
 @click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
 @click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))

@@ -1,0 +1,17 @@
+{
+  "schema_version": "safe2.operational-truth-source.v1",
+  "task_id": "demo-task-001",
+  "revision": "demo-revision-001",
+  "required_domains": [
+    "task_lifecycle",
+    "tool_calls",
+    "artifacts",
+    "tests",
+    "usage",
+    "environment_state",
+    "completion_claim"
+  ],
+  "decision_owner": "demo-release-owner",
+  "assumptions": ["Imported evidence belongs to the declared task and revision."],
+  "exclusions": ["Provider billing reconciliation and independent execution observation."]
+}
