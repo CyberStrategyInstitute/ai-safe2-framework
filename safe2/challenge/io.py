@@ -32,8 +32,8 @@ def safe_path(path: str | Path) -> Path:
 
 def read_bytes(path: str | Path, *, limit: int = MAX_BYTES) -> bytes:
     target = safe_path(path)
-    info = target.lstat()
-    if not stat.S_ISREG(info.st_mode) or info.st_size > limit:
+    before = target.lstat()
+    if not stat.S_ISREG(before.st_mode) or before.st_size > limit:
         raise ValueError("Input must be a regular file within the size limit")
     flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
     # A replaced leaf must not turn a bounded read into a blocking FIFO open.
@@ -41,6 +41,8 @@ def read_bytes(path: str | Path, *, limit: int = MAX_BYTES) -> bytes:
     descriptor = os.open(target, flags)
     with os.fdopen(descriptor, "rb") as handle:
         info = os.fstat(handle.fileno())
+        if (before.st_dev, before.st_ino) != (info.st_dev, info.st_ino):
+            raise ValueError("Input changed identity while being opened")
         if not stat.S_ISREG(info.st_mode) or info.st_size > limit:
             raise ValueError("Input must be a regular file within the size limit")
         data = handle.read(limit + 1)

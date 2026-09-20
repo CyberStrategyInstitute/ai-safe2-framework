@@ -2,6 +2,7 @@
   "schema_version": "safe2.operational-truth-source.v1",
   "task_id": "demo-task-001",
   "revision": "demo-revision-001",
+  "revision_receipt_sha256": [],
   "required_domains": [
     "task_lifecycle",
     "tool_calls",

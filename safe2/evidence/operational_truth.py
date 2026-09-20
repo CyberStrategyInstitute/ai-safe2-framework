@@ -65,7 +65,9 @@ def build(policy_payload: bytes, artifacts: list[bytes]) -> dict[str, Any]:
             if artifact["task_id"] != policy["task_id"]: conflicts.append("receipt_task_id_mismatch")
             harnesses.add(artifact["harness"])
             counts = artifact["counts"]
-            if counts["contradicted"]: receipt_states.append("contradicted")
+            if digest not in policy["revision_receipt_sha256"]:
+                receipt_states.append("unverifiable")
+            elif counts["contradicted"]: receipt_states.append("contradicted")
             elif counts["unverifiable"]: receipt_states.append("unverifiable")
             else: receipt_states.append("supported")
             for item in artifact["usage"]:
@@ -84,8 +86,15 @@ def build(policy_payload: bytes, artifacts: list[bytes]) -> dict[str, Any]:
             gaps.append(f"required_domain_{domain}_{aggregate[domain]}")
     if duplicate_usage:
         conflicts.append("duplicate_usage_ownership")
+    asserted_claims = set(claims) - {"not_claimed"}
+    if len(asserted_claims) > 1:
+        conflicts.append("completion_claim_conflict")
     complete_claimed = "claimed_complete" in claims
-    if not complete_claimed:
+    if len(asserted_claims) > 1:
+        completion = "contradicted"
+    elif "claimed_incomplete" in asserted_claims:
+        completion = "incomplete_claimed"
+    elif not complete_claimed:
         completion = "not_claimed"
     elif "contradicted" in receipt_states:
         completion = "contradicted"
@@ -94,9 +103,11 @@ def build(policy_payload: bytes, artifacts: list[bytes]) -> dict[str, Any]:
     else:
         completion = "insufficient_evidence"
         gaps.append("completion_claim_lacks_supported_receipt")
+        if receipt_states and "supported" not in receipt_states:
+            gaps.append("completion_receipt_not_bound_to_revision")
     conflicts = sorted(set(conflicts))
     gaps = sorted(set(gaps))
-    gate = "hold" if conflicts or completion == "contradicted" else ("review" if gaps or completion in {"not_claimed", "insufficient_evidence"} else "ready_for_human_decision")
+    gate = "hold" if conflicts or completion == "contradicted" else ("review" if gaps or completion in {"not_claimed", "incomplete_claimed", "insufficient_evidence"} else "ready_for_human_decision")
     result = {
         "schema_version": "safe2.operational-truth-manifest.v1", "created_at": datetime.now(UTC).isoformat(),
         "task": {"task_id": policy["task_id"], "revision": policy["revision"], "harnesses": sorted(harnesses)},

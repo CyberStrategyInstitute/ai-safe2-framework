@@ -55,7 +55,11 @@ def operational_truth(ctx: click.Context, policy: Path, artifacts: tuple[Path, .
             [read_bytes(path, limit=5_000_000) for path in artifacts],
         )
         write_json(output, result)
-        write_text(card, render(result))
+        try:
+            write_text(card, render(result))
+        except (OSError, ValueError):
+            output.unlink(missing_ok=True)
+            raise
     except (OSError, TypeError, ValueError, RecursionError) as exc:
         raise click.ClickException(
             "Operational-truth synthesis failed: invalid, conflicting, duplicate, or unsafe evidence"

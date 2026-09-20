@@ -18,8 +18,10 @@ safe2 evidence harness harness-source.json --output harness-evidence.json
 safe2 feedback receipt task-receipt-input.json --artifact-root . --output task-receipt.json
 ```
 
-Declare the task identity, revision, required evidence domains, decision owner,
-assumptions, and exclusions. A starting example ships as
+Declare the task identity, revision, SHA-256 digests of receipts explicitly
+bound to that revision, required evidence domains, decision owner, assumptions,
+and exclusions. An unbound receipt remains visible but cannot support a
+completion claim. A starting example ships as
 `safe2/data/operational-truth-source-demo.json`.
 
 ```bash
@@ -70,7 +72,9 @@ safe2 evidence changes . \
 New or changed skills are evaluated by the first-party Skill Trust Gate.
 Agent-configuration changes are held for human review because a byte change can
 alter authority without being inherently malicious. Removed files remain
-visible. Git, virtual environments, dependencies, and caches are excluded.
+visible. The baseline binds a privacy-preserving digest of the resolved root so
+unrelated directories with the same name cannot exchange baselines. Git,
+virtual environments, dependencies, and caches are excluded.
 Traversal is bounded to 10,000 entries and 1 MB per tracked file by default;
 incomplete coverage fails closed.
 
@@ -83,6 +87,8 @@ AI SAFE² does not create a hidden daemon.
 
 - Evidence files are parsed under strict versioned JSON contracts with bounded
   size and count limits.
+- Input identity is checked before and after opening to reject file-replacement
+  races rather than following a substituted link or special file.
 - Duplicate artifact bytes, unsafe output paths, symbolic links in monitored
   scope, unknown contracts, and output overwrite attempts are rejected.
 - Cards never become a second decision source; regenerate them from canonical

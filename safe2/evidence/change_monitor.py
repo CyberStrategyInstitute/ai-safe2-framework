@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from safe2.challenge.io import read_bytes
 from safe2.contracts import validate_artifact
 from safe2.engines import skill_gate
 
@@ -51,12 +52,10 @@ def _inventory(root: Path, max_files: int, max_file_bytes: int) -> list[dict[str
         harness_config = bool(HARNESS_CONFIG_DIRS.intersection(relative.parts)) and path.suffix.lower() in CONFIG_SUFFIXES
         if not in_skill and path.name not in TRACKED_CONFIGS and not harness_config:
             continue
-        size = path.stat().st_size
-        if size > max_file_bytes:
-            raise ValueError("Tracked file size limit exceeded")
+        body = read_bytes(path, limit=max_file_bytes)
         found.append({
             "path": relative.as_posix(), "kind": "skill" if in_skill else "agent_config",
-            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(), "bytes": size,
+            "sha256": hashlib.sha256(body).hexdigest(), "bytes": len(body),
         })
     return sorted(found, key=lambda item: item["path"])
 
@@ -68,7 +67,8 @@ def monitor(root: Path, baseline: dict[str, Any] | None = None, *, max_files: in
         raise ValueError("Monitor root must be a directory")
     if baseline is not None and validate_artifact("change-monitor-v1", baseline):
         raise ValueError("Baseline violates the change-monitor contract")
-    if baseline is not None and baseline["root"] != root.name:
+    root_binding = hashlib.sha256(os.path.normcase(str(root)).encode("utf-8")).hexdigest()
+    if baseline is not None and baseline["root_binding_sha256"] != root_binding:
         raise ValueError("Baseline belongs to a different declared root")
     current = _inventory(root, max_files, max_file_bytes)
     old = {item["path"]: item for item in baseline["inventory"]} if baseline else {}
@@ -108,7 +108,8 @@ def monitor(root: Path, baseline: dict[str, Any] | None = None, *, max_files: in
     counts = {name: sum(item["change"] == name for item in changes) for name in ("added", "changed", "removed")}
     result = {
         "schema_version": "safe2.change-monitor.v1", "created_at": datetime.now(UTC).isoformat(),
-        "root": root.name, "baseline": "validated" if baseline else "not_supplied",
+        "root": root.name, "root_binding_sha256": root_binding,
+        "baseline": "validated" if baseline else "not_supplied",
         "inventory": current, "changes": changes, "skill_gates": gates,
         "summary": {"tracked": len(current), **counts, "skills_evaluated": len(gates)},
         "decision": decision, "telemetry": "none", "content_exported": False,

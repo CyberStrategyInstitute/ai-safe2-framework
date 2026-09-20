@@ -3,11 +3,12 @@
   "$id": "https://aisafe2.dev/schemas/operational-truth-source-v1.json",
   "title": "Operational truth synthesis policy",
   "type": "object", "additionalProperties": false,
-  "required": ["schema_version", "task_id", "revision", "required_domains", "decision_owner", "assumptions", "exclusions"],
+  "required": ["schema_version", "task_id", "revision", "revision_receipt_sha256", "required_domains", "decision_owner", "assumptions", "exclusions"],
   "properties": {
     "schema_version": {"const": "safe2.operational-truth-source.v1"},
     "task_id": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/$defs/id"},
     "revision": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/$defs/id"},
+    "revision_receipt_sha256": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
     "required_domains": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["task_lifecycle", "tool_calls", "artifacts", "tests", "usage", "environment_state", "completion_claim"]}},
     "decision_owner": {"$ref": "https://aisafe2.dev/schemas/harness-source-v1.json#/$defs/id"},
     "assumptions": {"type": "array", "maxItems": 50, "items": {"type": "string", "minLength": 1, "maxLength": 500}},

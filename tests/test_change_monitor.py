@@ -54,8 +54,8 @@ def test_companion_skill_file_change_is_detected_and_rescanned(tmp_path: Path):
 def test_wrong_root_baselines_fail_closed(tmp_path: Path):
     root = workspace(tmp_path)
     baseline = monitor(root)
-    other = tmp_path / "other"
-    other.mkdir()
+    other = tmp_path / "other" / "workspace"
+    other.mkdir(parents=True)
     with pytest.raises(ValueError, match="different"):
         monitor(other, baseline)
 

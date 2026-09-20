@@ -12,7 +12,7 @@
     "coverage": {"type": "object", "additionalProperties": {"enum": ["complete", "partial", "missing"]}},
     "events": {"type": "object", "additionalProperties": false, "required": ["total", "observed", "declared", "missing"], "properties": {"total": {"type": "integer", "minimum": 0}, "observed": {"type": "integer", "minimum": 0}, "declared": {"type": "integer", "minimum": 0}, "missing": {"type": "integer", "minimum": 0}}},
     "usage": {"type": "object", "additionalProperties": false, "required": ["events", "duplicate_ownership", "billing_verified"], "properties": {"events": {"type": "integer", "minimum": 0}, "duplicate_ownership": {"type": "integer", "minimum": 0}, "billing_verified": {"const": false}}},
-    "completion": {"type": "object", "additionalProperties": false, "required": ["claims", "assessment"], "properties": {"claims": {"type": "array", "items": {"enum": ["claimed_complete", "claimed_incomplete", "not_claimed"]}}, "assessment": {"enum": ["not_claimed", "insufficient_evidence", "contradicted", "supported_by_supplied_evidence"]}}},
+    "completion": {"type": "object", "additionalProperties": false, "required": ["claims", "assessment"], "properties": {"claims": {"type": "array", "items": {"enum": ["claimed_complete", "claimed_incomplete", "not_claimed"]}}, "assessment": {"enum": ["not_claimed", "incomplete_claimed", "insufficient_evidence", "contradicted", "supported_by_supplied_evidence"]}}},
     "gaps": {"type": "array", "maxItems": 100, "items": {"type": "string"}},
     "conflicts": {"type": "array", "maxItems": 100, "items": {"type": "string"}},
     "gate": {"enum": ["hold", "review", "ready_for_human_decision"]},
