@@ -164,7 +164,6 @@ def test_cli_rolls_back_json_when_card_write_fails(tmp_path: Path, monkeypatch):
         nonlocal calls
         calls += 1
         if calls == 2:
-            Path(args[0]).write_text("partial", encoding="utf-8")
             raise OSError("simulated card failure")
         return original(*args, **kwargs)
 
@@ -174,6 +173,32 @@ def test_cli_rolls_back_json_when_card_write_fails(tmp_path: Path, monkeypatch):
     assert result.exit_code != 0
     assert not output.exists()
     assert not card.exists()
+
+
+def test_cli_does_not_delete_concurrently_created_card(tmp_path: Path, monkeypatch):
+    import safe2.challenge.io as artifact_io
+
+    policy_path, evidence_path = tmp_path / "policy.json", tmp_path / "evidence.json"
+    output, card = tmp_path / "truth.json", tmp_path / "truth.md"
+    policy_path.write_bytes(encoded(policy()))
+    evidence_path.write_bytes(encoded(harness(complete=False)))
+    original = artifact_io.write_text
+    calls = 0
+
+    def concurrent_card(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            Path(args[0]).write_text("owned by another process", encoding="utf-8")
+            raise FileExistsError("simulated concurrent output")
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(artifact_io, "write_text", concurrent_card)
+    result = CliRunner().invoke(cli, ["evidence", "truth", str(policy_path), str(evidence_path),
+                                      "--output", str(output), "--card", str(card)])
+    assert result.exit_code != 0
+    assert not output.exists()
+    assert card.read_text() == "owned by another process"
 
 
 def test_manifest_recognizes_policy_and_result(tmp_path: Path):

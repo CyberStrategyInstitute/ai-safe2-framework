@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import secrets
 import stat
 from pathlib import Path
 from typing import Any
@@ -87,12 +88,28 @@ def write_text(path: str | Path, value: str) -> None:
     if len(encoded) > MAX_BYTES:
         raise ValueError("Output size limit exceeded")
     target = safe_path(path)
-    # Deliberately do not create implicit directory trees.
+    # Publish only a complete same-directory temporary file. Hard-link creation
+    # is atomic and fails rather than replacing an existing destination.
+    temporary = safe_path(target.parent / f".{target.name}.safe2-{secrets.token_hex(16)}.tmp")
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
     flags |= getattr(os, "O_NOFOLLOW", 0)
-    descriptor = os.open(target, flags, 0o600)
-    with os.fdopen(descriptor, "wb") as handle:
-        handle.write(encoded)
+    identity = None
+    try:
+        descriptor = os.open(temporary, flags, 0o600)
+        with os.fdopen(descriptor, "wb") as handle:
+            identity = os.fstat(handle.fileno())
+            handle.write(encoded)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.link(temporary, target, follow_symlinks=False)
+    finally:
+        if identity is not None:
+            try:
+                current = temporary.lstat()
+                if (current.st_dev, current.st_ino) == (identity.st_dev, identity.st_ino):
+                    temporary.unlink()
+            except FileNotFoundError:
+                pass
 
 
 def write_json(path: str | Path, value: dict[str, Any]) -> None:

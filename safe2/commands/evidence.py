@@ -55,17 +55,16 @@ def operational_truth(ctx: click.Context, policy: Path, artifacts: tuple[Path, .
             [read_bytes(path, limit=5_000_000) for path in artifacts],
         )
         write_json(output, result)
+        created_output = destinations[0].lstat()
         try:
             write_text(card, render(result))
         except (OSError, ValueError):
-            cleanup_failed = False
-            for destination in destinations:
-                try:
-                    destination.unlink(missing_ok=True)
-                except OSError:
-                    cleanup_failed = True
-            if cleanup_failed:
-                raise OSError("Operational-truth output rollback was incomplete")
+            try:
+                current = destinations[0].lstat()
+                if (current.st_dev, current.st_ino) == (created_output.st_dev, created_output.st_ino):
+                    destinations[0].unlink()
+            except FileNotFoundError:
+                pass
             raise
     except (OSError, TypeError, ValueError, RecursionError) as exc:
         raise click.ClickException(

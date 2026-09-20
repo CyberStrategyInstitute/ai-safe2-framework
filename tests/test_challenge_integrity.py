@@ -213,6 +213,21 @@ def test_file_identity_change_during_open_is_rejected(tmp_path, monkeypatch):
         read_bytes(target)
 
 
+def test_failed_atomic_publish_leaves_no_partial_destination(tmp_path, monkeypatch):
+    from safe2.challenge.io import write_text
+
+    target = tmp_path / "result.json"
+
+    def fail_publish(*_args, **_kwargs):
+        raise OSError("simulated publish failure")
+
+    monkeypatch.setattr(os, "link", fail_publish)
+    with pytest.raises(OSError, match="publish failure"):
+        write_text(target, "complete body")
+    assert not target.exists()
+    assert list(tmp_path.iterdir()) == []
+
+
 @pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="POSIX FIFO behavior")
 def test_fifo_rejected_without_waiting_for_writer(tmp_path):
     from safe2.challenge.io import read_bytes
