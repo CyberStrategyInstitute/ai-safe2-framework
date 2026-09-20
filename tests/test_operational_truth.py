@@ -164,6 +164,7 @@ def test_cli_rolls_back_json_when_card_write_fails(tmp_path: Path, monkeypatch):
         nonlocal calls
         calls += 1
         if calls == 2:
+            Path(args[0]).write_text("partial", encoding="utf-8")
             raise OSError("simulated card failure")
         return original(*args, **kwargs)
 

@@ -58,7 +58,14 @@ def operational_truth(ctx: click.Context, policy: Path, artifacts: tuple[Path, .
         try:
             write_text(card, render(result))
         except (OSError, ValueError):
-            output.unlink(missing_ok=True)
+            cleanup_failed = False
+            for destination in destinations:
+                try:
+                    destination.unlink(missing_ok=True)
+                except OSError:
+                    cleanup_failed = True
+            if cleanup_failed:
+                raise OSError("Operational-truth output rollback was incomplete")
             raise
     except (OSError, TypeError, ValueError, RecursionError) as exc:
         raise click.ClickException(
