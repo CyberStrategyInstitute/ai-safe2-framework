@@ -300,6 +300,114 @@ violation_i6[msg] {
 }
 
 # ---------------------------------------------------------------------------
+# I-7: RUNTIME-BOUND AUTHORITY  (added in NEXUS v0.4 / CP.5.APAY)
+# ---------------------------------------------------------------------------
+# Authority to take a consequential action binds to a fresh measurement of the
+# workload exercising it, not only to the identity presenting it.
+#
+# Rationale: identity answers "which agent arrived". Every published agent
+# identity and agent payment protocol stops there. None of them establish that
+# the workload holding a valid credential is still running the software that was
+# approved. An attacker who owns the agent host inherits its identity and its
+# mandates intact, and every signature they produce verifies correctly.
+#
+# Scope: applies where consequence_class is consequential or critical, which is
+# how economically irreversible actions enter scope without forcing attestation
+# onto every low-impact call.
+
+invariant_7_runtime_bound_authority {
+    not requires_runtime_binding
+}
+
+invariant_7_runtime_bound_authority {
+    requires_runtime_binding
+    input.runtime.attested == true
+    not input.runtime.attestation_method in {"none", "declared"}
+    input.runtime.age_seconds <= input.runtime.max_age_seconds
+}
+
+requires_runtime_binding {
+    input.consequence_class in {"consequential", "critical"}
+}
+
+requires_runtime_binding {
+    input.grant.constraints.min_assurance >= 4
+}
+
+violation_i7[msg] {
+    requires_runtime_binding
+    not input.runtime
+    msg := "I-7 VIOLATED: consequential action attempted with no runtime measurement"
+}
+
+violation_i7[msg] {
+    requires_runtime_binding
+    input.runtime
+    not input.runtime.attested
+    msg := "I-7 VIOLATED: runtime measurement is self-declared, not attested"
+}
+
+violation_i7[msg] {
+    requires_runtime_binding
+    input.runtime.age_seconds > input.runtime.max_age_seconds
+    msg := concat("", [
+        "I-7 VIOLATED: runtime measurement is ",
+        sprintf("%.0f", [input.runtime.age_seconds]),
+        "s old, exceeding the ",
+        sprintf("%d", [input.runtime.max_age_seconds]),
+        "s freshness requirement",
+    ])
+}
+
+# ---------------------------------------------------------------------------
+# I-8: AGGREGATE ECONOMIC CONTAINMENT  (added in NEXUS v0.4 / CP.5.APAY)
+# ---------------------------------------------------------------------------
+# Consumable authority - spend, compute, tokens, API quota - aggregates across
+# the whole authority tree, and every descendant's consumption counts against
+# every ancestor's ceiling.
+#
+# Rationale: a per-action limit is the control an attacker never has to break.
+# Consumption is simply distributed across children, counterparties, rails and
+# time until each individual check passes. Containment that is not evaluated on
+# the tree is not containment.
+
+invariant_8_aggregate_containment {
+    not has_economic_ceiling
+}
+
+invariant_8_aggregate_containment {
+    has_economic_ceiling
+    input.exposure.aggregation_scope == "subtree"
+    input.exposure.subtree_committed <= input.economic_ceiling.max_aggregate
+}
+
+has_economic_ceiling {
+    input.economic_ceiling.max_aggregate
+}
+
+violation_i8[msg] {
+    has_economic_ceiling
+    not input.exposure
+    msg := "I-8 VIOLATED: economic ceiling declared with no exposure accounting"
+}
+
+violation_i8[msg] {
+    has_economic_ceiling
+    input.exposure.aggregation_scope != "subtree"
+    msg := concat("", [
+        "I-8 VIOLATED: exposure aggregated at scope '",
+        input.exposure.aggregation_scope,
+        "'; descendant consumption is not counted against this ceiling",
+    ])
+}
+
+violation_i8[msg] {
+    has_economic_ceiling
+    input.exposure.subtree_committed > input.economic_ceiling.max_aggregate
+    msg := "I-8 VIOLATED: committed subtree exposure exceeds the aggregate ceiling"
+}
+
+# ---------------------------------------------------------------------------
 # AGGREGATE
 # ---------------------------------------------------------------------------
 
@@ -310,6 +418,8 @@ invariants_satisfied {
     invariant_4_kill_switch
     invariant_5_owner_of_record
     invariant_6_bias_observable
+    invariant_7_runtime_bound_authority
+    invariant_8_aggregate_containment
 }
 
 all_violations := union({
@@ -319,6 +429,8 @@ all_violations := union({
     violation_i4,
     violation_i5,
     violation_i6,
+    violation_i7,
+    violation_i8,
 })
 
 invariant_violations := all_violations
@@ -329,8 +441,10 @@ aism_score := score {
                  [1 | invariant_3_memory_provenance] |
                  [1 | invariant_4_kill_switch] |
                  [1 | invariant_5_owner_of_record] |
-                 [1 | invariant_6_bias_observable]
-    score := count(satisfied) / 6
+                 [1 | invariant_6_bias_observable] |
+                 [1 | invariant_7_runtime_bound_authority] |
+                 [1 | invariant_8_aggregate_containment]
+    score := count(satisfied) / 8
 }
 
 aism_verdict := "allow" { count(all_violations) == 0 }

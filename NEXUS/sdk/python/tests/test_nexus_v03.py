@@ -1286,10 +1286,19 @@ class TestSAFE2v03Compliance:
         is_valid, violations = agbom.verify_chain_integrity()
         assert is_valid is True
 
-    def test_version_bump_to_0_3_0(self):
-        """SDK version must be bumped to 0.3.0 in __init__."""
+    def test_version_is_at_least_0_3_0(self):
+        """SDK version must be at or above 0.3.0.
+
+        Asserts a floor rather than equality. The original `== "0.3.0"` made
+        every release bump a test failure, which trains maintainers to edit the
+        test to make the suite green - the opposite of what a version guard is
+        for. What this check actually protects is that the v0.3 feature set is
+        present, so a floor is the correct assertion.
+        """
         import nexus_sdk
-        assert nexus_sdk.__version__ == "0.3.0"
+
+        parts = tuple(int(p) for p in nexus_sdk.__version__.split(".")[:3])
+        assert parts >= (0, 3, 0), nexus_sdk.__version__
 
     def test_guardian_module_importable_from_sdk_root(self):
         from nexus_sdk import GuardianPolicy, GuardianVerdict, StepMethod
