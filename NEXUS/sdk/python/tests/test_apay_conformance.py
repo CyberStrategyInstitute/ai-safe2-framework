@@ -188,3 +188,21 @@ def test_positive_vector_must_actually_exercise_declared_tuple():
     )
     assert not report.passed
     assert any(item.control == "support-tuple" for item in report.findings)
+
+
+def test_every_declared_network_asset_pair_requires_positive_coverage():
+    expanded = contract(
+        networks=frozenset({"eip155:8453", "eip155:1"}),
+        assets=frozenset({"usdc", "eurc"}),
+    )
+    report = RailBindingConformanceSuite().evaluate(
+        binding(), expanded,
+        [RailBindingCase(
+            "only one pair", payload(), "sha256:approved",
+            BindingDecision.ACCEPT, BindingDecision.ACCEPT,
+            SettlementFinality.IRREVERSIBLE,
+        )],
+    )
+    assert not report.passed
+    coverage = [item.detail for item in report.findings if item.control == "coverage"]
+    assert coverage and "eip155:1/eurc" in coverage[0]

@@ -138,7 +138,7 @@ class RailBindingConformanceSuite:
             if actual != expected:
                 report.add("contract", control, "binding declaration differs from contract")
 
-        positive_tuple_covered = False
+        covered_pairs: set[tuple[str, str]] = set()
         for case in cases:
             report.cases_run += 1
             self._evaluate_case(binding, contract, case, report)
@@ -166,7 +166,7 @@ class RailBindingConformanceSuite:
                         and actual_tuple.get("asset") in contract.assets
                     )
                 if tuple_matches:
-                    positive_tuple_covered = True
+                    covered_pairs.add((actual_tuple["network"], actual_tuple["asset"]))
                 else:
                     report.add(case.name, "support-tuple",
                                "positive vector does not exercise the declared tuple")
@@ -176,9 +176,17 @@ class RailBindingConformanceSuite:
                            "vector finality differs from the declared support tuple")
         if report.cases_run == 0:
             report.add("contract", "coverage", "at least one conformance case is required")
-        elif not positive_tuple_covered:
+        expected_pairs = {
+            (network, asset)
+            for network in contract.networks
+            for asset in contract.assets
+        }
+        missing_pairs = expected_pairs - covered_pairs
+        if report.cases_run and missing_pairs:
             report.add("contract", "coverage",
-                       "no positive vector covers the complete declared support tuple")
+                       "positive vectors do not cover every declared network/asset pair: "
+                       + ", ".join(f"{network}/{asset}"
+                                   for network, asset in sorted(missing_pairs)))
         return report
 
     def _evaluate_case(
