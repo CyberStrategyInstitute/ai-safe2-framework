@@ -260,14 +260,38 @@ class PaymentIntegrityGateway:
 
         if hear_satisfied_by:
             expected_authority = binding.hear_authority if binding else None
-            if (not expected_authority
-                    or hear_satisfied_by != expected_authority
-                    or not self.human_approval_verifier.verify(
+            try:
+                approval_valid = bool(
+                    expected_authority
+                    and hear_satisfied_by == expected_authority
+                    and self.human_approval_verifier.verify(
                         intent,
                         claimed_authority=hear_satisfied_by,
                         expected_authority=expected_authority,
                         now=now,
-                    )):
+                    )
+                )
+            except Exception as exc:
+                verdict = PaymentVerdict(
+                    decision=PaymentDecision.RECONCILE,
+                    transaction_intent_id=intent.transaction_intent_id,
+                    reason_codes=[PaymentReasonCode.HUMAN_APPROVAL_UNAVAILABLE],
+                    reasoning=f"human approval verifier unavailable: {type(exc).__name__}",
+                    policy_id=self.firewall.policy_id,
+                )
+                self._count(verdict, intent)
+                outcome = PaymentOutcome(
+                    verdict=verdict,
+                    transaction_intent_id=intent.transaction_intent_id,
+                )
+                receipt = self._write_receipt(
+                    intent, verdict, runtime, grant,
+                    authorization=None, settlement=None,
+                    hear_satisfied_by=None,
+                )
+                outcome.receipt_ids.append(receipt.receipt_id)
+                return outcome
+            if not approval_valid:
                 hear_satisfied_by = None
 
         if runtime is not None and runtime.attested:
@@ -450,21 +474,30 @@ class PaymentIntegrityGateway:
             if amount is None:
                 raise ValueError("settled result lacks both amount and spend hold")
             if outcome.reserved_amount is None or amount != outcome.reserved_amount:
-                raise ValueError("settled amount does not match the authorized Spend Hold")
-            self.graph.record_spend(SpendRecord(
-                authority_grant_id=grant.authority_grant_id,
-                delegation_chain_id=grant.delegation_chain_id or "",
-                amount=amount,
-                merchant_id=str(
-                    next((r.fields.get("merchant_id")
-                          for r in self.ledger.for_intent(intent_id)
-                          if r.fields.get("merchant_id")), "unknown")
-                ),
-                occurred_at=now,
-                transaction_intent_id=intent_id,
-                settled=True,
-            ))
-            self.graph.release_reservation(intent_id)
+                self.metrics.transactions_reconciling += 1
+                result = SettlementResult(
+                    state=SettlementState.RECONCILING,
+                    settlement_id=result.settlement_id,
+                    settled_amount=result.settled_amount,
+                    detail=(result.detail + "; " if result.detail else "")
+                    + "rail amount does not match authorized Spend Hold",
+                    settled_at=result.settled_at,
+                )
+            else:
+                self.graph.record_spend(SpendRecord(
+                    authority_grant_id=grant.authority_grant_id,
+                    delegation_chain_id=grant.delegation_chain_id or "",
+                    amount=amount,
+                    merchant_id=str(
+                        next((r.fields.get("merchant_id")
+                              for r in self.ledger.for_intent(intent_id)
+                              if r.fields.get("merchant_id")), "unknown")
+                    ),
+                    occurred_at=now,
+                    transaction_intent_id=intent_id,
+                    settled=True,
+                ))
+                self.graph.release_reservation(intent_id)
         elif result.state == SettlementState.FAILED:
             self.graph.release_reservation(intent_id)
         # AMBIGUOUS deliberately retains the full Spend Hold. Reconciliation

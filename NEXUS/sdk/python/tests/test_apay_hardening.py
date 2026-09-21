@@ -141,16 +141,18 @@ def test_evidence_vault_restores_intent_index(tmp_path):
 
 
 def test_settlement_amount_must_match_spend_hold():
-    import pytest
-
-    _, grant, gateway = system()
+    graph, grant, gateway = system()
     outcome = gateway.authorize(intent(grant, "60.00", "n1"), runtime=runtime(), now=NOW)
-    with pytest.raises(ValueError, match="Spend Hold"):
-        gateway.settle(
-            outcome,
-            SettlementResult(SettlementState.SETTLED, "rail-1", Money.parse("61.00")),
-            now=NOW,
-        )
+    gateway.settle(
+        outcome,
+        SettlementResult(SettlementState.SETTLED, "rail-1", Money.parse("61.00")),
+        now=NOW,
+    )
+    assert outcome.settlement.state == SettlementState.RECONCILING
+    assert graph.subtree_exposure(grant.authority_grant_id).minor_units == 6000
+    assert gateway.ledger.for_intent(outcome.transaction_intent_id)[-1].fields[
+        "settlement_state"
+    ] == SettlementState.RECONCILING
 
 
 def test_unregistered_principal_cannot_authorize():
@@ -186,3 +188,21 @@ def test_explicit_empty_capabilities_carry_no_payment_authority():
         ),
     ))
     assert not gateway.authorize(intent(grant, "1.00", "n-empty"), runtime=runtime(), now=NOW).authorized
+
+
+def test_human_approval_verifier_outage_is_evidenced():
+    class BrokenVerifier:
+        def verify(self, *args, **kwargs):
+            raise TimeoutError("approval service timeout")
+
+    _, grant, gateway = system()
+    gateway.human_approval_verifier = BrokenVerifier()
+    outcome = gateway.authorize(
+        intent(grant, "1.00", "n-approval-outage"),
+        runtime=runtime(),
+        hear_satisfied_by="owner@example.org",
+        now=NOW,
+    )
+    assert not outcome.authorized
+    assert outcome.verdict.decision.value == "reconcile"
+    assert gateway.ledger.for_intent(outcome.transaction_intent_id)
