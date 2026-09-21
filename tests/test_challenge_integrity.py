@@ -221,7 +221,7 @@ def test_failed_descriptor_publish_leaves_no_partial_destination(tmp_path, monke
     def fail_publish(*_args, **_kwargs):
         raise OSError("simulated publish failure")
 
-    monkeypatch.setattr(os, "link", fail_publish)
+    monkeypatch.setattr("safe2.challenge.io._link_open_descriptor", fail_publish)
     with pytest.raises(OSError, match="publish failure"):
         write_text(target, "complete body")
     assert not target.exists()
