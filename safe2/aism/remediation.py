@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from importlib.resources import files
 from typing import Any
 
@@ -132,6 +132,21 @@ def _history(
                     "basis": "current source declaration; completion evidence re-evaluated",
                 }
             )
+    current_ids = _ids(actions)
+    for action_id, old in prior.items():
+        if action_id in current_ids:
+            continue
+        if old.get("status") == "completed":
+            regression = True
+        history.append(
+            {
+                "recorded_at": datetime.now(UTC).isoformat(),
+                "action_id": action_id,
+                "from": old.get("status"),
+                "to": "removed",
+                "basis": "action absent from current source; prior history retained",
+            }
+        )
     return history[-1000:], regression
 
 
@@ -192,6 +207,12 @@ def build(
     accepted_risks = _unique_ids(source["accepted_residual_risks"], "Accepted residual risk")
     assumptions = _ids(assessment.get("assumptions", [])) | source_assumptions
     for risk in source["accepted_residual_risks"]:
+        try:
+            date.fromisoformat(risk["review_date"])
+        except ValueError as exc:
+            raise ValueError(
+                f"Accepted residual risk {risk['id']} has an invalid review date"
+            ) from exc
         if not set(risk["evidence_refs"]) <= evidence:
             raise ValueError(f"Accepted residual risk {risk['id']} cites unavailable evidence")
     for action in actions:

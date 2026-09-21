@@ -9,6 +9,7 @@ from click.testing import CliRunner
 
 from safe2.aism.remediation import build, render_markdown
 from safe2.cli import cli
+from safe2.contracts import validate_artifact
 from safe2.evidence.scope import build as build_scope
 from safe2.evidence.system_identity import ingest as ingest_identity
 
@@ -124,6 +125,14 @@ def test_plan_binds_identity_scope_and_keeps_normative_score_separate():
     assert "## Assumptions" in card
 
 
+def test_plan_contract_rejects_missing_nested_evidence_fields():
+    assessment, identity, scope = artifacts()
+    plan = build(encoded(source(assessment, identity, scope)), assessment, identity, scope)
+    plan["bindings"].pop("assessment_sha256")
+    violations = validate_artifact("aism-remediation-plan-v1", plan)
+    assert any(item["instance_path"] == "$.bindings" for item in violations)
+
+
 def test_binding_change_is_rejected():
     assessment, identity, scope = artifacts()
     value = source(assessment, identity, scope)
@@ -203,6 +212,42 @@ def test_previous_completion_regression_holds():
     assert current["decision"]["gate"] == "hold"
     assert current["history"][-1]["from"] == "completed"
     assert current["history"][-1]["to"] == "planned"
+
+
+def test_removed_completed_action_is_retained_as_a_regression():
+    assessment, identity, scope = artifacts()
+    prior_source = source(assessment, identity, scope)
+    prior_source["actions"][0]["status"] = "completed"
+    prior_source["actions"][0]["completion_evidence_refs"] = ["FACT-001"]
+    previous = build(encoded(prior_source), assessment, identity, scope)
+    current_source = source(assessment, identity, scope)
+    current_source["actions"] = []
+    current = build(encoded(current_source), assessment, identity, scope, encoded(previous))
+    assert current["decision"]["gate"] == "hold"
+    assert current["history"][-1] == {
+        "recorded_at": current["history"][-1]["recorded_at"],
+        "action_id": "ACTION-1",
+        "from": "completed",
+        "to": "removed",
+        "basis": "action absent from current source; prior history retained",
+    }
+
+
+def test_accepted_risk_review_date_must_be_a_real_calendar_date():
+    assessment, identity, scope = artifacts()
+    value = source(assessment, identity, scope)
+    value["accepted_residual_risks"] = [
+        {
+            "id": "RISK-1",
+            "statement": "An outage mode may remain.",
+            "owner": "CISO",
+            "rationale": "Temporary acceptance pending a scheduled control replacement.",
+            "review_date": "2026-13-99",
+            "evidence_refs": ["FACT-001"],
+        }
+    ]
+    with pytest.raises(ValueError, match="evidence contract"):
+        build(encoded(value), assessment, identity, scope)
 
 
 def test_cli_init_and_plan_preserve_outputs_before_strict_exit(tmp_path: Path):

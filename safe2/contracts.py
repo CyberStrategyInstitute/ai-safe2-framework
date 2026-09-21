@@ -81,7 +81,11 @@ def _safe_instance_path(parts: list[object]) -> str:
 def validate_artifact(name: str, artifact: object) -> list[dict[str, str]]:
     """Return redacted structural violations for one packaged contract."""
     schemas = _schemas()
-    validator = Draft202012Validator(schemas[name], registry=_registry(schemas))
+    validator = Draft202012Validator(
+        schemas[name],
+        registry=_registry(schemas),
+        format_checker=Draft202012Validator.FORMAT_CHECKER,
+    )
     violations = sorted(
         validator.iter_errors(artifact),
         key=lambda item: tuple(str(part) for part in item.absolute_path),
