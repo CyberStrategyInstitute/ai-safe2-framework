@@ -4,7 +4,8 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 
 from nexus_sdk.payments import (
-    AssuranceLevel, BindingDecision, RailBindingCase, RailBindingConformanceSuite,
+    AssuranceLevel, BindingDecision, BindingResult, RailBindingCase,
+    RailBindingConformanceSuite,
     RailBindingContract, SettlementFinality, X402V2ExactEVMUSDCBinding,
 )
 
@@ -162,3 +163,28 @@ def test_binding_metadata_must_match_complete_support_tuple():
     )
     assert not report.passed
     assert any(item.control == "protocol-version" for item in report.findings)
+
+
+def test_positive_vector_must_actually_exercise_declared_tuple():
+    class OverPermissive(X402V2ExactEVMUSDCBinding):
+        def verify_authority(self, supplied):
+            return BindingResult(BindingDecision.ACCEPT)
+
+        def bind_transaction(self, supplied, canonical_digest):
+            return BindingResult(
+                BindingDecision.ACCEPT, canonical_digest=canonical_digest
+            )
+
+    wrong = payload()
+    wrong["accepted"]["network"] = "eip155:attacker"
+    report = RailBindingConformanceSuite().evaluate(
+        OverPermissive(networks={"eip155:8453"}, assets={"usdc"}, payees={"0xpayee"}),
+        contract(),
+        [RailBindingCase(
+            "lying positive vector", wrong, "sha256:approved",
+            BindingDecision.ACCEPT, BindingDecision.ACCEPT,
+            SettlementFinality.IRREVERSIBLE,
+        )],
+    )
+    assert not report.passed
+    assert any(item.control == "support-tuple" for item in report.findings)

@@ -145,7 +145,31 @@ class RailBindingConformanceSuite:
             if (case.expected_authority is BindingDecision.ACCEPT
                     and case.expected_binding is BindingDecision.ACCEPT
                     and case.expected_finality == contract.finality):
-                positive_tuple_covered = True
+                actual_tuple = self._invoke_payload(
+                    report, case.name, "support-tuple", binding.support_tuple_of,
+                    case.payload,
+                )
+                expected_tuple = {
+                    "protocol_version": contract.protocol_version,
+                    "scheme": contract.scheme,
+                    "payment_flow": contract.payment_flow,
+                }
+                tuple_matches = isinstance(actual_tuple, dict)
+                if tuple_matches:
+                    tuple_matches = all(
+                        actual_tuple.get(key) == value
+                        for key, value in expected_tuple.items()
+                    )
+                    tuple_matches = (
+                        tuple_matches
+                        and actual_tuple.get("network") in contract.networks
+                        and actual_tuple.get("asset") in contract.assets
+                    )
+                if tuple_matches:
+                    positive_tuple_covered = True
+                else:
+                    report.add(case.name, "support-tuple",
+                               "positive vector does not exercise the declared tuple")
             if (case.expected_finality is not None
                     and case.expected_finality != contract.finality):
                 report.add(case.name, "finality",
