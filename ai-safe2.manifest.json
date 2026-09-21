@@ -20,6 +20,8 @@
     "challenge_bundle_schema": "safe2/data/challenge-bundle-v1.schema.json",
     "challenge_source_schema": "safe2/data/challenge-source-v1.schema.json",
     "challenge_comparison_schema": "safe2/data/challenge-comparison-v1.schema.json",
+    "operational_truth_schema": "safe2/data/operational-truth-manifest-v1.schema.json",
+    "agent_input_change_schema": "safe2/data/change-monitor-v1.schema.json",
     "challenge_001_fixture_protocol": "safe2/data/challenge_001_protocol.json",
     "uas_regulatory_profile": "00-cross-pillar/unbiased-ai/uas-profile-v1.json",
     "nexus_schemas": "NEXUS/schemas/",
@@ -114,7 +116,7 @@
     "dashboard": "dashboard/README.md",
     "cli": {
       "package": "ai-safe2",
-      "version": "0.2.0",
+      "version": "0.7.0",
       "command": "safe2",
       "module": "python -m safe2",
       "entrypoint": "safe2/README.md",
@@ -122,7 +124,9 @@
       "challenge_workflow": "docs/CHALLENGE-CLI.md",
       "challenge_quickstart": "safe2 challenge quickstart 001 --output-dir my-first-run",
       "challenge_verification": "safe2 challenge verify-bundle my-first-run",
-      "evidence_workflow": "safe2 evidence ... then safe2 aism ingest ..."
+      "evidence_workflow": "safe2 evidence ... then safe2 aism ingest ...",
+      "operational_truth_workflow": "safe2 evidence truth POLICY EVIDENCE... --output FILE --card FILE",
+      "agent_input_monitor": "safe2 evidence changes ROOT --baseline FILE --output FILE"
     }
   }
 }

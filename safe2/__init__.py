@@ -5,4 +5,4 @@ from importlib.metadata import PackageNotFoundError, version
 try:
     __version__ = version("ai-safe2")
 except PackageNotFoundError:  # Source checkout before installation.
-    __version__ = "0.6.0.dev0"
+    __version__ = "0.7.0.dev0"

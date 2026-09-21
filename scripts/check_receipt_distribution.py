@@ -14,7 +14,8 @@ def main():
         data = files("safe2").joinpath("data")
         for name in ("task-receipt-demo.json", "task-receipt-demo.txt", "harness-source-demo.json",
                      "system-identity-source-demo.json", "failure-source-demo.json",
-                     "assessment-scope-source-demo.json", "release-readiness-source-demo.json"):
+                     "assessment-scope-source-demo.json", "release-readiness-source-demo.json",
+                     "operational-truth-source-demo.json"):
             (root / name).write_bytes(data.joinpath(name).read_bytes())
 
         def invoke(*arguments):
@@ -31,7 +32,9 @@ def main():
                          "system-identity-manifest-v1", "failure-source-v1", "failure-diagnosis-v1",
                          "assessment-scope-source-v1", "assessment-scope-manifest-v1",
                          "change-attribution-source-v1", "change-attribution-manifest-v1",
-                         "release-readiness-source-v1", "release-readiness-manifest-v1"):
+                         "release-readiness-source-v1", "release-readiness-manifest-v1",
+                         "operational-truth-source-v1", "operational-truth-manifest-v1",
+                         "change-monitor-v1"):
             invoke("schema", "export", contract)
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
@@ -100,7 +103,23 @@ def main():
         assert readiness["status"] == "ready_for_human_decision"
         assert readiness["release_authorized"] is False
         assert readiness_card.is_file()
-    print("Installed distribution: receipts, nineteen schemas, pytest capture, harness intake, system identity, failure localization, assessment scope, change attribution, and release readiness passed")
+        truth_policy = json.loads((root / "operational-truth-source-demo.json").read_text())
+        truth_policy.update(task_id="demo-task", revision="working-tree")
+        truth_policy_path = root / "truth-policy.json"
+        truth_policy_path.write_text(json.dumps(truth_policy), encoding="utf-8")
+        truth_output, truth_card = root / "truth.json", root / "truth.md"
+        truth = invoke("evidence", "truth", str(truth_policy_path), str(harness_output),
+                       "--output", str(truth_output), "--card", str(truth_card))
+        assert truth["gate"] == "review"
+        assert truth["completion_verified"] is False
+        monitor_root = root / "agent-inputs"
+        (monitor_root / "skill").mkdir(parents=True)
+        (monitor_root / "skill" / "SKILL.md").write_text("# Installed smoke skill\nExplain results.\n", encoding="utf-8")
+        monitor_output = root / "agent-input-monitor.json"
+        monitored = invoke("evidence", "changes", str(monitor_root), "--output", str(monitor_output))
+        assert monitored["decision"] == "approve"
+        assert monitored["telemetry"] == "none"
+    print("Installed distribution: receipts, twenty-two schemas, pytest capture, harness intake, operational truth, agent-input monitoring, system identity, failure localization, assessment scope, change attribution, and release readiness passed")
 
 
 if __name__ == "__main__":

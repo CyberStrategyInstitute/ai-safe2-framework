@@ -16,6 +16,9 @@ from safe2.discovery.integrity import verify_inventory
 from safe2.evidence.friction import verify_event
 
 SCHEMA_CONTRACTS = {
+    "safe2.operational-truth-source.v1": "operational-truth-source-v1",
+    "safe2.operational-truth-manifest.v1": "operational-truth-manifest-v1",
+    "safe2.change-monitor.v1": "change-monitor-v1",
     "safe2.assessment-scope-source.v1": "assessment-scope-source-v1",
     "safe2.assessment-scope-manifest.v1": "assessment-scope-manifest-v1",
     "safe2.change-attribution-source.v1": "change-attribution-source-v1",

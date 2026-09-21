@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.6.0-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-0.7.0-F6921E?style=flat-square)](../README.md)
 
 [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
 
@@ -20,6 +20,8 @@
 [Change attribution](../docs/CHANGE-ATTRIBUTION.md)
 
 [Release-readiness card](../docs/RELEASE-READINESS.md)
+
+[Operational truth and agent-input monitoring](../docs/OPERATIONAL-TRUTH.md)
 
 [Framework Home](../README.md) | [AISM](../AISM/README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [Examples](../examples/README.md) | [NEXUS](../NEXUS/)
 
@@ -80,6 +82,8 @@ pytest tests/ scanner/tests/
 | `safe2 evidence scope SOURCE --project-root PATH --system-identity FILE --output FILE [--strict]` | Inventory the declared deployment relationship of repository paths | Metadata-only attributed scope; does not verify build inclusion, execution, or conformance |
 | `safe2 evidence attribute SOURCE --system-identity FILE --baseline-scope FILE --current-scope FILE --output FILE [--strict]` | Attribute normalized findings across a trusted baseline and current revision | Comparison support only; does not prove causation, deployment state, or conformance |
 | `safe2 evidence readiness SOURCE --system-identity FILE --assessment-scope FILE --change-attribution FILE --output FILE --card FILE [--strict]` | Create agent JSON and a human technical release-readiness card | Human decision support only; never authorizes release or claims conformance |
+| `safe2 evidence truth POLICY EVIDENCE... --output FILE --card FILE [--strict]` | Correlate multi-harness task evidence, receipts, usage, coverage and completion claims | Readiness for human decision only; never verifies completion, billing or conformance |
+| `safe2 evidence changes ROOT [--baseline FILE] --output FILE [--strict]` | One-shot local/CI detection of changed skills and agent configuration | No daemon, telemetry or content export; changed configuration requires review |
 | `safe2 aism init FILE` | Create a 30-cell unscored assessment | Missing evidence remains unscored |
 | `safe2 aism ingest BUNDLE...` | Import evidence conservatively | Suggests mappings; requires human confirmation |
 | `safe2 aism score FILE` | Validate and score AISM assessment | Produces agent JSON or human Decision Card |

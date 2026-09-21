@@ -196,6 +196,38 @@ def test_special_file_is_rejected_before_open(tmp_path, monkeypatch):
         read_bytes(target)
 
 
+def test_file_identity_change_during_open_is_rejected(tmp_path, monkeypatch):
+    from safe2.challenge.io import read_bytes
+
+    target = tmp_path / "input.json"
+    target.write_text("fixture", encoding="utf-8")
+    original = os.fstat
+
+    def changed_identity(descriptor):
+        values = list(original(descriptor))
+        values[1] += 1
+        return os.stat_result(values)
+
+    monkeypatch.setattr(os, "fstat", changed_identity)
+    with pytest.raises(ValueError, match="changed identity"):
+        read_bytes(target)
+
+
+def test_failed_descriptor_publish_leaves_no_partial_destination(tmp_path, monkeypatch):
+    from safe2.challenge.io import write_text
+
+    target = tmp_path / "result.json"
+
+    def fail_publish(*_args, **_kwargs):
+        raise OSError("simulated publish failure")
+
+    monkeypatch.setattr("safe2.challenge.io._link_open_descriptor", fail_publish)
+    with pytest.raises(OSError, match="publish failure"):
+        write_text(target, "complete body")
+    assert not target.exists()
+    assert list(tmp_path.iterdir()) == []
+
+
 @pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="POSIX FIFO behavior")
 def test_fifo_rejected_without_waiting_for_writer(tmp_path):
     from safe2.challenge.io import read_bytes
