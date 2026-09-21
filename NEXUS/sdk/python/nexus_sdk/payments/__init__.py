@@ -106,6 +106,10 @@ from nexus_sdk.payments.attestation import (
     NullAttestationVerifier,
 )
 from nexus_sdk.payments.user_control import UserControlDecision, UserControlPolicy
+from nexus_sdk.payments.conformance import (
+    ConformanceFinding, ConformanceReport, RailBindingCase, RailBindingConformanceSuite,
+    RailBindingContract,
+)
 
 __profile_version__ = "CP.5.APAY/0.4"
 
@@ -139,4 +143,7 @@ __all__ = [
     # Runtime Proof and Human Shield
     "AttestationResult", "AttestationVerifier", "HMACTestAttestationVerifier",
     "NullAttestationVerifier", "UserControlDecision", "UserControlPolicy",
+    # RailGuard Contract and Lab
+    "ConformanceFinding", "ConformanceReport", "RailBindingCase",
+    "RailBindingConformanceSuite", "RailBindingContract",
 ]
