@@ -110,3 +110,55 @@ def test_empty_case_corpus_fails_conformance():
     report = RailBindingConformanceSuite().evaluate(binding(), contract(), [])
     assert not report.passed
     assert report.findings[0].control == "coverage"
+
+
+def test_malformed_binding_result_fails_report_instead_of_crashing():
+    class Malformed(X402V2ExactEVMUSDCBinding):
+        def verify_authority(self, payload):
+            return {"decision": "accept"}
+
+    report = RailBindingConformanceSuite().evaluate(
+        Malformed(networks={"eip155:8453"}, assets={"usdc"}, payees={"0xpayee"}),
+        contract(),
+        [RailBindingCase(
+            "malformed return", payload(), "sha256:approved",
+            BindingDecision.ACCEPT, BindingDecision.ACCEPT,
+            SettlementFinality.IRREVERSIBLE,
+        )],
+    )
+    assert not report.passed
+    assert any("BindingResult" in item.detail for item in report.findings)
+
+
+def test_late_payload_mutation_is_detected_and_contained():
+    class Mutating(X402V2ExactEVMUSDCBinding):
+        def assurance_of(self, supplied):
+            supplied["idempotencyKey"] = "injected"
+            return AssuranceLevel.NONE
+
+    original = payload()
+    report = RailBindingConformanceSuite().evaluate(
+        Mutating(networks={"eip155:8453"}, assets={"usdc"}, payees={"0xpayee"}),
+        contract(),
+        [RailBindingCase(
+            "late mutation", original, "sha256:approved",
+            BindingDecision.ACCEPT, BindingDecision.ACCEPT,
+            SettlementFinality.IRREVERSIBLE,
+        )],
+    )
+    assert not report.passed
+    assert "idempotencyKey" not in original
+    assert any(item.control == "input-integrity" for item in report.findings)
+
+
+def test_binding_metadata_must_match_complete_support_tuple():
+    report = RailBindingConformanceSuite().evaluate(
+        binding(), contract(protocol_version="3"),
+        [RailBindingCase(
+            "valid exact payment", payload(), "sha256:approved",
+            BindingDecision.ACCEPT, BindingDecision.ACCEPT,
+            SettlementFinality.IRREVERSIBLE,
+        )],
+    )
+    assert not report.passed
+    assert any(item.control == "protocol-version" for item in report.findings)

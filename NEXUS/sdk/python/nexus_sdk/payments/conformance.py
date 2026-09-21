@@ -124,11 +124,37 @@ class RailBindingConformanceSuite:
         if binding.max_native_assurance != contract.max_native_assurance:
             report.add("contract", "assurance", "binding assurance differs from contract")
 
+        declarations = (
+            ("protocol-version", binding.protocol_version, contract.protocol_version),
+            ("scheme", binding.scheme, contract.scheme),
+            ("payment-flow", binding.payment_flow, contract.payment_flow),
+            ("finality", binding.native_finality, contract.finality),
+            ("authority-mode", binding.authoritative_verification,
+             contract.authoritative_verification),
+            ("networks", frozenset(getattr(binding, "networks", set())), contract.networks),
+            ("assets", frozenset(getattr(binding, "assets", set())), contract.assets),
+        )
+        for control, actual, expected in declarations:
+            if actual != expected:
+                report.add("contract", control, "binding declaration differs from contract")
+
+        positive_tuple_covered = False
         for case in cases:
             report.cases_run += 1
             self._evaluate_case(binding, contract, case, report)
+            if (case.expected_authority is BindingDecision.ACCEPT
+                    and case.expected_binding is BindingDecision.ACCEPT
+                    and case.expected_finality == contract.finality):
+                positive_tuple_covered = True
+            if (case.expected_finality is not None
+                    and case.expected_finality != contract.finality):
+                report.add(case.name, "finality",
+                           "vector finality differs from the declared support tuple")
         if report.cases_run == 0:
             report.add("contract", "coverage", "at least one conformance case is required")
+        elif not positive_tuple_covered:
+            report.add("contract", "coverage",
+                       "no positive vector covers the complete declared support tuple")
         return report
 
     def _evaluate_case(
@@ -139,21 +165,19 @@ class RailBindingConformanceSuite:
         report: ConformanceReport,
     ) -> None:
         original = deepcopy(case.payload)
-        authority = self._invoke(
-            report, case.name, "authority", binding.verify_authority, case.payload
+        authority = self._invoke_payload(
+            report, case.name, "authority", binding.verify_authority, original
         )
-        transaction = self._invoke(
+        transaction = self._invoke_payload(
             report, case.name, "canonical-binding", binding.bind_transaction,
-            case.payload, case.canonical_digest,
+            original, case.canonical_digest,
         )
-        if case.payload != original:
-            report.add(case.name, "input-integrity", "binding mutated caller payload")
         self._expect(report, case.name, "authority", authority, case.expected_authority)
         self._expect(report, case.name, "canonical-binding", transaction,
                      case.expected_binding)
 
         for label, result in (("authority", authority), ("canonical-binding", transaction)):
-            if result is None:
+            if not isinstance(result, BindingResult):
                 continue
             if result.assurance > contract.max_native_assurance:
                 report.add(case.name, "assurance", f"{label} exceeded declared ceiling")
@@ -163,8 +187,8 @@ class RailBindingConformanceSuite:
                 report.add(case.name, "canonical-binding",
                            "accepted result did not return the requested digest")
 
-        assurance = self._invoke(
-            report, case.name, "assurance", binding.assurance_of, case.payload
+        assurance = self._invoke_payload(
+            report, case.name, "assurance", binding.assurance_of, original
         )
         if isinstance(assurance, AssuranceLevel):
             if assurance > contract.max_native_assurance:
@@ -175,17 +199,17 @@ class RailBindingConformanceSuite:
                 report.add(case.name, "assurance", "rejected authority retained assurance")
 
         if case.expected_finality is not None:
-            finality = self._invoke(
-                report, case.name, "finality", binding.finality_of, case.payload
+            finality = self._invoke_payload(
+                report, case.name, "finality", binding.finality_of, original
             )
             if finality is not None and finality != case.expected_finality:
                 report.add(case.name, "finality", "reported finality differs from vector")
 
         # Reconciliation without an idempotency key or resolver must halt. It
         # must never manufacture acceptance from an incomplete payload.
-        if not case.payload.get("idempotencyKey"):
-            reconciliation = self._invoke(
-                report, case.name, "reconciliation", binding.reconcile, case.payload
+        if not original.get("idempotencyKey"):
+            reconciliation = self._invoke_payload(
+                report, case.name, "reconciliation", binding.reconcile, original
             )
             if (reconciliation is not None
                     and reconciliation.decision is not BindingDecision.HALT):
@@ -199,6 +223,15 @@ class RailBindingConformanceSuite:
         except Exception as exc:
             report.add(case, control, f"raised {type(exc).__name__}")
             return None
+
+    @classmethod
+    def _invoke_payload(cls, report: ConformanceReport, case: str, control: str,
+                        function, payload: dict[str, Any], *args):
+        isolated = deepcopy(payload)
+        result = cls._invoke(report, case, control, function, isolated, *args)
+        if isolated != payload:
+            report.add(case, "input-integrity", f"{control} mutated its input payload")
+        return result
 
     @staticmethod
     def _expect(report: ConformanceReport, case: str, control: str,

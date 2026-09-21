@@ -208,6 +208,11 @@ class RailBinding:
     """
 
     protocol: str = "abstract"
+    protocol_version: str = ""
+    scheme: str = ""
+    payment_flow: str = ""
+    native_finality: SettlementFinality = SettlementFinality.IRREVERSIBLE
+    authoritative_verification: bool = False
     rail: PaymentRail = PaymentRail.CARD_NETWORK
     #: The highest assurance this protocol can provide on its own, before any
     #: runtime measurement is added. No protocol here reaches RUNTIME_BOUND.
@@ -279,6 +284,11 @@ class X402V2ExactEVMUSDCBinding(X402Binding):
     """
     human_name = "SafePay Exact"
     technical_name = "X402V2ExactEVMUSDCBinding"
+    protocol_version = "2"
+    scheme = "exact"
+    payment_flow = "authorization"
+    native_finality = SettlementFinality.IRREVERSIBLE
+    authoritative_verification = False
     # Structural validation is not cryptographic authority verification.
     max_native_assurance = AssuranceLevel.NONE
 
