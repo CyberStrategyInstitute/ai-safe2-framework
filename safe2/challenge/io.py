@@ -6,10 +6,33 @@ import json
 import os
 import secrets
 import stat
+import sys
 from pathlib import Path
 from typing import Any
 
 MAX_BYTES = 20_000_000
+
+
+def _link_open_descriptor(descriptor: int, target: Path, temporary: Path) -> None:
+    """Publish an already-synced inode without replacing the destination."""
+    if sys.platform.startswith("linux"):
+        # Python's os.link may select link(2), which treats /proc/self/fd/N as
+        # a procfs inode and fails EXDEV. linkat(2) with AT_SYMLINK_FOLLOW is
+        # the kernel-documented way to bind the destination to the open file.
+        import ctypes
+
+        source = f"/proc/self/fd/{descriptor}".encode()
+        libc = ctypes.CDLL(None, use_errno=True)
+        linkat = libc.linkat
+        linkat.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_int]
+        linkat.restype = ctypes.c_int
+        if linkat(-100, source, -100, os.fsencode(target), 0x400) != 0:  # AT_SYMLINK_FOLLOW
+            error = ctypes.get_errno()
+            raise OSError(error, os.strerror(error), str(target))
+        return
+    # Windows prevents replacement of this CRT-opened file. Other supported
+    # platforms retain the descriptor and verify the published inode below.
+    os.link(temporary, target, follow_symlinks=False)
 
 
 def safe_path(path: str | Path) -> Path:
@@ -99,19 +122,7 @@ def write_text(path: str | Path, value: str) -> None:
             handle.write(encoded)
             handle.flush()
             os.fsync(handle.fileno())
-            if os.name == "posix":
-                # Publish from the open descriptor, not its mutable pathname.
-                # procfs/devfs descriptor links remain bound to this inode even
-                # if another process replaces the temporary directory entry.
-                descriptor_path = Path(f"/proc/self/fd/{handle.fileno()}")
-                if not descriptor_path.exists():
-                    descriptor_path = Path(f"/dev/fd/{handle.fileno()}")
-                os.link(descriptor_path, target, follow_symlinks=True)
-            else:
-                # Windows denies deletion/replacement of this CRT-opened file;
-                # keep the descriptor open through publication and verify both
-                # endpoints immediately afterwards.
-                os.link(temporary, target, follow_symlinks=False)
+            _link_open_descriptor(handle.fileno(), target, temporary)
             published = target.lstat()
             current = os.fstat(handle.fileno())
             if (published.st_dev, published.st_ino) != (current.st_dev, current.st_ino):
