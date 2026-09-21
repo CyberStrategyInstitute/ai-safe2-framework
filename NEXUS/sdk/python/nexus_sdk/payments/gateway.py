@@ -31,7 +31,7 @@ import threading
 from dataclasses import replace
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any, Optional, Protocol
 
 from nexus_sdk.payments.authority import AuthorityGraph, SpendRecord
 from nexus_sdk.payments.attestation import AttestationVerifier, NullAttestationVerifier
@@ -61,6 +61,8 @@ __all__ = [
     "PaymentOutcome",
     "PaymentIntegrityGateway",
     "GatewayMetrics",
+    "HumanApprovalVerifier",
+    "NullHumanApprovalVerifier",
 ]
 
 
@@ -70,6 +72,21 @@ class SettlementState:
     FAILED = "failed"
     AMBIGUOUS = "ambiguous"       # timeout or partial: never retried blindly
     RECONCILING = "reconciling"
+
+
+class HumanApprovalVerifier(Protocol):
+    """Verify fresh, intent-bound human approval outside the agent process."""
+
+    def verify(self, intent: TransactionIntent, *, claimed_authority: str,
+               expected_authority: str, now: datetime) -> bool: ...
+
+
+class NullHumanApprovalVerifier:
+    """Fail-closed default: a caller-supplied name is not approval proof."""
+
+    def verify(self, intent: TransactionIntent, *, claimed_authority: str,
+               expected_authority: str, now: datetime) -> bool:
+        return False
 
 
 @dataclass
@@ -170,7 +187,8 @@ class PaymentIntegrityGateway:
                  broker: Optional[CredentialBroker] = None,
                  ledger: Optional[EvidenceLedger] = None,
                  attestation_verifier: Optional[AttestationVerifier] = None,
-                 user_controls: Optional[UserControlPolicy] = None) -> None:
+                 user_controls: Optional[UserControlPolicy] = None,
+                 human_approval_verifier: Optional[HumanApprovalVerifier] = None) -> None:
         self.graph = graph
         self.firewall = firewall or TransactionFirewall(graph)
         # Default refuses to sign. An unconfigured gateway must not move money.
@@ -178,6 +196,7 @@ class PaymentIntegrityGateway:
         self.ledger = ledger or EvidenceLedger()
         self.attestation_verifier = attestation_verifier or NullAttestationVerifier()
         self.user_controls = user_controls
+        self.human_approval_verifier = human_approval_verifier or NullHumanApprovalVerifier()
         self.metrics = GatewayMetrics()
         self._principals: dict[str, PrincipalBinding] = {}
         self._baselines: dict[str, str] = {}   # agent_did -> expected runtime baseline
@@ -213,9 +232,43 @@ class PaymentIntegrityGateway:
         now = now or utcnow()
         grant = self.graph.get(intent.authority_grant_id)
         expected_baseline = None
+        binding = None
         if grant is not None and grant.agent_did:
             with self._lock:
                 expected_baseline = self._baselines.get(grant.agent_did)
+                binding = self._principals.get(grant.agent_did)
+
+        if (grant is not None and (
+                binding is None
+                or binding.principal_id != grant.principal_id
+                or binding.agent_did != grant.agent_did)):
+            verdict = PaymentVerdict(
+                decision=PaymentDecision.DENY,
+                transaction_intent_id=intent.transaction_intent_id,
+                reason_codes=[PaymentReasonCode.NO_PRINCIPAL_BINDING],
+                reasoning="registered principal binding is missing or does not match the grant",
+                policy_id=self.firewall.policy_id,
+            )
+            self._count(verdict, intent)
+            outcome = PaymentOutcome(verdict=verdict,
+                                     transaction_intent_id=intent.transaction_intent_id)
+            receipt = self._write_receipt(intent, verdict, runtime, grant,
+                                          authorization=None, settlement=None,
+                                          hear_satisfied_by=None)
+            outcome.receipt_ids.append(receipt.receipt_id)
+            return outcome
+
+        if hear_satisfied_by:
+            expected_authority = binding.hear_authority if binding else None
+            if (not expected_authority
+                    or hear_satisfied_by != expected_authority
+                    or not self.human_approval_verifier.verify(
+                        intent,
+                        claimed_authority=hear_satisfied_by,
+                        expected_authority=expected_authority,
+                        now=now,
+                    )):
+                hear_satisfied_by = None
 
         if runtime is not None and runtime.attested:
             proof = self.attestation_verifier.verify(
@@ -396,6 +449,8 @@ class PaymentIntegrityGateway:
             amount = result.settled_amount or outcome.reserved_amount
             if amount is None:
                 raise ValueError("settled result lacks both amount and spend hold")
+            if outcome.reserved_amount is None or amount != outcome.reserved_amount:
+                raise ValueError("settled amount does not match the authorized Spend Hold")
             self.graph.record_spend(SpendRecord(
                 authority_grant_id=grant.authority_grant_id,
                 delegation_chain_id=grant.delegation_chain_id or "",

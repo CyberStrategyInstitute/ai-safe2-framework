@@ -614,7 +614,9 @@ class AuthorityGrant:
     unresolved_ambiguities: list[str] = field(default_factory=list)
     approved_by: Optional[str] = None            # who approved the rendering (APAY-02)
     approval_surface: Optional[str] = None       # which trusted surface rendered it
-    capabilities: set[str] = field(default_factory=set)  # APAY-07 separation of duties
+    capabilities: set[str] = field(
+        default_factory=lambda: {"payment.execute"}
+    )  # APAY-07 separation of duties; an explicit empty set carries no authority
     revoked: bool = False
 
     def __post_init__(self) -> None:

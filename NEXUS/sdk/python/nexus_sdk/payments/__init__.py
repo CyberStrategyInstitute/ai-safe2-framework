@@ -79,6 +79,8 @@ from nexus_sdk.payments.evidence import (
 )
 from nexus_sdk.payments.gateway import (
     GatewayMetrics,
+    HumanApprovalVerifier,
+    NullHumanApprovalVerifier,
     PaymentIntegrityGateway,
     PaymentOutcome,
     SettlementResult,
@@ -127,7 +129,7 @@ __all__ = [
     "REQUIRED_EVIDENCE_FIELDS", "DisclosureTier", "EvidenceLedger", "DurableEvidenceLedger", "PaymentTransactionReceipt",
     # gateway
     "GatewayMetrics", "PaymentIntegrityGateway", "PaymentOutcome", "SettlementResult",
-    "SettlementState",
+    "SettlementState", "HumanApprovalVerifier", "NullHumanApprovalVerifier",
     # OPA binding
     "OPA_INPUT_FIELDS", "build_opa_input",
     # adapters

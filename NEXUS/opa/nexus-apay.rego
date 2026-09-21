@@ -125,7 +125,6 @@ identity_violations["NO_OWNER_OF_RECORD"] {
 # grant actually carries. A grant that can buy cannot therefore refund.
 identity_violations["SEPARATION_OF_DUTIES_VIOLATION"] {
 	caps := object.get(input.grant, "capabilities", [])
-	count(caps) > 0
 	not input.transaction.capability in caps
 }
 
@@ -152,6 +151,11 @@ lifecycle_violations["REVOCATION_STATUS_UNAVAILABLE"] {
 
 lifecycle_violations["REVOCATION_STATUS_UNAVAILABLE"] {
 	not input.revocation
+}
+
+lifecycle_violations["REVOCATION_STATUS_UNAVAILABLE"] {
+	input.revocation.available == true
+	not input.revocation.current_epoch
 }
 
 lifecycle_violations["GRANT_EXPIRED"] {

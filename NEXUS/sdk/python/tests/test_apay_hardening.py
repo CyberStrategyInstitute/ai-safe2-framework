@@ -6,7 +6,7 @@ from datetime import datetime, timedelta, timezone
 from nexus_sdk.payments import (
     AssuranceLevel, AttestationResult, AttestationVerifier, AuthorityConstraints,
     AuthorityGrant, AuthorityGraph, CounterpartyRegistry, DurableEvidenceLedger,
-    InProcessTestBroker, Money, PaymentIntegrityGateway, PaymentRail,
+    InProcessTestBroker, Money, PaymentIntegrityGateway, PaymentRail, PrincipalBinding,
     RevocationPlane, RuntimeMeasurement, SettlementFinality, SettlementResult,
     SettlementState, TransactionFirewall, TransactionIntent, UserControlPolicy,
     X402V2ExactEVMUSDCBinding,
@@ -38,6 +38,10 @@ def system(maximum="100.00", *, user_controls=None, ledger=None):
     gateway = PaymentIntegrityGateway(
         graph, firewall=firewall, broker=InProcessTestBroker(), ledger=ledger,
         attestation_verifier=AcceptFixtureProof(), user_controls=user_controls)
+    gateway.register_principal(PrincipalBinding(
+        principal_id="p", owner_of_record="owner@example.org", agent_did="did:a",
+        hear_authority="owner@example.org",
+    ))
     return graph, grant, gateway
 
 
@@ -126,3 +130,59 @@ def test_evidence_vault_uses_keyed_commitment(tmp_path):
         str(tmp_path / "evidence.jsonl"), integrity_key=b"k" * 32
     )
     assert len(restored) == 1
+
+
+def test_evidence_vault_restores_intent_index(tmp_path):
+    path = str(tmp_path / "indexed.jsonl")
+    ledger = DurableEvidenceLedger(path, integrity_key=b"k" * 32)
+    receipt = ledger.append({"transaction_intent_id": "intent-1", "decision": "allow"})
+    restored = DurableEvidenceLedger(path, integrity_key=b"k" * 32)
+    assert [item.receipt_id for item in restored.for_intent("intent-1")] == [receipt.receipt_id]
+
+
+def test_settlement_amount_must_match_spend_hold():
+    import pytest
+
+    _, grant, gateway = system()
+    outcome = gateway.authorize(intent(grant, "60.00", "n1"), runtime=runtime(), now=NOW)
+    with pytest.raises(ValueError, match="Spend Hold"):
+        gateway.settle(
+            outcome,
+            SettlementResult(SettlementState.SETTLED, "rail-1", Money.parse("61.00")),
+            now=NOW,
+        )
+
+
+def test_unregistered_principal_cannot_authorize():
+    _, grant, gateway = system()
+    gateway._principals.clear()
+    outcome = gateway.authorize(intent(grant, "1.00", "n1"), runtime=runtime(), now=NOW)
+    assert not outcome.authorized
+
+
+def test_caller_supplied_human_name_is_not_approval_proof():
+    controls = UserControlPolicy(confirmation_above=Money.parse("1.00"))
+    _, grant, gateway = system(user_controls=controls)
+    outcome = gateway.authorize(
+        intent(grant, "2.00", "n1"),
+        runtime=runtime(),
+        hear_satisfied_by="owner@example.org",
+        now=NOW,
+    )
+    assert not outcome.authorized
+
+
+def test_explicit_empty_capabilities_carry_no_payment_authority():
+    graph, _, gateway = system()
+    grant = graph.register_root(AuthorityGrant(
+        principal_id="p", agent_did="did:a", capabilities=set(),
+        constraints=AuthorityConstraints(
+            max_transaction=Money.parse("10.00"), currencies={"USD"},
+            allowed_merchants={"m"}, allowed_categories={"cloud"},
+            allowed_geographies={"US"}, allowed_rails={PaymentRail.CARD_NETWORK},
+            allowed_destinations={"acct"}, min_assurance=AssuranceLevel.RUNTIME_BOUND,
+            max_finality=SettlementFinality.REVERSIBLE,
+            not_after=(NOW + timedelta(days=1)).isoformat(),
+        ),
+    ))
+    assert not gateway.authorize(intent(grant, "1.00", "n-empty"), runtime=runtime(), now=NOW).authorized

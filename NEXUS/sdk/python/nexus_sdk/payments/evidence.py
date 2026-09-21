@@ -344,6 +344,9 @@ class DurableEvidenceLedger(EvidenceLedger):
                 if receipt.content_hash() != record.get("content_hash"):
                     raise ValueError(f"Evidence Vault content hash failure at line {line_number}")
                 self._receipts.append(receipt)
+                intent_id = receipt.fields.get("transaction_intent_id")
+                if intent_id:
+                    self._by_intent.setdefault(intent_id, []).append(receipt.receipt_id)
         intact, problems = self.verify_chain()
         if not intact:
             raise ValueError("Evidence Vault chain failure: " + "; ".join(problems))

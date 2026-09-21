@@ -239,7 +239,7 @@ class TransactionFirewall:
             )
 
         # 4. Separation of duties (APAY-07).
-        if grant.capabilities and intent.capability not in grant.capabilities:
+        if intent.capability not in grant.capabilities:
             reasons.append(PaymentReasonCode.SEPARATION_OF_DUTIES_VIOLATION)
 
         # 5. Runtime binding (APAY-05).
