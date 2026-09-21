@@ -25,6 +25,7 @@ Examples demonstrate implementation patterns. They do not create framework confo
 | Example | Stack | What It Governs |
 |---|---|---|
 | [`aism-decision-card/`](./aism-decision-card/) | AISM Decision Support | Executable assessment demonstrating evidence-aware AISM scoring and a human Decision Card. |
+| [`aism-remediation/`](./aism-remediation/) | AISM Remediation Decision Support | Executable evidence-bound AISM remediation plan with ownership, alternatives, exit criteria, history, and human decision gates. |
 | [`anti-gravity-sovereign-runtime/`](./anti-gravity-sovereign-runtime/) | Anti-Gravity | Sovereign runtime defense package for Anti-Gravity agent deployments. |
 | [`autogen-sovereign-runtime/`](./autogen-sovereign-runtime/) | Microsoft AutoGen | Governance wrapper for AutoGen multi-agent orchestration. |
 | [`claude-code-sovereign-runtime/`](./claude-code-sovereign-runtime/) | Claude Code | Hardens agentic coding sessions against unsafe tool execution, scope creep, and drift. |

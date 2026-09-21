@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "id": "aism-remediation",
+  "stack": "AISM Remediation Decision Support",
+  "status": "executable",
+  "framework_version": "3.1.0",
+  "expected": {
+    "gate": "ready_for_human_decision",
+    "remediation_authorized": false,
+    "conformance_claim": false
+  }
+}

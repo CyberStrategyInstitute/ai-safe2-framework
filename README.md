@@ -202,6 +202,8 @@ safe2 evidence truth operational-truth-policy.json harness-evidence.json task-re
 safe2 evidence changes . --baseline prior-agent-inputs.json --output current-agent-inputs.json --strict
 safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "NEXUS Local" --output assessment.json
 safe2 aism score assessment.json --format markdown --output decision-card.md
+safe2 aism remediation-init assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --decision-owner "Accountable system owner" --output remediation-source.json
+safe2 aism plan remediation-source.json assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --output remediation-plan.json --card remediation-card.md --strict
 ```
 
 `safe2 doctor` provides metadata-only discovery for multi-harness workstations,
@@ -223,6 +225,15 @@ The AISM Decision Card separates facts, assumptions, conflicts, unknowns,
 alternatives, history, and recommendations. Machine-readable JSON remains the
 canonical exchange format. An automated pass is not a claim of full framework
 conformance or organizational maturity.
+
+CLI 0.8 binds proposed remediation to the exact assessment, system identity,
+and deployment scope. It validates control and AISM-cell traceability,
+evidence, assumptions, owners, dependencies, alternatives, impacts, exit
+criteria, completion evidence, residual risk, and status history. It never
+executes or authorizes the proposed work and never increases the normative AISM
+score merely because an action is marked complete.
+
+See the [AISM implementation and remediation guide](docs/AISM-REMEDIATION.md).
 
 See the executable [AISM Decision Card example](examples/aism-decision-card/).
 See the executable [environment Decision Card workflow](examples/environment-decision-card/).

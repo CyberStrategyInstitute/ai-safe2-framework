@@ -167,6 +167,8 @@ safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "N
 safe2 aism score assessment.json --format markdown --output decision-card.md
 safe2 aism score assessment.json --format json --output decision.json
 safe2 aism compare previous.json current.json
+safe2 aism remediation-init assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --decision-owner "CISO" --output remediation-source.json
+safe2 aism plan remediation-source.json assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --output remediation-plan.json --card remediation-card.md --strict
 ```
 
 `ingest` preserves the provider bundle, suggests candidate cells, and requires human confirmation. It never converts scanner presence or endpoint availability directly into maturity ratings. Unverified evidence is explicitly capped in the supplemental decision-support score.
@@ -178,6 +180,15 @@ support. It does not create another maturity level or claim conformance.
 Probability ranges must name an outcome, time horizon, method, and confidence.
 When comparable evidence does not exist, the correct result is `NOT ESTIMABLE`,
 not an invented percentage.
+
+CLI 0.8 adds a separate remediation contract. Each action must name applicable
+AI SAFE² controls and AISM cells, available evidence, stated assumptions, an
+owner, dependencies, alternatives, impacts, exit criteria, and residual risk.
+Completed actions require available completion evidence. Reassessment records
+status transitions without silently changing the normative maturity score or
+authorizing implementation.
+
+See the [AISM remediation guide](../docs/AISM-REMEDIATION.md).
 
 See the executable [Decision Card example](../examples/aism-decision-card/).
 

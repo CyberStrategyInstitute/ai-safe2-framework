@@ -121,6 +121,9 @@ Release gate:
 
 ## CLI 0.8: AISM implementation decisions and remediation
 
+**Status:** Implemented in CLI 0.8.0; validation and release workflow complete
+before merge.
+
 **User outcome:** Translate system and operational evidence into an actionable,
 human-owned improvement decision.
 

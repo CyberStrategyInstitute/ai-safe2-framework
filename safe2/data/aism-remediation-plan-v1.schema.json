@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/aism-remediation-plan-v1.json",
+  "title": "AISM implementation remediation plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "created_at", "plan_id", "subject", "decision_owner", "source", "bindings", "assessment", "gaps", "assumptions", "actions", "alternatives", "accepted_residual_risks", "history", "summary", "decision", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.aism-remediation-plan.v1"},
+    "created_at": {"type": "string", "format": "date-time"}, "plan_id": {"type": "string"}, "subject": {"type": "object"}, "decision_owner": {"type": "string"},
+    "source": {"type": "object"}, "bindings": {"type": "object"}, "assessment": {"type": "object"},
+    "gaps": {"type": "array", "maxItems": 30, "items": {"type": "object"}},
+    "assumptions": {"type": "array", "maxItems": 200, "items": {"$ref": "https://aisafe2.dev/schemas/aism-remediation-source-v1.json#/$defs/statement"}},
+    "actions": {"type": "array", "maxItems": 500, "items": {"$ref": "https://aisafe2.dev/schemas/aism-remediation-source-v1.json#/$defs/action"}},
+    "alternatives": {"type": "array", "maxItems": 100, "items": {"$ref": "https://aisafe2.dev/schemas/aism-remediation-source-v1.json#/$defs/alternative"}},
+    "accepted_residual_risks": {"type": "array", "maxItems": 200, "items": {"$ref": "https://aisafe2.dev/schemas/aism-remediation-source-v1.json#/$defs/risk"}},
+    "history": {"type": "array", "items": {"type": "object"}}, "summary": {"type": "object"},
+    "decision": {"type": "object", "required": ["gate", "reason", "human_owned", "remediation_authorized", "conformance_claim"], "properties": {"gate": {"enum": ["hold", "review", "ready_for_human_decision"]}, "reason": {"type": "string"}, "human_owned": {"const": true}, "remediation_authorized": {"const": false}, "conformance_claim": {"const": false}}, "additionalProperties": false},
+    "limitations": {"type": "array", "minItems": 4, "items": {"type": "string"}}
+  }
+}

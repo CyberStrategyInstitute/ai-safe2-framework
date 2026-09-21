@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.7.0-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-0.8.0-F6921E?style=flat-square)](../README.md)
 
 [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
 
@@ -84,6 +84,8 @@ pytest tests/ scanner/tests/
 | `safe2 evidence readiness SOURCE --system-identity FILE --assessment-scope FILE --change-attribution FILE --output FILE --card FILE [--strict]` | Create agent JSON and a human technical release-readiness card | Human decision support only; never authorizes release or claims conformance |
 | `safe2 evidence truth POLICY EVIDENCE... --output FILE --card FILE [--strict]` | Correlate multi-harness task evidence, receipts, usage, coverage and completion claims | Readiness for human decision only; never verifies completion, billing or conformance |
 | `safe2 evidence changes ROOT [--baseline FILE] --output FILE [--strict]` | One-shot local/CI detection of changed skills and agent configuration | No daemon, telemetry or content export; changed configuration requires review |
+| `safe2 aism remediation-init ASSESSMENT --system-identity FILE --assessment-scope FILE --decision-owner NAME --output FILE` | Create a source template bound to the exact AISM, system-identity, and deployment-scope artifacts | Produces no recommendation and authorizes no action |
+| `safe2 aism plan SOURCE ASSESSMENT --system-identity FILE --assessment-scope FILE --output FILE --card FILE [--previous FILE] [--strict]` | Validate evidence-bound remediation actions, dependencies, alternatives, residual risk, completion evidence, and history | Keeps normative AISM scoring and human authorization separate |
 | `safe2 aism init FILE` | Create a 30-cell unscored assessment | Missing evidence remains unscored |
 | `safe2 aism ingest BUNDLE...` | Import evidence conservatively | Suggests mappings; requires human confirmation |
 | `safe2 aism score FILE` | Validate and score AISM assessment | Produces agent JSON or human Decision Card |
