@@ -114,6 +114,9 @@ from nexus_sdk.payments.conformance import (
     ConformanceFinding, ConformanceReport, RailBindingCase, RailBindingConformanceSuite,
     RailBindingContract,
 )
+from nexus_sdk.payments.x402_variable import (
+    EscrowPhase, VariableCharge, X402V2EscrowBinding, X402V2UptoBinding,
+)
 
 __profile_version__ = "CP.5.APAY/0.4"
 
@@ -152,4 +155,5 @@ __all__ = [
     # RailGuard Contract and Lab
     "ConformanceFinding", "ConformanceReport", "RailBindingCase",
     "RailBindingConformanceSuite", "RailBindingContract",
+    "EscrowPhase", "VariableCharge", "X402V2EscrowBinding", "X402V2UptoBinding",
 ]

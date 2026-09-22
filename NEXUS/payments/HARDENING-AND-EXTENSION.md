@@ -61,6 +61,15 @@ The included fixture verifier is test evidence only. Production deployments must
 inject a mutually authenticated facilitator client or independently operated
 chain verifier and protect its trust roots outside the agent process.
 
+**SafePay Variable** (`X402V2UptoBinding`) preserves the distinction between the
+client-signed ceiling and the server-metered actual charge, accepting zero or
+partial settlement only when `actual <= ceiling`. **SafePay Escrow**
+(`X402V2EscrowBinding`) models the separate deposit and claim/refund settles,
+requires deposit before resource execution, and requires an authenticated
+voucher even for a zero-charge refund. Its reference phase store is in-memory;
+production deployments must use durable, transactional channel state so restart
+or concurrency cannot replay a deposit or claim.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 
