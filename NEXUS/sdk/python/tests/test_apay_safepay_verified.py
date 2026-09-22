@@ -77,3 +77,27 @@ def test_settlement_amount_substitution_is_rejected():
             evidence = super().settlement(request)
             return X402SettlementEvidence(**{**evidence.__dict__, "amount": "101"})
     assert binding(WrongAmount()).verify_settlement(payload()).decision is BindingDecision.REJECT
+
+
+def test_successful_settlement_without_amount_evidence_is_rejected():
+    class MissingAmount(FixtureVerifier):
+        def settlement(self, request):
+            evidence = super().settlement(request)
+            return X402SettlementEvidence(**{**evidence.__dict__, "amount": None})
+    assert binding(MissingAmount()).verify_settlement(payload()).decision is BindingDecision.REJECT
+
+
+def test_settlement_cannot_bypass_binding_allowlists():
+    supplied = payload()
+    supplied["accepted"]["payTo"] = "0xattacker"
+    supplied["paymentRequirements"]["payTo"] = "0xattacker"
+    result = binding().verify_settlement(supplied)
+    assert result.decision is BindingDecision.REJECT
+    assert result.assurance.value == 0
+
+
+def test_settlement_cannot_bypass_signature_requirement():
+    supplied = payload()
+    del supplied["payload"]["signature"]
+    result = binding().verify_settlement(supplied)
+    assert result.decision is BindingDecision.REJECT

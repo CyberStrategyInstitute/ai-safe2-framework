@@ -504,6 +504,17 @@ class X402V2ExactEVMUSDCAuthoritativeBinding(X402V2ExactEVMUSDCBinding):
         return self.max_native_assurance if result.decision is BindingDecision.ACCEPT else AssuranceLevel.NONE
 
     def verify_settlement(self, payload: dict) -> BindingResult:
+        authority = self.verify_authority(payload)
+        if authority.decision is not BindingDecision.ACCEPT:
+            return BindingResult(
+                BindingDecision.HALT if authority.decision is BindingDecision.HALT
+                else BindingDecision.REJECT,
+                assurance=AssuranceLevel.NONE,
+                finality=SettlementFinality.IRREVERSIBLE,
+                reason="settlement refused because authority validation failed: "
+                + authority.reason,
+                findings=list(authority.findings),
+            )
         request = self._request(payload)
         digest = self._request_digest(request)
         try:
@@ -519,7 +530,9 @@ class X402V2ExactEVMUSDCAuthoritativeBinding(X402V2ExactEVMUSDCBinding):
             findings.append("settlement response authority is untrusted")
         if evidence.network != accepted.get("network"):
             findings.append("settlement network mismatch")
-        if evidence.amount is not None and evidence.amount != str(accepted.get("amount", "")):
+        if evidence.amount is None:
+            findings.append("successful settlement lacks amount evidence")
+        elif evidence.amount != str(accepted.get("amount", "")):
             findings.append("settlement amount mismatch")
         if evidence.success and not evidence.transaction:
             findings.append("successful settlement lacks transaction identifier")
