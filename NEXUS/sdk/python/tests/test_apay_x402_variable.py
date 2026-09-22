@@ -15,7 +15,10 @@ class Verifier:
         amount = str(req["amount"])
         return X402SettlementEvidence(True, "trusted", digest, req["network"],
                                       "" if amount == "0" else "0xtx",
-                                      amount=amount, authenticated=True)
+                                      amount=amount, authenticated=True,
+                                      voucher_authenticated=bool(
+                                          request["paymentPayload"].get("payload", {}).get("voucherSignature")
+                                      ))
 
 
 def upto(actual="60", ceiling="100"):
@@ -69,3 +72,27 @@ def test_escrow_zero_charge_refund_still_requires_voucher():
     assert binding.settle_phase(escrow_payload("deposit")).decision is BindingDecision.ACCEPT
     assert binding.settle_phase(escrow_payload("claim", "0")).decision is BindingDecision.REJECT
     assert binding.settle_phase(escrow_payload("claim", "0", "voucher")).decision is BindingDecision.ACCEPT
+
+
+def test_variable_rejects_noncanonical_atomic_amounts():
+    supplied = upto(actual="01")
+    assert variable().verify_variable_settlement(supplied).decision is BindingDecision.REJECT
+
+
+def test_escrow_rejects_over_ceiling_and_disallowed_route():
+    binding = escrow()
+    assert binding.settle_phase(escrow_payload("deposit", "101")).decision is BindingDecision.REJECT
+    supplied = escrow_payload("deposit")
+    supplied["accepted"]["payTo"] = "attacker"
+    supplied["paymentRequirements"]["payTo"] = "attacker"
+    assert binding.settle_phase(supplied).decision is BindingDecision.REJECT
+
+
+def test_escrow_verifier_outage_halts():
+    class Down(Verifier):
+        def settlement(self, request):
+            raise TimeoutError
+    binding = X402V2EscrowBinding(
+        verifier=Down(), trusted_facilitators={"trusted"}, networks={"solana:main"},
+        assets={"usdc"}, payees={"payee"})
+    assert binding.settle_phase(escrow_payload("deposit")).decision is BindingDecision.HALT

@@ -38,6 +38,14 @@ class X402V2UptoBinding(X402V2ExactEVMUSDCAuthoritativeBinding):
     technical_name = "X402V2UptoBinding"
     scheme = "upto"
 
+    @staticmethod
+    def _atomic(value) -> int:
+        if not isinstance(value, str) or not value.isdigit():
+            raise ValueError("amount is not a canonical atomic-unit string")
+        if len(value) > 1 and value.startswith("0"):
+            raise ValueError("amount has a non-canonical leading zero")
+        return int(value)
+
     def _charge(self, payload: dict) -> tuple[VariableCharge | None, list[str]]:
         findings: list[str] = []
         accepted = payload.get("accepted") or {}
@@ -54,8 +62,8 @@ class X402V2UptoBinding(X402V2ExactEVMUSDCAuthoritativeBinding):
         if not signed.get("signature") or not permit:
             findings.append("Permit2 signature or authorization missing")
         try:
-            ceiling = int(permitted["amount"])
-            actual = int(requirements["amount"])
+            ceiling = self._atomic(permitted["amount"])
+            actual = self._atomic(requirements["amount"])
         except (KeyError, TypeError, ValueError):
             findings.append("ceiling and actual amount must be atomic-unit integers")
             return None, findings
@@ -135,12 +143,20 @@ class X402V2EscrowBinding(X402V2UptoBinding):
         if not channel or phase not in {"deposit", "claim"}:
             return BindingResult(BindingDecision.REJECT,
                                  reason="channelId and explicit deposit/claim type required")
+        findings = self._escrow_findings(payload, phase)
+        if findings:
+            return BindingResult(BindingDecision.REJECT, findings=findings,
+                                 reason="; ".join(findings))
         with self._lock:
             current = self._phases.get(channel, EscrowPhase.NEW)
             if phase == "deposit":
                 if current is not EscrowPhase.NEW:
                     return BindingResult(BindingDecision.REJECT, reason="duplicate escrow deposit")
-                result = self.verifier.settlement(self._request(payload))
+                try:
+                    result = self.verifier.settlement(self._request(payload))
+                except Exception as exc:
+                    return BindingResult(BindingDecision.HALT,
+                                         reason=f"escrow verifier unavailable: {type(exc).__name__}")
                 if not self._trusted_settlement(payload, result):
                     return BindingResult(BindingDecision.REJECT, reason="deposit evidence rejected")
                 self._phases[channel] = EscrowPhase.DEPOSITED
@@ -150,7 +166,11 @@ class X402V2EscrowBinding(X402V2UptoBinding):
                 return BindingResult(BindingDecision.REJECT, reason="claim before deposit")
             if not signed.get("voucherSignature"):
                 return BindingResult(BindingDecision.REJECT, reason="claim/refund voucher missing")
-            result = self.verifier.settlement(self._request(payload))
+            try:
+                result = self.verifier.settlement(self._request(payload))
+            except Exception as exc:
+                return BindingResult(BindingDecision.HALT,
+                                     reason=f"escrow verifier unavailable: {type(exc).__name__}")
             if not self._trusted_settlement(payload, result):
                 return BindingResult(BindingDecision.REJECT, reason="claim evidence rejected")
             self._phases[channel] = EscrowPhase.CLOSED
@@ -159,8 +179,39 @@ class X402V2EscrowBinding(X402V2UptoBinding):
 
     def _trusted_settlement(self, payload: dict, evidence) -> bool:
         request = self._request(payload)
-        return bool(evidence.success and evidence.authenticated
+        signed = payload.get("payload") or {}
+        amount = str((payload.get("paymentRequirements") or {}).get("amount"))
+        transaction_ok = amount == "0" or bool(evidence.transaction)
+        voucher_ok = signed.get("type") == "deposit" or evidence.voucher_authenticated
+        return bool(evidence.success and evidence.authenticated and voucher_ok and transaction_ok
                     and evidence.request_digest == self._request_digest(request)
                     and evidence.facilitator_id in self.trusted_facilitators
                     and evidence.network == (payload.get("accepted") or {}).get("network")
                     and evidence.amount == str((payload.get("paymentRequirements") or {}).get("amount")))
+
+    def _escrow_findings(self, payload: dict, phase: str) -> list[str]:
+        accepted = payload.get("accepted") or {}
+        requirements = payload.get("paymentRequirements") or {}
+        signed = payload.get("payload") or {}
+        findings: list[str] = []
+        if accepted.get("scheme") != "upto" or requirements.get("scheme") != "upto":
+            findings.append("scheme is not upto")
+        if accepted.get("network") not in self.networks:
+            findings.append("network not allowlisted")
+        if accepted.get("asset") not in self.assets or accepted.get("payTo") not in self.payees:
+            findings.append("asset or payee not allowlisted")
+        if ((accepted.get("extra") or {}).get("paymentFlow") != "escrow"):
+            findings.append("payment flow is not escrow")
+        try:
+            ceiling = self._atomic(accepted["amount"])
+            actual = self._atomic(requirements["amount"])
+        except (KeyError, ValueError):
+            findings.append("ceiling and actual amount must be canonical atomic-unit strings")
+            return findings
+        if actual > ceiling:
+            findings.append("escrow settlement exceeds signed ceiling")
+        if phase == "deposit" and actual != ceiling:
+            findings.append("deposit must commit the full ceiling")
+        if phase == "claim" and not signed.get("voucherSignature"):
+            findings.append("claim/refund voucher missing")
+        return findings
