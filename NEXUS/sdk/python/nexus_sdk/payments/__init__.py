@@ -11,10 +11,9 @@ The agent-to-payment enforcement plane.
     authority tree when it may not.
 
 STATUS
-    Core enforcement (objects, mandate, authority, firewall, broker, evidence,
-    gateway) is implemented as a reference. Rail bindings in `adapters` remain
-    fail-closed except for the narrow, shadow-only SafePay Exact structural
-    x402 profile; see adapters.py and payments/HARDENING-AND-EXTENSION.md.
+    Core enforcement is implemented as a reference. Narrow SafePay and Mandate
+    Bridge profiles have explicit verifier boundaries; remaining rail contracts
+    fail closed. See adapters.py and payments/HARDENING-AND-EXTENSION.md.
 
     Nothing in this package should be described as production-assured until a
     deployment demonstrates the MVP acceptance gates in NEXUS/payments/README.md.
@@ -117,6 +116,10 @@ from nexus_sdk.payments.conformance import (
 from nexus_sdk.payments.x402_variable import (
     EscrowPhase, VariableCharge, X402V2EscrowBinding, X402V2UptoBinding,
 )
+from nexus_sdk.payments.ap2 import (
+    AP2AuthoritativeVerifier, AP2ReceiptEvidence, AP2V02Binding,
+    AP2VerificationEvidence,
+)
 
 __profile_version__ = "CP.5.APAY/0.4"
 
@@ -156,4 +159,7 @@ __all__ = [
     "ConformanceFinding", "ConformanceReport", "RailBindingCase",
     "RailBindingConformanceSuite", "RailBindingContract",
     "EscrowPhase", "VariableCharge", "X402V2EscrowBinding", "X402V2UptoBinding",
+    # Mandate Bridge
+    "AP2AuthoritativeVerifier", "AP2ReceiptEvidence", "AP2V02Binding",
+    "AP2VerificationEvidence",
 ]

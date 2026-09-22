@@ -70,6 +70,20 @@ voucher even for a zero-charge refund. Its reference phase store is in-memory;
 production deployments must use durable, transactional channel state so restart
 or concurrency cannot replay a deposit or claim.
 
+**Mandate Bridge** (`AP2V02Binding`) is a narrow AP2 v0.2 profile for one
+configured direct or autonomous flow. It enforces exact mandate type versions,
+checkout-to-payment hash continuity, audience and currency allowlists, expiry,
+NEXUS authority continuity, autonomous open-mandate key confirmation, and
+explicit selective disclosures before invoking a trusted deterministic verifier.
+That verifier—not the agent—must authenticate SD-JWT/JWS signatures, the
+merchant checkout JWT, constraint evaluation, key confirmation, and replay or
+single-use state. Signed receipt verification is a separate evidence step.
+
+Mandate Bridge deliberately does not parse or trust cryptographic claims inside
+the agent process. Production deployments must inject an independently operated
+verifier with protected trust roots and durable replay, budget, recurrence, and
+receipt state. AP2 mandate assurance remains below Runtime Proof.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 
