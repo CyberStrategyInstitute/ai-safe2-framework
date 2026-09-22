@@ -122,6 +122,31 @@ def test_receipts_must_be_signed_and_bound_by_authenticated_verifier():
             is BindingDecision.REJECT)
 
 
+def test_malformed_nested_objects_reject_without_raising():
+    for section in ("extensions", "paymentMandate"):
+        item = payload()
+        item[section] = "attacker-controlled"
+        assert binding().verify_authority(item).decision is BindingDecision.REJECT
+        assert binding().bind_transaction(item, "sha256:cart").decision is BindingDecision.REJECT
+        assert binding().assurance_of(item) is AssuranceLevel.NONE
+        assert isinstance(binding().support_tuple_of(item), dict)
+    item = payload()
+    item["extensions"]["nexus"] = ["not", "an", "object"]
+    assert binding().verify_authority(item).decision is BindingDecision.REJECT
+
+
+def test_offsetless_authority_expiry_is_rejected():
+    item = payload()
+    item["extensions"]["nexus"]["expiresAt"] = "2030-01-01T00:00:00"
+    assert binding().verify_authority(item).decision is BindingDecision.REJECT
+
+
+def test_receipts_cannot_bypass_invalid_or_expired_mandates():
+    item = payload()
+    item["paymentMandate"]["vct"] = "mandate.payment.2"
+    assert binding().verify_receipts(item).decision is BindingDecision.REJECT
+
+
 def test_mandate_bridge_passes_railguard_lab():
     item = payload()
     contract = RailBindingContract(

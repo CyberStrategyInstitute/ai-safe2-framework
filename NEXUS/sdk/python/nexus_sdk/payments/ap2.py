@@ -138,12 +138,26 @@ class AP2V02Binding(RailBinding):
                 findings.append(f"{label} Mandate is expired or lacks a valid exp")
             if not isinstance(mandate.get("iss"), str) or not mandate.get("iss"):
                 findings.append(f"{label} Mandate issuer is required")
-        nexus = ((payload.get("extensions") or {}).get("nexus") or {})
+        extensions = payload.get("extensions")
+        if not isinstance(extensions, dict):
+            findings.append("extensions must be an object")
+            nexus: dict = {}
+        else:
+            supplied_nexus = extensions.get("nexus")
+            if not isinstance(supplied_nexus, dict):
+                findings.append("extensions.nexus must be an object")
+                nexus = {}
+            else:
+                nexus = supplied_nexus
         for claim in ("authorityGrantDigest", "revocationEpoch", "nonce", "expiresAt"):
             if nexus.get(claim) in (None, ""):
                 findings.append(f"missing nexus.{claim}")
         try:
-            expires = datetime.fromisoformat(str(nexus.get("expiresAt", "")).replace("Z", "+00:00"))
+            expires = datetime.fromisoformat(
+                str(nexus.get("expiresAt", "")).replace("Z", "+00:00")
+            )
+            if expires.tzinfo is None or expires.utcoffset() is None:
+                raise ValueError("timezone required")
             if expires.timestamp() <= now:
                 findings.append("NEXUS authority binding expired")
         except ValueError:
@@ -169,8 +183,10 @@ class AP2V02Binding(RailBinding):
         return findings
 
     def support_tuple_of(self, payload: dict) -> dict[str, str]:
-        payment = payload.get("paymentMandate") or {}
-        amount = payment.get("payment_amount") or {}
+        supplied_payment = payload.get("paymentMandate")
+        payment = supplied_payment if isinstance(supplied_payment, dict) else {}
+        supplied_amount = payment.get("payment_amount")
+        amount = supplied_amount if isinstance(supplied_amount, dict) else {}
         return {
             "protocol_version": str(payload.get("ap2Version", "")),
             "scheme": self.scheme,
@@ -215,8 +231,9 @@ class AP2V02Binding(RailBinding):
         authority = self.verify_authority(payload)
         if authority.decision is not BindingDecision.ACCEPT:
             return authority
-        bound = (((payload.get("extensions") or {}).get("nexus") or {})
-                 .get("canonicalDigest"))
+        extensions = payload.get("extensions")
+        nexus = extensions.get("nexus") if isinstance(extensions, dict) else None
+        bound = nexus.get("canonicalDigest") if isinstance(nexus, dict) else None
         if bound != canonical_digest:
             return BindingResult(BindingDecision.REJECT,
                                  reason="canonical transaction digest mismatch",
@@ -228,6 +245,16 @@ class AP2V02Binding(RailBinding):
                              reason="AP2 mandates bound to canonical transaction")
 
     def verify_receipts(self, payload: dict) -> BindingResult:
+        authority = self.verify_authority(payload)
+        if authority.decision is not BindingDecision.ACCEPT:
+            return BindingResult(
+                authority.decision,
+                assurance=AssuranceLevel.NONE,
+                finality=self.native_finality,
+                reason="receipt verification refused because mandate validation failed: "
+                + authority.reason,
+                findings=list(authority.findings),
+            )
         receipts = payload.get("receipts")
         if (not isinstance(receipts, dict) or not receipts.get("checkout")
                 or not receipts.get("payment")):
