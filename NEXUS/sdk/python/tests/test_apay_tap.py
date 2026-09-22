@@ -46,7 +46,7 @@ def binding(verifier=None):
     return VisaTAPBinding(
         verifier=verifier or Verifier(), trusted_verifiers={"trusted"},
         authorities={"merchant.example"}, algorithms={"Ed25519"},
-        payment_container_types={"network-token"},
+        payment_container_types={"network-token"}, now=lambda: 1790100100,
     )
 
 
@@ -110,6 +110,50 @@ def test_malformed_nested_values_fail_closed_without_mutation():
         item[field] = "attacker-controlled"
         assert binding().verify_authority(item).decision is BindingDecision.REJECT
     assert original == payload()
+
+    for field, value in (
+        ("coveredComponents", [{"attacker": True}]),
+        ("alg", {"attacker": True}),
+    ):
+        item = payload()
+        item["signatureInput"][field] = value
+        assert binding().verify_authority(item).decision is BindingDecision.REJECT
+    item = payload()
+    item["agenticPaymentContainer"]["type"] = ["network-token"]
+    assert binding().verify_authority(item).decision is BindingDecision.REJECT
+
+
+def test_verifier_reason_cannot_overwrite_failed_check():
+    class Collision(Verifier):
+        def verify(self, request):
+            evidence = super().verify(request)
+            return TAPVerificationEvidence(
+                **{**evidence.__dict__, "payment_container_valid": False,
+                   "invalid_reason": "payment container signature or binding is invalid"}
+            )
+    assert binding(Collision()).verify_authority(payload()).decision is BindingDecision.REJECT
+
+
+def test_single_use_nonce_is_verified_once_for_idempotent_evaluation():
+    class SingleUse(Verifier):
+        def __init__(self):
+            self.calls = 0
+
+        def verify(self, request):
+            self.calls += 1
+            if self.calls > 1:
+                return TAPVerificationEvidence(
+                    False, "trusted", VisaTAPBinding._request_digest(request),
+                    authenticated=True, invalid_reason="replay",
+                )
+            return super().verify(request)
+
+    verifier = SingleUse()
+    profile = binding(verifier)
+    assert profile.verify_authority(payload()).decision is BindingDecision.ACCEPT
+    assert profile.bind_transaction(payload(), "sha256:cart").decision is BindingDecision.ACCEPT
+    assert profile.assurance_of(payload()) is AssuranceLevel.SIGNED_REQUEST
+    assert verifier.calls == 1
 
 
 def test_card_trust_bridge_passes_railguard_lab():
