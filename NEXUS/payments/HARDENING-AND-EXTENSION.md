@@ -97,6 +97,12 @@ SSRF-safe discovery, and payment-container binding. Recognition establishes at
 most Signed Request assurance. It does not prove user mandate, uncompromised
 runtime, payment authorization, or settlement.
 
+Production callers should use `bind_transaction` as the single verification and
+canonical-binding operation. Every invocation reaches the durable replay
+verifier; no accepted nonce is cached. The non-consuming `assurance_of` query
+therefore reports `NONE`; verified assurance is returned only in the operation's
+`BindingResult`.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 

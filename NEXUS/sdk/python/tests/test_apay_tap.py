@@ -46,7 +46,7 @@ def binding(verifier=None):
     return VisaTAPBinding(
         verifier=verifier or Verifier(), trusted_verifiers={"trusted"},
         authorities={"merchant.example"}, algorithms={"Ed25519"},
-        payment_container_types={"network-token"}, now=lambda: 1790100100,
+        payment_container_types={"network-token"},
     )
 
 
@@ -134,7 +134,7 @@ def test_verifier_reason_cannot_overwrite_failed_check():
     assert binding(Collision()).verify_authority(payload()).decision is BindingDecision.REJECT
 
 
-def test_single_use_nonce_is_verified_once_for_idempotent_evaluation():
+def test_each_submission_reaches_single_use_nonce_enforcement():
     class SingleUse(Verifier):
         def __init__(self):
             self.calls = 0
@@ -150,10 +150,10 @@ def test_single_use_nonce_is_verified_once_for_idempotent_evaluation():
 
     verifier = SingleUse()
     profile = binding(verifier)
-    assert profile.verify_authority(payload()).decision is BindingDecision.ACCEPT
     assert profile.bind_transaction(payload(), "sha256:cart").decision is BindingDecision.ACCEPT
-    assert profile.assurance_of(payload()) is AssuranceLevel.SIGNED_REQUEST
-    assert verifier.calls == 1
+    assert profile.bind_transaction(payload(), "sha256:cart").decision is BindingDecision.REJECT
+    assert profile.assurance_of(payload()) is AssuranceLevel.NONE
+    assert verifier.calls == 2
 
 
 def test_card_trust_bridge_passes_railguard_lab():

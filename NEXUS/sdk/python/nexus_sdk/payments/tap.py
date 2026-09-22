@@ -3,9 +3,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import threading
-import time
-from copy import deepcopy
 from dataclasses import dataclass
 from typing import Optional, Protocol
 
@@ -54,16 +51,13 @@ class VisaTAPBinding(RailBinding):
     def __init__(self, *, verifier: TAPAuthoritativeVerifier,
                  trusted_verifiers: set[str], authorities: set[str],
                  algorithms: set[str], payment_container_types: set[str],
-                 status_resolver=None, now=None):
+                 status_resolver=None):
         self.verifier = verifier
         self.trusted_verifiers = set(trusted_verifiers)
         self.networks = set(authorities)
         self.assets = set(payment_container_types)
         self.algorithms = set(algorithms)
         self.status_resolver = status_resolver
-        self._now = now or time.time
-        self._authority_cache: dict[str, tuple[int, BindingResult]] = {}
-        self._cache_lock = threading.RLock()
 
     @staticmethod
     def _request(payload: dict) -> dict:
@@ -166,43 +160,34 @@ class VisaTAPBinding(RailBinding):
                                  findings=findings)
         request = self._request(payload)
         digest = self._request_digest(request)
-        expires = self._object(payload.get("signatureInput")).get("expires")
-        with self._cache_lock:
-            cached = self._authority_cache.get(digest)
-            if cached is not None and self._now() < cached[0]:
-                return deepcopy(cached[1])
-            self._authority_cache.pop(digest, None)
-            try:
-                evidence = self.verifier.verify(request)
-            except Exception as exc:
-                return BindingResult(BindingDecision.HALT,
-                                     reason=f"TAP verifier unavailable: {type(exc).__name__}")
-            checks = [
-                ("verification response is unauthenticated", evidence.authenticated),
-                ("HTTP message signature is invalid", evidence.signature_valid),
-                ("signed request components do not match", evidence.covered_components_valid),
-                ("signature freshness check failed", evidence.freshness_valid),
-                ("nonce replay/relay check failed", evidence.replay_safe),
-                ("agent key is not trusted", evidence.key_trusted),
-                ("key discovery did not enforce SSRF controls", evidence.discovery_ssrf_safe),
-                ("payment container signature or binding is invalid",
-                 evidence.payment_container_valid),
-                ("verification evidence request digest mismatch",
-                 evidence.request_digest == digest),
-                ("untrusted TAP verifier", evidence.verifier_id in self.trusted_verifiers),
-                (evidence.invalid_reason or "TAP verifier rejected request", evidence.valid),
-            ]
-            findings = [message for message, passed in checks if not passed]
-            result = BindingResult(
-                BindingDecision.REJECT if findings else BindingDecision.ACCEPT,
-                assurance=(AssuranceLevel.NONE if findings else self.max_native_assurance),
-                finality=self.native_finality,
-                reason="; ".join(findings) or "authenticated TAP request accepted",
-                findings=findings,
-            )
-            if result.decision is BindingDecision.ACCEPT and isinstance(expires, int):
-                self._authority_cache[digest] = (expires, deepcopy(result))
-            return result
+        try:
+            evidence = self.verifier.verify(request)
+        except Exception as exc:
+            return BindingResult(BindingDecision.HALT,
+                                 reason=f"TAP verifier unavailable: {type(exc).__name__}")
+        checks = [
+            ("verification response is unauthenticated", evidence.authenticated),
+            ("HTTP message signature is invalid", evidence.signature_valid),
+            ("signed request components do not match", evidence.covered_components_valid),
+            ("signature freshness check failed", evidence.freshness_valid),
+            ("nonce replay/relay check failed", evidence.replay_safe),
+            ("agent key is not trusted", evidence.key_trusted),
+            ("key discovery did not enforce SSRF controls", evidence.discovery_ssrf_safe),
+            ("payment container signature or binding is invalid",
+             evidence.payment_container_valid),
+            ("verification evidence request digest mismatch",
+             evidence.request_digest == digest),
+            ("untrusted TAP verifier", evidence.verifier_id in self.trusted_verifiers),
+            (evidence.invalid_reason or "TAP verifier rejected request", evidence.valid),
+        ]
+        findings = [message for message, passed in checks if not passed]
+        return BindingResult(
+            BindingDecision.REJECT if findings else BindingDecision.ACCEPT,
+            assurance=(AssuranceLevel.NONE if findings else self.max_native_assurance),
+            finality=self.native_finality,
+            reason="; ".join(findings) or "authenticated TAP request accepted",
+            findings=findings,
+        )
 
     def bind_transaction(self, payload: dict, canonical_digest: str) -> BindingResult:
         authority = self.verify_authority(payload)
@@ -221,9 +206,9 @@ class VisaTAPBinding(RailBinding):
                              reason="TAP request bound to canonical transaction")
 
     def assurance_of(self, payload: dict) -> AssuranceLevel:
-        result = self.verify_authority(payload)
-        return (self.max_native_assurance
-                if result.decision is BindingDecision.ACCEPT else AssuranceLevel.NONE)
+        # This query must not consume replay state. Callers obtain the verified
+        # assurance from verify_authority/bind_transaction's BindingResult.
+        return AssuranceLevel.NONE
 
     def finality_of(self, payload: dict) -> SettlementFinality:
         findings = self._findings(payload)
