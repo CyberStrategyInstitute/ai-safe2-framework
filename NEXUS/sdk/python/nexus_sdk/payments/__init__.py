@@ -11,9 +11,9 @@ The agent-to-payment enforcement plane.
     authority tree when it may not.
 
 STATUS
-    Core enforcement is implemented as a reference. Narrow SafePay and Mandate
-    Bridge profiles have explicit verifier boundaries; remaining rail contracts
-    fail closed. See adapters.py and payments/HARDENING-AND-EXTENSION.md.
+    Core enforcement is implemented as a reference. Narrow SafePay, Mandate
+    Bridge, and Card Trust Bridge profiles have explicit verifier boundaries;
+    remaining rail contracts fail closed. See HARDENING-AND-EXTENSION.md.
 
     Nothing in this package should be described as production-assured until a
     deployment demonstrates the MVP acceptance gates in NEXUS/payments/README.md.
@@ -120,6 +120,9 @@ from nexus_sdk.payments.ap2 import (
     AP2AuthoritativeVerifier, AP2ReceiptEvidence, AP2V02Binding,
     AP2VerificationEvidence,
 )
+from nexus_sdk.payments.tap import (
+    TAPAuthoritativeVerifier, TAPVerificationEvidence, VisaTAPBinding,
+)
 
 __profile_version__ = "CP.5.APAY/0.4"
 
@@ -162,4 +165,6 @@ __all__ = [
     # Mandate Bridge
     "AP2AuthoritativeVerifier", "AP2ReceiptEvidence", "AP2V02Binding",
     "AP2VerificationEvidence",
+    # Card Trust Bridge
+    "TAPAuthoritativeVerifier", "TAPVerificationEvidence", "VisaTAPBinding",
 ]
