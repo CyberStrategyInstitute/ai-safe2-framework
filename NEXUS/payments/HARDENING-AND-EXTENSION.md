@@ -45,6 +45,22 @@ Every implemented rail binding must pass RailGuard Lab before it can be describe
 as supported. Reports intentionally omit payloads and retain only case names and
 control findings so conformance evidence does not become payment-data leakage.
 
+### SafePay Verified
+
+**SafePay Verified** (`X402V2ExactEVMUSDCAuthoritativeBinding`) adds an
+authoritative-verifier boundary for x402 v2 exact EVM payments. Authenticated
+verification and settlement evidence must bind the exact facilitator request
+digest. Facilitator identity is allowlisted; successful settlement must match the
+approved network and amount and include a transaction identifier. Verifier
+outages halt instead of falling back to structural assurance.
+
+The interface follows the x402 Foundation v2 specification's read-only
+`POST /verify` and state-committing `POST /settle` split:
+<https://github.com/x402-foundation/x402/blob/main/specs/x402-specification-v2.md>.
+The included fixture verifier is test evidence only. Production deployments must
+inject a mutually authenticated facilitator client or independently operated
+chain verifier and protect its trust roots outside the agent process.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 

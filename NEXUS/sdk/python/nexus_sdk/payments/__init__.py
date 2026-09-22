@@ -100,6 +100,10 @@ from nexus_sdk.payments.adapters import (
     TrustedAgentBinding,
     X402Binding,
     X402V2ExactEVMUSDCBinding,
+    X402VerificationEvidence,
+    X402SettlementEvidence,
+    X402AuthoritativeVerifier,
+    X402V2ExactEVMUSDCAuthoritativeBinding,
 )
 from nexus_sdk.payments.attestation import (
     AttestationResult, AttestationVerifier, HMACTestAttestationVerifier,
@@ -140,6 +144,8 @@ __all__ = [
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
     "RailBinding", "TrustedAgentBinding", "X402Binding", "X402V2ExactEVMUSDCBinding",
+    "X402VerificationEvidence", "X402SettlementEvidence", "X402AuthoritativeVerifier",
+    "X402V2ExactEVMUSDCAuthoritativeBinding",
     # Runtime Proof and Human Shield
     "AttestationResult", "AttestationVerifier", "HMACTestAttestationVerifier",
     "NullAttestationVerifier", "UserControlDecision", "UserControlPolicy",
