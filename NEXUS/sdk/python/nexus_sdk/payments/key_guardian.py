@@ -73,6 +73,7 @@ class RuntimeAuthorizationReceipt:
     verified_at: str
     authenticator_id: str
     proof: str
+    verifier_profile_digest: str = ""
 
 
 @dataclass(frozen=True)
@@ -159,6 +160,7 @@ class ReferenceKeyGuardianService:
                  state_store: CredentialReleaseStateStore,
                  receipt_authenticator: ReceiptAuthenticator,
                  trusted_policy_digests: Mapping[str, str],
+                 trusted_runtime_verifier_digests: Mapping[str, str],
                  revocation_epoch: Callable[[str], int],
                  now: Callable[[], datetime] = utcnow,
                  max_receipt_age_seconds: int = 120) -> None:
@@ -166,6 +168,7 @@ class ReferenceKeyGuardianService:
         self.state_store = state_store
         self.receipt_authenticator = receipt_authenticator
         self.trusted_policy_digests = dict(trusted_policy_digests)
+        self.trusted_runtime_verifier_digests = dict(trusted_runtime_verifier_digests)
         self.revocation_epoch = revocation_epoch
         self.now = now
         self.max_receipt_age_seconds = max_receipt_age_seconds
@@ -242,6 +245,8 @@ class ReferenceKeyGuardianService:
             or runtime.runtime_measurement_id != canonical.runtime_measurement_id
             or runtime.canonical_digest != canonical.canonical_digest
             or runtime.signing_digest != signing_digest
+            or self.trusted_runtime_verifier_digests.get(runtime.verifier_id)
+            != runtime.verifier_profile_digest
         ):
             self._refuse(
                 PaymentReasonCode.ATTESTATION_VERIFICATION_FAILED,
@@ -347,6 +352,7 @@ class InProcessHMACReceiptAuthenticator:
             "accepted": receipt.accepted,
             "verified_at": receipt.verified_at,
             "authenticator_id": receipt.authenticator_id,
+            "verifier_profile_digest": receipt.verifier_profile_digest,
         }
 
     def seal_policy(self, receipt: PolicyAuthorizationReceipt) -> str:

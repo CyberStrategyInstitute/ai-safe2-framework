@@ -124,6 +124,12 @@ from nexus_sdk.payments.policy_authority import (
     PolicyDefinition,
     PolicyReceiptIssuer,
 )
+from nexus_sdk.payments.runtime_verifier import (
+    IndependentRuntimeVerifier,
+    RuntimeReceiptIssuer,
+    RuntimeVerificationDecision,
+    RuntimeVerifierProfile,
+)
 from nexus_sdk.payments.adapters import (
     AP2Binding,
     AgenticTokenBinding,
@@ -209,6 +215,9 @@ __all__ = [
     # Independent deterministic policy issuance
     "DeterministicPolicyAuthority", "PolicyAuthorityDecision",
     "PolicyDefinition", "PolicyReceiptIssuer",
+    # Independent runtime attestation verification
+    "IndependentRuntimeVerifier", "RuntimeReceiptIssuer",
+    "RuntimeVerificationDecision", "RuntimeVerifierProfile",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
