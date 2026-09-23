@@ -163,8 +163,10 @@ def test_preflight_does_not_consume_replay_but_binding_does_once():
 
     profile = binding(SingleUse())
     assert profile.verify_authority(payload()).decision is BindingDecision.ACCEPT
+    mismatch = profile.bind_transaction(payload(), "sha256:attacker")
     first = profile.bind_transaction(payload(), "sha256:transaction")
     replay = profile.bind_transaction(payload(), "sha256:transaction")
+    assert mismatch.decision is BindingDecision.REJECT
     assert first.decision is BindingDecision.ACCEPT
     assert replay.decision is BindingDecision.REJECT
 

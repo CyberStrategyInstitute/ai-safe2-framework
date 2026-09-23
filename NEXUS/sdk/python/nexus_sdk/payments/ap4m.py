@@ -221,15 +221,15 @@ class MastercardAP4MBinding(RailBinding):
         return self._verify_authority(payload, consume_replay=False)
 
     def bind_transaction(self, payload: dict, canonical_digest: str) -> BindingResult:
-        authority = self._verify_authority(payload, consume_replay=True)
-        if authority.decision is not BindingDecision.ACCEPT:
-            return authority
         extensions = self._object(payload.get("extensions"))
         nexus = self._object(extensions.get("nexus"))
         if nexus.get("canonicalDigest") != canonical_digest:
             return BindingResult(BindingDecision.REJECT,
                                  reason="canonical transaction digest mismatch",
                                  findings=["canonical transaction digest mismatch"])
+        authority = self._verify_authority(payload, consume_replay=True)
+        if authority.decision is not BindingDecision.ACCEPT:
+            return authority
         return BindingResult(BindingDecision.ACCEPT,
                              assurance=self.max_native_assurance,
                              finality=self.native_finality,
