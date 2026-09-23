@@ -2,7 +2,7 @@
 
 **Continuous Transaction Integrity and Authority Assurance for autonomous systems**
 
-[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM) | [NEXUS](../README.md) | [Adapter Guide](ADAPTER-GUIDE.md) | [Threat Model](THREAT-MODEL.md) | [Controls](CONTROLS.md) | [Challenge Lab](CHALLENGE-LAB.md)
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM) | [NEXUS](../README.md) | [Adapter Guide](ADAPTER-GUIDE.md) | [Sovereign Payment Gateway](SOVEREIGN-GATEWAY.md) | [Threat Model](THREAT-MODEL.md) | [Controls](CONTROLS.md) | [Challenge Lab](CHALLENGE-LAB.md)
 
 **Previous:** [← NEXUS](../README.md) | **Next:** [Gateway / Runtime Enforcement →](../../gateway)
 
