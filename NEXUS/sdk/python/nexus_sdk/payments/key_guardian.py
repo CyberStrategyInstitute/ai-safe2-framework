@@ -19,11 +19,10 @@ from typing import NoReturn, Protocol
 from nexus_sdk.payments.broker import BrokerRefusal, SignedAuthorization
 from nexus_sdk.payments.execution_plane import (
     ComponentAssurance,
+    CredentialReleaseStateStore,
     ExecutionRecord,
     ExecutionState,
     ReplayDecision,
-    SettlementStateStore,
-    TransactionalReplayStore,
 )
 from nexus_sdk.payments.objects import (
     CanonicalTransaction,
@@ -156,15 +155,13 @@ class ReferenceKeyGuardianService:
     assurance = ComponentAssurance.REFERENCE
 
     def __init__(self, *, backend: ProtectedSigningBackend,
-                 replay_store: TransactionalReplayStore,
-                 execution_store: SettlementStateStore,
+                 state_store: CredentialReleaseStateStore,
                  receipt_authenticator: ReceiptAuthenticator,
                  revocation_epoch: Callable[[str], int],
                  now: Callable[[], datetime] = utcnow,
                  max_receipt_age_seconds: int = 120) -> None:
         self.backend = backend
-        self.replay_store = replay_store
-        self.execution_store = execution_store
+        self.state_store = state_store
         self.receipt_authenticator = receipt_authenticator
         self.revocation_epoch = revocation_epoch
         self.now = now
@@ -201,7 +198,7 @@ class ReferenceKeyGuardianService:
         ):
             self._refuse(PaymentReasonCode.FAIL_CLOSED_DEFAULT, "receipt is stale or out of order")
 
-        persisted = self.execution_store.get(execution.execution_id)
+        persisted = self.state_store.get(execution.execution_id)
         if persisted != execution:
             self._refuse(
                 PaymentReasonCode.EXPOSURE_RESERVATION_FAILED,
@@ -255,11 +252,17 @@ class ReferenceKeyGuardianService:
                 PaymentReasonCode.STALE_REVOCATION_EPOCH,
                 "revocation epoch changed or could not be reproduced at the guardian",
             )
-        replay = self.replay_store.consume(
+        replay = self.state_store.consume_reserved_release(
+            execution=execution,
             namespace="key-guardian",
             key=canonical.idempotency_key,
             digest=signing_digest,
         )
+        if replay is None:
+            self._refuse(
+                PaymentReasonCode.EXPOSURE_RESERVATION_FAILED,
+                "exposure reservation is missing, released, committed, or changed",
+            )
         if replay is not ReplayDecision.ACCEPTED:
             self._refuse(
                 PaymentReasonCode.REPLAY_DETECTED,

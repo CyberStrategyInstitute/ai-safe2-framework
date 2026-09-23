@@ -89,6 +89,7 @@ from nexus_sdk.payments.gateway import (
 from nexus_sdk.payments.opa_input import OPA_INPUT_FIELDS, build_opa_input
 from nexus_sdk.payments.execution_plane import (
     ComponentAssurance,
+    CredentialReleaseStateStore,
     ExecutionRecord,
     ExecutionState,
     ExecutionTransitionError,
@@ -190,6 +191,7 @@ __all__ = [
     "ComponentAssurance", "ExecutionRecord", "ExecutionState",
     "ExecutionTransitionError", "GatewayReadiness", "NEXUSPaymentExecutionPlane",
     "ReplayDecision",
+    "CredentialReleaseStateStore",
     "SettlementStateStore", "TransactionalAuthorityStore", "TransactionalReplayStore",
     "ExposureCeilingExceededError", "SQLiteGatewayStateStore", "StateConflictError",
     # Isolated credential release

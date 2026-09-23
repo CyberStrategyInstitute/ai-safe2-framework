@@ -44,18 +44,19 @@ def canonical(*, amount: int = 5000, epoch: int = 0) -> CanonicalTransaction:
     )
 
 
-def envelope(transaction: CanonicalTransaction | None = None) -> CredentialReleaseEnvelope:
+def envelope(transaction: CanonicalTransaction | None = None,
+             execution: ExecutionRecord | None = None) -> CredentialReleaseEnvelope:
     transaction = transaction or canonical()
-    execution = ExecutionRecord(
-        execution_id="execution-1",
-        transaction_intent_id=transaction.transaction_intent_id,
-        canonical_digest=transaction.canonical_digest,
-        idempotency_key=transaction.idempotency_key,
-        authority_grant_id=transaction.authority_grant_id,
-        revocation_epoch=transaction.revocation_epoch,
-    ).transition(ExecutionState.POLICY_ACCEPTED).transition(
-        ExecutionState.RESERVED, reservation_id="reservation-1"
-    )
+    execution = execution or ExecutionRecord(
+            execution_id="execution-1",
+            transaction_intent_id=transaction.transaction_intent_id,
+            canonical_digest=transaction.canonical_digest,
+            idempotency_key=transaction.idempotency_key,
+            authority_grant_id=transaction.authority_grant_id,
+            revocation_epoch=transaction.revocation_epoch,
+        ).transition(ExecutionState.POLICY_ACCEPTED).transition(
+            ExecutionState.RESERVED, reservation_id="reservation-1"
+        )
     signing_digest = transaction.signing_digest()
     authenticator = InProcessHMACReceiptAuthenticator()
     policy = PolicyAuthorizationReceipt(
@@ -89,24 +90,42 @@ def envelope(transaction: CanonicalTransaction | None = None) -> CredentialRelea
     )
 
 
-def service(tmp_path, request, backend=None):
+def configured(tmp_path, transaction=None, backend=None):
+    transaction = transaction or canonical()
     store = SQLiteGatewayStateStore(tmp_path / "guardian.db")
-    if store.get(request.execution.execution_id) is None:
-        store.create(request.execution)
-    return ReferenceKeyGuardianService(
+    initial = ExecutionRecord(
+        execution_id="execution-1",
+        transaction_intent_id=transaction.transaction_intent_id,
+        canonical_digest=transaction.canonical_digest,
+        idempotency_key=transaction.idempotency_key,
+        authority_grant_id=transaction.authority_grant_id,
+        revocation_epoch=transaction.revocation_epoch,
+    )
+    store.create(initial)
+    accepted = initial.transition(ExecutionState.POLICY_ACCEPTED)
+    assert store.compare_and_swap(expected=initial, updated=accepted)
+    reservation_id = store.reserve(
+        accepted,
+        amount_minor=transaction.amount.minor_units,
+        currency=transaction.amount.currency,
+        ceilings_minor={"grant-1": transaction.amount.minor_units},
+    )
+    reserved = accepted.transition(ExecutionState.RESERVED, reservation_id=reservation_id)
+    assert store.compare_and_swap(expected=accepted, updated=reserved)
+    request = envelope(transaction, reserved)
+    guardian = ReferenceKeyGuardianService(
         backend=backend or InProcessHMACTestBackend(),
-        replay_store=store,
-        execution_store=store,
+        state_store=store,
         receipt_authenticator=InProcessHMACReceiptAuthenticator(),
         revocation_epoch=store.current_revocation_epoch,
         now=lambda: datetime(2026, 9, 23, 0, 0, 30, tzinfo=timezone.utc),
     )
+    return request, guardian
 
 
 def test_guardian_signs_only_fully_bound_reserved_execution(tmp_path):
     backend = InProcessHMACTestBackend()
-    request = envelope()
-    guardian = service(tmp_path, request, backend)
+    request, guardian = configured(tmp_path, backend=backend)
     authorization = guardian.release(request)
     assert backend.verify(authorization)
     assert authorization.transaction_intent_id == "intent-1"
@@ -121,36 +140,35 @@ def test_default_client_refuses_without_isolated_transport():
 
 
 def test_policy_denial_never_reaches_signer(tmp_path):
-    request = envelope()
+    request, guardian = configured(tmp_path)
     request = replace(
         request,
         policy=replace(request.policy, decision=PaymentDecision.DENY),
     )
     with pytest.raises(BrokerRefusal) as refusal:
-        service(tmp_path, request).release(request)
+        guardian.release(request)
     assert refusal.value.code is PaymentReasonCode.FAIL_CLOSED_DEFAULT
 
 
 def test_unverified_runtime_never_reaches_signer(tmp_path):
-    request = envelope()
+    request, guardian = configured(tmp_path)
     request = replace(request, runtime=replace(request.runtime, accepted=False))
     with pytest.raises(BrokerRefusal) as refusal:
-        service(tmp_path, request).release(request)
+        guardian.release(request)
     assert refusal.value.code is PaymentReasonCode.ATTESTATION_VERIFICATION_FAILED
 
 
 def test_amount_mutation_breaks_policy_and_runtime_binding(tmp_path):
-    approved = envelope()
+    approved, guardian = configured(tmp_path)
     changed = canonical(amount=5001)
     attacked = replace(approved, canonical=changed)
     with pytest.raises(BrokerRefusal) as refusal:
-        service(tmp_path, attacked).release(attacked)
+        guardian.release(attacked)
     assert refusal.value.code is PaymentReasonCode.FAIL_CLOSED_DEFAULT
 
 
 def test_stale_or_unreproducible_revocation_epoch_refuses(tmp_path):
-    request = envelope()
-    guardian = service(tmp_path, request)
+    request, guardian = configured(tmp_path)
     guardian.revocation_epoch = lambda _: 1
     with pytest.raises(BrokerRefusal) as refusal:
         guardian.release(request)
@@ -158,7 +176,7 @@ def test_stale_or_unreproducible_revocation_epoch_refuses(tmp_path):
 
 
 def test_release_requires_durable_reservation(tmp_path):
-    request = envelope()
+    request, guardian = configured(tmp_path)
     unreserved = ExecutionRecord(
         execution_id="execution-1",
         transaction_intent_id="intent-1",
@@ -168,14 +186,13 @@ def test_release_requires_durable_reservation(tmp_path):
         revocation_epoch=0,
     ).transition(ExecutionState.POLICY_ACCEPTED)
     with pytest.raises(BrokerRefusal) as refusal:
-        service(tmp_path, request).release(replace(request, execution=unreserved))
+        guardian.release(replace(request, execution=unreserved))
     assert refusal.value.code is PaymentReasonCode.EXPOSURE_RESERVATION_FAILED
 
 
 def test_second_release_is_rejected_before_signing(tmp_path):
     backend = InProcessHMACTestBackend()
-    request = envelope()
-    guardian = service(tmp_path, request, backend)
+    request, guardian = configured(tmp_path, backend=backend)
     guardian.release(request)
     with pytest.raises(BrokerRefusal) as refusal:
         guardian.release(request)
@@ -183,16 +200,15 @@ def test_second_release_is_rejected_before_signing(tmp_path):
 
 
 def test_forged_policy_receipt_is_rejected(tmp_path):
-    request = envelope()
+    request, guardian = configured(tmp_path)
     forged = replace(request, policy=replace(request.policy, decision_id="forged"))
     with pytest.raises(BrokerRefusal) as refusal:
-        service(tmp_path, request).release(forged)
+        guardian.release(forged)
     assert refusal.value.code is PaymentReasonCode.FAIL_CLOSED_DEFAULT
 
 
 def test_unpersisted_reservation_copy_is_rejected(tmp_path):
-    request = envelope()
-    guardian = service(tmp_path, request)
+    request, guardian = configured(tmp_path)
     forged_execution = replace(request.execution, reservation_id="reservation-forged")
     with pytest.raises(BrokerRefusal) as refusal:
         guardian.release(replace(request, execution=forged_execution))
@@ -200,8 +216,18 @@ def test_unpersisted_reservation_copy_is_rejected(tmp_path):
 
 
 def test_stale_receipt_is_rejected(tmp_path):
-    request = envelope()
+    request, guardian = configured(tmp_path)
     stale = replace(request, policy=replace(request.policy, evaluated_at="2026-09-22T00:00:00+00:00"))
     with pytest.raises(BrokerRefusal) as refusal:
-        service(tmp_path, request).release(stale)
+        guardian.release(stale)
     assert refusal.value.code is PaymentReasonCode.FAIL_CLOSED_DEFAULT
+
+
+def test_released_reservation_cannot_sign(tmp_path):
+    request, guardian = configured(tmp_path)
+    getattr(guardian.state_store, "release")(
+        request.execution.reservation_id, reason="user cancelled"
+    )
+    with pytest.raises(BrokerRefusal) as refusal:
+        guardian.release(request)
+    assert refusal.value.code is PaymentReasonCode.EXPOSURE_RESERVATION_FAILED
