@@ -140,6 +140,45 @@ class SQLiteGatewayStateStore:
                 else ReplayDecision.CONFLICT
             )
 
+    def consume_reserved_release(self, *, execution: ExecutionRecord,
+                                 namespace: str, key: str,
+                                 digest: str) -> ReplayDecision | None:
+        """Atomically require an active reservation and consume the release key."""
+        if not namespace or not key or not digest:
+            raise ValueError("namespace, key, and digest are required")
+        if not execution.reservation_id:
+            return None
+        with self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            row = connection.execute(
+                """SELECT e.record_json
+                   FROM executions e
+                   JOIN reservations r ON r.execution_id = e.execution_id
+                   WHERE e.execution_id = ? AND r.reservation_id = ?
+                     AND r.status = 'reserved'""",
+                (execution.execution_id, execution.reservation_id),
+            ).fetchone()
+            if row is None or self._decode(row["record_json"]) != execution:
+                connection.rollback()
+                return None
+            existing = connection.execute(
+                "SELECT digest FROM replay_keys WHERE namespace = ? AND key = ?",
+                (namespace, key),
+            ).fetchone()
+            if existing is None:
+                connection.execute(
+                    "INSERT INTO replay_keys(namespace, key, digest) VALUES (?, ?, ?)",
+                    (namespace, key, digest),
+                )
+                connection.commit()
+                return ReplayDecision.ACCEPTED
+            connection.commit()
+            return (
+                ReplayDecision.IDEMPOTENT
+                if existing["digest"] == digest
+                else ReplayDecision.CONFLICT
+            )
+
     def create(self, record: ExecutionRecord) -> None:
         try:
             with self._connect() as connection:

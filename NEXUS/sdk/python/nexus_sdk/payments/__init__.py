@@ -89,6 +89,7 @@ from nexus_sdk.payments.gateway import (
 from nexus_sdk.payments.opa_input import OPA_INPUT_FIELDS, build_opa_input
 from nexus_sdk.payments.execution_plane import (
     ComponentAssurance,
+    CredentialReleaseStateStore,
     ExecutionRecord,
     ExecutionState,
     ExecutionTransitionError,
@@ -103,6 +104,19 @@ from nexus_sdk.payments.sqlite_state import (
     ExposureCeilingExceededError,
     SQLiteGatewayStateStore,
     StateConflictError,
+)
+from nexus_sdk.payments.key_guardian import (
+    CredentialReleaseEnvelope,
+    InProcessHMACReceiptAuthenticator,
+    InProcessHMACTestBackend,
+    KeyGuardianClient,
+    KeyGuardianTransport,
+    NullKeyGuardianTransport,
+    PolicyAuthorizationReceipt,
+    ProtectedSigningBackend,
+    ReceiptAuthenticator,
+    ReferenceKeyGuardianService,
+    RuntimeAuthorizationReceipt,
 )
 from nexus_sdk.payments.adapters import (
     AP2Binding,
@@ -177,8 +191,15 @@ __all__ = [
     "ComponentAssurance", "ExecutionRecord", "ExecutionState",
     "ExecutionTransitionError", "GatewayReadiness", "NEXUSPaymentExecutionPlane",
     "ReplayDecision",
+    "CredentialReleaseStateStore",
     "SettlementStateStore", "TransactionalAuthorityStore", "TransactionalReplayStore",
     "ExposureCeilingExceededError", "SQLiteGatewayStateStore", "StateConflictError",
+    # Isolated credential release
+    "CredentialReleaseEnvelope", "InProcessHMACReceiptAuthenticator",
+    "InProcessHMACTestBackend", "KeyGuardianClient",
+    "KeyGuardianTransport", "NullKeyGuardianTransport", "PolicyAuthorizationReceipt",
+    "ProtectedSigningBackend", "ReceiptAuthenticator", "ReferenceKeyGuardianService",
+    "RuntimeAuthorizationReceipt",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",

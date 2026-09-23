@@ -73,3 +73,24 @@ reservations, and execution state across workers and restarts.
 It remains `REFERENCE` assurance rather than self-declaring deployment status.
 A deployment must separately establish protected storage, access control,
 backup and recovery, availability, monitoring, and operational ownership.
+
+## Key Guardian
+
+`KeyGuardianClient` is the agent-side credential-release client. It holds no
+payment key and defaults to `NullKeyGuardianTransport`, which refuses every
+request. A guardian accepts only a `CredentialReleaseEnvelope` containing the
+durable reservation, canonical transaction, deterministic policy receipt,
+runtime-verifier receipt, and observed revocation epoch.
+
+`ReferenceKeyGuardianService` independently verifies exact transaction and
+signing digests, policy identity, runtime identity, the current revocation
+epoch, reservation state, and accept-once replay state before calling a
+`ProtectedSigningBackend`. It cannot sign arbitrary agent-supplied bytes.
+Active-reservation validation and replay consumption occur in one state-store
+transaction, so a released or concurrently cancelled hold cannot authorize a
+signature.
+
+The included HMAC backend is test-only. Deployment assurance requires a
+separate authenticated guardian service, a KMS/HSM/TEE or managed signer with
+non-exportable keys, protected trust roots, and durable idempotent response
+retrieval.

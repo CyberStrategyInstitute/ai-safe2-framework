@@ -189,6 +189,18 @@ class TransactionalReplayStore(Protocol):
 
 
 @runtime_checkable
+class CredentialReleaseStateStore(Protocol):
+    """Atomic active-reservation and replay boundary for credential release."""
+
+    assurance: ComponentAssurance
+
+    def get(self, execution_id: str) -> ExecutionRecord | None: ...
+    def consume_reserved_release(self, *, execution: ExecutionRecord,
+                                 namespace: str, key: str,
+                                 digest: str) -> ReplayDecision | None: ...
+
+
+@runtime_checkable
 class SettlementStateStore(Protocol):
     """Compare-and-swap persistence for payment execution state."""
 
