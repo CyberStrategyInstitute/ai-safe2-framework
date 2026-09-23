@@ -550,7 +550,9 @@ class X402V2ExactEVMUSDCAuthoritativeBinding(X402V2ExactEVMUSDCBinding):
             findings.append("successful settlement lacks amount evidence")
         elif evidence.amount != str(accepted.get("amount", "")):
             findings.append("settlement amount mismatch")
-        if evidence.success is True and not evidence.transaction:
+        if (evidence.success is True
+                and (not isinstance(evidence.transaction, str)
+                     or not evidence.transaction)):
             findings.append("successful settlement lacks transaction identifier")
         if evidence.success is not True:
             reason = (evidence.error_reason

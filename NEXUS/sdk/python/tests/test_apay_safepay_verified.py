@@ -103,6 +103,18 @@ def test_successful_settlement_without_amount_evidence_is_rejected():
     assert binding(MissingAmount()).verify_settlement(payload()).decision is BindingDecision.REJECT
 
 
+def test_successful_settlement_requires_string_transaction_identifier():
+    class MalformedTransaction(FixtureVerifier):
+        def settlement(self, request):
+            evidence = super().settlement(request)
+            return X402SettlementEvidence(
+                **{**evidence.__dict__, "transaction": 12345}
+            )
+
+    result = binding(MalformedTransaction()).verify_settlement(payload())
+    assert result.decision is BindingDecision.REJECT
+
+
 def test_settlement_cannot_bypass_binding_allowlists():
     supplied = payload()
     supplied["accepted"]["payTo"] = "0xattacker"

@@ -12,7 +12,11 @@ from nexus_sdk.payments.kyaos import KYAOSBinding
 
 
 class CrossAdapterSecuritySuite:
-    """Verifier Contract Shield: invariants shared by authoritative adapters."""
+    """Shared structural invariants for authoritative adapter evidence.
+
+    Adapter-specific suites exercise wrong runtime types, truthy non-booleans,
+    reason collisions, and replay-consuming metadata queries at each boundary.
+    """
 
     evidence_types = (
         AP2VerificationEvidence, AP2ReceiptEvidence, TAPVerificationEvidence,

@@ -142,6 +142,8 @@ the declared runtime type; security flags pass only when they are exactly
 `True`; a verifier's free-text reason cannot overwrite another failed check;
 metadata queries cannot consume replay state; and no adapter may claim native
 Runtime Proof.
+The shared suite checks evidence defaults and assurance ceilings; behavioral
+attack cases remain beside each adapter so they exercise its real boundary.
 
 | Human name | Technical name | Native ceiling | Settlement authority |
 | --- | --- | --- | --- |
