@@ -206,20 +206,29 @@ class AP2V02Binding(RailBinding):
         except Exception as exc:
             return BindingResult(BindingDecision.HALT,
                                  reason=f"AP2 verifier unavailable: {type(exc).__name__}")
-        checks = {
-            "verification response is unauthenticated": evidence.authenticated,
-            "mandate signatures are invalid": evidence.signatures_valid,
-            "mandate constraints are invalid": evidence.constraints_valid,
-            "key confirmation is invalid": evidence.key_confirmation_valid,
-            "mandate replay/single-use check failed": evidence.replay_safe,
-            "merchant checkout JWT is invalid or uses an unsupported signature":
-                evidence.merchant_checkout_jwt_valid,
-            "verification evidence request digest mismatch":
-                evidence.request_digest == self._request_digest(request),
-            "untrusted AP2 verifier": evidence.verifier_id in self.trusted_verifiers,
-            evidence.invalid_reason or "AP2 verifier rejected mandates": evidence.valid,
-        }
-        findings = [message for message, ok in checks.items() if not ok]
+        if not isinstance(evidence, AP2VerificationEvidence):
+            return BindingResult(BindingDecision.HALT,
+                                 reason="AP2 verifier returned malformed evidence")
+        rejection_reason = (evidence.invalid_reason
+                            if isinstance(evidence.invalid_reason, str)
+                            and evidence.invalid_reason
+                            else "AP2 verifier rejected mandates")
+        checks = [
+            ("verification response is unauthenticated", evidence.authenticated is True),
+            ("mandate signatures are invalid", evidence.signatures_valid is True),
+            ("mandate constraints are invalid", evidence.constraints_valid is True),
+            ("key confirmation is invalid", evidence.key_confirmation_valid is True),
+            ("mandate replay/single-use check failed", evidence.replay_safe is True),
+            ("merchant checkout JWT is invalid or uses an unsupported signature",
+             evidence.merchant_checkout_jwt_valid is True),
+            ("verification evidence request digest mismatch",
+             isinstance(evidence.request_digest, str)
+             and evidence.request_digest == self._request_digest(request)),
+            ("untrusted AP2 verifier", isinstance(evidence.verifier_id, str)
+             and evidence.verifier_id in self.trusted_verifiers),
+            (rejection_reason, evidence.valid is True),
+        ]
+        findings = [message for message, ok in checks if not ok]
         return BindingResult(BindingDecision.REJECT if findings else BindingDecision.ACCEPT,
                              assurance=(self.max_native_assurance if not findings
                                         else AssuranceLevel.NONE),
@@ -228,9 +237,6 @@ class AP2V02Binding(RailBinding):
                              findings=findings)
 
     def bind_transaction(self, payload: dict, canonical_digest: str) -> BindingResult:
-        authority = self.verify_authority(payload)
-        if authority.decision is not BindingDecision.ACCEPT:
-            return authority
         extensions = payload.get("extensions")
         nexus = extensions.get("nexus") if isinstance(extensions, dict) else None
         bound = nexus.get("canonicalDigest") if isinstance(nexus, dict) else None
@@ -238,6 +244,9 @@ class AP2V02Binding(RailBinding):
             return BindingResult(BindingDecision.REJECT,
                                  reason="canonical transaction digest mismatch",
                                  findings=["canonical transaction digest mismatch"])
+        authority = self.verify_authority(payload)
+        if authority.decision is not BindingDecision.ACCEPT:
+            return authority
         return BindingResult(BindingDecision.ACCEPT,
                              assurance=self.max_native_assurance,
                              finality=self.native_finality,
@@ -266,20 +275,29 @@ class AP2V02Binding(RailBinding):
         except Exception as exc:
             return BindingResult(BindingDecision.HALT,
                                  reason=f"AP2 receipt verifier unavailable: {type(exc).__name__}")
-        ok = (evidence.valid and evidence.authenticated and evidence.receipts_signed
-              and evidence.checkout_reference_valid and evidence.payment_reference_valid
+        if not isinstance(evidence, AP2ReceiptEvidence):
+            return BindingResult(BindingDecision.HALT,
+                                 reason="AP2 verifier returned malformed receipt evidence")
+        ok = (evidence.valid is True and evidence.authenticated is True
+              and evidence.receipts_signed is True
+              and evidence.checkout_reference_valid is True
+              and evidence.payment_reference_valid is True
+              and isinstance(evidence.verifier_id, str)
               and evidence.verifier_id in self.trusted_verifiers
+              and isinstance(evidence.request_digest, str)
               and evidence.request_digest == self._request_digest(request))
         return BindingResult(BindingDecision.ACCEPT if ok else BindingDecision.REJECT,
                              assurance=self.max_native_assurance if ok else AssuranceLevel.NONE,
                              finality=self.native_finality,
                              reason="authenticated AP2 receipt chain accepted" if ok
-                             else (evidence.invalid_reason or "AP2 receipt evidence rejected"))
+                             else (evidence.invalid_reason
+                                   if isinstance(evidence.invalid_reason, str)
+                                   and evidence.invalid_reason
+                                   else "AP2 receipt evidence rejected"))
 
     def assurance_of(self, payload: dict) -> AssuranceLevel:
-        result = self.verify_authority(payload)
-        return (self.max_native_assurance
-                if result.decision is BindingDecision.ACCEPT else AssuranceLevel.NONE)
+        # Metadata queries must not consume a single-use mandate or replay nonce.
+        return AssuranceLevel.NONE
 
     def finality_of(self, payload: dict) -> SettlementFinality:
         findings = self._structural_findings(payload)

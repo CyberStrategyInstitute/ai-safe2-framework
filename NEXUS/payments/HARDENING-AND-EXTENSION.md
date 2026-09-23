@@ -134,6 +134,30 @@ merchant honesty, or replace a user's consequential-action approval. The
 configured finality is an externally established property of the signed payment
 operation, not a claim derived from KYA-OS.
 
+### Verifier Contract Shield
+
+**Verifier Contract Shield** (`CrossAdapterSecuritySuite`) applies the same
+fail-closed verifier rules across every authoritative profile: evidence must be
+the declared runtime type; security flags pass only when they are exactly
+`True`; a verifier's free-text reason cannot overwrite another failed check;
+metadata queries cannot consume replay state; and no adapter may claim native
+Runtime Proof.
+The shared suite checks evidence defaults and assurance ceilings; behavioral
+attack cases remain beside each adapter so they exercise its real boundary.
+
+| Human name | Technical name | Native ceiling | Settlement authority |
+| --- | --- | --- | --- |
+| SafePay Verified | `X402V2ExactEVMUSDCAuthoritativeBinding` | Mandate Bound | Facilitator/chain verifier |
+| Mandate Bridge | `AP2V02Binding` | Mandate Bound | Signed receipt chain only |
+| Card Trust Bridge | `VisaTAPBinding` | Signed Request | None |
+| Agent Token Bridge | `MastercardAP4MBinding` | Mandate Bound | Authenticated network evidence |
+| Portable Delegation Bridge | `KYAOSBinding` | Mandate Bound | None |
+
+These profiles interoperate through NEXUS canonical transaction and authority
+digests, not by translating private credentials into a lowest-common-denominator
+token. Runtime Proof, Spend Hold, Human Shield, cumulative exposure, and
+revocation-tree enforcement remain NEXUS controls above every adapter.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 

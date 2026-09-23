@@ -71,6 +71,22 @@ def test_verifier_outage_halts_without_claiming_authority():
     assert result.assurance.value == 0
 
 
+def test_malformed_and_truthy_verifier_evidence_fail_closed():
+    class WrongShape(FixtureVerifier):
+        def verify(self, request):
+            return {"is_valid": True}
+
+    class Truthy(FixtureVerifier):
+        def verify(self, request):
+            evidence = super().verify(request)
+            return X402VerificationEvidence(
+                **{**evidence.__dict__, "authenticated": "false", "is_valid": "false"}
+            )
+
+    assert binding(WrongShape()).verify_authority(payload()).decision is BindingDecision.HALT
+    assert binding(Truthy()).verify_authority(payload()).decision is BindingDecision.REJECT
+
+
 def test_settlement_amount_substitution_is_rejected():
     class WrongAmount(FixtureVerifier):
         def settlement(self, request):
@@ -85,6 +101,18 @@ def test_successful_settlement_without_amount_evidence_is_rejected():
             evidence = super().settlement(request)
             return X402SettlementEvidence(**{**evidence.__dict__, "amount": None})
     assert binding(MissingAmount()).verify_settlement(payload()).decision is BindingDecision.REJECT
+
+
+def test_successful_settlement_requires_string_transaction_identifier():
+    class MalformedTransaction(FixtureVerifier):
+        def settlement(self, request):
+            evidence = super().settlement(request)
+            return X402SettlementEvidence(
+                **{**evidence.__dict__, "transaction": 12345}
+            )
+
+    result = binding(MalformedTransaction()).verify_settlement(payload())
+    assert result.decision is BindingDecision.REJECT
 
 
 def test_settlement_cannot_bypass_binding_allowlists():

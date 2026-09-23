@@ -113,6 +113,33 @@ def test_untrusted_or_incomplete_verifier_evidence_is_rejected_and_outage_halts(
     assert binding(verifier=Down()).verify_authority(payload()).decision is BindingDecision.HALT
 
 
+def test_malformed_truthy_and_reason_collision_evidence_fail_closed():
+    class WrongShape(Verifier):
+        def verify(self, request):
+            return {"valid": True}
+
+    class Truthy(Verifier):
+        def verify(self, request):
+            evidence = super().verify(request)
+            return AP2VerificationEvidence(
+                **{**evidence.__dict__, "authenticated": "false", "valid": "false"}
+            )
+
+    class Collision(Verifier):
+        def verify(self, request):
+            evidence = super().verify(request)
+            return AP2VerificationEvidence(
+                **{**evidence.__dict__, "constraints_valid": False,
+                   "invalid_reason": "mandate constraints are invalid"}
+            )
+
+    wrong_shape = binding(verifier=WrongShape()).verify_authority(payload())
+    assert binding(verifier=Truthy()).verify_authority(payload()).decision is BindingDecision.REJECT
+    collision = binding(verifier=Collision()).verify_authority(payload())
+    assert wrong_shape.decision is BindingDecision.HALT
+    assert collision.decision is BindingDecision.REJECT
+
+
 def test_receipts_must_be_signed_and_bound_by_authenticated_verifier():
     class WeakReceipt(Verifier):
         def verify_receipts(self, request):
@@ -120,6 +147,13 @@ def test_receipts_must_be_signed_and_bound_by_authenticated_verifier():
                                       authenticated=True)
     assert (binding(verifier=WeakReceipt()).verify_receipts(payload()).decision
             is BindingDecision.REJECT)
+
+    class WrongShape(Verifier):
+        def verify_receipts(self, request):
+            return {"valid": True}
+
+    assert (binding(verifier=WrongShape()).verify_receipts(payload()).decision
+            is BindingDecision.HALT)
 
 
 def test_malformed_nested_objects_reject_without_raising():
