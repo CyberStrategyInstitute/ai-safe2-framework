@@ -122,3 +122,18 @@ methods, permitted workload identities, maximum measurement age, and trust-root
 configuration. Key Guardian pins that profile digest by verifier identifier,
 preventing a familiar verifier name from silently using different trust roots
 or weaker evidence rules.
+
+## Human Intent Authority
+
+`TrustedIntentAuthority` is the independent **Human Intent Authority**. A
+trusted surface renders the exact amount, currency, merchant, destination,
+rail, and canonical signing digest without agent-authored prose. The authority
+accepts only authenticated approval from an allowlisted accountable person,
+bound to that rendering and a fresh single-use challenge.
+
+Policy receipts explicitly state whether fresh human approval is required.
+When required, Key Guardian refuses credential release unless it also receives
+an authenticated `HumanIntentAuthorizationReceipt` whose transaction,
+rendering, validity window, authority identity, and pinned authority profile all
+match. Routine transactions can continue under existing delegated mandate
+authority without prompting the user for every payment.
