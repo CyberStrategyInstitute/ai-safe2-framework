@@ -94,7 +94,7 @@ NEXUS wraps the user's stack. It does not replace the model, agent framework, to
 | ------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------- |
 | **East-west: agent to agent**   | Identity, delegation, authority, lineage, evidence | v0.3 implementation                                                     |
 | **Agent-to-tool: MCP/tool**     | CP.5.MCP enforcement contract and adapter path     | v3.1 adapter contract present; production implementation still required |
-| **Agent-to-payment: value**     | CP.5.APAY mandate, runtime, containment, evidence  | **v0.4 core implemented and tested; no rail binding implemented**       |
+| **Agent-to-payment: value**     | CP.5.APAY mandate, runtime, containment, evidence  | **v0.4 core and narrow reference adapters implemented and tested**      |
 | **North-south: model/provider** | Integrates with AI SAFE² gateway/runtime controls  | Reference integration path                                              |
 
 ### MCP status is intentionally explicit
@@ -107,7 +107,7 @@ See [NEXUS MCP adapter](adapters/mcp) and [CP.5.MCP](../00-cross-pillar/cp5_mcp_
 
 ### Payment status is intentionally explicit
 
-The CP.5.APAY **core** — object model, mandate compiler, authority graph, transaction firewall, credential broker contract, evidence ledger, gateway — is implemented and covered by 95 tests.
+The CP.5.APAY **core** and its narrow reference adapters are implemented and tested. See the [adapter guide](payments/ADAPTER-GUIDE.md) for supported profiles, integration boundaries, and verification commands.
 
 The **rail bindings** in `nexus_sdk/payments/adapters.py` (AP2, x402, Visa TAP, Mastercard Agent Pay, KYA-OS) are fail-closed contracts. Every enforcement method raises. They are published as contracts rather than stubs because each requires conformance testing against a live counterparty before it can be claimed, and a stub returning success would let a deployment believe it has binding it does not have.
 
@@ -294,7 +294,7 @@ The existing scoring utility remains an implementation checker and should not be
 | REST bridge                                   | Existing implementation                        |
 | MCP legacy bridge behavior                    | Existing compatibility path                    |
 | **MCP `2026-07-28` v3.1 enforcement adapter** | **Contract/scaffolding, not production-ready** |
-| **CP.5.APAY core enforcement**                | **v0.4 implemented, 95 tests**                 |
+| **CP.5.APAY core and reference adapters**      | **v0.4 implemented and adversarially tested**  |
 | **Identity normalization (Entra/KYA-OS/SPIFFE/Web Bot Auth)** | **v0.4 implemented**           |
 | **AP2 binding**                               | **Contract only, not implemented**             |
 | **x402 SafePay Exact binding** (`X402V2ExactEVMUSDCBinding`) | **Narrow structural binding implemented; shadow mode only, no live facilitator or chain verification** |
@@ -334,7 +334,7 @@ pip install -e ".[dev]"
 pytest sdk/python/tests -q
 ```
 
-298 tests. The payment suite is structured so that a control with only a happy-path test does not count as a control: every APAY control has at least one test proving it denies what it claims to deny, and the `TestHonesty` class fails if anyone makes a fail-closed default permissive.
+The payment suite is structured so that a control with only a happy-path test does not count as a control: every APAY control has at least one test proving it denies what it claims to deny, and the `TestHonesty` class fails if anyone makes a fail-closed default permissive. Run the current suite rather than relying on a documentation test count.
 
 ---
 

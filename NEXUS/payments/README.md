@@ -2,7 +2,7 @@
 
 **Continuous Transaction Integrity and Authority Assurance for autonomous systems**
 
-[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM) | [NEXUS](../README.md) | [Threat Model](THREAT-MODEL.md) | [Controls](CONTROLS.md) | [Challenge Lab](CHALLENGE-LAB.md)
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM) | [NEXUS](../README.md) | [Adapter Guide](ADAPTER-GUIDE.md) | [Threat Model](THREAT-MODEL.md) | [Controls](CONTROLS.md) | [Challenge Lab](CHALLENGE-LAB.md)
 
 **Previous:** [← NEXUS](../README.md) | **Next:** [Gateway / Runtime Enforcement →](../../gateway)
 
@@ -305,7 +305,7 @@ A release does not claim production assurance unless it demonstrates **all** of 
 - [ ] Timeout, partial settlement, missing attestation, unknown revocation state and policy conflict fail closed or enter governed reconciliation
 - [ ] External reviewers can reproduce the decision from evidence without trusting the agent's explanation
 
-The reference implementation in `nexus_sdk.payments` demonstrates each of these **in test**. None of them are demonstrated against a live rail, because no rail binding is implemented. That is the gap between this profile and a deployable product, and it is stated rather than papered over.
+The reference implementation in `nexus_sdk.payments` demonstrates each of these **in test**. Narrow adapter profiles are implemented, but none is demonstrated against a live rail in this repository. That is the gap between a reference profile and a deployable product, and it is stated rather than papered over.
 
 ---
 
@@ -339,6 +339,7 @@ CSI participates as the **execution-integrity and assurance profile** contributo
 ```
 NEXUS/payments/
 ├── README.md                      this profile
+├── ADAPTER-GUIDE.md               human and agent integration path
 ├── THREAT-MODEL.md                risks, adversaries, and stated limits
 ├── CONTROLS.md                    APAY-01..20 with AI SAFE2 mapping and test refs
 └── CHALLENGE-LAB.md               twelve falsifiable experiments
