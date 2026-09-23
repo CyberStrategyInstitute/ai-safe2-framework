@@ -36,9 +36,11 @@ WHAT A BINDING OWES THE GATEWAY
 from __future__ import annotations
 
 import enum
+import hashlib
+import json
 from datetime import datetime, timezone
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, Optional, Protocol
 
 from nexus_sdk.payments.objects import (
     AssuranceLevel,
@@ -57,6 +59,10 @@ __all__ = [
     "AP2Binding",
     "X402Binding",
     "X402V2ExactEVMUSDCBinding",
+    "X402VerificationEvidence",
+    "X402SettlementEvidence",
+    "X402AuthoritativeVerifier",
+    "X402V2ExactEVMUSDCAuthoritativeBinding",
     "TrustedAgentBinding",
     "AgenticTokenBinding",
     "KYAOSBinding",
@@ -395,6 +401,148 @@ class X402V2ExactEVMUSDCBinding(X402Binding):
             return BindingResult(BindingDecision.HALT, reason="unknown facilitator status")
         return BindingResult(BindingDecision.ACCEPT if status in {"settled", "failed"} else BindingDecision.HALT,
                              reason=f"facilitator status: {status}")
+
+
+@dataclass(frozen=True)
+class X402VerificationEvidence:
+    is_valid: bool
+    facilitator_id: str
+    request_digest: str
+    payer: Optional[str] = None
+    invalid_reason: Optional[str] = None
+    authenticated: bool = False
+
+
+@dataclass(frozen=True)
+class X402SettlementEvidence:
+    success: bool
+    facilitator_id: str
+    request_digest: str
+    network: str
+    transaction: str
+    payer: Optional[str] = None
+    amount: Optional[str] = None
+    error_reason: Optional[str] = None
+    authenticated: bool = False
+
+
+class X402AuthoritativeVerifier(Protocol):
+    """Trusted verifier boundary; implementations may use facilitator or chain RPC."""
+
+    def verify(self, request: dict) -> X402VerificationEvidence: ...
+
+    def settlement(self, request: dict) -> X402SettlementEvidence: ...
+
+
+class X402V2ExactEVMUSDCAuthoritativeBinding(X402V2ExactEVMUSDCBinding):
+    """SafePay Verified (`X402V2ExactEVMUSDCAuthoritativeBinding`)."""
+
+    human_name = "SafePay Verified"
+    technical_name = "X402V2ExactEVMUSDCAuthoritativeBinding"
+    authoritative_verification = True
+    max_native_assurance = AssuranceLevel.MANDATE_BOUND
+
+    def __init__(self, *, verifier: X402AuthoritativeVerifier,
+                 trusted_facilitators: set[str], **kwargs):
+        super().__init__(**kwargs)
+        self.verifier = verifier
+        self.trusted_facilitators = set(trusted_facilitators)
+
+    @staticmethod
+    def _request(payload: dict) -> dict:
+        return {
+            "x402Version": payload.get("x402Version"),
+            "paymentPayload": {
+                key: payload.get(key) for key in
+                ("x402Version", "resource", "accepted", "payload", "extensions")
+                if key in payload
+            },
+            "paymentRequirements": payload.get("paymentRequirements"),
+        }
+
+    @staticmethod
+    def _request_digest(request: dict) -> str:
+        encoded = json.dumps(request, sort_keys=True, separators=(",", ":")).encode()
+        return "sha256:" + hashlib.sha256(encoded).hexdigest()
+
+    def verify_authority(self, payload: dict) -> BindingResult:
+        structural = super().verify_authority(payload)
+        findings = list(structural.findings)
+        signed = payload.get("payload")
+        if not isinstance(signed, dict) or not signed.get("signature"):
+            findings.append("exact EVM signature missing")
+        if not isinstance(signed, dict) or not isinstance(signed.get("authorization"), dict):
+            findings.append("exact EVM authorization missing")
+        if findings:
+            return BindingResult(BindingDecision.REJECT, findings=findings,
+                                 reason="; ".join(findings))
+        request = self._request(payload)
+        digest = self._request_digest(request)
+        try:
+            evidence = self.verifier.verify(request)
+        except Exception as exc:
+            return BindingResult(BindingDecision.HALT,
+                                 reason=f"authoritative verifier unavailable: {type(exc).__name__}")
+        if evidence.request_digest != digest:
+            findings.append("verification evidence request digest mismatch")
+        if evidence.facilitator_id not in self.trusted_facilitators:
+            findings.append("untrusted facilitator")
+        if not evidence.authenticated:
+            findings.append("verification response is unauthenticated")
+        if not evidence.is_valid:
+            findings.append(evidence.invalid_reason or "facilitator rejected authorization")
+        return BindingResult(
+            BindingDecision.REJECT if findings else BindingDecision.ACCEPT,
+            assurance=self.max_native_assurance if not findings else AssuranceLevel.NONE,
+            finality=SettlementFinality.IRREVERSIBLE,
+            reason="; ".join(findings) or "authenticated facilitator verification accepted",
+            findings=findings,
+        )
+
+    def assurance_of(self, payload: dict) -> AssuranceLevel:
+        result = self.verify_authority(payload)
+        return self.max_native_assurance if result.decision is BindingDecision.ACCEPT else AssuranceLevel.NONE
+
+    def verify_settlement(self, payload: dict) -> BindingResult:
+        authority = self.verify_authority(payload)
+        if authority.decision is not BindingDecision.ACCEPT:
+            return BindingResult(
+                BindingDecision.HALT if authority.decision is BindingDecision.HALT
+                else BindingDecision.REJECT,
+                assurance=AssuranceLevel.NONE,
+                finality=SettlementFinality.IRREVERSIBLE,
+                reason="settlement refused because authority validation failed: "
+                + authority.reason,
+                findings=list(authority.findings),
+            )
+        request = self._request(payload)
+        digest = self._request_digest(request)
+        try:
+            evidence = self.verifier.settlement(request)
+        except Exception as exc:
+            return BindingResult(BindingDecision.HALT,
+                                 reason=f"settlement verifier unavailable: {type(exc).__name__}")
+        accepted = payload.get("accepted") or {}
+        findings: list[str] = []
+        if evidence.request_digest != digest:
+            findings.append("settlement evidence request digest mismatch")
+        if evidence.facilitator_id not in self.trusted_facilitators or not evidence.authenticated:
+            findings.append("settlement response authority is untrusted")
+        if evidence.network != accepted.get("network"):
+            findings.append("settlement network mismatch")
+        if evidence.amount is None:
+            findings.append("successful settlement lacks amount evidence")
+        elif evidence.amount != str(accepted.get("amount", "")):
+            findings.append("settlement amount mismatch")
+        if evidence.success and not evidence.transaction:
+            findings.append("successful settlement lacks transaction identifier")
+        if not evidence.success:
+            findings.append(evidence.error_reason or "settlement failed")
+        decision = BindingDecision.REJECT if findings else BindingDecision.ACCEPT
+        return BindingResult(decision, assurance=self.max_native_assurance if not findings else AssuranceLevel.NONE,
+                             finality=SettlementFinality.IRREVERSIBLE,
+                             reason="; ".join(findings) or "authenticated settlement accepted",
+                             findings=findings)
 
 
 class TrustedAgentBinding(RailBinding):
