@@ -202,6 +202,7 @@ For automated assessment or implementation guidance:
 - MCP profile: `00-cross-pillar/cp5_mcp_server_security.md`
 - AISM: `AISM/README.md`
 - NEXUS: `NEXUS/README.md`
+- Payment adapter usage: `NEXUS/payments/ADAPTER-GUIDE.md`
 - Scanner: `scanner/README.md`
 - Examples: `examples/README.md`
 - Research: `research/README.md`
