@@ -29,8 +29,11 @@ gates](README.md) before treating any result as deployable assurance.
    Verified**, authorization requires both an `ACCEPT` from
    `verify_authority(payload)` and an `ACCEPT` from the subsequent
    `bind_transaction(payload, canonical_digest)` call; never treat the binding
-   result alone as authoritative verification. Use `bind_transaction` as the
-   state-consuming step and stop if either result rejects or halts.
+   result alone as authoritative verification. Use `bind_transaction` for the
+   canonical binding decision and stop if either result rejects or halts.
+   State consumption is profile-specific: SafePay Verified's adapter methods
+   are stateless, so its authoritative verifier must enforce freshness and
+   replay policy atomically at its own trust boundary.
 5. Read verified assurance from the returned `BindingResult`; metadata methods
    intentionally return conservative answers when a query could consume state.
 6. Keep Runtime Proof, Spend Hold, Human Shield, cumulative exposure, evidence,
