@@ -84,6 +84,25 @@ the agent process. Production deployments must inject an independently operated
 verifier with protected trust roots and durable replay, budget, recurrence, and
 receipt state. AP2 mandate assurance remains below Runtime Proof.
 
+**Card Trust Bridge** (`VisaTAPBinding`) recognizes only Visa TAP payment
+requests whose RFC 9421 signature covers method, authority, path, and content
+digest and whose signed payment container is linked by nonce, key, and algorithm.
+Its contract is pinned to the dated `merchant-spec@2026-09-22` snapshot because
+Visa's public Merchant Specification exposes no formal version identifier; the
+related Web Bot Auth dependency is an active Internet-Draft, not an RFC.
+
+A trusted deterministic verifier must prove signature validity, exact covered
+components, freshness, replay/relay prevention, allowlisted-key trust, bounded
+SSRF-safe discovery, and payment-container binding. Recognition establishes at
+most Signed Request assurance. It does not prove user mandate, uncompromised
+runtime, payment authorization, or settlement.
+
+Production callers should use `bind_transaction` as the single verification and
+canonical-binding operation. Every invocation reaches the durable replay
+verifier; no accepted nonce is cached. The non-consuming `assurance_of` query
+therefore reports `NONE`; verified assurance is returned only in the operation's
+`BindingResult`.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 
