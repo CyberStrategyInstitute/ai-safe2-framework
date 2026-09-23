@@ -25,8 +25,12 @@ gates](README.md) before treating any result as deployable assurance.
 3. Implement the adapter's verifier protocol with deterministic cryptography,
    fresh revocation state, and an atomic shared replay store. Never use an LLM
    as the verifier.
-4. Treat `verify_authority` as preflight where documented. Use
-   `bind_transaction` for the state-consuming authorization decision.
+4. Treat `verify_authority` as preflight where documented. For **SafePay
+   Verified**, authorization requires both an `ACCEPT` from
+   `verify_authority(payload)` and an `ACCEPT` from the subsequent
+   `bind_transaction(payload, canonical_digest)` call; never treat the binding
+   result alone as authoritative verification. Use `bind_transaction` as the
+   state-consuming step and stop if either result rejects or halts.
 5. Read verified assurance from the returned `BindingResult`; metadata methods
    intentionally return conservative answers when a query could consume state.
 6. Keep Runtime Proof, Spend Hold, Human Shield, cumulative exposure, evidence,
@@ -40,7 +44,7 @@ From the repository root, set `PYTHONPATH=NEXUS/sdk/python` and run:
 
 ```console
 python -m pytest NEXUS/sdk/python/tests -q
-python -m mypy NEXUS/sdk/python/nexus_sdk/payments
+python -m mypy --config-file NEXUS/pyproject.toml NEXUS/sdk/python/nexus_sdk/payments
 ```
 
 The adapter corpus includes positive vectors, substitution attacks, malformed
@@ -55,4 +59,6 @@ Add a new human-named, technically named profile; do not broaden an existing
 profile. Declare its exact protocol version, scheme, network, asset, flow,
 finality, verifier boundary, assurance ceiling, privacy behavior, unsupported
 claims, positive vectors, and adversarial vectors. Run the Verifier Contract
-Shield and Greptile review before proposing production use.
+Shield before proposing production use. When the repository's optional
+external-review provider is available, complete that review too; otherwise
+follow the repository's documented fallback review process.
