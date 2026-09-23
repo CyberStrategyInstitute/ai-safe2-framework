@@ -32,6 +32,19 @@ None of these controls authorize production use by themselves. A deployment must
 
 ## Future extension contract
 
+### Shared adapter gate
+
+**RailGuard Contract** (`RailBindingContract`) declares the exact protocol
+version, scheme, networks, assets, payment flow, finality model, native assurance
+ceiling, and whether verification is authoritative. **RailGuard Lab**
+(`RailBindingConformanceSuite`) evaluates public synthetic vectors for canonical
+binding, fail-closed authority checks, assurance overclaiming, finality,
+reconciliation safety, deterministic input handling, and payload privacy.
+
+Every implemented rail binding must pass RailGuard Lab before it can be described
+as supported. Reports intentionally omit payloads and retain only case names and
+control findings so conformance evidence does not become payment-data leakage.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 

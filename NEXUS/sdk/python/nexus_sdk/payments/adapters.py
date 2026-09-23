@@ -208,6 +208,11 @@ class RailBinding:
     """
 
     protocol: str = "abstract"
+    protocol_version: str = ""
+    scheme: str = ""
+    payment_flow: str = ""
+    native_finality: SettlementFinality = SettlementFinality.IRREVERSIBLE
+    authoritative_verification: bool = False
     rail: PaymentRail = PaymentRail.CARD_NETWORK
     #: The highest assurance this protocol can provide on its own, before any
     #: runtime measurement is added. No protocol here reaches RUNTIME_BOUND.
@@ -216,6 +221,10 @@ class RailBinding:
     def verify_authority(self, payload: dict) -> BindingResult:
         """Confirm the counterparty's own authority artifact is valid and unexpired."""
         raise NotImplementedError(f"{self.protocol}.verify_authority: fail closed until implemented")
+
+    def support_tuple_of(self, payload: dict) -> dict[str, str]:
+        """Extract the support tuple actually exercised by a payload."""
+        raise NotImplementedError(f"{self.protocol}.support_tuple_of: fail closed until implemented")
 
     def bind_transaction(self, payload: dict, canonical_digest: str) -> BindingResult:
         """Confirm the protocol payload corresponds to the canonical transaction."""
@@ -279,6 +288,11 @@ class X402V2ExactEVMUSDCBinding(X402Binding):
     """
     human_name = "SafePay Exact"
     technical_name = "X402V2ExactEVMUSDCBinding"
+    protocol_version = "2"
+    scheme = "exact"
+    payment_flow = "authorization"
+    native_finality = SettlementFinality.IRREVERSIBLE
+    authoritative_verification = False
     # Structural validation is not cryptographic authority verification.
     max_native_assurance = AssuranceLevel.NONE
 
@@ -315,6 +329,21 @@ class X402V2ExactEVMUSDCBinding(X402Binding):
         if flow != "authorization":
             findings.append("only authorization flow is supported")
         return accepted, findings
+
+    def support_tuple_of(self, payload: dict) -> dict[str, str]:
+        accepted = payload.get("accepted")
+        if not isinstance(accepted, dict):
+            return {}
+        extra = accepted.get("extra")
+        if not isinstance(extra, dict):
+            extra = {}
+        return {
+            "protocol_version": str(payload.get("x402Version", "")),
+            "scheme": str(accepted.get("scheme", "")),
+            "network": str(accepted.get("network", "")),
+            "asset": str(accepted.get("asset", "")),
+            "payment_flow": str(extra.get("paymentFlow", "authorization")),
+        }
 
     def verify_authority(self, payload: dict) -> BindingResult:
         _, findings = self._accepted(payload)
