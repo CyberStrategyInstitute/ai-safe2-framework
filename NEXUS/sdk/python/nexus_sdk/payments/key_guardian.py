@@ -33,6 +33,7 @@ from nexus_sdk.payments.objects import (
 
 __all__ = [
     "CredentialReleaseEnvelope",
+    "HumanIntentAuthorizationReceipt",
     "InProcessHMACTestBackend",
     "KeyGuardianClient",
     "KeyGuardianTransport",
@@ -59,6 +60,24 @@ class PolicyAuthorizationReceipt:
     authenticator_id: str
     proof: str
     policy_digest: str = ""
+    human_approval_required: bool = False
+
+
+@dataclass(frozen=True)
+class HumanIntentAuthorizationReceipt:
+    """Authenticated proof that the trusted surface captured exact approval."""
+
+    approval_id: str
+    approver_id: str
+    canonical_digest: str
+    signing_digest: str
+    rendering_digest: str
+    authority_id: str
+    approved_at: str
+    expires_at: str
+    authenticator_id: str
+    proof: str
+    authority_profile_digest: str = ""
 
 
 @dataclass(frozen=True)
@@ -85,6 +104,7 @@ class CredentialReleaseEnvelope:
     policy: PolicyAuthorizationReceipt
     runtime: RuntimeAuthorizationReceipt
     observed_revocation_epoch: int
+    human_intent: HumanIntentAuthorizationReceipt | None = None
 
 
 class ProtectedSigningBackend(Protocol):
@@ -105,6 +125,7 @@ class ReceiptAuthenticator(Protocol):
 
     def verify_policy(self, receipt: PolicyAuthorizationReceipt) -> bool: ...
     def verify_runtime(self, receipt: RuntimeAuthorizationReceipt) -> bool: ...
+    def verify_human_intent(self, receipt: HumanIntentAuthorizationReceipt) -> bool: ...
 
 
 class KeyGuardianTransport(Protocol):
@@ -161,6 +182,7 @@ class ReferenceKeyGuardianService:
                  receipt_authenticator: ReceiptAuthenticator,
                  trusted_policy_digests: Mapping[str, str],
                  trusted_runtime_verifier_digests: Mapping[str, str],
+                 trusted_human_authority_digests: Mapping[str, str],
                  revocation_epoch: Callable[[str], int],
                  now: Callable[[], datetime] = utcnow,
                  max_receipt_age_seconds: int = 120) -> None:
@@ -169,6 +191,7 @@ class ReferenceKeyGuardianService:
         self.receipt_authenticator = receipt_authenticator
         self.trusted_policy_digests = dict(trusted_policy_digests)
         self.trusted_runtime_verifier_digests = dict(trusted_runtime_verifier_digests)
+        self.trusted_human_authority_digests = dict(trusted_human_authority_digests)
         self.revocation_epoch = revocation_epoch
         self.now = now
         self.max_receipt_age_seconds = max_receipt_age_seconds
@@ -252,6 +275,35 @@ class ReferenceKeyGuardianService:
                 PaymentReasonCode.ATTESTATION_VERIFICATION_FAILED,
                 "runtime receipt does not authorize the canonical transaction",
             )
+        human = envelope.human_intent
+        if policy.human_approval_required:
+            if human is None:
+                self._refuse(
+                    PaymentReasonCode.HEAR_REQUIRED,
+                    "fresh trusted-surface approval is required",
+                )
+            try:
+                approved_time = datetime.fromisoformat(human.approved_at)
+                expires_time = datetime.fromisoformat(human.expires_at)
+            except (TypeError, ValueError):
+                self._refuse(PaymentReasonCode.HEAR_REQUIRED, "human approval time is invalid")
+            if (
+                approved_time.tzinfo is None
+                or expires_time.tzinfo is None
+                or approved_time > current_time
+                or current_time > expires_time
+                or self.receipt_authenticator.verify_human_intent(human) is not True
+                or human.canonical_digest != canonical.canonical_digest
+                or human.signing_digest != signing_digest
+                or not human.approver_id
+                or not human.rendering_digest
+                or self.trusted_human_authority_digests.get(human.authority_id)
+                != human.authority_profile_digest
+            ):
+                self._refuse(
+                    PaymentReasonCode.HEAR_REQUIRED,
+                    "human approval is stale, untrusted, or not transaction-bound",
+                )
         authoritative_epoch = self.revocation_epoch(canonical.principal_id)
         if (
             envelope.observed_revocation_epoch != authoritative_epoch
@@ -340,6 +392,7 @@ class InProcessHMACReceiptAuthenticator:
             "evaluated_at": receipt.evaluated_at,
             "authenticator_id": receipt.authenticator_id,
             "policy_digest": receipt.policy_digest,
+            "human_approval_required": receipt.human_approval_required,
         }
 
     @staticmethod
@@ -355,11 +408,29 @@ class InProcessHMACReceiptAuthenticator:
             "verifier_profile_digest": receipt.verifier_profile_digest,
         }
 
+    @staticmethod
+    def _human_values(receipt: HumanIntentAuthorizationReceipt) -> dict:
+        return {
+            "approval_id": receipt.approval_id,
+            "approver_id": receipt.approver_id,
+            "canonical_digest": receipt.canonical_digest,
+            "signing_digest": receipt.signing_digest,
+            "rendering_digest": receipt.rendering_digest,
+            "authority_id": receipt.authority_id,
+            "approved_at": receipt.approved_at,
+            "expires_at": receipt.expires_at,
+            "authenticator_id": receipt.authenticator_id,
+            "authority_profile_digest": receipt.authority_profile_digest,
+        }
+
     def seal_policy(self, receipt: PolicyAuthorizationReceipt) -> str:
         return self._proof(self._policy_values(receipt))
 
     def seal_runtime(self, receipt: RuntimeAuthorizationReceipt) -> str:
         return self._proof(self._runtime_values(receipt))
+
+    def seal_human_intent(self, receipt: HumanIntentAuthorizationReceipt) -> str:
+        return self._proof(self._human_values(receipt))
 
     def verify_policy(self, receipt: PolicyAuthorizationReceipt) -> bool:
         if receipt.authenticator_id != self.authenticator_id:
@@ -370,3 +441,8 @@ class InProcessHMACReceiptAuthenticator:
         if receipt.authenticator_id != self.authenticator_id:
             return False
         return hmac.compare_digest(self.seal_runtime(receipt), receipt.proof)
+
+    def verify_human_intent(self, receipt: HumanIntentAuthorizationReceipt) -> bool:
+        if receipt.authenticator_id != self.authenticator_id:
+            return False
+        return hmac.compare_digest(self.seal_human_intent(receipt), receipt.proof)

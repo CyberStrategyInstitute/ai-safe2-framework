@@ -8,6 +8,7 @@ from nexus_sdk.payments.broker import BrokerRefusal
 from nexus_sdk.payments.execution_plane import ExecutionRecord, ExecutionState
 from nexus_sdk.payments.key_guardian import (
     CredentialReleaseEnvelope,
+    HumanIntentAuthorizationReceipt,
     InProcessHMACReceiptAuthenticator,
     InProcessHMACTestBackend,
     KeyGuardianClient,
@@ -122,6 +123,9 @@ def configured(tmp_path, transaction=None, backend=None):
         trusted_policy_digests={"policy-1": "sha256:policy-definition-1"},
         trusted_runtime_verifier_digests={
             "attestation-verifier-1": "sha256:runtime-verifier-profile-1"
+        },
+        trusted_human_authority_digests={
+            "human-intent-authority-1": "sha256:human-authority-profile-1"
         },
         revocation_epoch=store.current_revocation_epoch,
         now=lambda: datetime(2026, 9, 23, 0, 0, 30, tzinfo=timezone.utc),
@@ -256,3 +260,40 @@ def test_untrusted_runtime_verifier_profile_cannot_sign(tmp_path):
     with pytest.raises(BrokerRefusal) as refusal:
         guardian.release(forged)
     assert refusal.value.code is PaymentReasonCode.ATTESTATION_VERIFICATION_FAILED
+
+
+def with_required_human_approval(request, *, include_receipt: bool):
+    authenticator = InProcessHMACReceiptAuthenticator()
+    policy = replace(request.policy, human_approval_required=True, proof="")
+    policy = replace(policy, proof=authenticator.seal_policy(policy))
+    human = None
+    if include_receipt:
+        human = HumanIntentAuthorizationReceipt(
+            approval_id="approval-1",
+            approver_id="owner@example.org",
+            canonical_digest=request.canonical.canonical_digest,
+            signing_digest=request.canonical.signing_digest(),
+            rendering_digest="sha256:trusted-rendering-1",
+            authority_id="human-intent-authority-1",
+            approved_at="2026-09-23T00:00:10+00:00",
+            expires_at="2026-09-23T00:01:00+00:00",
+            authenticator_id=authenticator.authenticator_id,
+            proof="",
+            authority_profile_digest="sha256:human-authority-profile-1",
+        )
+        human = replace(human, proof=authenticator.seal_human_intent(human))
+    return replace(request, policy=policy, human_intent=human)
+
+
+def test_required_human_approval_cannot_be_omitted(tmp_path):
+    request, guardian = configured(tmp_path)
+    request = with_required_human_approval(request, include_receipt=False)
+    with pytest.raises(BrokerRefusal) as refusal:
+        guardian.release(request)
+    assert refusal.value.code is PaymentReasonCode.HEAR_REQUIRED
+
+
+def test_fresh_bound_human_approval_allows_release(tmp_path):
+    request, guardian = configured(tmp_path)
+    request = with_required_human_approval(request, include_receipt=True)
+    assert guardian.release(request).decision_id == "decision-1"
