@@ -103,6 +103,22 @@ def test_weak_verifier_evidence_rejects_and_outage_halts():
     assert binding(Down()).verify_authority(payload()).decision is BindingDecision.HALT
 
 
+def test_malformed_and_truthy_non_boolean_evidence_fail_closed():
+    class WrongShape(Verifier):
+        def verify(self, request):
+            return {"valid": True}
+
+    class Truthy(Verifier):
+        def verify(self, request):
+            evidence = super().verify(request)
+            return TAPVerificationEvidence(
+                **{**evidence.__dict__, "authenticated": "false", "valid": "false"}
+            )
+
+    assert binding(WrongShape()).verify_authority(payload()).decision is BindingDecision.HALT
+    assert binding(Truthy()).verify_authority(payload()).decision is BindingDecision.REJECT
+
+
 def test_malformed_nested_values_fail_closed_without_mutation():
     original = payload()
     for field in ("signatureInput", "agenticPaymentContainer", "headers", "extensions"):

@@ -71,6 +71,22 @@ def test_verifier_outage_halts_without_claiming_authority():
     assert result.assurance.value == 0
 
 
+def test_malformed_and_truthy_verifier_evidence_fail_closed():
+    class WrongShape(FixtureVerifier):
+        def verify(self, request):
+            return {"is_valid": True}
+
+    class Truthy(FixtureVerifier):
+        def verify(self, request):
+            evidence = super().verify(request)
+            return X402VerificationEvidence(
+                **{**evidence.__dict__, "authenticated": "false", "is_valid": "false"}
+            )
+
+    assert binding(WrongShape()).verify_authority(payload()).decision is BindingDecision.HALT
+    assert binding(Truthy()).verify_authority(payload()).decision is BindingDecision.REJECT
+
+
 def test_settlement_amount_substitution_is_rejected():
     class WrongAmount(FixtureVerifier):
         def settlement(self, request):

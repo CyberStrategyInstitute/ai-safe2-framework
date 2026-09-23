@@ -165,20 +165,31 @@ class VisaTAPBinding(RailBinding):
         except Exception as exc:
             return BindingResult(BindingDecision.HALT,
                                  reason=f"TAP verifier unavailable: {type(exc).__name__}")
+        if not isinstance(evidence, TAPVerificationEvidence):
+            return BindingResult(BindingDecision.HALT,
+                                 reason="TAP verifier returned malformed evidence")
+        rejection_reason = (evidence.invalid_reason
+                            if isinstance(evidence.invalid_reason, str)
+                            and evidence.invalid_reason
+                            else "TAP verifier rejected request")
         checks = [
-            ("verification response is unauthenticated", evidence.authenticated),
-            ("HTTP message signature is invalid", evidence.signature_valid),
-            ("signed request components do not match", evidence.covered_components_valid),
-            ("signature freshness check failed", evidence.freshness_valid),
-            ("nonce replay/relay check failed", evidence.replay_safe),
-            ("agent key is not trusted", evidence.key_trusted),
-            ("key discovery did not enforce SSRF controls", evidence.discovery_ssrf_safe),
+            ("verification response is unauthenticated", evidence.authenticated is True),
+            ("HTTP message signature is invalid", evidence.signature_valid is True),
+            ("signed request components do not match",
+             evidence.covered_components_valid is True),
+            ("signature freshness check failed", evidence.freshness_valid is True),
+            ("nonce replay/relay check failed", evidence.replay_safe is True),
+            ("agent key is not trusted", evidence.key_trusted is True),
+            ("key discovery did not enforce SSRF controls",
+             evidence.discovery_ssrf_safe is True),
             ("payment container signature or binding is invalid",
-             evidence.payment_container_valid),
+             evidence.payment_container_valid is True),
             ("verification evidence request digest mismatch",
-             evidence.request_digest == digest),
-            ("untrusted TAP verifier", evidence.verifier_id in self.trusted_verifiers),
-            (evidence.invalid_reason or "TAP verifier rejected request", evidence.valid),
+             isinstance(evidence.request_digest, str)
+             and evidence.request_digest == digest),
+            ("untrusted TAP verifier", isinstance(evidence.verifier_id, str)
+             and evidence.verifier_id in self.trusted_verifiers),
+            (rejection_reason, evidence.valid is True),
         ]
         findings = [message for message, passed in checks if not passed]
         return BindingResult(

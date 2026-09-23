@@ -487,14 +487,22 @@ class X402V2ExactEVMUSDCAuthoritativeBinding(X402V2ExactEVMUSDCBinding):
         except Exception as exc:
             return BindingResult(BindingDecision.HALT,
                                  reason=f"authoritative verifier unavailable: {type(exc).__name__}")
-        if evidence.request_digest != digest:
+        if not isinstance(evidence, X402VerificationEvidence):
+            return BindingResult(BindingDecision.HALT,
+                                 reason="facilitator returned malformed evidence")
+        if not isinstance(evidence.request_digest, str) or evidence.request_digest != digest:
             findings.append("verification evidence request digest mismatch")
-        if evidence.facilitator_id not in self.trusted_facilitators:
+        if (not isinstance(evidence.facilitator_id, str)
+                or evidence.facilitator_id not in self.trusted_facilitators):
             findings.append("untrusted facilitator")
-        if not evidence.authenticated:
+        if evidence.authenticated is not True:
             findings.append("verification response is unauthenticated")
-        if not evidence.is_valid:
-            findings.append(evidence.invalid_reason or "facilitator rejected authorization")
+        if evidence.is_valid is not True:
+            reason = (evidence.invalid_reason
+                      if isinstance(evidence.invalid_reason, str)
+                      and evidence.invalid_reason
+                      else "facilitator rejected authorization")
+            findings.append(reason)
         return BindingResult(
             BindingDecision.REJECT if findings else BindingDecision.ACCEPT,
             assurance=self.max_native_assurance if not findings else AssuranceLevel.NONE,
@@ -504,8 +512,7 @@ class X402V2ExactEVMUSDCAuthoritativeBinding(X402V2ExactEVMUSDCBinding):
         )
 
     def assurance_of(self, payload: dict) -> AssuranceLevel:
-        result = self.verify_authority(payload)
-        return self.max_native_assurance if result.decision is BindingDecision.ACCEPT else AssuranceLevel.NONE
+        return AssuranceLevel.NONE
 
     def verify_settlement(self, payload: dict) -> BindingResult:
         authority = self.verify_authority(payload)
@@ -526,11 +533,16 @@ class X402V2ExactEVMUSDCAuthoritativeBinding(X402V2ExactEVMUSDCBinding):
         except Exception as exc:
             return BindingResult(BindingDecision.HALT,
                                  reason=f"settlement verifier unavailable: {type(exc).__name__}")
+        if not isinstance(evidence, X402SettlementEvidence):
+            return BindingResult(BindingDecision.HALT,
+                                 reason="facilitator returned malformed settlement evidence")
         accepted = payload.get("accepted") or {}
         findings: list[str] = []
         if evidence.request_digest != digest:
             findings.append("settlement evidence request digest mismatch")
-        if evidence.facilitator_id not in self.trusted_facilitators or not evidence.authenticated:
+        if (not isinstance(evidence.facilitator_id, str)
+                or evidence.facilitator_id not in self.trusted_facilitators
+                or evidence.authenticated is not True):
             findings.append("settlement response authority is untrusted")
         if evidence.network != accepted.get("network"):
             findings.append("settlement network mismatch")
@@ -538,10 +550,13 @@ class X402V2ExactEVMUSDCAuthoritativeBinding(X402V2ExactEVMUSDCBinding):
             findings.append("successful settlement lacks amount evidence")
         elif evidence.amount != str(accepted.get("amount", "")):
             findings.append("settlement amount mismatch")
-        if evidence.success and not evidence.transaction:
+        if evidence.success is True and not evidence.transaction:
             findings.append("successful settlement lacks transaction identifier")
-        if not evidence.success:
-            findings.append(evidence.error_reason or "settlement failed")
+        if evidence.success is not True:
+            reason = (evidence.error_reason
+                      if isinstance(evidence.error_reason, str) and evidence.error_reason
+                      else "settlement failed")
+            findings.append(reason)
         decision = BindingDecision.REJECT if findings else BindingDecision.ACCEPT
         return BindingResult(decision, assurance=self.max_native_assurance if not findings else AssuranceLevel.NONE,
                              finality=SettlementFinality.IRREVERSIBLE,
