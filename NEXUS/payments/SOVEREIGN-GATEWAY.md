@@ -94,3 +94,17 @@ The included HMAC backend is test-only. Deployment assurance requires a
 separate authenticated guardian service, a KMS/HSM/TEE or managed signer with
 non-exportable keys, protected trust roots, and durable idempotent response
 retrieval.
+
+## Policy Authority
+
+`DeterministicPolicyAuthority` is the independent **Policy Authority**. It
+reuses the deterministic transaction firewall, binds an ALLOW decision to the
+exact canonical transaction and a content-addressed `PolicyDefinition`, and
+issues an authenticated `PolicyAuthorizationReceipt`. Deny, escalate, and
+reconcile outcomes carry no signing authority.
+
+The authority will not issue a receipt without a runtime identity, complete
+grant lineage, an idempotency key, a matching policy identifier, and proof from
+the configured receipt issuer. Key Guardian additionally requires a non-empty
+policy snapshot digest pinned by policy identifier, so a policy label cannot
+silently stand in for different rules or configuration.
