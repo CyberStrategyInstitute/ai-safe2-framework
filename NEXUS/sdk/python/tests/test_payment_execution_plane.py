@@ -27,23 +27,23 @@ class Component:
 
 
 def test_execution_follows_monotonic_happy_path():
-    current = record()
-    for state in (
-        ExecutionState.POLICY_ACCEPTED,
-        ExecutionState.RESERVED,
-        ExecutionState.CREDENTIAL_RELEASED,
-        ExecutionState.SUBMITTED,
-        ExecutionState.SETTLED,
-    ):
-        current = current.transition(state)
+    current = record().transition(ExecutionState.POLICY_ACCEPTED)
+    current = current.transition(ExecutionState.RESERVED, reservation_id="reservation-1")
+    current = current.transition(
+        ExecutionState.CREDENTIAL_RELEASED, authorization_id="authorization-1"
+    )
+    current = current.transition(ExecutionState.SUBMITTED)
+    current = current.transition(ExecutionState.SETTLED, settlement_id="settlement-1")
     assert current.state is ExecutionState.SETTLED
     assert current.version == 5
 
 
 def test_ambiguous_payment_must_enter_reconciliation():
     current = record().transition(ExecutionState.POLICY_ACCEPTED)
-    current = current.transition(ExecutionState.RESERVED)
-    current = current.transition(ExecutionState.CREDENTIAL_RELEASED)
+    current = current.transition(ExecutionState.RESERVED, reservation_id="reservation-1")
+    current = current.transition(
+        ExecutionState.CREDENTIAL_RELEASED, authorization_id="authorization-1"
+    )
     current = current.transition(ExecutionState.AMBIGUOUS)
     with pytest.raises(ExecutionTransitionError):
         current.transition(ExecutionState.RELEASED)
@@ -59,6 +59,37 @@ def test_terminal_state_cannot_be_reopened():
 def test_canonical_identity_and_revocation_epoch_are_immutable():
     with pytest.raises(ExecutionTransitionError, match="immutable execution fields"):
         record().transition(ExecutionState.POLICY_ACCEPTED, canonical_digest="sha256:changed")
+
+
+def test_lifecycle_identifiers_are_required_by_state():
+    accepted = record().transition(ExecutionState.POLICY_ACCEPTED)
+    with pytest.raises(ExecutionTransitionError, match="reserved execution requires"):
+        accepted.transition(ExecutionState.RESERVED)
+
+
+def test_lifecycle_identifiers_are_write_once():
+    reserved = record().transition(ExecutionState.POLICY_ACCEPTED).transition(
+        ExecutionState.RESERVED, reservation_id="reservation-1"
+    )
+    with pytest.raises(ExecutionTransitionError, match="write-once"):
+        reserved.transition(
+            ExecutionState.CREDENTIAL_RELEASED,
+            reservation_id="reservation-2",
+            authorization_id="authorization-1",
+        )
+
+
+def test_direct_construction_cannot_bypass_state_requirements():
+    with pytest.raises(ExecutionTransitionError, match="settled execution requires"):
+        ExecutionRecord(
+            execution_id="exec-1",
+            transaction_intent_id="intent-1",
+            canonical_digest="sha256:canonical",
+            idempotency_key="idem-1",
+            authority_grant_id="grant-1",
+            revocation_epoch=7,
+            state=ExecutionState.SETTLED,
+        )
 
 
 def test_execution_plane_reports_every_unbound_boundary():

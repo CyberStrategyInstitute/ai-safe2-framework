@@ -80,6 +80,41 @@ class ExecutionRecord:
     settlement_id: str | None = None
     evidence_refs: tuple[str, ...] = field(default_factory=tuple)
 
+    def __post_init__(self) -> None:
+        required_core = {
+            "execution_id": self.execution_id,
+            "transaction_intent_id": self.transaction_intent_id,
+            "canonical_digest": self.canonical_digest,
+            "idempotency_key": self.idempotency_key,
+            "authority_grant_id": self.authority_grant_id,
+        }
+        missing_core = sorted(name for name, value in required_core.items() if not value)
+        if missing_core:
+            raise ExecutionTransitionError(
+                "execution identity fields are required: " + ", ".join(missing_core)
+            )
+        if self.revocation_epoch < 0 or self.version < 0:
+            raise ExecutionTransitionError("revocation epoch and version cannot be negative")
+        self._validate_state_fields()
+
+    def _validate_state_fields(self) -> None:
+        required_by_state = {
+            ExecutionState.RESERVED: ("reservation_id",),
+            ExecutionState.CREDENTIAL_RELEASED: ("reservation_id", "authorization_id"),
+            ExecutionState.SUBMITTED: ("reservation_id", "authorization_id"),
+            ExecutionState.SETTLED: ("reservation_id", "authorization_id", "settlement_id"),
+            ExecutionState.AMBIGUOUS: ("reservation_id", "authorization_id"),
+            ExecutionState.RECONCILING: ("reservation_id", "authorization_id"),
+            ExecutionState.RELEASED: ("reservation_id",),
+            ExecutionState.ESCALATED: ("reservation_id", "authorization_id"),
+        }
+        required = required_by_state.get(self.state, ())
+        missing = sorted(name for name in required if not getattr(self, name))
+        if missing:
+            raise ExecutionTransitionError(
+                f"{self.state.value} execution requires: " + ", ".join(missing)
+            )
+
     def transition(self, target: ExecutionState, **changes: Any) -> ExecutionRecord:
         """Return the next record or reject an unsafe/non-monotonic transition."""
 
@@ -95,6 +130,17 @@ class ExecutionRecord:
         if overwritten:
             raise ExecutionTransitionError(
                 "immutable execution fields cannot change: " + ", ".join(sorted(overwritten))
+            )
+        lifecycle_fields = ("reservation_id", "authorization_id", "settlement_id")
+        replaced = sorted(
+            name for name in lifecycle_fields
+            if getattr(self, name) is not None
+            and name in changes
+            and changes[name] != getattr(self, name)
+        )
+        if replaced:
+            raise ExecutionTransitionError(
+                "lifecycle identifiers are write-once: " + ", ".join(replaced)
             )
         values = dict(self.__dict__)
         values.update(changes)
