@@ -65,6 +65,12 @@ def binding(verifier=None):
     )
 
 
+def test_legacy_adapters_import_path_is_preserved():
+    from nexus_sdk.payments.adapters import KYAOSBinding as LegacyKYAOSBinding
+
+    assert LegacyKYAOSBinding is KYAOSBinding
+
+
 def test_authority_overlay_binds_exact_transaction_but_not_settlement():
     item = payload()
     assert binding().verify_authority(item).decision is BindingDecision.ACCEPT

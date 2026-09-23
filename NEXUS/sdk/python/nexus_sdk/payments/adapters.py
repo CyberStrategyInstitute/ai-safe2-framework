@@ -32,7 +32,7 @@ import hashlib
 import json
 from datetime import datetime, timezone
 from dataclasses import dataclass, field
-from typing import Any, Optional, Protocol
+from typing import TYPE_CHECKING, Any, Optional, Protocol
 
 from nexus_sdk.payments.objects import (
     AssuranceLevel,
@@ -40,6 +40,9 @@ from nexus_sdk.payments.objects import (
     PrincipalBinding,
     SettlementFinality,
 )
+
+if TYPE_CHECKING:
+    from nexus_sdk.payments.kyaos import KYAOSBinding
 
 __all__ = [
     "IdentitySource",
@@ -57,7 +60,16 @@ __all__ = [
     "X402V2ExactEVMUSDCAuthoritativeBinding",
     "TrustedAgentBinding",
     "AgenticTokenBinding",
+    "KYAOSBinding",
 ]
+
+
+def __getattr__(name: str):
+    """Preserve the legacy KYAOSBinding import without a module cycle."""
+    if name == "KYAOSBinding":
+        from nexus_sdk.payments.kyaos import KYAOSBinding
+        return KYAOSBinding
+    raise AttributeError(name)
 
 
 # ── Identity normalization (implemented) ──────────────────────────────────────
