@@ -22,7 +22,8 @@
 | `opa/nexus-apay.rego` | Written; input contract test-enforced. **Not validated against a live OPA server in this repository's CI.** |
 | Mandate Bridge (AP2 v0.2) | **Authoritative reference profile; deployment verifier required** |
 | Card Trust Bridge (Visa TAP) | **Authoritative recognition profile; deployment verifier required** |
-| Agent Pay / KYA-OS bindings | **Fail-closed contracts. Not implemented. Do not deploy.** |
+| Agent Token Bridge (Mastercard AP4M) | **Verifier-evidence profile; no public wire compatibility claimed** |
+| KYA-OS binding | **Fail-closed contract. Not implemented. Do not deploy.** |
 | x402 **SafePay Exact** (`X402V2ExactEVMUSDCBinding`) | **Narrow structural binding. Shadow mode only; no live facilitator or chain verification.** |
 | Production assurance claim | **Not made.** See [MVP acceptance gates](#mvp-acceptance-gates). |
 

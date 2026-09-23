@@ -12,8 +12,9 @@ The agent-to-payment enforcement plane.
 
 STATUS
     Core enforcement is implemented as a reference. Narrow SafePay, Mandate
-    Bridge, and Card Trust Bridge profiles have explicit verifier boundaries;
-    remaining rail contracts fail closed. See HARDENING-AND-EXTENSION.md.
+    Bridge, Card Trust Bridge, and Agent Token Bridge profiles have explicit
+    verifier boundaries; remaining rail contracts fail closed. See
+    HARDENING-AND-EXTENSION.md.
 
     Nothing in this package should be described as production-assured until a
     deployment demonstrates the MVP acceptance gates in NEXUS/payments/README.md.
@@ -123,6 +124,10 @@ from nexus_sdk.payments.ap2 import (
 from nexus_sdk.payments.tap import (
     TAPAuthoritativeVerifier, TAPVerificationEvidence, VisaTAPBinding,
 )
+from nexus_sdk.payments.ap4m import (
+    AP4MAuthoritativeVerifier, AP4MAuthorityEvidence, AP4MSettlementEvidence,
+    MastercardAP4MBinding,
+)
 
 __profile_version__ = "CP.5.APAY/0.4"
 
@@ -167,4 +172,7 @@ __all__ = [
     "AP2VerificationEvidence",
     # Card Trust Bridge
     "TAPAuthoritativeVerifier", "TAPVerificationEvidence", "VisaTAPBinding",
+    # Agent Token Bridge
+    "AP4MAuthoritativeVerifier", "AP4MAuthorityEvidence", "AP4MSettlementEvidence",
+    "MastercardAP4MBinding",
 ]
