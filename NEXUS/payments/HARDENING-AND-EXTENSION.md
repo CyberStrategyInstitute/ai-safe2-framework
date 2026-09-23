@@ -103,6 +103,20 @@ verifier; no accepted nonce is cached. The non-consuming `assurance_of` query
 therefore reports `NONE`; verified assurance is returned only in the operation's
 `BindingResult`.
 
+**Agent Token Bridge** (`MastercardAP4MBinding`) is pinned to Mastercard's
+`public-product@2026-09-23` description of Agent Pay for Machines. Mastercard
+does not expose a public AP4M wire or token schema, so the binding treats
+credential and authorization artifacts as opaque references and never claims
+proprietary-token compatibility.
+
+An authenticated network verifier must establish credential status, agent and
+principal binding, verifiable authorization, exact transaction binding, scope,
+per-transaction and cumulative spend, velocity, counterparty, currency,
+freshness, revocation, and replay safety. Settlement evidence is verified
+separately against the exact rail, currency, amount, transaction identifier,
+configured finality, authority continuity, and settlement guarantee. Network
+assurance cannot prove Runtime Proof, user wisdom, or absence of fraud.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 
