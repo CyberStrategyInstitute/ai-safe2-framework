@@ -108,3 +108,17 @@ grant lineage, an idempotency key, a matching policy identifier, and proof from
 the configured receipt issuer. Key Guardian additionally requires a non-empty
 policy snapshot digest pinned by policy identifier, so a policy label cannot
 silently stand in for different rules or configuration.
+
+## Runtime Verifier
+
+`IndependentRuntimeVerifier` is the independent **Runtime Verifier**. It checks
+the exact runtime identity bound into the canonical transaction, a fresh
+single-use verifier challenge, an expected workload baseline, an attested
+workload identity, an allowed attestation method, and the underlying evidence
+verifier before issuing a `RuntimeAuthorizationReceipt`.
+
+`RuntimeVerifierProfile` content-addresses the verifier version, allowed
+methods, permitted workload identities, maximum measurement age, and trust-root
+configuration. Key Guardian pins that profile digest by verifier identifier,
+preventing a familiar verifier name from silently using different trust roots
+or weaker evidence rules.
