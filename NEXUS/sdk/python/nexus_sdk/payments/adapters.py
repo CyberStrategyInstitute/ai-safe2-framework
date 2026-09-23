@@ -424,6 +424,7 @@ class X402SettlementEvidence:
     amount: Optional[str] = None
     error_reason: Optional[str] = None
     authenticated: bool = False
+    voucher_authenticated: bool = False
 
 
 class X402AuthoritativeVerifier(Protocol):
