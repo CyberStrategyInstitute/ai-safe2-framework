@@ -104,6 +104,19 @@ from nexus_sdk.payments.sqlite_state import (
     SQLiteGatewayStateStore,
     StateConflictError,
 )
+from nexus_sdk.payments.key_guardian import (
+    CredentialReleaseEnvelope,
+    InProcessHMACReceiptAuthenticator,
+    InProcessHMACTestBackend,
+    KeyGuardianClient,
+    KeyGuardianTransport,
+    NullKeyGuardianTransport,
+    PolicyAuthorizationReceipt,
+    ProtectedSigningBackend,
+    ReceiptAuthenticator,
+    ReferenceKeyGuardianService,
+    RuntimeAuthorizationReceipt,
+)
 from nexus_sdk.payments.adapters import (
     AP2Binding,
     AgenticTokenBinding,
@@ -179,6 +192,12 @@ __all__ = [
     "ReplayDecision",
     "SettlementStateStore", "TransactionalAuthorityStore", "TransactionalReplayStore",
     "ExposureCeilingExceededError", "SQLiteGatewayStateStore", "StateConflictError",
+    # Isolated credential release
+    "CredentialReleaseEnvelope", "InProcessHMACReceiptAuthenticator",
+    "InProcessHMACTestBackend", "KeyGuardianClient",
+    "KeyGuardianTransport", "NullKeyGuardianTransport", "PolicyAuthorizationReceipt",
+    "ProtectedSigningBackend", "ReceiptAuthenticator", "ReferenceKeyGuardianService",
+    "RuntimeAuthorizationReceipt",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
