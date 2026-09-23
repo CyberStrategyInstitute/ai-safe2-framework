@@ -8,15 +8,15 @@ TWO CLASSES OF CODE LIVE HERE, AND THEY ARE LABELLED DIFFERENTLY.
    Collapses heterogeneous identity sources into one PrincipalBinding. This is
    real because it is a mapping problem NEXUS owns end to end.
 
-2. Rail bindings (AP2, generic x402, Visa TAP / Web Bot Auth, Mastercard Agent
-   Pay, KYA-OS) - FAIL-CLOSED CONTRACTS. NOT IMPLEMENTED. DO NOT DEPLOY.
+2. Remaining rail bindings (Visa TAP / Web Bot Auth, Mastercard Agent Pay,
+   KYA-OS) - FAIL-CLOSED CONTRACTS. NOT IMPLEMENTED. DO NOT DEPLOY.
    Every enforcement method raises NotImplementedError by design, matching the
    convention already used by NEXUS/adapters/mcp/adapter.py. An incomplete
    adapter must fail closed, not pass traffic.
 
-   `SafePay Exact` (`X402V2ExactEVMUSDCBinding`) is the sole exception: a narrow
-   structural, shadow-mode x402 profile. It performs no live facilitator or
-   chain verification and is not production support.
+   SafePay and Mandate Bridge implementations are narrow profiles with explicit
+   verifier boundaries. They are reference implementations, not production
+   support; see HARDENING-AND-EXTENSION.md for their deployment gates.
 
    The remaining contracts are published rather than permissive stubs because:
    each one requires conformance testing against a live counterparty before it
