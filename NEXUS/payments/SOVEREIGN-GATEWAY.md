@@ -62,3 +62,14 @@ credential release.
 
 Each layer will ship with concurrency, crash-recovery, replay, revocation, and
 negative-path evidence before the next layer is allowed to depend on it.
+
+## Gateway State Vault
+
+`SQLiteGatewayStateStore` is the first durable reference implementation. It
+uses database uniqueness, immediate write transactions, and compare-and-swap
+versions to preserve replay keys, revocation epochs, authority-tree exposure,
+reservations, and execution state across workers and restarts.
+
+It remains `REFERENCE` assurance rather than self-declaring deployment status.
+A deployment must separately establish protected storage, access control,
+backup and recovery, availability, monitoring, and operational ownership.

@@ -94,9 +94,15 @@ from nexus_sdk.payments.execution_plane import (
     ExecutionTransitionError,
     GatewayReadiness,
     NEXUSPaymentExecutionPlane,
+    ReplayDecision,
     SettlementStateStore,
     TransactionalAuthorityStore,
     TransactionalReplayStore,
+)
+from nexus_sdk.payments.sqlite_state import (
+    ExposureCeilingExceededError,
+    SQLiteGatewayStateStore,
+    StateConflictError,
 )
 from nexus_sdk.payments.adapters import (
     AP2Binding,
@@ -170,7 +176,9 @@ __all__ = [
     # Sovereign Payment Gateway execution contracts
     "ComponentAssurance", "ExecutionRecord", "ExecutionState",
     "ExecutionTransitionError", "GatewayReadiness", "NEXUSPaymentExecutionPlane",
+    "ReplayDecision",
     "SettlementStateStore", "TransactionalAuthorityStore", "TransactionalReplayStore",
+    "ExposureCeilingExceededError", "SQLiteGatewayStateStore", "StateConflictError",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
