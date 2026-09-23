@@ -118,6 +118,12 @@ from nexus_sdk.payments.key_guardian import (
     ReferenceKeyGuardianService,
     RuntimeAuthorizationReceipt,
 )
+from nexus_sdk.payments.policy_authority import (
+    DeterministicPolicyAuthority,
+    PolicyAuthorityDecision,
+    PolicyDefinition,
+    PolicyReceiptIssuer,
+)
 from nexus_sdk.payments.adapters import (
     AP2Binding,
     AgenticTokenBinding,
@@ -200,6 +206,9 @@ __all__ = [
     "KeyGuardianTransport", "NullKeyGuardianTransport", "PolicyAuthorizationReceipt",
     "ProtectedSigningBackend", "ReceiptAuthenticator", "ReferenceKeyGuardianService",
     "RuntimeAuthorizationReceipt",
+    # Independent deterministic policy issuance
+    "DeterministicPolicyAuthority", "PolicyAuthorityDecision",
+    "PolicyDefinition", "PolicyReceiptIssuer",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
