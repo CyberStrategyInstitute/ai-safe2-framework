@@ -8,21 +8,13 @@ TWO CLASSES OF CODE LIVE HERE, AND THEY ARE LABELLED DIFFERENTLY.
    Collapses heterogeneous identity sources into one PrincipalBinding. This is
    real because it is a mapping problem NEXUS owns end to end.
 
-2. The remaining KYA-OS rail binding is a FAIL-CLOSED CONTRACT. NOT
-   IMPLEMENTED. DO NOT DEPLOY.
-   Every enforcement method raises NotImplementedError by design, matching the
-   convention already used by NEXUS/adapters/mcp/adapter.py. An incomplete
-   adapter must fail closed, not pass traffic.
+2. SafePay, Mandate Bridge, Card Trust Bridge, Agent Token Bridge, and Portable
+   Delegation Bridge are narrow profiles with explicit verifier boundaries.
+   They are references, not production support; see
+   HARDENING-AND-EXTENSION.md for deployment gates.
 
-   SafePay, Mandate Bridge, Card Trust Bridge, and Agent Token Bridge are narrow
-   profiles with explicit verifier boundaries. They are references, not
-   production support; see HARDENING-AND-EXTENSION.md for deployment gates.
-
-   The remaining contracts are published rather than permissive stubs because:
-   each one requires conformance testing against a live counterparty before it
-   can be claimed, and shipping a stub that returns success would let a
-   deployment believe it has binding it does not have. The contract states what
-   must be verified; the implementation is a deliverable, not a detail.
+   A reference profile still requires conformance testing against a live
+   counterparty before deployment support can be claimed.
 
 WHAT A BINDING OWES THE GATEWAY
     Every rail binding maps its protocol's artifacts onto exactly four answers:
@@ -65,7 +57,6 @@ __all__ = [
     "X402V2ExactEVMUSDCAuthoritativeBinding",
     "TrustedAgentBinding",
     "AgenticTokenBinding",
-    "KYAOSBinding",
 ]
 
 
@@ -573,20 +564,4 @@ class AgenticTokenBinding(RailBinding):
     own per-transaction limit.
     """
     protocol = "mastercard-agent-pay"
-    max_native_assurance = AssuranceLevel.MANDATE_BOUND
-
-
-class KYAOSBinding(RailBinding):
-    """KYA-OS, stewarded by the Decentralized Identity Foundation.
-
-    Provides DID-based identity, scoped and revocable delegation, holder-of-key
-    proof, consent gating and audit trails. It is an identity and delegation
-    layer, not a payment layer: it does not establish settlement invariants or
-    workload-behavior assurance.
-
-    The binding maps KYA-OS delegation scopes onto AuthorityConstraints axes and
-    must fail closed on any scope dimension it cannot map, rather than treating
-    an unmapped dimension as unconstrained.
-    """
-    protocol = "kya-os"
     max_native_assurance = AssuranceLevel.MANDATE_BOUND

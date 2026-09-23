@@ -12,9 +12,9 @@ The agent-to-payment enforcement plane.
 
 STATUS
     Core enforcement is implemented as a reference. Narrow SafePay, Mandate
-    Bridge, Card Trust Bridge, and Agent Token Bridge profiles have explicit
-    verifier boundaries; remaining rail contracts fail closed. See
-    HARDENING-AND-EXTENSION.md.
+    Bridge, Card Trust Bridge, Agent Token Bridge, and Portable Delegation
+    Bridge profiles have explicit verifier boundaries. See
+    HARDENING-AND-EXTENSION.md for their deployment limits.
 
     Nothing in this package should be described as production-assured until a
     deployment demonstrates the MVP acceptance gates in NEXUS/payments/README.md.
@@ -95,7 +95,6 @@ from nexus_sdk.payments.adapters import (
     IdentityClaim,
     IdentityNormalizer,
     IdentitySource,
-    KYAOSBinding,
     RailBinding,
     TrustedAgentBinding,
     X402Binding,
@@ -127,6 +126,9 @@ from nexus_sdk.payments.tap import (
 from nexus_sdk.payments.ap4m import (
     AP4MAuthoritativeVerifier, AP4MAuthorityEvidence, AP4MSettlementEvidence,
     MastercardAP4MBinding,
+)
+from nexus_sdk.payments.kyaos import (
+    KYAOSAuthoritativeVerifier, KYAOSBinding, KYAOSVerificationEvidence,
 )
 
 __profile_version__ = "CP.5.APAY/0.4"
@@ -175,4 +177,6 @@ __all__ = [
     # Agent Token Bridge
     "AP4MAuthoritativeVerifier", "AP4MAuthorityEvidence", "AP4MSettlementEvidence",
     "MastercardAP4MBinding",
+    # Portable Delegation Bridge
+    "KYAOSAuthoritativeVerifier", "KYAOSBinding", "KYAOSVerificationEvidence",
 ]

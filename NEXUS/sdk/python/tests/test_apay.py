@@ -722,7 +722,8 @@ class TestControls:
 
     def test_apay20_no_binding_claims_native_runtime_assurance(self):
         from nexus_sdk.payments.adapters import (
-            AgenticTokenBinding, KYAOSBinding, TrustedAgentBinding, X402Binding)
+            AgenticTokenBinding, TrustedAgentBinding, X402Binding)
+        from nexus_sdk.payments.kyaos import KYAOSBinding
         for cls in (AP2Binding, X402Binding, TrustedAgentBinding,
                     AgenticTokenBinding, KYAOSBinding):
             assert cls.max_native_assurance < AssuranceLevel.RUNTIME_BOUND, cls.__name__
