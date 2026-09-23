@@ -116,6 +116,9 @@ freshness, revocation, and replay safety. Settlement evidence is verified
 separately against the exact rail, currency, amount, transaction identifier,
 configured finality, authority continuity, and settlement guarantee. Network
 assurance cannot prove Runtime Proof, user wisdom, or absence of fraud.
+Authority preflight is non-consuming; canonical binding requires the verifier
+to atomically consume replay state, so a legitimate two-step evaluation works
+once and every later binding attempt fails closed.
 
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:

@@ -8,7 +8,7 @@ from nexus_sdk.payments import (
 
 
 class Verifier:
-    def verify_authority(self, request):
+    def verify_authority(self, request, *, consume_replay):
         return AP4MAuthorityEvidence(
             True, "trusted", MastercardAP4MBinding._request_digest(request),
             authenticated=True, credential_active=True, agent_bound=True,
@@ -84,8 +84,10 @@ def test_every_authority_dimension_is_required():
     )
     for field in fields:
         class Weak(Verifier):
-            def verify_authority(self, request, field=field):
-                evidence = super().verify_authority(request)
+            def verify_authority(self, request, *, consume_replay, field=field):
+                evidence = super().verify_authority(
+                    request, consume_replay=consume_replay
+                )
                 values = {**evidence.__dict__, field: False}
                 return AP4MAuthorityEvidence(**values)
         assert binding(Weak()).verify_authority(payload()).decision is BindingDecision.REJECT
@@ -109,9 +111,62 @@ def test_malformed_nested_values_and_verifier_outage_fail_closed():
         assert binding().verify_authority(item).decision is BindingDecision.REJECT
 
     class Down(Verifier):
-        def verify_authority(self, request):
+        def verify_authority(self, request, *, consume_replay):
             raise TimeoutError
     assert binding(Down()).verify_authority(payload()).decision is BindingDecision.HALT
+
+
+def test_malformed_evidence_and_truthy_non_boole_fail_closed():
+    class WrongShape(Verifier):
+        def verify_authority(self, request, *, consume_replay):
+            return {"valid": True}
+
+        def verify_settlement(self, request):
+            return {"success": True}
+
+    assert binding(WrongShape()).verify_authority(payload()).decision is BindingDecision.HALT
+    assert binding(WrongShape()).verify_settlement(payload()).decision is BindingDecision.HALT
+
+    class TruthyStrings(Verifier):
+        def verify_authority(self, request, *, consume_replay):
+            evidence = super().verify_authority(
+                request, consume_replay=consume_replay
+            )
+            return AP4MAuthorityEvidence(
+                **{**evidence.__dict__, "authenticated": "false", "valid": "false"}
+            )
+
+        def verify_settlement(self, request):
+            evidence = super().verify_settlement(request)
+            return AP4MSettlementEvidence(
+                **{**evidence.__dict__, "authenticated": "false", "success": "false"}
+            )
+
+    assert binding(TruthyStrings()).verify_authority(payload()).decision is BindingDecision.REJECT
+    assert binding(TruthyStrings()).verify_settlement(payload()).decision is BindingDecision.REJECT
+
+
+def test_preflight_does_not_consume_replay_but_binding_does_once():
+    class SingleUse(Verifier):
+        consumed = False
+
+        def verify_authority(self, request, *, consume_replay):
+            replay_safe = not self.consumed
+            if consume_replay and replay_safe:
+                self.consumed = True
+            evidence = super().verify_authority(
+                request, consume_replay=consume_replay
+            )
+            return AP4MAuthorityEvidence(
+                **{**evidence.__dict__, "replay_safe": replay_safe}
+            )
+
+    profile = binding(SingleUse())
+    assert profile.verify_authority(payload()).decision is BindingDecision.ACCEPT
+    first = profile.bind_transaction(payload(), "sha256:transaction")
+    replay = profile.bind_transaction(payload(), "sha256:transaction")
+    assert first.decision is BindingDecision.ACCEPT
+    assert replay.decision is BindingDecision.REJECT
 
 
 def test_payload_is_not_mutated_or_logged_in_conformance_report():

@@ -56,7 +56,11 @@ class AP4MSettlementEvidence:
 class AP4MAuthoritativeVerifier(Protocol):
     """Trusted boundary for proprietary credential and settlement verification."""
 
-    def verify_authority(self, request: dict) -> AP4MAuthorityEvidence: ...
+    def verify_authority(
+        self, request: dict, *, consume_replay: bool
+    ) -> AP4MAuthorityEvidence:
+        """Inspect replay state, or atomically consume it for canonical binding."""
+        ...
 
     def verify_settlement(self, request: dict) -> AP4MSettlementEvidence: ...
 
@@ -152,7 +156,9 @@ class MastercardAP4MBinding(RailBinding):
             "payment_flow": self.payment_flow,
         }
 
-    def verify_authority(self, payload: dict) -> BindingResult:
+    def _verify_authority(
+        self, payload: dict, *, consume_replay: bool
+    ) -> BindingResult:
         findings = self._findings(payload)
         if findings:
             return BindingResult(BindingDecision.REJECT, reason="; ".join(findings),
@@ -160,31 +166,46 @@ class MastercardAP4MBinding(RailBinding):
         request = self._request(payload)
         digest = self._request_digest(request)
         try:
-            evidence = self.verifier.verify_authority(request)
+            evidence = self.verifier.verify_authority(
+                request, consume_replay=consume_replay
+            )
         except Exception as exc:
             return BindingResult(BindingDecision.HALT,
                                  reason=f"AP4M verifier unavailable: {type(exc).__name__}")
+        if not isinstance(evidence, AP4MAuthorityEvidence):
+            return BindingResult(
+                BindingDecision.HALT,
+                reason="AP4M verifier returned malformed authority evidence",
+            )
+        rejection_reason = (
+            evidence.invalid_reason
+            if isinstance(evidence.invalid_reason, str) and evidence.invalid_reason
+            else "AP4M verifier rejected authority"
+        )
         checks = [
-            ("verification response is unauthenticated", evidence.authenticated),
-            ("credential is inactive", evidence.credential_active),
-            ("credential is not bound to the agent", evidence.agent_bound),
-            ("credential is not bound to the principal", evidence.principal_bound),
-            ("verifiable authorization is invalid", evidence.authorization_valid),
-            ("authorization is not transaction-bound", evidence.transaction_bound),
-            ("authorization scope is invalid", evidence.scope_valid),
-            ("transaction exceeds its spend limit", evidence.spend_limit_valid),
+            ("verification response is unauthenticated", evidence.authenticated is True),
+            ("credential is inactive", evidence.credential_active is True),
+            ("credential is not bound to the agent", evidence.agent_bound is True),
+            ("credential is not bound to the principal", evidence.principal_bound is True),
+            ("verifiable authorization is invalid", evidence.authorization_valid is True),
+            ("authorization is not transaction-bound", evidence.transaction_bound is True),
+            ("authorization scope is invalid", evidence.scope_valid is True),
+            ("transaction exceeds its spend limit", evidence.spend_limit_valid is True),
             ("authority-tree cumulative budget is exceeded",
-             evidence.cumulative_budget_valid),
-            ("transaction violates velocity policy", evidence.velocity_valid),
-            ("counterparty constraint failed", evidence.counterparty_valid),
-            ("currency constraint failed", evidence.currency_valid),
-            ("authorization is expired or not yet valid", evidence.freshness_valid),
-            ("revocation state is stale", evidence.revocation_current),
-            ("authorization replay check failed", evidence.replay_safe),
+             evidence.cumulative_budget_valid is True),
+            ("transaction violates velocity policy", evidence.velocity_valid is True),
+            ("counterparty constraint failed", evidence.counterparty_valid is True),
+            ("currency constraint failed", evidence.currency_valid is True),
+            ("authorization is expired or not yet valid", evidence.freshness_valid is True),
+            ("revocation state is stale", evidence.revocation_current is True),
+            ("authorization replay check failed", evidence.replay_safe is True),
             ("authority evidence request digest mismatch",
-             evidence.request_digest == digest),
-            ("untrusted AP4M verifier", evidence.verifier_id in self.trusted_verifiers),
-            (evidence.invalid_reason or "AP4M verifier rejected authority", evidence.valid),
+             isinstance(evidence.request_digest, str)
+             and evidence.request_digest == digest),
+            ("untrusted AP4M verifier",
+             isinstance(evidence.verifier_id, str)
+             and evidence.verifier_id in self.trusted_verifiers),
+            (rejection_reason, evidence.valid is True),
         ]
         findings = [message for message, passed in checks if not passed]
         return BindingResult(
@@ -195,8 +216,12 @@ class MastercardAP4MBinding(RailBinding):
             findings=findings,
         )
 
+    def verify_authority(self, payload: dict) -> BindingResult:
+        """Perform a non-consuming preflight; canonical binding consumes replay state."""
+        return self._verify_authority(payload, consume_replay=False)
+
     def bind_transaction(self, payload: dict, canonical_digest: str) -> BindingResult:
-        authority = self.verify_authority(payload)
+        authority = self._verify_authority(payload, consume_replay=True)
         if authority.decision is not BindingDecision.ACCEPT:
             return authority
         extensions = self._object(payload.get("extensions"))
@@ -224,22 +249,35 @@ class MastercardAP4MBinding(RailBinding):
         except Exception as exc:
             reason = f"AP4M settlement verifier unavailable: {type(exc).__name__}"
             return BindingResult(BindingDecision.HALT, reason=reason)
+        if not isinstance(evidence, AP4MSettlementEvidence):
+            return BindingResult(
+                BindingDecision.HALT,
+                reason="AP4M verifier returned malformed settlement evidence",
+            )
         checks = [
-            ("settlement response is unauthenticated", evidence.authenticated),
-            ("settlement failed", evidence.success),
-            ("settlement lost authority continuity", evidence.authority_continuity_valid),
-            ("settlement guarantee is invalid", evidence.settlement_guarantee_valid),
-            ("settlement evidence request digest mismatch", evidence.request_digest == digest),
-            ("untrusted AP4M verifier", evidence.verifier_id in self.trusted_verifiers),
+            ("settlement response is unauthenticated", evidence.authenticated is True),
+            ("settlement failed", evidence.success is True),
+            ("settlement lost authority continuity",
+             evidence.authority_continuity_valid is True),
+            ("settlement guarantee is invalid",
+             evidence.settlement_guarantee_valid is True),
+            ("settlement evidence request digest mismatch",
+             isinstance(evidence.request_digest, str)
+             and evidence.request_digest == digest),
+            ("untrusted AP4M verifier",
+             isinstance(evidence.verifier_id, str)
+             and evidence.verifier_id in self.trusted_verifiers),
             ("settlement rail mismatch", evidence.rail == transaction.get("rail")),
             ("settlement currency mismatch", evidence.currency == transaction.get("currency")),
-            ("settlement amount mismatch", evidence.amount_minor == transaction.get("amountMinor")),
+            ("settlement amount mismatch",
+             type(evidence.amount_minor) is int
+             and evidence.amount_minor == transaction.get("amountMinor")),
             ("settlement transaction identifier mismatch",
              evidence.transaction_id == transaction.get("transactionId")),
             ("settlement finality mismatch", evidence.finality is self.native_finality),
         ]
         findings = [message for message, passed in checks if not passed]
-        if not evidence.success and evidence.invalid_reason:
+        if evidence.success is not True and isinstance(evidence.invalid_reason, str):
             findings.append(evidence.invalid_reason)
         return BindingResult(
             BindingDecision.REJECT if findings else BindingDecision.ACCEPT,
