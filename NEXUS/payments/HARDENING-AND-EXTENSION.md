@@ -120,6 +120,20 @@ Authority preflight is non-consuming; canonical binding requires the verifier
 to atomically consume replay state, so a legitimate two-step evaluation works
 once and every later binding attempt fails closed.
 
+**Portable Delegation Bridge** (`KYAOSBinding`) is pinned to KYA-OS Protocol
+v1.0.0, Entity Card v1.1, and the `org.kya-os/proof.v1` request-proof profile.
+It requires a conformant verifier to establish DID holder-key control, audience
+and request binding, delegation-chain continuity and attenuation, trust root,
+scope and constraints, user consent, freshness, revocation, and accept-once
+replay protection. Every required payment constraint axis must map losslessly;
+an unknown or unmapped axis rejects the request.
+
+This is an authority overlay, not a settlement protocol. It cannot prove that
+funds moved, reconcile an ambiguous payment, attest workload integrity, validate
+merchant honesty, or replace a user's consequential-action approval. The
+configured finality is an externally established property of the signed payment
+operation, not a claim derived from KYA-OS.
+
 Extend by **profile, never by making SafePay Exact generic**. Each new adapter
 gets its own human name, technical type, conformance corpus, and explicit tuple:
 
