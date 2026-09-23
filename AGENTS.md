@@ -203,6 +203,7 @@ For automated assessment or implementation guidance:
 - AISM: `AISM/README.md`
 - NEXUS: `NEXUS/README.md`
 - Payment adapter usage: `NEXUS/payments/ADAPTER-GUIDE.md`
+- Sovereign Payment Gateway: `NEXUS/payments/SOVEREIGN-GATEWAY.md`
 - Scanner: `scanner/README.md`
 - Examples: `examples/README.md`
 - Research: `research/README.md`
