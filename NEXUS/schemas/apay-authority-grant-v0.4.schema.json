@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/nexus/schemas/apay-authority-grant-v0.4.schema.json",
+  "title": "APAY Authority Grant v0.4",
+  "description": "The framework-owned mandate for the agent-to-payment plane. Protocol mandates (AP2 Intent/Cart Mandates, Mastercard Agentic Tokens, KYA-OS delegations, x402 payment payloads) bind TO this object; none of them replace it. Defined in NEXUS/payments/README.md, control profile CP.5.APAY.",
+  "type": "object",
+  "required": [
+    "authority_grant_id",
+    "delegation_chain_id",
+    "principal_id",
+    "depth",
+    "issued_at",
+    "revocation_epoch",
+    "constraints",
+    "grant_digest"
+  ],
+  "properties": {
+    "authority_grant_id": {
+      "type": "string",
+      "pattern": "^grant_[0-9a-f]{8,}$",
+      "description": "Stable identifier for this grant. Immutable after issuance."
+    },
+    "delegation_chain_id": {
+      "type": "string",
+      "description": "Lineage root shared by every grant in one authority tree. Revoking the chain severs all of them at once."
+    },
+    "parent_grant_id": {
+      "type": ["string", "null"],
+      "description": "Immediate parent. Null only for a root grant. A non-null value naming a grant that does not exist is an orphan and must fail closed."
+    },
+    "depth": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Hops from the root grant."
+    },
+    "principal_id": {
+      "type": "string",
+      "description": "The accountable principal. Revocation epochs are tracked per principal."
+    },
+    "agent_did": {
+      "type": ["string", "null"],
+      "pattern": "^did:[a-z]+:.+",
+      "description": "DID of the agent holding this grant."
+    },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "revocation_epoch": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic counter carried from the principal at issuance. A grant whose epoch is below the principal's current epoch has no authority, regardless of its other fields. This is what makes revocation a single atomic act rather than a race against every cache."
+    },
+    "revoked": { "type": "boolean", "default": false },
+    "instruction_ref": {
+      "type": ["string", "null"],
+      "description": "Reference to the principal's original natural-language instruction, retained so an adjudicator can inspect the translation rather than the agent's account of it."
+    },
+    "instruction_digest": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 over the original instruction."
+    },
+    "normalized_constraints_digest": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 over the deterministic constraints derived from the instruction. Kept separate from instruction_digest so semantic-translation error is visible as a difference between two artifacts."
+    },
+    "unresolved_ambiguities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Constraint axes the instruction did not determine. A grant with a non-empty list MUST NOT authorize spend. Unresolved ambiguity is never closed by a model."
+    },
+    "approved_by": {
+      "type": ["string", "null"],
+      "description": "Identity that approved the rendered mandate on a trusted surface."
+    },
+    "approval_surface": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Digest of exactly what was rendered at approval time. Generated from constraints, never from agent-supplied prose."
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "payment.search",
+          "payment.negotiate",
+          "payment.approve",
+          "payment.execute",
+          "payment.settle",
+          "payment.refund",
+          "payment.reconcile",
+          "account.manage"
+        ]
+      },
+      "description": "Separation of duties (APAY-07). A grant that can execute a payment does not thereby hold refund or account-management authority."
+    },
+    "constraints": { "$ref": "#/$defs/constraints" },
+    "grant_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 over the grant's authority-bearing fields."
+    }
+  },
+  "$defs": {
+    "money": {
+      "type": "object",
+      "required": ["minor_units", "currency"],
+      "additionalProperties": false,
+      "properties": {
+        "minor_units": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Exact minor units. Never a float: accumulated floating-point error in a spend ceiling is precisely the signal a micro-drain attack hides inside."
+        },
+        "currency": { "type": "string", "minLength": 1, "maxLength": 12 }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "description": "Every field is an attenuation axis. A null set-valued field means UNCONSTRAINED on that axis, which is why a child holding null under a constrained parent is a widening, not an inheritance.",
+      "required": ["min_assurance", "max_finality", "max_delegation_depth"],
+      "properties": {
+        "max_transaction": { "oneOf": [{ "$ref": "#/$defs/money" }, { "type": "null" }] },
+        "max_aggregate": {
+          "oneOf": [{ "$ref": "#/$defs/money" }, { "type": "null" }],
+          "description": "Ceiling across this grant AND every descendant. Evaluated on the subtree, not on the grant alone."
+        },
+        "window_max": { "oneOf": [{ "$ref": "#/$defs/money" }, { "type": "null" }] },
+        "window_seconds": { "type": ["integer", "null"], "minimum": 1 },
+        "currencies": { "type": ["array", "null"], "items": { "type": "string" } },
+        "allowed_merchants": { "type": ["array", "null"], "items": { "type": "string" } },
+        "denied_merchants": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "A child may never forget a parent's deny list."
+        },
+        "allowed_categories": { "type": ["array", "null"], "items": { "type": "string" } },
+        "allowed_geographies": { "type": ["array", "null"], "items": { "type": "string" } },
+        "allowed_rails": {
+          "type": ["array", "null"],
+          "items": {
+            "type": "string",
+            "enum": ["card_network", "bank_transfer", "stablecoin", "account_balance", "invoice_credit"]
+          }
+        },
+        "allowed_facilitators": { "type": ["array", "null"], "items": { "type": "string" } },
+        "allowed_destinations": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "Payee or settlement addresses. On an irreversible rail, a null value is unbounded liability rather than convenience."
+        },
+        "min_assurance": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4,
+          "default": 4,
+          "description": "0 none/guest, 1 bearer, 2 signed request (Web Bot Auth / Visa TAP class), 3 mandate bound to a cart (AP2 class), 4 mandate plus fresh workload measurement. The CP.5.APAY floor is 4. An execution path offering less is refused, which is what prevents an agent from escaping controls by choosing guest checkout."
+        },
+        "max_finality": {
+          "type": "string",
+          "enum": ["reversible", "mediated", "irreversible"],
+          "description": "Strongest settlement finality this grant tolerates. May tighten down the tree, never loosen."
+        },
+        "recurrence_allowed": { "type": "boolean", "default": false },
+        "max_transactions": { "type": ["integer", "null"], "minimum": 0 },
+        "max_delegation_depth": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "REMAINING sub-delegation budget, decremented at every hop. A grant holding zero cannot mint children."
+        },
+        "not_after": { "type": ["string", "null"], "format": "date-time" },
+        "hear_above": {
+          "oneOf": [{ "$ref": "#/$defs/money" }, { "type": "null" }],
+          "description": "Spend at or above this requires named human authority (AI SAFE2 CP.10 HEAR)."
+        }
+      }
+    }
+  }
+}

@@ -81,7 +81,7 @@
   },
   "implementations": {
     "nexus": {
-      "version": "0.3",
+      "version": "0.4",
       "role": "CSI first-party reference implementation",
       "required_for_framework_conformance": false,
       "entrypoint": "NEXUS/README.md",

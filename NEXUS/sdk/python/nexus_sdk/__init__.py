@@ -1,6 +1,15 @@
 """
 nexus_sdk - NEXUS-A2A Python SDK
-Cyber Strategy Institute | v0.3.0 | AI SAFE2 v3.0 Compatible
+Cyber Strategy Institute | v0.4.0 | AI SAFE2 v3.1 Compatible
+
+v0.4 additions:
+    payments/    CP.5.APAY agent-to-payment enforcement plane. Imported
+                 explicitly (`from nexus_sdk.payments import ...`) rather than
+                 re-exported here, so a deployment that does not move value
+                 does not load the payment object model.
+
+                 The default credential broker REFUSES every signing request.
+                 An unconfigured payment path does not move money.
 
 v0.3 additions:
     guardian.py  - ACS-compatible Guardian Integration Profile (per-call verdict model)
@@ -44,7 +53,7 @@ from nexus_sdk.bridges import (
     NEXUSRESTBridge, ProtocolBridgeFactory,
 )
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 __all__ = [
     # CAEL core
     "CAELEnvelope", "CAELSender", "CAELPolicy", "CAELBudget", "CAELDelegation",

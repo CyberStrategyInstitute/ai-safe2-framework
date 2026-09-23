@@ -1,10 +1,10 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexus-a2a-sdk"
-version = "0.3.0"
+version = "0.4.0"
 description = "NEXUS-A2A Python SDK: cryptographic governance for agentic AI communication"
 readme = "sdk/python/README.md"
 license = { file = "LICENSE" }

@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/nexus/schemas/apay-ptr-v0.4.schema.json",
+  "title": "APAY Payment Transaction Receipt (PTR) v0.4",
+  "description": "Dispute-grade evidence for one agent-initiated value movement. The payment-plane sibling of the NEXUS Output Receipt (NOR), with the same hash-chaining discipline. The test of adequacy: a third party who trusts none of the participants must be able to reconstruct who was accountable, what authority existed, what the principal approved, what workload executed, which ruleset decided, what moved, and whether revocation had already fired - without believing the agent's own account of its reasoning.",
+  "type": "object",
+  "required": [
+    "receipt_id",
+    "created_at",
+    "content_hash",
+    "fields"
+  ],
+  "properties": {
+    "receipt_id": { "type": "string", "pattern": "^ptr_[0-9a-f]{8,}$" },
+    "prev_hash": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Content hash of the preceding receipt. Null only for the first receipt in a ledger. A break in this chain is an insertion, deletion or edit."
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "content_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "completeness": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Fraction of required evidence fields covered. Reported, not asserted: a deployment claiming CP.5.APAY conformance publishes this number, and a low score is a finding rather than a formatting problem. Completeness is a property of the SET of receipts for a transaction, since an authorization receipt legitimately cannot carry a settlement id."
+    },
+    "fields": { "$ref": "#/$defs/evidence" },
+    "_sealed_commitment": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "Present on a redacted receipt. Digest over the withheld fields, so omission is detectable rather than silent and the principal can later open them to prove content."
+    },
+    "_sealed_fields": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Names of withheld fields. A verifier can see that a field existed without seeing its value."
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": [
+        "framework_version",
+        "profile_version",
+        "transaction_intent_id",
+        "decision",
+        "policy_id",
+        "decided_at"
+      ],
+      "properties": {
+        "framework_version": { "type": "string" },
+        "profile_version": { "type": "string", "const": "CP.5.APAY/0.4" },
+        "transaction_intent_id": { "type": "string" },
+
+        "principal_id": { "type": ["string", "null"] },
+        "owner_of_record": {
+          "type": ["string", "null"],
+          "description": "The accountable human (AISM I-5). Sealed at the adjudication tier by default."
+        },
+        "agent_did": { "type": ["string", "null"] },
+        "act_tier": { "type": ["integer", "null"], "minimum": 1, "maximum": 4 },
+        "consequence_class": {
+          "type": "string",
+          "enum": ["routine", "material", "consequential", "critical"]
+        },
+
+        "instruction_ref": { "type": ["string", "null"] },
+        "instruction_digest": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "normalized_constraints_digest": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "approval_surface_digest": {
+          "type": ["string", "null"],
+          "description": "What the human actually saw at approval time."
+        },
+        "approved_cart_digest": {
+          "type": ["string", "null"],
+          "description": "Digest of the terms bound at approval. Compared against canonical_digest to detect post-approval mutation."
+        },
+        "canonical_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Digest of the transaction's defining fields at execution. A difference from approved_cart_digest is a TOCTOU finding, not a rounding difference."
+        },
+
+        "authority_grant_id": { "type": ["string", "null"] },
+        "delegation_chain_id": { "type": ["string", "null"] },
+        "delegation_lineage": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Root-first grant ids ending with the grant that authorized this transaction."
+        },
+        "attenuation_result": {
+          "description": "The string 'monotonic', or the list of lineage axes on which authority widened. Re-derived at execution time rather than trusted from mint time.",
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } },
+            { "type": "null" }
+          ]
+        },
+
+        "runtime_measurement_id": { "type": ["string", "null"] },
+        "runtime_baseline_digest": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "runtime_attested": {
+          "type": "boolean",
+          "description": "False means the workload was self-declared. This single field is what separates 'a valid credential was presented' from 'the approved software presented it'."
+        },
+
+        "policy_id": { "type": "string" },
+        "decision_id": { "type": "string" },
+        "decision": {
+          "type": "string",
+          "enum": ["allow", "deny", "escalate", "reconcile"]
+        },
+        "reason_codes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Stable machine codes. Empty on a clean allow, which is an answer rather than a gap."
+        },
+
+        "merchant_id": { "type": "string" },
+        "merchant_baseline_digest": { "type": ["string", "null"] },
+        "destination": { "type": ["string", "null"] },
+        "rail": {
+          "type": "string",
+          "enum": ["card_network", "bank_transfer", "stablecoin", "account_balance", "invoice_credit"]
+        },
+        "facilitator": { "type": ["string", "null"] },
+        "path_assurance": { "type": "integer", "minimum": 0, "maximum": 4 },
+
+        "amount": {
+          "type": "object",
+          "required": ["minor_units", "currency"],
+          "properties": {
+            "minor_units": { "type": "integer", "minimum": 0 },
+            "currency": { "type": "string" }
+          }
+        },
+        "aggregate_exposure_after": {
+          "type": ["object", "null"],
+          "description": "Committed subtree exposure after this decision. Sealed at the adjudication tier: a merchant does not need the principal's running total."
+        },
+        "revocation_epoch": { "type": ["integer", "null"], "minimum": 0 },
+
+        "idempotency_key": { "type": ["string", "null"] },
+        "nonce": { "type": ["string", "null"] },
+        "risk_signals": { "type": "array", "items": { "type": "string" } },
+        "hear_satisfied_by": {
+          "type": "string",
+          "description": "Never null. Either the approving identity, 'not_required', or 'required_not_satisfied' - so an adjudicator can tell 'no human was needed' apart from 'a human was needed and the record is missing'."
+        },
+
+        "decided_at": { "type": "string", "format": "date-time" },
+        "settlement_id": { "type": ["string", "null"] },
+        "settlement_state": {
+          "type": "string",
+          "enum": ["pending", "settled", "failed", "ambiguous", "reconciling"],
+          "description": "'ambiguous' is a first-class outcome, not an error. A timeout where nobody knows whether value moved is the state that actually causes duplicate settlement and service-without-payment, and it must route to reconciliation rather than retry."
+        },
+        "settled_at": { "type": ["string", "null"], "format": "date-time" }
+      }
+    }
+  }
+}

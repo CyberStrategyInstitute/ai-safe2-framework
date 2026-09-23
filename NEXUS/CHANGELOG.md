@@ -7,6 +7,121 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [0.4.0] -- 2026-09-21
+
+### Summary
+
+v0.4 is the Agent-to-Payment Release. It adds a fourth enforcement plane, **CP.5.APAY
+(Agentic Payments Integrity Profile)**, covering the layer no published agent-payment
+protocol claims: proof that the workload holding a valid credential is still running the
+software that was approved, at the moment value moves.
+
+AP2 (FIDO, April 2026), x402 (Linux Foundation, April 2026), Visa TAP, Mastercard Agent
+Pay and KYA-OS answer recognition and authorization well. All of them assume the signing
+host is trustworthy; none require proof of it. An attacker who owns the agent host
+inherits its identity, registrations and mandates intact, and every signature they
+produce verifies correctly.
+
+Two AISM invariants are added: **I-7 Runtime-Bound Authority** and **I-8 Aggregate
+Economic Containment**.
+
+### Added -- SDK
+
+- **`nexus_sdk/payments/objects.py`**: protocol-independent object model
+  - Seven canonical identifiers: `principal_id`, `authority_grant_id`,
+    `delegation_chain_id`, `runtime_measurement_id`, `policy_id`,
+    `transaction_intent_id`, `revocation_epoch`
+  - `Money` in exact integer minor units; rejects float construction, excess precision,
+    and cross-currency comparison
+  - `AssuranceLevel` (0 none/guest → 4 runtime-bound), `SettlementFinality`,
+    `ConsequenceClass`, 40+ stable `PaymentReasonCode` values
+  - `AuthorityConstraints.attenuation_violations()` across 18 axes; null on a set-valued
+    axis is treated as the universal set, so an unconstrained child under a constrained
+    parent is a widening rather than an inheritance
+- **`nexus_sdk/payments/mandate.py`**: mandate compiler and trusted rendering surface
+  - Deterministic rule engine, never a model: a model compiling its own spending limit is
+    the vulnerability, since the injection that steers a purchase steers the constraint
+    meant to bound it
+  - Open-ended spend language and implied recurrence become recorded `Ambiguity` objects;
+    `issue()` refuses while any remain unresolved
+  - `render()` generates from constraints alone, consequence first
+- **`nexus_sdk/payments/authority.py`**: authority graph and revocation plane
+  - Subtree exposure accounting: a child's spend counts against every ancestor's ceiling
+  - `RevocationPlane` as a monotonic epoch rather than a delete, so revocation does not
+    race caches, facilitators or child agents
+  - Velocity detection for micro-drain, split transactions and merchant dispersion
+  - `exposure_after_revocation()`: measures value that still moved, not API latency
+- **`nexus_sdk/payments/firewall.py`**: deterministic policy decision point; no language
+  model participates; reports every failing rule, not the first
+- **`nexus_sdk/payments/broker.py`**: isolated signing authority
+  - `NullCredentialBroker` is the bound default and **refuses every request**
+  - Broker re-checks decision, canonical digest, runtime reference and revocation epoch
+    before touching a key, on the assumption that the caller may be compromised
+- **`nexus_sdk/payments/evidence.py`**: Payment Transaction Receipt (PTR)
+  - Hash-chained ledger with tamper detection; 41 required evidence fields
+  - Three disclosure tiers; withheld fields are committed by digest, not dropped
+  - Completeness measured across the union of a transaction's receipts
+- **`nexus_sdk/payments/gateway.py`**: orchestration and conformance metrics
+  - Re-reads the revocation epoch immediately before credential release
+  - Ambiguous settlement is a first-class state and commits exposure
+- **`nexus_sdk/payments/opa_input.py`**: single input contract shared by the Python
+  firewall and the Rego policy
+- **`nexus_sdk/payments/adapters.py`**: `IdentityNormalizer` (implemented) plus AP2,
+  x402, Visa TAP, Mastercard Agent Pay and KYA-OS bindings as **fail-closed contracts**
+
+### Added -- Policy and schemas
+
+- **`opa/nexus-apay.rego`**: out-of-process payment enforcement, default deny, with a
+  separate `release_credential` gate
+- **`opa/nexus-aism-invariants.rego`**: invariants I-7 and I-8; aggregate score now /8
+- **`schemas/apay-authority-grant-v0.4.schema.json`**
+- **`schemas/apay-ptr-v0.4.schema.json`**
+
+### Added -- Documentation
+
+- **`payments/README.md`**: CP.5.APAY profile, standards landscape, execution sequence,
+  required metrics, MVP acceptance gates, buyer and standards positioning
+- **`payments/THREAT-MODEL.md`**: adversaries, 14-entry risk register with residual risk,
+  and an explicit known-limits section
+- **`payments/CONTROLS.md`**: APAY-01..20 with AI SAFE² mapping, rationale, test
+  references, and three conformance levels
+- **`payments/CHALLENGE-LAB.md`**: twelve falsifiable experiments, including one
+  (EXP-08, catalog poisoning) designed to fail in order to document a stated limit
+
+### Added -- Tests
+
+- **`tests/test_apay.py`**: 95 tests. Every control has at least one test proving it
+  denies what it claims to deny. `TestHonesty` fails if a fail-closed default is made
+  permissive.
+- **`tests/test_apay_opa_contract.py`**: 7 tests. Parses the Rego, extracts every
+  `input.*` path it reads, and fails if anything is not supplied by the shared builder -
+  because a rule with an absent input path is undefined, and an undefined violation rule
+  is a control that silently stopped existing.
+- Suite total after hardening: **306 passing**
+
+### Fixed
+
+- **`pyproject.toml`**: `build-backend` was `setuptools.backends.legacy:build`, which does
+  not exist. The package could not be installed from source at all. Corrected to
+  `setuptools.build_meta`.
+
+### Known limitations (stated, not deferred)
+
+- No production rail binding is implemented. Every AP2/TAP/Agent Pay/KYA-OS claim in this
+  release describes what a binding must verify, not tested integration.
+- `opa/nexus-apay.rego` is not validated against a live OPA server in this repository's
+  CI. Its input contract is test-enforced; its evaluation semantics are not.
+- Semantic intent integrity is mitigated, not solved. No control proves the principal
+  meant what they said.
+- Catalog poisoning is not addressed. An authentic merchant selling the wrong thing at a
+  permitted price passes every provenance check; only containment survives it.
+- Consent decay is a human-factors problem. Legibility helps; habituation is not
+  engineered away.
+- `[project.scripts] nexus-score = "nexus_sdk._cli:main"` still points at a module that
+  does not exist. The console script is non-functional. Not fixed in this release.
+
+---
+
 ## [0.3.0] -- 2026-05-30
 
 ### Summary

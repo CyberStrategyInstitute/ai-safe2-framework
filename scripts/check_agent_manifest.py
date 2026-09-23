@@ -46,7 +46,7 @@ def main() -> int:
             uas_profile.get("adds_cross_pillar_control"),
             False,
         ),
-        "nexus.version": (implementations.get("nexus", {}).get("version"), "0.3"),
+        "nexus.version": (implementations.get("nexus", {}).get("version"), "0.4"),
         "gateway.version": (implementations.get("gateway", {}).get("version"), "3.0"),
         "scanner.rule_count": (implementations.get("scanner", {}).get("rule_count"), 64),
         "scanner.mcp_profile_rule_count": (
