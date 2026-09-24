@@ -45,7 +45,17 @@
 
 ## Security Review Notes
 
-<!-- For identity, authorization, delegation, state, tool, or protocol changes, describe the trust boundary and fail-closed behavior. -->
+<!-- For identity, authorization, delegation, state, tool, payment, cryptography, or protocol changes, describe the trust boundary and fail-closed behavior. -->
+
+## Independent Review
+
+- [ ] Greptile completed a substantive review of the current head commit
+- Greptile result or explicit limitation: <!-- quota/error/absence/stale review does not count as approval -->
+- Unresolved findings and accepted residual risk:
+
+## Compatibility and Recovery
+
+<!-- Describe compatibility impact and the rollback, migration, or recovery path. -->
 
 ## Changelog / Release Notes
 

@@ -1,0 +1,92 @@
+name: Security Gates
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: security-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  secrets:
+    name: Security / Secret history
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install verified Gitleaks 8.28.0
+        run: |
+          set -euo pipefail
+          base="https://github.com/gitleaks/gitleaks/releases/download/v8.28.0"
+          archive="gitleaks_8.28.0_linux_x64.tar.gz"
+          curl --fail --location --silent --show-error --output "$archive" "$base/$archive"
+          curl --fail --location --silent --show-error --output checksums.txt "$base/gitleaks_8.28.0_checksums.txt"
+          grep "  $archive$" checksums.txt | sha256sum --check --strict
+          tar -xzf "$archive" gitleaks
+      - name: Scan reachable Git history for new secrets
+        shell: bash
+        run: |
+          # A depth-zero checkout fetches every remote branch. Remove those references in this
+          # disposable runner so Gitleaks examines only commits reachable from the checked-out PR.
+          git for-each-ref --format='delete %(refname)' refs/remotes/origin | git update-ref --stdin
+          ./gitleaks git --redact --verbose --log-opts=HEAD --baseline-path .gitleaks-baseline.json .
+
+  semgrep:
+    name: Security / Repository guardrails
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install pinned Semgrep
+        run: python -m pip install "semgrep==1.178.0"
+      - name: Enforce repository-owned security rules
+        run: semgrep scan --config .semgrep/security.yml --error --metrics=off
+
+  dependency-audit:
+    name: Security / Python dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            pyproject.toml
+            NEXUS/sdk/python/requirements.txt
+            scanner/requirements.txt
+      - name: Audit shipped dependency surfaces
+        run: |
+          python -m pip install "pip-audit==2.9.0"
+          python -m pip_audit -r NEXUS/sdk/python/requirements.txt
+          python -m pip_audit -r scanner/requirements.txt
+
+  dependency-review:
+    name: Security / Dependency change review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Reject newly introduced high-severity vulnerable dependencies
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0
+        with:
+          fail-on-severity: high

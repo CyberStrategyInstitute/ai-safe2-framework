@@ -1,0 +1,21 @@
+[pr_reviewer]
+require_security_review = true
+require_risk_assessment = true
+require_merge_recommendation = true
+require_priority_files = true
+enable_review_coverage_footer = true
+enable_large_pr_chunking = true
+max_number_of_calls = 3
+num_max_findings = 8
+extra_instructions = """\
+Prioritize correctness, authorization and policy boundaries, untrusted input handling,
+fail-closed behavior, evidence integrity, concurrency, error handling, migration and
+backward compatibility, dependency and workflow safety, and missing regression tests.
+For AI SAFE2 and NEXUS, specifically trace whether decisions, receipts, manifests,
+settlement state, and compliance claims are deterministic and tamper-evident. Ignore
+pure style preferences unless they hide a correctness or security risk.
+"""
+
+[pr_code_suggestions]
+focus_only_on_problems = true
+num_code_suggestions = 8
