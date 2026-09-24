@@ -140,6 +140,15 @@ from nexus_sdk.payments.human_intent import (
     TrustedIntentAuthority,
     TrustedTransactionRendering,
 )
+from nexus_sdk.payments.settlement_truth import (
+    AuthoritativeSettlementObserver,
+    RailSettlementEvidence,
+    RetryDirective,
+    SettlementEvidenceVerifier,
+    SettlementObservation,
+    SettlementObserverProfile,
+    SettlementTruth,
+)
 from nexus_sdk.payments.adapters import (
     AP2Binding,
     AgenticTokenBinding,
@@ -234,6 +243,10 @@ __all__ = [
     "HumanIntentAuthorityProfile", "InMemoryTestApprovalChallengeStore",
     "InProcessHMACTestHumanApprovalVerifier", "TrustedIntentAuthority",
     "TrustedTransactionRendering",
+    # Authoritative settlement truth and retry discipline
+    "AuthoritativeSettlementObserver", "RailSettlementEvidence", "RetryDirective",
+    "SettlementEvidenceVerifier", "SettlementObservation",
+    "SettlementObserverProfile", "SettlementTruth",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",

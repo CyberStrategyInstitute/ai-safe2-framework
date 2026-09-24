@@ -137,3 +137,19 @@ an authenticated `HumanIntentAuthorizationReceipt` whose transaction,
 rendering, validity window, authority identity, and pinned authority profile all
 match. Routine transactions can continue under existing delegated mandate
 authority without prompting the user for every payment.
+
+## Settlement Truth Authority
+
+`AuthoritativeSettlementObserver` is the independent **Settlement Truth
+Authority**. It accepts only authenticated rail evidence bound to the exact
+canonical transaction and Key Guardian authorization, including amount,
+currency, destination, rail, finality, and signing digest.
+
+Identical observations are idempotent and conflicting claims for the same
+authorization halt once terminal truth is established. Ambiguous observations
+remain eligible to progress to authoritative terminal evidence. A settled
+outcome requires a settlement identifier and the
+profile-defined finality threshold. Unknown, timed-out, or insufficiently final
+outcomes become `AMBIGUOUS` with a reconciliation directive—never a blind retry.
+Even an authoritative failure requires a new authorization before another
+payment attempt.
