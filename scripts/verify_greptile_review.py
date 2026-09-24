@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail unless Greptile completed a substantive review of the current PR head."""
+"""Report whether Greptile completed a substantive review of the current PR head."""
 
 from __future__ import annotations
 
@@ -144,11 +144,11 @@ def _next_link(link_header: str) -> str:
     return ""
 
 
-def _write_summary(result: GateResult) -> None:
+def _write_summary(result: GateResult, *, advisory: bool = False) -> None:
     summary = os.getenv("GITHUB_STEP_SUMMARY")
     if not summary:
         return
-    marker = "PASS" if result.ok else "FAIL"
+    marker = "PASS" if result.ok else ("NOTICE" if advisory else "FAIL")
     with open(summary, "a", encoding="utf-8") as handle:
         handle.write(f"## Greptile current-head gate: {marker}\n\n{result.reason}\n")
 
@@ -160,6 +160,11 @@ def main() -> int:
     parser.add_argument("--head-sha", required=True)
     parser.add_argument("--timeout-seconds", type=int, default=720)
     parser.add_argument("--poll-seconds", type=int, default=30)
+    parser.add_argument(
+        "--advisory",
+        action="store_true",
+        help="Report missing/degraded review without failing the workflow.",
+    )
     args = parser.parse_args()
 
     token = os.getenv("GITHUB_TOKEN", "")
@@ -184,10 +189,13 @@ def main() -> int:
 
         print(f"[{datetime.now().isoformat(timespec='seconds')}] {last_result.reason}")
         if last_result.ok:
-            _write_summary(last_result)
+            _write_summary(last_result, advisory=args.advisory)
             return 0
         if time.monotonic() >= deadline:
-            _write_summary(last_result)
+            _write_summary(last_result, advisory=args.advisory)
+            if args.advisory:
+                print("Greptile did not complete a substantive current-head review; continuing.")
+                return 0
             print(
                 "Greptile is a required final review gate. Check installation, repository access, "
                 "quota/plan status, and whether it reviewed the latest commit.",

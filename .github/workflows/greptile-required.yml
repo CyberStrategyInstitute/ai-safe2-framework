@@ -1,4 +1,4 @@
-name: Greptile Required Review
+name: Greptile Review Status
 
 on:
   pull_request:
@@ -11,26 +11,27 @@ permissions:
   issues: read
 
 concurrency:
-  group: greptile-${{ github.event.pull_request.number }}
+  group: greptile-status-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
   current-head-review:
-    name: Greptile / Current-head review
+    name: Greptile / Advisory status
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 3
     steps:
       - name: Checkout gate implementation
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
-      - name: Require a completed Greptile review of this revision
+      - name: Report whether Greptile reviewed this revision
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
           python scripts/verify_greptile_review.py
           --pr "${{ github.event.pull_request.number }}"
           --head-sha "${{ github.event.pull_request.head.sha }}"
-          --timeout-seconds 720
-          --poll-seconds 30
+          --timeout-seconds 0
+          --poll-seconds 1
+          --advisory

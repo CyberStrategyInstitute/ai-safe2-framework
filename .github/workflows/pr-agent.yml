@@ -1,0 +1,49 @@
+name: PR-Agent Review
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, ready_for_review, synchronize]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: pr-agent-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: PR-Agent / Advisory review
+    if: github.event.pull_request.draft == false && github.event.sender.type != 'Bot'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+    steps:
+      - name: Explain missing model credential
+        if: env.OPENAI_KEY == ''
+        shell: bash
+        run: |
+          echo '## PR-Agent: not configured' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Add the OPENAI_KEY repository secret to enable routine advisory reviews.' >> "$GITHUB_STEP_SUMMARY"
+      - name: Review pull request
+        id: pr-agent
+        if: env.OPENAI_KEY != ''
+        continue-on-error: true
+        uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          github_action_config.auto_review: "true"
+          github_action_config.auto_describe: "false"
+          github_action_config.auto_improve: "false"
+          github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
+      - name: Report reviewer execution failure
+        if: steps.pr-agent.outcome == 'failure'
+        shell: bash
+        run: |
+          echo '## PR-Agent: review did not complete' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The advisory reviewer failed; deterministic checks remain authoritative.' >> "$GITHUB_STEP_SUMMARY"
