@@ -200,13 +200,23 @@ def test_release_requires_durable_reservation(tmp_path):
     assert refusal.value.code is PaymentReasonCode.EXPOSURE_RESERVATION_FAILED
 
 
-def test_second_release_is_rejected_before_signing(tmp_path):
+def test_identical_release_is_idempotent_while_reservation_remains_active(tmp_path):
     backend = InProcessHMACTestBackend()
     request, guardian = configured(tmp_path, backend=backend)
+    first = guardian.release(request)
+    second = guardian.release(request)
+    assert first.authorization_id == second.authorization_id
+    assert first.signing_digest == second.signing_digest
+
+
+def test_conflicting_release_is_rejected_before_signing(tmp_path):
+    request, guardian = configured(tmp_path)
     guardian.release(request)
+    changed = canonical(amount=5001)
+    forged = replace(request, canonical=changed)
     with pytest.raises(BrokerRefusal) as refusal:
-        guardian.release(request)
-    assert refusal.value.code is PaymentReasonCode.REPLAY_DETECTED
+        guardian.release(forged)
+    assert refusal.value.code is PaymentReasonCode.FAIL_CLOSED_DEFAULT
 
 
 def test_forged_policy_receipt_is_rejected(tmp_path):

@@ -324,7 +324,7 @@ class ReferenceKeyGuardianService:
                 PaymentReasonCode.EXPOSURE_RESERVATION_FAILED,
                 "exposure reservation is missing, released, committed, or changed",
             )
-        if replay is not ReplayDecision.ACCEPTED:
+        if replay is ReplayDecision.CONFLICT:
             self._refuse(
                 PaymentReasonCode.REPLAY_DETECTED,
                 f"credential release replay result was {replay.value}",

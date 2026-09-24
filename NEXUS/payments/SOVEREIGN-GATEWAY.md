@@ -88,7 +88,9 @@ epoch, reservation state, and accept-once replay state before calling a
 `ProtectedSigningBackend`. It cannot sign arbitrary agent-supplied bytes.
 Active-reservation validation and replay consumption occur in one state-store
 transaction, so a released or concurrently cancelled hold cannot authorize a
-signature.
+signature. An identical request may recover the same deterministic authorization
+identity while that reservation remains active; a conflicting digest or any
+request after the execution advances is refused.
 
 The included HMAC backend is test-only. Deployment assurance requires a
 separate authenticated guardian service, a KMS/HSM/TEE or managed signer with
