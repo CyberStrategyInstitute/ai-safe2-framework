@@ -153,3 +153,21 @@ profile-defined finality threshold. Unknown, timed-out, or insufficiently final
 outcomes become `AMBIGUOUS` with a reconciliation directive—never a blind retry.
 Even an authoritative failure requires a new authorization before another
 payment attempt.
+
+## Sovereign Payment Coordinator
+
+`SovereignPaymentCoordinator` is the **Sovereign Payment Coordinator**. It
+composes the independent controls without merging their trust boundaries. It
+creates one durable execution, verifies policy and runtime proof, atomically
+reserves exposure, obtains a transaction-bound authorization from Key Guardian,
+and submits through a rail contract that must implement `submit_or_retrieve`
+with the execution's stable idempotency key. A timeout is ambiguous and enters
+reconciliation; it is never interpreted as permission to send a second payment.
+
+Authoritative settlement commits held exposure in the same database transaction
+that records `SETTLED`. Authoritative rejection or failure releases exposure in
+the same transaction that records the terminal result. Conflicting or stale
+state fails closed. The SQLite implementation demonstrates these invariants on
+one host; production deployments still need equivalent transactional semantics,
+protected storage, an isolated Key Guardian transport, and authenticated rail
+and settlement integrations before claiming deployment assurance.

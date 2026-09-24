@@ -294,6 +294,55 @@ class SQLiteGatewayStateStore:
             connection.commit()
         return reservation_id
 
+    def reserve_execution(self, record: ExecutionRecord, *, amount_minor: int,
+                          currency: str,
+                          ceilings_minor: Mapping[str, int]) -> ExecutionRecord:
+        """Atomically reserve exposure and advance the execution to RESERVED."""
+        if amount_minor < 0 or not currency or not ceilings_minor:
+            raise ValueError("non-negative amount, currency, and authority ceilings are required")
+        if any(not scope or ceiling < 0 for scope, ceiling in ceilings_minor.items()):
+            raise ValueError("authority scope identifiers and ceilings must be valid")
+        if record.state is not ExecutionState.POLICY_ACCEPTED:
+            raise StateConflictError("exposure can be reserved only after policy acceptance")
+        reservation_id = f"res_{uuid.uuid4().hex}"
+        updated = record.transition(ExecutionState.RESERVED, reservation_id=reservation_id)
+        with self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            if not self._execution_matches(connection, record):
+                connection.rollback()
+                raise StateConflictError("reservation requires the persisted canonical execution")
+            for scope_id, ceiling in ceilings_minor.items():
+                row = connection.execute(
+                    """SELECT COALESCE(SUM(r.amount_minor), 0) AS exposure
+                       FROM reservations r
+                       JOIN reservation_scopes s ON s.reservation_id = r.reservation_id
+                       WHERE s.scope_id = ? AND r.currency = ?
+                         AND r.status IN ('reserved', 'committed')""",
+                    (scope_id, currency),
+                ).fetchone()
+                if int(row["exposure"]) + amount_minor > ceiling:
+                    connection.rollback()
+                    raise ExposureCeilingExceededError(
+                        f"authority ceiling exceeded for {scope_id}"
+                    )
+            try:
+                connection.execute(
+                    """INSERT INTO reservations(
+                           reservation_id, execution_id, amount_minor, currency, status
+                       ) VALUES (?, ?, ?, ?, 'reserved')""",
+                    (reservation_id, record.execution_id, amount_minor, currency),
+                )
+                connection.executemany(
+                    "INSERT INTO reservation_scopes(reservation_id, scope_id) VALUES (?, ?)",
+                    [(reservation_id, scope_id) for scope_id in ceilings_minor],
+                )
+                self._replace_execution(connection, record, updated)
+            except sqlite3.IntegrityError as exc:
+                connection.rollback()
+                raise StateConflictError("execution already has an exposure reservation") from exc
+            connection.commit()
+        return updated
+
     def commit(self, reservation_id: str, *, settlement_id: str) -> None:
         if not settlement_id:
             raise ValueError("settlement_id is required")
@@ -320,3 +369,98 @@ class SQLiteGatewayStateStore:
             )
             if cursor.rowcount != 1:
                 raise StateConflictError("reservation is missing or cannot be released")
+
+    def settle_execution(self, *, expected: ExecutionRecord,
+                         updated: ExecutionRecord) -> bool:
+        """Atomically commit exposure and record authoritative settlement."""
+        if (
+            updated.state is not ExecutionState.SETTLED
+            or not updated.settlement_id
+            or not expected.reservation_id
+        ):
+            raise StateConflictError("settlement requires bound execution and settlement ids")
+        self._validate_atomic_transition(expected, updated)
+        try:
+            with self._connect() as connection:
+                connection.execute("BEGIN IMMEDIATE")
+                if not self._execution_matches(connection, expected):
+                    connection.rollback()
+                    return False
+                reservation = connection.execute(
+                    """UPDATE reservations
+                       SET status = 'committed', settlement_id = ?
+                       WHERE reservation_id = ? AND execution_id = ?
+                         AND status = 'reserved'""",
+                    (updated.settlement_id, expected.reservation_id, expected.execution_id),
+                )
+                if reservation.rowcount != 1:
+                    connection.rollback()
+                    return False
+                self._replace_execution(connection, expected, updated)
+                connection.commit()
+                return True
+        except sqlite3.IntegrityError as exc:
+            raise StateConflictError("settlement identifier is already committed") from exc
+
+    def release_execution(self, *, expected: ExecutionRecord,
+                          updated: ExecutionRecord, reason: str) -> bool:
+        """Atomically release held exposure and record a terminal non-settlement."""
+        if (
+            updated.state not in {ExecutionState.FAILED, ExecutionState.RELEASED}
+            or not expected.reservation_id
+            or not reason
+        ):
+            raise StateConflictError("release requires a terminal state, reservation, and reason")
+        self._validate_atomic_transition(expected, updated)
+        with self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            if not self._execution_matches(connection, expected):
+                connection.rollback()
+                return False
+            reservation = connection.execute(
+                """UPDATE reservations
+                   SET status = 'released', release_reason = ?
+                   WHERE reservation_id = ? AND execution_id = ?
+                     AND status = 'reserved'""",
+                (reason, expected.reservation_id, expected.execution_id),
+            )
+            if reservation.rowcount != 1:
+                connection.rollback()
+                return False
+            self._replace_execution(connection, expected, updated)
+            connection.commit()
+            return True
+
+    @staticmethod
+    def _validate_atomic_transition(expected: ExecutionRecord,
+                                    updated: ExecutionRecord) -> None:
+        if expected.execution_id != updated.execution_id or updated.version != expected.version + 1:
+            raise StateConflictError("atomic transition requires the same execution and next version")
+        immutable_fields = (
+            "transaction_intent_id", "canonical_digest", "idempotency_key",
+            "authority_grant_id", "revocation_epoch",
+        )
+        if any(getattr(expected, name) != getattr(updated, name) for name in immutable_fields):
+            raise StateConflictError("atomic transition cannot replace canonical execution identity")
+
+    def _execution_matches(self, connection: sqlite3.Connection,
+                           expected: ExecutionRecord) -> bool:
+        row = connection.execute(
+            "SELECT record_json FROM executions WHERE execution_id = ? AND version = ?",
+            (expected.execution_id, expected.version),
+        ).fetchone()
+        return row is not None and self._decode(row["record_json"]) == expected
+
+    def _replace_execution(self, connection: sqlite3.Connection,
+                           expected: ExecutionRecord,
+                           updated: ExecutionRecord) -> None:
+        cursor = connection.execute(
+            """UPDATE executions SET version = ?, record_json = ?
+               WHERE execution_id = ? AND version = ? AND canonical_digest = ?""",
+            (
+                updated.version, self._encode(updated), expected.execution_id,
+                expected.version, expected.canonical_digest,
+            ),
+        )
+        if cursor.rowcount != 1:
+            raise StateConflictError("execution changed during atomic transition")

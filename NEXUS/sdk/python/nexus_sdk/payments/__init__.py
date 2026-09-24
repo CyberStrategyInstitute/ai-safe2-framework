@@ -149,6 +149,15 @@ from nexus_sdk.payments.settlement_truth import (
     SettlementObserverProfile,
     SettlementTruth,
 )
+from nexus_sdk.payments.coordinator import (
+    CoordinatedPayment,
+    CoordinatorConflictError,
+    PaymentRailSubmitter,
+    PreparedPayment,
+    RailSubmissionReceipt,
+    RailSubmissionUncertainError,
+    SovereignPaymentCoordinator,
+)
 from nexus_sdk.payments.adapters import (
     AP2Binding,
     AgenticTokenBinding,
@@ -247,6 +256,10 @@ __all__ = [
     "AuthoritativeSettlementObserver", "RailSettlementEvidence", "RetryDirective",
     "SettlementEvidenceVerifier", "SettlementObservation",
     "SettlementObserverProfile", "SettlementTruth",
+    # Fail-closed orchestration
+    "CoordinatedPayment", "CoordinatorConflictError", "PaymentRailSubmitter",
+    "PreparedPayment", "RailSubmissionReceipt", "RailSubmissionUncertainError",
+    "SovereignPaymentCoordinator",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
