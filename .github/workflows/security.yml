@@ -35,8 +35,12 @@ jobs:
           grep "  $archive$" checksums.txt | sha256sum --check --strict
           tar -xzf "$archive" gitleaks
       - name: Scan reachable Git history for new secrets
-        # Checkout fetches unrelated remote branches; scope the gate to this PR's history.
-        run: ./gitleaks git --redact --verbose --log-opts=HEAD --baseline-path .gitleaks-baseline.json .
+        shell: bash
+        run: |
+          # A depth-zero checkout fetches every remote branch. Remove those references in this
+          # disposable runner so Gitleaks examines only commits reachable from the checked-out PR.
+          git for-each-ref --format='delete %(refname)' refs/remotes/origin | git update-ref --stdin
+          ./gitleaks git --redact --verbose --log-opts=HEAD --baseline-path .gitleaks-baseline.json .
 
   semgrep:
     name: Security / Repository guardrails
