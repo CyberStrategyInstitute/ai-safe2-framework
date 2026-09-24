@@ -324,7 +324,7 @@ class ReferenceKeyGuardianService:
                 PaymentReasonCode.EXPOSURE_RESERVATION_FAILED,
                 "exposure reservation is missing, released, committed, or changed",
             )
-        if replay is not ReplayDecision.ACCEPTED:
+        if replay is ReplayDecision.CONFLICT:
             self._refuse(
                 PaymentReasonCode.REPLAY_DETECTED,
                 f"credential release replay result was {replay.value}",
@@ -346,6 +346,12 @@ class ReferenceKeyGuardianService:
             decision_id=envelope.policy.decision_id,
             revocation_epoch=envelope.canonical.revocation_epoch,
             runtime_measurement_id=envelope.canonical.runtime_measurement_id,
+            authorization_id="auth_" + hashlib.sha256(
+                (
+                    signing_digest + "\x00" + self.backend.signer_id + "\x00"
+                    + envelope.policy.decision_id
+                ).encode()
+            ).hexdigest()[:24],
         )
 
 

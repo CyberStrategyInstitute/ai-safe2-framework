@@ -88,7 +88,9 @@ epoch, reservation state, and accept-once replay state before calling a
 `ProtectedSigningBackend`. It cannot sign arbitrary agent-supplied bytes.
 Active-reservation validation and replay consumption occur in one state-store
 transaction, so a released or concurrently cancelled hold cannot authorize a
-signature.
+signature. An identical request may recover the same deterministic authorization
+identity while that reservation remains active; a conflicting digest or any
+request after the execution advances is refused.
 
 The included HMAC backend is test-only. Deployment assurance requires a
 separate authenticated guardian service, a KMS/HSM/TEE or managed signer with
@@ -153,3 +155,21 @@ profile-defined finality threshold. Unknown, timed-out, or insufficiently final
 outcomes become `AMBIGUOUS` with a reconciliation directive—never a blind retry.
 Even an authoritative failure requires a new authorization before another
 payment attempt.
+
+## Sovereign Payment Coordinator
+
+`SovereignPaymentCoordinator` is the **Sovereign Payment Coordinator**. It
+composes the independent controls without merging their trust boundaries. It
+creates one durable execution, verifies policy and runtime proof, atomically
+reserves exposure, obtains a transaction-bound authorization from Key Guardian,
+and submits through a rail contract that must implement `submit_or_retrieve`
+with the execution's stable idempotency key. A timeout is ambiguous and enters
+reconciliation; it is never interpreted as permission to send a second payment.
+
+Authoritative settlement commits held exposure in the same database transaction
+that records `SETTLED`. Authoritative rejection or failure releases exposure in
+the same transaction that records the terminal result. Conflicting or stale
+state fails closed. The SQLite implementation demonstrates these invariants on
+one host; production deployments still need equivalent transactional semantics,
+protected storage, an isolated Key Guardian transport, and authenticated rail
+and settlement integrations before claiming deployment assurance.
