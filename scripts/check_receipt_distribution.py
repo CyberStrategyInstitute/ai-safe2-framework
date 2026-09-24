@@ -34,7 +34,8 @@ def main():
                          "change-attribution-source-v1", "change-attribution-manifest-v1",
                          "release-readiness-source-v1", "release-readiness-manifest-v1",
                          "operational-truth-source-v1", "operational-truth-manifest-v1",
-                         "change-monitor-v1"):
+                         "change-monitor-v1", "aism-remediation-source-v1",
+                         "aism-remediation-plan-v1"):
             invoke("schema", "export", contract)
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
@@ -119,7 +120,34 @@ def main():
         monitored = invoke("evidence", "changes", str(monitor_root), "--output", str(monitor_output))
         assert monitored["decision"] == "approve"
         assert monitored["telemetry"] == "none"
-    print("Installed distribution: receipts, twenty-two schemas, pytest capture, harness intake, operational truth, agent-input monitoring, system identity, failure localization, assessment scope, change attribution, and release readiness passed")
+        assessment = {
+            "schema_version": "1.0",
+            "subject": {"id": identity_manifest["subject"]["subject_id"], "name": "Wheel smoke", "kind": "implementation"},
+            "cells": {}, "facts": [], "assumptions": [], "conflicts": [], "unknowns": [],
+            "alternatives": [], "history": [], "recommendation": {},
+        }
+        assessment_path = root / "aism-assessment.json"
+        assessment_path.write_text(json.dumps(assessment), encoding="utf-8")
+        remediation_source = {
+            "schema_version": "safe2.aism-remediation-source.v1", "plan_id": "wheel-remediation",
+            "subject_id": identity_manifest["subject"]["subject_id"], "decision_owner": "release owner",
+            "bindings": {
+                "assessment_sha256": hashlib.sha256(assessment_path.read_bytes()).hexdigest(),
+                "system_identity_sha256": hashlib.sha256(identity_output.read_bytes()).hexdigest(),
+                "assessment_scope_sha256": hashlib.sha256(scope_output.read_bytes()).hexdigest(),
+            },
+            "assumptions": [], "alternatives": [], "actions": [], "accepted_residual_risks": [],
+        }
+        remediation_source_path = root / "aism-remediation-source.json"
+        remediation_source_path.write_text(json.dumps(remediation_source), encoding="utf-8")
+        remediation_output, remediation_card = root / "aism-remediation.json", root / "aism-remediation.md"
+        remediation = invoke("aism", "plan", str(remediation_source_path), str(assessment_path),
+                             "--system-identity", str(identity_output), "--assessment-scope", str(scope_output),
+                             "--output", str(remediation_output), "--card", str(remediation_card))
+        assert remediation["remediation_authorized"] is False
+        assert remediation["conformance_claim"] is False
+        assert remediation_card.is_file()
+    print("Installed distribution: receipts, twenty-four schemas, pytest capture, harness intake, operational truth, agent-input monitoring, AISM remediation, system identity, failure localization, assessment scope, change attribution, and release readiness passed")
 
 
 if __name__ == "__main__":

@@ -46,6 +46,8 @@ def _inventory(root: Path) -> dict[str, object]:
 def test_all_packaged_schemas_are_valid_draft_2020_12():
     for name in (
         "aism-assessment-v1.schema.json",
+        "aism-remediation-source-v1.schema.json",
+        "aism-remediation-plan-v1.schema.json",
         "discovery-v1.schema.json",
         "discovery-drift-v1.schema.json",
         "environment-posture-v1.schema.json",
@@ -102,6 +104,8 @@ def test_schema_catalog_lists_and_exports_packaged_contracts(tmp_path: Path):
     catalog = json.loads(listed.output)
     assert "discovery-v1" in catalog["schemas"]
     assert "friction-summary-v1" in catalog["schemas"]
+    assert "aism-remediation-source-v1" in catalog["schemas"]
+    assert "aism-remediation-plan-v1" in catalog["schemas"]
 
     output = tmp_path / "schema.json"
     exported = runner.invoke(
@@ -137,9 +141,7 @@ def test_schema_validate_has_stable_agent_exit_contract(tmp_path: Path):
 def test_schema_validate_uses_exit_two_for_unreadable_input(tmp_path: Path):
     source = tmp_path / "malformed.json"
     source.write_text('{"secret": "DO_NOT_ECHO"', encoding="utf-8")
-    result = CliRunner().invoke(
-        cli, ["schema", "validate", "friction-event-v1", str(source)]
-    )
+    result = CliRunner().invoke(cli, ["schema", "validate", "friction-event-v1", str(source)])
     assert result.exit_code == 2
     assert "DO_NOT_ECHO" not in result.output
     assert json.loads(result.output)["error"] == "JSONDecodeError"
