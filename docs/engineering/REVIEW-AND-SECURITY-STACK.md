@@ -7,7 +7,7 @@ This repository uses layered evidence. No single scanner or reviewer is treated 
 | Gate | Purpose | Blocking condition |
 | --- | --- | --- |
 | Existing CI and repository consistency checks | Behavior, compatibility, packaging, and framework invariants | Any required job fails |
-| Gitleaks | Credential and secret exposure across Git history | Any unallowlisted finding |
+| Gitleaks | Credential and secret exposure across Git history | Any finding not present in the reviewed, fully redacted fixture baseline |
 | Repository-owned Semgrep rules | High-confidence dangerous implementation patterns | Any matching rule |
 | Python dependency audit | Known vulnerabilities on shipped Python dependency surfaces | Any unignored published advisory |
 | Dependency review | Newly introduced vulnerable dependencies | High or critical severity |

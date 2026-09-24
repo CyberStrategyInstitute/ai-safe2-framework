@@ -34,8 +34,8 @@ jobs:
           curl --fail --location --silent --show-error --output checksums.txt "$base/gitleaks_8.28.0_checksums.txt"
           grep "  $archive$" checksums.txt | sha256sum --check --strict
           tar -xzf "$archive" gitleaks
-      - name: Scan complete Git history for secrets
-        run: ./gitleaks git --redact --verbose .
+      - name: Scan complete Git history for new secrets
+        run: ./gitleaks git --redact --verbose --baseline-path .gitleaks-baseline.json .
 
   semgrep:
     name: Security / Repository guardrails
