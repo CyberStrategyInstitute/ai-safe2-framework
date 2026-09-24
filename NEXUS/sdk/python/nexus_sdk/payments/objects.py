@@ -783,6 +783,7 @@ class CanonicalTransaction:
     rail: PaymentRail
     idempotency_key: str
     decided_at: str = field(default_factory=lambda: utcnow().isoformat())
+    finality: SettlementFinality = SettlementFinality.REVERSIBLE
 
     def to_dict(self) -> dict:
         return {
@@ -800,6 +801,7 @@ class CanonicalTransaction:
             "rail": self.rail.value,
             "idempotency_key": self.idempotency_key,
             "decided_at": self.decided_at,
+            "finality": self.finality.value,
         }
 
     def signing_digest(self) -> str:
