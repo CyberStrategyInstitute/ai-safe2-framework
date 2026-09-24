@@ -5,6 +5,25 @@
 # Default: CSI maintainers review everything
 *                                   @CyberStrategyInstitute/nexus-maintainers
 
+# Root CI, dependency, packaging, and release controls
+/.github/                            @CyberStrategyInstitute/nexus-maintainers
+/pyproject.toml                      @CyberStrategyInstitute/nexus-maintainers
+/Dockerfile                          @CyberStrategyInstitute/nexus-maintainers
+
+# AI SAFE2 executable policy, evidence, scanning, and gateway surfaces
+/safe2/                              @CyberStrategyInstitute/nexus-maintainers
+/scanner/                            @CyberStrategyInstitute/nexus-maintainers
+/gateway/                            @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+/opa/                                @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+/skills/mcp/                         @CyberStrategyInstitute/nexus-maintainers
+
+# NEXUS protocol, authority, payment, cryptographic, and schema boundaries
+/NEXUS/sdk/python/nexus_sdk/         @CyberStrategyInstitute/nexus-maintainers
+/NEXUS/sdk/python/nexus_sdk/payments/ @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+/NEXUS/opa/                          @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+/NEXUS/schemas/                      @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
+/NEXUS/docker/                       @CyberStrategyInstitute/nexus-maintainers
+
 # Constitutional constraints and AISM invariants require founding seat sign-off
 opa/nexus-aism-invariants.rego      @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding
 governance/GOVERNANCE.md            @CyberStrategyInstitute/nexus-maintainers @CyberStrategyInstitute/nexus-founding

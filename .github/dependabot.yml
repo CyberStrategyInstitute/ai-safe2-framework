@@ -1,10 +1,47 @@
 version: 2
+
 updates:
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
+  - package-ecosystem: pip
+    directory: /
+    schedule: {interval: weekly, day: monday, time: "06:00"}
+    open-pull-requests-limit: 5
+    labels: [dependencies, python]
+    groups:
+      root-python-minor-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: pip
+    directory: /NEXUS
+    schedule: {interval: weekly, day: monday, time: "06:15"}
+    open-pull-requests-limit: 5
+    labels: [dependencies, python, nexus]
+
+  - package-ecosystem: pip
+    directory: /skills/mcp
+    schedule: {interval: weekly, day: monday, time: "06:30"}
+    open-pull-requests-limit: 3
+    labels: [dependencies, python]
+
+  - package-ecosystem: pip
+    directory: /examples/mcp-security-toolkit
+    schedule: {interval: weekly, day: monday, time: "06:45"}
+    open-pull-requests-limit: 3
+    labels: [dependencies, python]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: {interval: weekly, day: tuesday, time: "06:00"}
+    open-pull-requests-limit: 5
+    labels: [dependencies, github-actions]
+
+  - package-ecosystem: docker
+    directory: /
+    schedule: {interval: weekly, day: tuesday, time: "06:15"}
+    open-pull-requests-limit: 3
+    labels: [dependencies, docker]
+
+  - package-ecosystem: docker
+    directory: /NEXUS/docker/gateway
+    schedule: {interval: weekly, day: tuesday, time: "06:30"}
+    open-pull-requests-limit: 3
+    labels: [dependencies, docker, nexus]

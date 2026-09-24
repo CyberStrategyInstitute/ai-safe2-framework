@@ -1,0 +1,42 @@
+rules:
+  - id: python-dynamic-code-execution
+    message: Dynamic code execution crosses a critical trust boundary; use an explicit parser or dispatch table.
+    severity: ERROR
+    languages: [python]
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+
+  - id: python-shell-true
+    message: shell=True permits command interpretation; pass an argument vector without a shell.
+    severity: ERROR
+    languages: [python]
+    patterns:
+      - pattern-either:
+          - pattern: subprocess.run(..., shell=True, ...)
+          - pattern: subprocess.call(..., shell=True, ...)
+          - pattern: subprocess.Popen(..., shell=True, ...)
+
+  - id: python-tls-verification-disabled
+    message: TLS certificate verification must not be disabled.
+    severity: ERROR
+    languages: [python]
+    pattern-either:
+      - pattern: requests.$METHOD(..., verify=False, ...)
+      - pattern: httpx.$METHOD(..., verify=False, ...)
+      - pattern: httpx.Client(..., verify=False, ...)
+
+  - id: python-unsafe-yaml-load
+    message: Use yaml.safe_load or explicitly select SafeLoader.
+    severity: ERROR
+    languages: [python]
+    patterns:
+      - pattern: yaml.load(...)
+      - pattern-not: yaml.load(..., Loader=yaml.SafeLoader, ...)
+      - pattern-not: yaml.load(..., Loader=SafeLoader, ...)
+
+  - id: python-insecure-temporary-file
+    message: tempfile.mktemp is race-prone; use NamedTemporaryFile or mkstemp.
+    severity: ERROR
+    languages: [python]
+    pattern: tempfile.mktemp(...)
