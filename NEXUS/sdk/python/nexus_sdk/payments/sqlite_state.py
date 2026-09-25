@@ -21,6 +21,7 @@ from nexus_sdk.payments.execution_plane import (
     ExecutionState,
     ReplayDecision,
 )
+from nexus_sdk.payments.reconciliation import ReconciliationCase, ReconciliationStatus
 
 __all__ = ["ExposureCeilingExceededError", "SQLiteGatewayStateStore", "StateConflictError"]
 
@@ -100,6 +101,15 @@ class SQLiteGatewayStateStore:
                 );
                 CREATE INDEX IF NOT EXISTS reservation_scope_lookup
                     ON reservation_scopes(scope_id, reservation_id);
+                CREATE TABLE IF NOT EXISTS reconciliation_cases (
+                    case_id TEXT PRIMARY KEY,
+                    execution_id TEXT NOT NULL UNIQUE,
+                    authorization_id TEXT NOT NULL UNIQUE,
+                    version INTEGER NOT NULL,
+                    status TEXT NOT NULL,
+                    case_json TEXT NOT NULL,
+                    FOREIGN KEY (execution_id) REFERENCES executions(execution_id)
+                );
                 """
             )
 
@@ -116,6 +126,20 @@ class SQLiteGatewayStateStore:
         values["state"] = ExecutionState(values["state"])
         values["evidence_refs"] = tuple(values.get("evidence_refs", ()))
         return ExecutionRecord(**values)
+
+    @staticmethod
+    def _encode_case(case: ReconciliationCase) -> str:
+        values = dict(case.__dict__)
+        values["status"] = case.status.value
+        values["evidence_refs"] = list(case.evidence_refs)
+        return json.dumps(values, sort_keys=True, separators=(",", ":"))
+
+    @staticmethod
+    def _decode_case(payload: str) -> ReconciliationCase:
+        values = json.loads(payload)
+        values["status"] = ReconciliationStatus(values["status"])
+        values["evidence_refs"] = tuple(values.get("evidence_refs", ()))
+        return ReconciliationCase(**values)
 
     def consume(self, *, namespace: str, key: str, digest: str) -> ReplayDecision:
         if not namespace or not key or not digest:
@@ -428,6 +452,157 @@ class SQLiteGatewayStateStore:
                 connection.rollback()
                 return False
             self._replace_execution(connection, expected, updated)
+            connection.commit()
+            return True
+
+    def get_reconciliation_case(self, case_id: str) -> ReconciliationCase | None:
+        with self._connect() as connection:
+            row = connection.execute(
+                "SELECT case_json FROM reconciliation_cases WHERE case_id = ?", (case_id,)
+            ).fetchone()
+        return self._decode_case(row["case_json"]) if row is not None else None
+
+    def open_reconciliation(self, *, expected: ExecutionRecord,
+                            updated: ExecutionRecord,
+                            case: ReconciliationCase) -> bool:
+        """Atomically enter RECONCILING and create its single governed case."""
+        if (
+            expected.state is not ExecutionState.AMBIGUOUS
+            or updated.state is not ExecutionState.RECONCILING
+            or case.execution_id != expected.execution_id
+            or case.authorization_id != expected.authorization_id
+            or case.status is not ReconciliationStatus.OPEN
+        ):
+            raise StateConflictError("invalid reconciliation opening transition")
+        self._validate_atomic_transition(expected, updated)
+        try:
+            with self._connect() as connection:
+                connection.execute("BEGIN IMMEDIATE")
+                if not self._execution_matches(connection, expected):
+                    connection.rollback()
+                    return False
+                connection.execute(
+                    """INSERT INTO reconciliation_cases(
+                           case_id, execution_id, authorization_id, version, status, case_json
+                       ) VALUES (?, ?, ?, ?, ?, ?)""",
+                    (
+                        case.case_id, case.execution_id, case.authorization_id,
+                        case.version, case.status.value, self._encode_case(case),
+                    ),
+                )
+                self._replace_execution(connection, expected, updated)
+                connection.commit()
+                return True
+        except sqlite3.IntegrityError as exc:
+            raise StateConflictError("execution or authorization already has a recovery case") from exc
+
+    def update_reconciliation_case(self, *, expected: ReconciliationCase,
+                                   updated: ReconciliationCase) -> bool:
+        if (
+            expected.case_id != updated.case_id
+            or expected.execution_id != updated.execution_id
+            or expected.authorization_id != updated.authorization_id
+            or expected.signing_digest != updated.signing_digest
+            or expected.policy_digest != updated.policy_digest
+            or updated.version != expected.version + 1
+            or expected.status is not ReconciliationStatus.OPEN
+            or updated.status is not ReconciliationStatus.OPEN
+        ):
+            raise StateConflictError("invalid reconciliation case update")
+        with self._connect() as connection:
+            cursor = connection.execute(
+                """UPDATE reconciliation_cases
+                   SET version = ?, status = ?, case_json = ?
+                   WHERE case_id = ? AND version = ? AND status = 'open'
+                     AND case_json = ?""",
+                (
+                    updated.version, updated.status.value, self._encode_case(updated),
+                    expected.case_id, expected.version, self._encode_case(expected),
+                ),
+            )
+            return cursor.rowcount == 1
+
+    def resolve_reconciliation(self, *, expected_execution: ExecutionRecord,
+                               updated_execution: ExecutionRecord,
+                               expected_case: ReconciliationCase,
+                               updated_case: ReconciliationCase,
+                               release_reason: str | None = None) -> bool:
+        """Atomically resolve case, execution, and held exposure."""
+        terminal = {
+            ReconciliationStatus.SETTLED: ExecutionState.SETTLED,
+            ReconciliationStatus.FAILED: ExecutionState.RELEASED,
+            ReconciliationStatus.ESCALATED: ExecutionState.ESCALATED,
+        }
+        if (
+            expected_execution.state is not ExecutionState.RECONCILING
+            or expected_case.status is not ReconciliationStatus.OPEN
+            or expected_case.execution_id != expected_execution.execution_id
+            or updated_case.status not in terminal
+            or updated_execution.state is not terminal[updated_case.status]
+            or updated_case.version != expected_case.version + 1
+        ):
+            raise StateConflictError("invalid reconciliation resolution")
+        self._validate_atomic_transition(expected_execution, updated_execution)
+        if (
+            expected_case.case_id != updated_case.case_id
+            or expected_case.execution_id != updated_case.execution_id
+            or expected_case.authorization_id != updated_case.authorization_id
+            or expected_case.signing_digest != updated_case.signing_digest
+            or expected_case.policy_digest != updated_case.policy_digest
+        ):
+            raise StateConflictError("reconciliation identity cannot change")
+        with self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            if not self._execution_matches(connection, expected_execution):
+                connection.rollback()
+                return False
+            case_row = connection.execute(
+                "SELECT case_json FROM reconciliation_cases WHERE case_id = ? AND version = ?",
+                (expected_case.case_id, expected_case.version),
+            ).fetchone()
+            if case_row is None or self._decode_case(case_row["case_json"]) != expected_case:
+                connection.rollback()
+                return False
+            if updated_case.status is ReconciliationStatus.SETTLED:
+                reservation = connection.execute(
+                    """UPDATE reservations SET status = 'committed', settlement_id = ?
+                       WHERE reservation_id = ? AND execution_id = ? AND status = 'reserved'""",
+                    (
+                        updated_execution.settlement_id,
+                        expected_execution.reservation_id,
+                        expected_execution.execution_id,
+                    ),
+                )
+            elif updated_case.status is ReconciliationStatus.FAILED:
+                if not release_reason:
+                    raise StateConflictError("authoritative failure requires a release reason")
+                reservation = connection.execute(
+                    """UPDATE reservations
+                       SET status = 'released', release_reason = ?
+                       WHERE reservation_id = ? AND execution_id = ? AND status = 'reserved'""",
+                    (
+                        release_reason, expected_execution.reservation_id,
+                        expected_execution.execution_id,
+                    ),
+                )
+            else:
+                reservation = None
+            if reservation is not None and reservation.rowcount != 1:
+                connection.rollback()
+                return False
+            case_update = connection.execute(
+                """UPDATE reconciliation_cases SET version = ?, status = ?, case_json = ?
+                   WHERE case_id = ? AND version = ? AND status = 'open'""",
+                (
+                    updated_case.version, updated_case.status.value,
+                    self._encode_case(updated_case), expected_case.case_id,
+                    expected_case.version,
+                ),
+            )
+            if case_update.rowcount != 1:
+                connection.rollback()
+                return False
+            self._replace_execution(connection, expected_execution, updated_execution)
             connection.commit()
             return True
 

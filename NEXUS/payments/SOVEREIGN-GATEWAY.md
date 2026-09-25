@@ -173,3 +173,20 @@ state fails closed. The SQLite implementation demonstrates these invariants on
 one host; production deployments still need equivalent transactional semantics,
 protected storage, an isolated Key Guardian transport, and authenticated rail
 and settlement integrations before claiming deployment assurance.
+
+## Governed Payment Recovery
+
+`DeterministicReconciliationAuthority` is **Governed Payment Recovery**. It
+opens exactly one durable case for an ambiguous execution, binds that case to
+the execution, Key Guardian authorization, signing digest, recovery policy, and
+retained exposure reservation, then queries Settlement Truth Authority on a
+fixed cadence. It has no payment-submission capability and cannot mint a new
+authorization.
+
+Authenticated settled evidence atomically commits exposure and closes the case.
+Authenticated failure atomically releases exposure and closes the case. Unknown
+or insufficient evidence advances the bounded observation count. Reaching the
+attempt or time limit escalates the execution while deliberately preserving the
+exposure hold; a timeout is not evidence that money did not move. Stale workers,
+duplicate cases, early polling, conflicting truth, and artifact substitution all
+fail closed.

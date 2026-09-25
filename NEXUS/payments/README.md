@@ -307,6 +307,11 @@ A release does not claim production assurance unless it demonstrates **all** of 
 
 The reference implementation in `nexus_sdk.payments` demonstrates each of these **in test**. Narrow adapter profiles are implemented, but none is demonstrated against a live rail in this repository. That is the gap between a reference profile and a deployable product, and it is stated rather than papered over.
 
+Ambiguous post-submission outcomes are governed by the draft
+[Governed Payment Recovery](RECOVERY.md) extension. It requires durable,
+authorization-bound cases, bounded observation, authoritative truth, atomic
+exposure accounting, and exposure-preserving escalation rather than blind retry.
+
 ---
 
 ## Buyer position
