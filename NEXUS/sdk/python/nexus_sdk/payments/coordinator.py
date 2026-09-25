@@ -239,17 +239,14 @@ class SovereignPaymentCoordinator:
         """Apply authoritative truth and atomically commit or release exposure."""
         current = self._require_current(payment.execution)
         if current.state is ExecutionState.AMBIGUOUS:
-            reconciling = current.transition(ExecutionState.RECONCILING)
-            self._cas(current, reconciling)
-            current = reconciling
-        if current.state not in {ExecutionState.SUBMITTED, ExecutionState.RECONCILING}:
+            raise CoordinatorConflictError(
+                "ambiguous executions require Governed Payment Recovery"
+            )
+        if current.state is not ExecutionState.SUBMITTED:
             raise CoordinatorConflictError("settlement evidence is not valid in the current state")
         observation = self.settlement.observe(payment.canonical, payment.authorization, evidence)
         refs = current.evidence_refs + (observation.evidence_digest,)
         if observation.truth is SettlementTruth.AMBIGUOUS:
-            if current.state is ExecutionState.RECONCILING:
-                return CoordinatedPayment(current, payment.canonical, payment.authorization,
-                                          payment.submission, observation)
             updated = current.transition(ExecutionState.AMBIGUOUS, evidence_refs=refs)
             self._cas(current, updated)
         elif observation.truth is SettlementTruth.SETTLED:
@@ -261,12 +258,7 @@ class SovereignPaymentCoordinator:
             if not self.state.settle_execution(expected=current, updated=updated):
                 raise CoordinatorConflictError("settlement raced with another state change")
         else:
-            target = (
-                ExecutionState.RELEASED
-                if current.state is ExecutionState.RECONCILING
-                else ExecutionState.FAILED
-            )
-            updated = current.transition(target, evidence_refs=refs)
+            updated = current.transition(ExecutionState.FAILED, evidence_refs=refs)
             if not self.state.release_execution(
                 expected=current, updated=updated, reason=observation.reason
             ):
