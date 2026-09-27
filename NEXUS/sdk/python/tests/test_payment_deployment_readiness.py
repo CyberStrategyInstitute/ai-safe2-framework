@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 from nexus_sdk.payments.deployment_readiness import (
+    DeploymentApprovalEvidence,
     DeploymentControlEvidence,
     DeploymentReadinessAuthority,
     DeploymentReadinessProfile,
@@ -28,6 +29,16 @@ class Verifier:
 
     def verify(self, evidence):
         return hmac.compare_digest(self.seal(evidence), evidence.proof)
+
+
+class ApprovalVerifier:
+    assurance = ComponentAssurance.DEPLOYMENT
+
+    def seal(self, approval):
+        return hmac.new(KEY, approval.approval_digest.encode(), hashlib.sha256).hexdigest()
+
+    def verify(self, approval):
+        return hmac.compare_digest(self.seal(approval), approval.proof)
 
 
 class Issuer:
@@ -68,6 +79,22 @@ def profile():
         trusted_assessors=frozenset({"assessor-a", "assessor-b"}),
         authorized_approvers=frozenset({"change-approver"}),
     )
+
+
+def approval(**changes):
+    value = DeploymentApprovalEvidence(
+        approval_id="approval-1",
+        deployment_id="gateway-east-1",
+        environment_id="production-east",
+        profile_digest=profile().profile_digest,
+        approver_id="change-approver",
+        approved_mode=RailActivationMode.ENFORCED.value,
+        approved_at=(NOW - timedelta(minutes=2)).isoformat(),
+        expires_at=(NOW + timedelta(minutes=30)).isoformat(),
+        proof="",
+    )
+    value = replace(value, **changes)
+    return replace(value, proof=ApprovalVerifier().seal(value))
 
 
 def artifact_for(control_id, gateway=READY, sandbox=None):
@@ -111,10 +138,11 @@ def passing_evidence():
     )
 
 
-def authority(verifier=None, issuer=None):
+def authority(verifier=None, approval_verifier=None, issuer=None):
     return DeploymentReadinessAuthority(
         profile=profile(),
         verifier=verifier or Verifier(),
+        approval_verifier=approval_verifier or ApprovalVerifier(),
         issuer=issuer or Issuer(),
         now=lambda: NOW,
     )
@@ -125,7 +153,7 @@ def assess(items=None, **changes):
         passing_evidence() if items is None else items,
         gateway_readiness=changes.get("gateway_readiness", READY),
         sandbox_report=changes.get("sandbox_report", sandbox_report()),
-        approved_by=changes.get("approved_by", "change-approver"),
+        approval=changes.get("approval", approval()),
     )
 
 
@@ -135,6 +163,7 @@ def test_complete_independent_proof_issues_signed_enforced_decision():
     assert decision.maximum_mode is RailActivationMode.ENFORCED
     assert decision.findings == ()
     assert decision.assessor_ids == ("assessor-a", "assessor-b")
+    assert decision.approval_digest == approval().approval_digest
     assert decision.proof == Issuer().seal(replace(decision, proof=""))
 
 
@@ -180,7 +209,7 @@ def test_unknown_gateway_or_sandbox_result_types_are_signed_refusals():
     for gateway, report in (({"ready": True}, sandbox_report()), (READY, {"ready": True})):
         decision = authority().assess(
             passing_evidence(), gateway_readiness=gateway,
-            sandbox_report=report, approved_by="change-approver",
+            sandbox_report=report, approval=approval(),
         )
         assert not decision.ready
         assert "unknown type" in " ".join(decision.findings)
@@ -249,7 +278,40 @@ def test_one_assessor_or_unapproved_change_authority_blocks_readiness():
         for item in passing_evidence()
     )
     assert "assessor threshold" in " ".join(assess(one_assessor).findings)
-    assert "not authorized" in " ".join(assess(approved_by="agent-self-approval").findings)
+    assert "not authorized" in " ".join(
+        assess(approval=approval(approver_id="agent-self-approval")).findings
+    )
+
+
+@pytest.mark.parametrize("changes,expected", [
+    ({"deployment_id": "attacker"}, "deployment identity"),
+    ({"environment_id": "attacker"}, "environment identity"),
+    ({"profile_digest": "sha256:attacker"}, "profile digest"),
+    ({"approved_mode": RailActivationMode.OBSERVE_ONLY.value}, "enforced mode"),
+    ({"approved_at": (NOW + timedelta(seconds=1)).isoformat()}, "currently valid"),
+    ({"expires_at": NOW.isoformat()}, "currently valid"),
+])
+def test_approval_is_exact_fresh_and_bound(changes, expected):
+    decision = assess(approval=approval(**changes))
+    assert not decision.ready
+    assert expected in " ".join(decision.findings)
+
+
+def test_forged_unknown_or_unavailable_approval_fails_closed():
+    forged = replace(approval(), proof="forged")
+
+    class BrokenApprovalVerifier(ApprovalVerifier):
+        def verify(self, item):
+            raise RuntimeError("approval authority unavailable")
+
+    assert "approval proof" in " ".join(assess(approval=forged).findings)
+    assert "unknown approval" in " ".join(assess(approval={"approver": "change-approver"}).findings)
+    decision = authority(approval_verifier=BrokenApprovalVerifier()).assess(
+        passing_evidence(), gateway_readiness=READY,
+        sandbox_report=sandbox_report(), approval=approval(),
+    )
+    assert not decision.ready
+    assert "approval proof" in " ".join(decision.findings)
 
 
 def test_reference_verifier_or_issuer_and_wrong_authority_fail_closed():
@@ -264,18 +326,21 @@ def test_reference_verifier_or_issuer_and_wrong_authority_fail_closed():
 
     for candidate in (
         DeploymentReadinessAuthority(
-            profile=profile(), verifier=ReferenceVerifier(), issuer=Issuer(), now=lambda: NOW
+            profile=profile(), verifier=ReferenceVerifier(),
+            approval_verifier=ApprovalVerifier(), issuer=Issuer(), now=lambda: NOW
         ),
         DeploymentReadinessAuthority(
-            profile=profile(), verifier=Verifier(), issuer=ReferenceIssuer(), now=lambda: NOW
+            profile=profile(), verifier=Verifier(),
+            approval_verifier=ApprovalVerifier(), issuer=ReferenceIssuer(), now=lambda: NOW
         ),
         DeploymentReadinessAuthority(
-            profile=profile(), verifier=Verifier(), issuer=WrongIssuer(), now=lambda: NOW
+            profile=profile(), verifier=Verifier(),
+            approval_verifier=ApprovalVerifier(), issuer=WrongIssuer(), now=lambda: NOW
         ),
     ):
         decision = candidate.assess(
             passing_evidence(), gateway_readiness=READY,
-            sandbox_report=sandbox_report(), approved_by="change-approver",
+            sandbox_report=sandbox_report(), approval=approval(),
         )
         assert not decision.ready
 
@@ -293,7 +358,7 @@ def test_unavailable_or_empty_issuer_never_returns_unsigned_decision():
         with pytest.raises(RuntimeError, match="decision|issuer"):
             authority(issuer=issuer).assess(
                 passing_evidence(), gateway_readiness=READY,
-                sandbox_report=sandbox_report(), approved_by="change-approver",
+                sandbox_report=sandbox_report(), approval=approval(),
             )
 
 

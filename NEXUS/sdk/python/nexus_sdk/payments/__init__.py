@@ -212,6 +212,8 @@ from nexus_sdk.payments.sandbox_readiness import (
 )
 from nexus_sdk.payments.deployment_readiness import (
     DEFAULT_DEPLOYMENT_CONTROLS,
+    DeploymentApprovalEvidence,
+    DeploymentApprovalVerifier,
     DeploymentControlEvidence,
     DeploymentEvidenceVerifier,
     DeploymentReadinessAuthority,
@@ -322,6 +324,7 @@ __all__ = [
     "SandboxReadinessReport", "SandboxRunEvidence",
     # Signed production admission
     "DEFAULT_DEPLOYMENT_CONTROLS", "DeploymentControlEvidence",
+    "DeploymentApprovalEvidence", "DeploymentApprovalVerifier",
     "DeploymentEvidenceVerifier", "DeploymentReadinessAuthority",
     "DeploymentReadinessDecision", "DeploymentReadinessIssuer",
     "DeploymentReadinessProfile",

@@ -34,7 +34,7 @@ change control.
 | DPR-07 | Accountable and security owners are named and separated; data ownership and jurisdiction are declared. |
 | DPR-08 | Operational proof covers state and evidence restore, evidence completeness, revocation, ambiguous recovery, bypass prevention, monitoring, and incident escalation. |
 | DPR-09 | Evidence lifecycle proof covers export, deletion, and legal hold. |
-| DPR-10 | An allowlisted change approver authorizes the assessment and an independently protected authority signs the result. |
+| DPR-10 | Fresh authenticated approval binds an allowlisted change approver to the exact profile and enforced mode; an independently protected authority signs the result. |
 | DPR-11 | A refusal is signed as evidence; an unavailable signer never yields an unsigned readiness decision. |
 | DPR-12 | Decisions are short-lived and expose digests and findings, not payment payloads, credentials, or account details. |
 
@@ -58,19 +58,22 @@ export/deletion/legal hold, data residency, and accountable ownership.
 2. Collect one authenticated `DeploymentControlEvidence` item per required
    control. Evidence contains results and digests only.
 3. Supply the current `GatewayReadiness` and `SandboxReadinessReport` objects.
-4. Call `DeploymentReadinessAuthority.assess(...)` with the authorized change
-   approver identity.
-5. Independently verify the returned decision digest, proof, expiry, profile
+4. Obtain `DeploymentApprovalEvidence` through a separately authenticated human
+   change-control path. It must bind the exact deployment, environment,
+   readiness-profile digest, enforced mode, validity window, and approver.
+5. Call `DeploymentReadinessAuthority.assess(...)` with that approval evidence.
+6. Independently verify the returned decision digest, proof, expiry, profile
    digest, mode, and findings before any activation mechanism can proceed.
-6. Reassess after software, configuration, policy, sandbox profile, ownership,
+7. Reassess after software, configuration, policy, sandbox profile, ownership,
    jurisdiction, trust roots, or required controls change.
 
 ## Security, privacy, governance, and sovereignty
 
-The profile makes agent self-approval, evidence replay across deployments,
-single-assessor promotion, and substitution of a different gateway or sandbox
-report deterministic failures. It leaves the operator in control of assessors,
-approvers, owners, jurisdiction, retention, trust roots, and activation.
+The profile makes agent self-approval, approver-name replay, evidence replay
+across deployments, single-assessor promotion, and substitution of a different
+gateway or sandbox report deterministic failures. It leaves the operator in
+control of assessors, approvers, owners, jurisdiction, retention, trust roots,
+and activation.
 
 Reports intentionally retain only identities, timestamps, content digests,
 control findings, and a decision proof. Payment payloads, unrestricted keys,

@@ -15,6 +15,8 @@ from nexus_sdk.payments.sandbox_readiness import (
 
 __all__ = [
     "DEFAULT_DEPLOYMENT_CONTROLS",
+    "DeploymentApprovalEvidence",
+    "DeploymentApprovalVerifier",
     "DeploymentControlEvidence",
     "DeploymentEvidenceVerifier",
     "DeploymentReadinessAuthority",
@@ -44,6 +46,27 @@ DEFAULT_DEPLOYMENT_CONTROLS = frozenset({
     "data_residency_declared",
     "accountable_ownership_declared",
 })
+
+
+@dataclass(frozen=True)
+class DeploymentApprovalEvidence:
+    """Authenticated human change approval for one exact readiness profile."""
+
+    approval_id: str
+    deployment_id: str
+    environment_id: str
+    profile_digest: str
+    approver_id: str
+    approved_mode: str
+    approved_at: str
+    expires_at: str
+    proof: str
+
+    @property
+    def approval_digest(self) -> str:
+        values = dict(self.__dict__)
+        values.pop("proof")
+        return canonical_hash(values)
 
 
 @dataclass(frozen=True)
@@ -77,6 +100,14 @@ class DeploymentEvidenceVerifier(Protocol):
     assurance: ComponentAssurance
 
     def verify(self, evidence: DeploymentControlEvidence) -> bool: ...
+
+
+class DeploymentApprovalVerifier(Protocol):
+    """Authenticate human approval independently of the requesting agent."""
+
+    assurance: ComponentAssurance
+
+    def verify(self, approval: DeploymentApprovalEvidence) -> bool: ...
 
 
 class DeploymentReadinessIssuer(Protocol):
@@ -173,6 +204,7 @@ class DeploymentReadinessDecision:
     deployment_id: str
     environment_id: str
     approved_by: str
+    approval_digest: str
     authority_id: str
     evidence_digests: tuple[str, ...]
     assessor_ids: tuple[str, ...]
@@ -199,6 +231,7 @@ class DeploymentReadinessDecision:
             "deployment_id": self.deployment_id,
             "environment_id": self.environment_id,
             "approved_by": self.approved_by,
+            "approval_digest": self.approval_digest,
             "authority_id": self.authority_id,
             "evidence_digests": list(self.evidence_digests),
             "assessor_ids": list(self.assessor_ids),
@@ -220,17 +253,19 @@ class DeploymentReadinessAuthority:
 
     def __init__(self, *, profile: DeploymentReadinessProfile,
                  verifier: DeploymentEvidenceVerifier,
+                 approval_verifier: DeploymentApprovalVerifier,
                  issuer: DeploymentReadinessIssuer,
                  now=utcnow) -> None:
         self.profile = profile
         self.verifier = verifier
+        self.approval_verifier = approval_verifier
         self.issuer = issuer
         self.now = now
 
     def assess(self, evidence_items: tuple[DeploymentControlEvidence, ...], *,
                gateway_readiness: GatewayReadiness,
                sandbox_report: SandboxReadinessReport,
-               approved_by: str) -> DeploymentReadinessDecision:
+               approval: DeploymentApprovalEvidence) -> DeploymentReadinessDecision:
         current_time = self.now()
         if current_time.tzinfo is None:
             raise ValueError("deployment readiness clock must include a timezone")
@@ -241,12 +276,18 @@ class DeploymentReadinessAuthority:
 
         if getattr(self.verifier, "assurance", None) is not ComponentAssurance.DEPLOYMENT:
             findings.append("evidence verifier is not deployment-assured")
+        if (
+            getattr(self.approval_verifier, "assurance", None)
+            is not ComponentAssurance.DEPLOYMENT
+        ):
+            findings.append("approval verifier is not deployment-assured")
         if getattr(self.issuer, "assurance", None) is not ComponentAssurance.DEPLOYMENT:
             findings.append("decision issuer is not deployment-assured")
         if getattr(self.issuer, "authority_id", None) != self.profile.authority_id:
             findings.append("decision authority identity mismatch")
-        if approved_by not in self.profile.authorized_approvers:
-            findings.append("approver is not authorized")
+        approval_problems = self._approval_problems(approval, current_time)
+        findings.extend(f"deployment approval: {item}" for item in approval_problems)
+        approved_by = approval.approver_id if isinstance(approval, DeploymentApprovalEvidence) else ""
         gateway_valid = isinstance(gateway_readiness, GatewayReadiness)
         sandbox_valid = isinstance(sandbox_report, SandboxReadinessReport)
         if not gateway_valid:
@@ -324,6 +365,11 @@ class DeploymentReadinessAuthority:
             deployment_id=self.profile.deployment_id,
             environment_id=self.profile.environment_id,
             approved_by=approved_by,
+            approval_digest=(
+                approval.approval_digest
+                if isinstance(approval, DeploymentApprovalEvidence)
+                else ""
+            ),
             authority_id=self.profile.authority_id,
             evidence_digests=tuple(sorted(item.evidence_digest for item in accepted.values())),
             assessor_ids=assessors,
@@ -341,6 +387,48 @@ class DeploymentReadinessAuthority:
         if not isinstance(proof, str) or not proof:
             raise RuntimeError("deployment readiness issuer returned an empty proof")
         return replace(decision, proof=proof)
+
+    def _approval_problems(self, approval: DeploymentApprovalEvidence,
+                           current_time: datetime) -> tuple[str, ...]:
+        if not isinstance(approval, DeploymentApprovalEvidence):
+            return ("unknown approval evidence type",)
+        required = (
+            approval.approval_id, approval.deployment_id, approval.environment_id,
+            approval.profile_digest, approval.approver_id, approval.approved_mode,
+            approval.approved_at, approval.expires_at, approval.proof,
+        )
+        if not all(isinstance(value, str) and value for value in required):
+            return ("required approval identity is missing",)
+        problems: list[str] = []
+        try:
+            approved_at = datetime.fromisoformat(approval.approved_at)
+            expires_at = datetime.fromisoformat(approval.expires_at)
+        except (TypeError, ValueError):
+            return ("approval timestamps are invalid",)
+        if approved_at.tzinfo is None or expires_at.tzinfo is None:
+            problems.append("approval timestamps need a timezone")
+        elif not approved_at <= current_time < expires_at:
+            problems.append("approval is not currently valid")
+        checks = (
+            (approval.deployment_id == self.profile.deployment_id,
+             "deployment identity mismatch"),
+            (approval.environment_id == self.profile.environment_id,
+             "environment identity mismatch"),
+            (approval.profile_digest == self.profile.profile_digest,
+             "readiness profile digest mismatch"),
+            (approval.approver_id in self.profile.authorized_approvers,
+             "approver is not authorized"),
+            (approval.approved_mode == RailActivationMode.ENFORCED.value,
+             "approval does not authorize enforced mode"),
+        )
+        problems.extend(reason for accepted, reason in checks if not accepted)
+        try:
+            verified = self.approval_verifier.verify(approval) is True
+        except Exception:
+            verified = False
+        if not verified:
+            problems.append("approval proof is invalid or unavailable")
+        return tuple(problems)
 
     def _problems(self, evidence: DeploymentControlEvidence,
                   current_time: datetime) -> tuple[str, ...]:
