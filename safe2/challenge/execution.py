@@ -22,10 +22,10 @@ from safe2.contracts import validate_artifact
 
 def _file_digest(path: str | Path) -> tuple[Path, str]:
     target = Path(path)
-    metadata = target.lstat()
-    if stat.S_ISLNK(metadata.st_mode) or not stat.S_ISREG(metadata.st_mode):
-        raise ValueError("Executor must be a regular, non-link file.")
+    target.lstat()
     resolved = target.resolve(strict=True)
+    if not stat.S_ISREG(resolved.lstat().st_mode):
+        raise ValueError("Command file must resolve to a regular file.")
     flags = os.O_RDONLY | getattr(os, "O_BINARY", 0)
     descriptor = os.open(resolved, flags)
     try:
@@ -40,7 +40,7 @@ def _file_digest(path: str | Path) -> tuple[Path, str]:
         os.close(descriptor)
     def identity(value: os.stat_result) -> tuple[int, int, int, int]:
         return value.st_dev, value.st_ino, value.st_size, value.st_mtime_ns
-    if identity(before) != identity(after) or metadata.st_size != before.st_size:
+    if identity(before) != identity(after):
         raise ValueError("Command file changed while it was being inspected.")
     return resolved, hasher.hexdigest()
 

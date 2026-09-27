@@ -112,7 +112,9 @@ safe2 challenge report controlled-result/challenge-run.json --output controlled-
 On Windows, use the absolute path to `python.exe`; on Linux/WSL, use the absolute
 interpreter or executable path. The plan hashes the executable and every argument
 that resolves to a regular file at planning time, including a Python script. Other
-arguments remain literal strings and are not interpreted as files.
+arguments remain literal strings and are not interpreted as files. File symlinks
+are resolved once during planning; the stored command uses and later rechecks the
+exact regular-file target instead of executing the mutable link path.
 
 The CLI sends one compact JSON object to stdin with schema version
 `safe2.challenge-executor-request.v1`, challenge/protocol/scenario/trial/treatment

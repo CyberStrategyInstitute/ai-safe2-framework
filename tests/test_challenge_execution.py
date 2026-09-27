@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
 from click.testing import CliRunner
 
 from safe2.challenge.execution import create_plan, execute_plan, verify_execution
@@ -75,6 +76,22 @@ def test_timeout_and_output_caps_are_visible_not_success():
     _, output_run, output_receipt = execute_plan(output_plan)
     assert output_run["summary"]["status_counts"]["incomplete"] == 6
     assert {item["status"] for item in output_receipt["episode_receipts"]} == {"output_limit"}
+
+
+def test_command_symlink_is_resolved_to_exact_regular_target(tmp_path: Path):
+    target = tmp_path / "executor.py"
+    target.write_text("print('not executed during planning')\n", encoding="utf-8")
+    link = tmp_path / "executor-link.py"
+    try:
+        link.symlink_to(target)
+    except OSError:
+        pytest.skip("Host does not permit test symlinks")
+    plan = create_plan(
+        [sys.executable, str(link)], provider_name="link-test", provider_version="1",
+        producer_id="link-test", treatment="link-test",
+    )
+    assert plan["command"][1] == str(target.resolve())
+    assert plan["command_file_bindings"][1]["path"] == str(target.resolve())
 
 
 def test_cli_requires_authorization_and_writes_new_bundle(tmp_path: Path):
