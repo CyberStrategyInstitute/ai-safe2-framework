@@ -210,6 +210,15 @@ from nexus_sdk.payments.sandbox_readiness import (
     SandboxReadinessReport,
     SandboxRunEvidence,
 )
+from nexus_sdk.payments.deployment_readiness import (
+    DEFAULT_DEPLOYMENT_CONTROLS,
+    DeploymentControlEvidence,
+    DeploymentEvidenceVerifier,
+    DeploymentReadinessAuthority,
+    DeploymentReadinessDecision,
+    DeploymentReadinessIssuer,
+    DeploymentReadinessProfile,
+)
 from nexus_sdk.payments.x402_variable import (
     EscrowPhase, VariableCharge, X402V2EscrowBinding, X402V2UptoBinding,
 )
@@ -311,6 +320,11 @@ __all__ = [
     "RailActivationMode", "SandboxEvidenceVerifier",
     "SandboxRailReadinessGate", "SandboxReadinessProfile",
     "SandboxReadinessReport", "SandboxRunEvidence",
+    # Signed production admission
+    "DEFAULT_DEPLOYMENT_CONTROLS", "DeploymentControlEvidence",
+    "DeploymentEvidenceVerifier", "DeploymentReadinessAuthority",
+    "DeploymentReadinessDecision", "DeploymentReadinessIssuer",
+    "DeploymentReadinessProfile",
     "EscrowPhase", "VariableCharge", "X402V2EscrowBinding", "X402V2UptoBinding",
     # Mandate Bridge
     "AP2AuthoritativeVerifier", "AP2ReceiptEvidence", "AP2V02Binding",
