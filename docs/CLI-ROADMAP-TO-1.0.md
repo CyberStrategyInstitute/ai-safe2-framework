@@ -149,6 +149,8 @@ Release gate:
 
 ## CLI 0.9: Challenge Lab execution and independent evidence exchange
 
+**Status:** Implemented for release-candidate validation
+
 **User outcome:** Run reproducible agent-governance experiments and compare
 independent implementations without forcing them into identical internal
 semantics.
