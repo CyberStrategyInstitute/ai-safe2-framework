@@ -206,3 +206,18 @@ attempt or time limit escalates the execution while deliberately preserving the
 exposure hold; a timeout is not evidence that money did not move. Stale workers,
 duplicate cases, early polling, conflicting truth, and artifact substitution all
 fail closed.
+
+## Sandbox Rail Readiness
+
+`SandboxRailReadinessGate` is **Sandbox Rail Readiness**. It binds authenticated
+sandbox runs to the exact RailGuard contract, binding implementation, policy
+stack, and execution profile, and requires explicit success across mutation,
+replay, downgrade, revocation, timeout, reconciliation, settlement, and failure
+tests. Evidence must be fresh, payload-minimized, sandbox-only, and prove that no
+production credential or real value was used.
+
+One passing run permits at most observe-only operation. Enforced eligibility
+requires at least two allowlisted independent counterparties and environments,
+plus a deployment-ready execution plane. Conflicting, forged, incomplete, or
+failed evidence blocks enforcement. The report states the maximum permissible
+mode; it never activates a rail or substitutes for operator change control.

@@ -317,6 +317,12 @@ extension. It requires authenticated evaluator identity, pinned policy-bundle
 identity, exact input binding, freshness, and deterministic agreement with the
 reference firewall before policy authorization can reach Key Guardian.
 
+Rail activation is governed by the draft
+[Sandbox Rail Readiness](SANDBOX-READINESS.md) extension. Authenticated sandbox
+evidence from independent counterparties must cover mutation, replay,
+downgrade, revocation, timeout, reconciliation, settlement, and failure paths;
+one passing run permits at most observe-only operation.
+
 ---
 
 ## Buyer position
