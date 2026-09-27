@@ -35,6 +35,8 @@ SCHEMA_CONTRACTS = {
     "safe2.challenge-run.v1": "challenge-run",
     "safe2.challenge-comparison.v1": "challenge-comparison",
     "safe2.challenge-source.v1": "challenge-source",
+    "safe2.challenge-execution-plan.v1": "challenge-execution-plan-v1",
+    "safe2.challenge-execution-receipt.v1": "challenge-execution-receipt-v1",
     "safe2.discovery.v1": "discovery-v1",
     "safe2.discovery-drift.v1": "discovery-drift-v1",
     "safe2.environment-posture.v1": "environment-posture-v1",

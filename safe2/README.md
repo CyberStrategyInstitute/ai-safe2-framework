@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.8.0-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-0.9.0-F6921E?style=flat-square)](../README.md)
 
 [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
 
@@ -107,14 +107,15 @@ pytest tests/ scanner/tests/
 | `safe2 schema list` | Discover packaged machine-readable contracts | Returns stable schema identifiers as JSON |
 | `safe2 schema export NAME` | Export one versioned JSON Schema | Writes to stdout or an integration-owned file |
 | `safe2 schema validate NAME FILE` | Validate an evidence artifact | Exit 0 valid, 1 contract violation, 2 unreadable input |
-| `safe2 challenge ...` | Run inert experiments; import, compare, verify, sign, and report evidence | [Challenge CLI guide](../docs/CHALLENGE-CLI.md); fixture results are not live-agent validation |
+| `safe2 challenge ...` | Run inert fixtures or explicitly authorized bounded evaluators; import, compare, verify, sign, and report evidence | [Challenge CLI guide](../docs/CHALLENGE-CLI.md); bounded execution is not sandboxing or independent replication |
 
 ## Challenge Lab Evidence Workflow
 
-The [Challenge CLI guide](../docs/CHALLENGE-CLI.md) provides a runnable offline
-Challenge 001 workflow with six scenarios, three treatments, independent state
-grading, and a synthetic TENIR translation example. This is a fixture-stage
-extension to the existing CLI, not a reclassification of the CLI release.
+The [Challenge CLI guide](../docs/CHALLENGE-CLI.md) provides an offline fixture
+workflow and an opt-in controlled evaluator seam for the same six Challenge 001
+scenarios. Plans bind the named executable and limits before execution; receipts
+bind requests, responses, source evidence, normalized results, and optional system
+identity. The process runs with current-user authority and is not sandboxed.
 Raw provider verdicts, observation gaps, provenance, and incompatible conditions
 stay visible. Matching translated results do not establish independent replication.
 

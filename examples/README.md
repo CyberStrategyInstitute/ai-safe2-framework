@@ -28,6 +28,7 @@ Examples demonstrate implementation patterns. They do not create framework confo
 | [`aism-remediation/`](./aism-remediation/) | AISM Remediation Decision Support | Executable evidence-bound AISM remediation plan with ownership, alternatives, exit criteria, history, and human decision gates. |
 | [`anti-gravity-sovereign-runtime/`](./anti-gravity-sovereign-runtime/) | Anti-Gravity | Sovereign runtime defense package for Anti-Gravity agent deployments. |
 | [`autogen-sovereign-runtime/`](./autogen-sovereign-runtime/) | Microsoft AutoGen | Governance wrapper for AutoGen multi-agent orchestration. |
+| [`challenge-controlled-executor/`](./challenge-controlled-executor/) | Challenge 001 Controlled Executor | Reproducible process-boundary evaluator with pre-registration, independent grading, incomplete states, and cross-bound evidence receipts. |
 | [`claude-code-sovereign-runtime/`](./claude-code-sovereign-runtime/) | Claude Code | Hardens agentic coding sessions against unsafe tool execution, scope creep, and drift. |
 | [`codex-sovereign-runtime/`](./codex-sovereign-runtime/) | OpenAI Codex | Runtime enforcement wrapper for Codex-driven coding agents. |
 | [`crewai-sovereign-runtime/`](./crewai-sovereign-runtime/) | CrewAI | Governance wrapper for CrewAI crew-based orchestration. |

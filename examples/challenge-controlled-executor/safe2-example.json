@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "id": "challenge-controlled-executor",
+  "stack": "Challenge 001 Controlled Executor",
+  "status": "executable",
+  "framework_version": "3.1.0",
+  "expected": {
+    "valid": true,
+    "episodes": 6,
+    "incomplete": 0,
+    "process_sandboxed": false,
+    "independent_replication": "not_established"
+  }
+}

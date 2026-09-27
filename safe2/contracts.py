@@ -37,6 +37,8 @@ SCHEMAS = {
     "challenge-run": "challenge-run-v1.schema.json",
     "challenge-source": "challenge-source-v1.schema.json",
     "challenge-comparison": "challenge-comparison-v1.schema.json",
+    "challenge-execution-plan-v1": "challenge-execution-plan-v1.schema.json",
+    "challenge-execution-receipt-v1": "challenge-execution-receipt-v1.schema.json",
     "aism-assessment-v1": "aism-assessment-v1.schema.json",
     "discovery-v1": "discovery-v1.schema.json",
     "discovery-drift-v1": "discovery-drift-v1.schema.json",

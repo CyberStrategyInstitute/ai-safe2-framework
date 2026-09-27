@@ -337,11 +337,12 @@ Material normative framework, protocol-profile, implementation, policy, or grade
 
 See [Challenge 001](challenges/001-anthropic-multi-agent-turf-war/).
 
-The [Challenge CLI workflow](docs/CHALLENGE-CLI.md) now runs an offline, inert
-shared-state fixture, grades observed outcomes, and translates third-party evidence
-through a versioned contract. A synthetic TENIR example demonstrates interoperability;
-it is not a TENIR execution or independent replication. Live-agent validation remains
-a separate study stage.
+The [Challenge CLI workflow](docs/CHALLENGE-CLI.md) runs an offline fixture or an
+explicitly authorized, bounded external evaluator, independently grades recorded
+state, and translates third-party evidence through a versioned contract. Plans and
+receipts bind the evaluator, requests, responses, optional system identity, source,
+and normalized run. Bounded execution is not an OS sandbox, provider authentication,
+or independent replication. The synthetic TENIR example remains illustrative only.
 
 ---
 

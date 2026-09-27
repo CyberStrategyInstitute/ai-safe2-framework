@@ -22,7 +22,9 @@ def invoke(*arguments: str):
 def test_cli_discovers_and_validates_packaged_study():
     result = invoke("list")
     assert result.exit_code == 0, result.output
-    assert json.loads(result.output)["challenges"][0]["live_agent_execution"] is False
+    catalog = json.loads(result.output)["challenges"][0]
+    assert catalog["live_agent_execution"] is False
+    assert catalog["controlled_process_execution"] is True
     result = invoke("validate", "001")
     assert result.exit_code == 0, result.output
     assert json.loads(result.output)["framework_profile_conformance"] == "not_assessed"
