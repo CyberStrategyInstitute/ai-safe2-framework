@@ -125,6 +125,16 @@ from nexus_sdk.payments.policy_authority import (
     PolicyDefinition,
     PolicyReceiptIssuer,
 )
+from nexus_sdk.payments.policy_parity import (
+    AuthenticatedPolicyEvaluator,
+    DeployedPolicyEvaluation,
+    ParityEnforcedPolicyAuthority,
+    ParityPolicyAuthorityDecision,
+    PolicyEvaluationAuthenticator,
+    PolicyInputProvider,
+    PolicyParityProfile,
+    PolicyParityReport,
+)
 from nexus_sdk.payments.runtime_verifier import (
     IndependentRuntimeVerifier,
     RuntimeReceiptIssuer,
@@ -252,6 +262,11 @@ __all__ = [
     # Independent deterministic policy issuance
     "DeterministicPolicyAuthority", "PolicyAuthorityDecision",
     "PolicyDefinition", "PolicyReceiptIssuer",
+    # Deployed policy parity and identity
+    "AuthenticatedPolicyEvaluator", "DeployedPolicyEvaluation",
+    "ParityEnforcedPolicyAuthority", "ParityPolicyAuthorityDecision",
+    "PolicyEvaluationAuthenticator",
+    "PolicyInputProvider", "PolicyParityProfile", "PolicyParityReport",
     # Independent runtime attestation verification
     "IndependentRuntimeVerifier", "RuntimeReceiptIssuer",
     "RuntimeVerificationDecision", "RuntimeVerifierProfile",

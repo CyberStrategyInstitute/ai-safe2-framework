@@ -19,7 +19,7 @@
 | Transaction firewall (deterministic PDP) | Implemented, tested |
 | Credential broker contract | Implemented; **no production signer binding ships here** |
 | Evidence ledger and PTR | Implemented, tested |
-| `opa/nexus-apay.rego` | Written; input contract test-enforced. **Not validated against a live OPA server in this repository's CI.** |
+| `opa/nexus-apay.rego` | Written; input contract and Policy Parity Guard test-enforced. **Not validated against a live OPA server in this repository's CI.** |
 | Mandate Bridge (AP2 v0.2) | **Authoritative reference profile; deployment verifier required** |
 | Card Trust Bridge (Visa TAP) | **Authoritative recognition profile; deployment verifier required** |
 | Agent Token Bridge (Mastercard AP4M) | **Verifier-evidence profile; no public wire compatibility claimed** |
@@ -311,6 +311,11 @@ Ambiguous post-submission outcomes are governed by the draft
 [Governed Payment Recovery](RECOVERY.md) extension. It requires durable,
 authorization-bound cases, bounded observation, authoritative truth, atomic
 exposure accounting, and exposure-preserving escalation rather than blind retry.
+
+Deployed rules are governed by the draft [Policy Parity Guard](POLICY-PARITY.md)
+extension. It requires authenticated evaluator identity, pinned policy-bundle
+identity, exact input binding, freshness, and deterministic agreement with the
+reference firewall before policy authorization can reach Key Guardian.
 
 ---
 
