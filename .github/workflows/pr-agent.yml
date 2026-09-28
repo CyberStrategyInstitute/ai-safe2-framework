@@ -1,0 +1,52 @@
+name: PR-Agent Review
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+  issues: write
+  models: read
+  pull-requests: write
+
+concurrency:
+  group: pr-agent-${{ github.event.pull_request.number || github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: PR-Agent / Advisory review
+    if: >-
+      github.event.sender.type != 'Bot' &&
+      ((github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request &&
+      startsWith(github.event.comment.body, '/review')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Review pull request
+        id: pr-agent
+        continue-on-error: true
+        uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_API_KEY: ${{ github.token }}
+          GITHUB_API_BASE: https://models.github.ai/inference
+          config.model: github/openai/gpt-4.1-mini
+          config.fallback_models: '["github/openai/gpt-4o-mini"]'
+          config.custom_model_max_tokens: "128000"
+          config.output_run_details: "true"
+          config.propagate_tool_errors: "true"
+          github_action_config.auto_review: "true"
+          github_action_config.auto_describe: "false"
+          github_action_config.auto_improve: "false"
+          github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
+      - name: Report reviewer execution failure
+        if: steps.pr-agent.outcome == 'failure'
+        shell: bash
+        run: |
+          echo '## PR-Agent: review did not complete' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The advisory reviewer failed; deterministic checks remain authoritative.' >> "$GITHUB_STEP_SUMMARY"
