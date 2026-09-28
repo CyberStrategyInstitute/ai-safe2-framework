@@ -102,6 +102,8 @@ pytest tests/ scanner/tests/
 | `safe2 example verify NAME` | Verify declared example outcomes | Fails on expectation drift |
 | `safe2 mcp wrap ...` | Consumer-side MCP inspection and policy proxy | Applies runtime policy and audit behavior |
 | `safe2 doctor PATH` | Metadata-only harness, shell, host, and WSL discovery | Inventory evidence only; does not claim assessment or conformance |
+| `safe2 decision evaluate REQUEST --output FILE [--ledger FILE]` | Apply the deterministic decision firewall and optionally collect shadow System One evidence | Advisory review routing only; all merge, release, deploy, exception, and policy authority remains false |
+| `safe2 decision replay CORPUS --output FILE` | Replay labeled routing cases after policy, rubric, threshold, or provider changes | Deterministic regression evidence; does not claim model calibration unless a provider evaluation is separately supplied |
 | `safe2 feedback record ...` | Capture sanitized operational friction | Records typed outcome and verification state in local JSONL |
 | `safe2 feedback summary FILE` | Measure recurring friction and completion-verification gap | Aggregates local evidence without sending telemetry |
 | `safe2 schema list` | Discover packaged machine-readable contracts | Returns stable schema identifiers as JSON |

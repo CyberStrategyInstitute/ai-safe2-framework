@@ -67,7 +67,13 @@ jobs:
             --safe2-evidence "$EVIDENCE_DIR/ai-safe2-current.json" --safe2-version "$(cat "$EVIDENCE_DIR/cli-version.txt")" \
             --check "ai-safe2-environment=passed=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
             --json-output "$EVIDENCE_DIR/review-evidence.json" \
-            --markdown-output "$EVIDENCE_DIR/review-decision.md"
+            --markdown-output "$EVIDENCE_DIR/review-decision.md" \
+            --decision-request-output "$EVIDENCE_DIR/decision-request.json"
+          python -m safe2 decision evaluate "$EVIDENCE_DIR/decision-request.json" \
+            --output "$EVIDENCE_DIR/decision-gateway.json" \
+            --ledger "$EVIDENCE_DIR/decision-ledger.jsonl"
+          python -m safe2 decision replay .ai-safe2/decision-evals \
+            --output "$EVIDENCE_DIR/decision-replay.json"
           cat "$EVIDENCE_DIR/review-decision.md" >> "$GITHUB_STEP_SUMMARY"
           sha256sum "$EVIDENCE_DIR"/* > "$EVIDENCE_DIR/SHA256SUMS"
 

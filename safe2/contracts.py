@@ -48,6 +48,8 @@ SCHEMAS = {
     "run-manifest-v1": "run-manifest-v1.schema.json",
     "nexus-evidence-v1": "nexus-evidence-v1.schema.json",
     "skillspector-evidence-v1": "skillspector-evidence-v1.schema.json",
+    "decision-request-v1": "decision-request-v1.schema.json",
+    "decision-result-v1": "decision-result-v1.schema.json",
 }
 
 

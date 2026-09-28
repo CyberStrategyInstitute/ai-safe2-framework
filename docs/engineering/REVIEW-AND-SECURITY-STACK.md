@@ -2,6 +2,10 @@
 
 This repository uses layered evidence. No single scanner or reviewer is treated as proof of safety.
 
+See [PR Decision-Evidence Workflow](./PR-DECISION-EVIDENCE-WORKFLOW.md) for the
+complete architecture, authority boundaries, diagrams, before/after comparison,
+provider strategy, tradeoffs, and reviewer procedure.
+
 ## Required pull-request gates
 
 | Gate | Purpose | Blocking condition |

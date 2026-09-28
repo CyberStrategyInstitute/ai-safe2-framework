@@ -68,7 +68,13 @@ jobs:
             --check "installed-wheel=passed=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
             --check "release-invariants=passed=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" \
             --json-output release-evidence/release-review-evidence.json \
-            --markdown-output release-evidence/release-decision.md
+            --markdown-output release-evidence/release-decision.md \
+            --decision-request-output release-evidence/decision-request.json
+          python -m safe2 decision evaluate release-evidence/decision-request.json \
+            --output release-evidence/decision-gateway.json \
+            --ledger release-evidence/decision-ledger.jsonl
+          python -m safe2 decision replay .ai-safe2/decision-evals \
+            --output release-evidence/decision-replay.json
           sha256sum dist/* release-evidence/*.json release-evidence/*.md > release-evidence/SHA256SUMS
           cat release-evidence/release-decision.md >> "$GITHUB_STEP_SUMMARY"
 
