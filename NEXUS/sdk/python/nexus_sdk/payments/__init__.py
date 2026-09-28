@@ -107,6 +107,7 @@ from nexus_sdk.payments.sqlite_state import (
 )
 from nexus_sdk.payments.key_guardian import (
     CredentialReleaseEnvelope,
+    HumanIntentAuthorizationReceipt,
     InProcessHMACReceiptAuthenticator,
     InProcessHMACTestBackend,
     KeyGuardianClient,
@@ -129,6 +130,15 @@ from nexus_sdk.payments.runtime_verifier import (
     RuntimeReceiptIssuer,
     RuntimeVerificationDecision,
     RuntimeVerifierProfile,
+)
+from nexus_sdk.payments.human_intent import (
+    HumanApprovalEvidence,
+    HumanApprovalEvidenceVerifier,
+    HumanIntentAuthorityProfile,
+    InMemoryTestApprovalChallengeStore,
+    InProcessHMACTestHumanApprovalVerifier,
+    TrustedIntentAuthority,
+    TrustedTransactionRendering,
 )
 from nexus_sdk.payments.adapters import (
     AP2Binding,
@@ -207,7 +217,8 @@ __all__ = [
     "SettlementStateStore", "TransactionalAuthorityStore", "TransactionalReplayStore",
     "ExposureCeilingExceededError", "SQLiteGatewayStateStore", "StateConflictError",
     # Isolated credential release
-    "CredentialReleaseEnvelope", "InProcessHMACReceiptAuthenticator",
+    "CredentialReleaseEnvelope", "HumanIntentAuthorizationReceipt",
+    "InProcessHMACReceiptAuthenticator",
     "InProcessHMACTestBackend", "KeyGuardianClient",
     "KeyGuardianTransport", "NullKeyGuardianTransport", "PolicyAuthorizationReceipt",
     "ProtectedSigningBackend", "ReceiptAuthenticator", "ReferenceKeyGuardianService",
@@ -218,6 +229,11 @@ __all__ = [
     # Independent runtime attestation verification
     "IndependentRuntimeVerifier", "RuntimeReceiptIssuer",
     "RuntimeVerificationDecision", "RuntimeVerifierProfile",
+    # Trusted human intent and exact approval
+    "HumanApprovalEvidence", "HumanApprovalEvidenceVerifier",
+    "HumanIntentAuthorityProfile", "InMemoryTestApprovalChallengeStore",
+    "InProcessHMACTestHumanApprovalVerifier", "TrustedIntentAuthority",
+    "TrustedTransactionRendering",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",

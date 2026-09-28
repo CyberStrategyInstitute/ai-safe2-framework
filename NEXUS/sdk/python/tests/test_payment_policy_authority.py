@@ -123,6 +123,12 @@ def test_policy_configuration_change_changes_snapshot_digest():
     assert changed.policy_digest != authority.definition.policy_digest
 
 
+def test_human_approval_rule_changes_policy_snapshot_digest():
+    authority, _, _, _ = configured()
+    changed = replace(authority.definition, human_approval_consequences=frozenset())
+    assert changed.policy_digest != authority.definition.policy_digest
+
+
 def test_tampered_policy_snapshot_invalidates_receipt():
     authority, authenticator, intent, runtime = configured()
     result = authority.evaluate(intent, runtime=runtime, now=NOW)
