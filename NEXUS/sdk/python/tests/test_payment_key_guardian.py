@@ -68,6 +68,7 @@ def envelope(transaction: CanonicalTransaction | None = None,
         evaluated_at="2026-09-23T00:00:00+00:00",
         authenticator_id=authenticator.authenticator_id,
         proof="",
+        policy_digest="sha256:policy-definition-1",
     )
     policy = replace(policy, proof=authenticator.seal_policy(policy))
     runtime = RuntimeAuthorizationReceipt(
@@ -117,6 +118,7 @@ def configured(tmp_path, transaction=None, backend=None):
         backend=backend or InProcessHMACTestBackend(),
         state_store=store,
         receipt_authenticator=InProcessHMACReceiptAuthenticator(),
+        trusted_policy_digests={"policy-1": "sha256:policy-definition-1"},
         revocation_epoch=store.current_revocation_epoch,
         now=lambda: datetime(2026, 9, 23, 0, 0, 30, tzinfo=timezone.utc),
     )
@@ -231,3 +233,11 @@ def test_released_reservation_cannot_sign(tmp_path):
     with pytest.raises(BrokerRefusal) as refusal:
         guardian.release(request)
     assert refusal.value.code is PaymentReasonCode.EXPOSURE_RESERVATION_FAILED
+
+
+def test_untrusted_policy_snapshot_cannot_sign(tmp_path):
+    request, guardian = configured(tmp_path)
+    forged = replace(request, policy=replace(request.policy, policy_digest="sha256:other"))
+    with pytest.raises(BrokerRefusal) as refusal:
+        guardian.release(forged)
+    assert refusal.value.code is PaymentReasonCode.FAIL_CLOSED_DEFAULT

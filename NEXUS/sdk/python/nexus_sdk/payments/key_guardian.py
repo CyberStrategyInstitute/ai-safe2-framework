@@ -11,7 +11,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from typing import NoReturn, Protocol
@@ -58,6 +58,7 @@ class PolicyAuthorizationReceipt:
     evaluated_at: str
     authenticator_id: str
     proof: str
+    policy_digest: str = ""
 
 
 @dataclass(frozen=True)
@@ -157,12 +158,14 @@ class ReferenceKeyGuardianService:
     def __init__(self, *, backend: ProtectedSigningBackend,
                  state_store: CredentialReleaseStateStore,
                  receipt_authenticator: ReceiptAuthenticator,
+                 trusted_policy_digests: Mapping[str, str],
                  revocation_epoch: Callable[[str], int],
                  now: Callable[[], datetime] = utcnow,
                  max_receipt_age_seconds: int = 120) -> None:
         self.backend = backend
         self.state_store = state_store
         self.receipt_authenticator = receipt_authenticator
+        self.trusted_policy_digests = dict(trusted_policy_digests)
         self.revocation_epoch = revocation_epoch
         self.now = now
         self.max_receipt_age_seconds = max_receipt_age_seconds
@@ -227,6 +230,7 @@ class ReferenceKeyGuardianService:
             or policy.canonical_digest != canonical.canonical_digest
             or policy.signing_digest != signing_digest
             or policy.policy_id != canonical.policy_id
+            or self.trusted_policy_digests.get(policy.policy_id) != policy.policy_digest
         ):
             self._refuse(
                 PaymentReasonCode.FAIL_CLOSED_DEFAULT,
@@ -330,6 +334,7 @@ class InProcessHMACReceiptAuthenticator:
             "policy_id": receipt.policy_id,
             "evaluated_at": receipt.evaluated_at,
             "authenticator_id": receipt.authenticator_id,
+            "policy_digest": receipt.policy_digest,
         }
 
     @staticmethod
