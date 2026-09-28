@@ -15,10 +15,21 @@ This repository uses layered evidence. No single scanner or reviewer is treated 
 | PR-Agent advisory review | Routine semantic review focused on correctness, security, and regression risk | Advisory; execution failures are visible but do not stop deterministic CI |
 | Greptile review status | Confirms whether Greptile substantively reviewed the exact revision | Advisory; missing, stale, or quota-limited reviews are reported without blocking |
 | CODEOWNERS and human review | Architecture, authorization, policy, payment, cryptography, data, CI, and release judgment | Required owner approval absent |
+| AI SAFE2 decision evidence | Exact base/head risk classification, CLI 0.9.0 environment drift, required evidence, and machine/human records | Evidence generation fails; risk itself routes review rather than automatically blocking |
 
 PR-Agent is the routine AI reviewer. It is open-source software and uses GitHub Models with the workflow's short-lived, repository-scoped token. Its findings are advisory; deterministic checks and human owners remain authoritative.
 
 Greptile is reserved for major integration points: authentication or authorization, policy and enforcement, payment or settlement, cryptography, evidence integrity, migrations, release candidates, and large cross-boundary changes. `Greptile / Advisory status` distinguishes a substantive current-head review from a quota or error response, but never blocks ordinary development.
+
+`Review Decision Evidence` applies `.ai-safe2/review-policy.json` to the exact
+base/head diff, runs the released AI SAFE2 CLI 0.9.0 against comparable baseline
+and current checkouts, and retains JSON, Markdown, and hashes for 90 days. The
+report intentionally records unavailable historic finding attribution as unknown.
+It never converts absence of prior structured evidence into zero inherited defects.
+
+Release builds retain the same decision record and artifact hashes for 365 days.
+This makes each release comparable going forward. The first retained run is the
+baseline; direct before/after claims begin only when two comparable records exist.
 
 ## Operating policy
 
