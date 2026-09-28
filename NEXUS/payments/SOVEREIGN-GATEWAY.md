@@ -1,7 +1,9 @@
 # Sovereign Payment Gateway
 
-**Human name:** Sovereign Payment Gateway  
-**Technical name:** `NEXUSPaymentExecutionPlane`  
+**Human name:** Sovereign Payment Gateway
+
+**Technical name:** `NEXUSPaymentExecutionPlane`
+
 **Status:** NEXUS v0.5 draft contract; no production assurance claim
 
 The Sovereign Payment Gateway is the protected execution boundary around the
