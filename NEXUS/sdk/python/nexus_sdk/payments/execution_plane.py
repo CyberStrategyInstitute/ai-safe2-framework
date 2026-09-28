@@ -16,7 +16,8 @@ from typing import Any, Protocol, runtime_checkable
 __all__ = [
     "ComponentAssurance", "ExecutionRecord", "ExecutionState",
     "ExecutionTransitionError", "GatewayReadiness", "NEXUSPaymentExecutionPlane",
-    "SettlementStateStore", "TransactionalAuthorityStore", "TransactionalReplayStore",
+    "ReplayDecision", "SettlementStateStore", "TransactionalAuthorityStore",
+    "TransactionalReplayStore",
 ]
 
 
@@ -157,6 +158,14 @@ class ComponentAssurance(str, Enum):
     DEPLOYMENT = "deployment"
 
 
+class ReplayDecision(str, Enum):
+    """Atomic result of consuming a replay or idempotency key."""
+
+    ACCEPTED = "accepted"
+    IDEMPOTENT = "idempotent"
+    CONFLICT = "conflict"
+
+
 @runtime_checkable
 class TransactionalAuthorityStore(Protocol):
     """Durable authority, reservation, exposure, and revocation boundary."""
@@ -164,7 +173,8 @@ class TransactionalAuthorityStore(Protocol):
     assurance: ComponentAssurance
 
     def current_revocation_epoch(self, principal_id: str) -> int: ...
-    def reserve(self, record: ExecutionRecord, *, amount_minor: int, currency: str) -> str: ...
+    def reserve(self, record: ExecutionRecord, *, amount_minor: int, currency: str,
+                ceilings_minor: Mapping[str, int]) -> str: ...
     def commit(self, reservation_id: str, *, settlement_id: str) -> None: ...
     def release(self, reservation_id: str, *, reason: str) -> None: ...
 
@@ -175,7 +185,7 @@ class TransactionalReplayStore(Protocol):
 
     assurance: ComponentAssurance
 
-    def consume(self, *, namespace: str, key: str, digest: str) -> bool: ...
+    def consume(self, *, namespace: str, key: str, digest: str) -> ReplayDecision: ...
 
 
 @runtime_checkable
