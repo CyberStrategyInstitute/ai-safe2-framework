@@ -6,6 +6,7 @@ from click.testing import CliRunner
 
 from safe2.cli import cli
 from safe2.decision.gateway import DecisionGateway
+from safe2.decision.providers import SystemOneProvider
 
 
 def policy():
@@ -56,6 +57,32 @@ def test_invalid_request_fails_closed():
     value["decision_class"] = "merge_authorization"
     with pytest.raises(ValueError, match="violates contract"):
         DecisionGateway(policy()).evaluate(value)
+
+
+def test_invalid_policy_fails_closed():
+    value = policy()
+    value["model_prohibited_actions"].remove("merge")
+    with pytest.raises(ValueError, match="decision policy violates contract"):
+        DecisionGateway(value)
+
+
+def test_external_provider_requires_https():
+    with pytest.raises(ValueError, match="absolute HTTPS URL"):
+        SystemOneProvider("jev_external", "http://example.test", "jev", require_https=True)
+
+
+def test_provider_rejects_unrequested_answers(monkeypatch):
+    class Response:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"answers": {"unexpected": {"noul": 0.5}}}
+
+    monkeypatch.setattr("httpx.Client.post", lambda *args, **kwargs: Response())
+    provider = SystemOneProvider("kev", "http://127.0.0.1:8080", "kev")
+    with pytest.raises(TypeError, match="question set"):
+        provider.decide({}, {"expected": {"type": "noul", "instructions": "x"}})
 
 
 def test_nested_sensitive_capsule_field_disables_external_adjudication():

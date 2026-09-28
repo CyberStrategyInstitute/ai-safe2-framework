@@ -50,6 +50,7 @@ SCHEMAS = {
     "skillspector-evidence-v1": "skillspector-evidence-v1.schema.json",
     "decision-request-v1": "decision-request-v1.schema.json",
     "decision-result-v1": "decision-result-v1.schema.json",
+    "decision-routing-policy-v1": "decision-routing-policy-v1.schema.json",
 }
 
 

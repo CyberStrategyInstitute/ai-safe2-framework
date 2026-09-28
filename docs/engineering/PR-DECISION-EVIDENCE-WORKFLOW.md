@@ -57,6 +57,13 @@ flowchart TD
 The provider branch is disabled unless explicitly configured. The normal path
 today is deterministic review planning plus PR-Agent, CI, and human review.
 
+The packaging and deployment decision is recorded in
+[ADR: Decision Firewall Architecture](ADR-DECISION-FIREWALL-ARCHITECTURE.md).
+In short: the contracts and policy engine live in the AI SAFE2 package, the CLI
+is the default interface, and a separately deployable adapter is optional. This
+keeps local and CI use offline and reproducible without preventing a shared
+service later.
+
 ## Trust and authority boundaries
 
 ```mermaid
@@ -329,3 +336,50 @@ secret-access, or policy-change authority.
 - Record accepted residual risk, owner, expiry/review point, and rollback.
 - Never call the change “fixed” unless comparable before evidence identifies the finding and current evidence shows it resolved.
 
+## Repository and standards disposition
+
+References are inputs, not transitive trust. Every executable dependency must
+be version/hash pinned, license reviewed, scanned, and evaluated on the CSI
+corpus before adoption. A linked repository is not automatically installed or
+authorized to receive source, secrets, logs, or findings.
+
+| Project | Workflow position | Decision |
+| --- | --- | --- |
+| [PR-Agent](https://github.com/The-PR-Agent/pr-agent) | Generative explanation and review after deterministic planning | Use as the routine advisory reviewer; wrap with repository policy and preserve native findings |
+| [Kev](https://github.com/jaredpalmer/kev) | Local typed decision provider behind the firewall | Evaluate in shadow mode; pin model and service revision before any assisted routing |
+| [NanoJev](https://github.com/TianyuCodings/NanoJev) | Alternative implementation and training/evaluation reference | Research only until security-domain accuracy, calibration, provenance, and maintenance are established |
+| [NanoJev model artifacts](https://huggingface.co/C-Tianyu/NanoJev) | Candidate weights | Mirror, scan, hash, license-check, and record model-card evidence before isolated evaluation |
+| [TypeSafe skills](https://github.com/typesafe-ai/skills) | Integration-pattern reference | Review and pin individual useful patterns; do not install the collection wholesale |
+| [LiteLLM](https://github.com/BerriAI/litellm) | Optional gateway for generative LLM calls | Use for PR-Agent/provider budgets, routing, and telemetry; do not put it in the typed-decision authority path unless it preserves the System One contract exactly |
+| [OWASP MASVS](https://github.com/OWASP/masvs) | Be You mobile control vocabulary | Map MASVS/MASWE controls to changed paths, required evidence, and test results; it is a standard, not a scanner |
+| [OpenSSF Scorecard Action](https://github.com/ossf/scorecard-action) | Repository/supply-chain posture collection | Add as an isolated scheduled/default-branch workflow with least privilege and immutable action pins; do not run it as an expensive semantic review on every PR |
+| [OpenSSF Scorecard](https://github.com/ossf/scorecard) | Underlying checks and local/reference engine | Use its findings as observed evidence; do not treat an aggregate score as release authorization |
+| [typesafe-computer-use](https://github.com/awlevin/typesafe-computer-use) | Constrained UI-action pattern | Borrow decision/action separation only in disposable QA environments |
+| [jev-browser-use](https://github.com/wy-coliney/jev-browser-use) | Browser decision pattern | Reference for bounded action menus; never use against privileged production sessions |
+| [jev-browser](https://github.com/jkudish/jev-browser) | MCP/CLI browser execution pattern | Evaluate only for sandboxed emulator/browser testing with one-action receipts |
+| [skillbox](https://github.com/kitze/skillbox) | Versioned skill registry pattern | Borrow registry, versioning, provenance, and selection concepts for policy packs |
+| [captaincore](https://github.com/captaincore/captaincore) | Scanner-evidence/AI-triage pattern | Borrow the separation; a model may prioritize but never silently suppress high-severity scanner evidence |
+| [tax-doc-classifier](https://github.com/kyotofin/tax-doc-classifier) | Typed-classification/evaluation example | Borrow corpus methodology only; domain accuracy does not transfer to software security |
+| [jev-bot](https://github.com/bl888m/jev-bot) | Decision-to-action example | Cautionary reference only; its coupling of judgment to consequential action is explicitly excluded |
+| [NIST SSDF](https://csrc.nist.gov/pubs/sp/800/218/final) | Secure-development governance baseline | Map workflow controls and owners to SSDF practices |
+| [SLSA](https://slsa.dev/spec/v1.0/levels) | Release provenance and build integrity | Add signed provenance and downstream verification; evidence hashes alone are not SLSA provenance |
+| [OWASP MASVS](https://mas.owasp.org/MASVS/) | Mobile verification baseline | Apply to Be You policy packs and release evidence |
+| [OpenSSF Scorecard](https://scorecard.dev/) | Repository hygiene baseline | Track individual checks and remediation trends, not the score alone |
+
+### Changes resulting from this review
+
+- Added schema validation for the routing policy itself. A malformed or
+  authority-expanding policy now fails before evaluation.
+- Required HTTPS for an explicitly configured external Jev endpoint and rejected
+  endpoint URLs containing embedded credentials, queries, or fragments.
+- Required provider answers to match the exact requested question set and
+  constrained probability-bearing fields to the range 0–1.
+- Kept LiteLLM out of the typed-decision path by default. Its strengths are
+  generative-model routing, budgets, rate limits, and telemetry; it is not the
+  source of deterministic policy truth.
+- Deferred Scorecard installation until its workflow is independently pinned
+  and permission-reviewed. The official publishing mode has strict workflow and
+  OIDC requirements, so copying an unreviewed template into existing CI would
+  enlarge the trust boundary.
+- Made SLSA provenance, longitudinal finding normalization, ledger verification,
+  provider calibration, and shared-service operations explicit backlog items.

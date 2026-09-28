@@ -82,11 +82,12 @@ def evaluate(
     )
     secondary = (
         SystemOneProvider(
-            "jev_external",
-            jev_url,
-            jev_model,
-            os.getenv("TYPESAFE_API_KEY"),
-            policy["secondary"]["timeout_seconds"],
+            name="jev_external",
+            endpoint=jev_url,
+            model=jev_model,
+            api_key=os.getenv("TYPESAFE_API_KEY"),
+            timeout_seconds=policy["secondary"]["timeout_seconds"],
+            require_https=True,
         )
         if jev_url
         else None

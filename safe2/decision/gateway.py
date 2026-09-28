@@ -40,6 +40,11 @@ class DecisionGateway:
         primary: DecisionProvider | None = None,
         secondary: DecisionProvider | None = None,
     ):
+        violations = validate_artifact("decision-routing-policy-v1", policy)
+        if violations:
+            raise ValueError(
+                f"decision policy violates contract at {violations[0]['instance_path']}"
+            )
         self.policy, self.primary, self.secondary = policy, primary, secondary
 
     def evaluate(self, request: dict[str, Any]) -> dict[str, Any]:
