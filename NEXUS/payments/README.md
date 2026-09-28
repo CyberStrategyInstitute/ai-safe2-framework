@@ -323,6 +323,14 @@ evidence from independent counterparties must cover mutation, replay,
 downgrade, revocation, timeout, reconciliation, settlement, and failure paths;
 one passing run permits at most observe-only operation.
 
+Production admission is governed by the draft
+[Deployment Proof & Readiness](DEPLOYMENT-READINESS.md) extension. It binds the
+exact deployment, execution-plane result, sandbox report, policy profile,
+operational drills, evidence lifecycle, ownership, jurisdiction, independent
+assessors, and a separate change approver into one short-lived signed decision.
+Missing or untrusted proof produces a signed refusal and permits only disabled
+mode.
+
 ---
 
 ## Buyer position
