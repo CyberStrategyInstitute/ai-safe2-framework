@@ -38,7 +38,9 @@ jobs:
           OPENAI__API_BASE: https://models.github.ai/inference
           config.model: openai/openai/gpt-4.1-mini
           config.fallback_models: '["openai/openai/gpt-4o-mini"]'
+          config.custom_model_max_tokens: "128000"
           config.output_run_details: "true"
+          config.propagate_tool_errors: "true"
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "false"
           github_action_config.auto_improve: "false"
