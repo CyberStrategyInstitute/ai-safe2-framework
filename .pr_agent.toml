@@ -1,6 +1,6 @@
 [config]
-model = "openai/openai/gpt-4.1-mini"
-fallback_models = ["openai/openai/gpt-4o-mini"]
+model = "github/openai/gpt-4.1-mini"
+fallback_models = ["github/openai/gpt-4o-mini"]
 custom_model_max_tokens = 128000
 output_run_details = true
 propagate_tool_errors = true

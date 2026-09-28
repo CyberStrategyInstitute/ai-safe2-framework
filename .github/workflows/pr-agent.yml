@@ -33,11 +33,10 @@ jobs:
         uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          OPENAI_KEY: ${{ github.token }}
-          OPENAI__KEY: ${{ github.token }}
-          OPENAI__API_BASE: https://models.github.ai/inference
-          config.model: openai/openai/gpt-4.1-mini
-          config.fallback_models: '["openai/openai/gpt-4o-mini"]'
+          GITHUB_API_KEY: ${{ github.token }}
+          GITHUB_API_BASE: https://models.github.ai/inference
+          config.model: github/openai/gpt-4.1-mini
+          config.fallback_models: '["github/openai/gpt-4o-mini"]'
           config.custom_model_max_tokens: "128000"
           config.output_run_details: "true"
           config.propagate_tool_errors: "true"
