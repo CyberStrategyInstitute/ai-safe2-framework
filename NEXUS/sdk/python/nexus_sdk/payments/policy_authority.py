@@ -136,6 +136,7 @@ class DeterministicPolicyAuthority:
             rail=intent.rail,
             idempotency_key=intent.idempotency_key,
             decided_at=decided_at,
+            finality=intent.finality,
         )
         decision_id = "dec_" + canonical_hash({
             "evaluator_id": self.definition.evaluator_id,
