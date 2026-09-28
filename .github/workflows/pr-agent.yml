@@ -9,6 +9,7 @@ on:
 permissions:
   contents: read
   issues: write
+  models: read
   pull-requests: write
 
 concurrency:
@@ -25,23 +26,16 @@ jobs:
       startsWith(github.event.comment.body, '/review')))
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
     steps:
-      - name: Explain missing model credential
-        if: env.OPENAI_KEY == ''
-        shell: bash
-        run: |
-          echo '## PR-Agent: not configured' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Add the OPENAI_KEY repository secret to enable routine advisory reviews.' >> "$GITHUB_STEP_SUMMARY"
       - name: Review pull request
         id: pr-agent
-        if: env.OPENAI_KEY != ''
         continue-on-error: true
         uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          OPENAI_KEY: ${{ github.token }}
+          OPENAI__KEY: ${{ github.token }}
+          OPENAI__API_BASE: https://models.github.ai/inference
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "false"
           github_action_config.auto_improve: "false"

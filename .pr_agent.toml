@@ -1,3 +1,8 @@
+[config]
+model = "openai/openai/gpt-4.1-mini"
+fallback_models = ["openai/openai/gpt-4o-mini"]
+output_run_details = true
+
 [pr_reviewer]
 require_security_review = true
 require_risk_assessment = true

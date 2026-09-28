@@ -16,7 +16,7 @@ This repository uses layered evidence. No single scanner or reviewer is treated 
 | Greptile review status | Confirms whether Greptile substantively reviewed the exact revision | Advisory; missing, stale, or quota-limited reviews are reported without blocking |
 | CODEOWNERS and human review | Architecture, authorization, policy, payment, cryptography, data, CI, and release judgment | Required owner approval absent |
 
-PR-Agent is the routine AI reviewer. It is open-source software but still requires a configured model provider and may incur model API cost. Its findings are advisory; deterministic checks and human owners remain authoritative.
+PR-Agent is the routine AI reviewer. It is open-source software and uses GitHub Models with the workflow's short-lived, repository-scoped token. Its findings are advisory; deterministic checks and human owners remain authoritative.
 
 Greptile is reserved for major integration points: authentication or authorization, policy and enforcement, payment or settlement, cryptography, evidence integrity, migrations, release candidates, and large cross-boundary changes. `Greptile / Advisory status` distinguishes a substantive current-head review from a quota or error response, but never blocks ordinary development.
 
