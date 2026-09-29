@@ -23,6 +23,7 @@ from safe2 import __version__
 from safe2.commands.aism import aism
 from safe2.commands.challenge import challenge
 from safe2.commands.doctor import doctor
+from safe2.commands.decision import decision
 from safe2.commands.evidence import evidence
 from safe2.commands.example import example
 from safe2.commands.feedback import feedback
@@ -57,6 +58,7 @@ def cli():
     safe2 evidence readiness release.json   technical release-readiness card
     safe2 evidence harness export.json       provider-neutral harness evidence intake
     safe2 doctor .                            multi-harness environment inventory
+    safe2 decision evaluate request.json      bounded advisory review routing
     safe2 feedback record ...                 operational friction evidence
     safe2 schema list                         machine-readable evidence contracts
     safe2 challenge list                      offline Challenge Lab experiments
@@ -73,6 +75,7 @@ cli.add_command(challenge)
 cli.add_command(evidence)
 cli.add_command(example)
 cli.add_command(doctor)
+cli.add_command(decision)
 cli.add_command(feedback)
 cli.add_command(gate)
 cli.add_command(score)

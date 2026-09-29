@@ -2,6 +2,10 @@
 
 This repository uses layered evidence. No single scanner or reviewer is treated as proof of safety.
 
+See [PR Decision-Evidence Workflow](./PR-DECISION-EVIDENCE-WORKFLOW.md) for the
+complete architecture, authority boundaries, diagrams, before/after comparison,
+provider strategy, tradeoffs, and reviewer procedure.
+
 ## Required pull-request gates
 
 | Gate | Purpose | Blocking condition |
@@ -12,13 +16,24 @@ This repository uses layered evidence. No single scanner or reviewer is treated 
 | Python dependency audit | Known vulnerabilities on shipped Python dependency surfaces | Any unignored published advisory |
 | Dependency review | Newly introduced vulnerable dependencies | High or critical severity |
 | CodeQL | Cross-file code security analysis | Branch rule and code-scanning policy determine blocking severity |
-| PR-Agent advisory review | Routine semantic review focused on correctness, security, and regression risk | Advisory; execution failures are visible but do not stop deterministic CI |
+| PR-Agent advisory availability | Routine semantic review focused on correctness, security, and regression risk | A substantive publication is verified after every attempt; absence fails this advisory check but it is not a required merge check |
 | Greptile review status | Confirms whether Greptile substantively reviewed the exact revision | Advisory; missing, stale, or quota-limited reviews are reported without blocking |
 | CODEOWNERS and human review | Architecture, authorization, policy, payment, cryptography, data, CI, and release judgment | Required owner approval absent |
+| AI SAFE2 decision evidence | Exact base/head risk classification, CLI 0.9.0 environment drift, required evidence, and machine/human records | Evidence generation fails; risk itself routes review rather than automatically blocking |
 
-PR-Agent is the routine AI reviewer. It is open-source software and uses GitHub Models with the workflow's short-lived, repository-scoped token. Its findings are advisory; deterministic checks and human owners remain authoritative.
+PR-Agent is the routine AI reviewer. It is open-source software and uses GitHub Models with the workflow's short-lived, repository-scoped token. Its findings are advisory; deterministic checks and human owners remain authoritative. The workflow does not equate an action exit code with review completion: it verifies that a current-attempt bot publication contains substantive output, writes a privacy-minimized JSON execution receipt, and reports `review_unavailable` when the provider emits a failure message or no review. This advisory availability check is intentionally excluded from the required-status ruleset.
 
 Greptile is reserved for major integration points: authentication or authorization, policy and enforcement, payment or settlement, cryptography, evidence integrity, migrations, release candidates, and large cross-boundary changes. `Greptile / Advisory status` distinguishes a substantive current-head review from a quota or error response, but never blocks ordinary development.
+
+`Review Decision Evidence` applies `.ai-safe2/review-policy.json` to the exact
+base/head diff, runs the released AI SAFE2 CLI 0.9.0 against comparable baseline
+and current checkouts, and retains JSON, Markdown, and hashes for 90 days. The
+report intentionally records unavailable historic finding attribution as unknown.
+It never converts absence of prior structured evidence into zero inherited defects.
+
+Release builds retain the same decision record and artifact hashes for 365 days.
+This makes each release comparable going forward. The first retained run is the
+baseline; direct before/after claims begin only when two comparable records exist.
 
 ## Operating policy
 

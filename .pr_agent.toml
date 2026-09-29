@@ -21,6 +21,10 @@ backward compatibility, dependency and workflow safety, and missing regression t
 For AI SAFE2 and NEXUS, specifically trace whether decisions, receipts, manifests,
 settlement state, and compliance claims are deterministic and tamper-evident. Ignore
 pure style preferences unless they hide a correctness or security risk.
+Apply the deterministic path-risk policy in .ai-safe2/review-policy.json. State the
+matched specialist lens, distinguish evidence from inference, and never claim that a
+missing historic finding set means zero inherited or resolved defects. Treat PR-Agent
+as advisory and identify the exact deterministic evidence a human decision still needs.
 """
 
 [pr_code_suggestions]
