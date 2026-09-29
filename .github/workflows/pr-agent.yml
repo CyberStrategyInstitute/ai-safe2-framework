@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   review:
-    name: PR-Agent / Advisory review
+    name: PR-Agent / Advisory availability
     if: >-
       github.event.sender.type != 'Bot' &&
       ((github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
@@ -27,6 +27,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Record review attempt start
+        id: attempt
+        shell: bash
+        run: echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
+
       - name: Review pull request
         id: pr-agent
         continue-on-error: true
@@ -44,9 +49,116 @@ jobs:
           github_action_config.auto_describe: "false"
           github_action_config.auto_improve: "false"
           github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
-      - name: Report reviewer execution failure
-        if: steps.pr-agent.outcome == 'failure'
-        shell: bash
-        run: |
-          echo '## PR-Agent: review did not complete' >> "$GITHUB_STEP_SUMMARY"
-          echo 'The advisory reviewer failed; deterministic checks remain authoritative.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Verify substantive review publication
+        if: always()
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v8
+        env:
+          ACTION_OUTCOME: ${{ steps.pr-agent.outcome }}
+          ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const fs = require('fs');
+            const crypto = require('crypto');
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = Number(process.env.PR_NUMBER);
+            const startedAt = Date.parse(process.env.ATTEMPT_STARTED_AT);
+            const actionOutcome = process.env.ACTION_OUTCOME;
+            const failureMarkers = [
+              'failed to review pr',
+              'failed to review pull request',
+              'review could not be generated',
+            ];
+            const allowedAuthors = new Set(['github-actions[bot]', 'github-actions']);
+            const sources = [
+              ['issue_comment', github.rest.issues.listComments, {owner, repo, issue_number: pull_number}],
+              ['review', github.rest.pulls.listReviews, {owner, repo, pull_number}],
+              ['inline_comment', github.rest.pulls.listReviewComments, {owner, repo, pull_number}],
+            ];
+            const records = [];
+            let apiErrorType = null;
+            let pullHeadSha = null;
+            try {
+              const {data: pull} = await github.rest.pulls.get({owner, repo, pull_number});
+              pullHeadSha = pull.head.sha;
+              for (const [kind, endpoint, parameters] of sources) {
+                const values = await github.paginate(endpoint, {...parameters, per_page: 100});
+                records.push(...values.map(value => ({...value, kind})));
+              }
+            } catch (error) {
+              apiErrorType = error.name || 'GitHubApiError';
+            }
+            const substantive = [];
+            const failures = [];
+            for (const record of records) {
+              if (!allowedAuthors.has((record.user?.login || '').toLowerCase())) continue;
+              const observedAt = record.updated_at || record.submitted_at;
+              if (!observedAt || Date.parse(observedAt) < startedAt) continue;
+              const body = (record.body || '').trim();
+              const normalized = body.toLowerCase().replace(/\s+/g, ' ');
+              const evidence = {
+                kind: record.kind,
+                id: record.id,
+                url: record.html_url,
+                observed_at: observedAt,
+                body_sha256: crypto.createHash('sha256').update(body).digest('hex'),
+                body_length: body.length,
+              };
+              if (failureMarkers.some(marker => normalized.includes(marker))) failures.push(evidence);
+              else if (
+                body.length >= 80 &&
+                (normalized.includes('pr reviewer guide') || record.kind === 'inline_comment')
+              ) substantive.push(evidence);
+            }
+            const produced = (
+              actionOutcome === 'success' &&
+              substantive.length > 0 &&
+              failures.length === 0 &&
+              !apiErrorType
+            );
+            const receipt = {
+              schema_version: 'safe2.pr-agent-execution.v1',
+              created_at: new Date().toISOString(),
+              repository: `${owner}/${repo}`,
+              pr_number: pull_number,
+              head_sha: pullHeadSha,
+              run_id: context.runId,
+              run_attempt: process.env.GITHUB_RUN_ATTEMPT,
+              started_at: process.env.ATTEMPT_STARTED_AT,
+              action_outcome: actionOutcome,
+              status: produced ? 'review_produced' : 'review_unavailable',
+              publication: {
+                substantive_count: substantive.length,
+                failure_count: failures.length,
+                substantive,
+                failures,
+              },
+              api_error_type: apiErrorType,
+              advisory_only: true,
+              merge_authorized: false,
+            };
+            fs.writeFileSync('pr-agent-execution.json', `${JSON.stringify(receipt, null, 2)}\n`);
+            await core.summary
+              .addHeading('PR-Agent execution truth')
+              .addList([
+                `Status: **${receipt.status}**`,
+                `Substantive review publications: **${substantive.length}**`,
+                `Explicit failure publications: **${failures.length}**`,
+                `Action outcome: **${actionOutcome}**`,
+                'Authority: advisory only; deterministic checks and human review remain authoritative.',
+                ...(produced ? [] : ['Result: reviewer unavailable. This is not approval and this check is not a merge requirement.']),
+              ])
+              .write();
+            if (!produced) core.setFailed('PR-Agent did not publish a substantive review; see execution receipt.');
+
+      - name: Retain PR-Agent execution receipt
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: pr-agent-execution-${{ github.run_id }}-${{ github.run_attempt }}
+          path: pr-agent-execution.json
+          if-no-files-found: error
+          retention-days: 90

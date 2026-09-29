@@ -180,7 +180,13 @@ recorded evidence gaps. They never become approval.
 
 PR-Agent receives the repository risk policy and focuses on material correctness,
 security, privacy, evidence, migration, and regression issues. Its operational
-failure is visible but advisory.
+failure is visible but advisory. Completion is established by a postcondition,
+not by the action wrapper's exit status: a current-attempt, substantive review
+publication must exist. A plain provider response, `Failed to review PR`, API
+verification failure, or silence produces a retained `review_unavailable`
+receipt and a failed advisory-availability check. That check is not included in
+the required-status ruleset, so it cannot silently pass and cannot stop an
+otherwise authorized merge.
 
 Greptile is reserved for critical integration points or explicit human request.
 Quota exhaustion, stale output, or provider errors are reported as “not reviewed.”
