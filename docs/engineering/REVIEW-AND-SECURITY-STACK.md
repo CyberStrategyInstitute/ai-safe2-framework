@@ -21,7 +21,19 @@ provider strategy, tradeoffs, and reviewer procedure.
 | CODEOWNERS and human review | Architecture, authorization, policy, payment, cryptography, data, CI, and release judgment | Required owner approval absent |
 | AI SAFE2 decision evidence | Exact base/head risk classification, CLI 0.9.0 environment drift, required evidence, and machine/human records | Evidence generation fails; risk itself routes review rather than automatically blocking |
 
-PR-Agent is the routine AI reviewer. It is open-source software and uses GitHub Models with the workflow's short-lived, repository-scoped token. Its findings are advisory; deterministic checks and human owners remain authoritative. The workflow does not equate an action exit code with review completion: it verifies that a current-attempt bot publication contains substantive output, writes a privacy-minimized JSON execution receipt, and reports `review_unavailable` when the provider emits a failure message or no review. This advisory availability check is intentionally excluded from the required-status ruleset.
+PR-Agent is the routine AI reviewer. Its software is open source, while its model
+inference uses the metered OpenAI API through the repository `OPENAI_KEY` secret.
+The primary model is `gpt-5.6-terra`, selected for review quality and cost balance;
+`gpt-5.6-luna` is the lower-cost fallback. Run details and provider-reported cost
+are enabled so reviewer availability and consumption can be assessed together.
+GitHub Models is not used because GitHub retired that service on July 30, 2026.
+PR-Agent findings remain advisory; deterministic checks and human owners remain
+authoritative. The workflow does not equate an action exit code with review
+completion: it verifies that a current-attempt bot publication contains substantive
+output, writes a privacy-minimized JSON execution receipt, and reports
+`review_unavailable` when the provider emits a failure message or no review. This
+advisory availability check is intentionally excluded from the required-status
+ruleset.
 
 Greptile is reserved for major integration points: authentication or authorization, policy and enforcement, payment or settlement, cryptography, evidence integrity, migrations, release candidates, and large cross-boundary changes. `Greptile / Advisory status` distinguishes a substantive current-head review from a quota or error response, but never blocks ordinary development.
 

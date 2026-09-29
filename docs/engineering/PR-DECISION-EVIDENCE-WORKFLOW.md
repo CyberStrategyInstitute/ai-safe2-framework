@@ -188,6 +188,13 @@ receipt and a failed advisory-availability check. That check is not included in
 the required-status ruleset, so it cannot silently pass and cannot stop an
 otherwise authorized merge.
 
+The routine provider path is the official OpenAI API using a repository Actions
+secret. `gpt-5.6-terra` is the primary model and `gpt-5.6-luna` is the fallback;
+run details and provider-reported cost are emitted for operating evidence. The
+open-source reviewer and the metered inference service are separate cost and
+trust boundaries. GitHub Models is intentionally excluded because the service
+was retired on July 30, 2026.
+
 Greptile is reserved for critical integration points or explicit human request.
 Quota exhaustion, stale output, or provider errors are reported as “not reviewed.”
 They do not block routine progress and are never rewritten as a passing review.
