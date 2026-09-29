@@ -24,23 +24,38 @@ provider strategy, tradeoffs, and reviewer procedure.
 PR-Agent is the routine AI reviewer. Its software is open source. The provider
 chain deliberately prefers free inference, while keeping provider failure visible:
 
-1. `openrouter/qwen/qwen3.8-27b:free` is the pinned primary. It was the strongest
-   free coding candidate with a published OpenRouter coding score when reviewed on
-   September 29, 2026, and its exact ID makes results more reproducible than a
-   random router.
-2. `openrouter/free` is the second attempt when the pinned endpoint is unavailable.
-   Its selected model may change between requests, so the run details are material
-   evidence rather than a reproducible model identity.
-3. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
+1. `openrouter/poolside/laguna-s-2.1:free` is the pinned primary. It is specialized
+   for software-engineering agents and had the strongest combination of coding fit
+   and endpoint availability when reviewed on September 29, 2026.
+2. `openrouter/qwen/qwen3.8-27b:free` is the first fallback. Its strong published
+   coding result and structured-output support make it a useful independent route
+   when the primary cannot produce the expected review contract.
+3. `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free` is the deep-reasoning
+   fallback for architecture, security, and cross-boundary analysis.
+4. `openrouter/cohere/north-mini-code:free` is the final free fallback. It is a
+   code-specialized, high-availability route for fast recovery from upstream
+   provider failure.
+5. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
    It is chosen over Terra for cost-sensitive routine review.
+
+The chain uses exact model IDs. `openrouter/free` is deliberately excluded because
+its randomly selected model prevents dependable replay and before/after comparison.
+Inkling is also excluded from this text-diff path: its multimodal advantage is not
+needed for routine pull-request review and would add another provider data boundary.
+Model selection is a dated policy snapshot, not a permanent ranking; change it only
+through retained evaluation evidence and an explicit configuration review.
 
 OpenRouter uses the repository `OPENROUTER_API_KEY` secret and OpenAI uses
 `OPENAI_KEY`. Same-model retries are disabled so a transient provider failure moves
 to the next bounded option instead of consuming the free request allowance. Run
 details and provider-reported cost are enabled so reviewer availability, selected
-model, and consumption can be assessed together. OpenRouter's free tier is
-availability- and quota-limited, not an SLA. GitHub Models is not used because
-GitHub retired that service on July 30, 2026.
+model, and consumption can be assessed together. OpenRouter's free plan is limited
+to 50 requests per day and has no availability guarantee. Prove one representative
+review before launching a multi-PR batch, then stage the batch to preserve quota.
+GitHub Models is not used because GitHub retired that service on July 30, 2026.
+Each retained execution receipt records the ordered provider policy used for that
+attempt, allowing model-policy changes to be separated from code-quality changes
+in longitudinal comparisons.
 
 This free route is approved only for this repository's public pull-request content.
 Do not copy it to a private or sensitive repository unless the applicable model
@@ -87,4 +102,7 @@ Protect `main`; require pull requests, conversation resolution, CODEOWNERS appro
 Configure `OPENROUTER_API_KEY` as an Actions repository secret. The OpenRouter key
 requires only inference access; do not use a management key. Keep `OPENAI_KEY` as
 the final fallback credential. Missing, exhausted, or rejected credentials must
-remain visible as `review_unavailable`, never as approval.
+remain visible as `review_unavailable`, never as approval. Because the selected
+free endpoints may retain or use inputs and outputs to improve their services, this
+route is restricted to already-public pull-request material and must not receive
+secrets, unpublished vulnerability details, personal data, or private source code.

@@ -25,6 +25,9 @@ jobs:
       startsWith(github.event.comment.body, '/review')))
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      PR_AGENT_PRIMARY_MODEL: openrouter/poolside/laguna-s-2.1:free
+      PR_AGENT_FALLBACK_MODELS: '["openrouter/qwen/qwen3.8-27b:free", "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", "openrouter/cohere/north-mini-code:free", "gpt-5.6-luna"]'
     steps:
       - name: Record review attempt start
         id: attempt
@@ -39,9 +42,9 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
-          config.model: openrouter/qwen/qwen3.8-27b:free
-          config.fallback_models: '["openrouter/free", "gpt-5.6-luna"]'
-          config.custom_model_max_tokens: "262144"
+          config.model: ${{ env.PR_AGENT_PRIMARY_MODEL }}
+          config.fallback_models: ${{ env.PR_AGENT_FALLBACK_MODELS }}
+          config.custom_model_max_tokens: "256000"
           config.max_model_tokens: "32000"
           config.reasoning_effort: medium
           config.duplicate_examples: "true"
@@ -62,6 +65,8 @@ jobs:
           ACTION_OUTCOME: ${{ steps.pr-agent.outcome }}
           ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+          PRIMARY_MODEL: ${{ env.PR_AGENT_PRIMARY_MODEL }}
+          FALLBACK_MODELS: ${{ env.PR_AGENT_FALLBACK_MODELS }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -135,6 +140,10 @@ jobs:
               started_at: process.env.ATTEMPT_STARTED_AT,
               action_outcome: actionOutcome,
               status: produced ? 'review_produced' : 'review_unavailable',
+              provider_policy: {
+                primary_model: process.env.PRIMARY_MODEL,
+                fallback_models: JSON.parse(process.env.FALLBACK_MODELS),
+              },
               publication: {
                 substantive_count: substantive.length,
                 failure_count: failures.length,
@@ -153,6 +162,8 @@ jobs:
                 `Substantive review publications: **${substantive.length}**`,
                 `Explicit failure publications: **${failures.length}**`,
                 `Action outcome: **${actionOutcome}**`,
+                `Primary model: \`${receipt.provider_policy.primary_model}\``,
+                `Fallback order: ${receipt.provider_policy.fallback_models.map(model => `\`${model}\``).join(' → ')}`,
                 'Authority: advisory only; deterministic checks and human review remain authoritative.',
                 ...(produced ? [] : ['Result: reviewer unavailable. This is not approval and this check is not a merge requirement.']),
               ])
