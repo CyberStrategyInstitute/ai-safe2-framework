@@ -188,12 +188,21 @@ receipt and a failed advisory-availability check. That check is not included in
 the required-status ruleset, so it cannot silently pass and cannot stop an
 otherwise authorized merge.
 
-The routine provider path is the official OpenAI API using a repository Actions
-secret. `gpt-5.6-terra` is the primary model and `gpt-5.6-luna` is the fallback;
-run details and provider-reported cost are emitted for operating evidence. The
-open-source reviewer and the metered inference service are separate cost and
-trust boundaries. GitHub Models is intentionally excluded because the service
-was retired on July 30, 2026.
+The routine provider chain is pinned OpenRouter free inference, OpenRouter's free
+router, then the official OpenAI API. The primary model is
+`openrouter/qwen/qwen3.8-27b:free`; `openrouter/free` provides availability at the
+cost of model-identity drift; `gpt-5.6-luna` is the metered final fallback. Run
+details and provider-reported cost are emitted for operating evidence, and
+same-model retries are disabled to preserve the free request allowance. The
+open-source reviewer, OpenRouter gateway, selected model host, and metered OpenAI
+fallback are separate cost, privacy, and trust boundaries. GitHub Models is
+intentionally excluded because the service was retired on July 30, 2026.
+
+Free-provider review is limited to public pull-request content. Private or
+sensitive code requires a separately reviewed route with acceptable retention,
+training, residency, and zero-data-retention controls. Provider selection does
+not weaken the existing rule: a review counts only when a substantive publication
+is observed for the current attempt.
 
 Greptile is reserved for critical integration points or explicit human request.
 Quota exhaustion, stale output, or provider errors are reported as “not reviewed.”

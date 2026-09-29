@@ -1,7 +1,12 @@
 [config]
-model = "gpt-5.6-terra"
-fallback_models = ["gpt-5.6-luna"]
+model = "openrouter/qwen/qwen3.8-27b:free"
+fallback_models = ["openrouter/free", "gpt-5.6-luna"]
+custom_model_max_tokens = 262144
+max_model_tokens = 32000
 reasoning_effort = "medium"
+duplicate_examples = true
+num_retries = 0
+retry_same_model_on_timeout = false
 output_run_details = true
 output_run_cost = true
 propagate_tool_errors = true

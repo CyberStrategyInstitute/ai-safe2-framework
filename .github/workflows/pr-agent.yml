@@ -37,10 +37,16 @@ jobs:
         uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}
           OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
-          config.model: gpt-5.6-terra
-          config.fallback_models: '["gpt-5.6-luna"]'
+          config.model: openrouter/qwen/qwen3.8-27b:free
+          config.fallback_models: '["openrouter/free", "gpt-5.6-luna"]'
+          config.custom_model_max_tokens: "262144"
+          config.max_model_tokens: "32000"
           config.reasoning_effort: medium
+          config.duplicate_examples: "true"
+          config.num_retries: "0"
+          config.retry_same_model_on_timeout: "false"
           config.output_run_details: "true"
           config.output_run_cost: "true"
           config.propagate_tool_errors: "true"

@@ -21,12 +21,32 @@ provider strategy, tradeoffs, and reviewer procedure.
 | CODEOWNERS and human review | Architecture, authorization, policy, payment, cryptography, data, CI, and release judgment | Required owner approval absent |
 | AI SAFE2 decision evidence | Exact base/head risk classification, CLI 0.9.0 environment drift, required evidence, and machine/human records | Evidence generation fails; risk itself routes review rather than automatically blocking |
 
-PR-Agent is the routine AI reviewer. Its software is open source, while its model
-inference uses the metered OpenAI API through the repository `OPENAI_KEY` secret.
-The primary model is `gpt-5.6-terra`, selected for review quality and cost balance;
-`gpt-5.6-luna` is the lower-cost fallback. Run details and provider-reported cost
-are enabled so reviewer availability and consumption can be assessed together.
-GitHub Models is not used because GitHub retired that service on July 30, 2026.
+PR-Agent is the routine AI reviewer. Its software is open source. The provider
+chain deliberately prefers free inference, while keeping provider failure visible:
+
+1. `openrouter/qwen/qwen3.8-27b:free` is the pinned primary. It was the strongest
+   free coding candidate with a published OpenRouter coding score when reviewed on
+   September 29, 2026, and its exact ID makes results more reproducible than a
+   random router.
+2. `openrouter/free` is the second attempt when the pinned endpoint is unavailable.
+   Its selected model may change between requests, so the run details are material
+   evidence rather than a reproducible model identity.
+3. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
+   It is chosen over Terra for cost-sensitive routine review.
+
+OpenRouter uses the repository `OPENROUTER_API_KEY` secret and OpenAI uses
+`OPENAI_KEY`. Same-model retries are disabled so a transient provider failure moves
+to the next bounded option instead of consuming the free request allowance. Run
+details and provider-reported cost are enabled so reviewer availability, selected
+model, and consumption can be assessed together. OpenRouter's free tier is
+availability- and quota-limited, not an SLA. GitHub Models is not used because
+GitHub retired that service on July 30, 2026.
+
+This free route is approved only for this repository's public pull-request content.
+Do not copy it to a private or sensitive repository unless the applicable model
+provider's retention/training terms and OpenRouter privacy controls have been
+reviewed and enforced. A free endpoint is not evidence that data handling is safe.
+
 PR-Agent findings remain advisory; deterministic checks and human owners remain
 authoritative. The workflow does not equate an action exit code with review
 completion: it verifies that a current-attempt bot publication contains substantive
@@ -63,3 +83,8 @@ SonarQube is not a default gate because a self-hosted instance adds availability
 ## Repository settings required after merge
 
 Protect `main`; require pull requests, conversation resolution, CODEOWNERS approval, and approval dismissal after new commits. Require the stable job names documented in the table above. Prevent bypass except through a recorded emergency process. Enable Dependabot alerts and security updates, secret scanning/push protection where the GitHub plan allows it, and private vulnerability reporting.
+
+Configure `OPENROUTER_API_KEY` as an Actions repository secret. The OpenRouter key
+requires only inference access; do not use a management key. Keep `OPENAI_KEY` as
+the final fallback credential. Missing, exhausted, or rejected credentials must
+remain visible as `review_unavailable`, never as approval.
