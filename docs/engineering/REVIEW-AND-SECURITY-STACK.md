@@ -21,7 +21,55 @@ provider strategy, tradeoffs, and reviewer procedure.
 | CODEOWNERS and human review | Architecture, authorization, policy, payment, cryptography, data, CI, and release judgment | Required owner approval absent |
 | AI SAFE2 decision evidence | Exact base/head risk classification, CLI 0.9.0 environment drift, required evidence, and machine/human records | Evidence generation fails; risk itself routes review rather than automatically blocking |
 
-PR-Agent is the routine AI reviewer. It is open-source software and uses GitHub Models with the workflow's short-lived, repository-scoped token. Its findings are advisory; deterministic checks and human owners remain authoritative. The workflow does not equate an action exit code with review completion: it verifies that a current-attempt bot publication contains substantive output, writes a privacy-minimized JSON execution receipt, and reports `review_unavailable` when the provider emits a failure message or no review. This advisory availability check is intentionally excluded from the required-status ruleset.
+PR-Agent is the routine AI reviewer. Its software is open source. The provider
+chain deliberately prefers free inference, while keeping provider failure visible:
+
+1. `openrouter/poolside/laguna-s-2.1:free` is the pinned primary. It is specialized
+   for software-engineering agents and had the strongest combination of coding fit
+   and endpoint availability when reviewed on September 29, 2026.
+2. `openrouter/qwen/qwen3.8-27b:free` is the first fallback. Its strong published
+   coding result and structured-output support make it a useful independent route
+   when the primary cannot produce the expected review contract.
+3. `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free` is the deep-reasoning
+   fallback for architecture, security, and cross-boundary analysis.
+4. `openrouter/cohere/north-mini-code:free` is the final free fallback. It is a
+   code-specialized, high-availability route for fast recovery from upstream
+   provider failure.
+5. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
+   It is chosen over Terra for cost-sensitive routine review.
+
+The chain uses exact model IDs. `openrouter/free` is deliberately excluded because
+its randomly selected model prevents dependable replay and before/after comparison.
+Inkling is also excluded from this text-diff path: its multimodal advantage is not
+needed for routine pull-request review and would add another provider data boundary.
+Model selection is a dated policy snapshot, not a permanent ranking; change it only
+through retained evaluation evidence and an explicit configuration review.
+
+OpenRouter uses the repository `OPENROUTER_API_KEY` secret and OpenAI uses
+`OPENAI_KEY`. Same-model retries are disabled so a transient provider failure moves
+to the next bounded option instead of consuming the free request allowance. Run
+details and provider-reported cost are enabled so reviewer availability, selected
+model, and consumption can be assessed together. OpenRouter's free plan is limited
+to 50 requests per day and has no availability guarantee. Prove one representative
+review before launching a multi-PR batch, then stage the batch to preserve quota.
+GitHub Models is not used because GitHub retired that service on July 30, 2026.
+Each retained execution receipt records the ordered provider policy and the model
+observed in the substantive review publication, allowing provider failover and
+model-policy changes to be separated from code-quality changes in longitudinal
+comparisons.
+
+This free route is approved only for this repository's public pull-request content.
+Do not copy it to a private or sensitive repository unless the applicable model
+provider's retention/training terms and OpenRouter privacy controls have been
+reviewed and enforced. A free endpoint is not evidence that data handling is safe.
+
+PR-Agent findings remain advisory; deterministic checks and human owners remain
+authoritative. The workflow does not equate an action exit code with review
+completion: it verifies that a current-attempt bot publication contains substantive
+output, writes a privacy-minimized JSON execution receipt, and reports
+`review_unavailable` when the provider emits a failure message or no review. This
+advisory availability check is intentionally excluded from the required-status
+ruleset.
 
 Greptile is reserved for major integration points: authentication or authorization, policy and enforcement, payment or settlement, cryptography, evidence integrity, migrations, release candidates, and large cross-boundary changes. `Greptile / Advisory status` distinguishes a substantive current-head review from a quota or error response, but never blocks ordinary development.
 
@@ -51,3 +99,11 @@ SonarQube is not a default gate because a self-hosted instance adds availability
 ## Repository settings required after merge
 
 Protect `main`; require pull requests, conversation resolution, CODEOWNERS approval, and approval dismissal after new commits. Require the stable job names documented in the table above. Prevent bypass except through a recorded emergency process. Enable Dependabot alerts and security updates, secret scanning/push protection where the GitHub plan allows it, and private vulnerability reporting.
+
+Configure `OPENROUTER_API_KEY` as an Actions repository secret. The OpenRouter key
+requires only inference access; do not use a management key. Keep `OPENAI_KEY` as
+the final fallback credential. Missing, exhausted, or rejected credentials must
+remain visible as `review_unavailable`, never as approval. Because the selected
+free endpoints may retain or use inputs and outputs to improve their services, this
+route is restricted to already-public pull-request material and must not receive
+secrets, unpublished vulnerability details, personal data, or private source code.

@@ -9,7 +9,6 @@ on:
 permissions:
   contents: read
   issues: write
-  models: read
   pull-requests: write
 
 concurrency:
@@ -26,6 +25,9 @@ jobs:
       startsWith(github.event.comment.body, '/review')))
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      PR_AGENT_PRIMARY_MODEL: openrouter/poolside/laguna-s-2.1:free
+      PR_AGENT_FALLBACK_MODELS: '["openrouter/qwen/qwen3.8-27b:free", "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", "openrouter/cohere/north-mini-code:free", "gpt-5.6-luna"]'
     steps:
       - name: Record review attempt start
         id: attempt
@@ -38,12 +40,18 @@ jobs:
         uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          GITHUB_API_KEY: ${{ github.token }}
-          GITHUB_API_BASE: https://models.github.ai/inference
-          config.model: github/openai/gpt-4.1-mini
-          config.fallback_models: '["github/openai/gpt-4o-mini"]'
-          config.custom_model_max_tokens: "128000"
+          OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          config.model: ${{ env.PR_AGENT_PRIMARY_MODEL }}
+          config.fallback_models: ${{ env.PR_AGENT_FALLBACK_MODELS }}
+          config.custom_model_max_tokens: "256000"
+          config.max_model_tokens: "32000"
+          config.reasoning_effort: medium
+          config.duplicate_examples: "true"
+          config.num_retries: "0"
+          config.retry_same_model_on_timeout: "false"
           config.output_run_details: "true"
+          config.output_run_cost: "true"
           config.propagate_tool_errors: "true"
           github_action_config.auto_review: "true"
           github_action_config.auto_describe: "false"
@@ -57,6 +65,8 @@ jobs:
           ACTION_OUTCOME: ${{ steps.pr-agent.outcome }}
           ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+          PRIMARY_MODEL: ${{ env.PR_AGENT_PRIMARY_MODEL }}
+          FALLBACK_MODELS: ${{ env.PR_AGENT_FALLBACK_MODELS }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -99,6 +109,7 @@ jobs:
               if (!observedAt || Date.parse(observedAt) < startedAt) continue;
               const body = (record.body || '').trim();
               const normalized = body.toLowerCase().replace(/\s+/g, ' ');
+              const modelMatch = body.match(/(?:^|\n)- Model:\s+`?([^\s`(]+)`?(?:\s+\(([^)]+)\))?/i);
               const evidence = {
                 kind: record.kind,
                 id: record.id,
@@ -106,6 +117,8 @@ jobs:
                 observed_at: observedAt,
                 body_sha256: crypto.createHash('sha256').update(body).digest('hex'),
                 body_length: body.length,
+                selected_model: modelMatch?.[1] || null,
+                route_role: modelMatch?.[2] || null,
               };
               if (failureMarkers.some(marker => normalized.includes(marker))) failures.push(evidence);
               else if (
@@ -119,8 +132,11 @@ jobs:
               failures.length === 0 &&
               !apiErrorType
             );
+            const observedModels = [...new Set(
+              substantive.map(item => item.selected_model).filter(Boolean)
+            )];
             const receipt = {
-              schema_version: 'safe2.pr-agent-execution.v1',
+              schema_version: 'safe2.pr-agent-execution.v2',
               created_at: new Date().toISOString(),
               repository: `${owner}/${repo}`,
               pr_number: pull_number,
@@ -130,6 +146,14 @@ jobs:
               started_at: process.env.ATTEMPT_STARTED_AT,
               action_outcome: actionOutcome,
               status: produced ? 'review_produced' : 'review_unavailable',
+              provider_policy: {
+                primary_model: process.env.PRIMARY_MODEL,
+                fallback_models: JSON.parse(process.env.FALLBACK_MODELS),
+              },
+              provider_execution: {
+                selected_models: observedModels,
+                final_model: observedModels.at(-1) || null,
+              },
               publication: {
                 substantive_count: substantive.length,
                 failure_count: failures.length,
@@ -148,6 +172,9 @@ jobs:
                 `Substantive review publications: **${substantive.length}**`,
                 `Explicit failure publications: **${failures.length}**`,
                 `Action outcome: **${actionOutcome}**`,
+                `Primary model: \`${receipt.provider_policy.primary_model}\``,
+                `Fallback order: ${receipt.provider_policy.fallback_models.map(model => `\`${model}\``).join(' → ')}`,
+                `Observed responding model: ${receipt.provider_execution.final_model ? `\`${receipt.provider_execution.final_model}\`` : '**not reported**'}`,
                 'Authority: advisory only; deterministic checks and human review remain authoritative.',
                 ...(produced ? [] : ['Result: reviewer unavailable. This is not approval and this check is not a merge requirement.']),
               ])

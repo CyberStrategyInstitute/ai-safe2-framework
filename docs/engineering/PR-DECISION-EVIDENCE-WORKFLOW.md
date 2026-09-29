@@ -188,6 +188,37 @@ receipt and a failed advisory-availability check. That check is not included in
 the required-status ruleset, so it cannot silently pass and cannot stop an
 otherwise authorized merge.
 
+The routine provider chain uses pinned, role-specific OpenRouter free endpoints,
+then the official OpenAI API:
+
+1. Poolside Laguna S 2.1 for the primary software-engineering review.
+2. Qwen 3.8 27B for an independent coding and structured-output fallback.
+3. NVIDIA Nemotron 3 Ultra for deeper architecture and security reasoning.
+4. Cohere North Mini Code for a fast, code-specialized final free attempt.
+5. `gpt-5.6-luna` as the metered final fallback.
+
+Exact model IDs are part of the execution configuration and receipt context.
+`openrouter/free` is excluded because random model selection makes replay and
+before/after comparison unreliable. Inkling is excluded because multimodal input
+does not materially improve routine text-diff review and would add a provider data
+boundary. Run details and provider-reported cost are emitted for operating
+evidence, and same-model retries are disabled to preserve the 50-request daily
+free allowance. The retained execution receipt records the ordered provider policy
+and the model observed in the substantive publication. Prove one representative PR
+before a batch review. The open-source
+reviewer, OpenRouter gateway, selected model hosts, and metered OpenAI fallback are
+separate cost, privacy, and trust boundaries. GitHub Models is intentionally
+excluded because the service was retired on July 30, 2026.
+
+Free-provider review is limited to already-public pull-request content. The route
+must not receive secrets, unpublished vulnerability details, personal data, or
+private source code because the selected free endpoints may retain or use inputs
+and outputs to improve their services. Private or sensitive code requires a
+separately reviewed route with acceptable retention, training, residency, and
+zero-data-retention controls. Provider selection does not weaken the existing
+rule: a review counts only when a substantive publication is observed for the
+current attempt.
+
 Greptile is reserved for critical integration points or explicit human request.
 Quota exhaustion, stale output, or provider errors are reported as “not reviewed.”
 They do not block routine progress and are never rewritten as a passing review.
