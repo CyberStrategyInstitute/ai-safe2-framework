@@ -204,7 +204,8 @@ does not materially improve routine text-diff review and would add a provider da
 boundary. Run details and provider-reported cost are emitted for operating
 evidence, and same-model retries are disabled to preserve the 50-request daily
 free allowance. The retained execution receipt records the ordered provider policy
-used for the attempt. Prove one representative PR before a batch review. The open-source
+and the model observed in the substantive publication. Prove one representative PR
+before a batch review. The open-source
 reviewer, OpenRouter gateway, selected model hosts, and metered OpenAI fallback are
 separate cost, privacy, and trust boundaries. GitHub Models is intentionally
 excluded because the service was retired on July 30, 2026.

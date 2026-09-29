@@ -53,9 +53,10 @@ model, and consumption can be assessed together. OpenRouter's free plan is limit
 to 50 requests per day and has no availability guarantee. Prove one representative
 review before launching a multi-PR batch, then stage the batch to preserve quota.
 GitHub Models is not used because GitHub retired that service on July 30, 2026.
-Each retained execution receipt records the ordered provider policy used for that
-attempt, allowing model-policy changes to be separated from code-quality changes
-in longitudinal comparisons.
+Each retained execution receipt records the ordered provider policy and the model
+observed in the substantive review publication, allowing provider failover and
+model-policy changes to be separated from code-quality changes in longitudinal
+comparisons.
 
 This free route is approved only for this repository's public pull-request content.
 Do not copy it to a private or sensitive repository unless the applicable model

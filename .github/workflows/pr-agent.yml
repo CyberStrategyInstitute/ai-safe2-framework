@@ -109,6 +109,7 @@ jobs:
               if (!observedAt || Date.parse(observedAt) < startedAt) continue;
               const body = (record.body || '').trim();
               const normalized = body.toLowerCase().replace(/\s+/g, ' ');
+              const modelMatch = body.match(/(?:^|\n)- Model:\s+`?([^\s`(]+)`?(?:\s+\(([^)]+)\))?/i);
               const evidence = {
                 kind: record.kind,
                 id: record.id,
@@ -116,6 +117,8 @@ jobs:
                 observed_at: observedAt,
                 body_sha256: crypto.createHash('sha256').update(body).digest('hex'),
                 body_length: body.length,
+                selected_model: modelMatch?.[1] || null,
+                route_role: modelMatch?.[2] || null,
               };
               if (failureMarkers.some(marker => normalized.includes(marker))) failures.push(evidence);
               else if (
@@ -129,8 +132,11 @@ jobs:
               failures.length === 0 &&
               !apiErrorType
             );
+            const observedModels = [...new Set(
+              substantive.map(item => item.selected_model).filter(Boolean)
+            )];
             const receipt = {
-              schema_version: 'safe2.pr-agent-execution.v1',
+              schema_version: 'safe2.pr-agent-execution.v2',
               created_at: new Date().toISOString(),
               repository: `${owner}/${repo}`,
               pr_number: pull_number,
@@ -143,6 +149,10 @@ jobs:
               provider_policy: {
                 primary_model: process.env.PRIMARY_MODEL,
                 fallback_models: JSON.parse(process.env.FALLBACK_MODELS),
+              },
+              provider_execution: {
+                selected_models: observedModels,
+                final_model: observedModels.at(-1) || null,
               },
               publication: {
                 substantive_count: substantive.length,
@@ -164,6 +174,7 @@ jobs:
                 `Action outcome: **${actionOutcome}**`,
                 `Primary model: \`${receipt.provider_policy.primary_model}\``,
                 `Fallback order: ${receipt.provider_policy.fallback_models.map(model => `\`${model}\``).join(' → ')}`,
+                `Observed responding model: ${receipt.provider_execution.final_model ? `\`${receipt.provider_execution.final_model}\`` : '**not reported**'}`,
                 'Authority: advisory only; deterministic checks and human review remain authoritative.',
                 ...(produced ? [] : ['Result: reviewer unavailable. This is not approval and this check is not a merge requirement.']),
               ])

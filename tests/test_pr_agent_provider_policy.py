@@ -37,3 +37,6 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert config["output_run_cost"] is True
     assert "provider_policy:" in workflow
     assert "fallback_models: JSON.parse(process.env.FALLBACK_MODELS)" in workflow
+    assert "provider_execution:" in workflow
+    assert "selected_model: modelMatch?.[1] || null" in workflow
+    assert "final_model: observedModels.at(-1) || null" in workflow
