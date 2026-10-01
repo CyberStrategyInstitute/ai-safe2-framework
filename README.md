@@ -135,6 +135,7 @@ See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_server_secu
 | [Cross-Pillar Governance](00-cross-pillar/) | CP.1 through CP.10, ACT tiers, HEAR doctrine, replication governance, CP.5 profiles |
 | [AISM](AISM/) | AI Sovereignty Maturity Model and control mapping |
 | [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
+| [AI SAFE² Development Method](docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) | Risk-adjusted planning, implementation evidence, reviews, and completion receipts |
 | [NEXUS](NEXUS/) | CSI reference implementation for governed agent-to-agent and agent-to-tool interactions |
 | [Research](research/) | Threat research and deep-dive control evidence |
 | [Challenge Lab](challenges/) | Open falsification and replication experiments |

@@ -19,6 +19,12 @@ as Kev in shadow mode and a sanitized external provider such as Jev for eligible
 adjudication. None of these models can approve, merge, release, deploy, grant an
 exception, access a secret, or change policy.
 
+Material work enters this PR workflow through the
+[AI SAFE² Development Method](AI-SAFE2-DEVELOPMENT-METHOD.md). Its plan and
+receipt record delivery shape, risk, scope, test cycle, before/after evidence,
+reviews, findings, rollback, and the exact revision. They improve the review
+input but do not change the authority order above.
+
 Kev currently exposes TypeSafe-compatible typed questions and a local
 `/v1/systemone` endpoint. Its own server documentation also makes clear that
 authentication must be explicitly configured; local availability is not the
@@ -32,7 +38,10 @@ integration claims until validated on our corpus. See the
 
 ```mermaid
 flowchart TD
-    A[Pull request opened or updated] --> B[Exact base and head revisions]
+    S[Development plan] --> T[Isolated implementation and evidence]
+    T --> U[Development receipt]
+    U --> A[Pull request opened or updated]
+    A --> B[Exact base and head revisions]
     B --> C[Deterministic path-risk policy]
     B --> D[AI SAFE2 0.9 environment baseline and current inventory]
     C --> E[Required evidence and specialist review lenses]
@@ -56,6 +65,12 @@ flowchart TD
 
 The provider branch is disabled unless explicitly configured. The normal path
 today is deterministic review planning plus PR-Agent, CI, and human review.
+
+The development receipt is optional evidence for repositories that have not yet
+adopted the module. Where policy requires it, absence is reported as missing
+evidence rather than silently inferred as a failed implementation or a clean
+review. The PR workflow independently reruns deterministic checks against the
+submitted head; it never trusts a development receipt as a substitute for CI.
 
 The packaging and deployment decision is recorded in
 [ADR: Decision Firewall Architecture](ADR-DECISION-FIREWALL-ARCHITECTURE.md).

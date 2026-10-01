@@ -26,13 +26,14 @@ def test_top_level_help():
         "doctor",
         "feedback",
         "schema",
+        "dev",
     ):
         assert name in result.output
 
 
 def test_every_subcommand_group_has_help():
     runner = CliRunner()
-    for group in ("scan", "gate", "score", "report", "mcp", "feedback", "schema"):
+    for group in ("scan", "gate", "score", "report", "mcp", "feedback", "schema", "dev"):
         result = runner.invoke(cli, [group, "--help"])
         assert result.exit_code == 0, f"safe2 {group} --help failed: {result.output}"
 
