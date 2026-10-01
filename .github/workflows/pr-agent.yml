@@ -12,7 +12,14 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: pr-agent-${{ github.event.pull_request.number || github.event.issue.number }}
+  # Keep unrelated PR comments from cancelling an active review. Only pull-request
+  # events and explicit /review commands share the review concurrency lane.
+  group: >-
+    pr-agent-${{ github.event.pull_request.number || github.event.issue.number }}-${{
+      github.event_name == 'issue_comment' &&
+      !startsWith(github.event.comment.body, '/review') &&
+      github.run_id || 'review'
+    }}
   cancel-in-progress: true
 
 jobs:

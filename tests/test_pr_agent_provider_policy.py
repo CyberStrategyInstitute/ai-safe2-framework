@@ -40,3 +40,11 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert "provider_execution:" in workflow
     assert "selected_model: modelMatch?.[1] || null" in workflow
     assert "final_model: observedModels.at(-1) || null" in workflow
+
+
+def test_unrelated_pr_comments_cannot_cancel_an_active_review():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "!startsWith(github.event.comment.body, '/review')" in workflow
+    assert "github.run_id || 'review'" in workflow
+    assert "cancel-in-progress: true" in workflow
