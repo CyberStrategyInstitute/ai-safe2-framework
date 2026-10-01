@@ -75,8 +75,8 @@ def test_health_shortlist_uses_live_status_and_recent_uptime():
     alternatives = [
         health,
         {"model": "nvidia/ultra:free", "online": True, "recent_uptime": 97.0},
+        {"model": "nvidia/super:free", "online": False, "recent_uptime": 91.0},
         {"model": "nvidia/nano:free", "online": True, "recent_uptime": 50.0},
-        {"model": "offline/model:free", "online": False, "recent_uptime": 100.0},
     ]
 
     assert health["recent_uptime"] == 99.9
@@ -84,7 +84,11 @@ def test_health_shortlist_uses_live_status_and_recent_uptime():
         alternatives,
         size=3,
         minimum_recent_uptime=75,
-    ) == ["stealth/space-bunny-alpha", "nvidia/ultra:free"]
+    ) == [
+        "stealth/space-bunny-alpha",
+        "nvidia/ultra:free",
+        "nvidia/super:free",
+    ]
 
 
 def test_canary_requires_both_defects_and_no_safe_false_positive():

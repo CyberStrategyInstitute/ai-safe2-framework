@@ -26,11 +26,13 @@ chain deliberately prefers free inference, while keeping provider failure visibl
 
 1. The preflight queries OpenRouter's model catalog and per-model endpoint metadata.
    It filters an eight-model, review-capable pool for zero price, sufficient context,
-   unexpired availability, online endpoint status, and at least 75% recent uptime.
+   unexpired availability, endpoint status, and at least 75% recent uptime.
 2. It ranks the live routes by five-minute uptime, then 30-minute and daily uptime,
    and sends the same compact request only to the top three. This lets temporary
    high-quality routes such as `stealth/space-bunny-alpha` participate until their
    published expiration, while low-health routes are excluded automatically.
+   Degraded status is retained as evidence but does not suppress a route that still
+   clears the uptime floor; the canary provides the final availability proof.
 3. A candidate must return valid concise JSON, find both known canary defects at
    the correct location, and avoid findings on the verified-safe control. The
    highest score wins; response length and latency break ties.

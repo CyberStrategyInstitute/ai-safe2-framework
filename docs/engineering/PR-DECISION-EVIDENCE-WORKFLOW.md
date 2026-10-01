@@ -205,7 +205,9 @@ otherwise authorized merge.
 
 Before the full review, the workflow queries OpenRouter's live catalog and endpoint
 metadata. An eight-model, review-capable pool is filtered for zero price, sufficient
-context, expiration, online status, and recent uptime. The three healthiest routes
+context, expiration, endpoint status, and recent uptime. Degraded endpoints remain
+eligible above the 75% uptime floor because the canary, rather than a status label,
+provides the final availability proof. The three healthiest routes
 receive the same bounded preflight call. The versioned benchmark contains two known
 security defects, a verified-safe control, and up to 12,000 characters from one
 risk-prioritized hunk in the actual PR. Strict JSON, correct defect location,

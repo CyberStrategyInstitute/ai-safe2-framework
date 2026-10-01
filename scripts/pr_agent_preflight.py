@@ -149,12 +149,11 @@ def endpoint_health(model: dict[str, Any], payload: dict[str, Any]) -> dict[str,
                 return float(value)
         return -1.0
 
-    online = [endpoint for endpoint in free_endpoints if endpoint.get("status") == 0]
-    best = max(online, key=recent_uptime) if online else None
+    best = max(free_endpoints, key=recent_uptime) if free_endpoints else None
     return {
         "model": model["id"],
         "expiration_date": model.get("expiration_date"),
-        "online": best is not None,
+        "online": best is not None and best.get("status") == 0,
         "provider": best.get("provider_name") if best else None,
         "status": best.get("status") if best else None,
         "uptime_last_5m": best.get("uptime_last_5m") if best else None,
@@ -173,7 +172,7 @@ def shortlist_by_health(
     qualified = [
         record
         for record in health
-        if record.get("online") and float(record.get("recent_uptime", -1)) >= minimum_recent_uptime
+        if float(record.get("recent_uptime", -1)) >= minimum_recent_uptime
     ]
     qualified.sort(
         key=lambda record: (
@@ -326,6 +325,7 @@ def probe_model(
             },
             timeout=int(request_policy["timeout_seconds"]),
         )
+        record["http_status"] = 200
         content = response["choices"][0]["message"]["content"]
         if not isinstance(content, str) or not content.strip():
             raise ValueError("empty model response")
