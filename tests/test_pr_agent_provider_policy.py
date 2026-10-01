@@ -25,11 +25,7 @@ def test_provider_chain_is_pinned_and_consistent():
     assert "openrouter/free" not in [workflow_primary, *workflow_fallbacks]
     assert all(model != "openrouter/auto" for model in [workflow_primary, *workflow_fallbacks])
     assert workflow_primary == "openrouter/qwen/qwen3.8-27b:free"
-    assert workflow_fallbacks[:2] == [
-        "openrouter/cohere/north-mini-code:free",
-        "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
-    ]
-    assert workflow_fallbacks[-1] == "gpt-5.6-luna"
+    assert workflow_fallbacks == ["gpt-5.6-luna"]
 
 
 def test_provider_policy_preserves_bounded_attempts_and_evidence():
@@ -46,6 +42,13 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert "fallback_models: JSON.parse(process.env.FALLBACK_MODELS)" in workflow
     assert "request_timeout_seconds: Number(process.env.REQUEST_TIMEOUT_SECONDS)" in workflow
     assert "max_model_tokens: Number(process.env.MAX_MODEL_TOKENS)" in workflow
+    assert "id: pr-agent-free" in workflow
+    assert "id: free-publication" in workflow
+    assert "id: pr-agent-openai" in workflow
+    assert "timeout-minutes: 3" in workflow
+    assert "timeout-minutes: 5" in workflow
+    assert "fallback_invoked: fallbackInvoked" in workflow
+    assert "active_failure_count: activeFailures.length" in workflow
     assert "provider_execution:" in workflow
     assert "selected_model: modelMatch?.[1] || null" in workflow
     assert "final_model: observedModels.at(-1) || null" in workflow

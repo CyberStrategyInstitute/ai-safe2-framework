@@ -27,11 +27,7 @@ chain deliberately prefers free inference, while keeping provider failure visibl
 1. `openrouter/qwen/qwen3.8-27b:free` is the pinned primary. It combines coding
    specialization, structured-output support, 262K context, and the lowest current
    catalog latency among the retained review routes.
-2. `openrouter/cohere/north-mini-code:free` is the first fallback. It is a
-   code-specialized, low-latency route with 256K context.
-3. `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free` is the deep-reasoning
-   fallback for architecture, security, and cross-boundary analysis.
-4. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
+2. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
    It is chosen over Terra for cost-sensitive routine review.
 
 The chain uses exact model IDs. `openrouter/free` is deliberately excluded because
@@ -43,11 +39,19 @@ through retained evaluation evidence and an explicit configuration review.
 
 This order was recalibrated on October 1, 2026. On PR #370, Laguna S 2.1 entered
 generation but produced no publication before the ten-minute job limit. The current
-OpenRouter catalog placed Qwen 3.8 27B and North Mini Code ahead of Laguna S on
-latency. The workflow therefore removed Laguna from the bounded chain, limits each
-provider route to 75 seconds, and uses a 64K context budget so the measured 43.7K
-token change can be reviewed in one model call instead of two pruned chunks. These
-values are retained in each execution receipt.
+OpenRouter catalog placed Qwen 3.8 27B ahead of Laguna S on latency. A subsequent
+Qwen attempt received the full diff and the configured 75-second timeout but still
+held the provider call until the job limit, so PR-Agent's internal fallback never
+ran. The workflow therefore enforces failover outside PR-Agent: GitHub hard-stops
+one free Qwen attempt after three minutes, checks for a substantive publication,
+and invokes one OpenAI attempt for at most five minutes only when needed. A 64K
+context budget lets the measured 47.3K-token change use one call instead of pruned
+chunks. Receipts retain both route outcomes and whether metered fallback ran.
+
+North Mini Code and Nemotron Ultra remain useful evaluation candidates, but they
+are not automatic fallbacks. A long-lived upstream call cannot reach an in-process
+fallback, and serial runner-enforced attempts against several free providers would
+add latency and consume quota before the known metered recovery route.
 
 OpenRouter uses the repository `OPENROUTER_API_KEY` secret and OpenAI uses
 `OPENAI_KEY`. Same-model retries are disabled so a transient provider failure moves

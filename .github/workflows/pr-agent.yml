@@ -31,10 +31,11 @@ jobs:
       (github.event_name == 'issue_comment' && github.event.issue.pull_request &&
       startsWith(github.event.comment.body, '/review')))
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 12
     env:
       PR_AGENT_PRIMARY_MODEL: openrouter/qwen/qwen3.8-27b:free
-      PR_AGENT_FALLBACK_MODELS: '["openrouter/cohere/north-mini-code:free", "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", "gpt-5.6-luna"]'
+      PR_AGENT_FALLBACK_MODELS: '["gpt-5.6-luna"]'
+      PR_AGENT_OPENAI_FALLBACK_MODEL: gpt-5.6-luna
       PR_AGENT_REQUEST_TIMEOUT_SECONDS: "75"
       PR_AGENT_MAX_MODEL_TOKENS: "64000"
     steps:
@@ -43,16 +44,83 @@ jobs:
         shell: bash
         run: echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
 
-      - name: Review pull request
-        id: pr-agent
+      - name: Review with free primary
+        id: pr-agent-free
         continue-on-error: true
+        timeout-minutes: 3
         uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
           OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
           config.model: ${{ env.PR_AGENT_PRIMARY_MODEL }}
-          config.fallback_models: ${{ env.PR_AGENT_FALLBACK_MODELS }}
+          config.fallback_models: '[]'
+          config.custom_model_max_tokens: "256000"
+          config.max_model_tokens: ${{ env.PR_AGENT_MAX_MODEL_TOKENS }}
+          config.ai_timeout: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
+          config.reasoning_effort: medium
+          config.duplicate_examples: "true"
+          config.num_retries: "0"
+          config.retry_same_model_on_timeout: "false"
+          config.output_run_details: "true"
+          config.output_run_cost: "true"
+          config.propagate_tool_errors: "true"
+          github_action_config.auto_review: "true"
+          github_action_config.auto_describe: "false"
+          github_action_config.auto_improve: "false"
+          github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
+
+      - name: Check free-route publication
+        id: free-publication
+        if: always()
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v8
+        env:
+          ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pull_number = Number(process.env.PR_NUMBER);
+            const startedAt = Date.parse(process.env.ATTEMPT_STARTED_AT);
+            const allowedAuthors = new Set(['github-actions[bot]', 'github-actions']);
+            const failureMarkers = [
+              'failed to review pr',
+              'failed to review pull request',
+              'review could not be generated',
+            ];
+            const sources = [
+              [github.rest.issues.listComments, {owner, repo, issue_number: pull_number}],
+              [github.rest.pulls.listReviews, {owner, repo, pull_number}],
+              [github.rest.pulls.listReviewComments, {owner, repo, pull_number}],
+            ];
+            const records = [];
+            for (const [endpoint, parameters] of sources) {
+              records.push(...await github.paginate(endpoint, {...parameters, per_page: 100}));
+            }
+            const produced = records.some(record => {
+              if (!allowedAuthors.has((record.user?.login || '').toLowerCase())) return false;
+              const observedAt = record.updated_at || record.submitted_at;
+              if (!observedAt || Date.parse(observedAt) < startedAt) return false;
+              const body = (record.body || '').trim();
+              const normalized = body.toLowerCase().replace(/\s+/g, ' ');
+              return body.length >= 80 &&
+                normalized.includes('pr reviewer guide') &&
+                !failureMarkers.some(marker => normalized.includes(marker));
+            });
+            core.setOutput('produced', String(produced));
+
+      - name: Review with metered OpenAI fallback
+        id: pr-agent-openai
+        if: always() && steps.free-publication.outputs.produced != 'true'
+        continue-on-error: true
+        timeout-minutes: 5
+        uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          config.model: ${{ env.PR_AGENT_OPENAI_FALLBACK_MODEL }}
+          config.fallback_models: '[]'
           config.custom_model_max_tokens: "256000"
           config.max_model_tokens: ${{ env.PR_AGENT_MAX_MODEL_TOKENS }}
           config.ai_timeout: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
@@ -72,7 +140,9 @@ jobs:
         if: always()
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v8
         env:
-          ACTION_OUTCOME: ${{ steps.pr-agent.outcome }}
+          FREE_ACTION_OUTCOME: ${{ steps.pr-agent-free.outcome }}
+          FREE_REVIEW_PRODUCED: ${{ steps.free-publication.outputs.produced }}
+          FALLBACK_ACTION_OUTCOME: ${{ steps.pr-agent-openai.outcome }}
           ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
           PRIMARY_MODEL: ${{ env.PR_AGENT_PRIMARY_MODEL }}
@@ -88,7 +158,11 @@ jobs:
             const repo = context.repo.repo;
             const pull_number = Number(process.env.PR_NUMBER);
             const startedAt = Date.parse(process.env.ATTEMPT_STARTED_AT);
-            const actionOutcome = process.env.ACTION_OUTCOME;
+            const freeActionOutcome = process.env.FREE_ACTION_OUTCOME;
+            const freeReviewProduced = process.env.FREE_REVIEW_PRODUCED === 'true';
+            const fallbackActionOutcome = process.env.FALLBACK_ACTION_OUTCOME || 'not_invoked';
+            const fallbackInvoked = !freeReviewProduced;
+            const actionOutcome = freeReviewProduced ? freeActionOutcome : fallbackActionOutcome;
             const failureMarkers = [
               'failed to review pr',
               'failed to review pull request',
@@ -138,12 +212,14 @@ jobs:
                 (normalized.includes('pr reviewer guide') || record.kind === 'inline_comment')
               ) substantive.push(evidence);
             }
-            const produced = (
-              actionOutcome === 'success' &&
-              substantive.length > 0 &&
-              failures.length === 0 &&
-              !apiErrorType
+            const latestSubstantiveAt = Math.max(
+              ...substantive.map(item => Date.parse(item.observed_at)),
+              0,
             );
+            const activeFailures = failures.filter(
+              item => Date.parse(item.observed_at) > latestSubstantiveAt,
+            );
+            const produced = substantive.length > 0 && activeFailures.length === 0 && !apiErrorType;
             const observedModels = [...new Set(
               substantive.map(item => item.selected_model).filter(Boolean)
             )];
@@ -165,12 +241,17 @@ jobs:
                 max_model_tokens: Number(process.env.MAX_MODEL_TOKENS),
               },
               provider_execution: {
+                free_action_outcome: freeActionOutcome,
+                free_review_produced: freeReviewProduced,
+                fallback_invoked: fallbackInvoked,
+                fallback_action_outcome: fallbackActionOutcome,
                 selected_models: observedModels,
                 final_model: observedModels.at(-1) || null,
               },
               publication: {
                 substantive_count: substantive.length,
                 failure_count: failures.length,
+                active_failure_count: activeFailures.length,
                 substantive,
                 failures,
               },
@@ -186,6 +267,9 @@ jobs:
                 `Substantive review publications: **${substantive.length}**`,
                 `Explicit failure publications: **${failures.length}**`,
                 `Action outcome: **${actionOutcome}**`,
+                `Free-route outcome: **${freeActionOutcome}**`,
+                `Metered fallback invoked: **${fallbackInvoked ? 'yes' : 'no'}**`,
+                `Fallback outcome: **${fallbackActionOutcome}**`,
                 `Primary model: \`${receipt.provider_policy.primary_model}\``,
                 `Fallback order: ${receipt.provider_policy.fallback_models.map(model => `\`${model}\``).join(' → ')}`,
                 `Per-route timeout: **${receipt.provider_policy.request_timeout_seconds}s**`,
