@@ -300,3 +300,14 @@ def test_scope_paths_must_remain_repository_relative():
     source = _source(scope={"include": ["../safe2/commands/dev.py"], "exclude": []})
     with pytest.raises(ValueError, match="repository-relative"):
         create_plan(source, _policy(), _risk_policy())
+
+
+def test_skill_workflow_uses_unified_gate_and_retains_report():
+    root = Path(__file__).parents[1]
+    workflow = (root / ".github" / "workflows" / "skill-trust-gate.yml").read_text(
+        encoding="utf-8"
+    )
+    assert "python -m safe2 gate skill" in workflow
+    assert "python scripts/skill_trust_gate.py" not in workflow
+    assert "trust-gate-*.txt" in workflow
+    assert "python -m pip install ." in workflow
