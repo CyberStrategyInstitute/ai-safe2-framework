@@ -10,7 +10,9 @@ import os
 import re
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -71,7 +73,47 @@ def _is_zero_price(value: Any) -> bool:
         return False
 
 
-def eligible_candidates(catalog: dict[str, Any], configured: list[str]) -> tuple[list[str], int]:
+def _not_expired(value: Any, now: datetime) -> bool:
+    if value in (None, ""):
+        return True
+    try:
+        if isinstance(value, (int, float)):
+            expires = datetime.fromtimestamp(value, tz=UTC)
+        else:
+            text = str(value)
+            if text.endswith("Z"):
+                text = f"{text[:-1]}+00:00"
+            expires = datetime.fromisoformat(text)
+            if expires.tzinfo is None:
+                expires = expires.replace(tzinfo=UTC)
+    except (OSError, OverflowError, ValueError):
+        return False
+    return expires > now
+
+
+def _is_eligible_free_text_model(
+    model: dict[str, Any],
+    minimum_context_tokens: int,
+    now: datetime,
+) -> bool:
+    pricing = model.get("pricing", {})
+    return bool(
+        _is_zero_price(pricing.get("prompt"))
+        and _is_zero_price(pricing.get("completion"))
+        and _is_zero_price(pricing.get("request", 0))
+        and "text" in model.get("architecture", {}).get("output_modalities", [])
+        and int(model.get("context_length") or 0) >= minimum_context_tokens
+        and _not_expired(model.get("expiration_date"), now)
+    )
+
+
+def eligible_candidates(
+    catalog: dict[str, Any],
+    configured: list[str],
+    minimum_context_tokens: int = 0,
+    now: datetime | None = None,
+) -> tuple[list[dict[str, Any]], int]:
+    observed_at = now or datetime.now(tz=UTC)
     models = {
         item.get("id"): item
         for item in catalog.get("data", [])
@@ -80,22 +122,68 @@ def eligible_candidates(catalog: dict[str, Any], configured: list[str]) -> tuple
     eligible_total = sum(
         1
         for model in models.values()
-        if model["id"].endswith(":free")
-        and _is_zero_price(model.get("pricing", {}).get("prompt"))
-        and _is_zero_price(model.get("pricing", {}).get("completion"))
-        and "text" in model.get("architecture", {}).get("output_modalities", [])
+        if _is_eligible_free_text_model(model, minimum_context_tokens, observed_at)
     )
-    retained = []
+    retained: list[dict[str, Any]] = []
     for model_id in configured:
         model = models.get(model_id, {})
-        if (
-            model_id.endswith(":free")
-            and _is_zero_price(model.get("pricing", {}).get("prompt"))
-            and _is_zero_price(model.get("pricing", {}).get("completion"))
-            and "text" in model.get("architecture", {}).get("output_modalities", [])
-        ):
-            retained.append(model_id)
+        if _is_eligible_free_text_model(model, minimum_context_tokens, observed_at):
+            retained.append(model)
     return retained, eligible_total
+
+
+def endpoint_health(model: dict[str, Any], payload: dict[str, Any]) -> dict[str, Any]:
+    endpoints = payload.get("data", {}).get("endpoints", [])
+    free_endpoints = [
+        endpoint
+        for endpoint in endpoints
+        if isinstance(endpoint, dict)
+        and _is_zero_price(endpoint.get("pricing", {}).get("prompt"))
+        and _is_zero_price(endpoint.get("pricing", {}).get("completion"))
+    ]
+
+    def recent_uptime(endpoint: dict[str, Any]) -> float:
+        for field in ("uptime_last_5m", "uptime_last_30m", "uptime_last_1d"):
+            value = endpoint.get(field)
+            if isinstance(value, (int, float)):
+                return float(value)
+        return -1.0
+
+    online = [endpoint for endpoint in free_endpoints if endpoint.get("status") == 0]
+    best = max(online, key=recent_uptime) if online else None
+    return {
+        "model": model["id"],
+        "expiration_date": model.get("expiration_date"),
+        "online": best is not None,
+        "provider": best.get("provider_name") if best else None,
+        "status": best.get("status") if best else None,
+        "uptime_last_5m": best.get("uptime_last_5m") if best else None,
+        "uptime_last_30m": best.get("uptime_last_30m") if best else None,
+        "uptime_last_1d": best.get("uptime_last_1d") if best else None,
+        "recent_uptime": recent_uptime(best) if best else -1.0,
+    }
+
+
+def shortlist_by_health(
+    health: list[dict[str, Any]],
+    *,
+    size: int,
+    minimum_recent_uptime: float,
+) -> list[str]:
+    qualified = [
+        record
+        for record in health
+        if record.get("online") and float(record.get("recent_uptime", -1)) >= minimum_recent_uptime
+    ]
+    qualified.sort(
+        key=lambda record: (
+            -float(record.get("recent_uptime", -1)),
+            -float(record.get("uptime_last_30m") or -1),
+            -float(record.get("uptime_last_1d") or -1),
+            str(record["model"]),
+        )
+    )
+    return [str(record["model"]) for record in qualified[:size]]
 
 
 def select_pr_patch(files: list[dict[str, Any]], policy: dict[str, Any]) -> tuple[str, str]:
@@ -283,15 +371,19 @@ def main() -> int:
     github_token = os.environ.get("GITHUB_TOKEN", "")
     repository = os.environ.get("GITHUB_REPOSITORY", "")
     pr_number = os.environ.get("PR_NUMBER", "")
-    configured = list(policy["candidates"])
+    candidate_pool = list(policy["candidate_pool"])
+    discovery = policy["discovery"]
     receipt: dict[str, Any] = {
         "schema_version": "safe2.pr-agent-preflight.v1",
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "repository": repository,
         "pr_number": int(pr_number) if pr_number.isdigit() else None,
         "benchmark_version": policy["benchmark_version"],
-        "configured_candidates": configured,
+        "candidate_pool": candidate_pool,
         "eligible_free_models_in_catalog": None,
+        "catalog_candidates": [],
+        "endpoint_health": [],
+        "shortlisted_candidates": [],
         "tested_candidates": [],
         "selected_model": None,
         "status": "unavailable",
@@ -305,8 +397,55 @@ def main() -> int:
                 headers={"Authorization": f"Bearer {api_key}"},
                 timeout=int(policy["request"]["timeout_seconds"]),
             )
-            candidates, eligible_total = eligible_candidates(catalog, configured)
+            candidate_models, eligible_total = eligible_candidates(
+                catalog,
+                candidate_pool,
+                int(discovery["minimum_context_tokens"]),
+            )
             receipt["eligible_free_models_in_catalog"] = eligible_total
+            receipt["catalog_candidates"] = [model["id"] for model in candidate_models]
+            for model in candidate_models:
+                details_path = model.get("links", {}).get("details")
+                if not details_path:
+                    author, slug = str(model["id"]).split("/", 1)
+                    details_path = (
+                        "/api/v1/models/"
+                        f"{urllib.parse.quote(author, safe='')}/"
+                        f"{urllib.parse.quote(slug, safe=':')}/endpoints"
+                    )
+                details_url = urllib.parse.urljoin("https://openrouter.ai", str(details_path))
+                try:
+                    endpoint_payload = _request_json(
+                        details_url,
+                        headers={"Authorization": f"Bearer {api_key}"},
+                        timeout=int(policy["request"]["timeout_seconds"]),
+                    )
+                    receipt["endpoint_health"].append(endpoint_health(model, endpoint_payload))
+                except (
+                    urllib.error.URLError,
+                    TimeoutError,
+                    OSError,
+                    KeyError,
+                    IndexError,
+                    TypeError,
+                    ValueError,
+                ) as error:
+                    message, status = _error_details(error)
+                    receipt["endpoint_health"].append(
+                        {
+                            "model": model["id"],
+                            "online": False,
+                            "recent_uptime": -1,
+                            "metadata_error": message,
+                            "metadata_http_status": status,
+                        }
+                    )
+            candidates = shortlist_by_health(
+                receipt["endpoint_health"],
+                size=int(discovery["shortlist_size"]),
+                minimum_recent_uptime=float(discovery["minimum_recent_uptime_percent"]),
+            )
+            receipt["shortlisted_candidates"] = candidates
             files: list[dict[str, Any]] = []
             if github_token and repository and pr_number.isdigit():
                 files_url = f"https://api.github.com/repos/{repository}/pulls/{pr_number}/files?per_page=100"
@@ -352,7 +491,9 @@ def main() -> int:
                 receipt["selected_model"] = passing[0]["model"]
                 receipt["status"] = "selected"
             elif not candidates:
-                receipt["failure_reason"] = "configured candidates are not currently free and eligible"
+                receipt["failure_reason"] = (
+                    "no candidate passed live catalog, expiry, status, and uptime filters"
+                )
             else:
                 receipt["failure_reason"] = "no tested candidate passed the review canary"
         except (

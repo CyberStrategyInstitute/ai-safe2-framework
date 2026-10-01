@@ -24,17 +24,21 @@ provider strategy, tradeoffs, and reviewer procedure.
 PR-Agent is the routine AI reviewer. Its software is open source. The provider
 chain deliberately prefers free inference, while keeping provider failure visible:
 
-1. A bounded preflight tests exactly three pinned free candidates with the same
-   compact request: `qwen/qwen3.8-27b:free`, `poolside/laguna-s-2.1:free`, and
-   `cohere/north-mini-code:free`.
-2. Only candidates that are still present as zero-price text endpoints in the live
-   OpenRouter catalog are called. A candidate must return valid concise JSON, find
-   both known canary defects at the correct location, and avoid findings on the
-   verified-safe control. The highest score wins; latency breaks ties only.
-3. The same request includes one bounded, risk-prioritized hunk from the actual PR
-   to confirm context compatibility. Its speculative findings do not increase the
-   score because that would reward hallucination when the hunk is correct.
-4. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback
+1. The preflight queries OpenRouter's model catalog and per-model endpoint metadata.
+   It filters an eight-model, review-capable pool for zero price, sufficient context,
+   unexpired availability, online endpoint status, and at least 75% recent uptime.
+2. It ranks the live routes by five-minute uptime, then 30-minute and daily uptime,
+   and sends the same compact request only to the top three. This lets temporary
+   high-quality routes such as `stealth/space-bunny-alpha` participate until their
+   published expiration, while low-health routes are excluded automatically.
+3. A candidate must return valid concise JSON, find both known canary defects at
+   the correct location, and avoid findings on the verified-safe control. The
+   highest score wins; response length and latency break ties.
+4. The same request includes up to 12,000 characters from one risk-prioritized hunk
+   in the actual PR to confirm context and moderate-input compatibility. Its
+   speculative findings do not increase the score because that would reward
+   hallucination when the hunk is correct.
+5. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback
    when no free candidate passes or the selected model produces no review.
 
 The chain uses exact model IDs. `openrouter/free` is deliberately excluded because
@@ -51,16 +55,20 @@ Qwen attempt received the full diff and the configured 75-second timeout but sti
 held the provider call until the job limit, so PR-Agent's internal fallback never
 ran. The workflow therefore enforces failover outside PR-Agent: GitHub hard-stops
 the selected free attempt after three minutes, checks for a substantive publication,
-and invokes one OpenAI attempt for at most five minutes only when needed. A 64K
-context budget lets the measured 47.3K-token change use one call instead of pruned
-chunks. Receipts retain both route outcomes and whether metered fallback ran.
+and invokes one OpenAI attempt for at most five minutes only when needed. A later
+Laguna run passed the small canary but stalled after PR-Agent sent the entire
+58.5K-token diff. The free route is therefore capped at 16K tokens to produce a
+bounded, risk-focused review instead of treating small-call availability as proof
+of full-diff throughput. The metered fallback retains a 64K budget. Receipts retain
+both budgets, route outcomes, and whether metered fallback ran.
 
-The selector deliberately tests three models rather than every free model. At the
-October 1 catalog check, 17 zero-price `:free` text endpoints were eligible; testing
-all of them before every PR would consume the daily allowance without improving
-decision quality proportionally. Three canary calls plus one real review allow up
-to roughly 12 complete PR attempts within a 50-request day. The claim is therefore
-"best passing model in the tested shortlist," never "globally best free model."
+The selector deliberately canary-tests three models rather than every free model.
+Catalog and endpoint-health calls do not invoke a model; they cheaply narrow the
+curated pool before inference quota is spent. Testing every free model before every
+PR would consume the daily allowance without improving decision quality
+proportionally. Three canary calls plus one real review allow up to roughly 12
+complete PR attempts within a 50-request day. The claim is therefore "best passing
+model in the live, review-capable shortlist," never "globally best free model."
 
 The canary is versioned and includes two real defects plus a safe control. Rotate
 or expand the vetted fixtures through an evidence-backed policy change when the
@@ -86,10 +94,11 @@ model, and consumption can be assessed together. OpenRouter's free plan is limit
 to 50 requests per day and has no availability guarantee. Prove one representative
 review before launching a multi-PR batch, then stage the batch to preserve quota.
 GitHub Models is not used because GitHub retired that service on July 30, 2026.
-Each retained execution receipt records the eligible catalog count, three tested
-models, per-model latency/failure/score evidence, selected model, prompt and patch
-hashes, provider outcomes, and the model observed in a substantive publication.
-Raw credentials and raw model responses are not retained.
+Each retained execution receipt records the eligible catalog count, curated pool,
+endpoint uptime/status evidence, dynamic top-three shortlist, per-model
+latency/failure/score evidence, selected model, prompt and patch hashes, provider
+outcomes, and the model observed in a substantive publication. Raw credentials and
+raw model responses are not retained.
 
 This free route is approved only for this repository's public pull-request content.
 Do not copy it to a private or sensitive repository unless the applicable model

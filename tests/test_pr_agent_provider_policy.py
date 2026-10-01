@@ -18,15 +18,14 @@ def _workflow_value(name: str) -> str:
 
 def test_provider_chain_is_pinned_and_consistent():
     config = tomllib.loads(CONFIG.read_text(encoding="utf-8"))["config"]
-    policy_candidates = json.loads(PREFLIGHT_POLICY.read_text(encoding="utf-8"))["candidates"]
-    workflow_candidates = json.loads(_workflow_value("PR_AGENT_FREE_CANDIDATES"))
+    policy_candidates = json.loads(PREFLIGHT_POLICY.read_text(encoding="utf-8"))["candidate_pool"]
+    workflow_candidates = json.loads(_workflow_value("PR_AGENT_FREE_MODEL_POOL"))
     workflow_fallbacks = json.loads(_workflow_value("PR_AGENT_FALLBACK_MODELS"))
 
     assert workflow_candidates == policy_candidates
-    assert len(workflow_candidates) == 3
-    assert len(set(workflow_candidates)) == 3
-    assert all(model.endswith(":free") for model in workflow_candidates)
-    assert config["model"] == f"openrouter/{workflow_candidates[0]}"
+    assert len(workflow_candidates) == 8
+    assert len(set(workflow_candidates)) == 8
+    assert config["model"].removeprefix("openrouter/") in workflow_candidates
     assert workflow_fallbacks == config["fallback_models"]
     assert "openrouter/free" not in [*workflow_candidates, *workflow_fallbacks]
     assert all(model != "openrouter/auto" for model in [*workflow_candidates, *workflow_fallbacks])
@@ -40,13 +39,14 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert config["num_retries"] == 0
     assert config["retry_same_model_on_timeout"] is False
     assert config["ai_timeout"] == 75
-    assert config["max_model_tokens"] == 64000
+    assert config["max_model_tokens"] == 16000
     assert config["output_run_details"] is True
     assert config["output_run_cost"] is True
     assert "provider_policy:" in workflow
     assert "fallback_models: JSON.parse(process.env.FALLBACK_MODELS)" in workflow
     assert "request_timeout_seconds: Number(process.env.REQUEST_TIMEOUT_SECONDS)" in workflow
-    assert "max_model_tokens: Number(process.env.MAX_MODEL_TOKENS)" in workflow
+    assert "free_max_model_tokens: Number(process.env.FREE_MAX_MODEL_TOKENS)" in workflow
+    assert "openai_max_model_tokens: Number(process.env.OPENAI_MAX_MODEL_TOKENS)" in workflow
     assert "id: pr-agent-free" in workflow
     assert "id: free-publication" in workflow
     assert "id: pr-agent-openai" in workflow

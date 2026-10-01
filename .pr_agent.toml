@@ -2,7 +2,7 @@
 model = "openrouter/qwen/qwen3.8-27b:free"
 fallback_models = ["gpt-5.6-luna"]
 custom_model_max_tokens = 256000
-max_model_tokens = 64000
+max_model_tokens = 16000
 ai_timeout = 75
 reasoning_effort = "medium"
 duplicate_examples = true

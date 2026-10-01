@@ -1,13 +1,23 @@
 {
   "schema_version": "safe2.pr-agent-preflight-policy.v1",
   "benchmark_version": "code-review-canary.v1",
-  "candidates": [
+  "candidate_pool": [
+    "stealth/space-bunny-alpha",
     "qwen/qwen3.8-27b:free",
     "poolside/laguna-s-2.1:free",
-    "cohere/north-mini-code:free"
+    "cohere/north-mini-code:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nvidia/nemotron-3.5-lightning:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
   ],
+  "discovery": {
+    "shortlist_size": 3,
+    "minimum_context_tokens": 16000,
+    "minimum_recent_uptime_percent": 75
+  },
   "request": {
-    "timeout_seconds": 20,
+    "timeout_seconds": 30,
     "max_completion_tokens": 350,
     "temperature": 0
   },
@@ -26,7 +36,7 @@
     "maximum_response_characters": 2200
   },
   "pr_context": {
-    "maximum_patch_characters": 3500,
+    "maximum_patch_characters": 12000,
     "priority_path_fragments": [
       ".github/workflows/",
       "auth",

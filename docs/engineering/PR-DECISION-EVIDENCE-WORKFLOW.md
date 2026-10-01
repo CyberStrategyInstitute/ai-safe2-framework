@@ -203,17 +203,22 @@ receipt and a failed advisory-availability check. That check is not included in
 the required-status ruleset, so it cannot silently pass and cannot stop an
 otherwise authorized merge.
 
-Before the full review, one bounded preflight call is sent to each of three pinned
-OpenRouter free candidates: Qwen 3.8 27B, Poolside Laguna S 2.1, and Cohere North
-Mini Code. The request and settings are identical. The versioned benchmark contains
-two known security defects, a verified-safe control, and one bounded hunk from the
-actual PR. Availability, strict JSON, correct defect location, false-positive
-discipline, and concision are hard gates. Only passing models are ranked; score is
-primary and latency is only a tiebreaker. The PR hunk tests context compatibility
-but does not earn quality points because it has no established ground truth.
+Before the full review, the workflow queries OpenRouter's live catalog and endpoint
+metadata. An eight-model, review-capable pool is filtered for zero price, sufficient
+context, expiration, online status, and recent uptime. The three healthiest routes
+receive the same bounded preflight call. The versioned benchmark contains two known
+security defects, a verified-safe control, and up to 12,000 characters from one
+risk-prioritized hunk in the actual PR. Strict JSON, correct defect location,
+false-positive discipline, and concision are hard gates. Only passing models are
+ranked; score is primary, then response length and latency. The PR hunk tests
+context compatibility but does not earn quality points because it has no established
+ground truth.
 
-The winner receives the full PR-Agent review. If no candidate passes, or the winner
-does not publish a substantive review, `gpt-5.6-luna` is the metered final fallback.
+The winner receives a risk-focused PR-Agent review capped at 16K input tokens. This
+prevents a model that passes a moderate canary from being handed an unbounded large
+diff; PR #370 demonstrated that a 58.5K-token request could still stall. If no
+candidate passes, or the winner does not publish a substantive review,
+`gpt-5.6-luna` is the metered final fallback with a 64K budget.
 
 Exact model IDs are part of the execution configuration and receipt context.
 `openrouter/free` is excluded because random model selection makes replay and
@@ -221,9 +226,10 @@ before/after comparison unreliable. Inkling is excluded because multimodal input
 does not materially improve routine text-diff review and would add a provider data
 boundary. Run details and provider-reported cost are emitted for operating
 evidence, and same-model retries are disabled to preserve the 50-request daily
-free allowance. Exactly three of the currently eligible free models are tested per
-PR; the receipt states both numbers so "best in shortlist" cannot be misrepresented
-as "globally best." It records hashes rather than raw responses or patches. Prove
+free allowance. At most three of the currently healthy, eligible routes are tested
+per PR; the receipt retains the catalog total, curated pool, endpoint health, and
+shortlist so "best in shortlist" cannot be misrepresented as "globally best." It
+records hashes rather than raw responses or patches. Prove
 one representative PR before a batch review. The open-source
 reviewer, OpenRouter gateway, selected model hosts, and metered OpenAI fallback are
 separate cost, privacy, and trust boundaries. GitHub Models is intentionally
