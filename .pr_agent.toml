@@ -1,8 +1,9 @@
 [config]
-model = "openrouter/poolside/laguna-s-2.1:free"
-fallback_models = ["openrouter/qwen/qwen3.8-27b:free", "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", "openrouter/cohere/north-mini-code:free", "gpt-5.6-luna"]
+model = "openrouter/qwen/qwen3.8-27b:free"
+fallback_models = ["openrouter/cohere/north-mini-code:free", "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", "gpt-5.6-luna"]
 custom_model_max_tokens = 256000
-max_model_tokens = 32000
+max_model_tokens = 64000
+ai_timeout = 75
 reasoning_effort = "medium"
 duplicate_examples = true
 num_retries = 0

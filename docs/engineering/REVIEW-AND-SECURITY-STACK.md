@@ -24,18 +24,14 @@ provider strategy, tradeoffs, and reviewer procedure.
 PR-Agent is the routine AI reviewer. Its software is open source. The provider
 chain deliberately prefers free inference, while keeping provider failure visible:
 
-1. `openrouter/poolside/laguna-s-2.1:free` is the pinned primary. It is specialized
-   for software-engineering agents and had the strongest combination of coding fit
-   and endpoint availability when reviewed on September 29, 2026.
-2. `openrouter/qwen/qwen3.8-27b:free` is the first fallback. Its strong published
-   coding result and structured-output support make it a useful independent route
-   when the primary cannot produce the expected review contract.
+1. `openrouter/qwen/qwen3.8-27b:free` is the pinned primary. It combines coding
+   specialization, structured-output support, 262K context, and the lowest current
+   catalog latency among the retained review routes.
+2. `openrouter/cohere/north-mini-code:free` is the first fallback. It is a
+   code-specialized, low-latency route with 256K context.
 3. `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free` is the deep-reasoning
    fallback for architecture, security, and cross-boundary analysis.
-4. `openrouter/cohere/north-mini-code:free` is the final free fallback. It is a
-   code-specialized, high-availability route for fast recovery from upstream
-   provider failure.
-5. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
+4. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
    It is chosen over Terra for cost-sensitive routine review.
 
 The chain uses exact model IDs. `openrouter/free` is deliberately excluded because
@@ -44,6 +40,14 @@ Inkling is also excluded from this text-diff path: its multimodal advantage is n
 needed for routine pull-request review and would add another provider data boundary.
 Model selection is a dated policy snapshot, not a permanent ranking; change it only
 through retained evaluation evidence and an explicit configuration review.
+
+This order was recalibrated on October 1, 2026. On PR #370, Laguna S 2.1 entered
+generation but produced no publication before the ten-minute job limit. The current
+OpenRouter catalog placed Qwen 3.8 27B and North Mini Code ahead of Laguna S on
+latency. The workflow therefore removed Laguna from the bounded chain, limits each
+provider route to 75 seconds, and uses a 64K context budget so the measured 43.7K
+token change can be reviewed in one model call instead of two pruned chunks. These
+values are retained in each execution receipt.
 
 OpenRouter uses the repository `OPENROUTER_API_KEY` secret and OpenAI uses
 `OPENAI_KEY`. Same-model retries are disabled so a transient provider failure moves

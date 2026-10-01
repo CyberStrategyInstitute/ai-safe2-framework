@@ -33,8 +33,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      PR_AGENT_PRIMARY_MODEL: openrouter/poolside/laguna-s-2.1:free
-      PR_AGENT_FALLBACK_MODELS: '["openrouter/qwen/qwen3.8-27b:free", "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", "openrouter/cohere/north-mini-code:free", "gpt-5.6-luna"]'
+      PR_AGENT_PRIMARY_MODEL: openrouter/qwen/qwen3.8-27b:free
+      PR_AGENT_FALLBACK_MODELS: '["openrouter/cohere/north-mini-code:free", "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free", "gpt-5.6-luna"]'
+      PR_AGENT_REQUEST_TIMEOUT_SECONDS: "75"
+      PR_AGENT_MAX_MODEL_TOKENS: "64000"
     steps:
       - name: Record review attempt start
         id: attempt
@@ -52,7 +54,8 @@ jobs:
           config.model: ${{ env.PR_AGENT_PRIMARY_MODEL }}
           config.fallback_models: ${{ env.PR_AGENT_FALLBACK_MODELS }}
           config.custom_model_max_tokens: "256000"
-          config.max_model_tokens: "32000"
+          config.max_model_tokens: ${{ env.PR_AGENT_MAX_MODEL_TOKENS }}
+          config.ai_timeout: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
           config.reasoning_effort: medium
           config.duplicate_examples: "true"
           config.num_retries: "0"
@@ -74,6 +77,8 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
           PRIMARY_MODEL: ${{ env.PR_AGENT_PRIMARY_MODEL }}
           FALLBACK_MODELS: ${{ env.PR_AGENT_FALLBACK_MODELS }}
+          REQUEST_TIMEOUT_SECONDS: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
+          MAX_MODEL_TOKENS: ${{ env.PR_AGENT_MAX_MODEL_TOKENS }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -156,6 +161,8 @@ jobs:
               provider_policy: {
                 primary_model: process.env.PRIMARY_MODEL,
                 fallback_models: JSON.parse(process.env.FALLBACK_MODELS),
+                request_timeout_seconds: Number(process.env.REQUEST_TIMEOUT_SECONDS),
+                max_model_tokens: Number(process.env.MAX_MODEL_TOKENS),
               },
               provider_execution: {
                 selected_models: observedModels,
@@ -181,6 +188,8 @@ jobs:
                 `Action outcome: **${actionOutcome}**`,
                 `Primary model: \`${receipt.provider_policy.primary_model}\``,
                 `Fallback order: ${receipt.provider_policy.fallback_models.map(model => `\`${model}\``).join(' → ')}`,
+                `Per-route timeout: **${receipt.provider_policy.request_timeout_seconds}s**`,
+                `Context budget: **${receipt.provider_policy.max_model_tokens} tokens**`,
                 `Observed responding model: ${receipt.provider_execution.final_model ? `\`${receipt.provider_execution.final_model}\`` : '**not reported**'}`,
                 'Authority: advisory only; deterministic checks and human review remain authoritative.',
                 ...(produced ? [] : ['Result: reviewer unavailable. This is not approval and this check is not a merge requirement.']),
