@@ -1,0 +1,42 @@
+{
+  "schema_version": "safe2.pr-agent-preflight-policy.v1",
+  "benchmark_version": "code-review-canary.v1",
+  "candidates": [
+    "qwen/qwen3.8-27b:free",
+    "poolside/laguna-s-2.1:free",
+    "cohere/north-mini-code:free"
+  ],
+  "request": {
+    "timeout_seconds": 20,
+    "max_completion_tokens": 350,
+    "temperature": 0
+  },
+  "selection": {
+    "required_defects": {
+      "authorization-after-read": "C2",
+      "path-traversal": "C2"
+    },
+    "safe_line_ids": [
+      "S1",
+      "S2",
+      "S3",
+      "S4"
+    ],
+    "maximum_findings": 2,
+    "maximum_response_characters": 2200
+  },
+  "pr_context": {
+    "maximum_patch_characters": 3500,
+    "priority_path_fragments": [
+      ".github/workflows/",
+      "auth",
+      "policy",
+      "security",
+      "payment",
+      "settlement",
+      "evidence",
+      "safe2/",
+      "nexus/"
+    ]
+  }
+}

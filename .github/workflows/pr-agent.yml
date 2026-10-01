@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
-      PR_AGENT_PRIMARY_MODEL: openrouter/qwen/qwen3.8-27b:free
+      PR_AGENT_FREE_CANDIDATES: '["qwen/qwen3.8-27b:free","poolside/laguna-s-2.1:free","cohere/north-mini-code:free"]'
       PR_AGENT_FALLBACK_MODELS: '["gpt-5.6-luna"]'
       PR_AGENT_OPENAI_FALLBACK_MODEL: gpt-5.6-luna
       PR_AGENT_REQUEST_TIMEOUT_SECONDS: "75"
@@ -44,15 +44,33 @@ jobs:
         shell: bash
         run: echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
 
-      - name: Review with free primary
+      - name: Check out review policy and preflight
+        uses: actions/checkout@v7
+
+      - name: Select an available free review model
+        id: preflight
+        continue-on-error: true
+        timeout-minutes: 2
+        shell: bash
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+        run: >-
+          python scripts/pr_agent_preflight.py
+          --policy .ai-safe2/pr-agent-preflight-policy.json
+          --receipt pr-agent-preflight.json
+
+      - name: Review with selected free model
         id: pr-agent-free
+        if: steps.preflight.outputs.available == 'true'
         continue-on-error: true
         timeout-minutes: 3
         uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
           OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          config.model: ${{ env.PR_AGENT_PRIMARY_MODEL }}
+          config.model: openrouter/${{ steps.preflight.outputs.selected_model }}
           config.fallback_models: '[]'
           config.custom_model_max_tokens: "256000"
           config.max_model_tokens: ${{ env.PR_AGENT_MAX_MODEL_TOKENS }}
@@ -145,7 +163,12 @@ jobs:
           FALLBACK_ACTION_OUTCOME: ${{ steps.pr-agent-openai.outcome }}
           ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
-          PRIMARY_MODEL: ${{ env.PR_AGENT_PRIMARY_MODEL }}
+          SELECTED_FREE_MODEL: ${{ steps.preflight.outputs.selected_model }}
+          FREE_CANDIDATES: ${{ env.PR_AGENT_FREE_CANDIDATES }}
+          PREFLIGHT_OUTCOME: ${{ steps.preflight.outcome }}
+          PREFLIGHT_TESTED_COUNT: ${{ steps.preflight.outputs.tested_count }}
+          PREFLIGHT_ELIGIBLE_COUNT: ${{ steps.preflight.outputs.eligible_count }}
+          PREFLIGHT_RECEIPT_SHA256: ${{ steps.preflight.outputs.receipt_sha256 }}
           FALLBACK_MODELS: ${{ env.PR_AGENT_FALLBACK_MODELS }}
           REQUEST_TIMEOUT_SECONDS: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
           MAX_MODEL_TOKENS: ${{ env.PR_AGENT_MAX_MODEL_TOKENS }}
@@ -163,6 +186,15 @@ jobs:
             const fallbackActionOutcome = process.env.FALLBACK_ACTION_OUTCOME || 'not_invoked';
             const fallbackInvoked = !freeReviewProduced;
             const actionOutcome = freeReviewProduced ? freeActionOutcome : fallbackActionOutcome;
+            let preflight = null;
+            try {
+              preflight = JSON.parse(fs.readFileSync('pr-agent-preflight.json', 'utf8'));
+            } catch (error) {
+              preflight = {
+                status: 'receipt_unavailable',
+                failure_reason: error.name || 'PreflightReceiptError',
+              };
+            }
             const failureMarkers = [
               'failed to review pr',
               'failed to review pull request',
@@ -235,12 +267,17 @@ jobs:
               action_outcome: actionOutcome,
               status: produced ? 'review_produced' : 'review_unavailable',
               provider_policy: {
-                primary_model: process.env.PRIMARY_MODEL,
+                free_candidates: JSON.parse(process.env.FREE_CANDIDATES),
+                selected_free_model: process.env.SELECTED_FREE_MODEL || null,
                 fallback_models: JSON.parse(process.env.FALLBACK_MODELS),
                 request_timeout_seconds: Number(process.env.REQUEST_TIMEOUT_SECONDS),
                 max_model_tokens: Number(process.env.MAX_MODEL_TOKENS),
               },
               provider_execution: {
+                preflight_outcome: process.env.PREFLIGHT_OUTCOME,
+                preflight_tested_count: Number(process.env.PREFLIGHT_TESTED_COUNT || 0),
+                preflight_eligible_count: Number(process.env.PREFLIGHT_ELIGIBLE_COUNT || 0),
+                preflight_receipt_sha256: process.env.PREFLIGHT_RECEIPT_SHA256 || null,
                 free_action_outcome: freeActionOutcome,
                 free_review_produced: freeReviewProduced,
                 fallback_invoked: fallbackInvoked,
@@ -248,6 +285,7 @@ jobs:
                 selected_models: observedModels,
                 final_model: observedModels.at(-1) || null,
               },
+              preflight,
               publication: {
                 substantive_count: substantive.length,
                 failure_count: failures.length,
@@ -270,7 +308,9 @@ jobs:
                 `Free-route outcome: **${freeActionOutcome}**`,
                 `Metered fallback invoked: **${fallbackInvoked ? 'yes' : 'no'}**`,
                 `Fallback outcome: **${fallbackActionOutcome}**`,
-                `Primary model: \`${receipt.provider_policy.primary_model}\``,
+                `Free models tested: **${receipt.provider_execution.preflight_tested_count}** of **${receipt.provider_execution.preflight_eligible_count}** currently eligible`,
+                `Selected free model: ${receipt.provider_policy.selected_free_model ? `\`${receipt.provider_policy.selected_free_model}\`` : '**none**'}`,
+                `Preflight status: **${receipt.preflight.status}**`,
                 `Fallback order: ${receipt.provider_policy.fallback_models.map(model => `\`${model}\``).join(' → ')}`,
                 `Per-route timeout: **${receipt.provider_policy.request_timeout_seconds}s**`,
                 `Context budget: **${receipt.provider_policy.max_model_tokens} tokens**`,
@@ -286,6 +326,8 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: pr-agent-execution-${{ github.run_id }}-${{ github.run_attempt }}
-          path: pr-agent-execution.json
+          path: |
+            pr-agent-preflight.json
+            pr-agent-execution.json
           if-no-files-found: error
           retention-days: 90

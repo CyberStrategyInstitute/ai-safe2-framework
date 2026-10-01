@@ -203,14 +203,17 @@ receipt and a failed advisory-availability check. That check is not included in
 the required-status ruleset, so it cannot silently pass and cannot stop an
 otherwise authorized merge.
 
-The routine provider chain uses pinned, role-specific OpenRouter free endpoints,
-then the official OpenAI API:
+Before the full review, one bounded preflight call is sent to each of three pinned
+OpenRouter free candidates: Qwen 3.8 27B, Poolside Laguna S 2.1, and Cohere North
+Mini Code. The request and settings are identical. The versioned benchmark contains
+two known security defects, a verified-safe control, and one bounded hunk from the
+actual PR. Availability, strict JSON, correct defect location, false-positive
+discipline, and concision are hard gates. Only passing models are ranked; score is
+primary and latency is only a tiebreaker. The PR hunk tests context compatibility
+but does not earn quality points because it has no established ground truth.
 
-1. Poolside Laguna S 2.1 for the primary software-engineering review.
-2. Qwen 3.8 27B for an independent coding and structured-output fallback.
-3. NVIDIA Nemotron 3 Ultra for deeper architecture and security reasoning.
-4. Cohere North Mini Code for a fast, code-specialized final free attempt.
-5. `gpt-5.6-luna` as the metered final fallback.
+The winner receives the full PR-Agent review. If no candidate passes, or the winner
+does not publish a substantive review, `gpt-5.6-luna` is the metered final fallback.
 
 Exact model IDs are part of the execution configuration and receipt context.
 `openrouter/free` is excluded because random model selection makes replay and
@@ -218,9 +221,10 @@ before/after comparison unreliable. Inkling is excluded because multimodal input
 does not materially improve routine text-diff review and would add a provider data
 boundary. Run details and provider-reported cost are emitted for operating
 evidence, and same-model retries are disabled to preserve the 50-request daily
-free allowance. The retained execution receipt records the ordered provider policy
-and the model observed in the substantive publication. Prove one representative PR
-before a batch review. The open-source
+free allowance. Exactly three of the currently eligible free models are tested per
+PR; the receipt states both numbers so "best in shortlist" cannot be misrepresented
+as "globally best." It records hashes rather than raw responses or patches. Prove
+one representative PR before a batch review. The open-source
 reviewer, OpenRouter gateway, selected model hosts, and metered OpenAI fallback are
 separate cost, privacy, and trust boundaries. GitHub Models is intentionally
 excluded because the service was retired on July 30, 2026.

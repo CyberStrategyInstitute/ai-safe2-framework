@@ -24,11 +24,18 @@ provider strategy, tradeoffs, and reviewer procedure.
 PR-Agent is the routine AI reviewer. Its software is open source. The provider
 chain deliberately prefers free inference, while keeping provider failure visible:
 
-1. `openrouter/qwen/qwen3.8-27b:free` is the pinned primary. It combines coding
-   specialization, structured-output support, 262K context, and the lowest current
-   catalog latency among the retained review routes.
-2. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback.
-   It is chosen over Terra for cost-sensitive routine review.
+1. A bounded preflight tests exactly three pinned free candidates with the same
+   compact request: `qwen/qwen3.8-27b:free`, `poolside/laguna-s-2.1:free`, and
+   `cohere/north-mini-code:free`.
+2. Only candidates that are still present as zero-price text endpoints in the live
+   OpenRouter catalog are called. A candidate must return valid concise JSON, find
+   both known canary defects at the correct location, and avoid findings on the
+   verified-safe control. The highest score wins; latency breaks ties only.
+3. The same request includes one bounded, risk-prioritized hunk from the actual PR
+   to confirm context compatibility. Its speculative findings do not increase the
+   score because that would reward hallucination when the hunk is correct.
+4. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback
+   when no free candidate passes or the selected model produces no review.
 
 The chain uses exact model IDs. `openrouter/free` is deliberately excluded because
 its randomly selected model prevents dependable replay and before/after comparison.
@@ -37,21 +44,39 @@ needed for routine pull-request review and would add another provider data bound
 Model selection is a dated policy snapshot, not a permanent ranking; change it only
 through retained evaluation evidence and an explicit configuration review.
 
-This order was recalibrated on October 1, 2026. On PR #370, Laguna S 2.1 entered
+This policy was recalibrated on October 1, 2026. On PR #370, Laguna S 2.1 entered
 generation but produced no publication before the ten-minute job limit. The current
 OpenRouter catalog placed Qwen 3.8 27B ahead of Laguna S on latency. A subsequent
 Qwen attempt received the full diff and the configured 75-second timeout but still
 held the provider call until the job limit, so PR-Agent's internal fallback never
 ran. The workflow therefore enforces failover outside PR-Agent: GitHub hard-stops
-one free Qwen attempt after three minutes, checks for a substantive publication,
+the selected free attempt after three minutes, checks for a substantive publication,
 and invokes one OpenAI attempt for at most five minutes only when needed. A 64K
 context budget lets the measured 47.3K-token change use one call instead of pruned
 chunks. Receipts retain both route outcomes and whether metered fallback ran.
 
-North Mini Code and Nemotron Ultra remain useful evaluation candidates, but they
-are not automatic fallbacks. A long-lived upstream call cannot reach an in-process
-fallback, and serial runner-enforced attempts against several free providers would
-add latency and consume quota before the known metered recovery route.
+The selector deliberately tests three models rather than every free model. At the
+October 1 catalog check, 17 zero-price `:free` text endpoints were eligible; testing
+all of them before every PR would consume the daily allowance without improving
+decision quality proportionally. Three canary calls plus one real review allow up
+to roughly 12 complete PR attempts within a 50-request day. The claim is therefore
+"best passing model in the tested shortlist," never "globally best free model."
+
+The canary is versioned and includes two real defects plus a safe control. Rotate
+or expand the vetted fixtures through an evidence-backed policy change when the
+benchmark stops discriminating between candidates. Sol-low and Astra-low are
+independent design baselines, not OpenRouter candidates and not recurring calls.
+
+Baseline run on October 1, 2026:
+
+| Independent baseline | Reasoning | Defects | Safe false positives | JSON | Score |
+| --- | --- | ---: | ---: | --- | ---: |
+| `gpt-6-sol` | low | 2/2 | 0 | valid | 100/100 |
+| `gpt-6-astra` | low | 2/2 | 0 | valid | 100/100 |
+
+Both baselines located authorization-after-read and path traversal at `C2` and
+left the safe control unflagged. These results validate the canary shape; they do
+not place either model in the free OpenRouter ranking.
 
 OpenRouter uses the repository `OPENROUTER_API_KEY` secret and OpenAI uses
 `OPENAI_KEY`. Same-model retries are disabled so a transient provider failure moves
@@ -61,10 +86,10 @@ model, and consumption can be assessed together. OpenRouter's free plan is limit
 to 50 requests per day and has no availability guarantee. Prove one representative
 review before launching a multi-PR batch, then stage the batch to preserve quota.
 GitHub Models is not used because GitHub retired that service on July 30, 2026.
-Each retained execution receipt records the ordered provider policy and the model
-observed in the substantive review publication, allowing provider failover and
-model-policy changes to be separated from code-quality changes in longitudinal
-comparisons.
+Each retained execution receipt records the eligible catalog count, three tested
+models, per-model latency/failure/score evidence, selected model, prompt and patch
+hashes, provider outcomes, and the model observed in a substantive publication.
+Raw credentials and raw model responses are not retained.
 
 This free route is approved only for this repository's public pull-request content.
 Do not copy it to a private or sensitive repository unless the applicable model

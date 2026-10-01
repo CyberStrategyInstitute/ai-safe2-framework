@@ -6,6 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "pr-agent.yml"
 CONFIG = ROOT / ".pr_agent.toml"
+PREFLIGHT_POLICY = ROOT / ".ai-safe2" / "pr-agent-preflight-policy.json"
 
 
 def _workflow_value(name: str) -> str:
@@ -17,14 +18,18 @@ def _workflow_value(name: str) -> str:
 
 def test_provider_chain_is_pinned_and_consistent():
     config = tomllib.loads(CONFIG.read_text(encoding="utf-8"))["config"]
-    workflow_primary = _workflow_value("PR_AGENT_PRIMARY_MODEL")
+    policy_candidates = json.loads(PREFLIGHT_POLICY.read_text(encoding="utf-8"))["candidates"]
+    workflow_candidates = json.loads(_workflow_value("PR_AGENT_FREE_CANDIDATES"))
     workflow_fallbacks = json.loads(_workflow_value("PR_AGENT_FALLBACK_MODELS"))
 
-    assert workflow_primary == config["model"]
+    assert workflow_candidates == policy_candidates
+    assert len(workflow_candidates) == 3
+    assert len(set(workflow_candidates)) == 3
+    assert all(model.endswith(":free") for model in workflow_candidates)
+    assert config["model"] == f"openrouter/{workflow_candidates[0]}"
     assert workflow_fallbacks == config["fallback_models"]
-    assert "openrouter/free" not in [workflow_primary, *workflow_fallbacks]
-    assert all(model != "openrouter/auto" for model in [workflow_primary, *workflow_fallbacks])
-    assert workflow_primary == "openrouter/qwen/qwen3.8-27b:free"
+    assert "openrouter/free" not in [*workflow_candidates, *workflow_fallbacks]
+    assert all(model != "openrouter/auto" for model in [*workflow_candidates, *workflow_fallbacks])
     assert workflow_fallbacks == ["gpt-5.6-luna"]
 
 
@@ -52,6 +57,10 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert "provider_execution:" in workflow
     assert "selected_model: modelMatch?.[1] || null" in workflow
     assert "final_model: observedModels.at(-1) || null" in workflow
+    assert "id: preflight" in workflow
+    assert "steps.preflight.outputs.available == 'true'" in workflow
+    assert "config.model: openrouter/${{ steps.preflight.outputs.selected_model }}" in workflow
+    assert "preflight_receipt_sha256" in workflow
 
 
 def test_unrelated_pr_comments_cannot_cancel_an_active_review():
