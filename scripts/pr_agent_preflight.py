@@ -163,6 +163,22 @@ def endpoint_health(model: dict[str, Any], payload: dict[str, Any]) -> dict[str,
     }
 
 
+def model_details_url(model: dict[str, Any]) -> str:
+    model_id = str(model["id"])
+    details_path = model.get("links", {}).get("details")
+    # Catalog links for :free variants may resolve to the canonical paid model.
+    # Preserve the exact variant so health and zero-price evidence describe the
+    # route that will actually receive the review.
+    if model_id.endswith(":free") or not details_path:
+        author, slug = model_id.split("/", 1)
+        details_path = (
+            "/api/v1/models/"
+            f"{urllib.parse.quote(author, safe='')}/"
+            f"{urllib.parse.quote(slug, safe=':')}/endpoints"
+        )
+    return urllib.parse.urljoin("https://openrouter.ai", str(details_path))
+
+
 def shortlist_by_health(
     health: list[dict[str, Any]],
     *,
@@ -405,15 +421,7 @@ def main() -> int:
             receipt["eligible_free_models_in_catalog"] = eligible_total
             receipt["catalog_candidates"] = [model["id"] for model in candidate_models]
             for model in candidate_models:
-                details_path = model.get("links", {}).get("details")
-                if not details_path:
-                    author, slug = str(model["id"]).split("/", 1)
-                    details_path = (
-                        "/api/v1/models/"
-                        f"{urllib.parse.quote(author, safe='')}/"
-                        f"{urllib.parse.quote(slug, safe=':')}/endpoints"
-                    )
-                details_url = urllib.parse.urljoin("https://openrouter.ai", str(details_path))
+                details_url = model_details_url(model)
                 try:
                     endpoint_payload = _request_json(
                         details_url,

@@ -6,6 +6,7 @@ from scripts.pr_agent_preflight import (
     assess_response,
     eligible_candidates,
     endpoint_health,
+    model_details_url,
     select_pr_patch,
     shortlist_by_health,
 )
@@ -89,6 +90,17 @@ def test_health_shortlist_uses_live_status_and_recent_uptime():
         "nvidia/ultra:free",
         "nvidia/super:free",
     ]
+
+
+def test_free_variant_health_url_preserves_exact_model_id():
+    model = {
+        "id": "nvidia/example:free",
+        "links": {"details": "/api/v1/models/nvidia/example-paid/endpoints"},
+    }
+
+    assert model_details_url(model) == (
+        "https://openrouter.ai/api/v1/models/nvidia/example:free/endpoints"
+    )
 
 
 def test_canary_requires_both_defects_and_no_safe_false_positive():
