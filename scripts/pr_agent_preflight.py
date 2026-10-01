@@ -337,14 +337,26 @@ def probe_model(
                 "model": model,
                 "messages": [{"role": "user", "content": prompt}],
                 "temperature": request_policy["temperature"],
-                "max_tokens": request_policy["max_completion_tokens"],
+                "max_completion_tokens": request_policy["max_completion_tokens"],
+                "reasoning": {
+                    "max_tokens": request_policy["reasoning_max_tokens"],
+                    "exclude": True,
+                },
             },
             timeout=int(request_policy["timeout_seconds"]),
         )
         record["http_status"] = 200
-        content = response["choices"][0]["message"]["content"]
+        choice = response["choices"][0]
+        content = choice["message"]["content"]
         if not isinstance(content, str) or not content.strip():
-            raise ValueError("empty model response")
+            usage = response.get("usage", {})
+            completion_details = usage.get("completion_tokens_details", {})
+            raise ValueError(
+                "empty model response "
+                f"(finish_reason={choice.get('finish_reason')}, "
+                f"completion_tokens={usage.get('completion_tokens')}, "
+                f"reasoning_tokens={completion_details.get('reasoning_tokens')})"
+            )
         assessment = assess_response(content, policy)
         record.update(
             {

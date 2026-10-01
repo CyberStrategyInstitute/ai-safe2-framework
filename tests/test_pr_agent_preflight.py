@@ -145,6 +145,13 @@ def test_canary_rejects_malformed_or_incomplete_answers():
     assert assess_response(json.dumps(incomplete), POLICY)["passed"] is False
 
 
+def test_canary_reserves_visible_output_budget_after_reasoning():
+    request = POLICY["request"]
+
+    assert request["reasoning_max_tokens"] < request["max_completion_tokens"]
+    assert request["max_completion_tokens"] - request["reasoning_max_tokens"] >= 900
+
+
 def test_pr_patch_selection_prefers_security_sensitive_paths_and_bounds_content():
     limit = POLICY["pr_context"]["maximum_patch_characters"]
     files = [

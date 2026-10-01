@@ -18,7 +18,8 @@
   },
   "request": {
     "timeout_seconds": 30,
-    "max_completion_tokens": 900,
+    "max_completion_tokens": 1200,
+    "reasoning_max_tokens": 256,
     "temperature": 0
   },
   "selection": {
