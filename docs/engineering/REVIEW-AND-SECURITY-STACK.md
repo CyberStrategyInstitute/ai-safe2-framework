@@ -56,21 +56,22 @@ OpenRouter catalog placed Qwen 3.8 27B ahead of Laguna S on latency. A subsequen
 Qwen attempt received the full diff and the configured 75-second timeout but still
 held the provider call until the job limit, so PR-Agent's internal fallback never
 ran. The workflow therefore enforces failover outside PR-Agent: GitHub hard-stops
-the selected free attempt after six minutes, checks for a substantive publication,
+the selected free attempt after three minutes, checks for a substantive publication,
 and invokes one OpenAI attempt for at most five minutes only when needed. A later
 Laguna run passed the small canary but stalled after PR-Agent sent the entire
-58.5K-token diff. The free route is therefore capped at 32K tokens to reduce
-chunk count while preserving a bounded request and enough room to produce a
-bounded, risk-focused review instead of treating small-call availability as proof
-of full-diff throughput. The metered fallback retains a 64K budget. Receipts retain
-both budgets, route outcomes, and whether metered fallback ran.
+58.5K-token diff. Repeated multi-chunk trials at 16K and 32K still exhausted the
+three- and six-minute guards without publishing. The free route therefore performs
+one bounded 16K pass and records partial coverage instead of treating small-call
+availability as proof of full-diff throughput. The metered fallback retains a 64K,
+three-call budget. Receipts retain both budgets, coverage mode, route outcomes, and
+whether metered fallback ran.
 
 The selector deliberately canary-tests three models rather than every free model.
 Catalog and endpoint-health calls do not invoke a model; they cheaply narrow the
 curated pool before inference quota is spent. Testing every free model before every
 PR would consume the daily allowance without improving decision quality
-proportionally. Three canary calls plus up to two large-review chunks allow roughly
-10 complete large-PR attempts within a 50-request day. The claim is therefore "best passing
+proportionally. Three canary calls plus one bounded review allow roughly 12
+review attempts within a 50-request day. The claim is therefore "best passing
 model in the live, review-capable shortlist," never "globally best free model."
 
 The canary is versioned and includes two real defects plus a safe control. Rotate

@@ -31,13 +31,14 @@ jobs:
       (github.event_name == 'issue_comment' && github.event.issue.pull_request &&
       startsWith(github.event.comment.body, '/review')))
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 15
     env:
       PR_AGENT_FREE_MODEL_POOL: '["stealth/space-bunny-alpha","qwen/qwen3.8-27b:free","poolside/laguna-s-2.1:free","cohere/north-mini-code:free","nvidia/nemotron-3-ultra-550b-a55b:free","nvidia/nemotron-3.5-lightning:free","nvidia/nemotron-3-super-120b-a12b:free","nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"]'
       PR_AGENT_FALLBACK_MODELS: '["gpt-5.6-luna"]'
       PR_AGENT_OPENAI_FALLBACK_MODEL: gpt-5.6-luna
       PR_AGENT_REQUEST_TIMEOUT_SECONDS: "75"
-      PR_AGENT_FREE_MAX_MODEL_TOKENS: "32000"
+      PR_AGENT_FREE_MAX_MODEL_TOKENS: "16000"
+      PR_AGENT_FREE_MAX_CALLS: "1"
       PR_AGENT_OPENAI_MAX_MODEL_TOKENS: "64000"
     steps:
       - name: Record review attempt start
@@ -66,7 +67,7 @@ jobs:
         id: pr-agent-free
         if: steps.preflight.outputs.available == 'true'
         continue-on-error: true
-        timeout-minutes: 6
+        timeout-minutes: 3
         uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -77,6 +78,8 @@ jobs:
           config.max_model_tokens: ${{ env.PR_AGENT_FREE_MAX_MODEL_TOKENS }}
           config.ai_timeout: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
           config.reasoning_effort: low
+          pr_reviewer.enable_large_pr_chunking: "false"
+          pr_reviewer.max_number_of_calls: ${{ env.PR_AGENT_FREE_MAX_CALLS }}
           config.duplicate_examples: "true"
           config.num_retries: "0"
           config.retry_same_model_on_timeout: "false"
@@ -144,6 +147,8 @@ jobs:
           config.max_model_tokens: ${{ env.PR_AGENT_OPENAI_MAX_MODEL_TOKENS }}
           config.ai_timeout: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
           config.reasoning_effort: medium
+          pr_reviewer.enable_large_pr_chunking: "true"
+          pr_reviewer.max_number_of_calls: "3"
           config.duplicate_examples: "true"
           config.num_retries: "0"
           config.retry_same_model_on_timeout: "false"
@@ -173,6 +178,7 @@ jobs:
           FALLBACK_MODELS: ${{ env.PR_AGENT_FALLBACK_MODELS }}
           REQUEST_TIMEOUT_SECONDS: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
           FREE_MAX_MODEL_TOKENS: ${{ env.PR_AGENT_FREE_MAX_MODEL_TOKENS }}
+          FREE_MAX_CALLS: ${{ env.PR_AGENT_FREE_MAX_CALLS }}
           OPENAI_MAX_MODEL_TOKENS: ${{ env.PR_AGENT_OPENAI_MAX_MODEL_TOKENS }}
         with:
           github-token: ${{ github.token }}
@@ -274,6 +280,8 @@ jobs:
                 fallback_models: JSON.parse(process.env.FALLBACK_MODELS),
                 request_timeout_seconds: Number(process.env.REQUEST_TIMEOUT_SECONDS),
                 free_max_model_tokens: Number(process.env.FREE_MAX_MODEL_TOKENS),
+                free_max_number_of_calls: Number(process.env.FREE_MAX_CALLS),
+                free_coverage_mode: 'bounded_single_pass',
                 openai_max_model_tokens: Number(process.env.OPENAI_MAX_MODEL_TOKENS),
               },
               provider_execution: {

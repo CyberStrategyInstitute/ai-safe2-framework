@@ -2,7 +2,7 @@
 model = "openrouter/qwen/qwen3.8-27b:free"
 fallback_models = ["gpt-5.6-luna"]
 custom_model_max_tokens = 256000
-max_model_tokens = 32000
+max_model_tokens = 16000
 ai_timeout = 75
 reasoning_effort = "low"
 duplicate_examples = true
@@ -18,8 +18,8 @@ require_risk_assessment = true
 require_merge_recommendation = true
 require_priority_files = true
 enable_review_coverage_footer = true
-enable_large_pr_chunking = true
-max_number_of_calls = 3
+enable_large_pr_chunking = false
+max_number_of_calls = 1
 num_max_findings = 8
 extra_instructions = """\
 Prioritize correctness, authorization and policy boundaries, untrusted input handling,
