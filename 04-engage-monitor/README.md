@@ -13,7 +13,7 @@
 
 ## Authorization, oversight, and accountability evidence
 
-Apply the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Apply the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to separate deterministic interception, probabilistic authorization judgment, and
 deterministic actuation. Review forged approval/process artifacts with paired
 clean/attacked cases and legitimate-task utility in the

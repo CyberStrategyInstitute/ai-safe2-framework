@@ -119,7 +119,7 @@
     "challenge_lab": "challenges/README.md",
     "aism": "AISM/README.md",
     "technology_review": {
-      "status": "proposed documentation guidance",
+      "status": "v1.0 assessment methods",
       "methodology_version": "1.0",
       "entrypoint": "docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md",
       "evidence_assurance": "docs/EVIDENCE-ASSURANCE.md",

@@ -11,8 +11,7 @@
 
 ## Technology profiles and new validation candidates
 
-Record challenge results in the proposed
-[Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Record challenge results in the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 with [claim-level assurance](../docs/EVIDENCE-ASSURANCE.md). Keep C0-C5 claim
 maturity, E0-E5 assurance v1.0, technology contribution 0-5, and organizational
 AISM maturity separate; there is no automatic conversion. The

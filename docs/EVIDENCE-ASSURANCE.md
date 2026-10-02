@@ -3,15 +3,23 @@
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Method](https://img.shields.io/badge/Method-Evidence_Assurance-820F1A?style=flat-square)](./EVIDENCE-ASSURANCE.md)
-[![Status](https://img.shields.io/badge/Status-Proposed_v1.0-808080?style=flat-square)](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+[![Status](https://img.shields.io/badge/Status-Method_v1.0-808080?style=flat-square)](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
 ---
 
+**Method version:** 1.0
+
+**Documentation updated:** 2026-10-02
+
+**Status:** CSI assessment method for use and feedback
+
+Start with the [AISM assessment guide](../AISM/ASSESSMENT-GUIDE.md) for a practical workflow.
+
 ## Rubric and status
 
-This proposed documentation rubric is separate from organizational maturity,
+This v1.0 evidence rubric is separate from organizational maturity,
 contribution capability, framework conformance, and Challenge Lab claim maturity.
 Always name it **AI SAFE² Evidence Assurance v1.0** with each E rating.
 
@@ -58,7 +66,7 @@ Generalizing from one environment requires additional evidence.
 The current [AISM CLI model](../safe2/data/aism-model-v1.json) maps E0-E5 to numeric
 weights. [`scoring.py`](../safe2/aism/scoring.py) combines those weights with
 verification caps and evidence-category completeness. Those input and summary
-grades are not automatically assurance-v1.0 ratings. This proposal changes no
+grades are not automatically assurance-v1.0 ratings. This method changes no
 weights, caps, formulas, schemas, or previously issued results.
 
 Store assurance assessments in the separate [Technology Card](./templates/TECHNOLOGY-CARD.md).

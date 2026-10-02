@@ -10,7 +10,7 @@
 
 ## Evidence workflow
 
-This proposed assessment guidance strengthens review of logging, traceability,
+This assessment guidance strengthens review of logging, traceability,
 incident response, oversight, and learning under existing controls. It does not
 add statutory deadlines, determine legal liability, or establish that a notified
 organization was breached. The named legal/incident owner determines applicable

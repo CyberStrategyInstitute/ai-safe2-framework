@@ -13,7 +13,7 @@
 
 ## Technology contribution and enforcement boundaries
 
-Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to distinguish a design from tested sandbox, tool, data, and credential enforcement.
 Record interception, authorization judgment, actuation, supported OS/kernel paths,
 and uncovered dependencies separately. Test composed permitted-service capabilities

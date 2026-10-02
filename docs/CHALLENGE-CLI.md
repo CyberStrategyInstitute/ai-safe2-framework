@@ -15,7 +15,7 @@
 
 ## Technology profiles and claim separation
 
-Use the proposed [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to record what imported or executed challenge evidence supports. Bundle integrity
 and reproduced grading do not establish independent execution or production
 enforcement. The [validation candidates](./TECHNOLOGY-VALIDATION.md) are proposed

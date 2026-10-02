@@ -10,8 +10,7 @@ itself create a CLI 0.6.0 release.
 
 ## Technology contribution scope
 
-For an artifact review, reuse system identity and scope in the proposed
-[Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md).
+For an artifact review, reuse system identity and scope in the [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md).
 Record covered paths/planes, exclusions, external dependencies, and unknowns
 per control. An included implementation is not a tested mechanism, and an
 excluded benchmark may supply evidence without becoming deployed enforcement.

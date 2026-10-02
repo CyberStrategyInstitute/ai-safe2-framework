@@ -17,8 +17,8 @@ capabilities until their implementation, validation, and release evidence exist.
 
 The [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md),
 [assurance rubric](./EVIDENCE-ASSURANCE.md), and
-[candidate backlog](../research/technology-contribution-examples.md) add proposed
-documentation guidance. A machine schema, CLI command, adapter, and dashboard
+[candidate backlog](../research/technology-contribution-examples.md) provide v1.0
+assessment methods. A machine schema, CLI command, adapter, and dashboard
 view remain unimplemented, separately scoped work. Their capability gate requires
 claim-level provenance, strict unknown/N/A states, validated control IDs,
 separation from organizational scoring and current E0-E5 weights, explicit

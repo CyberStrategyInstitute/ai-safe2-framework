@@ -3,8 +3,11 @@
 [Framework Home](../../README.md) | [AISM](../../AISM/README.md) | [Technology Profile](../TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Evidence Assurance](../EVIDENCE-ASSURANCE.md)
 
 Copy this template for one artifact/version and assessment boundary. This is a
-Markdown review record under proposed AISM-TCP v1.0, not a CLI assessment payload.
+Markdown review record under AISM-TCP v1.0, not a CLI assessment payload.
 Replace placeholders; preserve `not_assessed`, unknowns, and reasons for N/A.
+
+Use the [AISM assessment guide](../../AISM/ASSESSMENT-GUIDE.md) for step-by-step
+instructions and an illustrative review.
 
 ## Identity and scope
 

@@ -11,7 +11,7 @@
 
 ## Reviewing technology contributions
 
-Use the proposed [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) to
+Use the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) to
 document each example's actual implemented, enforced, validated, and evidenced
 controls. The [nine-example backlog](../research/technology-contribution-examples.md)
 illustrates source-attributed candidates; it adds no runnable integration to this

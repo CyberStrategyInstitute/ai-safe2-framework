@@ -13,7 +13,7 @@
 
 ## Technology learning and validation intake
 
-Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 and [nine-example backlog](../research/technology-contribution-examples.md) when
 converting research or incidents into test candidates. Benchmarks validate tested
 decisions; they do not enforce production actions or establish Level 5 governance.

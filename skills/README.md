@@ -11,7 +11,7 @@
 
 ## Technology review and evidence boundaries
 
-Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 and [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) for tool/skill reviews.
 Distinguish inspecting an artifact from enforcing an action and testing its effects.
 The [validation guide](../docs/TECHNOLOGY-VALIDATION.md) covers poisoned skills,

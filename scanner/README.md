@@ -15,7 +15,7 @@
 
 A static scan score is not organizational maturity or a technology contribution
 score. Pattern matches and source availability do not prove runtime enforcement.
-The proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 records static evidence as `evidences` or `addresses` where justified, with
 [assurance](../docs/EVIDENCE-ASSURANCE.md) assigned to the specific claim.
 Independent validation requires an identified evaluator and material results;

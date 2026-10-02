@@ -48,8 +48,8 @@ clearly labeled current guidance. If the release is still a draft, link its
 actual reviewed commit or PR and disclose that status.
 
 For a documentation-only update, replace installation commands with a short
-linked reading or copy-and-review workflow. Keep draft status and proposed
-methodology status explicit; merging documentation does not create a package
+linked reading or copy-and-review workflow. State the announcement status and
+the actual methodology version/status explicitly; merging documentation does not create a package
 release or certify its examples. Retain only sections relevant to the update.
 Do not claim a release, test, integration, endorsement, or future capability that
 has not been independently confirmed.

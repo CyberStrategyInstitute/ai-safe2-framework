@@ -9,7 +9,7 @@ We do not accept theoretical ideas without justification. We accept **Engineered
 ## Technology and evidence contributions
 
 For a technology, paper, benchmark, or incident-driven proposal, include the
-proposed [Technology Card](docs/templates/TECHNOLOGY-CARD.md) with canonical
+[Technology Card](docs/templates/TECHNOLOGY-CARD.md) with canonical
 control IDs, source/version attribution, effects, coverage, test boundary,
 failure behavior, and residual risk. Use the
 [Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) and

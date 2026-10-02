@@ -29,7 +29,7 @@ or product capability.
 
 ## Pinned outside the active release path
 
-The separate proposed [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+The separate [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 and [Evidence Assurance v1.0](./EVIDENCE-ASSURANCE.md) now document a scoped review
 method for the [nine new examples](../research/technology-contribution-examples.md).
 They do not change current CLI E0-E5 weights or organizational scoring semantics.

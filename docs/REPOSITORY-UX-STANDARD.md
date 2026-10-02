@@ -14,8 +14,8 @@ Use **AI Sovereign Maturity (AISM) Model** on first mention, then **AISM** or
 The Sovereignty Score and Sovereignty Matrix retain their distinct names.
 Preserve original terminology in historical records and asset filenames.
 
-Keep organizational AISM maturity, proposed
-[technology contribution](./TECHNOLOGY-CONTRIBUTION-PROFILE.md), proposed
+Keep organizational AISM maturity,
+[technology contribution](./TECHNOLOGY-CONTRIBUTION-PROFILE.md),
 [assurance v1.0](./EVIDENCE-ASSURANCE.md), Challenge Lab C0-C5, and native tool
 scores visibly separate. Major review/implementation surfaces should link to
 the method and [Technology Card](./templates/TECHNOLOGY-CARD.md) where relevant.
@@ -88,9 +88,9 @@ absolute GitHub URLs pinned to a verified release tag or merged commit. For a
 documentation update, use a linked review workflow instead of installation
 commands. Mark draft announcements and proposed methods explicitly.
 
-The [technology-contribution release-note draft](./releases/DRAFT-TECHNOLOGY-CONTRIBUTION.md)
-illustrates this structure for a documentation update. It is a draft artifact,
-not a published GitHub release.
+Completed release announcements are prepared outside the repository for the
+release owner to copy into GitHub. Do not commit announcement drafts unless
+the owner explicitly requests a repository archive.
 
 Major landing pages should make these destinations easy to reach:
 

@@ -69,7 +69,7 @@ and Learning Engine; prevention remains a separate control claim.
 describes a Linux reference monitor and human-authorized damage boundary. Its
 abstract names eBPF LSM enforcement and supported propagation paths. That is
 author-described architecture; this review did not inspect its implementation
-or reproduce its tests. The design statement can be cited as E1 under proposed
+or reproduce its tests. The design statement can be cited as E1 under
 assurance v1.0, while runtime effectiveness and all pillar scores remain unassessed.
 Kernel support, IPC limitations, cloud paths, descendants, and stopping authority
 must be reviewed before a control claim is promoted.
@@ -171,7 +171,7 @@ Do not import the brief's E2 implementation rating for this event.
 ## Delivery backlog and ownership
 
 The methodology, reusable card, validation guide, incident guide, navigation,
-and discovery pointers are delivered as proposed documentation in this PR.
+and discovery pointers are provided as v1.0 assessment methods.
 Runtime integrations and live experiments remain proposed work:
 
 | Work | Proposed owner role, to be assigned | Completion evidence |

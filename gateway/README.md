@@ -14,7 +14,7 @@
 ## Gateway evidence and technology contribution
 
 Gateway action-risk routing scores are separate from organizational AISM
-maturity and the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md).
+maturity and the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md).
 Record provider, tool, and agent-to-agent boundaries separately. A mediated
 provider request does not establish containment of direct tool or delegated paths.
 Use the [validation guide](../docs/TECHNOLOGY-VALIDATION.md) to test interception,
