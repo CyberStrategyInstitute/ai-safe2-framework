@@ -10,6 +10,13 @@
 
 ## Outcome and acceptance boundary
 
+The current full name is **AI Sovereign Maturity (AISM) Model**, shortened to
+AISM or AISM Model. Current headings, root navigation, scoring/assessment prose,
+and naming guidance use this expansion. Historical submission wording and asset
+filenames remain intact with a current-name pointer; the Sovereignty Score and
+Sovereignty Matrix retain their distinct names. This is an editorial naming
+change with no scoring, schema, command, or path migration.
+
 This proposal separates organizational AISM maturity, scoped artifact contribution,
 and claim-level assurance throughout repository guidance. Acceptance requires a
 central review method, reusable card, all nine supplied example dispositions,

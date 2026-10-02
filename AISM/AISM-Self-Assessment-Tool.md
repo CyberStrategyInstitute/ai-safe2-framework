@@ -14,7 +14,7 @@ code, or vendor test cannot fill an organizational cell by itself. Keep
 [assurance v1.0](../docs/EVIDENCE-ASSURANCE.md) separate from current CLI grades;
 unreviewed cells remain unscored rather than inheriting a product contribution.
 
-## AI Sovereignty Matrix — Organizational Assessment Questionnaire
+## AI Sovereign Maturity (AISM) Model: Organizational Assessment Questionnaire
 
 **Version:** 1.0  
 **Date:** March 2026  

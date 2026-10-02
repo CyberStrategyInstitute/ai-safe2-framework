@@ -14,6 +14,10 @@
 **Website:** [cyberstrategyinstitute.com](https://cyberstrategyinstitute.com)
 **GitHub:** [github.com/CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework/)
 
+**Current terminology note:** The model is now named
+[AI Sovereign Maturity (AISM) Model](../AISM/README.md). This v2.1 submission
+retains its original wording and version context below.
+
 ---
 
 ## Core Thesis

@@ -2,7 +2,7 @@
   <img src="../assets/AI Sovereignty Maturity Ladder v2.png" alt="AISM Model Overview" width="100%" />
 </div>
 
-# AISM Maturity Model
+# AI Sovereign Maturity (AISM) Model
 
 **Framework:** AI SAFE2 v3.1
 **Organization:** Cyber Strategy Institute
@@ -21,7 +21,7 @@ formal verification, retained authority, or organizational sovereignty.
 
 ## Overview
 
-The AISM Maturity Model describes how organizations evolve their AI governance capabilities from unstructured experimentation to full sovereignty. It provides a common language for assessing current state, setting targets, and tracking progress.
+The AI Sovereign Maturity (AISM) Model describes how organizations evolve their AI governance capabilities from unstructured experimentation to full sovereignty. It provides a common language for assessing current state, setting targets, and tracking progress.
 
 The model has five levels. Each level is defined by specific capabilities across all five AISM pillars. Organizations do not choose a level. They earn it by demonstrating the capabilities that characterize it.
 

@@ -15,19 +15,19 @@ robustness, and sovereignty assurance. The proposed
 instruments. They do not change this scoring rubric, its weights, the current
 CLI evidence-grade calculation, or previously issued maturity results.
 
-## AI Sovereignty Maturity Scoring Framework for the Agentic AI Era
+## AI Sovereign Maturity (AISM) Model: Scoring Framework for the Agentic AI Era
 
 **Version:** 1.0  
 **Date:** March 2026  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE2 v3.1 — AI Sovereignty Matrix (AISM)
+**Framework:** AI SAFE2 v3.1; AI Sovereign Maturity (AISM) Model
 **Status:** Proposed Methodology
 
 ---
 
 ## 1. Purpose & Scope
 
-This document establishes a rigorous, quantitative scoring methodology for the AI Sovereignty Matrix (AISM), enabling organizations to measure, benchmark, and advance their maturity across all five pillars of the AI SAFE2 Framework v3.1. The methodology is purpose-built for the **agentic AI era** — where autonomous multi-agent systems, non-human identities (NHI), and distributed AI architectures create governance challenges that no existing framework fully addresses.
+This document establishes a rigorous, quantitative scoring methodology for the AI Sovereign Maturity (AISM) Model, enabling organizations to measure, benchmark, and advance their maturity across all five pillars of the AI SAFE2 Framework v3.1. The methodology is purpose-built for the **agentic AI era**, where autonomous multi-agent systems, non-human identities (NHI), and distributed AI architectures create governance challenges that no existing framework fully addresses.
 
 ### 1.1 Design Principles
 

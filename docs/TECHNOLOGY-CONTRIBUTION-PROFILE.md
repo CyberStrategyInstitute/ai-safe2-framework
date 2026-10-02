@@ -13,6 +13,7 @@
 
 An organization earns an AISM maturity level. A product, paper, benchmark,
 investigation, or technique contributes evidence toward specific controls.
+The organizational model's full name is **AI Sovereign Maturity (AISM) Model**.
 This proposed v1.0 review instrument, AISM-TCP, separates that contribution from
 organization-wide scoring. It is documentation guidance pending governance
 review, not a certification, implemented CLI feature, or new framework control.

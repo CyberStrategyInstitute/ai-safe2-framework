@@ -130,6 +130,9 @@ An organization earns an AISM maturity level. A technology contributes evidence
 for specific controls within a defined boundary. A paper, benchmark, released
 implementation, or vendor test cannot establish organizational maturity by itself.
 
+AISM is the **AI Sovereign Maturity (AISM) Model**, which assesses the organization's
+retained authority and governance capabilities across five pillars and six dimensions.
+
 | Review instrument | Question | Starting point |
 |---|---|---|
 | AISM Sovereignty Score | How mature is the organization's governance across five pillars and six dimensions? | [Organizational methodology](AISM/AISM-Scoring-Matrix-Methodology.md) |
@@ -165,7 +168,7 @@ dashboard scoring integration is implemented by this proposal. See the
 | [Pillar 4: Engage & Monitor](04-engage-monitor/) | Detection pipelines, HITL, platform monitoring |
 | [Pillar 5: Evolve & Educate](05-evolve-educate/) | Adversarial evaluation and red-team artifacts |
 | [Cross-Pillar Governance](00-cross-pillar/) | CP.1 through CP.10, ACT tiers, HEAR doctrine, replication governance, CP.5 profiles |
-| [AISM](AISM/) | Organizational maturity model and control mapping |
+| [AI Sovereign Maturity (AISM) Model](AISM/) | Organizational maturity model and control mapping |
 | [Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Proposed artifact review, evidence assurance, adoption rule, and reusable card |
 | [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
 | [NEXUS](NEXUS/) | CSI reference implementation for governed agent-to-agent and agent-to-tool interactions |
@@ -516,7 +519,7 @@ See [EVOLUTION.md](EVOLUTION.md) for the full history.
 ├── 03-fail-safe-recovery/     # Pillar 3
 ├── 04-engage-monitor/         # Pillar 4
 ├── 05-evolve-educate/         # Pillar 5
-├── AISM/                      # Normative AI Sovereignty Maturity Model
+├── AISM/                      # Normative AI Sovereign Maturity (AISM) Model
 ├── safe2/                     # Unified agent-facing Python CLI and AISM runtime
 ├── NEXUS/                     # CSI reference implementation
 ├── challenges/                # Falsification and replication experiments

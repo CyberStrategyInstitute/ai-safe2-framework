@@ -197,6 +197,10 @@ For automated assessment or implementation guidance:
 
 ## Technology contribution and evidence interpretation
 
+- The current model name is **AI Sovereign Maturity (AISM) Model**. Use AISM or
+  AISM Model after first mention; Sovereignty Score and Sovereignty Matrix remain
+  distinct named instruments. Preserve historical wording and asset paths.
+
 - Organizational AISM maturity is separate from an artifact's scoped contribution.
 - Use `docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md`, `docs/EVIDENCE-ASSURANCE.md`,
   and `docs/templates/TECHNOLOGY-CARD.md` for the proposed documentation method.

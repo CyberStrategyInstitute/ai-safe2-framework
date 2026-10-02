@@ -9,6 +9,11 @@
 
 ## Assessment terminology and technology-review navigation
 
+Use **AI Sovereign Maturity (AISM) Model** on first mention, then **AISM** or
+**AISM Model**. AISM expands to AI Sovereign Maturity; Model follows the acronym.
+The Sovereignty Score and Sovereignty Matrix retain their distinct names.
+Preserve original terminology in historical records and asset filenames.
+
 Keep organizational AISM maturity, proposed
 [technology contribution](./TECHNOLOGY-CONTRIBUTION-PROFILE.md), proposed
 [assurance v1.0](./EVIDENCE-ASSURANCE.md), Challenge Lab C0-C5, and native tool
