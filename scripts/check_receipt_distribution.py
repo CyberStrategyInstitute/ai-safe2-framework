@@ -35,8 +35,33 @@ def main():
                          "release-readiness-source-v1", "release-readiness-manifest-v1",
                          "operational-truth-source-v1", "operational-truth-manifest-v1",
                          "change-monitor-v1", "aism-remediation-source-v1",
-                         "aism-remediation-plan-v1"):
+                         "aism-remediation-plan-v1", "development-policy-v1",
+                         "development-plan-source-v1", "development-plan-v1",
+                         "development-receipt-source-v1", "development-receipt-v1",
+                         "review-policy-v1"):
             invoke("schema", "export", contract)
+        development_source = {
+            "schema_version": "safe2.development-plan-source.v1",
+            "task_id": "wheel-development", "title": "Document a bounded behavior",
+            "outcome": "The installed wheel exposes the development method.",
+            "delivery_shape": "bounded", "risk_tier": "low",
+            "change_kind": "documentation", "work_product": "reusable",
+            "acceptance_conditions": ["The installed command produces a sealed plan."],
+            "scope": {"include": ["docs/example.md"], "exclude": ["release automation"]},
+            "trust_boundaries": [], "assumptions": [], "unknowns": [],
+            "design": {"summary": "Use the packaged default policy.", "approved": False},
+            "isolation": {"strategy": "branch", "reference": "docs/wheel-smoke"},
+            "testing": {"mode": "render-validation"},
+        }
+        development_source_path = root / "development-source.json"
+        development_source_path.write_text(json.dumps(development_source), encoding="utf-8")
+        development_plan_path = root / "development-plan.json"
+        development = invoke("dev", "plan", str(development_source_path),
+                             "--output", str(development_plan_path))
+        assert development["disposition"] == "ready"
+        verified_development = invoke("dev", "verify", str(development_plan_path))
+        assert verified_development["valid"] is True
+        assert verified_development["authorization_granted"] is False
         (root / "test_demo.py").write_text("def test_ok():\n    assert True\n", encoding="utf-8")
         capture = root / "capture.json"
         invoke("feedback", "capture-pytest", "--execute", "--python", str(Path(sys.executable).resolve(strict=True)),
@@ -147,7 +172,7 @@ def main():
         assert remediation["remediation_authorized"] is False
         assert remediation["conformance_claim"] is False
         assert remediation_card.is_file()
-    print("Installed distribution: receipts, twenty-four schemas, pytest capture, harness intake, operational truth, agent-input monitoring, AISM remediation, system identity, failure localization, assessment scope, change attribution, and release readiness passed")
+    print("Installed distribution: receipts, schemas, development planning, pytest capture, harness intake, operational truth, agent-input monitoring, AISM remediation, system identity, failure localization, assessment scope, change attribution, and release readiness passed")
 
 
 if __name__ == "__main__":

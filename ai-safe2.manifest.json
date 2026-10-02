@@ -26,6 +26,13 @@
     "agent_input_change_schema": "safe2/data/change-monitor-v1.schema.json",
     "aism_remediation_source_schema": "safe2/data/aism-remediation-source-v1.schema.json",
     "aism_remediation_plan_schema": "safe2/data/aism-remediation-plan-v1.schema.json",
+    "development_policy": ".ai-safe2/development-policy.json",
+    "development_policy_schema": "safe2/data/development-policy-v1.schema.json",
+    "development_plan_source_schema": "safe2/data/development-plan-source-v1.schema.json",
+    "development_plan_schema": "safe2/data/development-plan-v1.schema.json",
+    "development_receipt_source_schema": "safe2/data/development-receipt-source-v1.schema.json",
+    "development_receipt_schema": "safe2/data/development-receipt-v1.schema.json",
+    "review_policy_schema": "safe2/data/review-policy-v1.schema.json",
     "challenge_001_fixture_protocol": "safe2/data/challenge_001_protocol.json",
     "uas_regulatory_profile": "00-cross-pillar/unbiased-ai/uas-profile-v1.json",
     "nexus_schemas": "NEXUS/schemas/",
@@ -148,7 +155,8 @@
       "evidence_workflow": "safe2 evidence ... then safe2 aism ingest ...",
       "operational_truth_workflow": "safe2 evidence truth POLICY EVIDENCE... --output FILE --card FILE",
       "agent_input_monitor": "safe2 evidence changes ROOT --baseline FILE --output FILE",
-      "aism_remediation_workflow": "safe2 aism plan SOURCE ASSESSMENT --system-identity FILE --assessment-scope FILE --output FILE --card FILE"
+      "aism_remediation_workflow": "safe2 aism plan SOURCE ASSESSMENT --system-identity FILE --assessment-scope FILE --output FILE --card FILE",
+      "development_workflow": "safe2 dev plan SOURCE --output PLAN then safe2 dev receipt PLAN SOURCE --artifact-root DIR --output RECEIPT"
     }
   }
 }

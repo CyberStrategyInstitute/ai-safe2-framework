@@ -19,6 +19,26 @@ as Kev in shadow mode and a sanitized external provider such as Jev for eligible
 adjudication. None of these models can approve, merge, release, deploy, grant an
 exception, access a secret, or change policy.
 
+Material work enters this PR workflow through the
+[AI SAFE² Development Method](AI-SAFE2-DEVELOPMENT-METHOD.md). Its plan and
+receipt record delivery shape, risk, scope, test cycle, before/after evidence,
+reviews, findings, rollback, and the exact revision. They improve the review
+input but do not change the authority order above.
+
+The workflow is proportionate to the kind of change. It does not spend model
+calls on images, links, research notes, or editorial-only updates, and it does
+not mistake a text-only framework change for executable code.
+
+| Route | Trigger | Review applied | Compliance posture |
+| --- | --- | --- | --- |
+| Solution | Executable code, tests, automation, configuration, enforcement policy, or a shipped contract changes | Full deterministic evidence, PR-Agent availability, and optional Greptile status | Full candidate; still requires human authority |
+| Framework | Normative pillar, control, architecture, or development-method meaning changes without solution code | Cross-reference and framework-impact report plus human consistency decision | Partial until impact is confirmed |
+| Content | Images, links, research notes, release prose, or simple editorial changes | Changed-artifact and ordinary deterministic validation only | Partial; no code or framework-conformance claim |
+
+`review:solution`, `review:framework`, and `review:content` labels may explicitly
+select a route for ambiguous prose. A label can escalate review, but it cannot
+downgrade a detected solution change. Conflicting route labels fail closed.
+
 Kev currently exposes TypeSafe-compatible typed questions and a local
 `/v1/systemone` endpoint. Its own server documentation also makes clear that
 authentication must be explicitly configured; local availability is not the
@@ -32,7 +52,13 @@ integration claims until validated on our corpus. See the
 
 ```mermaid
 flowchart TD
-    A[Pull request opened or updated] --> B[Exact base and head revisions]
+    S[Development plan] --> T[Isolated implementation and evidence]
+    T --> U[Development receipt]
+    U --> A[Pull request opened or updated]
+    A --> R{Deterministic change route}
+    R -->|Solution| B[Exact base and head revisions]
+    R -->|Framework| RI[Framework impact and dependency report]
+    R -->|Content| RC[Lightweight changed-artifact verification]
     B --> C[Deterministic path-risk policy]
     B --> D[AI SAFE2 0.9 environment baseline and current inventory]
     C --> E[Required evidence and specialist review lenses]
@@ -52,10 +78,18 @@ flowchart TD
     N --> O[Deterministic CI and security gates]
     O --> P[Reviewer decision card and artifacts]
     P --> Q[Named human merge or release decision]
+    RI --> Q
+    RC --> Q
 ```
 
 The provider branch is disabled unless explicitly configured. The normal path
 today is deterministic review planning plus PR-Agent, CI, and human review.
+
+The development receipt is optional evidence for repositories that have not yet
+adopted the module. Where policy requires it, absence is reported as missing
+evidence rather than silently inferred as a failed implementation or a clean
+review. The PR workflow independently reruns deterministic checks against the
+submitted head; it never trusts a development receipt as a substitute for CI.
 
 The packaging and deployment decision is recorded in
 [ADR: Decision Firewall Architecture](ADR-DECISION-FIREWALL-ARCHITECTURE.md).
@@ -126,6 +160,15 @@ Repository-owned policy maps changed paths to low, medium, high, or critical
 risk. Rules supply required evidence and specialist review lenses. Models may
 recommend escalation, but they cannot lower this risk floor.
 
+Before risk-tier selection, the repository classifies the change route. Any
+detected solution file forces the solution route even when the PR also contains
+documentation or carries a lower-intensity label. Framework-only changes extract
+changed identifiers and headings and search the rest of the repository for
+possible dependencies. Those references are decision leads, not proof that an
+edit is required or that consistency has been achieved. The report therefore
+requires a named human to decide whether related framework surfaces must be
+updated before merge. Content-only changes skip whole-repository semantic review.
+
 AI SAFE2 critical examples include release code, package identity, authorization,
 policy enforcement, settlement, and protocol boundaries. Be You critical examples
 include encrypted storage, privacy controls, Android manifests, backup/network
@@ -178,7 +221,7 @@ recorded evidence gaps. They never become approval.
 
 ### 6. Run semantic and deterministic review
 
-PR-Agent receives the repository risk policy and focuses on material correctness,
+For solution changes, PR-Agent receives the repository risk policy and focuses on material correctness,
 security, privacy, evidence, migration, and regression issues. Its operational
 failure is visible but advisory. Completion is established by a postcondition,
 not by the action wrapper's exit status: a current-attempt, substantive review
@@ -188,14 +231,38 @@ receipt and a failed advisory-availability check. That check is not included in
 the required-status ruleset, so it cannot silently pass and cannot stop an
 otherwise authorized merge.
 
-The routine provider chain uses pinned, role-specific OpenRouter free endpoints,
-then the official OpenAI API:
+Framework and content routes do not invoke PR-Agent or the repository's Greptile
+status verifier. This avoids consuming advisory-review capacity where there is no
+solution code to inspect. Greptile's separate GitHub App automation must use the
+same label/path policy in its service settings if automatic reviews are enabled;
+repository Actions cannot prevent an independently configured App webhook from
+starting a review.
 
-1. Poolside Laguna S 2.1 for the primary software-engineering review.
-2. Qwen 3.8 27B for an independent coding and structured-output fallback.
-3. NVIDIA Nemotron 3 Ultra for deeper architecture and security reasoning.
-4. Cohere North Mini Code for a fast, code-specialized final free attempt.
-5. `gpt-5.6-luna` as the metered final fallback.
+Before the full review, the workflow queries OpenRouter's live catalog and endpoint
+metadata. An eight-model, review-capable pool is filtered for zero price, sufficient
+context, expiration, endpoint status, and recent uptime. Degraded endpoints remain
+eligible above the 75% uptime floor because the canary, rather than a status label,
+provides the final availability proof. The three healthiest routes
+receive the same bounded preflight call. The versioned benchmark contains two known
+security defects, a verified-safe control, and up to 12,000 characters from one
+risk-prioritized hunk in the actual PR. Strict JSON, correct defect location,
+false-positive discipline, and concision are hard gates. Only passing models are
+ranked; score is primary, then response length and latency. The PR hunk tests
+context compatibility but does not earn quality points because it has no established
+ground truth.
+
+The winner publishes its risk-focused, bounded-hunk OpenRouter review directly. This
+free route is explicitly partial coverage for oversized PRs; its receipt records the
+bounded single-pass mode and reviewed path. This prevents a model
+that passes a moderate canary from being handed an unbounded large
+diff; PR #370 demonstrated that a 58.5K-token request could still stall. If no
+candidate passes, or the winner does not publish a substantive review,
+PR-Agent uses `gpt-5.6-luna` as the metered final fallback with multi-chunk coverage
+and a 64K budget.
+
+Manual `/review` runs explicitly check out `refs/pull/<number>/head`. GitHub loads
+`issue_comment` workflow definitions from the default branch, so this binding is
+required to ensure repository policy, preflight code, and the reviewed SHA agree.
 
 Exact model IDs are part of the execution configuration and receipt context.
 `openrouter/free` is excluded because random model selection makes replay and
@@ -203,9 +270,11 @@ before/after comparison unreliable. Inkling is excluded because multimodal input
 does not materially improve routine text-diff review and would add a provider data
 boundary. Run details and provider-reported cost are emitted for operating
 evidence, and same-model retries are disabled to preserve the 50-request daily
-free allowance. The retained execution receipt records the ordered provider policy
-and the model observed in the substantive publication. Prove one representative PR
-before a batch review. The open-source
+free allowance. At most three of the currently healthy, eligible routes are tested
+per PR; the receipt retains the catalog total, curated pool, endpoint health, and
+shortlist so "best in shortlist" cannot be misrepresented as "globally best." It
+records hashes rather than raw responses or patches. Prove
+one representative PR before a batch review. The open-source
 reviewer, OpenRouter gateway, selected model hosts, and metered OpenAI fallback are
 separate cost, privacy, and trust boundaries. GitHub Models is intentionally
 excluded because the service was retired on July 30, 2026.

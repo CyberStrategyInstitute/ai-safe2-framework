@@ -171,6 +171,7 @@ dashboard scoring integration is implemented by this proposal. See the
 | [AI Sovereign Maturity (AISM) Model](AISM/) | Organizational maturity model and control mapping |
 | [Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Proposed artifact review, evidence assurance, adoption rule, and reusable card |
 | [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
+| [AI SAFE² Development Method](docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) | Risk-adjusted planning, implementation evidence, reviews, and completion receipts |
 | [NEXUS](NEXUS/) | CSI reference implementation for governed agent-to-agent and agent-to-tool interactions |
 | [Research](research/) | Threat research and deep-dive control evidence |
 | [Challenge Lab](challenges/) | Open falsification and replication experiments |

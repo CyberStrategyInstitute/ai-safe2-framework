@@ -9,6 +9,8 @@
 
 [Task receipts: local artifact verification](../docs/TASK-RECEIPTS.md)
 
+[Development method: plan, prove, and receipt changes](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md)
+
 [Agent system identity manifests](../docs/SYSTEM-IDENTITY.md)
 
 [Failure localization](../docs/FAILURE-LOCALIZATION.md)
@@ -115,6 +117,10 @@ pytest tests/ scanner/tests/
 | `safe2 doctor PATH` | Metadata-only harness, shell, host, and WSL discovery | Inventory evidence only; does not claim assessment or conformance |
 | `safe2 decision evaluate REQUEST --output FILE [--ledger FILE]` | Apply the deterministic decision firewall and optionally collect shadow System One evidence | Advisory review routing only; all merge, release, deploy, exception, and policy authority remains false |
 | `safe2 decision replay CORPUS --output FILE` | Replay labeled routing cases after policy, rubric, threshold, or provider changes | Deterministic regression evidence; does not claim model calibration unless a provider evaluation is separately supplied |
+| `safe2 dev plan SOURCE --output FILE` | Derive delivery-shape and risk-adjusted development requirements | Exit 0 means planning prerequisites are represented; grants no implementation or action authority |
+| `safe2 dev receipt PLAN SOURCE --artifact-root DIR --output FILE` | Bind required development evidence, final revision, test cycle, reviews, findings, and rollback | Evidence consistency only; never authorizes completion, merge, release, deployment, or risk acceptance |
+| `safe2 dev verify ARTIFACT` | Verify a development plan or receipt contract and integrity seal | Structural and byte-integrity check only |
+| `safe2 dev replay CORPUS --output FILE` | Replay deterministic development-policy cases | Policy regression only; no live model or calibration claim |
 | `safe2 feedback record ...` | Capture sanitized operational friction | Records typed outcome and verification state in local JSONL |
 | `safe2 feedback summary FILE` | Measure recurring friction and completion-verification gap | Aggregates local evidence without sending telemetry |
 | `safe2 schema list` | Discover packaged machine-readable contracts | Returns stable schema identifiers as JSON |

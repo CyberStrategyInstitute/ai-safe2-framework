@@ -1,0 +1,27 @@
+{
+  "source": {
+    "schema_version": "safe2.development-plan-source.v1",
+    "task_id": "eval.critical-architecture",
+    "title": "Change release authorization architecture",
+    "outcome": "Release authorization uses a new policy boundary.",
+    "delivery_shape": "architectural",
+    "risk_tier": "critical",
+    "change_kind": "code",
+    "work_product": "reusable",
+    "acceptance_conditions": ["Unauthorized release paths fail closed."],
+    "scope": {"include": ["safe2/release/**"], "exclude": ["production deployment"]},
+    "trust_boundaries": ["CI identity to package registry."],
+    "assumptions": [],
+    "unknowns": ["Final key-custody owner is not yet named."],
+    "design": {"summary": "Introduce a separate authorization adapter.", "approved": false},
+    "isolation": {"strategy": "worktree", "reference": "feat/release-boundary"},
+    "testing": {"mode": "contract-first"}
+  },
+  "expected": {
+    "disposition": "review_required",
+    "gap_codes": ["design_approval_missing", "design_approval_reference_missing", "design_artifact_missing", "threat_model_missing"],
+    "human_design_approval": true,
+    "threat_model": true,
+    "greptile_recommended": true
+  }
+}

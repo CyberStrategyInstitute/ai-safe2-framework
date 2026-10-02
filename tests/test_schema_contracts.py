@@ -48,6 +48,12 @@ def test_all_packaged_schemas_are_valid_draft_2020_12():
         "aism-assessment-v1.schema.json",
         "aism-remediation-source-v1.schema.json",
         "aism-remediation-plan-v1.schema.json",
+        "development-policy-v1.schema.json",
+        "development-plan-source-v1.schema.json",
+        "development-plan-v1.schema.json",
+        "development-receipt-source-v1.schema.json",
+        "development-receipt-v1.schema.json",
+        "review-policy-v1.schema.json",
         "discovery-v1.schema.json",
         "discovery-drift-v1.schema.json",
         "environment-posture-v1.schema.json",
@@ -106,6 +112,9 @@ def test_schema_catalog_lists_and_exports_packaged_contracts(tmp_path: Path):
     assert "friction-summary-v1" in catalog["schemas"]
     assert "aism-remediation-source-v1" in catalog["schemas"]
     assert "aism-remediation-plan-v1" in catalog["schemas"]
+    assert "development-plan-v1" in catalog["schemas"]
+    assert "development-receipt-v1" in catalog["schemas"]
+    assert "review-policy-v1" in catalog["schemas"]
 
     output = tmp_path / "schema.json"
     exported = runner.invoke(

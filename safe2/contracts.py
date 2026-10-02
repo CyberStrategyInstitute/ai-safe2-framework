@@ -53,6 +53,12 @@ SCHEMAS = {
     "decision-request-v1": "decision-request-v1.schema.json",
     "decision-result-v1": "decision-result-v1.schema.json",
     "decision-routing-policy-v1": "decision-routing-policy-v1.schema.json",
+    "development-policy-v1": "development-policy-v1.schema.json",
+    "development-plan-source-v1": "development-plan-source-v1.schema.json",
+    "development-plan-v1": "development-plan-v1.schema.json",
+    "development-receipt-source-v1": "development-receipt-source-v1.schema.json",
+    "development-receipt-v1": "development-receipt-v1.schema.json",
+    "review-policy-v1": "review-policy-v1.schema.json",
 }
 
 

@@ -26,15 +26,49 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
 
+      - name: Initialize evidence directory
+        env:
+          EVIDENCE_DIR: ${{ runner.temp }}/review-evidence
+        run: mkdir -p "$EVIDENCE_DIR"
+
+      - name: Select proportionate review route and assess framework impact
+        id: route
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.event.repository.default_branch }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          LABELS_JSON: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+          EVIDENCE_DIR: ${{ runner.temp }}/review-evidence
+        run: >-
+          python scripts/classify_pr_change.py
+          --base "$BASE_SHA" --head "$HEAD_SHA"
+          --labels-json "$LABELS_JSON"
+          --json-output "$EVIDENCE_DIR/change-route.json"
+          --markdown-output "$EVIDENCE_DIR/change-review.md"
+
+      - name: Publish proportionate non-solution review
+        if: steps.route.outputs.route != 'solution'
+        env:
+          EVIDENCE_DIR: ${{ runner.temp }}/review-evidence
+        run: cat "$EVIDENCE_DIR/change-review.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Enforce lightweight changed-artifact validation
+        if: steps.route.outputs.route == 'content' && steps.route.outputs.validation_passed != 'true'
+        run: |
+          cat "${{ runner.temp }}/review-evidence/change-review.md"
+          exit 1
+
       - name: Set up Python
+        if: steps.route.outputs.route == 'solution'
         uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: "3.12"
 
       - name: Install released AI SAFE2 CLI
+        if: steps.route.outputs.route == 'solution'
         run: python -m pip install "ai-safe2==0.9.0"
 
       - name: Capture comparable AI SAFE2 environment evidence
+        if: steps.route.outputs.route == 'solution'
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.event.repository.default_branch }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -52,6 +86,7 @@ jobs:
           safe2 --version > "$EVIDENCE_DIR/cli-version.txt"
 
       - name: Build reviewer decision record
+        if: steps.route.outputs.route == 'solution'
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before || github.event.repository.default_branch }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -78,9 +113,10 @@ jobs:
           sha256sum "$EVIDENCE_DIR"/* > "$EVIDENCE_DIR/SHA256SUMS"
 
       - name: Retain before, after, and decision evidence
+        if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: review-evidence-${{ github.event.pull_request.number || github.run_id }}-${{ github.sha }}
+          name: review-evidence-${{ steps.route.outputs.route }}-${{ github.event.pull_request.number || github.run_id }}-${{ github.sha }}
           path: ${{ runner.temp }}/review-evidence/
           retention-days: 90
           if-no-files-found: error
