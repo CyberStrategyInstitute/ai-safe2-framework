@@ -80,6 +80,18 @@ the user outcome, a GitHub-safe before/after table, copyable quick start, eviden
 boundaries, validation, invariants, and clearly separated roadmap items. Preview
 the completed Markdown in GitHub before publishing and verify every link.
 
+Release notes must also link directly to the relevant repository entry point,
+changed guides/specifications, examples/templates, and validation evidence.
+Keep these repository destinations separate from the note's section navigation.
+Link material updates beside their descriptions, using concrete labels and
+absolute GitHub URLs pinned to a verified release tag or merged commit. For a
+documentation update, use a linked review workflow instead of installation
+commands. Mark draft announcements and proposed methods explicitly.
+
+The [technology-contribution release-note draft](./releases/DRAFT-TECHNOLOGY-CONTRIBUTION.md)
+illustrates this structure for a documentation update. It is a draft artifact,
+not a published GitHub release.
+
 Major landing pages should make these destinations easy to reach:
 
 - Framework Home
