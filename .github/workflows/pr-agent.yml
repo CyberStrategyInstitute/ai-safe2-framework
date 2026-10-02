@@ -41,21 +41,41 @@ jobs:
       PR_AGENT_FREE_MAX_CALLS: "1"
       PR_AGENT_OPENAI_MAX_MODEL_TOKENS: "64000"
     steps:
-      - name: Record review attempt start
-        id: attempt
-        shell: bash
-        run: echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
-
       - name: Check out review policy and preflight
         uses: actions/checkout@v7
         with:
           # issue_comment workflows are loaded from the default branch. Explicitly
           # bind scripts and repository policy to the PR revision being reviewed.
           ref: ${{ github.event.pull_request.head.sha || format('refs/pull/{0}/head', github.event.issue.number) }}
+          fetch-depth: 0
           persist-credentials: false
+
+      - name: Select proportionate review route
+        id: route
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.repository.default_branch }}
+          LABELS_JSON: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: >-
+          python scripts/classify_pr_change.py
+          --base "$BASE_SHA" --head HEAD
+          --labels-json "$LABELS_JSON"
+          --json-output change-route.json
+          --markdown-output change-route.md
+
+      - name: Explain skipped AI review
+        if: steps.route.outputs.route != 'solution'
+        shell: bash
+        run: cat change-route.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Record review attempt start
+        if: steps.route.outputs.route == 'solution'
+        id: attempt
+        shell: bash
+        run: echo "started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_OUTPUT"
 
       - name: Select an available free review model
         id: preflight
+        if: steps.route.outputs.route == 'solution'
         continue-on-error: true
         timeout-minutes: 2
         shell: bash
@@ -70,7 +90,7 @@ jobs:
 
       - name: Publish bounded OpenRouter review
         id: pr-agent-free
-        if: steps.preflight.outputs.available == 'true'
+        if: steps.route.outputs.route == 'solution' && steps.preflight.outputs.available == 'true'
         continue-on-error: true
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v8
         env:
@@ -111,7 +131,7 @@ jobs:
 
       - name: Check free-route publication
         id: free-publication
-        if: always()
+        if: always() && steps.route.outputs.route == 'solution'
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v8
         env:
           ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
@@ -153,7 +173,7 @@ jobs:
 
       - name: Review with metered OpenAI fallback
         id: pr-agent-openai
-        if: always() && steps.free-publication.outputs.produced != 'true'
+        if: always() && steps.route.outputs.route == 'solution' && steps.free-publication.outputs.produced != 'true'
         continue-on-error: true
         timeout-minutes: 5
         uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
@@ -180,7 +200,7 @@ jobs:
           github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
 
       - name: Verify substantive review publication
-        if: always()
+        if: always() && steps.route.outputs.route == 'solution'
         uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v8
         env:
           FREE_ACTION_OUTCOME: ${{ steps.pr-agent-free.outcome }}
@@ -356,7 +376,7 @@ jobs:
             if (!produced) core.setFailed('PR-Agent did not publish a substantive review; see execution receipt.');
 
       - name: Retain PR-Agent execution receipt
-        if: always()
+        if: always() && steps.route.outputs.route == 'solution'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: pr-agent-execution-${{ github.run_id }}-${{ github.run_attempt }}

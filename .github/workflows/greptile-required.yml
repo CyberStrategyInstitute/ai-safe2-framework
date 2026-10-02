@@ -24,8 +24,24 @@ jobs:
       - name: Checkout gate implementation
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
+      - name: Select proportionate review route
+        id: route
+        env:
+          LABELS_JSON: ${{ toJSON(github.event.pull_request.labels.*.name) }}
+        run: >-
+          python scripts/classify_pr_change.py
+          --base "${{ github.event.pull_request.base.sha }}"
+          --head HEAD --labels-json "$LABELS_JSON"
+          --json-output change-route.json
+          --markdown-output change-route.md
+      - name: Explain skipped strategic review
+        if: steps.route.outputs.route != 'solution'
+        run: cat change-route.md >> "$GITHUB_STEP_SUMMARY"
       - name: Report whether Greptile reviewed this revision
+        if: steps.route.outputs.route == 'solution'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-

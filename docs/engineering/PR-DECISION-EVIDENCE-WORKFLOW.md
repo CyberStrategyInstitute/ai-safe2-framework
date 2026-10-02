@@ -25,6 +25,20 @@ receipt record delivery shape, risk, scope, test cycle, before/after evidence,
 reviews, findings, rollback, and the exact revision. They improve the review
 input but do not change the authority order above.
 
+The workflow is proportionate to the kind of change. It does not spend model
+calls on images, links, research notes, or editorial-only updates, and it does
+not mistake a text-only framework change for executable code.
+
+| Route | Trigger | Review applied | Compliance posture |
+| --- | --- | --- | --- |
+| Solution | Executable code, tests, automation, configuration, enforcement policy, or a shipped contract changes | Full deterministic evidence, PR-Agent availability, and optional Greptile status | Full candidate; still requires human authority |
+| Framework | Normative pillar, control, architecture, or development-method meaning changes without solution code | Cross-reference and framework-impact report plus human consistency decision | Partial until impact is confirmed |
+| Content | Images, links, research notes, release prose, or simple editorial changes | Changed-artifact and ordinary deterministic validation only | Partial; no code or framework-conformance claim |
+
+`review:solution`, `review:framework`, and `review:content` labels may explicitly
+select a route for ambiguous prose. A label can escalate review, but it cannot
+downgrade a detected solution change. Conflicting route labels fail closed.
+
 Kev currently exposes TypeSafe-compatible typed questions and a local
 `/v1/systemone` endpoint. Its own server documentation also makes clear that
 authentication must be explicitly configured; local availability is not the
@@ -41,7 +55,10 @@ flowchart TD
     S[Development plan] --> T[Isolated implementation and evidence]
     T --> U[Development receipt]
     U --> A[Pull request opened or updated]
-    A --> B[Exact base and head revisions]
+    A --> R{Deterministic change route}
+    R -->|Solution| B[Exact base and head revisions]
+    R -->|Framework| RI[Framework impact and dependency report]
+    R -->|Content| RC[Lightweight changed-artifact verification]
     B --> C[Deterministic path-risk policy]
     B --> D[AI SAFE2 0.9 environment baseline and current inventory]
     C --> E[Required evidence and specialist review lenses]
@@ -61,6 +78,8 @@ flowchart TD
     N --> O[Deterministic CI and security gates]
     O --> P[Reviewer decision card and artifacts]
     P --> Q[Named human merge or release decision]
+    RI --> Q
+    RC --> Q
 ```
 
 The provider branch is disabled unless explicitly configured. The normal path
@@ -141,6 +160,15 @@ Repository-owned policy maps changed paths to low, medium, high, or critical
 risk. Rules supply required evidence and specialist review lenses. Models may
 recommend escalation, but they cannot lower this risk floor.
 
+Before risk-tier selection, the repository classifies the change route. Any
+detected solution file forces the solution route even when the PR also contains
+documentation or carries a lower-intensity label. Framework-only changes extract
+changed identifiers and headings and search the rest of the repository for
+possible dependencies. Those references are decision leads, not proof that an
+edit is required or that consistency has been achieved. The report therefore
+requires a named human to decide whether related framework surfaces must be
+updated before merge. Content-only changes skip whole-repository semantic review.
+
 AI SAFE2 critical examples include release code, package identity, authorization,
 policy enforcement, settlement, and protocol boundaries. Be You critical examples
 include encrypted storage, privacy controls, Android manifests, backup/network
@@ -193,7 +221,7 @@ recorded evidence gaps. They never become approval.
 
 ### 6. Run semantic and deterministic review
 
-PR-Agent receives the repository risk policy and focuses on material correctness,
+For solution changes, PR-Agent receives the repository risk policy and focuses on material correctness,
 security, privacy, evidence, migration, and regression issues. Its operational
 failure is visible but advisory. Completion is established by a postcondition,
 not by the action wrapper's exit status: a current-attempt, substantive review
@@ -202,6 +230,13 @@ verification failure, or silence produces a retained `review_unavailable`
 receipt and a failed advisory-availability check. That check is not included in
 the required-status ruleset, so it cannot silently pass and cannot stop an
 otherwise authorized merge.
+
+Framework and content routes do not invoke PR-Agent or the repository's Greptile
+status verifier. This avoids consuming advisory-review capacity where there is no
+solution code to inspect. Greptile's separate GitHub App automation must use the
+same label/path policy in its service settings if automatic reviews are enabled;
+repository Actions cannot prevent an independently configured App webhook from
+starting a review.
 
 Before the full review, the workflow queries OpenRouter's live catalog and endpoint
 metadata. An eight-model, review-capable pool is filtered for zero price, sufficient
