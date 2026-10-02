@@ -39,7 +39,7 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert config["num_retries"] == 0
     assert config["retry_same_model_on_timeout"] is False
     assert config["ai_timeout"] == 75
-    assert config["max_model_tokens"] == 16000
+    assert config["max_model_tokens"] == 32000
     assert config["output_run_details"] is True
     assert config["output_run_cost"] is True
     assert "provider_policy:" in workflow
@@ -50,7 +50,9 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert "id: pr-agent-free" in workflow
     assert "id: free-publication" in workflow
     assert "id: pr-agent-openai" in workflow
-    assert "timeout-minutes: 3" in workflow
+    assert "timeout-minutes: 6" in workflow
+    assert 'PR_AGENT_FREE_MAX_MODEL_TOKENS: "32000"' in workflow
+    assert "config.reasoning_effort: low" in workflow
     assert "timeout-minutes: 5" in workflow
     assert "fallback_invoked: fallbackInvoked" in workflow
     assert "active_failure_count: activeFailures.length" in workflow

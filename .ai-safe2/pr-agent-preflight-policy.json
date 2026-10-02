@@ -13,7 +13,7 @@
   ],
   "discovery": {
     "shortlist_size": 3,
-    "minimum_context_tokens": 16000,
+    "minimum_context_tokens": 32000,
     "minimum_recent_uptime_percent": 75
   },
   "request": {

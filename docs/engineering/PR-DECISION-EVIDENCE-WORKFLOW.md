@@ -216,7 +216,7 @@ ranked; score is primary, then response length and latency. The PR hunk tests
 context compatibility but does not earn quality points because it has no established
 ground truth.
 
-The winner receives a risk-focused PR-Agent review capped at 16K input tokens. This
+The winner receives a risk-focused PR-Agent review capped at 32K input tokens. This
 prevents a model that passes a moderate canary from being handed an unbounded large
 diff; PR #370 demonstrated that a 58.5K-token request could still stall. If no
 candidate passes, or the winner does not publish a substantive review,

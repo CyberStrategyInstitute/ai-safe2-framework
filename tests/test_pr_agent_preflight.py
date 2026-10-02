@@ -46,7 +46,7 @@ def test_catalog_filter_retains_only_configured_zero_cost_text_models():
     retained, eligible_total = eligible_candidates(
         catalog,
         configured,
-        16000,
+        32000,
         datetime(2026, 10, 1, tzinfo=UTC),
     )
 
