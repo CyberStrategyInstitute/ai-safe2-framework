@@ -11,6 +11,15 @@
 
 ---
 
+## Emerging evidence and technology mapping
+
+Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+to record whether a source implements, validates, evidences, or challenges each
+mapped control. The [nine-example review](../research/technology-contribution-examples.md)
+adds candidates for composed capabilities, forged process evidence, and learned-policy
+poisoning tests. These are review targets under existing canonical IDs, not new
+threat/control totals or completed Challenge Lab results.
+
 ## Overview
 
 Agentic AI systems introduce a threat landscape that does not exist in traditional software environments. When an AI system can autonomously call tools, spawn sub-agents, retrieve external data, and execute multi-step workflows, the attack surface expands dramatically. Threats that are theoretical for a chatbot are operational for an autonomous agent.

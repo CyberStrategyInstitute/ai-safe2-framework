@@ -13,6 +13,18 @@ extensions rather than unfinished core workflows.
 This is a planning document. Items below a released version are not delivered
 capabilities until their implementation, validation, and release evidence exist.
 
+## Technology-profile implementation proposal
+
+The [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md),
+[assurance rubric](./EVIDENCE-ASSURANCE.md), and
+[candidate backlog](../research/technology-contribution-examples.md) add proposed
+documentation guidance. A machine schema, CLI command, adapter, and dashboard
+view remain unimplemented, separately scoped work. Their capability gate requires
+claim-level provenance, strict unknown/N/A states, validated control IDs,
+separation from organizational scoring and current E0-E5 weights, explicit
+translation/migration rules, negative tests, and end-to-end review. This proposal
+is not assigned to a released CLI version and does not delay the active release path.
+
 ## Release policy
 
 - Separate code review from product release. One capability may require several

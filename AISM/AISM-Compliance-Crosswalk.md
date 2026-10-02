@@ -4,6 +4,16 @@
 </div>
 
 # AISM Compliance Crosswalk
+## Procurement evidence boundary
+
+A standards mapping supports control selection; it does not establish compliance,
+certification, or legal approval. For procurement, apply the proposed
+[Technology Contribution Profile adoption rule](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule):
+required-control fit, enforcement location, evidence, failure behavior, sovereignty,
+residual risk, and integration value. Keep claim-level
+[assurance](../docs/EVIDENCE-ASSURANCE.md) separate from organizational maturity
+and existing CLI numeric grades.
+
 ## AI SAFE2 Framework v3.1 — Cross-Framework Compliance Mapping
 
 **Version:** 1.1  

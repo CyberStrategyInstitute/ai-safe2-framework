@@ -195,6 +195,21 @@ For automated assessment or implementation guidance:
 7. Use `challenges/` for falsification evidence and keep challenge maturity separate from framework/profile conformance.
 8. Preserve source version and implementation provenance in generated evidence.
 
+## Technology contribution and evidence interpretation
+
+- Organizational AISM maturity is separate from an artifact's scoped contribution.
+- Use `docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md`, `docs/EVIDENCE-ASSURANCE.md`,
+  and `docs/templates/TECHNOLOGY-CARD.md` for the proposed documentation method.
+- Distinguish addresses, implements, enforces, validates, evidences, and challenges.
+- Keep assurance-v1.0 E0-E5 separate from the existing CLI numeric `grade` fields,
+  verification caps, category completeness, and Challenge Lab C0-C5.
+- Do not infer a product's organizational maturity or promote candidate examples
+  to independent validation. Missing evidence stays unassessed.
+- TCP schemas, commands, integrations, and dashboard views are not implemented.
+  Read `research/technology-contribution-examples.md` for source limits and backlog.
+- Use `docs/TECHNOLOGY-VALIDATION.md` and `docs/INCIDENT-EVIDENCE.md` for proposed
+  test and incident-review practices; frozen Challenge 001 remains unchanged.
+
 ## Useful entry points
 
 - Framework: `README.md`

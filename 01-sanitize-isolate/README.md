@@ -11,6 +11,17 @@
 
 ---
 
+## Technology contribution and enforcement boundaries
+
+Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+to distinguish a design from tested sandbox, tool, data, and credential enforcement.
+Record interception, authorization judgment, actuation, supported OS/kernel paths,
+and uncovered dependencies separately. Test composed permitted-service capabilities
+and independent file/network side effects using the [validation guide](../docs/TECHNOLOGY-VALIDATION.md).
+The [candidate backlog](../research/technology-contribution-examples.md) frames
+ContractWarden, OpenShell/Sentry, ActionGuard, and policy-learning reviews without
+endorsing their deployment or assigning organizational maturity.
+
 ## 🎯 The Problem. The Realization. The Solution.
 
 **Problem:** AI agents process inputs from everywhere: users, retrieved documents, tool outputs, emails, web pages, API responses. Every one of these is a potential injection surface. Most defenses check only what the user typed. Attackers know this. They embed instructions in documents the agent will retrieve, in tool responses, in content the agent scrapes. By the time the agent acts on those instructions, the injection is invisible in the logs.

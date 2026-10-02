@@ -10,6 +10,15 @@
 
 ---
 
+## Scope of maturity claims
+
+Organizations earn these five maturity levels. Technologies supply scoped
+control evidence. Use the proposed
+[Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) to
+describe a candidate's demonstrated capability without calling it "AISM Level 4"
+or "AISM Level 5." A continuously run benchmark alone does not demonstrate
+formal verification, retained authority, or organizational sovereignty.
+
 ## Overview
 
 The AISM Maturity Model describes how organizations evolve their AI governance capabilities from unstructured experimentation to full sovereignty. It provides a common language for assessing current state, setting targets, and tracking progress.

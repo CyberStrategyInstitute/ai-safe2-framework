@@ -11,6 +11,16 @@
 
 ---
 
+## Technology evidence and incident reconstruction
+
+A log-producing technology `evidences` a control; it does not automatically
+`enforce` it. Apply the proposed [Evidence Assurance rubric](../docs/EVIDENCE-ASSURANCE.md)
+to individual claims with provenance, collection gaps, and tested boundaries.
+The [incident evidence guide](../docs/INCIDENT-EVIDENCE.md) covers reconstruction,
+affected-party uncertainty, custodianship, retention/hold decisions, and notification
+ownership. Preserve evidence outside the governed component's authority where
+required; hashes alone do not establish truth or independent validation.
+
 ## 🎯 The Problem. The Realization. The Solution.
 
 **Problem:** AI agents make decisions continuously. Most of those decisions leave no traceable record. When an agent produces a wrong answer, behaves unexpectedly, or causes a downstream failure, the question "what actually happened?" has no answer. The execution is a black box. Post-mortems take weeks. Compliance audits produce evidence for what was supposed to happen, not what did.

@@ -23,6 +23,18 @@
 
 ---
 
+## Organizational maturity and technology contribution
+
+The Sovereignty Score assesses an organization across five pillars and six
+dimensions. Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+for a product, paper, benchmark, technique, investigation, or accountability input.
+Record its control effects and scoped contribution alongside the proposed
+[Evidence Assurance Level](../docs/EVIDENCE-ASSURANCE.md); neither determines
+organizational maturity. Start with the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md)
+and [nine examples](../research/technology-contribution-examples.md).
+The existing CLI's E0-E5 numeric grades are separate from assurance v1.0 and keep
+their current formulas and verification caps. No TCP command is implemented here.
+
 ## Why AISM Exists
 
 AI systems are probabilistic by nature. They hallucinate, drift, and behave unexpectedly under novel conditions. Yet most organizations deploy them with governance designed for static software: write a policy, run an audit, repeat annually.

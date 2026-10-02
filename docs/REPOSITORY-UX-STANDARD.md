@@ -7,6 +7,17 @@
 
 ---
 
+## Assessment terminology and technology-review navigation
+
+Keep organizational AISM maturity, proposed
+[technology contribution](./TECHNOLOGY-CONTRIBUTION-PROFILE.md), proposed
+[assurance v1.0](./EVIDENCE-ASSURANCE.md), Challenge Lab C0-C5, and native tool
+scores visibly separate. Major review/implementation surfaces should link to
+the method and [Technology Card](./templates/TECHNOLOGY-CARD.md) where relevant.
+Do not present a candidate, design, or adoption backlog as a validated integration.
+The [repository coverage review](./TECHNOLOGY-PROFILE-REPO-REVIEW.md) records affected
+surfaces, unchanged contracts, and deferred runtime work.
+
 ## Purpose
 
 Every user-facing README, guide, implementation page, research index, example landing page, and major module page should feel like part of one AI SAFE² repository rather than an unrelated collection of projects.

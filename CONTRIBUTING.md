@@ -6,6 +6,17 @@ We do not accept theoretical ideas without justification. We accept **Engineered
 
 ---
 
+## Technology and evidence contributions
+
+For a technology, paper, benchmark, or incident-driven proposal, include the
+proposed [Technology Card](docs/templates/TECHNOLOGY-CARD.md) with canonical
+control IDs, source/version attribution, effects, coverage, test boundary,
+failure behavior, and residual risk. Use the
+[Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) and
+[Evidence Assurance v1.0](docs/EVIDENCE-ASSURANCE.md) without changing organizational
+scoring or current CLI grades. New experiments require separate preregistration;
+source availability, vendor tests, and standards mappings are not certification.
+
 ## 📋 The Contribution Process
 
 ### 1. Identify the Type of Contribution

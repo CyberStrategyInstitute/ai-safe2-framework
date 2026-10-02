@@ -12,6 +12,15 @@ provider-neutral import contracts, and an explicitly authorized process seam.
 It validates experiment and evidence mechanics; it does not by itself establish
 real-agent effectiveness, process containment, or independent replication.
 
+## Technology validation candidates
+
+The proposed [technology validation guide](./TECHNOLOGY-VALIDATION.md) frames
+clean/attacked pairs, process-mimicking attacks, composed service capabilities,
+independent side-effect observation, and learned-policy integrity tests.
+These require separate owned/versioned experiment plans; they do not alter
+Challenge 001's frozen cases or the current execution boundary. Preserve
+[assurance](./EVIDENCE-ASSURANCE.md), challenge maturity, and contribution separately.
+
 ## Implementation boundary
 
 - Native runner: deterministic inert dictionary state; no processes, networks,
