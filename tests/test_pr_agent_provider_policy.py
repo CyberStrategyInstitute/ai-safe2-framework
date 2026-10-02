@@ -74,3 +74,11 @@ def test_unrelated_pr_comments_cannot_cancel_an_active_review():
     assert "!startsWith(github.event.comment.body, '/review')" in workflow
     assert "github.run_id || 'review'" in workflow
     assert "cancel-in-progress: true" in workflow
+
+
+def test_manual_review_checks_out_the_pull_request_revision():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "github.event.pull_request.head.sha" in workflow
+    assert "format('refs/pull/{0}/head', github.event.issue.number)" in workflow
+    assert "persist-credentials: false" in workflow

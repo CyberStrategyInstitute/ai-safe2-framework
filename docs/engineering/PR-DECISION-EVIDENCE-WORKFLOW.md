@@ -225,6 +225,10 @@ candidate passes, or the winner does not publish a substantive review,
 `gpt-5.6-luna` is the metered final fallback with multi-chunk coverage and a 64K
 budget.
 
+Manual `/review` runs explicitly check out `refs/pull/<number>/head`. GitHub loads
+`issue_comment` workflow definitions from the default branch, so this binding is
+required to ensure repository policy, preflight code, and the reviewed SHA agree.
+
 Exact model IDs are part of the execution configuration and receipt context.
 `openrouter/free` is excluded because random model selection makes replay and
 before/after comparison unreliable. Inkling is excluded because multimodal input

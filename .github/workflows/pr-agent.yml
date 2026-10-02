@@ -48,6 +48,11 @@ jobs:
 
       - name: Check out review policy and preflight
         uses: actions/checkout@v7
+        with:
+          # issue_comment workflows are loaded from the default branch. Explicitly
+          # bind scripts and repository policy to the PR revision being reviewed.
+          ref: ${{ github.event.pull_request.head.sha || format('refs/pull/{0}/head', github.event.issue.number) }}
+          persist-credentials: false
 
       - name: Select an available free review model
         id: preflight
