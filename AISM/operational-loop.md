@@ -10,6 +10,16 @@
 
 ---
 
+## Incident and technology evidence intake
+
+Feed new research, bypasses, and incidents into the loop through the proposed
+[Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md),
+[validation guide](../docs/TECHNOLOGY-VALIDATION.md), and
+[incident evidence workflow](../docs/INCIDENT-EVIDENCE.md).
+Preserve source attribution, notification/retention ownership, and a versioned
+regression candidate. Learned-policy changes require approval, provenance,
+poisoning/conflict review, and rollback; adaptation alone earns no maturity level.
+
 ## Overview
 
 Static AI governance does not work. A policy document written in January does not protect an autonomous agent from a novel prompt injection technique discovered in March. An annual audit does not catch a runaway agent in real time. A compliance checklist does not tell you when an agent has started behaving outside its sanctioned parameters.

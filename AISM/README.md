@@ -2,7 +2,7 @@
   <img src="../assets/Full AISM Ecosystem - Agentic AI Operating System Framework v2.png" alt="Full AISM Ecosystem" width="100%" />
 </div>
 
-# AISM: AI Sovereignty Maturity Model
+# AI Sovereign Maturity (AISM) Model
 ### The maturity and operating model for deterministic governance of probabilistic AI
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
@@ -23,17 +23,34 @@
 
 ---
 
+## Organizational maturity and technology contribution
+
+The Sovereignty Score assesses an organization across five pillars and six
+dimensions. Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+for a product, paper, benchmark, technique, investigation, or accountability input.
+Record its control effects and scoped contribution alongside the proposed
+[Evidence Assurance Level](../docs/EVIDENCE-ASSURANCE.md); neither determines
+organizational maturity. Start with the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md)
+and [nine examples](../research/technology-contribution-examples.md).
+The existing CLI's E0-E5 numeric grades are separate from assurance v1.0 and keep
+their current formulas and verification caps. No TCP command is implemented here.
+
 ## Why AISM Exists
 
 AI systems are probabilistic by nature. They hallucinate, drift, and behave unexpectedly under novel conditions. Yet most organizations deploy them with governance designed for static software: write a policy, run an audit, repeat annually.
 
 That approach fails for autonomous agents.
 
-The **AI Sovereignty Maturity Model (AISM)** exists because agentic AI systems require governance that operates at runtime, not just at policy review time. When an agent is autonomously executing tasks, chaining tool calls, and orchestrating other agents, a PDF policy document offers no protection. What you need is deterministic control layered over probabilistic behavior, enforced continuously, and measurable at every stage.
+The **AI Sovereign Maturity (AISM) Model** exists because agentic AI systems require governance that operates at runtime, not just at policy review time. When an agent is autonomously executing tasks, chaining tool calls, and orchestrating other agents, a PDF policy document offers no protection. What you need is deterministic control layered over probabilistic behavior, enforced continuously, and measurable at every stage.
 
 AISM provides exactly that.
 
 ### Relationship to AI SAFE² v3.1
+
+**Naming:** AISM expands to **AI Sovereign Maturity**; Model follows the acronym.
+Use **AISM** or **AISM Model** after the first mention. Sovereign refers to the
+organization's retained authority over AI. The Sovereignty Score and Sovereignty
+Matrix retain their names as distinct instruments within the model.
 
 AI SAFE² defines the control and evidence requirements. AISM provides the maturity model used to measure how completely and robustly an organization has operationalized those requirements.
 

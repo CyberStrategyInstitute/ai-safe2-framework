@@ -9,6 +9,15 @@
 
 ---
 
+## Profile discovery and technology review
+
+The MCP server's taxonomy/profile access does not itself establish runtime
+enforcement or product maturity. Use the proposed
+[Technology Contribution Profile](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+to identify actual control effects and claim evidence at each plane.
+[Assurance v1.0](../../docs/EVIDENCE-ASSURANCE.md) is documentation guidance;
+no new MCP assessment tool or schema is exposed by this proposal.
+
 ## What This Is
 
 The AI SAFE² MCP server exposes the framework taxonomy and MCP security profile to MCP-compatible clients such as Claude Code, Codex, Cursor, and other agent runtimes.

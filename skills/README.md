@@ -9,6 +9,15 @@
 
 ---
 
+## Technology review and evidence boundaries
+
+Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) for tool/skill reviews.
+Distinguish inspecting an artifact from enforcing an action and testing its effects.
+The [validation guide](../docs/TECHNOLOGY-VALIDATION.md) covers poisoned skills,
+forged process evidence, and probabilistic authorization. Skill trust verdicts
+and screening scores are not organizational AISM levels or assurance ratings.
+
 ## What This Folder Does
 
 The `skills/` surface packages AI SAFE² guidance for AI assistants and provides the Python MCP server used for live control lookup and governance workflows.

@@ -4,7 +4,17 @@
 </div>
 
 # AISM Self-Assessment Tool
-## AI Sovereignty Matrix — Organizational Assessment Questionnaire
+## Using technology evidence in an organizational assessment
+
+Record candidate evidence in the proposed
+[Technology Card](../docs/templates/TECHNOLOGY-CARD.md) before deciding which
+organizational assessment cells it supports. Confirm local deployment, ownership,
+control coverage, tested boundaries, and complementary controls. A paper, released
+code, or vendor test cannot fill an organizational cell by itself. Keep
+[assurance v1.0](../docs/EVIDENCE-ASSURANCE.md) separate from current CLI grades;
+unreviewed cells remain unscored rather than inheriting a product contribution.
+
+## AI Sovereign Maturity (AISM) Model: Organizational Assessment Questionnaire
 
 **Version:** 1.0  
 **Date:** March 2026  

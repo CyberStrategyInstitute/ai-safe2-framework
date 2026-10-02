@@ -31,6 +31,17 @@ teams, and CI systems. JSON is the canonical agent exchange format. Human
 decisions remain human-owned and can be rendered as Markdown or HTML Decision
 Cards.
 
+## Technology profiles and current CLI compatibility
+
+The proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) are separate Markdown
+review instruments. No TCP command, schema, or automatic score translation is
+implemented. Existing `safe2 aism ingest` preserves attributed evidence with
+unscored organizational cells for review. CLI E0-E5 weights, verification caps,
+and category completeness remain unchanged; their input/summary grades are not
+automatically [Evidence Assurance v1.0](../docs/EVIDENCE-ASSURANCE.md) ratings.
+Static, MCP, skill, and gateway scores retain their native meanings.
+
 ## Where This Capability Lives
 
 | Location | Role |

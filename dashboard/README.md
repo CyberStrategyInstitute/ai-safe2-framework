@@ -11,6 +11,16 @@
 
 ---
 
+## Technology contribution presentation boundary
+
+The proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [Evidence Assurance rubric](../docs/EVIDENCE-ASSURANCE.md) are documentation
+review instruments. The current dashboard has no TCP scoring/view integration.
+Future presentation must show per-control effects, coverage, contribution,
+assurance rubric, independence, unknowns, and scope separately. Do not relabel
+existing grades or display a product contribution as an organizational maturity
+badge. Existing generated control/profile data remains unchanged.
+
 ## What the Dashboard Represents
 
 The dashboard visualizes the **161-control AI SAFE² core taxonomy** across five operational pillars and the core Cross-Pillar Governance layer.

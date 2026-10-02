@@ -15,6 +15,17 @@
 
 ---
 
+## Scoped technology contribution claims
+
+NEXUS implementation evidence is assessed under the same proposed
+[Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+as third-party candidates. Pin component versions, separate tested planes and
+scaffolding from operational mechanisms, and record contribution and
+[assurance](../docs/EVIDENCE-ASSURANCE.md) per claim. Reference-implementation
+status and AISM invariants do not confer organizational maturity, certification,
+or automatic conformance. This documentation proposal changes no NEXUS schema
+or enforcement behavior.
+
 ## Role in AI SAFE² v3.1
 
 **AI SAFE² is the governance and requirements standard. NEXUS is Cyber Strategy Institute's first-party reference implementation.**

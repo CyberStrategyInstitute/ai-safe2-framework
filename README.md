@@ -15,7 +15,7 @@
 [![Scope](https://img.shields.io/badge/Scope-161_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm_%7C_CP.1--CP.10-red)](https://cyberstrategyinstitute.com/ai-safe2/)
 [![MCP](https://img.shields.io/badge/MCP-2026--07--28-blue.svg)](00-cross-pillar/cp5_mcp_server_security.md)
 
-**[Why AI SAFE²](#what-ai-safe-is-for)** · **[What Changed in v3.1](#what-changed-in-v31)** · **[Architecture](#the-core-architecture)** · **[MCP Security](#mcp-security-in-v31)** · **[Examples](#examples-sovereign-runtimes-in-the-wild)** · **[Challenge Lab](#challenge-lab-falsification-before-claims)** · **[32 Frameworks](#the-universal-rosetta-stone-32-frameworks)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
+**[Why AI SAFE²](#what-ai-safe-is-for)** · **[What Changed in v3.1](#what-changed-in-v31)** · **[Architecture](#the-core-architecture)** · **[MCP Security](#mcp-security-in-v31)** · **[Technology Reviews](#assess-organizations-technologies-and-evidence-separately)** · **[Examples](#examples-sovereign-runtimes-in-the-wild)** · **[Challenge Lab](#challenge-lab-falsification-before-claims)** · **[32 Frameworks](#the-universal-rosetta-stone-32-frameworks)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
 
 </div>
 
@@ -39,6 +39,7 @@ Version 3.1 also formalizes three enforcement planes:
 
 ---
 
+<a id="what-ai-safe-is-for"></a>
 ## What AI SAFE² Is For
 
 Production agents can drift without a code change. Retrieval changes, accumulated memory, delegated authority, tool calls, identity confusion, protocol behavior, or changes in external services can alter the effective operating environment while the source code remains unchanged.
@@ -123,6 +124,40 @@ See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_server_secu
 
 ---
 
+## Assess Organizations, Technologies, and Evidence Separately
+
+An organization earns an AISM maturity level. A technology contributes evidence
+for specific controls within a defined boundary. A paper, benchmark, released
+implementation, or vendor test cannot establish organizational maturity by itself.
+
+AISM is the **AI Sovereign Maturity (AISM) Model**, which assesses the organization's
+retained authority and governance capabilities across five pillars and six dimensions.
+
+| Review instrument | Question | Starting point |
+|---|---|---|
+| AISM Sovereignty Score | How mature is the organization's governance across five pillars and six dimensions? | [Organizational methodology](AISM/AISM-Scoring-Matrix-Methodology.md) |
+| Proposed AISM Technology Contribution Profile v1.0 | Which controls does this artifact address, implement, enforce, validate, evidence, or challenge? | [Profile and adoption rule](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md), [Technology Card](docs/templates/TECHNOLOGY-CARD.md) |
+| Proposed AI SAFE² Evidence Assurance v1.0 | What evidence supports each scoped claim? | [Assurance rubric and compatibility](docs/EVIDENCE-ASSURANCE.md) |
+
+Select technologies by required-control fit, enforcement location, evidence,
+failure behavior, retained authority, residual risk, and integration value.
+Do not rank purchases by average pillar contribution or label a product
+"AISM Level 4." A measured control contribution remains bounded by its tests.
+
+The [nine-example review](research/technology-contribution-examples.md) frames
+ContractWarden, DGF-Bench, ActionGuard, OpenShell/Sentry, policy learning, oversight,
+and incident/accountability inputs as adoption candidates. Follow the
+[validation guide](docs/TECHNOLOGY-VALIDATION.md) and
+[incident evidence workflow](docs/INCIDENT-EVIDENCE.md) before promoting claims.
+
+These additions are proposed documentation guidance. The CLI's current E0-E5
+numeric grades, Challenge Lab C0-C5 scale, organizational scoring, 161 controls,
+and generated profile data keep their existing meanings. No TCP command or
+dashboard scoring integration is implemented by this proposal. See the
+[repository coverage review](docs/TECHNOLOGY-PROFILE-REPO-REVIEW.md).
+
+---
+
 ## Navigate the Framework
 
 | Section | What You'll Find |
@@ -133,7 +168,8 @@ See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_server_secu
 | [Pillar 4: Engage & Monitor](04-engage-monitor/) | Detection pipelines, HITL, platform monitoring |
 | [Pillar 5: Evolve & Educate](05-evolve-educate/) | Adversarial evaluation and red-team artifacts |
 | [Cross-Pillar Governance](00-cross-pillar/) | CP.1 through CP.10, ACT tiers, HEAR doctrine, replication governance, CP.5 profiles |
-| [AISM](AISM/) | AI Sovereignty Maturity Model and control mapping |
+| [AI Sovereign Maturity (AISM) Model](AISM/) | Organizational maturity model and control mapping |
+| [Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Proposed artifact review, evidence assurance, adoption rule, and reusable card |
 | [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
 | [NEXUS](NEXUS/) | CSI reference implementation for governed agent-to-agent and agent-to-tool interactions |
 | [Research](research/) | Threat research and deep-dive control evidence |
@@ -483,7 +519,7 @@ See [EVOLUTION.md](EVOLUTION.md) for the full history.
 ├── 03-fail-safe-recovery/     # Pillar 3
 ├── 04-engage-monitor/         # Pillar 4
 ├── 05-evolve-educate/         # Pillar 5
-├── AISM/                      # Normative AI Sovereignty Maturity Model
+├── AISM/                      # Normative AI Sovereign Maturity (AISM) Model
 ├── safe2/                     # Unified agent-facing Python CLI and AISM runtime
 ├── NEXUS/                     # CSI reference implementation
 ├── challenges/                # Falsification and replication experiments

@@ -107,7 +107,9 @@
     "protocol_independence_rule": "A CP.5 profile MUST NOT bind a control to a construct owned by the protocol it profiles.",
     "nexus_is_mandatory": false,
     "mcp19_legacy_bearer_token_proves_audience_binding": false,
-    "maturity_is_conformance": false
+    "maturity_is_conformance": false,
+    "technology_contribution_is_organizational_maturity": false,
+    "assurance_v1_is_cli_evidence_grade": false
   },
   "discovery": {
     "human": "README.md",
@@ -116,6 +118,20 @@
     "research": "research/README.md",
     "challenge_lab": "challenges/README.md",
     "aism": "AISM/README.md",
+    "technology_review": {
+      "status": "proposed documentation guidance",
+      "methodology_version": "1.0",
+      "entrypoint": "docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md",
+      "evidence_assurance": "docs/EVIDENCE-ASSURANCE.md",
+      "card_template": "docs/templates/TECHNOLOGY-CARD.md",
+      "validation": "docs/TECHNOLOGY-VALIDATION.md",
+      "incident_evidence": "docs/INCIDENT-EVIDENCE.md",
+      "examples": "research/technology-contribution-examples.md",
+      "repo_review": "docs/TECHNOLOGY-PROFILE-REPO-REVIEW.md",
+      "cli_implemented": false,
+      "changes_organizational_scoring": false,
+      "changes_existing_cli_evidence_grades": false
+    },
     "nexus": "NEXUS/README.md",
     "dashboard": "dashboard/README.md",
     "cli": {
