@@ -25,8 +25,8 @@ def test_provider_chain_is_pinned_and_consistent():
     assert workflow_candidates == policy_candidates
     assert len(workflow_candidates) == 8
     assert len(set(workflow_candidates)) == 8
-    assert config["model"].removeprefix("openrouter/") in workflow_candidates
-    assert workflow_fallbacks == config["fallback_models"]
+    assert config["model"] == workflow_fallbacks[0]
+    assert config["fallback_models"] == []
     assert "openrouter/free" not in [*workflow_candidates, *workflow_fallbacks]
     assert all(model != "openrouter/auto" for model in [*workflow_candidates, *workflow_fallbacks])
     assert workflow_fallbacks == ["gpt-5.6-luna"]
@@ -39,7 +39,7 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert config["num_retries"] == 0
     assert config["retry_same_model_on_timeout"] is False
     assert config["ai_timeout"] == 75
-    assert config["max_model_tokens"] == 16000
+    assert config["max_model_tokens"] == 64000
     assert config["output_run_details"] is True
     assert config["output_run_cost"] is True
     assert "provider_policy:" in workflow
@@ -50,11 +50,11 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert "id: pr-agent-free" in workflow
     assert "id: free-publication" in workflow
     assert "id: pr-agent-openai" in workflow
-    assert "timeout-minutes: 3" in workflow
     assert 'PR_AGENT_FREE_MAX_MODEL_TOKENS: "16000"' in workflow
     assert 'PR_AGENT_FREE_MAX_CALLS: "1"' in workflow
-    assert "config.reasoning_effort: low" in workflow
-    assert 'pr_reviewer.enable_large_pr_chunking: "false"' in workflow
+    assert "config.reasoning_effort: medium" in workflow
+    assert "Bounded OpenRouter Reviewer Guide" in workflow
+    assert "pr_context_review" in workflow
     assert "free_coverage_mode: 'bounded_single_pass'" in workflow
     assert "timeout-minutes: 5" in workflow
     assert "fallback_invoked: fallbackInvoked" in workflow
@@ -64,7 +64,7 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert "final_model: observedModels.at(-1) || null" in workflow
     assert "id: preflight" in workflow
     assert "steps.preflight.outputs.available == 'true'" in workflow
-    assert "config.model: openrouter/${{ steps.preflight.outputs.selected_model }}" in workflow
+    assert "receipt.selected_model" in workflow
     assert "preflight_receipt_sha256" in workflow
 
 

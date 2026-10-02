@@ -59,12 +59,12 @@ ran. The workflow therefore enforces failover outside PR-Agent: GitHub hard-stop
 the selected free attempt after three minutes, checks for a substantive publication,
 and invokes one OpenAI attempt for at most five minutes only when needed. A later
 Laguna run passed the small canary but stalled after PR-Agent sent the entire
-58.5K-token diff. Repeated multi-chunk trials at 16K and 32K still exhausted the
-three- and six-minute guards without publishing. The free route therefore performs
-one bounded 16K pass and records partial coverage instead of treating small-call
-availability as proof of full-diff throughput. The metered fallback retains a 64K,
-three-call budget. Receipts retain both budgets, coverage mode, route outcomes, and
-whether metered fallback ran.
+58.5K-token diff. Repeated PR-Agent trials at 16K and 32K, including a single-call
+attempt, still exhausted the three- and six-minute guards without publishing. The
+free route therefore publishes the passing canary model's bounded,
+risk-prioritized hunk review directly and labels partial coverage. PR-Agent remains
+the metered fallback with a 64K, three-call budget. Receipts retain both budgets,
+coverage mode, route outcomes, and whether metered fallback ran.
 
 The selector deliberately canary-tests three models rather than every free model.
 Catalog and endpoint-health calls do not invoke a model; they cheaply narrow the

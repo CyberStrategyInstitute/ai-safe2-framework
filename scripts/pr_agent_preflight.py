@@ -257,6 +257,7 @@ def assess_response(text: str, policy: dict[str, Any]) -> dict[str, Any]:
         "concise": len(text) <= int(policy["selection"]["maximum_response_characters"]),
         "passed": False,
         "score": 0,
+        "pr_context_review": None,
     }
     if parsed is None:
         return result
@@ -264,6 +265,16 @@ def assess_response(text: str, policy: dict[str, Any]) -> dict[str, Any]:
     safe_findings = parsed.get("safe_line_findings")
     if not isinstance(findings, list) or not isinstance(safe_findings, list):
         return result
+    pr_context = parsed.get("pr_context")
+    if isinstance(pr_context, dict):
+        potential_issue = pr_context.get("potential_issue")
+        result["pr_context_review"] = {
+            "path": str(pr_context.get("path") or "unavailable")[:300],
+            "potential_issue": (
+                None if potential_issue is None else str(potential_issue)[:1200]
+            ),
+            "why": str(pr_context.get("why") or "No rationale supplied.")[:1200],
+        }
     required = policy["selection"]["required_defects"]
     observed = {
         str(item.get("defect_id")): str(item.get("line_id"))

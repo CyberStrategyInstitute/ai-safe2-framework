@@ -216,14 +216,14 @@ ranked; score is primary, then response length and latency. The PR hunk tests
 context compatibility but does not earn quality points because it has no established
 ground truth.
 
-The winner receives one risk-focused PR-Agent pass capped at 16K input tokens. This
+The winner publishes its risk-focused, bounded-hunk OpenRouter review directly. This
 free route is explicitly partial coverage for oversized PRs; its receipt records the
-bounded single-pass mode and PR-Agent lists omitted files. This prevents a model
+bounded single-pass mode and reviewed path. This prevents a model
 that passes a moderate canary from being handed an unbounded large
 diff; PR #370 demonstrated that a 58.5K-token request could still stall. If no
 candidate passes, or the winner does not publish a substantive review,
-`gpt-5.6-luna` is the metered final fallback with multi-chunk coverage and a 64K
-budget.
+PR-Agent uses `gpt-5.6-luna` as the metered final fallback with multi-chunk coverage
+and a 64K budget.
 
 Manual `/review` runs explicitly check out `refs/pull/<number>/head`. GitHub loads
 `issue_comment` workflow definitions from the default branch, so this binding is

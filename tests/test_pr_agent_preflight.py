@@ -126,6 +126,11 @@ def test_canary_requires_both_defects_and_no_safe_false_positive():
     assert result["passed"] is True
     assert result["score"] == 100
     assert result["response_characters"] == len(passing)
+    assert result["pr_context_review"] == {
+        "path": "x.py",
+        "potential_issue": None,
+        "why": "insufficient evidence",
+    }
 
     unsafe = json.loads(passing)
     unsafe["safe_line_findings"] = [{"line_id": "S3", "why": "invented"}]
