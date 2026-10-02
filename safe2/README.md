@@ -35,7 +35,7 @@ Cards.
 
 ## Technology profiles and current CLI compatibility
 
-The proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 and [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) are separate Markdown
 review instruments. No TCP command, schema, or automatic score translation is
 implemented. Existing `safe2 aism ingest` preserves attributed evidence with

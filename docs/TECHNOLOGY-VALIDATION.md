@@ -10,7 +10,7 @@
 
 ## Scope
 
-These proposed acceptance practices support the [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md).
+These acceptance practices support the [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md).
 They add review guidance, not a new runnable challenge. Frozen Challenge 001,
 its preregistration, and its executable fixtures remain unchanged. New experiments
 need a separately owned, versioned plan before confirmatory results are promoted.

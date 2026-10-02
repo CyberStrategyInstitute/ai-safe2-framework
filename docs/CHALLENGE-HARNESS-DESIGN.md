@@ -14,7 +14,7 @@ real-agent effectiveness, process containment, or independent replication.
 
 ## Technology validation candidates
 
-The proposed [technology validation guide](./TECHNOLOGY-VALIDATION.md) frames
+The [technology validation guide](./TECHNOLOGY-VALIDATION.md) frames
 clean/attacked pairs, process-mimicking attacks, composed service capabilities,
 independent side-effect observation, and learned-policy integrity tests.
 These require separate owned/versioned experiment plans; they do not alter

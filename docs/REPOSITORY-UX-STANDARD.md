@@ -14,8 +14,8 @@ Use **AI Sovereign Maturity (AISM) Model** on first mention, then **AISM** or
 The Sovereignty Score and Sovereignty Matrix retain their distinct names.
 Preserve original terminology in historical records and asset filenames.
 
-Keep organizational AISM maturity, proposed
-[technology contribution](./TECHNOLOGY-CONTRIBUTION-PROFILE.md), proposed
+Keep organizational AISM maturity,
+[technology contribution](./TECHNOLOGY-CONTRIBUTION-PROFILE.md),
 [assurance v1.0](./EVIDENCE-ASSURANCE.md), Challenge Lab C0-C5, and native tool
 scores visibly separate. Major review/implementation surfaces should link to
 the method and [Technology Card](./templates/TECHNOLOGY-CARD.md) where relevant.
@@ -79,6 +79,18 @@ GitHub release announcements should start from
 the user outcome, a GitHub-safe before/after table, copyable quick start, evidence
 boundaries, validation, invariants, and clearly separated roadmap items. Preview
 the completed Markdown in GitHub before publishing and verify every link.
+
+Release notes must also link directly to the relevant repository entry point,
+changed guides/specifications, examples/templates, and validation evidence.
+Keep these repository destinations separate from the note's section navigation.
+Link material updates beside their descriptions, using concrete labels and
+absolute GitHub URLs pinned to a verified release tag or merged commit. For a
+documentation update, use a linked review workflow instead of installation
+commands. Mark draft announcements and proposed methods explicitly.
+
+Completed release announcements are prepared outside the repository for the
+release owner to copy into GitHub. Do not commit announcement drafts unless
+the owner explicitly requests a repository archive.
 
 Major landing pages should make these destinations easy to reach:
 

@@ -8,6 +8,11 @@
 
 ---
 
+**Documentation updated:** 2026-10-02. TCP and Evidence Assurance v1.0 are CSI
+assessment methods for use and feedback. All AISM pages include a dated change
+summary and link the [practical assessment guide](../AISM/ASSESSMENT-GUIDE.md).
+Release announcements are prepared outside the repository for owner publication.
+
 ## Outcome and acceptance boundary
 
 The current full name is **AI Sovereign Maturity (AISM) Model**, shortened to
@@ -17,7 +22,7 @@ filenames remain intact with a current-name pointer; the Sovereignty Score and
 Sovereignty Matrix retain their distinct names. This is an editorial naming
 change with no scoring, schema, command, or path migration.
 
-This proposal separates organizational AISM maturity, scoped artifact contribution,
+This method separates organizational AISM maturity, scoped artifact contribution,
 and claim-level assurance throughout repository guidance. Acceptance requires a
 central review method, reusable card, all nine supplied example dispositions,
 canonical control references, actionable validation/incident practices, root
@@ -39,7 +44,7 @@ demonstrating improved deployed security.
 | Repository surface | Changes or reviewed disposition |
 |---|---|
 | [Root README](../README.md), [quickstart](../QUICKSTART_5_MIN.md) | New three-instrument summary, method/card/examples links, score interpretation |
-| [Agent entry point](../AGENTS.md), [manifest](../ai-safe2.manifest.json) | Discovery pointers, proposal/implementation status, explicit separation from organizational maturity and CLI grades |
+| [Agent entry point](../AGENTS.md), [manifest](../ai-safe2.manifest.json) | Discovery pointers, method/implementation status, explicit separation from organizational maturity and CLI grades |
 | [Shield](../01-sanitize-isolate/README.md) | Actual interception/judgment/actuation boundary, composed paths, side effects |
 | [Ledger](../02-audit-inventory/README.md) | Evidence origin, protected records, reconstruction, retention and notification ownership |
 | [Circuit Breaker](../03-fail-safe-recovery/README.md) | Actuation/stopping authority, direct/descendant bypass, outage and revocation tests |
@@ -56,7 +61,7 @@ demonstrating improved deployed security.
 | [Examples index](../examples/README.md), [research index](../research/README.md) | Method/card pointers, nine-example review; no runnable integration added or generated table hand-edited |
 | [Challenge Lab](../challenges/README.md), [harness design](./CHALLENGE-HARNESS-DESIGN.md), [CLI guide](./CHALLENGE-CLI.md) | C scale distinct, new test candidates explicit; frozen Challenge 001 and current executable scope untouched |
 | [Contribution guidance](../CONTRIBUTING.md), [PR template](../.github/PULL_REQUEST_TEMPLATE.md) | Claim/control/boundary evidence requirements and separate proposal/result states |
-| [Evolution](../EVOLUTION.md), [CLI roadmap](./CLI-ROADMAP-TO-1.0.md), [brief triage](./SECURITY-BRIEF-2026-09-13-TRIAGE.md), [UX standard](./REPOSITORY-UX-STANDARD.md) | Proposed guidance recorded; runtime work/version migration deferred; navigation and terminology rules linked |
+| [Evolution](../EVOLUTION.md), [CLI roadmap](./CLI-ROADMAP-TO-1.0.md), [brief triage](./SECURITY-BRIEF-2026-09-13-TRIAGE.md), [UX standard](./REPOSITORY-UX-STANDARD.md) | Assessment methods recorded; runtime work/version migration deferred; navigation and terminology rules linked |
 | Core/profile datasets, NEXUS schemas, scanner rules, CLI schemas/scoring, dashboard generated data | Reviewed relevant IDs, versions, counts, discovery, grade/cap semantics; no contract change required for Markdown review instruments |
 | Historical notes, release notes, published assets | Kept as original records; new source-reviewed guidance is discoverable from current indexes rather than rewriting historical evidence |
 
@@ -88,7 +93,7 @@ Framework controls remain 161; CP.5.MCP remains 19 profile controls; UAS remains
 verification caps, schemas, and frozen challenge artifacts remain unchanged.
 Manifest additions are discovery-only, not schema catalog or executable commands.
 
-Repository governance maintainers decide whether to adopt the proposed rubric;
+CSI maintains the v1.0 assessment methods and welcomes evidence-based feedback;
 deployment/incident owners make adoption, risk, retention, and notification
 decisions. No decision authority is delegated by this change. Rollback is a revert
 of the documentation/discovery commit; no runtime state or data migration exists.

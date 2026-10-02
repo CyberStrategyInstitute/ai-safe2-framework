@@ -4,13 +4,18 @@
 </div>
 
 # AISM Scoring Matrix Methodology
+
+**Documentation updated:** 2026-10-02. Clarifies the existing Sovereignty Score
+and introduces TCP and Evidence Assurance v1.0 as separate assessment methods.
+See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
+Technology Card workflow, and worked example. Original methodology dates below
+identify their baseline; this update does not change scoring formulas.
 ## Organizational scoring boundary
 
 The Sovereignty Score applies to an organization, not an individual product,
 paper, benchmark, or vendor feature. Technology evidence may support specific
 assessment cells only after the assessor evaluates organizational coverage,
-robustness, and sovereignty assurance. The proposed
-[Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) and
+robustness, and sovereignty assurance. The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) and
 [Evidence Assurance Level](../docs/EVIDENCE-ASSURANCE.md) are separate review
 instruments. They do not change this scoring rubric, its weights, the current
 CLI evidence-grade calculation, or previously issued maturity results.
@@ -21,7 +26,7 @@ CLI evidence-grade calculation, or previously issued maturity results.
 **Date:** March 2026  
 **Organization:** Cyber Strategy Institute  
 **Framework:** AI SAFE2 v3.1; AI Sovereign Maturity (AISM) Model
-**Status:** Proposed Methodology
+**Status:** CSI assessment methodology v1.0
 
 ---
 

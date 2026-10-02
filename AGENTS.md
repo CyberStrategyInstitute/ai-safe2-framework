@@ -218,7 +218,7 @@ For automated assessment or implementation guidance:
 
 - Organizational AISM maturity is separate from an artifact's scoped contribution.
 - Use `docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md`, `docs/EVIDENCE-ASSURANCE.md`,
-  and `docs/templates/TECHNOLOGY-CARD.md` for the proposed documentation method.
+  and `docs/templates/TECHNOLOGY-CARD.md` for the v1.0 assessment method.
 - Distinguish addresses, implements, enforces, validates, evidences, and challenges.
 - Keep assurance-v1.0 E0-E5 separate from the existing CLI numeric `grade` fields,
   verification caps, category completeness, and Challenge Lab C0-C5.
@@ -226,7 +226,7 @@ For automated assessment or implementation guidance:
   to independent validation. Missing evidence stays unassessed.
 - TCP schemas, commands, integrations, and dashboard views are not implemented.
   Read `research/technology-contribution-examples.md` for source limits and backlog.
-- Use `docs/TECHNOLOGY-VALIDATION.md` and `docs/INCIDENT-EVIDENCE.md` for proposed
+- Use `docs/TECHNOLOGY-VALIDATION.md` and `docs/INCIDENT-EVIDENCE.md` for
   test and incident-review practices; frozen Challenge 001 remains unchanged.
 
 ## Useful entry points

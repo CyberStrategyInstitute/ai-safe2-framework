@@ -4,10 +4,15 @@
 </div>
 
 # AISM Self-Assessment Tool
+
+**Documentation updated:** 2026-10-02. Clarifies the existing Sovereignty Score
+and introduces TCP and Evidence Assurance v1.0 as separate assessment methods.
+See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
+Technology Card workflow, and worked example. Original methodology dates below
+identify their baseline; this update does not change scoring formulas.
 ## Using technology evidence in an organizational assessment
 
-Record candidate evidence in the proposed
-[Technology Card](../docs/templates/TECHNOLOGY-CARD.md) before deciding which
+Record candidate evidence in the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) before deciding which
 organizational assessment cells it supports. Confirm local deployment, ownership,
 control coverage, tested boundaries, and complementary controls. A paper, released
 code, or vendor test cannot fill an organizational cell by itself. Keep

@@ -3,20 +3,28 @@
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Method](https://img.shields.io/badge/Method-AISM_TCP-820F1A?style=flat-square)](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
-[![Status](https://img.shields.io/badge/Status-Proposed_v1.0-808080?style=flat-square)](../EVOLUTION.md)
+[![Status](https://img.shields.io/badge/Status-Method_v1.0-808080?style=flat-square)](../EVOLUTION.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Research](../research/README.md) | [Challenge Lab](../challenges/README.md)
 
 ---
+
+**Method version:** 1.0
+
+**Documentation updated:** 2026-10-02
+
+**Status:** CSI assessment method for use and feedback
+
+Start with the [AISM assessment guide](../AISM/ASSESSMENT-GUIDE.md) for a practical workflow.
 
 ## Purpose and status
 
 An organization earns an AISM maturity level. A product, paper, benchmark,
 investigation, or technique contributes evidence toward specific controls.
 The organizational model's full name is **AI Sovereign Maturity (AISM) Model**.
-This proposed v1.0 review instrument, AISM-TCP, separates that contribution from
-organization-wide scoring. It is documentation guidance pending governance
-review, not a certification, implemented CLI feature, or new framework control.
+This v1.0 review instrument, AISM-TCP, separates that contribution from
+organization-wide scoring. CSI introduces it as a method for use and feedback. It does not confer
+certification or add a CLI feature or framework control.
 
 The primary reader is the security leader deciding which control gap to address.
 The new decision is whether a candidate supplies the needed mechanism and evidence,
@@ -26,8 +34,8 @@ runtime-control and research guidance with a scoped adoption method.
 | Instrument | Subject | Result | Does not establish |
 |---|---|---|---|
 | [AISM Sovereignty Score](../AISM/AISM-Scoring-Matrix-Methodology.md) | Organization across five pillars and six dimensions | Maturity using coverage, robustness, and sovereignty assurance | Product certification or framework conformance |
-| AISM Technology Contribution Profile, proposed v1.0 | Exact artifact and deployment/test boundary | Control effects, pillar contribution, coverage, limitations | Vendor or adopting organization maturity |
-| [AI SAFE² Evidence Assurance Level, proposed v1.0](./EVIDENCE-ASSURANCE.md) | Each attributed claim and supporting artifacts | E0 through E5 under the named assurance rubric | Control completeness, independence by default, or universal prevention |
+| AISM Technology Contribution Profile, v1.0 | Exact artifact and deployment/test boundary | Control effects, pillar contribution, coverage, limitations | Vendor or adopting organization maturity |
+| [AI SAFE² Evidence Assurance Level, v1.0](./EVIDENCE-ASSURANCE.md) | Each attributed claim and supporting artifacts | E0 through E5 under the named assurance rubric | Control completeness, independence by default, or universal prevention |
 
 Report all three independently. Do not multiply contribution by assurance, average
 pillars to rank purchases, or substitute the maximum pillar contribution for an
@@ -168,7 +176,7 @@ Existing `safe2 aism ingest` imports attributed evidence with cells unscored for
 review. Assessors still supply organization-specific coverage, robustness, and
 sovereignty assurance under the current methodology. A future TCP schema, command,
 adapter, dashboard view, or grade translation requires a separate versioned contract,
-explicit migration policy, and tests. This proposal delivers the review method and
+explicit migration policy, and tests. This update delivers the review method and
 documentation, not those runtime features.
 
 ---

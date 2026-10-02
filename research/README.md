@@ -11,7 +11,7 @@
 
 ## Technology contribution reviews
 
-The proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 separates conceptual/design evidence, implementation, validation, and enforcement.
 Use the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) for claim-level
 provenance, assurance, coverage, and limits. The

@@ -4,6 +4,12 @@
 
 # AI Sovereign Maturity (AISM) Model
 
+**Documentation updated:** 2026-10-02. Clarifies the existing Sovereignty Score
+and introduces TCP and Evidence Assurance v1.0 as separate assessment methods.
+See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
+Technology Card workflow, and worked example. Original methodology dates below
+identify their baseline; this update does not change scoring formulas.
+
 **Framework:** AI SAFE2 v3.1
 **Organization:** Cyber Strategy Institute
 **Version:** March 2026
@@ -13,8 +19,7 @@
 ## Scope of maturity claims
 
 Organizations earn these five maturity levels. Technologies supply scoped
-control evidence. Use the proposed
-[Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) to
+control evidence. Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) to
 describe a candidate's demonstrated capability without calling it "AISM Level 4"
 or "AISM Level 5." A continuously run benchmark alone does not demonstrate
 formal verification, retained authority, or organizational sovereignty.

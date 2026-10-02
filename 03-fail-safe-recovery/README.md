@@ -13,8 +13,7 @@
 
 ## Technology contribution and stopping authority
 
-Review circuit-breaker products through the proposed
-[Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md), recording
+Review circuit-breaker products through the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md), recording
 the actual actuator, named stopping authority, covered process/tool paths, and
 complementary controls. Test direct bypass, outage, timeout, restart, descendants,
 and revocation under the [validation guide](../docs/TECHNOLOGY-VALIDATION.md).

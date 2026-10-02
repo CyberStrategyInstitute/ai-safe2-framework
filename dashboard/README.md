@@ -13,7 +13,7 @@
 
 ## Technology contribution presentation boundary
 
-The proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 and [Evidence Assurance rubric](../docs/EVIDENCE-ASSURANCE.md) are documentation
 review instruments. The current dashboard has no TCP scoring/view integration.
 Future presentation must show per-control effects, coverage, contribution,

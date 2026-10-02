@@ -4,11 +4,16 @@
 </div>
 
 # AISM Compliance Crosswalk
+
+**Documentation updated:** 2026-10-02. Clarifies the existing Sovereignty Score
+and introduces TCP and Evidence Assurance v1.0 as separate assessment methods.
+See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
+Technology Card workflow, and worked example. Original methodology dates below
+identify their baseline; this update does not change scoring formulas.
 ## Procurement evidence boundary
 
 A standards mapping supports control selection; it does not establish compliance,
-certification, or legal approval. For procurement, apply the proposed
-[Technology Contribution Profile adoption rule](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule):
+certification, or legal approval. For procurement, apply the [Technology Contribution Profile adoption rule](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule):
 required-control fit, enforcement location, evidence, failure behavior, sovereignty,
 residual risk, and integration value. Keep claim-level
 [assurance](../docs/EVIDENCE-ASSURANCE.md) separate from organizational maturity

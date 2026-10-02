@@ -12,7 +12,7 @@ and replace every placeholder with evidence for the exact candidate revision.
 
 ## Technology adoption and release evidence
 
-Attach a proposed [Technology Card](./templates/TECHNOLOGY-CARD.md) when a
+Attach a [Technology Card](./templates/TECHNOLOGY-CARD.md) when a
 release depends on a new runtime, technique, or benchmark. Review actual control
 fit, failure behavior, retained authority, residual paths, and integration needs
 under the [adoption rule](./TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule).

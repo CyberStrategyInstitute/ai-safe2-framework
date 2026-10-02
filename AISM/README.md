@@ -5,6 +5,13 @@
 # AI Sovereign Maturity (AISM) Model
 ### The maturity and operating model for deterministic governance of probabilistic AI
 
+**Documentation updated:** 2026-10-02. Clarifies the existing Sovereignty Score
+and introduces TCP and Evidence Assurance v1.0 as separate assessment methods.
+See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
+Technology Card workflow, and worked example. Original methodology dates below
+identify their baseline; this update does not change scoring formulas.
+
+
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-AISM-820F1A?style=flat-square)](./README.md)
 [![Status](https://img.shields.io/badge/Status-Current-808080?style=flat-square)](../EVOLUTION.md)
@@ -19,17 +26,16 @@
 **Core Principle:** *Probabilistic intelligence requires deterministic control.*  
 **Organization:** Cyber Strategy Institute  
 **Framework:** AI SAFE² v3.1  
-**Current release context:** August 2026
+**Framework release context:** August 2026; assessment-method documentation updated October 2026
 
 ---
 
 ## Organizational maturity and technology contribution
 
 The Sovereignty Score assesses an organization across five pillars and six
-dimensions. Use the proposed [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+dimensions. Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 for a product, paper, benchmark, technique, investigation, or accountability input.
-Record its control effects and scoped contribution alongside the proposed
-[Evidence Assurance Level](../docs/EVIDENCE-ASSURANCE.md); neither determines
+Record its control effects and scoped contribution alongside the [Evidence Assurance Level](../docs/EVIDENCE-ASSURANCE.md); neither determines
 organizational maturity. Start with the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md)
 and [nine examples](../research/technology-contribution-examples.md).
 The existing CLI's E0-E5 numeric grades are separate from assurance v1.0 and keep
