@@ -38,9 +38,7 @@ def load_state(path: Path) -> dict[str, Any] | None:
 
 
 def _serialized(value: dict[str, Any]) -> bytes:
-    return (json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode(
-        "utf-8"
-    )
+    return (json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
 
 
 def _write_new(path: Path, body: bytes) -> None:

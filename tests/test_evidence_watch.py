@@ -63,7 +63,15 @@ def test_invalid_or_wrong_root_state_fails_closed(tmp_path: Path) -> None:
     state.write_text("not json", encoding="utf-8")
     result = CliRunner().invoke(
         cli,
-        ["evidence", "watch", str(root), "--state", str(state), "--evidence-dir", str(evidence_dir)],
+        [
+            "evidence",
+            "watch",
+            str(root),
+            "--state",
+            str(state),
+            "--evidence-dir",
+            str(evidence_dir),
+        ],
     )
     assert result.exit_code != 0
 
@@ -75,7 +83,15 @@ def test_cli_once_and_bounded_continuous_modes(tmp_path: Path) -> None:
     runner = CliRunner()
     first = runner.invoke(
         cli,
-        ["evidence", "watch", str(root), "--state", str(state), "--evidence-dir", str(evidence_dir)],
+        [
+            "evidence",
+            "watch",
+            str(root),
+            "--state",
+            str(state),
+            "--evidence-dir",
+            str(evidence_dir),
+        ],
     )
     assert first.exit_code == 0, first.output
     continued = runner.invoke(
