@@ -132,6 +132,7 @@ pytest tests/ scanner/tests/
 | `safe2 evidence readiness SOURCE --system-identity FILE --assessment-scope FILE --change-attribution FILE --output FILE --card FILE [--strict]` | Create agent JSON and a human technical release-readiness card | Human decision support only; never authorizes release or claims conformance |
 | `safe2 evidence truth POLICY EVIDENCE... --output FILE --card FILE [--strict]` | Correlate multi-harness task evidence, receipts, usage, coverage and completion claims | Readiness for human decision only; never verifies completion, billing or conformance |
 | `safe2 evidence changes ROOT [--baseline FILE] --output FILE [--strict]` | One-shot local/CI detection of changed skills and agent configuration | No daemon, telemetry or content export; changed configuration requires review |
+| `safe2 evidence watch ROOT --state FILE --evidence-dir DIR [--continuous] [--strict]` | Preserve repeated local change reports and rescan changed skills | Polling detection only; does not intercept installs, pasted context, or harness execution |
 | `safe2 aism remediation-init ASSESSMENT --system-identity FILE --assessment-scope FILE --decision-owner NAME --output FILE` | Create a source template bound to the exact AISM, system-identity, and deployment-scope artifacts | Produces no recommendation and authorizes no action |
 | `safe2 aism plan SOURCE ASSESSMENT --system-identity FILE --assessment-scope FILE --output FILE --card FILE [--previous FILE] [--strict]` | Validate evidence-bound remediation actions, dependencies, alternatives, residual risk, completion evidence, and history | Keeps normative AISM scoring and human authorization separate |
 | `safe2 aism init FILE` | Create a 30-cell unscored assessment | Missing evidence remains unscored |
@@ -444,6 +445,9 @@ endorsements, independent truth verification, or AI SAFE² conformance claims.
 OpenTelemetry users can also import offline OTLP/JSON trace files and export
 non-content SAFE² metadata. See the
 [OpenTelemetry adapter](../docs/OPENTELEMETRY-ADAPTER.md).
+
+For opt-in repeated change evidence, see
+[Continuous Local Evidence](../docs/CONTINUOUS-EVIDENCE.md).
 
 ## Unified Evidence Run Manifest
 
