@@ -441,6 +441,10 @@ safe2 adapter codex-jsonl codex-trace.jsonl \
 Adapter records remain attributed `evidence_only` inputs. They are not provider
 endorsements, independent truth verification, or AI SAFE² conformance claims.
 
+OpenTelemetry users can also import offline OTLP/JSON trace files and export
+non-content SAFE² metadata. See the
+[OpenTelemetry adapter](../docs/OPENTELEMETRY-ADAPTER.md).
+
 ## Unified Evidence Run Manifest
 
 After collectors produce their JSON artifacts, bind them into one portable run
