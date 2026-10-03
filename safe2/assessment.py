@@ -20,6 +20,7 @@ from safe2.discovery import assess_posture, discover_local, inventory_assets, se
 from safe2.discovery.config import inspect_inventory
 from safe2.engines.project import run_scan
 from safe2.evidence.manifest import create_manifest
+from safe2.secure_io import reject_symlink_ancestry
 
 
 class AssessmentError(ValueError):
@@ -52,12 +53,28 @@ def _project_scan(root: Path, *, enabled: bool, max_files: int) -> dict[str, Any
         ],
     }
     if enabled:
+        traversed = 0
+        pending = [root]
+        while pending:
+            current = pending.pop()
+            with os.scandir(current) as entries:
+                for entry in entries:
+                    traversed += 1
+                    if traversed > max_files:
+                        break
+                    if entry.is_symlink():
+                        raise AssessmentError("static scan refuses symbolic links")
+                    if entry.is_dir(follow_symlinks=False):
+                        pending.append(Path(entry.path))
         scan = run_scan(str(root), max_files=max_files)
+        serialized = scan.model_dump(mode="json")
+        for violation in serialized.get("violations", []):
+            violation["evidence"] = "[redacted: inspect the source locally]"
         result.update(
             {
                 "status": "incomplete" if scan.meta.get("scan_truncated") else "completed",
                 "content_read_locally": True,
-                "result": scan.model_dump(mode="json"),
+                "result": serialized,
             }
         )
     result["integrity_sha256"] = _canonical_digest(result, "integrity_sha256")
@@ -143,8 +160,10 @@ def run_assessment(
     selected_output = selected_output.absolute()
     if selected_output.exists() or selected_output.is_symlink():
         raise AssessmentError(f"output directory already exists: {selected_output}")
-    if selected_output.parent.is_symlink():
-        raise AssessmentError("symbolic-link output parents are not allowed")
+    try:
+        reject_symlink_ancestry(selected_output.parent)
+    except ValueError as exc:
+        raise AssessmentError("symbolic-link output ancestors are not allowed") from exc
     selected_output.parent.mkdir(parents=True, exist_ok=True)
 
     staging = Path(tempfile.mkdtemp(prefix=".safe2-assess-", dir=selected_output.parent))
@@ -182,6 +201,8 @@ def run_assessment(
         for record in manifest["artifacts"]:
             record["path"] = Path(record["path"]).name
         manifest["integrity_sha256"] = _canonical_digest(manifest, "integrity_sha256")
+        if validate_artifact("run-manifest-v1", manifest):
+            raise AssessmentError("evidence manifest failed its packaged contract")
         _write_json(staging / "manifest.json", manifest)
 
         posture_findings = discovery["posture"]["findings"]
@@ -247,7 +268,11 @@ def run_assessment(
                 },
                 {
                     "surface": "configuration_structure",
-                    "status": "complete" if config_enabled else "not_requested",
+                    "status": "incomplete"
+                    if config_incomplete
+                    else "complete"
+                    if config_enabled
+                    else "not_requested",
                     "meaning": "Raw values are never emitted.",
                 },
                 {
@@ -282,24 +307,9 @@ def run_assessment(
         with (staging / "decision-card.md").open("x", encoding="utf-8", newline="\n") as handle:
             handle.write(_render_card(assessment))
         try:
-            selected_output.mkdir()
+            os.replace(staging, selected_output)
         except FileExistsError as exc:
             raise AssessmentError(f"output directory already exists: {selected_output}") from exc
-        marker = selected_output / ".incomplete"
-        marker.write_text(
-            "Bundle publication did not complete. Do not rely on these artifacts.\n",
-            encoding="utf-8",
-        )
-        for name in (
-            "environment.json",
-            "project-scan.json",
-            "manifest.json",
-            "decision-card.md",
-            "assessment.json",
-        ):
-            os.replace(staging / name, selected_output / name)
-        marker.unlink()
-        staging.rmdir()
         return {"assessment": assessment, "output_dir": str(selected_output)}
     except Exception:
         shutil.rmtree(staging, ignore_errors=True)

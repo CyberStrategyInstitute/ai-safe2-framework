@@ -18,7 +18,8 @@ CONFIG_SUFFIXES = {".json", ".toml", ".yaml", ".yml"}
 IGNORED_PARTS = {".git", ".venv", "venv", "node_modules", "__pycache__"}
 
 
-def _candidate_files(root: Path, max_entries: int) -> list[Path]:
+def _candidate_files(root: Path, max_entries: int, excluded: set[Path] | None = None) -> list[Path]:
+    excluded = {path.resolve(strict=False) for path in (excluded or set())}
     pending = [root]
     files = []
     traversed = 0
@@ -32,6 +33,9 @@ def _candidate_files(root: Path, max_entries: int) -> list[Path]:
                 if entry.is_symlink():
                     raise ValueError("Symbolic links are not accepted by the change monitor")
                 path = Path(entry.path)
+                resolved = path.resolve(strict=False)
+                if any(resolved == item or item in resolved.parents for item in excluded):
+                    continue
                 if entry.is_dir(follow_symlinks=False):
                     if entry.name not in IGNORED_PARTS:
                         pending.append(path)
@@ -42,26 +46,41 @@ def _candidate_files(root: Path, max_entries: int) -> list[Path]:
     return sorted(files)
 
 
-def _inventory(root: Path, max_files: int, max_file_bytes: int) -> list[dict[str, Any]]:
+def _inventory(
+    root: Path, max_files: int, max_file_bytes: int, excluded: set[Path] | None = None
+) -> list[dict[str, Any]]:
     found: list[dict[str, Any]] = []
-    candidates = _candidate_files(root, max_files)
+    candidates = _candidate_files(root, max_files, excluded)
     skill_roots = [entry.parent for entry in candidates if entry.name == "SKILL.md"]
     for path in candidates:
         relative = path.relative_to(root)
         in_skill = any(skill_root in path.parents for skill_root in skill_roots)
-        harness_config = bool(HARNESS_CONFIG_DIRS.intersection(relative.parts)) and path.suffix.lower() in CONFIG_SUFFIXES
+        harness_config = (
+            bool(HARNESS_CONFIG_DIRS.intersection(relative.parts))
+            and path.suffix.lower() in CONFIG_SUFFIXES
+        )
         if not in_skill and path.name not in TRACKED_CONFIGS and not harness_config:
             continue
         body = read_bytes(path, limit=max_file_bytes)
-        found.append({
-            "path": relative.as_posix(), "kind": "skill" if in_skill else "agent_config",
-            "sha256": hashlib.sha256(body).hexdigest(), "bytes": len(body),
-        })
+        found.append(
+            {
+                "path": relative.as_posix(),
+                "kind": "skill" if in_skill else "agent_config",
+                "sha256": hashlib.sha256(body).hexdigest(),
+                "bytes": len(body),
+            }
+        )
     return sorted(found, key=lambda item: item["path"])
 
 
-def monitor(root: Path, baseline: dict[str, Any] | None = None, *, max_files: int = 10_000,
-            max_file_bytes: int = 1_000_000) -> dict[str, Any]:
+def monitor(
+    root: Path,
+    baseline: dict[str, Any] | None = None,
+    *,
+    max_files: int = 10_000,
+    max_file_bytes: int = 1_000_000,
+    excluded: set[Path] | None = None,
+) -> dict[str, Any]:
     root = root.resolve(strict=True)
     if not root.is_dir():
         raise ValueError("Monitor root must be a directory")
@@ -70,49 +89,87 @@ def monitor(root: Path, baseline: dict[str, Any] | None = None, *, max_files: in
     root_binding = hashlib.sha256(os.path.normcase(str(root)).encode("utf-8")).hexdigest()
     if baseline is not None and baseline["root_binding_sha256"] != root_binding:
         raise ValueError("Baseline belongs to a different declared root")
-    current = _inventory(root, max_files, max_file_bytes)
+    current = _inventory(root, max_files, max_file_bytes, excluded)
     old = {item["path"]: item for item in baseline["inventory"]} if baseline else {}
     new = {item["path"]: item for item in current}
     changes = []
     for path in sorted(set(old) | set(new)):
-        if path not in old: change = "added"
-        elif path not in new: change = "removed"
-        elif old[path]["sha256"] != new[path]["sha256"]: change = "changed"
-        else: continue
-        changes.append({"path": path, "kind": (new.get(path) or old[path])["kind"], "change": change})
+        if path not in old:
+            change = "added"
+        elif path not in new:
+            change = "removed"
+        elif old[path]["sha256"] != new[path]["sha256"]:
+            change = "changed"
+        else:
+            continue
+        changes.append(
+            {"path": path, "kind": (new.get(path) or old[path])["kind"], "change": change}
+        )
 
     gates = []
     present_skill_roots = sorted(
-        (Path(item["path"]).parent for item in current
-         if item["kind"] == "skill" and Path(item["path"]).name == "SKILL.md"),
-        key=lambda path: len(path.parts), reverse=True,
+        (
+            Path(item["path"]).parent
+            for item in current
+            if item["kind"] == "skill" and Path(item["path"]).name == "SKILL.md"
+        ),
+        key=lambda path: len(path.parts),
+        reverse=True,
     )
     changed_skill_roots = set()
     for item in changes:
         if item["kind"] != "skill":
             continue
         changed_path = Path(item["path"])
-        matched = next((candidate for candidate in present_skill_roots
-                        if candidate == changed_path.parent or candidate in changed_path.parents), None)
+        matched = next(
+            (
+                candidate
+                for candidate in present_skill_roots
+                if candidate == changed_path.parent or candidate in changed_path.parents
+            ),
+            None,
+        )
         if matched is not None:
             changed_skill_roots.add(matched.as_posix())
     for relative in sorted(changed_skill_roots):
         findings = skill_gate.scan(root / relative)
         decision, severity = skill_gate.decision_for(findings, strict=False)
-        gates.append({"path": relative, "decision": decision, "highest_severity": severity,
-                      "findings": len(findings),
-                      "coverage": {"files_read": findings.files_read, "text_files": findings.text_files}})
-    decision = "reject" if any(item["decision"] == "REJECT" for item in gates) else (
-        "hold" if any(item["decision"] == "HOLD FOR REVIEW" for item in gates) or
-        any(item["kind"] == "agent_config" for item in changes) else "approve")
-    counts = {name: sum(item["change"] == name for item in changes) for name in ("added", "changed", "removed")}
+        gates.append(
+            {
+                "path": relative,
+                "decision": decision,
+                "highest_severity": severity,
+                "findings": len(findings),
+                "coverage": {"files_read": findings.files_read, "text_files": findings.text_files},
+            }
+        )
+    decision = (
+        "reject"
+        if any(item["decision"] == "REJECT" for item in gates)
+        else (
+            "hold"
+            if any(item["decision"] == "HOLD FOR REVIEW" for item in gates)
+            or any(item["kind"] == "agent_config" for item in changes)
+            else "approve"
+        )
+    )
+    counts = {
+        name: sum(item["change"] == name for item in changes)
+        for name in ("added", "changed", "removed")
+    }
     result = {
-        "schema_version": "safe2.change-monitor.v1", "created_at": datetime.now(UTC).isoformat(),
-        "root": root.name, "root_binding_sha256": root_binding,
+        "schema_version": "safe2.change-monitor.v1",
+        "created_at": datetime.now(UTC).isoformat(),
+        "root": root.name,
+        "root_binding_sha256": root_binding,
         "baseline": "validated" if baseline else "not_supplied",
-        "inventory": current, "changes": changes, "skill_gates": gates,
+        "inventory": current,
+        "changes": changes,
+        "skill_gates": gates,
         "summary": {"tracked": len(current), **counts, "skills_evaluated": len(gates)},
-        "decision": decision, "telemetry": "none", "content_exported": False,
+        "decision": decision,
+        "telemetry": "none",
+        "content_exported": False,
         "conformance_claim": False,
         "limitations": [
             "This one-shot local inventory runs only when invoked and does not install a background service.",

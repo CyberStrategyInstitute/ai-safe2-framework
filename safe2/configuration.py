@@ -10,6 +10,8 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
+from safe2.secure_io import read_regular_bounded, reject_symlink_ancestry, write_new_atomic
+
 CONFIG_SCHEMA = "safe2.config.v1"
 CONFIG_RELATIVE_PATH = Path(".safe2") / "config.toml"
 MAX_CONFIG_BYTES = 1_048_576
@@ -114,7 +116,7 @@ def validate_configuration(data: dict[str, Any]) -> dict[str, Any]:
     for key in _ALLOWED["privacy"]:
         if not isinstance(result["privacy"][key], bool):
             raise ConfigurationError(f"privacy.{key} must be true or false")
-    if result["output"]["format"] not in {"json"}:
+    if not isinstance(result["output"]["format"], str) or result["output"]["format"] != "json":
         raise ConfigurationError("output.format must be json")
     if not isinstance(result["output"]["directory"], str) or not result["output"]["directory"]:
         raise ConfigurationError("output.directory must be a non-empty string")
@@ -138,11 +140,10 @@ def validate_configuration(data: dict[str, Any]) -> dict[str, Any]:
 
 def read_configuration(path: Path) -> dict[str, Any]:
     """Read one bounded TOML configuration and return its normalized form."""
-    _regular_file(path)
     try:
-        raw = path.read_bytes()
+        raw = read_regular_bounded(path, limit=MAX_CONFIG_BYTES)
         parsed = tomllib.loads(raw.decode("utf-8"))
-    except (OSError, UnicodeDecodeError, tomllib.TOMLDecodeError) as exc:
+    except (OSError, ValueError, UnicodeDecodeError, tomllib.TOMLDecodeError) as exc:
         raise ConfigurationError(f"configuration is not valid UTF-8 TOML: {path}") from exc
     return validate_configuration(parsed)
 
@@ -200,6 +201,10 @@ def initialize_project(root: Path, *, profile: str, project_name: str | None) ->
     """Create a configuration exclusively; existing paths and symlink parents fail closed."""
     root = root.absolute()
     try:
+        reject_symlink_ancestry(root)
+    except ValueError as exc:
+        raise ConfigurationError(str(exc)) from exc
+    try:
         root_info = root.lstat()
     except OSError as exc:
         raise ConfigurationError("project path must be an existing directory") from exc
@@ -218,13 +223,16 @@ def initialize_project(root: Path, *, profile: str, project_name: str | None) ->
         ) from exc
     if not config_dir.is_dir():
         raise ConfigurationError("configuration directory path is not a directory")
+    try:
+        reject_symlink_ancestry(config_dir)
+    except ValueError as exc:
+        raise ConfigurationError(str(exc)) from exc
     target = config_dir / CONFIG_RELATIVE_PATH.name
     payload = render_configuration(
         default_configuration(profile=profile, project_name=project_name)
     )
     try:
-        with target.open("x", encoding="utf-8", newline="\n") as handle:
-            handle.write(payload)
-    except FileExistsError as exc:
+        write_new_atomic(target, payload.encode("utf-8"))
+    except (FileExistsError, OSError, ValueError) as exc:
         raise ConfigurationError(f"configuration already exists: {target}") from exc
     return target

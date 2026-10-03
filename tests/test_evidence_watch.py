@@ -28,7 +28,8 @@ def test_collect_once_preserves_history_and_advances_validated_state(tmp_path: P
     assert json.loads(state.read_text(encoding="utf-8")) == first
 
     second, second_path = collect_once(root, state, evidence_dir)
-    assert second["decision"] == "approve"
+    assert second["decision"] == "hold"
+    assert second["changes"]
     assert second_path != first_path
     assert first_path.exists()
     assert len(list(evidence_dir.glob("change-*.json"))) == 2

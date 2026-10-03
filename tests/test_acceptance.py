@@ -33,6 +33,17 @@ def test_changed_fixture_fails_replay(tmp_path: Path) -> None:
     assert "fixture_digest_mismatch:benign-control" in result["errors"]
 
 
+def test_added_fixture_file_and_changed_human_card_fail_verification(tmp_path: Path) -> None:
+    root = tmp_path / "acceptance"
+    create_bundle(root)
+    (root / "fixtures" / "benign-control" / "extra.txt").write_text("extra", encoding="utf-8")
+    (root / "acceptance-card.md").write_text("PASSED", encoding="utf-8")
+    result = verify_bundle(root)
+    assert result["valid"] is False
+    assert "fixture_digest_mismatch:benign-control" in result["errors"]
+    assert "human_card_mismatch" in result["errors"]
+
+
 def test_report_cannot_redirect_fixture_verification_outside_bundle(tmp_path: Path) -> None:
     root = tmp_path / "acceptance"
     create_bundle(root)

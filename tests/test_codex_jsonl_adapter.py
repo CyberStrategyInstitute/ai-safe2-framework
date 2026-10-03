@@ -134,3 +134,21 @@ def test_negative_and_boolean_usage_are_not_treated_as_tokens(tmp_path: Path) ->
     result = translate(trace, "1")
     assert result["status"] == "partial"
     assert result["payload"]["usage"]["events"] == 0
+
+
+def test_producer_controlled_labels_are_bounded_and_missing_status_is_visible(tmp_path: Path) -> None:
+    trace = tmp_path / "trace.jsonl"
+    write_trace(
+        trace,
+        [
+            {"type": "thread.started", "thread_id": "secret"},
+            {"type": "turn.started"},
+            {"type": "item.completed", "item": {"type": "SECRET_ITEM"}},
+            {"type": "item.completed", "item": {"type": "command_execution"}},
+        ],
+    )
+    result = translate(trace, "1")
+    rendered = json.dumps(result)
+    assert result["status"] == "partial"
+    assert "SECRET_ITEM" not in rendered
+    assert "invalid_command_status" in rendered

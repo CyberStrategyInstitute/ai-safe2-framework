@@ -121,3 +121,20 @@ def test_duplicate_json_keys_are_rejected(tmp_path: Path) -> None:
     result = CliRunner().invoke(cli, ["adapter", "validate", str(source)])
     assert result.exit_code != 0
     assert "duplicate JSON object key" in result.output
+
+
+def test_unavailable_evidence_cannot_retain_observed_claims() -> None:
+    specimen = evidence()
+    specimen["status"] = "unavailable"
+    specimen["payload"] = None
+    report = evaluate_conformance(descriptor(), [("unavailable.json", specimen)])
+    assert report["status"] == "failed"
+    assert any(row["rule"] == "UNAVAILABLE-CLAIMS" for row in report["cases"][0]["semantic_errors"])
+
+
+def test_overflowing_json_number_is_rejected(tmp_path: Path) -> None:
+    source = tmp_path / "overflow.json"
+    source.write_text('{"schema_version":"safe2.adapter.v1","nested":{"value":1e400}}', encoding="utf-8")
+    result = CliRunner().invoke(cli, ["adapter", "validate", str(source)])
+    assert result.exit_code != 0
+    assert "non-finite" in result.output

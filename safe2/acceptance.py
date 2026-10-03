@@ -35,11 +35,20 @@ def _digest(value: dict[str, Any]) -> str:
 def _scan_fixture(root: Path, identifier: str, expected: str) -> dict[str, Any]:
     findings = skill_gate.scan(root)
     decision, severity = skill_gate.decision_for(findings, strict=False)
-    skill_file = root / "SKILL.md"
+    digest = hashlib.sha256()
+    for path in sorted(root.rglob("*")):
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("Acceptance fixtures must contain regular files only")
+        relative = path.relative_to(root).as_posix().encode("utf-8")
+        body = read_bytes(path, limit=100_000)
+        digest.update(len(relative).to_bytes(4, "big"))
+        digest.update(relative)
+        digest.update(len(body).to_bytes(8, "big"))
+        digest.update(body)
     return {
         "id": identifier,
-        "path": f"fixtures/{root.name}/SKILL.md",
-        "sha256": hashlib.sha256(read_bytes(skill_file, limit=100_000)).hexdigest(),
+        "path": f"fixtures/{root.name}",
+        "sha256": digest.hexdigest(),
         "expected_decision": expected,
         "observed_decision": decision,
         "highest_severity": severity,
@@ -165,8 +174,8 @@ def verify_bundle(root: Path) -> dict[str, Any]:
     if _digest(report) != report["integrity_sha256"]:
         errors.append("report_integrity_mismatch")
     expected_paths = {
-        "benign-control": "fixtures/benign-control/SKILL.md",
-        "hostile-control": "fixtures/hostile-control/SKILL.md",
+        "benign-control": "fixtures/benign-control",
+        "hostile-control": "fixtures/hostile-control",
     }
     if {fixture["id"] for fixture in report["fixtures"]} != set(expected_paths):
         errors.append("fixture_identity_set_invalid")
@@ -182,17 +191,29 @@ def verify_bundle(root: Path) -> dict[str, Any]:
             continue
         target = root / fixture["path"]
         try:
-            current = hashlib.sha256(read_bytes(target, limit=100_000)).hexdigest()
+            current_record = _scan_fixture(target, fixture["id"], fixture["expected_decision"])
+            current = current_record["sha256"]
         except (OSError, ValueError):
             errors.append(f"fixture_unreadable:{fixture['id']}")
             continue
         if current != fixture["sha256"]:
             errors.append(f"fixture_digest_mismatch:{fixture['id']}")
             continue
-        findings = skill_gate.scan(target.parent)
-        decision, _ = skill_gate.decision_for(findings, strict=False)
+        try:
+            findings = skill_gate.scan(target)
+            decision, _ = skill_gate.decision_for(findings, strict=False)
+        except (OSError, ValueError, skill_gate.ScanLimitExceeded):
+            errors.append(f"fixture_scan_failed:{fixture['id']}")
+            continue
         if decision != fixture["observed_decision"]:
             errors.append(f"fixture_replay_mismatch:{fixture['id']}")
+    try:
+        card = read_bytes(root / "acceptance-card.md", limit=1_000_000)
+        expected_card = render_card(report).encode("utf-8")
+        if card != expected_card:
+            errors.append("human_card_mismatch")
+    except (OSError, ValueError):
+        errors.append("human_card_unreadable")
     return {
         "valid": not errors,
         "errors": errors,

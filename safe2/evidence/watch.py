@@ -82,11 +82,15 @@ def collect_once(
 ) -> tuple[dict[str, Any], Path]:
     """Collect one bounded report, preserve it immutably, then advance state."""
     baseline = load_state(state_path)
+    comparison_baseline = baseline
+    if baseline is not None and baseline.get("decision") != "approve":
+        comparison_baseline = {**baseline, "inventory": []}
     result = monitor(
         root,
-        baseline,
+        comparison_baseline,
         max_files=max_files,
         max_file_bytes=max_file_bytes,
+        excluded={state_path, evidence_dir},
     )
     body = _serialized(result)
     digest = hashlib.sha256(body).hexdigest()

@@ -70,6 +70,20 @@ def test_invalid_token_pair_is_visible_partial_coverage(tmp_path: Path) -> None:
     assert result["coverage"]["gaps"] == ["invalid_or_incomplete_token_pair=1"]
 
 
+def test_invalid_token_value_and_categorical_text_do_not_look_complete_or_leak(tmp_path: Path) -> None:
+    document = trace_document()
+    attributes = document["resourceSpans"][0]["scopeSpans"][0]["spans"][0]["attributes"]
+    attributes[:] = [
+        attr("gen_ai.operation.name", "stringValue", "PROMPT TEXT SHOULD NOT LEAK"),
+        attr("gen_ai.usage.input_tokens", "intValue", "invalid"),
+    ]
+    source = tmp_path / "invalid.jsonl"
+    write_jsonl(source, [document])
+    result = translate(source, "1")
+    assert result["status"] == "partial"
+    assert "PROMPT TEXT SHOULD NOT LEAK" not in json.dumps(result)
+
+
 def test_rejects_mixed_or_non_trace_signal_files(tmp_path: Path) -> None:
     source = tmp_path / "logs.jsonl"
     write_jsonl(source, [{"resourceLogs": []}])

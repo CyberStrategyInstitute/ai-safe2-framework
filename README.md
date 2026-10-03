@@ -247,7 +247,7 @@ safe2 evidence diagnose safe2/data/failure-source-demo.json --system-identity sy
 safe2 evidence scope safe2/data/assessment-scope-source-demo.json --project-root . --system-identity system-identity.json --output assessment-scope.json
 safe2 evidence truth operational-truth-policy.json harness-evidence.json task-receipt.json --output operational-truth.json --card operational-truth.md --strict
 safe2 evidence changes . --baseline prior-agent-inputs.json --output current-agent-inputs.json --strict
-safe2 evidence watch . --state .safe2/watch-state.json --evidence-dir .safe2/evidence/changes --continuous
+safe2 evidence watch . --state .safe2/watch-state.json --evidence-dir .safe2/evidence/changes --continuous --max-runs 1
 safe2 adapter codex-jsonl codex-trace.jsonl --codex-version VERSION --output codex-evidence.json
 safe2 adapter otel-jsonl agent-traces.jsonl --otel-version VERSION --output otel-evidence.json
 safe2 evidence claims claims.json task-receipt.json --output claim-audit.json --card claim-audit.md --strict

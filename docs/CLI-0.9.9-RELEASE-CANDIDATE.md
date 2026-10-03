@@ -14,7 +14,7 @@ It is a release candidate for final validation, not the 1.0 stability promise.
 | Unified assessment | Produce one bounded project bundle and human card | Unrequested content remains incomplete, never clean |
 | Adapter SDK | Validate external descriptors and attributed specimens | Conformance checks contracts, not provider truth |
 | Codex JSONL | Convert explicit Codex traces without retaining prompts or output | Offline aggregate evidence; no session access |
-| OpenTelemetry | Import OTLP traces and export non-content SAFE² metadata | Telemetry is provider-reported, not proof of execution or billing |
+| OpenTelemetry | Import OTLP traces and export privacy-reduced SAFE² metadata | Selected categorical values are hashed; telemetry remains producer-controlled and is not proof of execution or billing |
 | Continuous evidence | Preserve repeated skill/configuration change reports | Polling detection, not interception or prevention |
 | Claim audit | Identify evidence consistency, contradictions, gaps, and disclosures | No honesty score, deception inference, or completion certification |
 | Installation self-check | Verify Python, package metadata, dependencies, entry point, and contracts | No signature, vulnerability, or project assurance claim |
@@ -34,8 +34,9 @@ It is a release candidate for final validation, not the 1.0 stability promise.
 
 - bounded regular-file inputs, duplicate-key and non-finite JSON rejection;
 - symlink/reparse defenses and no-overwrite output behavior at new boundaries;
-- no prompts, command strings, command output, arbitrary spans, or content in
-  Codex/OpenTelemetry adapter output;
+- no prompts, command strings, command output, or arbitrary span bodies in
+  adapter output; selected OpenTelemetry categorical values are represented by
+  truncated SHA-256 labels rather than copied text;
 - no ambient credential, session-store, or network access by the new adapters;
 - explicit partial, unavailable, contradicted, and held states;
 - provider output remains attributed evidence and cannot claim AI SAFE²

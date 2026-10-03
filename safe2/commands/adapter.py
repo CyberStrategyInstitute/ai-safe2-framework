@@ -14,6 +14,7 @@ from safe2.adapters.otel_jsonl import descriptor as otel_descriptor
 from safe2.adapters.otel_jsonl import export_metadata as export_otel_metadata
 from safe2.adapters.otel_jsonl import translate as translate_otel
 from safe2.contracts import validate_artifact
+from safe2.secure_io import write_new_atomic
 
 
 @click.group("adapter")
@@ -68,20 +69,24 @@ def conformance(descriptor: Path, specimens: tuple[Path, ...], output: Path) -> 
 def _write_new_json(output: Path, value: dict) -> None:
     if output.exists() or output.is_symlink():
         raise click.ClickException(f"output already exists: {output}")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with output.open("x", encoding="utf-8", newline="\n") as handle:
-        json.dump(value, handle, indent=2, ensure_ascii=False, allow_nan=False)
-        handle.write("\n")
+    body = (json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
+    try:
+        write_new_atomic(output, body)
+    except (FileExistsError, OSError, ValueError) as exc:
+        raise click.ClickException(f"output could not be published: {output}") from exc
 
 
 def _write_new_jsonl(output: Path, value: dict) -> None:
     """Write one compact JSON value as exactly one JSON Lines record."""
     if output.exists() or output.is_symlink():
         raise click.ClickException(f"output already exists: {output}")
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with output.open("x", encoding="utf-8", newline="\n") as handle:
-        handle.write(json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":")))
-        handle.write("\n")
+    body = (
+        json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":")) + "\n"
+    ).encode("utf-8")
+    try:
+        write_new_atomic(output, body)
+    except (FileExistsError, OSError, ValueError) as exc:
+        raise click.ClickException(f"output could not be published: {output}") from exc
 
 
 @adapter.command("codex-jsonl")

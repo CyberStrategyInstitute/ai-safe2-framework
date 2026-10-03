@@ -5,13 +5,13 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-import stat
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from safe2 import __version__
 from safe2.contracts import validate_artifact
+from safe2.secure_io import read_regular_bounded
 
 MAX_DOCUMENT_BYTES = 20_000_000
 EVIDENCE_TYPES = {"harness", "scanner", "evaluator", "ledger", "usage", "cloud"}
@@ -33,25 +33,32 @@ def _pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
 def load_json_regular(path: Path, *, max_bytes: int = MAX_DOCUMENT_BYTES) -> dict[str, Any]:
     """Load one bounded, non-symlink JSON object with duplicate/non-finite rejection."""
     try:
-        info = path.lstat()
-    except OSError as exc:
-        raise AdapterError(f"input is not readable: {path}") from exc
-    if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
-        raise AdapterError("adapter input must be a regular, non-symlink file")
-    if info.st_size > max_bytes:
-        raise AdapterError(f"adapter input exceeds {max_bytes} bytes")
-    try:
+        raw = read_regular_bounded(path, limit=max_bytes)
         value = json.loads(
-            path.read_bytes(),
+            raw,
             object_pairs_hook=_pairs,
             parse_constant=lambda token: (_ for _ in ()).throw(
                 AdapterError(f"non-finite JSON number: {token}")
             ),
         )
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+    except AdapterError:
+        raise
+    except (OSError, ValueError, UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise AdapterError("adapter input must be valid UTF-8 JSON") from exc
     if not isinstance(value, dict):
         raise AdapterError("adapter input root must be an object")
+
+    def reject_non_finite(item: Any) -> None:
+        if isinstance(item, float) and not math.isfinite(item):
+            raise AdapterError("adapter input contains a non-finite JSON number")
+        if isinstance(item, dict):
+            for nested in item.values():
+                reject_non_finite(nested)
+        elif isinstance(item, list):
+            for nested in item:
+                reject_non_finite(nested)
+
+    reject_non_finite(value)
     return value
 
 
@@ -105,6 +112,8 @@ def _semantic_violations(
         fail("UNAVAILABLE-PAYLOAD", "$.payload", "unavailable evidence must not contain a payload")
     if status != "unavailable" and evidence.get("payload") is None:
         fail("EVIDENCE-PAYLOAD", "$.payload", "completed or partial evidence requires a payload")
+    if status == "unavailable" and evidence.get("claims"):
+        fail("UNAVAILABLE-CLAIMS", "$.claims", "unavailable evidence cannot claim observations")
 
     claim_ids: set[str] = set()
     for index, claim in enumerate(evidence.get("claims", [])):

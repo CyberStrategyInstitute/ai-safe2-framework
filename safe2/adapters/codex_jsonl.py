@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
-import stat
+import math
 from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
@@ -12,6 +12,7 @@ from typing import Any
 
 from safe2.adapters.conformance import AdapterError, _pairs
 from safe2.contracts import validate_artifact
+from safe2.secure_io import read_regular_bounded
 
 MAX_TRACE_BYTES = 20_000_000
 MAX_TRACE_LINES = 100_000
@@ -55,6 +56,18 @@ def _strict_object(raw: bytes, line_number: int) -> dict[str, Any]:
         raise AdapterError(f"Codex JSONL line {line_number} is not valid UTF-8 JSON") from exc
     if not isinstance(value, dict):
         raise AdapterError(f"Codex JSONL line {line_number} must be a JSON object")
+
+    def reject_non_finite(item: Any) -> None:
+        if isinstance(item, float) and not math.isfinite(item):
+            raise AdapterError(f"non-finite JSON number on line {line_number}")
+        if isinstance(item, dict):
+            for nested in item.values():
+                reject_non_finite(nested)
+        elif isinstance(item, list):
+            for nested in item:
+                reject_non_finite(nested)
+
+    reject_non_finite(value)
     return value
 
 
@@ -66,16 +79,8 @@ def translate(path: Path, codex_version: str, *, observed_at: str | None = None)
     """
     producer = descriptor(codex_version)["provider"]
     try:
-        info = path.lstat()
-    except OSError as exc:
-        raise AdapterError(f"Codex trace is not readable: {path}") from exc
-    if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
-        raise AdapterError("Codex trace must be a regular, non-symlink file")
-    if info.st_size > MAX_TRACE_BYTES:
-        raise AdapterError(f"Codex trace exceeds {MAX_TRACE_BYTES} bytes")
-    try:
-        source = path.read_bytes()
-    except OSError as exc:
+        source = read_regular_bounded(path, limit=MAX_TRACE_BYTES)
+    except (OSError, ValueError) as exc:
         raise AdapterError(f"Codex trace is not readable: {path}") from exc
 
     event_counts: Counter[str] = Counter()
@@ -91,7 +96,24 @@ def translate(path: Path, codex_version: str, *, observed_at: str | None = None)
     if len(lines) > MAX_TRACE_LINES:
         raise AdapterError(f"Codex trace exceeds {MAX_TRACE_LINES} lines")
 
-    documented_events = {"item.started", "item.completed", "turn.completed"}
+    documented_events = {
+        "thread.started",
+        "turn.started",
+        "item.started",
+        "item.completed",
+        "turn.completed",
+    }
+    documented_items = {
+        "agent_message",
+        "reasoning",
+        "command_execution",
+        "file_change",
+        "mcp_tool_call",
+        "web_search",
+        "todo_list",
+        "error",
+    }
+    documented_statuses = {"in_progress", "completed", "failed", "declined"}
     for number, raw in enumerate(lines, start=1):
         if not raw.strip():
             raise AdapterError(f"Codex JSONL line {number} is blank")
@@ -109,14 +131,18 @@ def translate(path: Path, codex_version: str, *, observed_at: str | None = None)
             if not isinstance(item, dict) or not isinstance(item.get("type"), str):
                 unknown_event_counts[f"{event_type}:missing_item_type"] += 1
                 continue
-            item_type = str(item["type"])
+            raw_item_type = str(item["type"])
+            item_type = raw_item_type if raw_item_type in documented_items else "unmodeled"
+            if item_type == "unmodeled":
+                unknown_event_counts[f"{event_type}:unmodeled_item_type"] += 1
             item_counts[item_type] += 1
             if item_type == "command_execution" and event_type == "item.completed":
                 status = item.get("status")
-                if isinstance(status, str) and status:
+                if isinstance(status, str) and status in documented_statuses:
                     command_status_counts[status] += 1
                 else:
                     command_status_counts["unreported"] += 1
+                    unknown_event_counts["item.completed:invalid_command_status"] += 1
 
         if event_type == "turn.completed":
             usage = event.get("usage")

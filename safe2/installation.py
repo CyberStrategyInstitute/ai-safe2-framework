@@ -8,12 +8,10 @@ import json
 import sys
 from datetime import UTC, datetime
 from importlib.resources import files
+from pathlib import Path
 from typing import Any
 
-from jsonschema import Draft202012Validator
-
-from safe2 import __version__
-from safe2.contracts import SCHEMAS, validate_artifact
+from safe2 import __package_version__, __version__
 
 REQUIRED_DISTRIBUTIONS = (
     "click",
@@ -63,6 +61,9 @@ def inspect_installation(
             resolved_distribution: str | None = importlib.metadata.version("ai-safe2")
         except importlib.metadata.PackageNotFoundError:
             resolved_distribution = None
+        source_project = Path(__file__).resolve().parent.parent / "pyproject.toml"
+        if source_project.is_file():
+            resolved_distribution = __package_version__
     else:
         resolved_distribution = distribution_version  # type: ignore[assignment]
     entries = _entrypoints() if console_entrypoints is ... else console_entrypoints
@@ -77,12 +78,23 @@ def inspect_installation(
     invalid = []
     catalog = hashlib.sha256()
     loaded = 0
+    try:
+        from jsonschema import Draft202012Validator
+        from jsonschema.exceptions import SchemaError
+
+        from safe2.contracts import SCHEMAS, validate_artifact
+    except ImportError:
+        SCHEMAS = {}
+        Draft202012Validator = None  # type: ignore[assignment,misc]
+        SchemaError = ValueError  # type: ignore[assignment,misc]
+        validate_artifact = None  # type: ignore[assignment]
+        invalid.append("contract_runtime_unavailable")
     for name, filename in sorted(SCHEMAS.items()):
         try:
             raw = files("safe2.data").joinpath(filename).read_bytes()
             document = json.loads(raw)
             Draft202012Validator.check_schema(document)
-        except (OSError, UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        except (OSError, UnicodeError, json.JSONDecodeError, SchemaError, TypeError, ValueError):
             invalid.append(name)
             continue
         loaded += 1
@@ -101,7 +113,10 @@ def inspect_installation(
         else "missing"
     )
     version_match = (
-        resolved_distribution == __version__ if resolved_distribution is not None else None
+        resolved_distribution == __package_version__
+        or (resolved_distribution == __version__ and __version__.endswith(".dev0"))
+        if resolved_distribution is not None
+        else None
     )
     hard_fail = (
         python_support == "unsupported" or bool(missing) or bool(invalid) or version_match is False
@@ -141,6 +156,11 @@ def inspect_installation(
             "A passing installation check does not test a project, harness, control implementation, or framework conformance.",
         ],
     }
-    if validate_artifact("installation-check-v1", result):
-        raise ValueError("Installation check produced an invalid artifact")
+    if validate_artifact is not None and "installation-check-v1" not in invalid:
+        try:
+            if validate_artifact("installation-check-v1", result):
+                raise ValueError("Installation check produced an invalid artifact")
+        except (KeyError, TypeError, ValueError):
+            if result["verdict"] != "fail":
+                raise
     return result

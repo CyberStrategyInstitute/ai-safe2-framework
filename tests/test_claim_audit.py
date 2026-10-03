@@ -17,6 +17,7 @@ def source() -> dict:
         "schema_version": "safe2.claim-audit-source.v1",
         "audit_id": "audit-1",
         "task_id": "task-1",
+        "input_sha256": "0" * 64,
         "claims": [
             {
                 "id": "done",
@@ -151,6 +152,17 @@ def test_wrong_task_and_duplicate_claim_ids_fail_closed() -> None:
         assert "unique" in str(exc)
     else:
         raise AssertionError("duplicate claim accepted")
+
+
+def test_receipt_for_stale_task_input_fails_closed() -> None:
+    stale = receipt()
+    stale["input_sha256"] = "9" * 64
+    try:
+        build(encoded(source()), [encoded(stale)])
+    except ValueError as exc:
+        assert "different task input" in str(exc)
+    else:
+        raise AssertionError("stale-input receipt accepted")
 
 
 def test_cli_preserves_outputs_then_strict_exits_for_review(tmp_path: Path) -> None:

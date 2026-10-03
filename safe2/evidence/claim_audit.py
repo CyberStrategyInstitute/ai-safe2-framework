@@ -29,6 +29,8 @@ def build(source_payload: bytes, receipt_payloads: list[bytes]) -> dict[str, Any
         raise ValueError("Task receipt violates its contract")
     if any(receipt["task_id"] != source["task_id"] for receipt in receipts):
         raise ValueError("Task receipt belongs to a different task")
+    if any(receipt["input_sha256"] != source["input_sha256"] for receipt in receipts):
+        raise ValueError("Task receipt belongs to a different task input")
 
     criteria: dict[str, list[dict[str, Any]]] = {}
     for receipt in receipts:
@@ -46,14 +48,33 @@ def build(source_payload: bytes, receipt_payloads: list[bytes]) -> dict[str, Any
         flattened = [item for group in matched for item in group]
         if not references:
             status, reason = "unverifiable", "no_evidence_referenced"
-        elif any(len(group) != 1 for group in matched):
-            status, reason = "unverifiable", "missing_or_unverifiable_criterion"
         elif any(item["status"] == "contradicted" for item in flattened):
             status, reason = "contradicted", "referenced_criterion_contradicted"
-        elif any(item["status"] != "supported" for item in flattened):
+        elif any(len(group) != 1 for group in matched) or any(
+            item["status"] != "supported" for item in flattened
+        ):
             status, reason = "unverifiable", "missing_or_unverifiable_criterion"
         else:
-            status, reason = "evidence_consistent", "all_referenced_criteria_supported"
+            outcome_consistent = True
+            for item in flattened:
+                tool = item.get("tool_summary")
+                test = item.get("test_summary")
+                if tool and tool.get("claimed_outcome") != claim["asserted_outcome"]:
+                    outcome_consistent = False
+                if test:
+                    passed = (
+                        test.get("exit_code") == 0
+                        and not test.get("counts", {}).get("failed")
+                        and not test.get("counts", {}).get("errors")
+                    )
+                    if claim["asserted_outcome"] == "succeeded" and not passed:
+                        outcome_consistent = False
+                    if claim["asserted_outcome"] == "failed" and passed:
+                        outcome_consistent = False
+            if outcome_consistent:
+                status, reason = "evidence_consistent", "all_referenced_criteria_supported"
+            else:
+                status, reason = "contradicted", "referenced_outcome_conflicts_with_claim"
         rows.append(
             {
                 "id": claim["id"],

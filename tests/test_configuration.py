@@ -94,6 +94,14 @@ def test_unknown_keys_and_unsafe_output_paths_fail_closed(tmp_path: Path) -> Non
     assert result.exit_code != 0
     assert "must not exceed" in result.output
 
+    source.write_text(
+        'schema_version = "safe2.config.v1"\n[output]\nformat = ["json"]\n',
+        encoding="utf-8",
+    )
+    result = CliRunner().invoke(cli, ["config", "validate", str(source)])
+    assert result.exit_code != 0
+    assert "output.format must be json" in result.output
+
 
 def test_symlink_configuration_is_rejected_when_supported(tmp_path: Path) -> None:
     target = tmp_path / "real.toml"

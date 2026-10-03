@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import stat
 from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
@@ -12,6 +11,7 @@ from typing import Any
 
 from safe2.adapters.conformance import AdapterError, _pairs
 from safe2.contracts import validate_artifact
+from safe2.secure_io import read_regular_bounded
 
 MAX_FILE_BYTES = 20_000_000
 MAX_LINES = 100_000
@@ -52,14 +52,9 @@ def descriptor(otel_version: str) -> dict[str, Any]:
 
 def _read_lines(path: Path) -> tuple[bytes, list[dict[str, Any]]]:
     try:
-        info = path.lstat()
-    except OSError as exc:
+        source = read_regular_bounded(path, limit=MAX_FILE_BYTES)
+    except (OSError, ValueError) as exc:
         raise AdapterError(f"OTLP JSONL input is not readable: {path}") from exc
-    if stat.S_ISLNK(info.st_mode) or not stat.S_ISREG(info.st_mode):
-        raise AdapterError("OTLP JSONL input must be a regular, non-symlink file")
-    if info.st_size > MAX_FILE_BYTES:
-        raise AdapterError(f"OTLP JSONL input exceeds {MAX_FILE_BYTES} bytes")
-    source = path.read_bytes()
     raw_lines = source.splitlines()
     if not raw_lines:
         raise AdapterError("OTLP JSONL input is empty")
@@ -120,6 +115,16 @@ def _attributes(rows: Any) -> dict[str, Any]:
     return result
 
 
+def _attribute_keys(rows: Any) -> set[str]:
+    if not isinstance(rows, list):
+        return set()
+    return {row["key"] for row in rows if isinstance(row, dict) and isinstance(row.get("key"), str)}
+
+
+def _private_label(value: str) -> str:
+    return f"sha256:{hashlib.sha256(value.encode('utf-8')).hexdigest()[:16]}"
+
+
 def translate(path: Path, otel_version: str, *, observed_at: str | None = None) -> dict[str, Any]:
     """Aggregate OTLP TracesData without retaining span content or identifiers."""
     producer = descriptor(otel_version)["provider"]
@@ -163,17 +168,18 @@ def translate(path: Path, otel_version: str, *, observed_at: str | None = None) 
                         continue
                     span_count += 1
                     attributes = _attributes(span.get("attributes"))
+                    attribute_keys = _attribute_keys(span.get("attributes"))
                     operation = attributes.get("gen_ai.operation.name")
                     provider = attributes.get("gen_ai.provider.name")
                     model = attributes.get("gen_ai.response.model") or attributes.get(
                         "gen_ai.request.model"
                     )
                     if isinstance(operation, str):
-                        operation_counts[operation] += 1
+                        operation_counts[_private_label(operation)] += 1
                     if isinstance(provider, str):
-                        provider_counts[provider] += 1
+                        provider_counts[_private_label(provider)] += 1
                     if isinstance(model, str):
-                        model_counts[model] += 1
+                        model_counts[_private_label(model)] += 1
                     status = span.get("status")
                     if isinstance(status, dict) and status.get("code") in (2, "STATUS_CODE_ERROR"):
                         error_spans += 1
@@ -189,7 +195,10 @@ def translate(path: Path, otel_version: str, *, observed_at: str | None = None) 
                         and not isinstance(outgoing, bool)
                         and outgoing >= 0
                     )
-                    if incoming is not None or outgoing is not None:
+                    usage_keys_present = bool(
+                        {"gen_ai.usage.input_tokens", "gen_ai.usage.output_tokens"} & attribute_keys
+                    )
+                    if usage_keys_present:
                         if valid_in and valid_out:
                             input_tokens += incoming
                             output_tokens += outgoing
