@@ -426,6 +426,21 @@ parsed. Validation output never includes instance values or verbose validator
 messages. Structural validation does not verify evidence integrity, factual
 accuracy, authorization, control effectiveness, or conformance.
 
+## Provider-Neutral Adapters
+
+Validate third-party adapter descriptors and translate explicit Codex CLI JSONL
+exports without retaining prompts, commands, or output content. See the
+[adapter SDK](../docs/ADAPTER-SDK.md) and
+[Codex reference adapter](../docs/CODEX-JSONL-ADAPTER.md).
+
+```bash
+safe2 adapter codex-jsonl codex-trace.jsonl \
+  --codex-version YOUR_CODEX_VERSION --output codex-evidence.json
+```
+
+Adapter records remain attributed `evidence_only` inputs. They are not provider
+endorsements, independent truth verification, or AI SAFE² conformance claims.
+
 ## Unified Evidence Run Manifest
 
 After collectors produce their JSON artifacts, bind them into one portable run
