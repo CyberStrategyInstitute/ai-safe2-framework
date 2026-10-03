@@ -38,6 +38,8 @@ SCHEMAS = {
     "test-result-v1": "test-result-v1.schema.json",
     "task-receipt-input-v1": "task-receipt-input-v1.schema.json",
     "task-receipt-v1": "task-receipt-v1.schema.json",
+    "claim-audit-source-v1": "claim-audit-source-v1.schema.json",
+    "claim-audit-v1": "claim-audit-v1.schema.json",
     "challenge-bundle": "challenge-bundle-v1.schema.json",
     "challenge-run": "challenge-run-v1.schema.json",
     "challenge-source": "challenge-source-v1.schema.json",

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/claim-audit-source-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "audit_id", "task_id", "claims"],
+  "properties": {
+    "schema_version": {"const": "safe2.claim-audit-source.v1"},
+    "audit_id": {"$ref": "#/$defs/id"},
+    "task_id": {"$ref": "#/$defs/id"},
+    "claims": {
+      "type": "array", "minItems": 1, "maxItems": 100,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "claim_type", "asserted_outcome", "evidence_criteria_ids"],
+        "properties": {
+          "id": {"$ref": "#/$defs/id"},
+          "claim_type": {"enum": ["task_completion", "tool_outcome", "search_outcome", "test_outcome", "artifact_delivery"]},
+          "asserted_outcome": {"enum": ["completed", "succeeded", "failed", "unavailable", "not_attempted"]},
+          "evidence_criteria_ids": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+        }
+      }
+    }
+  },
+  "$defs": {"id": {"type": "string", "minLength": 1, "maxLength": 120, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"}}
+}

@@ -66,6 +66,7 @@ def cli():
     safe2 evidence readiness release.json   technical release-readiness card
     safe2 evidence harness export.json       provider-neutral harness evidence intake
     safe2 evidence watch .                   continuous local agent-input evidence
+    safe2 evidence claims claims.json        claim/receipt contradiction audit
     safe2 adapter codex-jsonl trace.jsonl    privacy-safe Codex trace evidence
     safe2 adapter otel-jsonl traces.jsonl    OpenTelemetry evidence exchange
     safe2 doctor .                            multi-harness environment inventory
