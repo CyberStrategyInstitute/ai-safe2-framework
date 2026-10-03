@@ -65,6 +65,15 @@ def test_imported_code_and_distribution_version_mismatch_fails() -> None:
     assert result["distribution"]["version_match"] is False
 
 
+def test_metadata_lookup_mismatch_is_not_hidden_by_source_checkout(monkeypatch) -> None:
+    monkeypatch.setattr("safe2.installation.importlib.metadata.version", lambda _name: "0.1.0")
+    result = inspect_installation(
+        runtime=(3, 14, 0), installed=dependencies(), console_entrypoints={"safe2"}
+    )
+    assert result["verdict"] == "fail"
+    assert result["distribution"]["version"] == "0.1.0"
+
+
 def test_cli_writes_new_machine_report(tmp_path: Path) -> None:
     output = tmp_path / "self-check.json"
     result = CliRunner().invoke(cli, ["self-check", "--format", "json", "--output", str(output)])

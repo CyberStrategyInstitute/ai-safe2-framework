@@ -28,11 +28,21 @@ def test_collect_once_preserves_history_and_advances_validated_state(tmp_path: P
     assert json.loads(state.read_text(encoding="utf-8")) == first
 
     second, second_path = collect_once(root, state, evidence_dir)
-    assert second["decision"] == "hold"
-    assert second["changes"]
+    assert second["decision"] == "approve"
+    assert second["changes"] == []
     assert second_path != first_path
     assert first_path.exists()
     assert len(list(evidence_dir.glob("change-*.json"))) == 2
+
+
+def test_watch_rejects_output_directory_that_contains_root(tmp_path: Path) -> None:
+    root = workspace(tmp_path)
+    try:
+        collect_once(root, tmp_path / "state.json", tmp_path)
+    except ValueError as exc:
+        assert "must not contain" in str(exc)
+    else:
+        raise AssertionError("overlapping evidence directory was accepted")
 
 
 def test_changed_skill_is_rescanned_and_rejected(tmp_path: Path) -> None:

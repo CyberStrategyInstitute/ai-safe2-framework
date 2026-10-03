@@ -193,7 +193,7 @@ def verify_bundle(root: Path) -> dict[str, Any]:
         try:
             current_record = _scan_fixture(target, fixture["id"], fixture["expected_decision"])
             current = current_record["sha256"]
-        except (OSError, ValueError):
+        except (OSError, ValueError, skill_gate.ScanLimitExceeded):
             errors.append(f"fixture_unreadable:{fixture['id']}")
             continue
         if current != fixture["sha256"]:

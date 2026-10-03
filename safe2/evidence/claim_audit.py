@@ -29,8 +29,9 @@ def build(source_payload: bytes, receipt_payloads: list[bytes]) -> dict[str, Any
         raise ValueError("Task receipt violates its contract")
     if any(receipt["task_id"] != source["task_id"] for receipt in receipts):
         raise ValueError("Task receipt belongs to a different task")
-    if any(receipt["input_sha256"] != source["input_sha256"] for receipt in receipts):
-        raise ValueError("Task receipt belongs to a different task input")
+    supplied_inputs = sorted({receipt["input_sha256"] for receipt in receipts})
+    if supplied_inputs != sorted(source["receipt_input_sha256s"]):
+        raise ValueError("Task receipt input set does not match the audit declaration")
 
     criteria: dict[str, list[dict[str, Any]]] = {}
     for receipt in receipts:
@@ -59,8 +60,14 @@ def build(source_payload: bytes, receipt_payloads: list[bytes]) -> dict[str, Any
             for item in flattened:
                 tool = item.get("tool_summary")
                 test = item.get("test_summary")
-                if tool and tool.get("claimed_outcome") != claim["asserted_outcome"]:
-                    outcome_consistent = False
+                if tool:
+                    observed = tool.get("claimed_outcome")
+                    asserted = claim["asserted_outcome"]
+                    if asserted == "completed":
+                        if observed != "succeeded":
+                            outcome_consistent = False
+                    elif observed != asserted:
+                        outcome_consistent = False
                 if test:
                     passed = (
                         test.get("exit_code") == 0

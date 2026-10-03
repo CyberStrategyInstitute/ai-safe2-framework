@@ -81,13 +81,20 @@ def collect_once(
     max_file_bytes: int = 1_000_000,
 ) -> tuple[dict[str, Any], Path]:
     """Collect one bounded report, preserve it immutably, then advance state."""
+    root = safe_path(root)
+    state_path = safe_path(state_path)
+    evidence_dir = safe_path(evidence_dir)
+    root_resolved = root.resolve(strict=False)
+    evidence_resolved = evidence_dir.resolve(strict=False)
+    state_resolved = state_path.resolve(strict=False)
+    if evidence_resolved == root_resolved or root_resolved.is_relative_to(evidence_resolved):
+        raise ValueError("Evidence directory must not contain the watched root")
+    if state_resolved == root_resolved or root_resolved.is_relative_to(state_resolved):
+        raise ValueError("Watch state must not contain the watched root")
     baseline = load_state(state_path)
-    comparison_baseline = baseline
-    if baseline is not None and baseline.get("decision") != "approve":
-        comparison_baseline = {**baseline, "inventory": []}
     result = monitor(
         root,
-        comparison_baseline,
+        baseline,
         max_files=max_files,
         max_file_bytes=max_file_bytes,
         excluded={state_path, evidence_dir},

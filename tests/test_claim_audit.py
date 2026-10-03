@@ -17,7 +17,7 @@ def source() -> dict:
         "schema_version": "safe2.claim-audit-source.v1",
         "audit_id": "audit-1",
         "task_id": "task-1",
-        "input_sha256": "0" * 64,
+        "receipt_input_sha256s": ["0" * 64],
         "claims": [
             {
                 "id": "done",
@@ -160,9 +160,22 @@ def test_receipt_for_stale_task_input_fails_closed() -> None:
     try:
         build(encoded(source()), [encoded(stale)])
     except ValueError as exc:
-        assert "different task input" in str(exc)
+        assert "input set" in str(exc)
     else:
         raise AssertionError("stale-input receipt accepted")
+
+
+def test_distinct_declared_receipt_inputs_can_be_combined() -> None:
+    declared = source()
+    declared["claims"] = [declared["claims"][0]]
+    second = receipt()
+    second["input_sha256"] = "9" * 64
+    second["criteria"] = [copy.deepcopy(second["criteria"][0])]
+    second["criteria"][0]["id"] = "other-artifact"
+    second["counts"] = {"supported": 1, "contradicted": 0, "unverifiable": 0}
+    declared["receipt_input_sha256s"] = ["0" * 64, "9" * 64]
+    result = build(encoded(declared), [encoded(receipt()), encoded(second)])
+    assert result["claims"][0]["status"] == "evidence_consistent"
 
 
 def test_cli_preserves_outputs_then_strict_exits_for_review(tmp_path: Path) -> None:

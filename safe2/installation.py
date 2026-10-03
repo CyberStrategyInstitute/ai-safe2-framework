@@ -8,7 +8,6 @@ import json
 import sys
 from datetime import UTC, datetime
 from importlib.resources import files
-from pathlib import Path
 from typing import Any
 
 from safe2 import __package_version__, __version__
@@ -61,9 +60,6 @@ def inspect_installation(
             resolved_distribution: str | None = importlib.metadata.version("ai-safe2")
         except importlib.metadata.PackageNotFoundError:
             resolved_distribution = None
-        source_project = Path(__file__).resolve().parent.parent / "pyproject.toml"
-        if source_project.is_file():
-            resolved_distribution = __package_version__
     else:
         resolved_distribution = distribution_version  # type: ignore[assignment]
     entries = _entrypoints() if console_entrypoints is ... else console_entrypoints

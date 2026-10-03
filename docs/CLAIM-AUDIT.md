@@ -16,6 +16,10 @@ are supposed to support it. The audit labels the claim `evidence_consistent`,
 `unavailable`, and `not_attempted` disclosures so a truthful limitation is not
 mistaken for incomplete work hidden behind a success claim.
 
+The source also declares the complete `receipt_input_sha256s` set. This binds
+the audit to each supplied receipt's own canonical criteria-input document while
+still allowing independently produced receipts for the same task to be combined.
+
 There is intentionally no “honesty score.” A missing or contradictory receipt
 does not prove intent or deception, while a consistent unsigned receipt can still
 be fabricated. Coverage and contradiction ratios always retain their denominator

@@ -21,6 +21,7 @@ from safe2.discovery.config import inspect_inventory
 from safe2.engines.project import run_scan
 from safe2.evidence.manifest import create_manifest
 from safe2.secure_io import reject_symlink_ancestry
+from scanner.scanner import SKIP_DIR_PREFIXES, SKIP_DIRS
 
 
 class AssessmentError(ValueError):
@@ -59,6 +60,10 @@ def _project_scan(root: Path, *, enabled: bool, max_files: int) -> dict[str, Any
             current = pending.pop()
             with os.scandir(current) as entries:
                 for entry in entries:
+                    if entry.is_dir(follow_symlinks=False) and (
+                        entry.name in SKIP_DIRS or entry.name.startswith(SKIP_DIR_PREFIXES)
+                    ):
+                        continue
                     traversed += 1
                     if traversed > max_files:
                         break

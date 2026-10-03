@@ -3,11 +3,22 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
 from click.testing import CliRunner
 
+from safe2 import __version__
 from safe2.acceptance import create_bundle, verify_bundle
 from safe2.cli import cli
 from safe2.contracts import validate_artifact
+from safe2.engines import skill_gate
+
+
+@pytest.fixture(autouse=True)
+def installed_release_metadata(monkeypatch):
+    monkeypatch.setattr(
+        "safe2.installation.importlib.metadata.version",
+        lambda name: __version__ if name == "ai-safe2" else "1.0",
+    )
 
 
 def test_bundle_is_readable_replayable_and_claim_bounded(tmp_path: Path) -> None:
@@ -42,6 +53,18 @@ def test_added_fixture_file_and_changed_human_card_fail_verification(tmp_path: P
     assert result["valid"] is False
     assert "fixture_digest_mismatch:benign-control" in result["errors"]
     assert "human_card_mismatch" in result["errors"]
+
+
+def test_oversized_fixture_returns_structured_invalid_result(tmp_path: Path, monkeypatch) -> None:
+    root = tmp_path / "acceptance"
+    create_bundle(root)
+    monkeypatch.setattr(
+        "safe2.acceptance._scan_fixture",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(skill_gate.ScanLimitExceeded("limit")),
+    )
+    result = verify_bundle(root)
+    assert result["valid"] is False
+    assert "fixture_unreadable:benign-control" in result["errors"]
 
 
 def test_report_cannot_redirect_fixture_verification_outside_bundle(tmp_path: Path) -> None:
