@@ -226,6 +226,8 @@ The unified CLI makes repository evidence directly callable by agents while
 preserving human decision authority:
 
 ```bash
+safe2 init . --profile local
+safe2 config show
 safe2 scan project .
 safe2 doctor . --format json --output environment-inventory.json
 safe2 doctor . --assess --inspect-config --baseline trusted-inventory.json
@@ -246,6 +248,9 @@ safe2 aism score assessment.json --format markdown --output decision-card.md
 safe2 aism remediation-init assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --decision-owner "Accountable system owner" --output remediation-source.json
 safe2 aism plan remediation-source.json assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --output remediation-plan.json --card remediation-card.md --strict
 ```
+
+`safe2 init` creates a versioned secure-default project configuration without
+overwriting an existing file. See the [CLI configuration contract](docs/CLI-CONFIGURATION.md).
 
 `safe2 doctor` provides metadata-only discovery for multi-harness workstations,
 including known Codex, Claude Code, Antigravity, Hermes, OpenClaw, and Grok
