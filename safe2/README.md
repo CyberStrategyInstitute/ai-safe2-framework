@@ -17,6 +17,8 @@
 
 [CLI roadmap to 1.0](../docs/CLI-ROADMAP-TO-1.0.md)
 
+[Unified project assessment](../docs/UNIFIED-ASSESSMENT.md)
+
 [Assessment scope](../docs/ASSESSMENT-SCOPE.md)
 
 [Change attribution](../docs/CHANGE-ATTRIBUTION.md)
@@ -76,6 +78,7 @@ Create the versioned project configuration before the first assessment:
 safe2 init . --profile local
 safe2 config show
 safe2 config validate .safe2/config.toml
+safe2 assess . --scan-content --inspect-config
 ```
 
 Initialization creates `.safe2/config.toml` exclusively and refuses to replace
@@ -84,6 +87,14 @@ environment-variable values, or network telemetry. Configuration precedence is
 explicit command input, `SAFE2_CONFIG`, the nearest project configuration, then
 built-in defaults. See the [configuration contract](../docs/CLI-CONFIGURATION.md)
 for profiles, limits, trust boundaries, and recovery.
+
+`safe2 assess` is the bounded golden path. Without content consent it produces
+an honestly `INCOMPLETE` metadata assessment rather than presenting uninspected
+content as clean. `--scan-content` opts into local static content analysis;
+`--inspect-config` additionally emits only allowlisted structural configuration
+facts. The command writes `assessment.json`, `environment.json`,
+`project-scan.json`, `manifest.json`, and a human `decision-card.md` atomically
+to a new directory. It refuses to overwrite an existing bundle.
 
 For contributor checks:
 
@@ -99,6 +110,7 @@ pytest tests/ scanner/tests/
 | `safe2 init PATH` | Create a secure-default, versioned project configuration | Refuses overwrite and symbolic-link configuration paths |
 | `safe2 config show` | Show the normalized effective configuration and its precedence source | Inspection only; does not run an assessment |
 | `safe2 config validate FILE` | Validate bounded `safe2.config.v1` TOML | Rejects unknown keys, unsafe paths, symlinks, and malformed values |
+| `safe2 assess PATH [--scan-content] [--inspect-config]` | Produce one sealed environment and project assessment bundle | Missing or unrequested evidence remains explicit; no deployment authorization or conformance claim |
 | `safe2 scan project PATH` | Informational 161-control project scan | Reports findings; does not gate |
 | `safe2 score project PATH` | Compact project score | Reports score only |
 | `safe2 gate project PATH` | CI/CD project decision | Enforces tier or `--fail-under` threshold |

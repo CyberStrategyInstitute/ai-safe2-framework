@@ -22,6 +22,7 @@ import click
 
 from safe2 import __version__
 from safe2.commands.aism import aism
+from safe2.commands.assess import assess_project
 from safe2.commands.challenge import challenge
 from safe2.commands.configuration import config, init_project
 from safe2.commands.decision import decision
@@ -46,6 +47,7 @@ def cli():
     \b
     safe2 scan project .            161-control static audit, findings only
     safe2 init .                    secure-default project configuration
+    safe2 assess .                  bounded project assessment bundle
     safe2 config show              effective configuration and source
     safe2 scan skill ./my-skill     skill package static scan, findings only
     safe2 scan mcp ./my-server      MCP server source scan, findings only
@@ -77,6 +79,7 @@ def cli():
 
 cli.add_command(scan)
 cli.add_command(aism)
+cli.add_command(assess_project)
 cli.add_command(challenge)
 cli.add_command(config)
 cli.add_command(init_project)
