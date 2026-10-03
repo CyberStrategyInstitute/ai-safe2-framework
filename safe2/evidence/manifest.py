@@ -16,6 +16,8 @@ from safe2.discovery.integrity import verify_inventory
 from safe2.evidence.friction import verify_event
 
 SCHEMA_CONTRACTS = {
+    "safe2.project-assessment.v1": "project-assessment-v1",
+    "safe2.project-scan-evidence.v1": "project-scan-evidence-v1",
     "safe2.operational-truth-source.v1": "operational-truth-source-v1",
     "safe2.operational-truth-manifest.v1": "operational-truth-manifest-v1",
     "safe2.change-monitor.v1": "change-monitor-v1",
@@ -61,11 +63,7 @@ def verify_manifest(manifest: dict[str, Any]) -> str:
         return "not_present"
     if not isinstance(digest, str) or len(digest) != 64:
         return "invalid"
-    return (
-        "valid"
-        if digest == _canonical_digest(manifest, "integrity_sha256")
-        else "invalid"
-    )
+    return "valid" if digest == _canonical_digest(manifest, "integrity_sha256") else "invalid"
 
 
 def _artifact_record(path: Path, *, max_bytes: int) -> dict[str, Any]:
@@ -100,7 +98,11 @@ def _artifact_record(path: Path, *, max_bytes: int) -> dict[str, Any]:
     )
     record.update({"schema_version": schema_version, "contract": contract})
     if contract is None:
-        return {**record, "error": "unknown_schema_version", "structural_validation": "not_available"}
+        return {
+            **record,
+            "error": "unknown_schema_version",
+            "structural_validation": "not_available",
+        }
     violations = validate_artifact(contract, artifact)
     record["structural_validation"] = "valid" if not violations else "invalid"
     record["validation_error_count"] = len(violations)
@@ -111,7 +113,9 @@ def _artifact_record(path: Path, *, max_bytes: int) -> dict[str, Any]:
     elif declared_version == "safe2.run-manifest.v1":
         record["integrity_verification"] = verify_manifest(artifact)
     elif declared_version in {
-        "safe2.challenge-run.v1", "safe2.challenge-comparison.v1", "safe2.challenge-source.v1",
+        "safe2.challenge-run.v1",
+        "safe2.challenge-comparison.v1",
+        "safe2.challenge-source.v1",
         "safe2.challenge-bundle.v1",
     }:
         from safe2.challenge.io import parse_json
@@ -130,8 +134,11 @@ def _artifact_record(path: Path, *, max_bytes: int) -> dict[str, Any]:
                 )
                 record["challenge_verification"] = result
             else:
-                result = (verify_run(artifact) if declared_version == "safe2.challenge-run.v1"
-                          else verify_comparison(artifact))
+                result = (
+                    verify_run(artifact)
+                    if declared_version == "safe2.challenge-run.v1"
+                    else verify_comparison(artifact)
+                )
                 record["integrity_verification"] = "valid" if result["valid"] else "invalid"
                 record["challenge_verification"] = result
         except ValueError:
@@ -139,9 +146,7 @@ def _artifact_record(path: Path, *, max_bytes: int) -> dict[str, Any]:
     else:
         record["integrity_verification"] = "not_applicable"
     record["status"] = (
-        "valid"
-        if not violations and record["integrity_verification"] != "invalid"
-        else "invalid"
+        "valid" if not violations and record["integrity_verification"] != "invalid" else "invalid"
     )
     return record
 

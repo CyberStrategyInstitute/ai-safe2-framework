@@ -228,6 +228,7 @@ preserving human decision authority:
 ```bash
 safe2 init . --profile local
 safe2 config show
+safe2 assess . --scan-content --inspect-config
 safe2 scan project .
 safe2 doctor . --format json --output environment-inventory.json
 safe2 doctor . --assess --inspect-config --baseline trusted-inventory.json
