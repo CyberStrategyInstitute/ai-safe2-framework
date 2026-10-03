@@ -174,6 +174,63 @@ def watch_agent_inputs(
         ) from exc
 
 
+@evidence.command("claims")
+@click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.argument("receipts", nargs=-1, required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", "output", required=True, type=click.Path(path_type=Path))
+@click.option("--card", required=True, type=click.Path(path_type=Path))
+@click.option("--strict", is_flag=True, help="Exit 1 after writing when any claim needs review.")
+@click.pass_context
+def audit_claims(
+    ctx: click.Context,
+    source: Path,
+    receipts: tuple[Path, ...],
+    output: Path,
+    card: Path,
+    strict: bool,
+) -> None:
+    """Audit explicit agent claims against task-receipt evidence."""
+    from safe2.challenge.io import read_bytes, safe_path, write_json, write_text
+    from safe2.evidence.claim_audit import build, render_markdown
+
+    try:
+        destinations = [safe_path(output), safe_path(card)]
+        if len(set(destinations)) != 2 or any(path.exists() for path in destinations):
+            raise ValueError("Outputs must be distinct and new")
+        result = build(
+            read_bytes(source, limit=1_000_000),
+            [read_bytes(path, limit=5_000_000) for path in receipts],
+        )
+        write_json(output, result)
+        created_output = destinations[0].lstat()
+        try:
+            write_text(card, render_markdown(result))
+        except (OSError, ValueError):
+            try:
+                current = destinations[0].lstat()
+                if (current.st_dev, current.st_ino) == (
+                    created_output.st_dev,
+                    created_output.st_ino,
+                ):
+                    destinations[0].unlink()
+            except FileNotFoundError:
+                pass
+            raise
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException(
+            "Claim audit failed: invalid claims, receipts, task binding, or unsafe output"
+        ) from exc
+    click.echo(json.dumps({
+        "output": str(output),
+        "card": str(card),
+        "gate": result["gate"],
+        "completion_verified": False,
+        "deception_inferred": False,
+    }))
+    if strict and result["gate"] != "evidence_consistent":
+        ctx.exit(1)
+
+
 @evidence.command("readiness")
 @click.argument("source", type=click.Path(path_type=Path, exists=True, dir_okay=False))
 @click.option("--system-identity", required=True, type=click.Path(path_type=Path, exists=True, dir_okay=False))

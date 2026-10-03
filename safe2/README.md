@@ -131,6 +131,7 @@ pytest tests/ scanner/tests/
 | `safe2 evidence attribute SOURCE --system-identity FILE --baseline-scope FILE --current-scope FILE --output FILE [--strict]` | Attribute normalized findings across a trusted baseline and current revision | Comparison support only; does not prove causation, deployment state, or conformance |
 | `safe2 evidence readiness SOURCE --system-identity FILE --assessment-scope FILE --change-attribution FILE --output FILE --card FILE [--strict]` | Create agent JSON and a human technical release-readiness card | Human decision support only; never authorizes release or claims conformance |
 | `safe2 evidence truth POLICY EVIDENCE... --output FILE --card FILE [--strict]` | Correlate multi-harness task evidence, receipts, usage, coverage and completion claims | Readiness for human decision only; never verifies completion, billing or conformance |
+| `safe2 evidence claims SOURCE RECEIPTS... --output FILE --card FILE [--strict]` | Audit explicit agent outcome claims against receipt criteria | Detects contradictions and disclosures; never infers deception or verifies completion |
 | `safe2 evidence changes ROOT [--baseline FILE] --output FILE [--strict]` | One-shot local/CI detection of changed skills and agent configuration | No daemon, telemetry or content export; changed configuration requires review |
 | `safe2 evidence watch ROOT --state FILE --evidence-dir DIR [--continuous] [--strict]` | Preserve repeated local change reports and rescan changed skills | Polling detection only; does not intercept installs, pasted context, or harness execution |
 | `safe2 aism remediation-init ASSESSMENT --system-identity FILE --assessment-scope FILE --decision-owner NAME --output FILE` | Create a source template bound to the exact AISM, system-identity, and deployment-scope artifacts | Produces no recommendation and authorizes no action |
@@ -448,6 +449,9 @@ non-content SAFE² metadata. See the
 
 For opt-in repeated change evidence, see
 [Continuous Local Evidence](../docs/CONTINUOUS-EVIDENCE.md).
+
+For evidence-bounded completion and failure disclosure review, see the
+[Agent Claim Audit](../docs/CLAIM-AUDIT.md).
 
 ## Unified Evidence Run Manifest
 
