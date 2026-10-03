@@ -8,6 +8,8 @@ from pathlib import Path
 import click
 
 from safe2.adapters import AdapterError, evaluate_conformance, load_json_regular
+from safe2.adapters.codex_jsonl import descriptor as codex_descriptor
+from safe2.adapters.codex_jsonl import translate as translate_codex
 from safe2.contracts import validate_artifact
 
 
@@ -58,3 +60,39 @@ def conformance(descriptor: Path, specimens: tuple[Path, ...], output: Path) -> 
     click.echo(json.dumps(report, indent=2))
     if report["status"] != "passed":
         raise SystemExit(1)
+
+
+def _write_new_json(output: Path, value: dict) -> None:
+    if output.exists() or output.is_symlink():
+        raise click.ClickException(f"output already exists: {output}")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    with output.open("x", encoding="utf-8", newline="\n") as handle:
+        json.dump(value, handle, indent=2, ensure_ascii=False, allow_nan=False)
+        handle.write("\n")
+
+
+@adapter.command("codex-jsonl")
+@click.argument("trace", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--codex-version", required=True, help="Version declared by the trace producer.")
+@click.option("--output", type=click.Path(path_type=Path), required=True)
+def codex_jsonl(trace: Path, codex_version: str, output: Path) -> None:
+    """Translate an explicit Codex JSONL trace into privacy-safe evidence."""
+    try:
+        value = translate_codex(trace, codex_version)
+        _write_new_json(output, value)
+    except AdapterError as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(json.dumps(value, indent=2))
+
+
+@adapter.command("codex-descriptor")
+@click.option("--codex-version", required=True, help="Version declared by the trace producer.")
+@click.option("--output", type=click.Path(path_type=Path), required=True)
+def write_codex_descriptor(codex_version: str, output: Path) -> None:
+    """Write the matching Codex adapter descriptor for conformance checks."""
+    try:
+        value = codex_descriptor(codex_version)
+        _write_new_json(output, value)
+    except AdapterError as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(json.dumps(value, indent=2))
