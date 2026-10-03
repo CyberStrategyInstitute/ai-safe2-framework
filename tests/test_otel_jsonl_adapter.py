@@ -187,4 +187,6 @@ def test_cli_import_descriptor_conformance_and_export(tmp_path: Path) -> None:
         ).exit_code
         == 0
     )
-    assert "resourceLogs" in json.loads(exported.read_text(encoding="utf-8"))
+    exported_lines = exported.read_text(encoding="utf-8").splitlines()
+    assert len(exported_lines) == 1
+    assert "resourceLogs" in json.loads(exported_lines[0])
