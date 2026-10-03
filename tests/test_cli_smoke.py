@@ -31,6 +31,7 @@ def test_top_level_help():
         "init",
         "config",
         "assess",
+        "adapter",
     ):
         assert name in result.output
 

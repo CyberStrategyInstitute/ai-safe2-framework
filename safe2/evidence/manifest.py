@@ -16,6 +16,8 @@ from safe2.discovery.integrity import verify_inventory
 from safe2.evidence.friction import verify_event
 
 SCHEMA_CONTRACTS = {
+    "safe2.adapter-evidence.v1": "adapter-evidence-v1",
+    "safe2.adapter-conformance.v1": "adapter-conformance-v1",
     "safe2.project-assessment.v1": "project-assessment-v1",
     "safe2.project-scan-evidence.v1": "project-scan-evidence-v1",
     "safe2.operational-truth-source.v1": "operational-truth-source-v1",

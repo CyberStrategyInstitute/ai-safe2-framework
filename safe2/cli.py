@@ -21,6 +21,7 @@ import sys
 import click
 
 from safe2 import __version__
+from safe2.commands.adapter import adapter
 from safe2.commands.aism import aism
 from safe2.commands.assess import assess_project
 from safe2.commands.challenge import challenge
@@ -78,6 +79,7 @@ def cli():
 
 
 cli.add_command(scan)
+cli.add_command(adapter)
 cli.add_command(aism)
 cli.add_command(assess_project)
 cli.add_command(challenge)
