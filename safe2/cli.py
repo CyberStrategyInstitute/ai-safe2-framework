@@ -37,6 +37,7 @@ from safe2.commands.mcp import mcp
 from safe2.commands.report import report
 from safe2.commands.scan import scan
 from safe2.commands.schema import schema
+from safe2.commands.self_check import self_check
 from safe2.commands.score import score
 
 
@@ -74,6 +75,7 @@ def cli():
     safe2 dev plan source.json                risk-adjusted development plan
     safe2 feedback record ...                 operational friction evidence
     safe2 schema list                         machine-readable evidence contracts
+    safe2 self-check                         installed runtime and contract verification
     safe2 challenge list                      offline Challenge Lab experiments
     safe2 aism score assessment.json         human Decision Card
     safe2 example verify aism-decision-card  executable reference validation
@@ -100,6 +102,7 @@ cli.add_command(score)
 cli.add_command(report)
 cli.add_command(mcp)
 cli.add_command(schema)
+cli.add_command(self_check)
 
 
 @cli.command("serve")

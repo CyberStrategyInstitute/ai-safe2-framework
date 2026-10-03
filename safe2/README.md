@@ -8,6 +8,7 @@
 [Try the skill-screening demo](../docs/SKILL-SCREENING-DEMO.md) | [Our own-skill results and lessons](../docs/SKILL-SCREENING-SECOND-PASS.md)
 
 [Task receipts: local artifact verification](../docs/TASK-RECEIPTS.md)
+[Installation self-check](../docs/INSTALLATION-CHECK.md)
 
 [Development method: plan, prove, and receipt changes](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md)
 
@@ -159,6 +160,7 @@ pytest tests/ scanner/tests/
 | `safe2 dev verify ARTIFACT` | Verify a development plan or receipt contract and integrity seal | Structural and byte-integrity check only |
 | `safe2 dev replay CORPUS --output FILE` | Replay deterministic development-policy cases | Policy regression only; no live model or calibration claim |
 | `safe2 feedback record ...` | Capture sanitized operational friction | Records typed outcome and verification state in local JSONL |
+| `safe2 self-check [--format json] [--output FILE] [--strict]` | Verify installed runtime, dependencies, entry point, and packaged contracts | Offline installation evidence only; not signature, vulnerability, project, or conformance validation |
 | `safe2 feedback summary FILE` | Measure recurring friction and completion-verification gap | Aggregates local evidence without sending telemetry |
 | `safe2 schema list` | Discover packaged machine-readable contracts | Returns stable schema identifiers as JSON |
 | `safe2 schema export NAME` | Export one versioned JSON Schema | Writes to stdout or an integration-owned file |
