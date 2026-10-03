@@ -80,9 +80,7 @@ def _write_new_jsonl(output: Path, value: dict) -> None:
         raise click.ClickException(f"output already exists: {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
     with output.open("x", encoding="utf-8", newline="\n") as handle:
-        handle.write(
-            json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
-        )
+        handle.write(json.dumps(value, ensure_ascii=False, allow_nan=False, separators=(",", ":")))
         handle.write("\n")
 
 
