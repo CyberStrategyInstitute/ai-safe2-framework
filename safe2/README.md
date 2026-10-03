@@ -19,6 +19,8 @@
 
 [Unified project assessment](../docs/UNIFIED-ASSESSMENT.md)
 
+[Provider-neutral adapter SDK](../docs/ADAPTER-SDK.md)
+
 [Assessment scope](../docs/ASSESSMENT-SCOPE.md)
 
 [Change attribution](../docs/CHANGE-ATTRIBUTION.md)
@@ -111,6 +113,7 @@ pytest tests/ scanner/tests/
 | `safe2 config show` | Show the normalized effective configuration and its precedence source | Inspection only; does not run an assessment |
 | `safe2 config validate FILE` | Validate bounded `safe2.config.v1` TOML | Rejects unknown keys, unsafe paths, symlinks, and malformed values |
 | `safe2 assess PATH [--scan-content] [--inspect-config]` | Produce one sealed environment and project assessment bundle | Missing or unrequested evidence remains explicit; no deployment authorization or conformance claim |
+| `safe2 adapter validate/conformance ...` | Validate attributed external evidence adapters and specimens | Contract evidence only; never executes or endorses a provider |
 | `safe2 scan project PATH` | Informational 161-control project scan | Reports findings; does not gate |
 | `safe2 score project PATH` | Compact project score | Reports score only |
 | `safe2 gate project PATH` | CI/CD project decision | Enforces tier or `--fail-under` threshold |
