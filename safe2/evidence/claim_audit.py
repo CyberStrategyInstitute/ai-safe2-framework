@@ -74,7 +74,7 @@ def build(source_payload: bytes, receipt_payloads: list[bytes]) -> dict[str, Any
                         and not test.get("counts", {}).get("failed")
                         and not test.get("counts", {}).get("errors")
                     )
-                    if claim["asserted_outcome"] == "succeeded" and not passed:
+                    if claim["asserted_outcome"] in {"completed", "succeeded"} and not passed:
                         outcome_consistent = False
                     if claim["asserted_outcome"] == "failed" and passed:
                         outcome_consistent = False

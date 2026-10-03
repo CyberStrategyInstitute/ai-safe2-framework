@@ -15,7 +15,7 @@
       "properties": {
         "id": {"type": "string"}, "claim_type": {"type": "string"}, "asserted_outcome": {"type": "string"},
         "status": {"enum": ["evidence_consistent", "contradicted", "unverifiable"]},
-        "reason": {"enum": ["all_referenced_criteria_supported", "referenced_criterion_contradicted", "missing_or_unverifiable_criterion", "no_evidence_referenced"]},
+        "reason": {"enum": ["all_referenced_criteria_supported", "referenced_criterion_contradicted", "referenced_outcome_conflicts_with_claim", "missing_or_unverifiable_criterion", "no_evidence_referenced"]},
         "evidence_criteria_ids": {"type": "array", "items": {"type": "string"}},
         "matched_criteria": {"type": "integer", "minimum": 0, "maximum": 100},
         "explicit_limitation_disclosure": {"type": "boolean"}

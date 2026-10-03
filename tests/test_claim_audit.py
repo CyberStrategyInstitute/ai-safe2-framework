@@ -178,6 +178,24 @@ def test_distinct_declared_receipt_inputs_can_be_combined() -> None:
     assert result["claims"][0]["status"] == "evidence_consistent"
 
 
+def test_failed_test_report_contradicts_completed_claim() -> None:
+    declared = source()
+    declared["claims"] = [
+        {
+            "id": "done",
+            "claim_type": "task_completion",
+            "asserted_outcome": "completed",
+            "evidence_criteria_ids": ["tests"],
+        }
+    ]
+    supplied = receipt()
+    supplied["criteria"] = [copy.deepcopy(supplied["criteria"][2])]
+    supplied["criteria"][0]["status"] = "supported"
+    supplied["counts"] = {"supported": 1, "contradicted": 0, "unverifiable": 0}
+    result = build(encoded(declared), [encoded(supplied)])
+    assert result["claims"][0]["status"] == "contradicted"
+
+
 def test_cli_preserves_outputs_then_strict_exits_for_review(tmp_path: Path) -> None:
     source_path = tmp_path / "claims.json"
     receipt_path = tmp_path / "receipt.json"

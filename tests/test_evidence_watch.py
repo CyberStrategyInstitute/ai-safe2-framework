@@ -56,6 +56,9 @@ def test_changed_skill_is_rescanned_and_rejected(tmp_path: Path) -> None:
     result, _ = collect_once(root, state, evidence_dir)
     assert result["decision"] == "reject"
     assert result["skill_gates"][0]["highest_severity"] == "CRITICAL"
+    unchanged, _ = collect_once(root, state, evidence_dir)
+    assert unchanged["changes"] == []
+    assert unchanged["decision"] == "reject"
 
 
 def test_invalid_or_wrong_root_state_fails_closed(tmp_path: Path) -> None:

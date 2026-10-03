@@ -116,22 +116,10 @@ def monitor(
         key=lambda path: len(path.parts),
         reverse=True,
     )
-    changed_skill_roots = set()
-    for item in changes:
-        if item["kind"] != "skill":
-            continue
-        changed_path = Path(item["path"])
-        matched = next(
-            (
-                candidate
-                for candidate in present_skill_roots
-                if candidate == changed_path.parent or candidate in changed_path.parents
-            ),
-            None,
-        )
-        if matched is not None:
-            changed_skill_roots.add(matched.as_posix())
-    for relative in sorted(changed_skill_roots):
+    # Re-evaluate every present skill on each explicit polling run. Inventory
+    # deltas alone cannot preserve a prior rejection: an unchanged hostile
+    # skill must remain rejected rather than silently becoming approved.
+    for relative in sorted({path.as_posix() for path in present_skill_roots}):
         findings = skill_gate.scan(root / relative)
         decision, severity = skill_gate.decision_for(findings, strict=False)
         gates.append(
