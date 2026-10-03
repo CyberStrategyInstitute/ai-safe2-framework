@@ -12,7 +12,9 @@ from safe2.installation import inspect_installation
 
 
 @click.command("self-check")
-@click.option("--format", "fmt", type=click.Choice(["human", "json"]), default="human", show_default=True)
+@click.option(
+    "--format", "fmt", type=click.Choice(["human", "json"]), default="human", show_default=True
+)
 @click.option("--output", type=click.Path(path_type=Path))
 @click.option("--strict", is_flag=True, help="Return the verdict exit code after writing output.")
 def self_check(fmt: str, output: Path | None, strict: bool) -> None:

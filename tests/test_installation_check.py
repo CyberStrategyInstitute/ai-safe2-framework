@@ -67,9 +67,7 @@ def test_imported_code_and_distribution_version_mismatch_fails() -> None:
 
 def test_cli_writes_new_machine_report(tmp_path: Path) -> None:
     output = tmp_path / "self-check.json"
-    result = CliRunner().invoke(
-        cli, ["self-check", "--format", "json", "--output", str(output)]
-    )
+    result = CliRunner().invoke(cli, ["self-check", "--format", "json", "--output", str(output)])
     assert result.exit_code == 0, result.output
     artifact = json.loads(output.read_text(encoding="utf-8"))
     assert not validate_artifact("installation-check-v1", artifact)

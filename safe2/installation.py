@@ -44,7 +44,7 @@ def _entrypoints() -> set[str] | None:
             for item in importlib.metadata.entry_points(group="console_scripts")
             if item.value == "safe2.cli:main"
         }
-    except Exception:  # metadata providers are outside SAFE2's control
+    except (AttributeError, OSError, TypeError, ValueError):
         return None
 
 
@@ -100,12 +100,11 @@ def inspect_installation(
         if "safe2" in entries
         else "missing"
     )
-    version_match = resolved_distribution == __version__ if resolved_distribution is not None else None
+    version_match = (
+        resolved_distribution == __version__ if resolved_distribution is not None else None
+    )
     hard_fail = (
-        python_support == "unsupported"
-        or bool(missing)
-        or bool(invalid)
-        or version_match is False
+        python_support == "unsupported" or bool(missing) or bool(invalid) or version_match is False
     )
     unresolved = (
         python_support == "not_yet_qualified"
