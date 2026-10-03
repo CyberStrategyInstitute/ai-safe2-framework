@@ -26,12 +26,16 @@ def run_acceptance(output_dir: Path, strict: bool) -> None:
         raise click.ClickException(
             "Acceptance run failed; inspect any retained .incomplete directory before retrying"
         ) from exc
-    click.echo(json.dumps({
-        "output_dir": str(output_dir),
-        "status": report["status"],
-        "independent_review_claim": False,
-        "conformance_claim": False,
-    }))
+    click.echo(
+        json.dumps(
+            {
+                "output_dir": str(output_dir),
+                "status": report["status"],
+                "independent_review_claim": False,
+                "conformance_claim": False,
+            }
+        )
+    )
     if strict:
         raise SystemExit(report["exit_code"])
 

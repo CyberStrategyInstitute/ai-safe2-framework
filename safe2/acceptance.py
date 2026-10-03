@@ -99,9 +99,7 @@ def create_bundle(output_dir: Path) -> dict[str, Any]:
         _scan_fixture(hostile_dir, "hostile-control", "REJECT"),
     ]
     detection_passed = all(row["expected_decision"] == row["observed_decision"] for row in fixtures)
-    install_status = {"pass": "passed", "hold": "held", "fail": "failed"}[
-        installation["verdict"]
-    ]
+    install_status = {"pass": "passed", "hold": "held", "fail": "failed"}[installation["verdict"]]
     checks = [
         {
             "id": "installation",
