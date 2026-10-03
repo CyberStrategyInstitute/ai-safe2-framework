@@ -190,6 +190,28 @@ Release gate:
   and provider divergence cases remain visible.
 - Evaluator, adapter, source, and policy versions are bound to every result.
 
+## CLI 0.9.1–0.9.9: stable-core release candidate
+
+**Status:** Implemented in the ordered release-candidate stack; exact combined
+revision validation and independent acceptance remain release gates.
+
+This sequence closes the highest-value pre-1.0 usability and evidence gaps:
+
+1. secure-default project initialization and explicit configuration precedence;
+2. one bounded `safe2 assess` project workflow;
+3. provider-neutral adapter descriptors, evidence, and conformance reports;
+4. privacy-preserving Codex JSONL reference translation;
+5. offline OpenTelemetry OTLP/JSON trace import and non-content metadata export;
+6. explicit continuous local change evidence with immutable per-run reports;
+7. claim/receipt contradiction auditing without speculative honesty scoring;
+8. offline installed-runtime and packaged-contract self-checks; and
+9. a replayable first-user acceptance bundle that disclaims independence.
+
+These additions make the core adaptable across harnesses while retaining facts,
+provider reports, gaps, and decisions as separate layers. The Codex and
+OpenTelemetry adapters consume explicit files; they are not ambient session
+access, native harness hooks, or enforcement integrations.
+
 ## CLI 1.0: stable core and integration platform
 
 **User outcome:** Install one supported CLI and obtain a complete, reviewable
@@ -238,7 +260,9 @@ The 1.0 release gate requires:
 
 Post-1.0 work should normally extend the stable core through:
 
-- native Codex, Claude Code, Hermes, OpenClaw, and other harness adapters;
+- native direct hooks for Codex, Claude Code, Hermes, OpenClaw, and other
+  harnesses beyond the provider-neutral contract and explicit Codex JSONL
+  reference translator delivered before 1.0;
 - cloud, network, ledger, scanner, policy-engine, and usage-provider adapters;
 - refreshed sovereign-runtime examples;
 - additional Challenge Lab protocols and independently supplied evidence;

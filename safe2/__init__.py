@@ -1,8 +1,4 @@
 """AI SAFE2 unified CLI."""
 
-from importlib.metadata import PackageNotFoundError, version
-
-try:
-    __version__ = version("ai-safe2")
-except PackageNotFoundError:  # Source checkout before installation.
-    __version__ = "0.9.0.dev0"
+__package_version__ = "0.9.9"
+__version__ = __package_version__
