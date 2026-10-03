@@ -21,8 +21,8 @@ import sys
 import click
 
 from safe2 import __version__
-from safe2.commands.adapter import adapter
 from safe2.commands.acceptance import acceptance
+from safe2.commands.adapter import adapter
 from safe2.commands.aism import aism
 from safe2.commands.assess import assess_project
 from safe2.commands.challenge import challenge
@@ -38,8 +38,8 @@ from safe2.commands.mcp import mcp
 from safe2.commands.report import report
 from safe2.commands.scan import scan
 from safe2.commands.schema import schema
-from safe2.commands.self_check import self_check
 from safe2.commands.score import score
+from safe2.commands.self_check import self_check
 
 
 @click.group()
