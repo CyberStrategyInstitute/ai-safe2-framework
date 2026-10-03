@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 
 import click
@@ -112,6 +113,65 @@ def changed_agent_inputs(ctx: click.Context, root: Path, baseline: Path | None, 
     }))
     if strict and result["decision"] != "approve":
         ctx.exit(1)
+
+
+@evidence.command("watch")
+@click.argument("root", type=click.Path(path_type=Path, exists=True, file_okay=False))
+@click.option("--state", "state_path", required=True, type=click.Path(path_type=Path))
+@click.option("--evidence-dir", required=True, type=click.Path(path_type=Path, file_okay=False))
+@click.option("--continuous", is_flag=True, help="Poll until interrupted instead of collecting once.")
+@click.option("--interval", default=60.0, type=click.FloatRange(min=1.0, max=86400.0), show_default=True)
+@click.option("--max-runs", default=0, type=click.IntRange(0, 1_000_000), show_default=True,
+              help="Bound continuous polling; zero means run until interrupted.")
+@click.option("--max-files", default=10_000, type=click.IntRange(1, 10_000), show_default=True)
+@click.option("--max-file-bytes", default=1_000_000, type=click.IntRange(1, 1_000_000), show_default=True)
+@click.option("--strict", is_flag=True, help="Stop with exit 1 when a run requires review or rejects.")
+@click.pass_context
+def watch_agent_inputs(
+    ctx: click.Context,
+    root: Path,
+    state_path: Path,
+    evidence_dir: Path,
+    continuous: bool,
+    interval: float,
+    max_runs: int,
+    max_files: int,
+    max_file_bytes: int,
+    strict: bool,
+) -> None:
+    """Continuously preserve local skill and harness-configuration change evidence."""
+    from safe2.evidence.watch import collect_once
+
+    target_runs = max_runs if continuous else 1
+    completed = 0
+    try:
+        while target_runs == 0 or completed < target_runs:
+            result, report_path = collect_once(
+                root,
+                state_path,
+                evidence_dir,
+                max_files=max_files,
+                max_file_bytes=max_file_bytes,
+            )
+            completed += 1
+            click.echo(json.dumps({
+                "run": completed,
+                "report": str(report_path),
+                "decision": result["decision"],
+                "summary": result["summary"],
+                "content_exported": False,
+                "enforcement": False,
+            }))
+            if strict and result["decision"] != "approve":
+                ctx.exit(1)
+            if target_runs == 0 or completed < target_runs:
+                time.sleep(interval)
+    except KeyboardInterrupt:
+        click.echo(json.dumps({"stopped": "user_interrupt", "runs": completed}), err=True)
+    except (OSError, TypeError, ValueError, RecursionError) as exc:
+        raise click.ClickException(
+            "Continuous evidence collection failed: unsafe path, invalid state, or incomplete bounded coverage"
+        ) from exc
 
 
 @evidence.command("readiness")
