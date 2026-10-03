@@ -11,6 +11,7 @@ See PART 3 of the CSI roadmap: "Collapse everything into one safe2 CLI
 with subcommands... Ship criterion is a cold git clone on a clean
 machine, one install command, full test suite green."
 """
+
 from __future__ import annotations
 
 import shutil
@@ -22,9 +23,10 @@ import click
 from safe2 import __version__
 from safe2.commands.aism import aism
 from safe2.commands.challenge import challenge
-from safe2.commands.doctor import doctor
+from safe2.commands.configuration import config, init_project
 from safe2.commands.decision import decision
 from safe2.commands.dev import dev
+from safe2.commands.doctor import doctor
 from safe2.commands.evidence import evidence
 from safe2.commands.example import example
 from safe2.commands.feedback import feedback
@@ -43,6 +45,8 @@ def cli():
 
     \b
     safe2 scan project .            161-control static audit, findings only
+    safe2 init .                    secure-default project configuration
+    safe2 config show              effective configuration and source
     safe2 scan skill ./my-skill     skill package static scan, findings only
     safe2 scan mcp ./my-server      MCP server source scan, findings only
     safe2 gate project . --tier Tier2       exit 0/1 for CI
@@ -74,6 +78,8 @@ def cli():
 cli.add_command(scan)
 cli.add_command(aism)
 cli.add_command(challenge)
+cli.add_command(config)
+cli.add_command(init_project)
 cli.add_command(evidence)
 cli.add_command(example)
 cli.add_command(doctor)
@@ -102,7 +108,9 @@ def serve(host, port):
         sys.exit(3)
 
     if shutil.which("uvicorn"):
-        raise SystemExit(subprocess.call(["uvicorn", "gateway.main:app", "--host", host, "--port", str(port)]))
+        raise SystemExit(
+            subprocess.call(["uvicorn", "gateway.main:app", "--host", host, "--port", str(port)])
+        )
 
     import uvicorn  # type: ignore
 

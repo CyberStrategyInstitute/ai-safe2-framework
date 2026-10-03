@@ -68,6 +68,23 @@ pip install -e ".[all]"
 safe2 --help
 ```
 
+## Initialize a Project
+
+Create the versioned project configuration before the first assessment:
+
+```bash
+safe2 init . --profile local
+safe2 config show
+safe2 config validate .safe2/config.toml
+```
+
+Initialization creates `.safe2/config.toml` exclusively and refuses to replace
+an existing file. The secure defaults collect no prompts, file contents,
+environment-variable values, or network telemetry. Configuration precedence is
+explicit command input, `SAFE2_CONFIG`, the nearest project configuration, then
+built-in defaults. See the [configuration contract](../docs/CLI-CONFIGURATION.md)
+for profiles, limits, trust boundaries, and recovery.
+
 For contributor checks:
 
 ```bash
@@ -79,6 +96,9 @@ pytest tests/ scanner/tests/
 
 | Command | Purpose | Decision behavior |
 |---|---|---|
+| `safe2 init PATH` | Create a secure-default, versioned project configuration | Refuses overwrite and symbolic-link configuration paths |
+| `safe2 config show` | Show the normalized effective configuration and its precedence source | Inspection only; does not run an assessment |
+| `safe2 config validate FILE` | Validate bounded `safe2.config.v1` TOML | Rejects unknown keys, unsafe paths, symlinks, and malformed values |
 | `safe2 scan project PATH` | Informational 161-control project scan | Reports findings; does not gate |
 | `safe2 score project PATH` | Compact project score | Reports score only |
 | `safe2 gate project PATH` | CI/CD project decision | Enforces tier or `--fail-under` threshold |
