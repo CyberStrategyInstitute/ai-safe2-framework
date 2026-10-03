@@ -80,7 +80,9 @@ def build(source_payload: bytes, receipt_payloads: list[bytes]) -> dict[str, Any
         "audit_id": source["audit_id"],
         "task_id": source["task_id"],
         "source_sha256": hashlib.sha256(source_payload).hexdigest(),
-        "receipt_sha256": sorted({hashlib.sha256(payload).hexdigest() for payload in receipt_payloads}),
+        "receipt_sha256": sorted(
+            {hashlib.sha256(payload).hexdigest() for payload in receipt_payloads}
+        ),
         "claims": rows,
         "summary": {
             "total": total,
