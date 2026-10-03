@@ -229,6 +229,9 @@ preserving human decision authority:
 safe2 init . --profile local
 safe2 config show
 safe2 assess . --scan-content --inspect-config
+safe2 self-check --strict
+safe2 acceptance run ./safe2-acceptance --strict
+safe2 acceptance verify ./safe2-acceptance
 safe2 scan project .
 safe2 doctor . --format json --output environment-inventory.json
 safe2 doctor . --assess --inspect-config --baseline trusted-inventory.json
@@ -244,6 +247,10 @@ safe2 evidence diagnose safe2/data/failure-source-demo.json --system-identity sy
 safe2 evidence scope safe2/data/assessment-scope-source-demo.json --project-root . --system-identity system-identity.json --output assessment-scope.json
 safe2 evidence truth operational-truth-policy.json harness-evidence.json task-receipt.json --output operational-truth.json --card operational-truth.md --strict
 safe2 evidence changes . --baseline prior-agent-inputs.json --output current-agent-inputs.json --strict
+safe2 evidence watch . --state .safe2/watch-state.json --evidence-dir .safe2/evidence/changes --continuous
+safe2 adapter codex-jsonl codex-trace.jsonl --codex-version VERSION --output codex-evidence.json
+safe2 adapter otel-jsonl agent-traces.jsonl --otel-version VERSION --output otel-evidence.json
+safe2 evidence claims claims.json task-receipt.json --output claim-audit.json --card claim-audit.md --strict
 safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "NEXUS Local" --output assessment.json
 safe2 aism score assessment.json --format markdown --output decision-card.md
 safe2 aism remediation-init assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --decision-owner "Accountable system owner" --output remediation-source.json
@@ -299,6 +306,17 @@ The CLI includes a provider-neutral
 that makes declared, observed, partial, and missing coverage visible before native
 harness adapters are introduced.
 
+The provider-neutral [adapter SDK](docs/ADAPTER-SDK.md), privacy-preserving
+[Codex JSONL translator](docs/CODEX-JSONL-ADAPTER.md), and
+[OpenTelemetry exchange](docs/OPENTELEMETRY-ADAPTER.md) let external harnesses
+contribute attributed evidence without becoming AI SAFE² decision authorities.
+
+The [continuous local evidence runner](docs/CONTINUOUS-EVIDENCE.md) preserves
+repeated skill and harness-configuration change reports. The
+[agent claim audit](docs/CLAIM-AUDIT.md) separates evidence-consistent,
+contradicted, unverifiable, and explicitly limited outcomes without assigning a
+speculative honesty score or inferring deception.
+
 The [agent system identity manifest](docs/SYSTEM-IDENTITY.md) adds the next layer,
 harness, tools, skills, memory, environment, policies, evaluator, authority and
 relationships to one assessment subject without claiming the declared deployment
@@ -326,11 +344,11 @@ agent JSON plus a human card while preserving human release authority.
 
 [Operational truth](docs/OPERATIONAL-TRUTH.md) correlates provider-attributed
 harness evidence, task receipts, coverage, usage declarations, and completion
-claims without promoting agreement into verified completion or billing. Its
-bounded one-shot change monitor can inventory new or changed skills and named
-agent configuration in an explicitly supplied local or CI scope. It installs no
-daemon, sends no telemetry, exports no file content, and holds configuration
-changes for human review.
+claims without promoting agreement into verified completion or billing. The
+bounded one-shot change monitor supports local or CI use; the explicit polling
+runner can preserve repeated reports until interrupted. Neither installs an OS
+service, intercepts pasted context, sends telemetry, exports file content, or
+turns detection into prevention.
 
 For release boundaries, verified behavior, and external checks that still
 require human or production execution, see the

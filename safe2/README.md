@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.9.0-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-0.9.9-F6921E?style=flat-square)](../README.md)
 
 [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
 
@@ -22,6 +22,14 @@
 [Unified project assessment](../docs/UNIFIED-ASSESSMENT.md)
 
 [Provider-neutral adapter SDK](../docs/ADAPTER-SDK.md)
+
+[Codex JSONL adapter](../docs/CODEX-JSONL-ADAPTER.md)
+
+[OpenTelemetry interoperability](../docs/OPENTELEMETRY-ADAPTER.md)
+
+[Continuous local evidence](../docs/CONTINUOUS-EVIDENCE.md)
+
+[Agent claim audit](../docs/CLAIM-AUDIT.md)
 
 [Assessment scope](../docs/ASSESSMENT-SCOPE.md)
 
