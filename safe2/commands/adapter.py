@@ -10,6 +10,9 @@ import click
 from safe2.adapters import AdapterError, evaluate_conformance, load_json_regular
 from safe2.adapters.codex_jsonl import descriptor as codex_descriptor
 from safe2.adapters.codex_jsonl import translate as translate_codex
+from safe2.adapters.otel_jsonl import descriptor as otel_descriptor
+from safe2.adapters.otel_jsonl import export_metadata as export_otel_metadata
+from safe2.adapters.otel_jsonl import translate as translate_otel
 from safe2.contracts import validate_artifact
 
 
@@ -92,6 +95,46 @@ def write_codex_descriptor(codex_version: str, output: Path) -> None:
     """Write the matching Codex adapter descriptor for conformance checks."""
     try:
         value = codex_descriptor(codex_version)
+        _write_new_json(output, value)
+    except AdapterError as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(json.dumps(value, indent=2))
+
+
+@adapter.command("otel-jsonl")
+@click.argument("trace", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--otel-version", required=True, help="OpenTelemetry version declared by producer.")
+@click.option("--output", type=click.Path(path_type=Path), required=True)
+def otel_jsonl(trace: Path, otel_version: str, output: Path) -> None:
+    """Translate an OTLP/JSON traces file into privacy-safe evidence."""
+    try:
+        value = translate_otel(trace, otel_version)
+        _write_new_json(output, value)
+    except AdapterError as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(json.dumps(value, indent=2))
+
+
+@adapter.command("otel-descriptor")
+@click.option("--otel-version", required=True, help="OpenTelemetry version declared by producer.")
+@click.option("--output", type=click.Path(path_type=Path), required=True)
+def write_otel_descriptor(otel_version: str, output: Path) -> None:
+    """Write the matching OpenTelemetry adapter descriptor."""
+    try:
+        value = otel_descriptor(otel_version)
+        _write_new_json(output, value)
+    except AdapterError as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(json.dumps(value, indent=2))
+
+
+@adapter.command("otel-export")
+@click.argument("evidence", type=click.Path(path_type=Path, exists=True, dir_okay=False))
+@click.option("--output", type=click.Path(path_type=Path), required=True)
+def otel_export(evidence: Path, output: Path) -> None:
+    """Export non-content SAFE2 evidence metadata as OTLP/JSON LogsData."""
+    try:
+        value = export_otel_metadata(load_json_regular(evidence))
         _write_new_json(output, value)
     except AdapterError as exc:
         raise click.ClickException(str(exc)) from exc
