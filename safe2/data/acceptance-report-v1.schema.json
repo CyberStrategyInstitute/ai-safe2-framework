@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/acceptance-report-v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "created_at", "runner", "installation", "fixtures", "checks", "status", "exit_code", "independent_review_claim", "security_claim", "conformance_claim", "limitations", "integrity_sha256"],
+  "properties": {
+    "schema_version": {"const": "safe2.acceptance-report.v1"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "runner": {"type": "object", "additionalProperties": false, "required": ["name", "version"], "properties": {"name": {"const": "safe2"}, "version": {"type": "string"}}},
+    "installation": {"type": "object"},
+    "fixtures": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "object", "additionalProperties": false, "required": ["id", "path", "sha256", "expected_decision", "observed_decision", "highest_severity", "findings"], "properties": {"id": {"enum": ["benign-control", "hostile-control"]}, "path": {"type": "string"}, "sha256": {"$ref": "#/$defs/hash"}, "expected_decision": {"enum": ["APPROVE", "REJECT"]}, "observed_decision": {"enum": ["APPROVE", "HOLD FOR REVIEW", "REJECT"]}, "highest_severity": {"type": "string"}, "findings": {"type": "integer", "minimum": 0}}}},
+    "checks": {"type": "array", "minItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["id", "status", "meaning"], "properties": {"id": {"type": "string"}, "status": {"enum": ["passed", "held", "failed"]}, "meaning": {"type": "string"}}},
+    "status": {"enum": ["passed", "held", "failed"]}, "exit_code": {"enum": [0, 1, 2]},
+    "independent_review_claim": {"const": false}, "security_claim": {"const": false}, "conformance_claim": {"const": false},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "integrity_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}
+}

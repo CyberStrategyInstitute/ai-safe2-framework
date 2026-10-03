@@ -22,6 +22,7 @@ import click
 
 from safe2 import __version__
 from safe2.commands.adapter import adapter
+from safe2.commands.acceptance import acceptance
 from safe2.commands.aism import aism
 from safe2.commands.assess import assess_project
 from safe2.commands.challenge import challenge
@@ -76,6 +77,7 @@ def cli():
     safe2 feedback record ...                 operational friction evidence
     safe2 schema list                         machine-readable evidence contracts
     safe2 self-check                         installed runtime and contract verification
+    safe2 acceptance run ./acceptance        offline first-user acceptance bundle
     safe2 challenge list                      offline Challenge Lab experiments
     safe2 aism score assessment.json         human Decision Card
     safe2 example verify aism-decision-card  executable reference validation
@@ -86,6 +88,7 @@ def cli():
 
 cli.add_command(scan)
 cli.add_command(adapter)
+cli.add_command(acceptance)
 cli.add_command(aism)
 cli.add_command(assess_project)
 cli.add_command(challenge)

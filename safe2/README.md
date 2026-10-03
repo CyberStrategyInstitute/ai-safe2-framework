@@ -9,6 +9,7 @@
 
 [Task receipts: local artifact verification](../docs/TASK-RECEIPTS.md)
 [Installation self-check](../docs/INSTALLATION-CHECK.md)
+[Stranger acceptance](../docs/STRANGER-ACCEPTANCE.md)
 
 [Development method: plan, prove, and receipt changes](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md)
 
@@ -161,6 +162,7 @@ pytest tests/ scanner/tests/
 | `safe2 dev replay CORPUS --output FILE` | Replay deterministic development-policy cases | Policy regression only; no live model or calibration claim |
 | `safe2 feedback record ...` | Capture sanitized operational friction | Records typed outcome and verification state in local JSONL |
 | `safe2 self-check [--format json] [--output FILE] [--strict]` | Verify installed runtime, dependencies, entry point, and packaged contracts | Offline installation evidence only; not signature, vulnerability, project, or conformance validation |
+| `safe2 acceptance run DIR [--strict]` / `safe2 acceptance verify DIR` | Create and replay an offline first-user control bundle | Self-produced reproducibility evidence; explicitly not independent validation |
 | `safe2 feedback summary FILE` | Measure recurring friction and completion-verification gap | Aggregates local evidence without sending telemetry |
 | `safe2 schema list` | Discover packaged machine-readable contracts | Returns stable schema identifiers as JSON |
 | `safe2 schema export NAME` | Export one versioned JSON Schema | Writes to stdout or an integration-owned file |

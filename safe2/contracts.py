@@ -41,6 +41,7 @@ SCHEMAS = {
     "claim-audit-source-v1": "claim-audit-source-v1.schema.json",
     "claim-audit-v1": "claim-audit-v1.schema.json",
     "installation-check-v1": "installation-check-v1.schema.json",
+    "acceptance-report-v1": "acceptance-report-v1.schema.json",
     "challenge-bundle": "challenge-bundle-v1.schema.json",
     "challenge-run": "challenge-run-v1.schema.json",
     "challenge-source": "challenge-source-v1.schema.json",
