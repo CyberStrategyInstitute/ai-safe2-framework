@@ -81,6 +81,11 @@ def main() -> int:
         implementations.get("gateway", {}).get("entrypoint"),
         implementations.get("scanner", {}).get("entrypoint"),
     ]
+    required_paths.extend(
+        value
+        for key, value in machine.items()
+        if key.endswith("_schema") and isinstance(value, str)
+    )
     for rel in required_paths:
         if not rel or not (ROOT / rel).exists():
             errors.append(f"manifest path missing or unresolved: {rel!r}")

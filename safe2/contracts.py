@@ -9,6 +9,11 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 SCHEMAS = {
+    "adapter-descriptor-v1": "adapter-descriptor-v1.schema.json",
+    "adapter-evidence-v1": "adapter-evidence-v1.schema.json",
+    "adapter-conformance-v1": "adapter-conformance-v1.schema.json",
+    "project-assessment-v1": "project-assessment-v1.schema.json",
+    "project-scan-evidence-v1": "project-scan-evidence-v1.schema.json",
     "aism-remediation-source-v1": "aism-remediation-source-v1.schema.json",
     "aism-remediation-plan-v1": "aism-remediation-plan-v1.schema.json",
     "operational-truth-source-v1": "operational-truth-source-v1.schema.json",
@@ -33,6 +38,10 @@ SCHEMAS = {
     "test-result-v1": "test-result-v1.schema.json",
     "task-receipt-input-v1": "task-receipt-input-v1.schema.json",
     "task-receipt-v1": "task-receipt-v1.schema.json",
+    "claim-audit-source-v1": "claim-audit-source-v1.schema.json",
+    "claim-audit-v1": "claim-audit-v1.schema.json",
+    "installation-check-v1": "installation-check-v1.schema.json",
+    "acceptance-report-v1": "acceptance-report-v1.schema.json",
     "challenge-bundle": "challenge-bundle-v1.schema.json",
     "challenge-run": "challenge-run-v1.schema.json",
     "challenge-source": "challenge-source-v1.schema.json",

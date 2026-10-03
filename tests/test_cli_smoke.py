@@ -6,6 +6,7 @@ pure stdlib) and project scan (bundled controls JSON) exercise real code
 paths; the mcp/wrap/serve commands are covered by --help wiring checks
 only here, since exercising them for real needs a live target.
 """
+
 from __future__ import annotations
 
 from click.testing import CliRunner
@@ -27,13 +28,17 @@ def test_top_level_help():
         "feedback",
         "schema",
         "dev",
+        "init",
+        "config",
+        "assess",
+        "adapter",
     ):
         assert name in result.output
 
 
 def test_every_subcommand_group_has_help():
     runner = CliRunner()
-    for group in ("scan", "gate", "score", "report", "mcp", "feedback", "schema", "dev"):
+    for group in ("scan", "gate", "score", "report", "mcp", "feedback", "schema", "dev", "config"):
         result = runner.invoke(cli, [group, "--help"])
         assert result.exit_code == 0, f"safe2 {group} --help failed: {result.output}"
 
@@ -95,4 +100,7 @@ def test_score_project_runs_clean(tmp_path):
 def test_gate_project_passes_on_empty_dir(tmp_path):
     (tmp_path / "README.md").write_text("# empty project\n")
     result = CliRunner().invoke(cli, ["gate", "project", str(tmp_path), "--tier", "Tier1"])
-    assert result.exit_code in (0, 1)  # deterministic given the engine; just must not crash (exit 3)
+    assert result.exit_code in (
+        0,
+        1,
+    )  # deterministic given the engine; just must not crash (exit 3)

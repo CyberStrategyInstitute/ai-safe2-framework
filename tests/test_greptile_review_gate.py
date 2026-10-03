@@ -1,7 +1,6 @@
+import sys
 from importlib.util import module_from_spec, spec_from_file_location
 from pathlib import Path
-import sys
-
 
 SCRIPT = Path(__file__).parents[1] / "scripts" / "verify_greptile_review.py"
 SPEC = spec_from_file_location("verify_greptile_review", SCRIPT)
