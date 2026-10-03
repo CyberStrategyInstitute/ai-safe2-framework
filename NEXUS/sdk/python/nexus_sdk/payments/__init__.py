@@ -87,6 +87,17 @@ from nexus_sdk.payments.gateway import (
     SettlementState,
 )
 from nexus_sdk.payments.opa_input import OPA_INPUT_FIELDS, build_opa_input
+from nexus_sdk.payments.execution_plane import (
+    ComponentAssurance,
+    ExecutionRecord,
+    ExecutionState,
+    ExecutionTransitionError,
+    GatewayReadiness,
+    NEXUSPaymentExecutionPlane,
+    SettlementStateStore,
+    TransactionalAuthorityStore,
+    TransactionalReplayStore,
+)
 from nexus_sdk.payments.adapters import (
     AP2Binding,
     AgenticTokenBinding,
@@ -156,6 +167,10 @@ __all__ = [
     "SettlementState", "HumanApprovalVerifier", "NullHumanApprovalVerifier",
     # OPA binding
     "OPA_INPUT_FIELDS", "build_opa_input",
+    # Sovereign Payment Gateway execution contracts
+    "ComponentAssurance", "ExecutionRecord", "ExecutionState",
+    "ExecutionTransitionError", "GatewayReadiness", "NEXUSPaymentExecutionPlane",
+    "SettlementStateStore", "TransactionalAuthorityStore", "TransactionalReplayStore",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
