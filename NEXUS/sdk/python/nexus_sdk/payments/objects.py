@@ -17,7 +17,7 @@ The seven canonical identifiers:
     transaction_intent_id   what this specific movement of value is for
     revocation_epoch        monotonic counter; stale epoch == no authority
 
-Reference: NEXUS-A2A v0.4, AI SAFE2 v3.1 CP.4 / CP.5 / CP.9 / CP.10
+Reference: NEXUS v0.5.0, CP.5.APAY/0.4, AI SAFE2 v3.1 CP.4 / CP.5 / CP.9 / CP.10
 """
 
 from __future__ import annotations

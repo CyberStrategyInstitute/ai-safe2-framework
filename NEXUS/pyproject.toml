@@ -1,13 +1,14 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=77.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexus-a2a-sdk"
-version = "0.4.0"
-description = "NEXUS-A2A Python SDK: cryptographic governance for agentic AI communication"
+version = "0.5.0"
+description = "NEXUS SDK: deterministic governance for agent, tool, and payment execution"
 readme = "sdk/python/README.md"
-license = { file = "LICENSE" }
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
 authors = [
     { name = "Cyber Strategy Institute", email = "sdk@cyberstrategyinstitute.com" }
 ]
@@ -20,11 +21,12 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
-    "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Security",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
@@ -57,9 +59,11 @@ otel = [
 
 # Full production stack: embeddings + OPA + OTel
 full = [
-    "nexus-a2a-sdk[embeddings]",
-    "nexus-a2a-sdk[opa]",
-    "nexus-a2a-sdk[otel]",
+    "sentence-transformers>=2.7.0",
+    "httpx>=0.27.0",
+    "opentelemetry-api>=1.24.0",
+    "opentelemetry-sdk>=1.24.0",
+    "opentelemetry-exporter-otlp>=1.24.0",
 ]
 
 # Development: testing and linting
@@ -71,15 +75,12 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://cyberstrategyinstitute.com/nexus"
+Homepage = "https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/NEXUS"
 Repository = "https://github.com/CyberStrategyInstitute/ai-safe2-framework"
-Documentation = "https://cyberstrategyinstitute.com/nexus/docs"
-"Security Policy" = "https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/nexus-a2a/SECURITY.md"
+Documentation = "https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/NEXUS/README.md"
+"Security Policy" = "https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/NEXUS/SECURITY.md"
 "Issue Tracker" = "https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues"
-Changelog = "https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/nexus-a2a/CHANGELOG.md"
-
-[project.scripts]
-nexus-score = "nexus_sdk._cli:main"
+Changelog = "https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/NEXUS/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["sdk/python"]
@@ -98,6 +99,8 @@ addopts = "-v --tb=short"
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+
+[tool.ruff.lint]
 select = ["E", "F", "I", "N", "W", "UP"]
 ignore = ["E501"]
 
