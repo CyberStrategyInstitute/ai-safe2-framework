@@ -11,6 +11,17 @@
 
 ---
 
+## Technology learning and validation intake
+
+Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [nine-example backlog](../research/technology-contribution-examples.md) when
+converting research or incidents into test candidates. Benchmarks validate tested
+decisions; they do not enforce production actions or establish Level 5 governance.
+The [validation guide](../docs/TECHNOLOGY-VALIDATION.md) adds clean/attacked pairs,
+composed capabilities, process-mimicking attacks, and learned-policy poisoning,
+malicious lesson extraction, conflict, approval, and rollback tests. Keep candidates
+separate from executed regressions and frozen Challenge 001 results.
+
 ## 🎯 The Problem. The Realization. The Solution.
 
 **Problem:** Most organizations red-team their AI systems once, at launch. Then the model gets updated, the RAG corpus changes, new tools are added, the system prompt is modified, and the system that was tested no longer exists. The red-team report becomes a historical artifact. Security findings from red-team exercises live in a report that gets filed and never referenced again. The next exercise starts from scratch.

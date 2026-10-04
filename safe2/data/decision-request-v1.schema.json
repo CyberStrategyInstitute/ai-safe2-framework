@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/decision-request-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "decision_id", "decision_class", "data_classification", "structured_state", "questions", "deterministic", "external_adjudication_allowed"],
+  "properties": {
+    "schema_version": {"const": "safe2.decision-request.v1"},
+    "decision_id": {"$ref": "#/$defs/id"},
+    "decision_class": {"enum": ["context_relevance", "review_module_selection", "test_plan_selection", "risk_signal", "review_finding_triage"]},
+    "data_classification": {"enum": ["public", "internal", "internal_sanitized", "confidential", "restricted"]},
+    "structured_state": {"type": "object", "maxProperties": 100},
+    "questions": {
+      "type": "object", "minProperties": 1, "maxProperties": 25,
+      "additionalProperties": {"$ref": "#/$defs/question"}
+    },
+    "deterministic": {
+      "type": "object", "additionalProperties": false,
+      "required": ["risk_tier", "required_evidence", "evidence_status", "policy_flags"],
+      "properties": {
+        "risk_tier": {"enum": ["low", "medium", "high", "critical"]},
+        "required_evidence": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "evidence_status": {"type": "object", "maxProperties": 100, "additionalProperties": {"enum": ["passed", "failed", "pending", "unavailable", "not_applicable"]}},
+        "policy_flags": {"type": "object", "maxProperties": 100, "additionalProperties": {"type": "boolean"}}
+      }
+    },
+    "external_adjudication_allowed": {"type": "boolean"}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "question": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": false, "required": ["type", "instructions"], "properties": {"type": {"const": "noul"}, "instructions": {"type": "string", "minLength": 1, "maxLength": 2000}}},
+        {"type": "object", "additionalProperties": false, "required": ["type", "instructions", "criteria"], "properties": {"type": {"const": "choice"}, "instructions": {"type": "string", "minLength": 1, "maxLength": 2000}, "criteria": {"type": "object", "minProperties": 2, "maxProperties": 25, "additionalProperties": {"type": "string", "minLength": 1, "maxLength": 1000}}}},
+        {"type": "object", "additionalProperties": false, "required": ["type", "instructions", "criteria"], "properties": {"type": {"const": "score"}, "instructions": {"type": "string", "minLength": 1, "maxLength": 2000}, "criteria": {"type": "array", "minItems": 2, "maxItems": 10, "items": {"type": "string", "minLength": 1, "maxLength": 1000}}}}
+      ]
+    }
+  }
+}

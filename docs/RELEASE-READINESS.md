@@ -10,6 +10,15 @@ card. It supports—but never replaces—the named human release decision.
 Start from [`safe2/data/release-readiness-source-demo.json`](../safe2/data/release-readiness-source-demo.json)
 and replace every placeholder with evidence for the exact candidate revision.
 
+## Technology adoption and release evidence
+
+Attach a [Technology Card](./templates/TECHNOLOGY-CARD.md) when a
+release depends on a new runtime, technique, or benchmark. Review actual control
+fit, failure behavior, retained authority, residual paths, and integration needs
+under the [adoption rule](./TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule).
+Contribution and assurance cannot substitute for required release checks or
+named human acceptance. No readiness schema fields change in this proposal.
+
 ## Quick start
 
 ```text

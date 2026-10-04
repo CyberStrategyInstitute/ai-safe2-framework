@@ -1,0 +1,55 @@
+{
+  "schema_version": "ai-safe2.review-policy.v1",
+  "policy_id": "ai-safe2-framework-review-v1",
+  "default_tier": "low",
+  "tiers": ["low", "medium", "high", "critical"],
+  "rules": [
+    {
+      "id": "release-and-supply-chain",
+      "tier": "critical",
+      "patterns": [".github/workflows/publish.yml", "pyproject.toml", "safe2/**", "scripts/check_agent_manifest.py"],
+      "reason": "Changes can alter shipped CLI behavior, package identity, provenance, or release authorization evidence.",
+      "required_evidence": ["full-tests", "installed-wheel", "release-invariants", "dependency-audit", "human-release-decision"],
+      "review_lenses": ["supply-chain", "evidence-integrity", "rollback"]
+    },
+    {
+      "id": "authority-and-enforcement",
+      "tier": "critical",
+      "patterns": ["NEXUS/opa/**", "NEXUS/payments/**", "NEXUS/adapters/**", "NEXUS/gateway/**", "00-cross-pillar/**"],
+      "reason": "Changes cross authorization, policy, settlement, protocol, or governance boundaries.",
+      "required_evidence": ["targeted-tests", "negative-tests", "security-gates", "codeowner-review"],
+      "review_lenses": ["authorization", "fail-closed", "replay", "boundary-confusion"]
+    },
+    {
+      "id": "agent-and-evidence-contracts",
+      "tier": "high",
+      "patterns": ["AGENTS.md", ".pr_agent.toml", ".ai-safe2/**", "safe2/data/**", "safe2/evidence/**", "challenges/**", "skills/**"],
+      "reason": "Changes affect agent instructions, evidence contracts, evaluators, or falsification behavior.",
+      "required_evidence": ["contract-tests", "adversarial-tests", "manifest-consistency", "human-review"],
+      "review_lenses": ["prompt-injection", "evidence-integrity", "evaluator-independence", "unknown-state"]
+    },
+    {
+      "id": "ci-and-security-controls",
+      "tier": "high",
+      "patterns": [".github/workflows/**", ".github/CODEOWNERS", ".semgrep/**", ".gitleaks*"],
+      "reason": "Changes can weaken required checks or the independence of security evidence.",
+      "required_evidence": ["workflow-validation", "least-privilege-review", "pinned-actions", "human-review"],
+      "review_lenses": ["workflow-injection", "permissions", "supply-chain", "gate-bypass"]
+    },
+    {
+      "id": "tests-and-documentation",
+      "tier": "medium",
+      "patterns": ["tests/**", "scanner/tests/**", "docs/**", "guides/**", "README.md"],
+      "reason": "Changes affect proof, examples, or the claims a reviewer and user will rely on.",
+      "required_evidence": ["relevant-tests", "documentation-validation"],
+      "review_lenses": ["claim-evidence-alignment", "regression-coverage"]
+    }
+  ],
+  "greptile": {
+    "recommend_for": ["critical"],
+    "also_when": ["release-candidate", "large-cross-boundary-change", "unresolved-high-risk"],
+    "blocking": false
+  },
+  "decision_owner": "repository-maintainers",
+  "retention_days": 90
+}

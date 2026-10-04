@@ -12,3 +12,4 @@ __pycache__/
 dist-final/
 dist-qa*/
 dist-stranger-ready/
+.codex-test-tmp-*/
