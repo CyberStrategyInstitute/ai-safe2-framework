@@ -5,3 +5,5 @@
 be682fd8e9e6128947647780d6e5b7924555fdff:NEXUS/sdk/python/tests/test_nexus_complete.py:generic-api-key:189
 3459adbc6b4132a7e87b2efe3ec74644eedb6d3b:examples/mcp-security-toolkit/tests/test_toolkit.py:generic-api-key:627
 47e86933f87f44d65b09af23cb903cc7536229a3:examples/quickstart_nhi_check.py:generic-api-key:13
+708e728d413ffb285ba81e4d2f7dc777885ea369:NEXUS/sdk/python/tests/test_payment_settlement_truth.py:generic-api-key:208
+708e728d413ffb285ba81e4d2f7dc777885ea369:NEXUS/sdk/python/tests/test_payment_settlement_truth.py:generic-api-key:209
