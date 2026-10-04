@@ -1,6 +1,11 @@
 """
 nexus_sdk - NEXUS-A2A Python SDK
-Cyber Strategy Institute | v0.4.0 | AI SAFE2 v3.1 Compatible
+Cyber Strategy Institute | v0.5.0 | AI SAFE2 v3.1 Compatible
+
+v0.5 additions:
+    payments/    Sovereign Payment Gateway execution controls, independent
+                 policy/runtime/human-intent/settlement authorities, governed
+                 recovery, policy parity, and deployment-readiness evidence.
 
 v0.4 additions:
     payments/    CP.5.APAY agent-to-payment enforcement plane. Imported
@@ -25,35 +30,62 @@ Quick start:
     from nexus_sdk.agbom import AgBOMManager
     from nexus_sdk.bridges import ProtocolBridgeFactory
 
-Full docs: https://github.com/CyberStrategyInstitute/ai-safe2-framework/nexus-a2a
+Full docs: https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/NEXUS
 """
-from nexus_sdk.cael import (
-    CAELEnvelope, CAELSender, CAELPolicy, CAELBudget, CAELDelegation,
-    CAELMemory, CAELToolCall, JouleWorkCost, OPAReceipt,
-    Performative, ContextCompartment,
-)
-from nexus_sdk.memory import (
-    MemoryVaccine, MemoryZone, MemoryWriteResult, JouleWorkAccount,
-)
-from nexus_sdk.guardian import (
-    GuardianPolicy, GuardianVerdict, GuardianVerdictResult,
-    GuardianStepContext, NEXUSAgentContext, NEXUSMemoryProvenance,
-    StepMethod, NEXUSGuardianClient,
-    build_tool_call_step, build_memory_store_step,
-)
-from nexus_sdk.otel import (
-    NEXUSOutputReceipt, InMemoryNORExporter, NEXUSNORSpan,
-    OCSFEventClass, build_tool_call_nor, build_memory_nor,
-)
 from nexus_sdk.agbom import (
-    AgBOMManager, AgBOMComponent, AgBOMComponentType,
+    AgBOMComponent,
+    AgBOMComponentType,
+    AgBOMManager,
 )
 from nexus_sdk.bridges import (
-    NEXUSMCPBridge, NEXUSACSBridge, NEXUSAIBridge, NEXUSOpenAIBridge,
-    NEXUSRESTBridge, ProtocolBridgeFactory,
+    NEXUSACSBridge,
+    NEXUSAIBridge,
+    NEXUSMCPBridge,
+    NEXUSOpenAIBridge,
+    NEXUSRESTBridge,
+    ProtocolBridgeFactory,
+)
+from nexus_sdk.cael import (
+    CAELBudget,
+    CAELDelegation,
+    CAELEnvelope,
+    CAELMemory,
+    CAELPolicy,
+    CAELSender,
+    CAELToolCall,
+    ContextCompartment,
+    JouleWorkCost,
+    OPAReceipt,
+    Performative,
+)
+from nexus_sdk.guardian import (
+    GuardianPolicy,
+    GuardianStepContext,
+    GuardianVerdict,
+    GuardianVerdictResult,
+    NEXUSAgentContext,
+    NEXUSGuardianClient,
+    NEXUSMemoryProvenance,
+    StepMethod,
+    build_memory_store_step,
+    build_tool_call_step,
+)
+from nexus_sdk.memory import (
+    JouleWorkAccount,
+    MemoryVaccine,
+    MemoryWriteResult,
+    MemoryZone,
+)
+from nexus_sdk.otel import (
+    InMemoryNORExporter,
+    NEXUSNORSpan,
+    NEXUSOutputReceipt,
+    OCSFEventClass,
+    build_memory_nor,
+    build_tool_call_nor,
 )
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __all__ = [
     # CAEL core
     "CAELEnvelope", "CAELSender", "CAELPolicy", "CAELBudget", "CAELDelegation",

@@ -239,4 +239,4 @@ Slower-moving, and the two most likely to be skipped. They should not be.
 
 ---
 
-*CP.5.APAY draft · NEXUS v0.4 · AI SAFE² v3.1*
+*CP.5.APAY/0.4 draft · NEXUS v0.5.0 · AI SAFE² v3.1*

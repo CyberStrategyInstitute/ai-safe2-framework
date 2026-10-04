@@ -7,6 +7,52 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [0.5.0] -- 2026-10-04
+
+### Summary
+
+v0.5.0 is the Sovereign Payment Gateway release. It composes the
+`CP.5.APAY/0.4` payment-integrity foundation into a deterministic execution
+boundary designed so that compromising an agent process is not sufficient to
+obtain a payment key, widen authority, replay authorization, restore spent
+capacity, or declare settlement truth.
+
+### Added
+
+- Durable authority, exposure, replay, idempotency, settlement, and evidence
+  boundaries with atomic state transitions.
+- **Key Guardian** (`KeyGuardian`): an isolated credential-use boundary with
+  transaction-bound authorization and no raw-key return path.
+- Independent policy, runtime-attestation, human-intent, and settlement
+  authorities with fail-closed decisions.
+- Governed recovery, policy-parity verification, sandbox rail readiness, and
+  machine-readable deployment-readiness evidence.
+- Rail-neutral payment execution adapters and deterministic conformance tests.
+- A dedicated, OIDC-based NEXUS publication workflow, clean-wheel smoke test,
+  and release-tag isolation from the main `ai-safe2` package.
+
+### Changed
+
+- Python package version is now `0.5.0`; the distribution remains
+  `nexus-a2a-sdk` and the import namespace remains `nexus_sdk`.
+- Package documentation and project URLs now resolve to the maintained NEXUS
+  subtree and security policy.
+- The `full` extra now expands to its dependencies directly so package metadata
+  can be resolved before the first public release exists.
+- Removed the advertised `nexus-score` console entry point because its target
+  module was not shipped. The source scoring utility remains available for
+  repository workflows until it is redesigned as a supported SDK command.
+
+### Compatibility and assurance
+
+- Existing `CP.5.APAY/0.4` schemas, policy IDs, profile IDs, and wire contracts
+  are intentionally unchanged. Package v0.5.0 adds the gateway without silently
+  creating a new protocol version.
+- In-process and reference implementations do not satisfy production readiness.
+  Operators must bind production storage, protected signing, authenticated rail
+  integrations, independent trust roots, and the evidence named by
+  `NEXUSPaymentExecutionPlane.readiness()`.
+
 ## [0.4.0] -- 2026-09-21
 
 ### Summary
