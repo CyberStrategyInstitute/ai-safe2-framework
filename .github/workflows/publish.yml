@@ -28,8 +28,15 @@ jobs:
       - name: Install build tools
         run: python -m pip install build twine ".[all,dev]"
 
+      - name: Read package version
+        id: package
+        shell: bash
+        run: |
+          PACKAGE_VERSION=$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml", "rb"))["project"]["version"])')
+          echo "version=$PACKAGE_VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Verify release tag matches package version
-        run: python scripts/check_release_installation.py --expected-version 1.0.0 --check-tag "$GITHUB_REF_NAME"
+        run: python scripts/check_release_installation.py --expected-version "${{ steps.package.outputs.version }}" --check-tag "$GITHUB_REF_NAME"
 
       - name: Run tests before publish
         run: python -m pytest tests/ scanner/tests/ -q
@@ -55,7 +62,7 @@ jobs:
           "$GITHUB_WORKSPACE/wheel-smoke/bin/python" -m safe2 --version
           "$GITHUB_WORKSPACE/wheel-smoke/bin/safe2" example verify aism-decision-card
           "$GITHUB_WORKSPACE/wheel-smoke/bin/safe2" example verify environment-decision-card
-          "$GITHUB_WORKSPACE/wheel-smoke/bin/python" -I "$GITHUB_WORKSPACE/scripts/check_release_installation.py" --expected-version 1.0.0
+          "$GITHUB_WORKSPACE/wheel-smoke/bin/python" -I "$GITHUB_WORKSPACE/scripts/check_release_installation.py" --expected-version "${{ steps.package.outputs.version }}"
 
       - name: Build release decision evidence
         shell: bash

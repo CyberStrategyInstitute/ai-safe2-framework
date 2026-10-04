@@ -3,6 +3,12 @@
 This is the shortest complete path from installation to reviewable evidence.
 Run it only against systems and projects you are authorized to inspect.
 
+After `safe2 init .`, create `system-identity-source.json` from observations
+you can support. Use the exported schema and the repository's
+[`system-identity-source-demo.json`](../safe2/data/system-identity-source-demo.json)
+as a structural example. Replace every demo value; a copied example is not an
+observation of your system.
+
 ```console
 safe2 self-check --strict
 mkdir review-project
@@ -10,18 +16,13 @@ cd review-project
 safe2 init .
 safe2 doctor . --assess --assets --output environment.json
 safe2 schema export system-identity-source-v1 --output system-identity-source.schema.json
+# Create system-identity-source.json here before continuing.
 safe2 evidence system system-identity-source.json --output system-identity.json
 safe2 assess . --output-dir assessment
 safe2 evidence manifest system-identity.json assessment/assessment.json --subject-id reviewed-system --output evidence-manifest.json
 safe2 acceptance run ./safe2-acceptance --strict
 safe2 acceptance verify ./safe2-acceptance
 ```
-
-Create `system-identity-source.json` from observations you can support, using
-the exported schema and the repository's
-[`system-identity-source-demo.json`](../safe2/data/system-identity-source-demo.json)
-as a structural example. Replace every demo value; a copied example is not an
-observation of your system.
 
 Add task receipts, claim audit, AISM ingestion, Challenge Lab runs, or attributed
 provider adapters when the decision requires them. Those layers answer different

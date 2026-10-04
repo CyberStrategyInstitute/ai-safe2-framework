@@ -30,6 +30,25 @@ def run(*arguments: str, expected: int = 0) -> subprocess.CompletedProcess[str]:
     return result
 
 
+def run_entry(
+    entry: Path, *arguments: str, expected: int = 0
+) -> subprocess.CompletedProcess[str]:
+    result = subprocess.run(
+        [os.fspath(entry), *arguments],
+        text=True,
+        capture_output=True,
+        timeout=180,
+        check=False,
+        cwd=tempfile.gettempdir(),
+    )
+    if result.returncode != expected:
+        raise RuntimeError(
+            f"safe2 entry point {' '.join(arguments)} returned {result.returncode}, "
+            f"expected {expected}\nstdout:\n{result.stdout}\nstderr:\n{result.stderr}"
+        )
+    return result
+
+
 def qualify(expected_version: str) -> None:
     installed = importlib.metadata.version("ai-safe2")
     if installed != expected_version:
@@ -37,7 +56,7 @@ def qualify(expected_version: str) -> None:
     entry = Path(sysconfig.get_path("scripts")) / ("safe2.exe" if os.name == "nt" else "safe2")
     if not entry.is_file():
         raise RuntimeError("safe2 console entry point is absent from the active environment")
-    version = run("--version").stdout.strip()
+    version = run_entry(entry, "--version").stdout.strip()
     if expected_version not in version:
         raise RuntimeError(f"unexpected version output: {version!r}")
     self_check = json.loads(run("self-check", "--format", "json", "--strict").stdout)

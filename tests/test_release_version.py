@@ -16,8 +16,10 @@ def test_release_version_is_consistent_across_package_and_qualification() -> Non
         encoding="utf-8"
     )
     publish = (ROOT / ".github/workflows/publish.yml").read_text(encoding="utf-8")
-    assert "--expected-version 1.0.0" in workflow
-    assert "--expected-version 1.0.0" in publish
+    for source in (workflow, publish):
+        assert "tomllib.load" in source
+        assert "steps.package.outputs.version" in source
+        assert "--expected-version 1.0.0" not in source
 
 
 def test_release_documentation_links_exist() -> None:
