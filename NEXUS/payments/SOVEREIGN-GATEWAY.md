@@ -133,6 +133,22 @@ measurement time, freshness lifetime, and single-use verifier challenge into
 the evidence. Changing any bound field invalidates the evidence before a
 runtime authorization receipt can be issued.
 
+## Policy Parity Guard
+
+`ParityEnforcedPolicyAuthority` is the **Policy Parity Guard**. It binds a
+deployed evaluator response to the exact policy input, evaluator identity,
+pinned policy-bundle digest, policy identifier, freshness window, and
+independently verified proof. It then requires exact agreement with the
+reference firewall across decision, all reason codes, policy identity, and
+consequence before preserving the policy authorization receipt.
+
+Outage, malformed evidence, unknown values, duplicate reasons, stale proof, or
+any divergence returns a fail-closed decision with no canonical transaction and
+no signing authority. The reference contract does not claim that a synthetic
+evaluator proves live OPA deployment; production assurance requires an
+authenticated transport, protected trust roots, bounded availability behavior,
+and independently verifiable policy-bundle provenance.
+
 ## Human Intent Authority
 
 `TrustedIntentAuthority` is the independent **Human Intent Authority**. A
