@@ -48,7 +48,10 @@ def qualify(expected_version: str) -> None:
     for example in ("aism-decision-card", "aism-remediation", "environment-decision-card"):
         run("example", "verify", example)
     with tempfile.TemporaryDirectory(prefix="safe2-acceptance-") as temporary:
-        bundle = Path(temporary) / "bundle"
+        # macOS exposes /var through /private/var. Give the acceptance scope
+        # guard the canonical OS-created path so it does not confuse that
+        # platform alias with an untrusted user-controlled symlink.
+        bundle = Path(temporary).resolve() / "bundle"
         run("acceptance", "run", os.fspath(bundle), "--strict")
         run("acceptance", "verify", os.fspath(bundle))
     for command in ("assess", "doctor", "evidence", "challenge", "aism"):
