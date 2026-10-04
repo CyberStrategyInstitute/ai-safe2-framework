@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.org/schemas/challenge-execution-receipt-v1.schema.json",
+  "title": "Challenge Lab controlled execution receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "safe2.challenge-execution-receipt.v1"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "run_integrity_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "executor_sha256_before": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "executor_sha256_after": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "executor_unchanged": {"type": "boolean"},
+    "command_file_checks": {
+      "type": "array", "minItems": 1, "maxItems": 32,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "properties": {
+          "argument_index": {"type": "integer", "minimum": 0, "maximum": 31},
+          "path": {"type": "string", "minLength": 1, "maxLength": 2048},
+          "sha256_before": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "sha256_after": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "unchanged": {"type": "boolean"}
+        },
+        "required": ["argument_index", "path", "sha256_before", "sha256_after", "unchanged"]
+      }
+    },
+    "system_identity_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "episode_receipts": {
+      "type": "array", "minItems": 1, "maxItems": 1800,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "properties": {
+          "episode_id": {"type": "string", "minLength": 1, "maxLength": 200},
+          "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "response_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+          "return_code": {"type": ["integer", "null"]},
+          "status": {"enum": ["complete", "timeout", "output_limit", "stream_incomplete", "process_error", "invalid_response"]}
+        },
+        "required": ["episode_id", "request_sha256", "response_sha256", "return_code", "status"]
+      }
+    },
+    "claims": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "parent_process_bounded": {"const": true},
+        "process_sandboxed": {"const": false},
+        "descendant_containment": {"const": false},
+        "independent_replication": {"const": "not_established"}
+      },
+      "required": ["parent_process_bounded", "process_sandboxed", "descendant_containment", "independent_replication"]
+    },
+    "integrity_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "required": ["schema_version", "plan_sha256", "source_sha256", "run_integrity_sha256", "executor_sha256_before", "executor_sha256_after", "executor_unchanged", "command_file_checks", "system_identity_sha256", "episode_receipts", "claims", "integrity_sha256"]
+}

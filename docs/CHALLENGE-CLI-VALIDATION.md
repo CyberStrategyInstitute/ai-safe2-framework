@@ -1,6 +1,6 @@
 # AI SAFE² Challenge CLI Validation
 
-Evidence-backed handoff for the offline fixture and third-party translation stage.
+Evidence-backed handoff for fixture, translation, and controlled execution stages.
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Review](https://img.shields.io/badge/Review-Offline_Evidence-820F1A?style=flat-square)](./CHALLENGE-CLI.md)
@@ -10,6 +10,36 @@ Evidence-backed handoff for the offline fixture and third-party translation stag
 [User guide](./CHALLENGE-CLI.md) | [Design](./CHALLENGE-HARNESS-DESIGN.md) | [Implementation](../safe2/challenge/README.md)
 
 ---
+
+## CLI 0.9 controlled-execution addendum
+
+Local release-candidate validation completed on 2026-09-26 at revision
+`9484487` using a clean detached worktree. This addendum covers the new bounded
+Challenge 001 process seam; the CLI 0.2 fixture record below remains historical.
+
+| Check | Observed result and boundary |
+|---|---|
+| Clean full CLI/scanner suite | 823 passed, 7 skipped on Windows with Python 3.12.14 |
+| Focused compatibility matrix | 24 passed on each of Python 3.11.15, 3.12.14, 3.13.14, and 3.14.6 |
+| Negative execution cases | Invalid JSON, timeout, and output-cap cases remained explicit incomplete episodes |
+| Installed wheel acceptance | CLI 0.9.0 wheel exposed both new schemas and verified the packaged controlled-executor example outside the checkout |
+| Build contents | Wheel contains the plan/receipt contracts and packaged executable example; source and wheel artifacts built successfully |
+| Static/repository gates | Release-critical Ruff, agent manifest, repository UX, example index, changed-document Markdown, and diff checks passed |
+| Hosted and independent review | Pending on the exact pushed revision; local results do not substitute for GitHub checks or external review |
+
+The pre-registration binds the interpreter/executable and each argument that is
+a regular file at planning time. Execution rechecks those files before the first
+scenario and records before/after hashes. The receipt binds the plan, source,
+normalized run, optional system identity, and per-episode request/response hashes.
+Verification detects cross-artifact substitution, ordinary receipt tampering, and
+resealed inconsistent file checks without re-running the provider.
+
+The remaining boundary is deliberate and release-visible: the direct child has
+time and combined-output limits, but it runs with current-user authority and the
+portable runner does not establish network/filesystem sandboxing or descendant
+process-tree containment. Provider identity and observations remain declarations;
+matching results do not establish independent replication. Use a separately
+isolated environment and external stop controls for untrusted or real targets.
 
 ## Decision and scope
 

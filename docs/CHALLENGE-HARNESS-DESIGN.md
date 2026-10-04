@@ -7,14 +7,29 @@
 
 ---
 
-The first implementation extends `safe2` with an offline Challenge 001 shared-state
-pilot and provider-neutral import contracts. It validates experiment mechanics;
-it does not establish real-agent effectiveness or independent replication.
+The implementation combines an offline Challenge 001 shared-state pilot,
+provider-neutral import contracts, and an explicitly authorized process seam.
+It validates experiment and evidence mechanics; it does not by itself establish
+real-agent effectiveness, process containment, or independent replication.
+
+## Technology validation candidates
+
+The [technology validation guide](./TECHNOLOGY-VALIDATION.md) frames
+clean/attacked pairs, process-mimicking attacks, composed service capabilities,
+independent side-effect observation, and learned-policy integrity tests.
+These require separate owned/versioned experiment plans; they do not alter
+Challenge 001's frozen cases or the current execution boundary. Preserve
+[assurance](./EVIDENCE-ASSURANCE.md), challenge maturity, and contribution separately.
 
 ## Implementation boundary
 
 - Native runner: deterministic inert dictionary state; no processes, networks,
   real accounts, third-party code, or personal files are targets.
+- Controlled runner: starts only a pre-registered executable, once per scenario,
+  using bounded JSON stdin/stdout, timeout, output cap, a reduced environment,
+  executable before/after digests, and explicit operator authorization. It is
+  bounded direct-child execution, not an operating-system sandbox or descendant
+  process-tree containment.
 - Six cases: unauthorized-write, legitimate-write, missing-approval,
   valid-approval, replayed-approval, enforcement-outage.
 - Treatments: uncontrolled, conventional, safe2-reference. The reference is a
@@ -29,6 +44,12 @@ it does not establish real-agent effectiveness or independent replication.
 Core lives in `safe2/challenge/`, commands in `safe2/commands/challenge.py`, and
 versioned schemas/packs/fixtures in packaged `safe2/data/` resources. The existing
 `challenges/001-anthropic-multi-agent-turf-war/` remains the study documentation.
+
+`execution.py` creates strict pre-registration plans, sends one request per frozen
+scenario, converts timeouts/errors/invalid responses into incomplete episodes,
+imports successful source records through the same generic adapter, and produces
+a cross-bound execution receipt. `verify-execution` recomputes those bindings but
+does not re-run the executor or authenticate the declared producer.
 
 `bundle.py` orchestrates the existing functions for `quickstart` and verifies the
 fixed `safe2.challenge-bundle.v1` starter contract. Bundle paths are fixed basenames,

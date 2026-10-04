@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/development-receipt-v1.json",
+  "title": "AI SAFE2 Development Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "task_id", "revision", "plan_sha256", "source_sha256", "claim_status", "required_evidence", "additional_evidence", "process_checks", "reviews", "open_findings", "residual_risks", "rollback", "completion_claim", "authorization", "limitations", "integrity"],
+  "properties": {
+    "schema_version": {"const": "safe2.development-receipt.v1"}, "receipt_id": {"$ref": "#/$defs/id"}, "task_id": {"$ref": "#/$defs/id"}, "revision": {"$ref": "#/$defs/id"}, "plan_sha256": {"$ref": "#/$defs/sha"}, "source_sha256": {"$ref": "#/$defs/sha"},
+    "claim_status": {"enum": ["supported", "review_required", "contradicted"]},
+    "required_evidence": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/evaluated_evidence"}},
+    "additional_evidence": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/evaluated_evidence"}},
+    "process_checks": {"type": "array", "minItems": 6, "maxItems": 20, "items": {"type": "object", "additionalProperties": false, "required": ["id", "status", "reason"], "properties": {"id": {"$ref": "#/$defs/id"}, "mode": {"$ref": "#/$defs/test_mode"}, "status": {"enum": ["supported", "unverifiable", "contradicted"]}, "reason": {"$ref": "#/$defs/id"}}}},
+    "reviews": {"type": "array", "maxItems": 20, "items": {"type": "object", "additionalProperties": false, "required": ["kind", "status"], "properties": {"kind": {"enum": ["human", "pr-agent", "greptile", "security", "other"]}, "status": {"enum": ["completed", "unavailable", "not_requested"]}, "evidence_id": {"$ref": "#/$defs/id"}}}},
+    "open_findings": {"type": "array", "maxItems": 100, "items": {"type": "object", "additionalProperties": false, "required": ["id", "severity"], "properties": {"id": {"$ref": "#/$defs/id"}, "severity": {"enum": ["low", "medium", "high", "critical"]}}}},
+    "residual_risks": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/text"}}, "rollback": {"$ref": "#/$defs/nullable_text"}, "completion_claim": {"$ref": "#/$defs/text"},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["completion", "merge", "release", "deploy", "risk_acceptance"], "properties": {"completion": {"const": false}, "merge": {"const": false}, "release": {"const": false}, "deploy": {"const": false}, "risk_acceptance": {"const": false}}},
+    "limitations": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"$ref": "#/$defs/text"}}, "integrity": {"$ref": "#/$defs/integrity"}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"}, "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"}, "text": {"type": "string", "minLength": 1, "maxLength": 4000}, "nullable_text": {"anyOf": [{"$ref": "#/$defs/text"}, {"type": "null"}]}, "test_mode": {"enum": ["tdd", "characterization-first", "contract-first", "schema-validation", "render-validation", "approved-spike", "not-applicable"]},
+    "evaluated_evidence": {"type": "object", "additionalProperties": false, "required": ["evidence_id", "declared_status", "status", "reason", "artifact_path", "expected_sha256", "observed_sha256"], "properties": {"evidence_id": {"$ref": "#/$defs/id"}, "declared_status": {"enum": ["passed", "failed", "unavailable", "missing"]}, "status": {"enum": ["supported", "unverifiable", "contradicted"]}, "reason": {"$ref": "#/$defs/id"}, "artifact_path": {"anyOf": [{"type": "string", "minLength": 1, "maxLength": 500}, {"type": "null"}]}, "expected_sha256": {"anyOf": [{"$ref": "#/$defs/sha"}, {"type": "null"}]}, "observed_sha256": {"anyOf": [{"$ref": "#/$defs/sha"}, {"type": "null"}]}}},
+    "integrity": {"type": "object", "additionalProperties": false, "required": ["algorithm", "canonicalization", "digest", "verification_scope", "authenticity"], "properties": {"algorithm": {"const": "sha256"}, "canonicalization": {"const": "json-sort-keys-compact-utf8-v1"}, "digest": {"$ref": "#/$defs/sha"}, "verification_scope": {"const": "all top-level content except integrity"}, "authenticity": {"const": "unsigned"}}}
+  }
+}

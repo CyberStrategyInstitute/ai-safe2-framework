@@ -1,0 +1,6 @@
+interface:
+  display_name: "AI SAFE2 Development Method"
+  short_description: "Plan, prove, and receipt repository changes"
+  default_prompt: "Use $ai-safe2-development-method to plan and verify this repository change."
+policy:
+  allow_implicit_invocation: true

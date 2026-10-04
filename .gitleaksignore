@@ -1,0 +1,7 @@
+# Historical test/example fixtures reviewed on 2026-09-24. These fingerprints appear in the
+# GitHub-generated merge history; production secrets must never be added here.
+1010d83a7ff7d5203109615c439e4c4ec021fa70:examples/anti-gravity-sovereign-runtime/smoke_test.js:stripe-access-token:121
+41a06d888ba8034aaa43b5b74db7655c5c1ac8dd:examples/anti-gravity-sovereign-runtime/smoke_test.js:stripe-access-token:82
+be682fd8e9e6128947647780d6e5b7924555fdff:NEXUS/sdk/python/tests/test_nexus_complete.py:generic-api-key:189
+3459adbc6b4132a7e87b2efe3ec74644eedb6d3b:examples/mcp-security-toolkit/tests/test_toolkit.py:generic-api-key:627
+47e86933f87f44d65b09af23cb903cc7536229a3:examples/quickstart_nhi_check.py:generic-api-key:13

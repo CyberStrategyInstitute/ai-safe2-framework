@@ -9,6 +9,17 @@
 
 ---
 
+## Technology contribution reviews
+
+The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+separates conceptual/design evidence, implementation, validation, and enforcement.
+Use the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) for claim-level
+provenance, assurance, coverage, and limits. The
+[nine-example review and adoption backlog](./technology-contribution-examples.md)
+captures the supplied recommendations with primary source pointers, corrected
+control mappings, pending verification, and acceptance work. Its candidates
+are not certified technologies or scored organizations.
+
 ## How to read the research library
 
 The research library records the evidence and reasoning that informed AI SAFE² over time. Individual notes retain their original publication dates, terminology, findings, and historical framework references so the evidence trail remains inspectable.
