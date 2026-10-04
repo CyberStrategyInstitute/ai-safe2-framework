@@ -1,0 +1,27 @@
+{
+  "source": {
+    "schema_version": "safe2.development-plan-source.v1",
+    "task_id": "eval.high-documentation",
+    "title": "Revise an agent authority document",
+    "outcome": "Agent instructions preserve human release authority.",
+    "delivery_shape": "bounded",
+    "risk_tier": "high",
+    "change_kind": "documentation",
+    "work_product": "reusable",
+    "acceptance_conditions": ["Rendered instructions distinguish evidence from authorization."],
+    "scope": {"include": ["AGENTS.md"], "exclude": ["release workflows"]},
+    "trust_boundaries": ["Repository instructions to coding-agent behavior."],
+    "assumptions": [],
+    "unknowns": [],
+    "design": {"summary": "Add a bounded authority clarification.", "approved": true, "approval_reference": "issue:123"},
+    "isolation": {"strategy": "branch", "reference": "docs/authority"},
+    "testing": {"mode": "render-validation"}
+  },
+  "expected": {
+    "disposition": "ready",
+    "gap_codes": [],
+    "human_design_approval": true,
+    "threat_model": false,
+    "greptile_recommended": false
+  }
+}
