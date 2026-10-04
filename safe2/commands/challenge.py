@@ -50,10 +50,11 @@ def _write(value: dict, output: Path, operation: str) -> None:
 
 @click.group("challenge")
 def challenge() -> None:
-    """Run inert fixtures, translate evidence and report bounded findings.
+    """Run fixtures or authorized processes; translate and verify evidence.
 
-    No model, process, network, live provider or production target is executed.
-    Translation and matching outcomes do not establish independent replication.
+    The execute command starts only a pre-registered process after an explicit
+    authorization flag. It is bounded but not sandboxed. Translation and
+    matching outcomes do not establish independent replication.
     """
 
 
@@ -98,6 +99,7 @@ def list_challenges(ctx: click.Context) -> None:
             "execution": "inert_dictionary_fixture",
             "scenario_count": len(specification["scenarios"]),
             "live_agent_execution": False,
+            "controlled_process_execution": True,
         }],
     })
 
@@ -144,6 +146,107 @@ def run_challenge(
         _write(result, output, "run")
 
     _execute(ctx, "run", action)
+
+
+@challenge.command("plan")
+@click.argument("challenge_id", type=click.Choice(["001"]))
+@click.option("--executable", type=click.Path(path_type=Path, dir_okay=False), required=True)
+@click.option("--arg", "arguments", multiple=True, help="Repeat for each literal executor argument.")
+@click.option("--provider-name", required=True)
+@click.option("--provider-version", required=True)
+@click.option("--producer-id", required=True)
+@click.option("--treatment", required=True)
+@click.option("--seed", default=0, type=click.IntRange(0, 2_147_483_647), show_default=True)
+@click.option("--repetitions", default=1, type=click.IntRange(1, 100), show_default=True)
+@click.option("--timeout-seconds", default=30.0, type=click.FloatRange(0.1, 300), show_default=True)
+@click.option("--max-output-bytes", default=262_144, type=click.IntRange(1024, 10_485_760), show_default=True)
+@click.option("--system-identity", type=click.Path(path_type=Path, dir_okay=False), default=None)
+@click.option("--output", "output", type=click.Path(path_type=Path), required=True)
+@click.pass_context
+def plan_execution(
+    ctx: click.Context, challenge_id: str, executable: Path, arguments: tuple[str, ...],
+    provider_name: str, provider_version: str, producer_id: str, treatment: str,
+    seed: int, repetitions: int, timeout_seconds: float, max_output_bytes: int,
+    system_identity: Path | None, output: Path,
+) -> None:
+    """Pre-register an exact Challenge 001 executor without running it."""
+    from safe2.challenge.execution import create_plan
+
+    def action() -> None:
+        value = create_plan(
+            [str(executable), *arguments], provider_name=provider_name,
+            provider_version=provider_version, producer_id=producer_id,
+            treatment=treatment, seed=seed, repetitions=repetitions,
+            timeout_seconds=timeout_seconds, max_output_bytes=max_output_bytes,
+            system_identity=system_identity,
+        )
+        _write(value, output, "plan")
+
+    _execute(ctx, "plan", action)
+
+
+@challenge.command("execute")
+@click.argument("plan", type=click.Path(path_type=Path, dir_okay=False))
+@click.option("--output-dir", type=click.Path(path_type=Path), required=True)
+@click.option(
+    "--authorize-process-execution", is_flag=True, required=True,
+    help="Confirm the named external process may run with current-user authority.",
+)
+@click.pass_context
+def execute_controlled(
+    ctx: click.Context, plan: Path, output_dir: Path, authorize_process_execution: bool,
+) -> None:
+    """Run a pre-registered executor; bounded process I/O is not a sandbox."""
+    from safe2.challenge.execution import execute_plan
+    from safe2.challenge.io import read_json, safe_path, write_json
+
+    def action() -> None:
+        if not authorize_process_execution:
+            raise ValueError("Explicit process execution authorization is required.")
+        destination = safe_path(output_dir)
+        if destination.exists():
+            raise FileExistsError("Output directory already exists.")
+        source, run, receipt = execute_plan(read_json(plan))
+        destination.mkdir(parents=True, exist_ok=False)
+        write_json(destination / "challenge-source.json", source)
+        write_json(destination / "challenge-run.json", run)
+        write_json(destination / "execution-receipt.json", receipt)
+        _json({
+            "schema_version": "safe2.challenge-command.v1", "operation": "execute",
+            "output_dir": str(destination), "run_id": run["run_id"],
+            "episodes": run["summary"]["episodes"],
+            "incomplete": run["summary"]["status_counts"]["incomplete"],
+            "process_sandboxed": False, "descendant_containment": False,
+            "independent_replication": "not_established",
+        })
+
+    _execute(ctx, "execute", action)
+
+
+@challenge.command("verify-execution")
+@click.argument("directory", type=click.Path(path_type=Path, file_okay=False))
+@click.option("--plan", "plan_path", type=click.Path(path_type=Path, dir_okay=False), required=True)
+@click.option("--system-identity", type=click.Path(path_type=Path, dir_okay=False), default=None)
+@click.pass_context
+def verify_controlled(
+    ctx: click.Context, directory: Path, plan_path: Path, system_identity: Path | None,
+) -> None:
+    """Verify plan, source, run, receipt, and optional identity bindings."""
+    from safe2.challenge.execution import verify_execution
+    from safe2.challenge.io import read_json, safe_path
+
+    def action() -> dict:
+        root = safe_path(directory)
+        return verify_execution(
+            read_json(plan_path), read_json(root / "challenge-source.json"),
+            read_json(root / "challenge-run.json"), read_json(root / "execution-receipt.json"),
+            system_identity=system_identity,
+        )
+
+    result = _execute(ctx, "verify-execution", action)
+    _json(result)
+    if not result["valid"]:
+        ctx.exit(1)
 
 
 @challenge.command("example")

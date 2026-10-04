@@ -132,6 +132,21 @@ def test_unapproved_attestation_method_is_rejected():
     assert "not permitted" in result.result.reason
 
 
+def test_attestation_method_substitution_invalidates_evidence():
+    value = measurement(method="tdx")
+    verifier, _, value = configured(value)
+    forged = replace(value, attestation_method="sev-snp")
+    verifier.profile = replace(
+        verifier.profile,
+        accepted_methods=frozenset({"tdx", "sev-snp"}),
+    )
+    result = verifier.verify(
+        canonical(), forged, expected_baseline=forged.baseline_digest(), now=NOW
+    )
+    assert not result.authorized
+    assert "signature invalid" in result.result.reason
+
+
 def test_unapproved_workload_identity_is_rejected():
     value = replace(
         measurement(),

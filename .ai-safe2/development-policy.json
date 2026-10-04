@@ -1,0 +1,66 @@
+{
+  "schema_version": "safe2.development-policy.v1",
+  "policy_id": "ai-safe2-development-method-v1",
+  "delivery_shapes": {
+    "spike": {
+      "design_artifact": "hypothesis-and-discard-plan",
+      "human_design_approval": false,
+      "reusable_output_allowed": false,
+      "review_cadence": "completion",
+      "required_evidence": ["spike-disposition"]
+    },
+    "bounded": {
+      "design_artifact": "acceptance-conditions-and-scope",
+      "human_design_approval": false,
+      "reusable_output_allowed": true,
+      "review_cadence": "subsystem",
+      "required_evidence": ["scope-contract"]
+    },
+    "architectural": {
+      "design_artifact": "written-spec-and-plan",
+      "human_design_approval": true,
+      "reusable_output_allowed": true,
+      "review_cadence": "task",
+      "required_evidence": ["design-specification", "implementation-plan"]
+    }
+  },
+  "risk_tiers": {
+    "low": {
+      "human_design_approval": false,
+      "threat_model_required": false,
+      "review_cadence": "completion",
+      "required_evidence": ["targeted-validation"]
+    },
+    "medium": {
+      "human_design_approval": false,
+      "threat_model_required": false,
+      "review_cadence": "subsystem",
+      "required_evidence": ["targeted-validation", "regression-validation"]
+    },
+    "high": {
+      "human_design_approval": true,
+      "threat_model_required": false,
+      "review_cadence": "task",
+      "required_evidence": ["targeted-validation", "negative-validation", "human-review"]
+    },
+    "critical": {
+      "human_design_approval": true,
+      "threat_model_required": true,
+      "review_cadence": "task-and-specialist",
+      "required_evidence": ["targeted-validation", "negative-validation", "security-validation", "threat-model", "human-review"]
+    }
+  },
+  "test_modes_by_change_kind": {
+    "code": ["tdd", "characterization-first", "contract-first", "approved-spike"],
+    "configuration": ["contract-first", "schema-validation", "approved-spike"],
+    "documentation": ["render-validation", "schema-validation", "approved-spike"],
+    "research": ["approved-spike", "not-applicable"]
+  },
+  "evidence_by_change_kind": {
+    "code": ["red-state", "green-state"],
+    "configuration": ["configuration-validation"],
+    "documentation": ["documentation-validation"],
+    "research": ["research-log"]
+  },
+  "greptile_recommended_for": ["critical"]
+}

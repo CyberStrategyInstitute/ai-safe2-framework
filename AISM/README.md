@@ -2,8 +2,15 @@
   <img src="../assets/Full AISM Ecosystem - Agentic AI Operating System Framework v2.png" alt="Full AISM Ecosystem" width="100%" />
 </div>
 
-# AISM: AI Sovereignty Maturity Model
+# AI Sovereign Maturity (AISM) Model
 ### The maturity and operating model for deterministic governance of probabilistic AI
+
+**Documentation updated:** 2026-10-02. Clarifies the existing Sovereignty Score
+and introduces TCP and Evidence Assurance v1.0 as separate assessment methods.
+See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
+Technology Card workflow, and worked example. Original methodology dates below
+identify their baseline; this update does not change scoring formulas.
+
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-AISM-820F1A?style=flat-square)](./README.md)
@@ -19,9 +26,20 @@
 **Core Principle:** *Probabilistic intelligence requires deterministic control.*  
 **Organization:** Cyber Strategy Institute  
 **Framework:** AI SAFE² v3.1  
-**Current release context:** August 2026
+**Framework release context:** August 2026; assessment-method documentation updated October 2026
 
 ---
+
+## Organizational maturity and technology contribution
+
+The Sovereignty Score assesses an organization across five pillars and six
+dimensions. Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+for a product, paper, benchmark, technique, investigation, or accountability input.
+Record its control effects and scoped contribution alongside the [Evidence Assurance Level](../docs/EVIDENCE-ASSURANCE.md); neither determines
+organizational maturity. Start with the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md)
+and [nine examples](../research/technology-contribution-examples.md).
+The existing CLI's E0-E5 numeric grades are separate from assurance v1.0 and keep
+their current formulas and verification caps. No TCP command is implemented here.
 
 ## Why AISM Exists
 
@@ -29,11 +47,16 @@ AI systems are probabilistic by nature. They hallucinate, drift, and behave unex
 
 That approach fails for autonomous agents.
 
-The **AI Sovereignty Maturity Model (AISM)** exists because agentic AI systems require governance that operates at runtime, not just at policy review time. When an agent is autonomously executing tasks, chaining tool calls, and orchestrating other agents, a PDF policy document offers no protection. What you need is deterministic control layered over probabilistic behavior, enforced continuously, and measurable at every stage.
+The **AI Sovereign Maturity (AISM) Model** exists because agentic AI systems require governance that operates at runtime, not just at policy review time. When an agent is autonomously executing tasks, chaining tool calls, and orchestrating other agents, a PDF policy document offers no protection. What you need is deterministic control layered over probabilistic behavior, enforced continuously, and measurable at every stage.
 
 AISM provides exactly that.
 
 ### Relationship to AI SAFE² v3.1
+
+**Naming:** AISM expands to **AI Sovereign Maturity**; Model follows the acronym.
+Use **AISM** or **AISM Model** after the first mention. Sovereign refers to the
+organization's retained authority over AI. The Sovereignty Score and Sovereignty
+Matrix retain their names as distinct instruments within the model.
 
 AI SAFE² defines the control and evidence requirements. AISM provides the maturity model used to measure how completely and robustly an organization has operationalized those requirements.
 
@@ -167,6 +190,8 @@ safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "N
 safe2 aism score assessment.json --format markdown --output decision-card.md
 safe2 aism score assessment.json --format json --output decision.json
 safe2 aism compare previous.json current.json
+safe2 aism remediation-init assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --decision-owner "CISO" --output remediation-source.json
+safe2 aism plan remediation-source.json assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --output remediation-plan.json --card remediation-card.md --strict
 ```
 
 `ingest` preserves the provider bundle, suggests candidate cells, and requires human confirmation. It never converts scanner presence or endpoint availability directly into maturity ratings. Unverified evidence is explicitly capped in the supplemental decision-support score.
@@ -178,6 +203,15 @@ support. It does not create another maturity level or claim conformance.
 Probability ranges must name an outcome, time horizon, method, and confidence.
 When comparable evidence does not exist, the correct result is `NOT ESTIMABLE`,
 not an invented percentage.
+
+CLI 0.8 adds a separate remediation contract. Each action must name applicable
+AI SAFE² controls and AISM cells, available evidence, stated assumptions, an
+owner, dependencies, alternatives, impacts, exit criteria, and residual risk.
+Completed actions require available completion evidence. Reassessment records
+status transitions without silently changing the normative maturity score or
+authorizing implementation.
+
+See the [AISM remediation guide](../docs/AISM-REMEDIATION.md).
 
 See the executable [Decision Card example](../examples/aism-decision-card/).
 

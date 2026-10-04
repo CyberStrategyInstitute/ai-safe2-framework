@@ -29,6 +29,13 @@ or product capability.
 
 ## Pinned outside the active release path
 
+The separate [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [Evidence Assurance v1.0](./EVIDENCE-ASSURANCE.md) now document a scoped review
+method for the [nine new examples](../research/technology-contribution-examples.md).
+They do not change current CLI E0-E5 weights or organizational scoring semantics.
+Their machine schema, integrations, and new live experiments remain outside the
+active release path under the constraints below.
+
 The following require separate proposals and version review. They must not delay
 harness evidence adoption or silently enter AI SAFE² v3.1:
 
