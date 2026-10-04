@@ -80,6 +80,7 @@ def envelope(transaction: CanonicalTransaction | None = None,
         verified_at="2026-09-23T00:00:01+00:00",
         authenticator_id=authenticator.authenticator_id,
         proof="",
+        verifier_profile_digest="sha256:runtime-verifier-profile-1",
     )
     runtime = replace(runtime, proof=authenticator.seal_runtime(runtime))
     return CredentialReleaseEnvelope(
@@ -119,6 +120,9 @@ def configured(tmp_path, transaction=None, backend=None):
         state_store=store,
         receipt_authenticator=InProcessHMACReceiptAuthenticator(),
         trusted_policy_digests={"policy-1": "sha256:policy-definition-1"},
+        trusted_runtime_verifier_digests={
+            "attestation-verifier-1": "sha256:runtime-verifier-profile-1"
+        },
         revocation_epoch=store.current_revocation_epoch,
         now=lambda: datetime(2026, 9, 23, 0, 0, 30, tzinfo=timezone.utc),
     )
@@ -241,3 +245,14 @@ def test_untrusted_policy_snapshot_cannot_sign(tmp_path):
     with pytest.raises(BrokerRefusal) as refusal:
         guardian.release(forged)
     assert refusal.value.code is PaymentReasonCode.FAIL_CLOSED_DEFAULT
+
+
+def test_untrusted_runtime_verifier_profile_cannot_sign(tmp_path):
+    request, guardian = configured(tmp_path)
+    forged = replace(
+        request,
+        runtime=replace(request.runtime, verifier_profile_digest="sha256:other"),
+    )
+    with pytest.raises(BrokerRefusal) as refusal:
+        guardian.release(forged)
+    assert refusal.value.code is PaymentReasonCode.ATTESTATION_VERIFICATION_FAILED
