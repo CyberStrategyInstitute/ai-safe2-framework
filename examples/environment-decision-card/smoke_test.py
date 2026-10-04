@@ -119,7 +119,11 @@ def main() -> None:
         print(json.dumps(_run(args.output_dir.resolve()), indent=2))
         return
     with tempfile.TemporaryDirectory(prefix="safe2-environment-example-") as temporary:
-        print(json.dumps(_run(Path(temporary)), indent=2))
+        # macOS exposes its system temporary directory through /var -> /private/var.
+        # Canonicalize that trusted OS-created location before exercising the
+        # evidence scope boundary; user-supplied paths remain subject to the
+        # CLI's normal symlink rejection.
+        print(json.dumps(_run(Path(temporary).resolve()), indent=2))
 
 
 if __name__ == "__main__":

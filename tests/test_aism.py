@@ -264,6 +264,22 @@ def test_examples_inventory_and_executable_verification(monkeypatch):
     assert nested.exit_code == 0, nested.output
 
 
+def test_example_verification_reports_bounded_smoke_failure_detail(monkeypatch):
+    monkeypatch.chdir(REPO_ROOT)
+    monkeypatch.setattr(
+        "safe2.commands.example.run_bounded",
+        lambda *args, **kwargs: SimpleNamespace(
+            returncode=1,
+            stdout=b"",
+            stderr=b"scope rejected the candidate path",
+            exceeded=False,
+        ),
+    )
+    result = CliRunner().invoke(cli, ["example", "verify", "environment-decision-card"])
+    assert result.exit_code == 1
+    assert "scope rejected the candidate path" in result.output
+
+
 def test_aism_ingest_preserves_evidence_without_inventing_scores(tmp_path, monkeypatch):
     bundle = collect(REPO_ROOT / "NEXUS")
     bundle_path = tmp_path / "nexus.json"
