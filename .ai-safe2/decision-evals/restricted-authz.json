@@ -1,0 +1,11 @@
+{
+  "schema_version": "safe2.decision-request.v1",
+  "decision_id": "restricted-authz-001",
+  "decision_class": "risk_signal",
+  "data_classification": "restricted",
+  "structured_state": {"decision_capsule": {"affected_domains": ["authorization"], "boundary_changed": true}},
+  "questions": {"authorization_boundary_affected": {"type": "noul", "instructions": "Could the described change alter an authorization boundary?"}},
+  "deterministic": {"risk_tier": "high", "required_evidence": ["negative-authorization-tests", "security-review"], "evidence_status": {"negative-authorization-tests": "passed", "security-review": "passed"}, "policy_flags": {"touches_authorization": true}},
+  "external_adjudication_allowed": true,
+  "expected": {"risk_tier": "high", "missing_or_incomplete_evidence": [], "human_approval_required": true, "external_adjudication_eligible": false}
+}

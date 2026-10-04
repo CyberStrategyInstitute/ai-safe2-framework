@@ -9,7 +9,7 @@
 
 ## Support policy
 
-CLI 0.2.0 retains Python 3.11 as its minimum. Release CI covers standard CPython
+CLI 0.9.9 retains Python 3.11 as its minimum. Release CI covers standard CPython
 3.11–3.14 on Linux: all optional dependencies, tests, package build, and installed
 Challenge acceptance. Configured jobs are not passing results: check the release
 commit's CI. Classifiers identify intended compatibility, not certification.

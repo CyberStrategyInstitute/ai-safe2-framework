@@ -15,7 +15,7 @@
 [![Scope](https://img.shields.io/badge/Scope-161_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm_%7C_CP.1--CP.10-red)](https://cyberstrategyinstitute.com/ai-safe2/)
 [![MCP](https://img.shields.io/badge/MCP-2026--07--28-blue.svg)](00-cross-pillar/cp5_mcp_server_security.md)
 
-**[Why AI SAFE²](#what-ai-safe-is-for)** · **[What Changed in v3.1](#what-changed-in-v31)** · **[Architecture](#the-core-architecture)** · **[MCP Security](#mcp-security-in-v31)** · **[Examples](#examples-sovereign-runtimes-in-the-wild)** · **[Challenge Lab](#challenge-lab-falsification-before-claims)** · **[32 Frameworks](#the-universal-rosetta-stone-32-frameworks)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
+**[Why AI SAFE²](#what-ai-safe-is-for)** · **[What Changed in v3.1](#what-changed-in-v31)** · **[Architecture](#the-core-architecture)** · **[MCP Security](#mcp-security-in-v31)** · **[Technology Reviews](#assess-organizations-technologies-and-evidence-separately)** · **[Examples](#examples-sovereign-runtimes-in-the-wild)** · **[Challenge Lab](#challenge-lab-falsification-before-claims)** · **[32 Frameworks](#the-universal-rosetta-stone-32-frameworks)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
 
 </div>
 
@@ -39,6 +39,7 @@ Version 3.1 also formalizes three enforcement planes:
 
 ---
 
+<a id="what-ai-safe-is-for"></a>
 ## What AI SAFE² Is For
 
 Production agents can drift without a code change. Retrieval changes, accumulated memory, delegated authority, tool calls, identity confusion, protocol behavior, or changes in external services can alter the effective operating environment while the source code remains unchanged.
@@ -123,6 +124,44 @@ See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_server_secu
 
 ---
 
+## Assess Organizations, Technologies, and Evidence Separately
+
+**Documentation updated: 2026-10-02.** Start with the
+[AISM assessment guide](AISM/ASSESSMENT-GUIDE.md) to use all three instruments
+with the Technology Card and a worked example.
+
+An organization earns an AISM maturity level. A technology contributes evidence
+for specific controls within a defined boundary. A paper, benchmark, released
+implementation, or vendor test cannot establish organizational maturity by itself.
+
+AISM is the **AI Sovereign Maturity (AISM) Model**, which assesses the organization's
+retained authority and governance capabilities across five pillars and six dimensions.
+
+| Review instrument | Question | Starting point |
+|---|---|---|
+| AISM Sovereignty Score | How mature is the organization's governance across five pillars and six dimensions? | [Organizational methodology](AISM/AISM-Scoring-Matrix-Methodology.md) |
+| AISM Technology Contribution Profile v1.0 | Which controls does this artifact address, implement, enforce, validate, evidence, or challenge? | [Profile and adoption rule](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md), [Technology Card](docs/templates/TECHNOLOGY-CARD.md) |
+| AI SAFE² Evidence Assurance v1.0 | What evidence supports each scoped claim? | [Assurance rubric and compatibility](docs/EVIDENCE-ASSURANCE.md) |
+
+Select technologies by required-control fit, enforcement location, evidence,
+failure behavior, retained authority, residual risk, and integration value.
+Do not rank purchases by average pillar contribution or label a product
+"AISM Level 4." A measured control contribution remains bounded by its tests.
+
+The [nine-example review](research/technology-contribution-examples.md) frames
+ContractWarden, DGF-Bench, ActionGuard, OpenShell/Sentry, policy learning, oversight,
+and incident/accountability inputs as adoption candidates. Follow the
+[validation guide](docs/TECHNOLOGY-VALIDATION.md) and
+[incident evidence workflow](docs/INCIDENT-EVIDENCE.md) before promoting claims.
+
+These additions are CSI v1.0 assessment methods for use and feedback. The CLI's current E0-E5
+numeric grades, Challenge Lab C0-C5 scale, organizational scoring, 161 controls,
+and generated profile data keep their existing meanings. No TCP command or
+dashboard scoring integration is implemented by this update. See the
+[repository coverage review](docs/TECHNOLOGY-PROFILE-REPO-REVIEW.md).
+
+---
+
 ## Navigate the Framework
 
 | Section | What You'll Find |
@@ -133,8 +172,10 @@ See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_server_secu
 | [Pillar 4: Engage & Monitor](04-engage-monitor/) | Detection pipelines, HITL, platform monitoring |
 | [Pillar 5: Evolve & Educate](05-evolve-educate/) | Adversarial evaluation and red-team artifacts |
 | [Cross-Pillar Governance](00-cross-pillar/) | CP.1 through CP.10, ACT tiers, HEAR doctrine, replication governance, CP.5 profiles |
-| [AISM](AISM/) | AI Sovereignty Maturity Model and control mapping |
+| [AI Sovereign Maturity (AISM) Model](AISM/) | Organizational maturity model and control mapping |
+| [Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Artifact review, evidence assurance, adoption rule, and reusable card |
 | [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
+| [AI SAFE² Development Method](docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) | Risk-adjusted planning, implementation evidence, reviews, and completion receipts |
 | [NEXUS](NEXUS/) | CSI reference implementation for governed agent-to-agent and agent-to-tool interactions |
 | [Research](research/) | Threat research and deep-dive control evidence |
 | [Challenge Lab](challenges/) | Open falsification and replication experiments |
@@ -185,6 +226,12 @@ The unified CLI makes repository evidence directly callable by agents while
 preserving human decision authority:
 
 ```bash
+safe2 init . --profile local
+safe2 config show
+safe2 assess . --scan-content --inspect-config
+safe2 self-check --strict
+safe2 acceptance run ./safe2-acceptance --strict
+safe2 acceptance verify ./safe2-acceptance
 safe2 scan project .
 safe2 doctor . --format json --output environment-inventory.json
 safe2 doctor . --assess --inspect-config --baseline trusted-inventory.json
@@ -200,9 +247,18 @@ safe2 evidence diagnose safe2/data/failure-source-demo.json --system-identity sy
 safe2 evidence scope safe2/data/assessment-scope-source-demo.json --project-root . --system-identity system-identity.json --output assessment-scope.json
 safe2 evidence truth operational-truth-policy.json harness-evidence.json task-receipt.json --output operational-truth.json --card operational-truth.md --strict
 safe2 evidence changes . --baseline prior-agent-inputs.json --output current-agent-inputs.json --strict
+safe2 evidence watch . --state .safe2/watch-state.json --evidence-dir .safe2/evidence/changes --continuous --max-runs 1
+safe2 adapter codex-jsonl codex-trace.jsonl --codex-version VERSION --output codex-evidence.json
+safe2 adapter otel-jsonl agent-traces.jsonl --otel-version VERSION --output otel-evidence.json
+safe2 evidence claims claims.json task-receipt.json --output claim-audit.json --card claim-audit.md --strict
 safe2 aism ingest nexus-evidence.json --subject-id nexus-local --subject-name "NEXUS Local" --output assessment.json
 safe2 aism score assessment.json --format markdown --output decision-card.md
+safe2 aism remediation-init assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --decision-owner "Accountable system owner" --output remediation-source.json
+safe2 aism plan remediation-source.json assessment.json --system-identity system-identity.json --assessment-scope assessment-scope.json --output remediation-plan.json --card remediation-card.md --strict
 ```
+
+`safe2 init` creates a versioned secure-default project configuration without
+overwriting an existing file. See the [CLI configuration contract](docs/CLI-CONFIGURATION.md).
 
 `safe2 doctor` provides metadata-only discovery for multi-harness workstations,
 including known Codex, Claude Code, Antigravity, Hermes, OpenClaw, and Grok
@@ -224,6 +280,15 @@ alternatives, history, and recommendations. Machine-readable JSON remains the
 canonical exchange format. An automated pass is not a claim of full framework
 conformance or organizational maturity.
 
+CLI 0.8 binds proposed remediation to the exact assessment, system identity,
+and deployment scope. It validates control and AISM-cell traceability,
+evidence, assumptions, owners, dependencies, alternatives, impacts, exit
+criteria, completion evidence, residual risk, and status history. It never
+executes or authorizes the proposed work and never increases the normative AISM
+score merely because an action is marked complete.
+
+See the [AISM implementation and remediation guide](docs/AISM-REMEDIATION.md).
+
 See the executable [AISM Decision Card example](examples/aism-decision-card/).
 See the executable [environment Decision Card workflow](examples/environment-decision-card/).
 Evidence ingestion is conservative: collectors suggest candidate AISM cells but never invent maturity ratings. Evidence without verification provenance is labeled and capped until a human confirms the mapping.
@@ -240,6 +305,17 @@ The CLI includes a provider-neutral
 [harness evidence intake](docs/TASK-RECEIPTS.md#provider-neutral-harness-evidence-intake)
 that makes declared, observed, partial, and missing coverage visible before native
 harness adapters are introduced.
+
+The provider-neutral [adapter SDK](docs/ADAPTER-SDK.md), privacy-preserving
+[Codex JSONL translator](docs/CODEX-JSONL-ADAPTER.md), and
+[OpenTelemetry exchange](docs/OPENTELEMETRY-ADAPTER.md) let external harnesses
+contribute attributed evidence without becoming AI SAFE² decision authorities.
+
+The [continuous local evidence runner](docs/CONTINUOUS-EVIDENCE.md) preserves
+repeated skill and harness-configuration change reports. The
+[agent claim audit](docs/CLAIM-AUDIT.md) separates evidence-consistent,
+contradicted, unverifiable, and explicitly limited outcomes without assigning a
+speculative honesty score or inferring deception.
 
 The [agent system identity manifest](docs/SYSTEM-IDENTITY.md) adds the next layer,
 harness, tools, skills, memory, environment, policies, evaluator, authority and
@@ -268,11 +344,11 @@ agent JSON plus a human card while preserving human release authority.
 
 [Operational truth](docs/OPERATIONAL-TRUTH.md) correlates provider-attributed
 harness evidence, task receipts, coverage, usage declarations, and completion
-claims without promoting agreement into verified completion or billing. Its
-bounded one-shot change monitor can inventory new or changed skills and named
-agent configuration in an explicitly supplied local or CI scope. It installs no
-daemon, sends no telemetry, exports no file content, and holds configuration
-changes for human review.
+claims without promoting agreement into verified completion or billing. The
+bounded one-shot change monitor supports local or CI use; the explicit polling
+runner can preserve repeated reports until interrupted. Neither installs an OS
+service, intercepts pasted context, sends telemetry, exports file content, or
+turns detection into prevention.
 
 For release boundaries, verified behavior, and external checks that still
 require human or production execution, see the
@@ -326,11 +402,12 @@ Material normative framework, protocol-profile, implementation, policy, or grade
 
 See [Challenge 001](challenges/001-anthropic-multi-agent-turf-war/).
 
-The [Challenge CLI workflow](docs/CHALLENGE-CLI.md) now runs an offline, inert
-shared-state fixture, grades observed outcomes, and translates third-party evidence
-through a versioned contract. A synthetic TENIR example demonstrates interoperability;
-it is not a TENIR execution or independent replication. Live-agent validation remains
-a separate study stage.
+The [Challenge CLI workflow](docs/CHALLENGE-CLI.md) runs an offline fixture or an
+explicitly authorized, bounded external evaluator, independently grades recorded
+state, and translates third-party evidence through a versioned contract. Plans and
+receipts bind the evaluator, requests, responses, optional system identity, source,
+and normalized run. Bounded execution is not an OS sandbox, provider authentication,
+or independent replication. The synthetic TENIR example remains illustrative only.
 
 ---
 
@@ -471,7 +548,7 @@ See [EVOLUTION.md](EVOLUTION.md) for the full history.
 ├── 03-fail-safe-recovery/     # Pillar 3
 ├── 04-engage-monitor/         # Pillar 4
 ├── 05-evolve-educate/         # Pillar 5
-├── AISM/                      # Normative AI Sovereignty Maturity Model
+├── AISM/                      # Normative AI Sovereign Maturity (AISM) Model
 ├── safe2/                     # Unified agent-facing Python CLI and AISM runtime
 ├── NEXUS/                     # CSI reference implementation
 ├── challenges/                # Falsification and replication experiments
