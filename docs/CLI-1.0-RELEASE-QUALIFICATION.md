@@ -14,14 +14,23 @@
 
 | Requirement | Evidence at PR creation | Final release condition |
 |---|---|---|
-| Clean wheel and source distribution | Built locally from the candidate source | Hosted build and artifact checks pass on the exact revision |
-| Installed package, outside source imports | Windows CPython 3.12 clean-wheel qualification passed | Ubuntu, Windows, and macOS jobs pass on Python 3.11 and 3.14 |
-| Runtime range | Existing Linux matrix covers Python 3.11–3.14 | Exact-revision matrix remains green |
-| Stranger acceptance | Self-check, fixed benign/hostile replay, and verification passed locally | Same public workflow passes from each hosted wheel |
-| Public surface | Version, schemas, examples, key command help, and console entry point checked | Stability policy and command checks remain green |
+| Clean wheel and source distribution | Built locally from the candidate source | Passed on the exact PR revision |
+| Installed package, outside source imports | Windows CPython 3.12 clean-wheel qualification passed | Passed on Ubuntu, Windows, and macOS with Python 3.11 and 3.14 |
+| Runtime range | Existing Linux matrix covers Python 3.11–3.14 | Exact-revision matrix passed |
+| Stranger acceptance | Self-check, fixed benign/hostile replay, and verification passed locally | Passed from all six hosted wheels |
+| Public surface | Version, schemas, examples, key command help, and console entry point checked | Stability policy and command checks passed |
 | Upgrade and recovery | Migration, clean-environment upgrade, rollback, and evidence-retention guidance documented | Release note links the final guidance |
-| Uninstall | Active-environment distribution metadata and entry point removal passed locally | Hosted uninstall checks pass on all matrix platforms |
-| Security and independent review | Pending on the candidate PR | CodeQL, dependency/secret/repository checks, PR-Agent, and Greptile pass with no unresolved release blockers |
+| Uninstall | Active-environment distribution metadata and entry point removal passed locally | Passed on all six hosted environments |
+| Security and independent review | CodeQL and dependency, secret, and repository checks passed | PR-Agent and Greptile review after the PR leaves draft, with no unresolved release blockers |
+
+## Hosted evidence
+
+- [Clean-wheel qualification matrix](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/runs/37169646354)
+- [Python 3.11–3.14, NEXUS, examples, and lint](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/runs/37169646328)
+- [CodeQL](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/runs/37169646298)
+- [Security guardrails](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/runs/37169646319)
+- [Repository and framework integrity](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/runs/37169646289)
+- [PR checks summary](https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/385/checks)
 
 ## Security and evidence boundaries
 
@@ -46,5 +55,5 @@ the stable CLI contract.
 ## Release decision
 
 Merge, tag creation, PyPI publication, deployment, risk acceptance, and public
-release remain human-owned decisions. Replace pending statements with links to
-the exact hosted checks before announcing 1.0.0.
+release remain human-owned decisions. External review must complete without an
+unresolved release blocker before announcing 1.0.0.
