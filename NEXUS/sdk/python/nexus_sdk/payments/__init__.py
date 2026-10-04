@@ -158,6 +158,14 @@ from nexus_sdk.payments.coordinator import (
     RailSubmissionUncertainError,
     SovereignPaymentCoordinator,
 )
+from nexus_sdk.payments.reconciliation import (
+    DeterministicReconciliationAuthority,
+    ReconciliationCase,
+    ReconciliationConflictError,
+    ReconciliationPolicy,
+    ReconciliationResult,
+    ReconciliationStatus,
+)
 from nexus_sdk.payments.adapters import (
     AP2Binding,
     AgenticTokenBinding,
@@ -260,6 +268,10 @@ __all__ = [
     "CoordinatedPayment", "CoordinatorConflictError", "PaymentRailSubmitter",
     "PreparedPayment", "RailSubmissionReceipt", "RailSubmissionUncertainError",
     "SovereignPaymentCoordinator",
+    # Governed ambiguous-payment recovery
+    "DeterministicReconciliationAuthority", "ReconciliationCase",
+    "ReconciliationConflictError", "ReconciliationPolicy",
+    "ReconciliationResult", "ReconciliationStatus",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
