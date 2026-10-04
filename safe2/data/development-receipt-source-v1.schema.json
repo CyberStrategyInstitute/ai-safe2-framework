@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/development-receipt-source-v1.json",
+  "title": "AI SAFE2 Development Receipt Source",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_id", "task_id", "revision", "evidence", "test_cycle", "before_after", "reviews", "open_findings", "residual_risks", "completion_claim"],
+  "properties": {
+    "schema_version": {"const": "safe2.development-receipt-source.v1"},
+    "receipt_id": {"$ref": "#/$defs/id"}, "task_id": {"$ref": "#/$defs/id"}, "revision": {"$ref": "#/$defs/id"},
+    "evidence": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/evidence"}},
+    "test_cycle": {
+      "type": "object", "additionalProperties": false, "required": ["mode", "red", "green"],
+      "properties": {"mode": {"$ref": "#/$defs/test_mode"}, "red": {"$ref": "#/$defs/phase"}, "green": {"$ref": "#/$defs/phase"}}
+    },
+    "before_after": {
+      "type": "object", "additionalProperties": false, "required": ["status", "evidence_ids"],
+      "properties": {"status": {"enum": ["compared", "baseline_missing", "not_applicable"]}, "evidence_ids": {"type": "array", "maxItems": 10, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}}
+    },
+    "reviews": {"type": "array", "maxItems": 20, "items": {"type": "object", "additionalProperties": false, "required": ["kind", "status"], "properties": {"kind": {"enum": ["human", "pr-agent", "greptile", "security", "other"]}, "status": {"enum": ["completed", "unavailable", "not_requested"]}, "evidence_id": {"$ref": "#/$defs/id"}}}},
+    "open_findings": {"type": "array", "maxItems": 100, "items": {"type": "object", "additionalProperties": false, "required": ["id", "severity"], "properties": {"id": {"$ref": "#/$defs/id"}, "severity": {"enum": ["low", "medium", "high", "critical"]}}}},
+    "residual_risks": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/text"}},
+    "rollback": {"$ref": "#/$defs/text"},
+    "completion_claim": {"$ref": "#/$defs/text"}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "test_mode": {"enum": ["tdd", "characterization-first", "contract-first", "schema-validation", "render-validation", "approved-spike", "not-applicable"]},
+    "phase": {"type": "object", "additionalProperties": false, "required": ["status"], "properties": {"status": {"enum": ["observed", "not_observed", "not_applicable"]}, "evidence_id": {"$ref": "#/$defs/id"}}},
+    "evidence": {
+      "type": "object", "additionalProperties": false, "required": ["evidence_id", "status"],
+      "properties": {"evidence_id": {"$ref": "#/$defs/id"}, "status": {"enum": ["passed", "failed", "unavailable"]}, "artifact_path": {"type": "string", "minLength": 1, "maxLength": 500}, "expected_sha256": {"$ref": "#/$defs/sha"}},
+      "allOf": [{"if": {"properties": {"status": {"const": "passed"}}, "required": ["status"]}, "then": {"required": ["artifact_path", "expected_sha256"]}, "else": {"not": {"anyOf": [{"required": ["artifact_path"]}, {"required": ["expected_sha256"]}]}}}]
+    }
+  }
+}

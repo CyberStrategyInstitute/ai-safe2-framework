@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/development-plan-v1.json",
+  "title": "AI SAFE2 Development Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "plan_id", "policy", "source_sha256", "task", "risk_classification", "requirements", "observations", "gaps", "disposition", "authorization", "limitations", "integrity"],
+  "properties": {
+    "schema_version": {"const": "safe2.development-plan.v1"},
+    "plan_id": {"$ref": "#/$defs/id"},
+    "policy": {"type": "object", "additionalProperties": false, "required": ["id", "sha256", "risk_policy_id", "risk_policy_sha256"], "properties": {"id": {"$ref": "#/$defs/id"}, "sha256": {"$ref": "#/$defs/sha"}, "risk_policy_id": {"anyOf": [{"$ref": "#/$defs/id"}, {"type": "null"}]}, "risk_policy_sha256": {"anyOf": [{"$ref": "#/$defs/sha"}, {"type": "null"}]}}},
+    "source_sha256": {"$ref": "#/$defs/sha"},
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["title", "outcome", "delivery_shape", "declared_risk_tier", "risk_tier", "change_kind", "work_product", "acceptance_conditions", "scope", "trust_boundaries", "assumptions", "unknowns"],
+      "properties": {
+        "title": {"$ref": "#/$defs/text"}, "outcome": {"$ref": "#/$defs/text"},
+        "delivery_shape": {"enum": ["spike", "bounded", "architectural"]},
+        "declared_risk_tier": {"enum": ["low", "medium", "high", "critical"]},
+        "risk_tier": {"enum": ["low", "medium", "high", "critical"]},
+        "change_kind": {"enum": ["code", "configuration", "documentation", "research"]},
+        "work_product": {"enum": ["disposable", "reusable"]},
+        "acceptance_conditions": {"type": "array", "minItems": 1, "maxItems": 50, "items": {"$ref": "#/$defs/text"}},
+        "scope": {"type": "object", "additionalProperties": false, "required": ["include", "exclude"], "properties": {"include": {"type": "array", "minItems": 1, "maxItems": 100, "items": {"type": "string", "minLength": 1, "maxLength": 500}}, "exclude": {"type": "array", "maxItems": 100, "items": {"type": "string", "minLength": 1, "maxLength": 500}}}},
+        "trust_boundaries": {"$ref": "#/$defs/text_array"}, "assumptions": {"$ref": "#/$defs/text_array"}, "unknowns": {"$ref": "#/$defs/text_array"}
+      }
+    },
+    "risk_classification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["declared_tier", "policy_floor", "effective_tier", "matched_rules", "risk_raised"],
+      "properties": {
+        "declared_tier": {"enum": ["low", "medium", "high", "critical"]},
+        "policy_floor": {"anyOf": [{"enum": ["low", "medium", "high", "critical"]}, {"type": "null"}]},
+        "effective_tier": {"enum": ["low", "medium", "high", "critical"]},
+        "risk_raised": {"type": "boolean"},
+        "matched_rules": {
+          "type": "array", "maxItems": 200,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["id", "tier", "reason", "matched_paths", "required_evidence", "review_lenses"],
+            "properties": {
+              "id": {"$ref": "#/$defs/id"},
+              "tier": {"enum": ["low", "medium", "high", "critical"]},
+              "reason": {"$ref": "#/$defs/text"},
+              "matched_paths": {"type": "array", "minItems": 1, "maxItems": 100, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 500}},
+              "required_evidence": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+              "review_lenses": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+            }
+          }
+        }
+      }
+    },
+    "requirements": {
+      "type": "object", "additionalProperties": false,
+      "required": ["design_artifact", "human_design_approval", "threat_model", "reusable_output_allowed", "isolation_required", "allowed_test_modes", "review_cadence", "before_after", "independent_review", "specialist_review", "rollback", "greptile_recommended", "verification_before_completion", "required_evidence", "review_lenses"],
+      "properties": {
+        "design_artifact": {"enum": ["hypothesis-and-discard-plan", "acceptance-conditions-and-scope", "written-spec-and-plan"]},
+        "human_design_approval": {"type": "boolean"}, "threat_model": {"type": "boolean"}, "reusable_output_allowed": {"type": "boolean"}, "isolation_required": {"type": "boolean"},
+        "allowed_test_modes": {"type": "array", "minItems": 1, "maxItems": 8, "uniqueItems": true, "items": {"$ref": "#/$defs/test_mode"}},
+        "review_cadence": {"enum": ["completion", "subsystem", "task", "task-and-specialist"]},
+        "before_after": {"type": "boolean"}, "independent_review": {"type": "boolean"}, "specialist_review": {"type": "boolean"}, "rollback": {"type": "boolean"}, "greptile_recommended": {"type": "boolean"}, "verification_before_completion": {"const": true},
+        "required_evidence": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}},
+        "review_lenses": {"type": "array", "maxItems": 100, "uniqueItems": true, "items": {"$ref": "#/$defs/id"}}
+      }
+    },
+    "observations": {
+      "type": "object", "additionalProperties": false,
+      "required": ["design_summary_present", "design_artifact", "design_approved", "approval_reference", "threat_model_reference", "isolation_strategy", "isolation_reference", "test_mode", "test_rationale"],
+      "properties": {
+        "design_summary_present": {"const": true}, "design_artifact": {"$ref": "#/$defs/nullable_text"}, "design_approved": {"type": "boolean"}, "approval_reference": {"$ref": "#/$defs/nullable_text"}, "threat_model_reference": {"$ref": "#/$defs/nullable_text"},
+        "isolation_strategy": {"enum": ["worktree", "branch", "none"]}, "isolation_reference": {"$ref": "#/$defs/nullable_text"}, "test_mode": {"$ref": "#/$defs/test_mode"}, "test_rationale": {"$ref": "#/$defs/nullable_text"}
+      }
+    },
+    "gaps": {"type": "array", "maxItems": 50, "items": {"type": "object", "additionalProperties": false, "required": ["code", "severity", "detail"], "properties": {"code": {"$ref": "#/$defs/id"}, "severity": {"enum": ["review", "contradiction"]}, "detail": {"$ref": "#/$defs/text"}}}},
+    "disposition": {"enum": ["ready", "review_required", "invalid"]},
+    "authorization": {"type": "object", "additionalProperties": false, "required": ["merge", "release", "deploy", "exception", "policy_change"], "properties": {"merge": {"const": false}, "release": {"const": false}, "deploy": {"const": false}, "exception": {"const": false}, "policy_change": {"const": false}}},
+    "limitations": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"$ref": "#/$defs/text"}},
+    "integrity": {"$ref": "#/$defs/integrity"}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "text_array": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/text"}},
+    "nullable_text": {"anyOf": [{"type": "string", "minLength": 1, "maxLength": 4000}, {"type": "null"}]},
+    "test_mode": {"enum": ["tdd", "characterization-first", "contract-first", "schema-validation", "render-validation", "approved-spike", "not-applicable"]},
+    "integrity": {"type": "object", "additionalProperties": false, "required": ["algorithm", "canonicalization", "digest", "verification_scope", "authenticity"], "properties": {"algorithm": {"const": "sha256"}, "canonicalization": {"const": "json-sort-keys-compact-utf8-v1"}, "digest": {"$ref": "#/$defs/sha"}, "verification_scope": {"const": "all top-level content except integrity"}, "authenticity": {"const": "unsigned"}}}
+  }
+}

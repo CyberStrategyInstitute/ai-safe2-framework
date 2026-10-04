@@ -127,6 +127,12 @@ configuration. Key Guardian pins that profile digest by verifier identifier,
 preventing a familiar verifier name from silently using different trust roots
 or weaker evidence rules.
 
+The portable reference verifier cryptographically binds the runtime measurement
+identity, workload identity, attested status, attestation method, baseline,
+measurement time, freshness lifetime, and single-use verifier challenge into
+the evidence. Changing any bound field invalidates the evidence before a
+runtime authorization receipt can be issued.
+
 ## Policy Parity Guard
 
 `ParityEnforcedPolicyAuthority` is the **Policy Parity Guard**. It binds a
