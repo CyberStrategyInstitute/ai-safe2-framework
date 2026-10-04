@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/installation-check-v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "checked_at", "cli_version", "python", "distribution", "dependencies", "contracts", "console_entrypoint", "verdict", "exit_code", "network_used", "content_inspected", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.installation-check.v1"},
+    "checked_at": {"type": "string", "format": "date-time"},
+    "cli_version": {"type": "string"},
+    "python": {"type": "object", "additionalProperties": false, "required": ["version", "support"], "properties": {"version": {"type": "string"}, "support": {"enum": ["supported", "unsupported", "not_yet_qualified"]}}},
+    "distribution": {"type": "object", "additionalProperties": false, "required": ["name", "version", "status", "version_match"], "properties": {"name": {"const": "ai-safe2"}, "version": {"type": ["string", "null"]}, "status": {"enum": ["installed", "metadata_unavailable"]}, "version_match": {"type": ["boolean", "null"]}}},
+    "dependencies": {"type": "object", "additionalProperties": false, "required": ["required", "missing"], "properties": {"required": {"type": "object", "additionalProperties": {"type": "string"}}, "missing": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}}},
+    "contracts": {"type": "object", "additionalProperties": false, "required": ["declared", "loaded", "invalid", "catalog_sha256"], "properties": {"declared": {"type": "integer", "minimum": 1}, "loaded": {"type": "integer", "minimum": 0}, "invalid": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}, "catalog_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}}},
+    "console_entrypoint": {"enum": ["present", "missing", "metadata_unavailable"]},
+    "verdict": {"enum": ["pass", "hold", "fail"]},
+    "exit_code": {"enum": [0, 1, 2]},
+    "network_used": {"const": false}, "content_inspected": {"const": false},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+  }
+}

@@ -31,6 +31,16 @@
 
 <!-- Does this affect any mapped compliance frameworks? Cite only mappings actually changed. -->
 
+## Technology Contribution and Claim Boundaries
+
+<!-- For technology, research, benchmark, or incident-driven changes, link a completed
+Technology Card at docs/templates/TECHNOLOGY-CARD.md. Record canonical controls,
+effects, coverage, boundary, source/version, claim-level assurance rubric,
+independence, failure modes, retained authority, and complementary controls.
+Keep organizational maturity, contribution, assurance v1.0, existing CLI grades,
+Challenge Lab claim maturity, and native tool scores separate. Identify proposed
+tests/integrations separately from executed or released behavior. -->
+
 ## Evidence and Testing
 
 - [ ] Existing applicable tests pass
@@ -45,7 +55,17 @@
 
 ## Security Review Notes
 
-<!-- For identity, authorization, delegation, state, tool, or protocol changes, describe the trust boundary and fail-closed behavior. -->
+<!-- For identity, authorization, delegation, state, tool, payment, cryptography, or protocol changes, describe the trust boundary and fail-closed behavior. -->
+
+## Independent Review
+
+- [ ] Greptile completed a substantive review of the current head commit
+- Greptile result or explicit limitation: <!-- quota/error/absence/stale review does not count as approval -->
+- Unresolved findings and accepted residual risk:
+
+## Compatibility and Recovery
+
+<!-- Describe compatibility impact and the rollback, migration, or recovery path. -->
 
 ## Changelog / Release Notes
 
