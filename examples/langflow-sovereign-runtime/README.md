@@ -121,7 +121,6 @@ examples/langflow-sovereign-runtime/
 │   └── policy.yaml                 Machine-readable control registry
 │
 ├── integrations/
-│   ├── NEXUS-love-equation.md      Proxy pattern + unified score
 │   ├── mcp-security.md             MCP safe configuration guide
 │   └── langsmith-integration.md    AI SAFE2 + LangSmith observability
 │
@@ -170,6 +169,8 @@ PYTHONPATH=enforcement python3 smoke_test.py
 ---
 
 ## Connect to the NEXUS Mesh
+
+See the centralized [Langflow legacy integration guide](../../NEXUS/integrations/legacy-sovereign-runtimes/langflow-love-equation.md).
 
 ```
 examples/
