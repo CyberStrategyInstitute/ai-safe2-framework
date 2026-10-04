@@ -11,6 +11,7 @@ from nexus_sdk.payments.firewall import PaymentVerdict, TransactionFirewall
 from nexus_sdk.payments.key_guardian import PolicyAuthorizationReceipt
 from nexus_sdk.payments.objects import (
     CanonicalTransaction,
+    ConsequenceClass,
     PaymentDecision,
     RuntimeMeasurement,
     TransactionIntent,
@@ -34,6 +35,11 @@ class PolicyDefinition:
     ruleset_version: str
     configuration_digest: str
     evaluator_id: str
+    human_approval_consequences: frozenset[ConsequenceClass] = frozenset({
+        ConsequenceClass.MATERIAL,
+        ConsequenceClass.CONSEQUENTIAL,
+        ConsequenceClass.CRITICAL,
+    })
 
     @property
     def policy_digest(self) -> str:
@@ -42,6 +48,9 @@ class PolicyDefinition:
             "ruleset_version": self.ruleset_version,
             "configuration_digest": self.configuration_digest,
             "evaluator_id": self.evaluator_id,
+            "human_approval_consequences": sorted(
+                value.value for value in self.human_approval_consequences
+            ),
         })
 
 
@@ -146,6 +155,9 @@ class DeterministicPolicyAuthority:
             authenticator_id=self.receipt_issuer.authenticator_id,
             proof="",
             policy_digest=self.definition.policy_digest,
+            human_approval_required=(
+                verdict.consequence in self.definition.human_approval_consequences
+            ),
         )
         receipt = replace(receipt, proof=self.receipt_issuer.seal_policy(receipt))
         if not receipt.proof:
