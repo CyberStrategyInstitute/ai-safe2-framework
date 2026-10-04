@@ -62,6 +62,8 @@ jobs:
         run: |
           safe2 example verify aism-decision-card
           python examples/aism-decision-card/smoke_test.py
+          safe2 example verify aism-remediation
+          python examples/aism-remediation/smoke_test.py
           safe2 example verify environment-decision-card
           python examples/environment-decision-card/smoke_test.py
 

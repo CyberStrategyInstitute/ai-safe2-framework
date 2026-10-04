@@ -11,12 +11,22 @@ agents reusing these instructions elsewhere.
 Use this workflow with any model, harness, or review provider. Repository facts
 and executable evidence take priority over model confidence or reviewer scores.
 
+For material changes, classify delivery shape (`spike`, `bounded`, or
+`architectural`) separately from risk. Use `.ai-safe2/development-policy.json`
+and `safe2 dev plan` when the CLI is available. A generated plan or receipt is
+decision evidence, never merge, release, deployment, exception, policy-change,
+completion, or risk-acceptance authority. See
+`docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md`.
+
 ### 1. Establish and isolate
 
 1. Read the nearest applicable `AGENTS.md`, repository manifest, contributing
    guidance, security policy, and relevant tests before changing files.
 2. Record the requested outcome, acceptance conditions, applicable controls,
    assumptions, exclusions, and evidence needed to call the work complete.
+   Record the delivery shape and risk tier independently. Low- and medium-risk
+   bounded work may proceed under existing authorization; architectural and
+   high/critical work requires the explicit decisions named by policy.
 3. Inspect the working tree and preserve unrelated user changes. Never erase or
    rewrite work merely to obtain a clean checkout.
 4. For a new feature, use a dedicated branch or worktree based on the current
@@ -47,6 +57,9 @@ and executable evidence take priority over model confidence or reviewer scores.
 1. Capture the relevant before state before implementation when it can be
    reproduced safely. After implementation, capture the same measure or user
    journey under comparable conditions.
+   For code, prefer an observed red/green cycle; use characterization-first,
+   contract, schema, render, or approved-spike evidence when that is the more
+   truthful falsification method.
 2. Use the evidence type appropriate to the claim:
    - UI or workflow: screenshots, video, or an accessibility/interaction trace.
    - Performance: repeatable measurements with environment and method.
@@ -98,6 +111,8 @@ and executable evidence take priority over model confidence or reviewer scores.
 4. Do not claim ready, complete, fixed, deployed, or released while required
    checks are failing, work remains uncommitted, the PR differs from the tested
    revision, or an external deployment has not been observed.
+   For a material change using the development policy, produce and verify a
+   `safe2 dev receipt` against the final revision before making a completion claim.
 5. Agents may prepare and update a PR when authorized. Human merge, release,
    production deployment, risk acceptance, and framework-conformance decisions
    remain with their named owners unless authority is explicitly delegated.
@@ -194,6 +209,25 @@ For automated assessment or implementation guidance:
 6. Use `scanner/` for static evidence where applicable, but do not equate scanner coverage with full framework conformance.
 7. Use `challenges/` for falsification evidence and keep challenge maturity separate from framework/profile conformance.
 8. Preserve source version and implementation provenance in generated evidence.
+
+## Technology contribution and evidence interpretation
+
+- The current model name is **AI Sovereign Maturity (AISM) Model**. Use AISM or
+  AISM Model after first mention; Sovereignty Score and Sovereignty Matrix remain
+  distinct named instruments. Preserve historical wording and asset paths.
+
+- Organizational AISM maturity is separate from an artifact's scoped contribution.
+- Use `docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md`, `docs/EVIDENCE-ASSURANCE.md`,
+  and `docs/templates/TECHNOLOGY-CARD.md` for the v1.0 assessment method.
+- Distinguish addresses, implements, enforces, validates, evidences, and challenges.
+- Keep assurance-v1.0 E0-E5 separate from the existing CLI numeric `grade` fields,
+  verification caps, category completeness, and Challenge Lab C0-C5.
+- Do not infer a product's organizational maturity or promote candidate examples
+  to independent validation. Missing evidence stays unassessed.
+- TCP schemas, commands, integrations, and dashboard views are not implemented.
+  Read `research/technology-contribution-examples.md` for source limits and backlog.
+- Use `docs/TECHNOLOGY-VALIDATION.md` and `docs/INCIDENT-EVIDENCE.md` for
+  test and incident-review practices; frozen Challenge 001 remains unchanged.
 
 ## Useful entry points
 

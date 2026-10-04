@@ -13,6 +13,18 @@ extensions rather than unfinished core workflows.
 This is a planning document. Items below a released version are not delivered
 capabilities until their implementation, validation, and release evidence exist.
 
+## Technology-profile implementation proposal
+
+The [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md),
+[assurance rubric](./EVIDENCE-ASSURANCE.md), and
+[candidate backlog](../research/technology-contribution-examples.md) provide v1.0
+assessment methods. A machine schema, CLI command, adapter, and dashboard
+view remain unimplemented, separately scoped work. Their capability gate requires
+claim-level provenance, strict unknown/N/A states, validated control IDs,
+separation from organizational scoring and current E0-E5 weights, explicit
+translation/migration rules, negative tests, and end-to-end review. This proposal
+is not assigned to a released CLI version and does not delay the active release path.
+
 ## Release policy
 
 - Separate code review from product release. One capability may require several
@@ -121,6 +133,9 @@ Release gate:
 
 ## CLI 0.8: AISM implementation decisions and remediation
 
+**Status:** Implemented in CLI 0.8.0; validation and release workflow complete
+before merge.
+
 **User outcome:** Translate system and operational evidence into an actionable,
 human-owned improvement decision.
 
@@ -145,6 +160,8 @@ Release gate:
   interpretations of the same canonical artifact.
 
 ## CLI 0.9: Challenge Lab execution and independent evidence exchange
+
+**Status:** Implemented for release-candidate validation
 
 **User outcome:** Run reproducible agent-governance experiments and compare
 independent implementations without forcing them into identical internal
@@ -172,6 +189,28 @@ Release gate:
 - Unsafe action, false block, enforcement outage, replay, incomplete evidence,
   and provider divergence cases remain visible.
 - Evaluator, adapter, source, and policy versions are bound to every result.
+
+## CLI 0.9.1–0.9.9: stable-core release candidate
+
+**Status:** Implemented in the ordered release-candidate stack; exact combined
+revision validation and independent acceptance remain release gates.
+
+This sequence closes the highest-value pre-1.0 usability and evidence gaps:
+
+1. secure-default project initialization and explicit configuration precedence;
+2. one bounded `safe2 assess` project workflow;
+3. provider-neutral adapter descriptors, evidence, and conformance reports;
+4. privacy-preserving Codex JSONL reference translation;
+5. offline OpenTelemetry OTLP/JSON trace import and non-content metadata export;
+6. explicit continuous local change evidence with immutable per-run reports;
+7. claim/receipt contradiction auditing without speculative honesty scoring;
+8. offline installed-runtime and packaged-contract self-checks; and
+9. a replayable first-user acceptance bundle that disclaims independence.
+
+These additions make the core adaptable across harnesses while retaining facts,
+provider reports, gaps, and decisions as separate layers. The Codex and
+OpenTelemetry adapters consume explicit files; they are not ambient session
+access, native harness hooks, or enforcement integrations.
 
 ## CLI 1.0: stable core and integration platform
 
@@ -221,7 +260,9 @@ The 1.0 release gate requires:
 
 Post-1.0 work should normally extend the stable core through:
 
-- native Codex, Claude Code, Hermes, OpenClaw, and other harness adapters;
+- native direct hooks for Codex, Claude Code, Hermes, OpenClaw, and other
+  harnesses beyond the provider-neutral contract and explicit Codex JSONL
+  reference translator delivered before 1.0;
 - cloud, network, ledger, scanner, policy-engine, and usage-provider adapters;
 - refreshed sovereign-runtime examples;
 - additional Challenge Lab protocols and independently supplied evidence;

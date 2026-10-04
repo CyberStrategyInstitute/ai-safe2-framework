@@ -9,6 +9,13 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 SCHEMAS = {
+    "adapter-descriptor-v1": "adapter-descriptor-v1.schema.json",
+    "adapter-evidence-v1": "adapter-evidence-v1.schema.json",
+    "adapter-conformance-v1": "adapter-conformance-v1.schema.json",
+    "project-assessment-v1": "project-assessment-v1.schema.json",
+    "project-scan-evidence-v1": "project-scan-evidence-v1.schema.json",
+    "aism-remediation-source-v1": "aism-remediation-source-v1.schema.json",
+    "aism-remediation-plan-v1": "aism-remediation-plan-v1.schema.json",
     "operational-truth-source-v1": "operational-truth-source-v1.schema.json",
     "operational-truth-manifest-v1": "operational-truth-manifest-v1.schema.json",
     "change-monitor-v1": "change-monitor-v1.schema.json",
@@ -31,10 +38,16 @@ SCHEMAS = {
     "test-result-v1": "test-result-v1.schema.json",
     "task-receipt-input-v1": "task-receipt-input-v1.schema.json",
     "task-receipt-v1": "task-receipt-v1.schema.json",
+    "claim-audit-source-v1": "claim-audit-source-v1.schema.json",
+    "claim-audit-v1": "claim-audit-v1.schema.json",
+    "installation-check-v1": "installation-check-v1.schema.json",
+    "acceptance-report-v1": "acceptance-report-v1.schema.json",
     "challenge-bundle": "challenge-bundle-v1.schema.json",
     "challenge-run": "challenge-run-v1.schema.json",
     "challenge-source": "challenge-source-v1.schema.json",
     "challenge-comparison": "challenge-comparison-v1.schema.json",
+    "challenge-execution-plan-v1": "challenge-execution-plan-v1.schema.json",
+    "challenge-execution-receipt-v1": "challenge-execution-receipt-v1.schema.json",
     "aism-assessment-v1": "aism-assessment-v1.schema.json",
     "discovery-v1": "discovery-v1.schema.json",
     "discovery-drift-v1": "discovery-drift-v1.schema.json",
@@ -46,6 +59,15 @@ SCHEMAS = {
     "run-manifest-v1": "run-manifest-v1.schema.json",
     "nexus-evidence-v1": "nexus-evidence-v1.schema.json",
     "skillspector-evidence-v1": "skillspector-evidence-v1.schema.json",
+    "decision-request-v1": "decision-request-v1.schema.json",
+    "decision-result-v1": "decision-result-v1.schema.json",
+    "decision-routing-policy-v1": "decision-routing-policy-v1.schema.json",
+    "development-policy-v1": "development-policy-v1.schema.json",
+    "development-plan-source-v1": "development-plan-source-v1.schema.json",
+    "development-plan-v1": "development-plan-v1.schema.json",
+    "development-receipt-source-v1": "development-receipt-source-v1.schema.json",
+    "development-receipt-v1": "development-receipt-v1.schema.json",
+    "review-policy-v1": "review-policy-v1.schema.json",
 }
 
 
@@ -79,7 +101,11 @@ def _safe_instance_path(parts: list[object]) -> str:
 def validate_artifact(name: str, artifact: object) -> list[dict[str, str]]:
     """Return redacted structural violations for one packaged contract."""
     schemas = _schemas()
-    validator = Draft202012Validator(schemas[name], registry=_registry(schemas))
+    validator = Draft202012Validator(
+        schemas[name],
+        registry=_registry(schemas),
+        format_checker=Draft202012Validator.FORMAT_CHECKER,
+    )
     violations = sorted(
         validator.iter_errors(artifact),
         key=lambda item: tuple(str(part) for part in item.absolute_path),
