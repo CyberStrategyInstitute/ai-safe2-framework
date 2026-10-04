@@ -1,0 +1,11 @@
+{
+  "schema_version": "safe2.decision-request.v1",
+  "decision_id": "critical-ci-001",
+  "decision_class": "risk_signal",
+  "data_classification": "internal",
+  "structured_state": {"decision_capsule": {"affected_domains": ["ci_cd"], "workflow_permissions_changed": true}},
+  "questions": {"policy_exception_risk": {"type": "noul", "instructions": "Does supplied evidence indicate an unjustified policy exception?"}},
+  "deterministic": {"risk_tier": "critical", "required_evidence": ["workflow-permission-review", "codeowner-review"], "evidence_status": {"workflow-permission-review": "pending", "codeowner-review": "unavailable"}, "policy_flags": {"touches_ci_workflow": true}},
+  "external_adjudication_allowed": false,
+  "expected": {"risk_tier": "critical", "missing_or_incomplete_evidence": ["codeowner-review", "workflow-permission-review"], "human_approval_required": true}
+}

@@ -11,6 +11,16 @@
 
 ---
 
+## Gateway evidence and technology contribution
+
+Gateway action-risk routing scores are separate from organizational AISM
+maturity and the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md).
+Record provider, tool, and agent-to-agent boundaries separately. A mediated
+provider request does not establish containment of direct tool or delegated paths.
+Use the [validation guide](../docs/TECHNOLOGY-VALIDATION.md) to test interception,
+authorization, actuation, outage, revocation, and legitimate utility before
+claiming runtime effectiveness.
+
 ## Version and Conformance Boundary
 
 The current gateway implementation is **Gateway v3.0**. AI SAFE² v3.1 did not silently rename this component.

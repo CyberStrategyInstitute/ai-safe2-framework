@@ -1,0 +1,27 @@
+{
+  "source": {
+    "schema_version": "safe2.development-plan-source.v1",
+    "task_id": "eval.bounded-medium-code",
+    "title": "Add a bounded parser behavior",
+    "outcome": "The parser accepts the new bounded input without changing authority.",
+    "delivery_shape": "bounded",
+    "risk_tier": "medium",
+    "change_kind": "code",
+    "work_product": "reusable",
+    "acceptance_conditions": ["A failing test captures the requested behavior before implementation."],
+    "scope": {"include": ["src/parser.py", "tests/test_parser.py"], "exclude": ["release automation"]},
+    "trust_boundaries": ["Untrusted input enters the parser."],
+    "assumptions": [],
+    "unknowns": [],
+    "design": {"summary": "Extend the existing parser contract without adding a service layer.", "approved": false},
+    "isolation": {"strategy": "worktree", "reference": "feat/bounded-parser"},
+    "testing": {"mode": "tdd"}
+  },
+  "expected": {
+    "disposition": "ready",
+    "gap_codes": [],
+    "human_design_approval": false,
+    "threat_model": false,
+    "greptile_recommended": false
+  }
+}
