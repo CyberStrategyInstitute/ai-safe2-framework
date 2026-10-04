@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.9.9-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-1.0.0-F6921E?style=flat-square)](../README.md)
 
 [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
 
@@ -10,6 +10,8 @@
 [Task receipts: local artifact verification](../docs/TASK-RECEIPTS.md)
 [Installation self-check](../docs/INSTALLATION-CHECK.md)
 [Stranger acceptance](../docs/STRANGER-ACCEPTANCE.md)
+[CLI 1.0 operator workflow](../docs/CLI-1.0-WORKFLOW.md)
+[CLI stability and deprecation policy](../docs/CLI-STABILITY.md)
 
 [Development method: plan, prove, and receipt changes](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md)
 

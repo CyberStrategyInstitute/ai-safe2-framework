@@ -9,15 +9,17 @@
 
 ## Support policy
 
-CLI 0.9.9 retains Python 3.11 as its minimum. Release CI covers standard CPython
-3.11–3.14 on Linux: all optional dependencies, tests, package build, and installed
-Challenge acceptance. Configured jobs are not passing results: check the release
-commit's CI. Classifiers identify intended compatibility, not certification.
+CLI 1.0.0 retains Python 3.11 as its minimum. Release CI covers standard CPython
+3.11–3.14 on Linux. A separate clean-wheel qualification matrix exercises Python
+3.11 and 3.14 on Ubuntu, Windows, and macOS. Configured jobs are not passing
+results: check the release commit's CI. Classifiers identify intended
+compatibility, not certification.
 
 Prefer patched Python 3.13 for new environments once validation passes. Future
 versions, prereleases, free-threaded builds, and alternative interpreters are not
 automatically validated. The installer range `>=3.11` is not a support guarantee.
-Windows/macOS require separate execution evidence; NEXUS has a separate matrix.
+WSL is treated as a Linux environment and still requires evidence from the actual
+distribution in use. NEXUS has a separate compatibility matrix.
 
 Track interpreter support dates, native wheels (`cryptography`, `pydantic-core`,
 `ast-grep-py`, provider `yara-python`), and Click/HTTPX/AnyIO/Starlette/FastAPI/Uvicorn

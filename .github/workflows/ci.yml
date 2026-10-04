@@ -22,6 +22,8 @@ on:
       - "ai-safe2.manifest.json"
       - "scripts/check_agent_manifest.py"
       - ".github/workflows/ci.yml"
+      - ".github/workflows/cli-release-qualification.yml"
+      - "scripts/check_release_installation.py"
   pull_request:
     branches: [main]
 

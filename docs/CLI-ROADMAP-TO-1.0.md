@@ -214,6 +214,10 @@ access, native harness hooks, or enforcement integrations.
 
 ## CLI 1.0: stable core and integration platform
 
+**Status:** Release qualification implemented on the 1.0 release branch. Final
+status depends on the exact release revision's hosted checks and accountable
+release-owner decision; this roadmap is not itself a release declaration.
+
 **User outcome:** Install one supported CLI and obtain a complete, reviewable
 picture of an agent system's safety, security, governance, compliance evidence,
 operational performance, and unresolved decisions.

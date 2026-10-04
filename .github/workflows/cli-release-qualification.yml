@@ -1,0 +1,60 @@
+name: CLI Release Qualification
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "safe2/**"
+      - "scanner/**"
+      - "aisafe2_mcp_tools/**"
+      - "gateway/**"
+      - "examples/**"
+      - "scripts/check_release_installation.py"
+      - "pyproject.toml"
+      - ".github/workflows/cli-release-qualification.yml"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  clean-wheel:
+    name: Clean wheel / ${{ matrix.os }} / Python ${{ matrix.python }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.11", "3.14"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Build wheel
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build --wheel --outdir dist
+
+      - name: Install wheel
+        shell: bash
+        run: python -m pip install dist/*.whl
+
+      - name: Qualify installed public surfaces
+        run: python -I scripts/check_release_installation.py --expected-version 1.0.0
+
+      - name: Verify uninstall
+        run: |
+          python -m pip uninstall --yes ai-safe2
+          python -I scripts/check_release_installation.py --verify-uninstalled

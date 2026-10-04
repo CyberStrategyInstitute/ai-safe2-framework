@@ -145,6 +145,7 @@ required. It must remain understandable without access to an agent's chat log.
 ## Version model
 
 - AI SAFE² Framework: v3.1.0
+- AI SAFE² CLI: v1.0.0 release candidate; release status depends on exact-revision gates
 - NEXUS: v0.4
 - Gateway: v3.0
 - MCP primary specification binding: 2026-07-28

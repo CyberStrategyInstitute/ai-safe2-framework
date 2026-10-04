@@ -4,7 +4,7 @@
 
 # AI SAFE² Framework v3.1
 
-[Security advisories](docs/advisories/README.md) · [CLI runtime compatibility](docs/PYTHON-COMPATIBILITY.md)
+[Security advisories](docs/advisories/README.md) · [CLI 1.0 workflow](docs/CLI-1.0-WORKFLOW.md) · [CLI stability](docs/CLI-STABILITY.md) · [CLI runtime compatibility](docs/PYTHON-COMPATIBILITY.md)
 
 ### The Universal GRC Standard for Agentic AI, Swarm Governance, and Runtime Enforcement
 
