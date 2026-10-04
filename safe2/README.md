@@ -1,19 +1,35 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.7.0-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-0.9.9-F6921E?style=flat-square)](../README.md)
 
 [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](../docs/PYTHON-COMPATIBILITY.md)
 
 [Try the skill-screening demo](../docs/SKILL-SCREENING-DEMO.md) | [Our own-skill results and lessons](../docs/SKILL-SCREENING-SECOND-PASS.md)
 
 [Task receipts: local artifact verification](../docs/TASK-RECEIPTS.md)
+[Installation self-check](../docs/INSTALLATION-CHECK.md)
+[Stranger acceptance](../docs/STRANGER-ACCEPTANCE.md)
+
+[Development method: plan, prove, and receipt changes](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md)
 
 [Agent system identity manifests](../docs/SYSTEM-IDENTITY.md)
 
 [Failure localization](../docs/FAILURE-LOCALIZATION.md)
 
 [CLI roadmap to 1.0](../docs/CLI-ROADMAP-TO-1.0.md)
+
+[Unified project assessment](../docs/UNIFIED-ASSESSMENT.md)
+
+[Provider-neutral adapter SDK](../docs/ADAPTER-SDK.md)
+
+[Codex JSONL adapter](../docs/CODEX-JSONL-ADAPTER.md)
+
+[OpenTelemetry interoperability](../docs/OPENTELEMETRY-ADAPTER.md)
+
+[Continuous local evidence](../docs/CONTINUOUS-EVIDENCE.md)
+
+[Agent claim audit](../docs/CLAIM-AUDIT.md)
 
 [Assessment scope](../docs/ASSESSMENT-SCOPE.md)
 
@@ -30,6 +46,17 @@ contracts into a single command surface for agents, engineers, governance
 teams, and CI systems. JSON is the canonical agent exchange format. Human
 decisions remain human-owned and can be rendered as Markdown or HTML Decision
 Cards.
+
+## Technology profiles and current CLI compatibility
+
+The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) are separate Markdown
+review instruments. No TCP command, schema, or automatic score translation is
+implemented. Existing `safe2 aism ingest` preserves attributed evidence with
+unscored organizational cells for review. CLI E0-E5 weights, verification caps,
+and category completeness remain unchanged; their input/summary grades are not
+automatically [Evidence Assurance v1.0](../docs/EVIDENCE-ASSURANCE.md) ratings.
+Static, MCP, skill, and gateway scores retain their native meanings.
 
 ## Where This Capability Lives
 
@@ -55,6 +82,32 @@ pip install -e ".[all]"
 safe2 --help
 ```
 
+## Initialize a Project
+
+Create the versioned project configuration before the first assessment:
+
+```bash
+safe2 init . --profile local
+safe2 config show
+safe2 config validate .safe2/config.toml
+safe2 assess . --scan-content --inspect-config
+```
+
+Initialization creates `.safe2/config.toml` exclusively and refuses to replace
+an existing file. The secure defaults collect no prompts, file contents,
+environment-variable values, or network telemetry. Configuration precedence is
+explicit command input, `SAFE2_CONFIG`, the nearest project configuration, then
+built-in defaults. See the [configuration contract](../docs/CLI-CONFIGURATION.md)
+for profiles, limits, trust boundaries, and recovery.
+
+`safe2 assess` is the bounded golden path. Without content consent it produces
+an honestly `INCOMPLETE` metadata assessment rather than presenting uninspected
+content as clean. `--scan-content` opts into local static content analysis;
+`--inspect-config` additionally emits only allowlisted structural configuration
+facts. The command writes `assessment.json`, `environment.json`,
+`project-scan.json`, `manifest.json`, and a human `decision-card.md` atomically
+to a new directory. It refuses to overwrite an existing bundle.
+
 For contributor checks:
 
 ```bash
@@ -66,6 +119,11 @@ pytest tests/ scanner/tests/
 
 | Command | Purpose | Decision behavior |
 |---|---|---|
+| `safe2 init PATH` | Create a secure-default, versioned project configuration | Refuses overwrite and symbolic-link configuration paths |
+| `safe2 config show` | Show the normalized effective configuration and its precedence source | Inspection only; does not run an assessment |
+| `safe2 config validate FILE` | Validate bounded `safe2.config.v1` TOML | Rejects unknown keys, unsafe paths, symlinks, and malformed values |
+| `safe2 assess PATH [--scan-content] [--inspect-config]` | Produce one sealed environment and project assessment bundle | Missing or unrequested evidence remains explicit; no deployment authorization or conformance claim |
+| `safe2 adapter validate/conformance ...` | Validate attributed external evidence adapters and specimens | Contract evidence only; never executes or endorses a provider |
 | `safe2 scan project PATH` | Informational 161-control project scan | Reports findings; does not gate |
 | `safe2 score project PATH` | Compact project score | Reports score only |
 | `safe2 gate project PATH` | CI/CD project decision | Enforces tier or `--fail-under` threshold |
@@ -83,7 +141,11 @@ pytest tests/ scanner/tests/
 | `safe2 evidence attribute SOURCE --system-identity FILE --baseline-scope FILE --current-scope FILE --output FILE [--strict]` | Attribute normalized findings across a trusted baseline and current revision | Comparison support only; does not prove causation, deployment state, or conformance |
 | `safe2 evidence readiness SOURCE --system-identity FILE --assessment-scope FILE --change-attribution FILE --output FILE --card FILE [--strict]` | Create agent JSON and a human technical release-readiness card | Human decision support only; never authorizes release or claims conformance |
 | `safe2 evidence truth POLICY EVIDENCE... --output FILE --card FILE [--strict]` | Correlate multi-harness task evidence, receipts, usage, coverage and completion claims | Readiness for human decision only; never verifies completion, billing or conformance |
+| `safe2 evidence claims SOURCE RECEIPTS... --output FILE --card FILE [--strict]` | Audit explicit agent outcome claims against receipt criteria | Detects contradictions and disclosures; never infers deception or verifies completion |
 | `safe2 evidence changes ROOT [--baseline FILE] --output FILE [--strict]` | One-shot local/CI detection of changed skills and agent configuration | No daemon, telemetry or content export; changed configuration requires review |
+| `safe2 evidence watch ROOT --state FILE --evidence-dir DIR [--continuous] [--strict]` | Preserve repeated local change reports and rescan changed skills | Polling detection only; does not intercept installs, pasted context, or harness execution |
+| `safe2 aism remediation-init ASSESSMENT --system-identity FILE --assessment-scope FILE --decision-owner NAME --output FILE` | Create a source template bound to the exact AISM, system-identity, and deployment-scope artifacts | Produces no recommendation and authorizes no action |
+| `safe2 aism plan SOURCE ASSESSMENT --system-identity FILE --assessment-scope FILE --output FILE --card FILE [--previous FILE] [--strict]` | Validate evidence-bound remediation actions, dependencies, alternatives, residual risk, completion evidence, and history | Keeps normative AISM scoring and human authorization separate |
 | `safe2 aism init FILE` | Create a 30-cell unscored assessment | Missing evidence remains unscored |
 | `safe2 aism ingest BUNDLE...` | Import evidence conservatively | Suggests mappings; requires human confirmation |
 | `safe2 aism score FILE` | Validate and score AISM assessment | Produces agent JSON or human Decision Card |
@@ -100,19 +162,28 @@ pytest tests/ scanner/tests/
 | `safe2 example verify NAME` | Verify declared example outcomes | Fails on expectation drift |
 | `safe2 mcp wrap ...` | Consumer-side MCP inspection and policy proxy | Applies runtime policy and audit behavior |
 | `safe2 doctor PATH` | Metadata-only harness, shell, host, and WSL discovery | Inventory evidence only; does not claim assessment or conformance |
+| `safe2 decision evaluate REQUEST --output FILE [--ledger FILE]` | Apply the deterministic decision firewall and optionally collect shadow System One evidence | Advisory review routing only; all merge, release, deploy, exception, and policy authority remains false |
+| `safe2 decision replay CORPUS --output FILE` | Replay labeled routing cases after policy, rubric, threshold, or provider changes | Deterministic regression evidence; does not claim model calibration unless a provider evaluation is separately supplied |
+| `safe2 dev plan SOURCE --output FILE` | Derive delivery-shape and risk-adjusted development requirements | Exit 0 means planning prerequisites are represented; grants no implementation or action authority |
+| `safe2 dev receipt PLAN SOURCE --artifact-root DIR --output FILE` | Bind required development evidence, final revision, test cycle, reviews, findings, and rollback | Evidence consistency only; never authorizes completion, merge, release, deployment, or risk acceptance |
+| `safe2 dev verify ARTIFACT` | Verify a development plan or receipt contract and integrity seal | Structural and byte-integrity check only |
+| `safe2 dev replay CORPUS --output FILE` | Replay deterministic development-policy cases | Policy regression only; no live model or calibration claim |
 | `safe2 feedback record ...` | Capture sanitized operational friction | Records typed outcome and verification state in local JSONL |
+| `safe2 self-check [--format json] [--output FILE] [--strict]` | Verify installed runtime, dependencies, entry point, and packaged contracts | Offline installation evidence only; not signature, vulnerability, project, or conformance validation |
+| `safe2 acceptance run DIR [--strict]` / `safe2 acceptance verify DIR` | Create and replay an offline first-user control bundle | Self-produced reproducibility evidence; explicitly not independent validation |
 | `safe2 feedback summary FILE` | Measure recurring friction and completion-verification gap | Aggregates local evidence without sending telemetry |
 | `safe2 schema list` | Discover packaged machine-readable contracts | Returns stable schema identifiers as JSON |
 | `safe2 schema export NAME` | Export one versioned JSON Schema | Writes to stdout or an integration-owned file |
 | `safe2 schema validate NAME FILE` | Validate an evidence artifact | Exit 0 valid, 1 contract violation, 2 unreadable input |
-| `safe2 challenge ...` | Run inert experiments; import, compare, verify, sign, and report evidence | [Challenge CLI guide](../docs/CHALLENGE-CLI.md); fixture results are not live-agent validation |
+| `safe2 challenge ...` | Run inert fixtures or explicitly authorized bounded evaluators; import, compare, verify, sign, and report evidence | [Challenge CLI guide](../docs/CHALLENGE-CLI.md); bounded execution is not sandboxing or independent replication |
 
 ## Challenge Lab Evidence Workflow
 
-The [Challenge CLI guide](../docs/CHALLENGE-CLI.md) provides a runnable offline
-Challenge 001 workflow with six scenarios, three treatments, independent state
-grading, and a synthetic TENIR translation example. This is a fixture-stage
-extension to the existing CLI, not a reclassification of the CLI release.
+The [Challenge CLI guide](../docs/CHALLENGE-CLI.md) provides an offline fixture
+workflow and an opt-in controlled evaluator seam for the same six Challenge 001
+scenarios. Plans bind the named executable and limits before execution; receipts
+bind requests, responses, source evidence, normalized results, and optional system
+identity. The process runs with current-user authority and is not sandboxed.
 Raw provider verdicts, observation gaps, provenance, and incompatible conditions
 stay visible. Matching translated results do not establish independent replication.
 
@@ -368,6 +439,31 @@ violations were found, and exit `2` means the input could not be safely read or
 parsed. Validation output never includes instance values or verbose validator
 messages. Structural validation does not verify evidence integrity, factual
 accuracy, authorization, control effectiveness, or conformance.
+
+## Provider-Neutral Adapters
+
+Validate third-party adapter descriptors and translate explicit Codex CLI JSONL
+exports without retaining prompts, commands, or output content. See the
+[adapter SDK](../docs/ADAPTER-SDK.md) and
+[Codex reference adapter](../docs/CODEX-JSONL-ADAPTER.md).
+
+```bash
+safe2 adapter codex-jsonl codex-trace.jsonl \
+  --codex-version YOUR_CODEX_VERSION --output codex-evidence.json
+```
+
+Adapter records remain attributed `evidence_only` inputs. They are not provider
+endorsements, independent truth verification, or AI SAFE² conformance claims.
+
+OpenTelemetry users can also import offline OTLP/JSON trace files and export
+non-content SAFE² metadata. See the
+[OpenTelemetry adapter](../docs/OPENTELEMETRY-ADAPTER.md).
+
+For opt-in repeated change evidence, see
+[Continuous Local Evidence](../docs/CONTINUOUS-EVIDENCE.md).
+
+For evidence-bounded completion and failure disclosure review, see the
+[Agent Claim Audit](../docs/CLAIM-AUDIT.md).
 
 ## Unified Evidence Run Manifest
 

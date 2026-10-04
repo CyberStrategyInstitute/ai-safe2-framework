@@ -5,11 +5,26 @@
 
 # AISM Control Stack
 
+**Documentation updated:** 2026-10-02. Clarifies the existing Sovereignty Score
+and introduces TCP and Evidence Assurance v1.0 as separate assessment methods.
+See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
+Technology Card workflow, and worked example. Original methodology dates below
+identify their baseline; this update does not change scoring formulas.
+
 **Framework:** AI SAFE2 v3.1
 **Organization:** Cyber Strategy Institute
 **Version:** March 2026
 
 ---
+
+## Assess the actual enforcement mechanism
+
+Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+to bind technology claims to the layer and plane where they act. Record
+deterministic interception, probabilistic or deterministic authorization, actuation,
+bypass paths, and authority to change or stop the mechanism separately. The
+[validation guide](../docs/TECHNOLOGY-VALIDATION.md) requires actual side-effect
+observation rather than inferring containment from agent output.
 
 ## Overview
 

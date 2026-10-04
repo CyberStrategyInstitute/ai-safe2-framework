@@ -1,0 +1,27 @@
+{
+  "source": {
+    "schema_version": "safe2.development-plan-source.v1",
+    "task_id": "eval.spike-reusable-conflict",
+    "title": "Probe an unfamiliar parser",
+    "outcome": "Learn whether the parser can represent the target grammar.",
+    "delivery_shape": "spike",
+    "risk_tier": "low",
+    "change_kind": "code",
+    "work_product": "reusable",
+    "acceptance_conditions": ["Record the result and discard implementation code."],
+    "scope": {"include": ["experiments/parser"], "exclude": ["production code"]},
+    "trust_boundaries": [],
+    "assumptions": [],
+    "unknowns": ["Library behavior is not yet known."],
+    "design": {"summary": "Run a time-boxed disposable probe.", "approved": false},
+    "isolation": {"strategy": "branch", "reference": "spike/parser"},
+    "testing": {"mode": "approved-spike", "rationale": "The output is disposable evidence only."}
+  },
+  "expected": {
+    "disposition": "invalid",
+    "gap_codes": ["spike_reusable_conflict"],
+    "human_design_approval": false,
+    "threat_model": false,
+    "greptile_recommended": false
+  }
+}

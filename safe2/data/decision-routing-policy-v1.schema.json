@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/decision-routing-policy-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "policy_id", "version", "mode", "primary", "secondary", "external_permitted_data_classes", "external_allowed_decision_classes", "human_review_tiers", "model_prohibited_actions", "failures"],
+  "properties": {
+    "schema_version": {"const": "safe2.decision-routing-policy.v1"},
+    "policy_id": {"$ref": "#/$defs/id"},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "mode": {"enum": ["deterministic", "shadow", "assisted"]},
+    "primary": {"$ref": "#/$defs/provider"},
+    "secondary": {"$ref": "#/$defs/provider"},
+    "external_permitted_data_classes": {"type": "array", "uniqueItems": true, "items": {"enum": ["public", "internal_sanitized"]}},
+    "external_allowed_decision_classes": {"type": "array", "uniqueItems": true, "items": {"enum": ["context_relevance", "review_module_selection", "test_plan_selection", "risk_signal", "review_finding_triage"]}},
+    "human_review_tiers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["low", "medium", "high", "critical"]}},
+    "model_prohibited_actions": {"type": "array", "minItems": 6, "uniqueItems": true, "allOf": [{"contains": {"const": "merge"}}, {"contains": {"const": "release"}}, {"contains": {"const": "deploy"}}, {"contains": {"const": "approve_exception"}}, {"contains": {"const": "change_policy"}}, {"contains": {"const": "access_secret"}}], "items": {"enum": ["merge", "release", "deploy", "approve_exception", "change_policy", "access_secret"]}},
+    "failures": {"type": "object", "additionalProperties": false, "required": ["provider_unavailable", "schema_failure", "timeout"], "properties": {"provider_unavailable": {"enum": ["human_or_deterministic_fallback"]}, "schema_failure": {"enum": ["deny_automation_and_log"]}, "timeout": {"enum": ["deny_automation_and_log"]}}}
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "provider": {"type": "object", "additionalProperties": false, "required": ["provider", "timeout_seconds", "retries"], "properties": {"provider": {"$ref": "#/$defs/id"}, "minimum_confidence": {"type": "number", "minimum": 0, "maximum": 1}, "minimum_margin": {"type": "number", "minimum": 0, "maximum": 1}, "timeout_seconds": {"type": "number", "exclusiveMinimum": 0, "maximum": 120}, "retries": {"type": "integer", "minimum": 0, "maximum": 3}}, "oneOf": [{"required": ["minimum_confidence"]}, {"required": ["minimum_margin"]}]}
+  }
+}
