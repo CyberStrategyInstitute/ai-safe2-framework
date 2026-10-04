@@ -11,6 +11,16 @@
 
 ---
 
+## Technology contribution and stopping authority
+
+Review circuit-breaker products through the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md), recording
+the actual actuator, named stopping authority, covered process/tool paths, and
+complementary controls. Test direct bypass, outage, timeout, restart, descendants,
+and revocation under the [validation guide](../docs/TECHNOLOGY-VALIDATION.md).
+The [incident workflow](../docs/INCIDENT-EVIDENCE.md) connects containment and recovery
+to retained evidence. A runtime component's tested contribution does not confer
+AISM maturity on its vendor or adopting organization.
+
 ## 🎯 The Problem. The Realization. The Solution.
 
 **Problem:** Autonomous agents can fail in ways that compound before anyone notices. A loop that has no termination condition consumes API budget overnight. One agent in a multi-agent pipeline that produces malformed output corrupts every downstream agent that processes it. An agent whose behavior has drifted gradually over weeks looks fine until a client reports wrong outputs. By then, the failure is deeply embedded and the rollback is painful.

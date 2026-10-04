@@ -4,6 +4,22 @@ This document outlines the strategic evolution of the AI SAFE² framework from a
 
 ---
 
+## Technology-review methods v1.0 (October 2026)
+
+**Documentation updated:** 2026-10-02. The existing organizational Sovereignty
+Score is clarified; TCP and Evidence Assurance v1.0 are introduced as CSI methods
+for use and feedback. Follow the [AISM assessment guide](AISM/ASSESSMENT-GUIDE.md)
+for the Technology Card workflow and worked example.
+
+The [AISM Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+separates organizational maturity, scoped artifact contribution, and
+[claim-level assurance](docs/EVIDENCE-ASSURANCE.md). The change includes a reusable
+card, validation/incident practices, nine source-attributed adoption candidates,
+and [repository-wide navigation and compatibility review](docs/TECHNOLOGY-PROFILE-REPO-REVIEW.md).
+It is not a framework/CLI release, certification program, scoring migration,
+new control, or completed runtime integration. Existing grades, formulas,
+versions, generated control data, and frozen Challenge 001 are unchanged.
+
 ## Version History
 
 | Version | Released | Framework Controls | Frameworks | Primary focus |

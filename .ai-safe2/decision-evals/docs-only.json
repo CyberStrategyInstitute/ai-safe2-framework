@@ -1,0 +1,11 @@
+{
+  "schema_version": "safe2.decision-request.v1",
+  "decision_id": "docs-only-001",
+  "decision_class": "review_module_selection",
+  "data_classification": "public",
+  "structured_state": {"decision_capsule": {"affected_domains": ["documentation"], "code_changed": false}},
+  "questions": {"review_scope": {"type": "choice", "instructions": "Select the minimum complete review scope.", "criteria": {"standard": "Normal correctness and documentation review.", "security": "Security specialist review is required."}}},
+  "deterministic": {"risk_tier": "low", "required_evidence": ["documentation-validation"], "evidence_status": {"documentation-validation": "passed"}, "policy_flags": {"touches_ci_workflow": false}},
+  "external_adjudication_allowed": true,
+  "expected": {"risk_tier": "low", "missing_or_incomplete_evidence": [], "human_approval_required": false}
+}

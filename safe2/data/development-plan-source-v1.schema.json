@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/development-plan-source-v1.json",
+  "title": "AI SAFE2 Development Plan Source",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "title", "outcome", "delivery_shape", "risk_tier", "change_kind", "work_product", "acceptance_conditions", "scope", "trust_boundaries", "assumptions", "unknowns", "design", "isolation", "testing"],
+  "properties": {
+    "schema_version": {"const": "safe2.development-plan-source.v1"},
+    "task_id": {"$ref": "#/$defs/id"},
+    "title": {"$ref": "#/$defs/text"},
+    "outcome": {"$ref": "#/$defs/text"},
+    "delivery_shape": {"enum": ["spike", "bounded", "architectural"]},
+    "risk_tier": {"enum": ["low", "medium", "high", "critical"]},
+    "change_kind": {"enum": ["code", "configuration", "documentation", "research"]},
+    "work_product": {"enum": ["disposable", "reusable"]},
+    "acceptance_conditions": {"type": "array", "minItems": 1, "maxItems": 50, "items": {"$ref": "#/$defs/text"}},
+    "scope": {
+      "type": "object", "additionalProperties": false, "required": ["include", "exclude"],
+      "properties": {
+        "include": {"type": "array", "minItems": 1, "maxItems": 100, "items": {"$ref": "#/$defs/path_text"}},
+        "exclude": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/path_text"}}
+      }
+    },
+    "trust_boundaries": {"$ref": "#/$defs/text_array"},
+    "assumptions": {"$ref": "#/$defs/text_array"},
+    "unknowns": {"$ref": "#/$defs/text_array"},
+    "design": {
+      "type": "object", "additionalProperties": false, "required": ["summary", "approved"],
+      "properties": {
+        "summary": {"$ref": "#/$defs/text"},
+        "artifact": {"$ref": "#/$defs/path_text"},
+        "approved": {"type": "boolean"},
+        "approval_reference": {"$ref": "#/$defs/path_text"}
+      }
+    },
+    "threat_model_reference": {"$ref": "#/$defs/path_text"},
+    "isolation": {
+      "type": "object", "additionalProperties": false, "required": ["strategy"],
+      "properties": {
+        "strategy": {"enum": ["worktree", "branch", "none"]},
+        "reference": {"$ref": "#/$defs/path_text"}
+      }
+    },
+    "testing": {
+      "type": "object", "additionalProperties": false, "required": ["mode"],
+      "properties": {
+        "mode": {"$ref": "#/$defs/test_mode"},
+        "rationale": {"$ref": "#/$defs/text"}
+      }
+    }
+  },
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]*$"},
+    "text": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "path_text": {"type": "string", "minLength": 1, "maxLength": 500},
+    "text_array": {"type": "array", "maxItems": 100, "items": {"$ref": "#/$defs/text"}},
+    "test_mode": {"enum": ["tdd", "characterization-first", "contract-first", "schema-validation", "render-validation", "approved-spike", "not-applicable"]}
+  }
+}

@@ -110,6 +110,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install unified AI SAFE2 CLI
+        run: python -m pip install .
+
       - name: Run static trust gate scan
         id: scan
         env:
@@ -126,19 +129,20 @@ jobs:
           if [[ "$STRICT_MODE" == "true" ]]; then STRICT_FLAG="--strict"; fi
 
           SCAN_EXIT=0
-          python scripts/skill_trust_gate.py "$SKILL_PATH" \
-            --output both --report "$REPORT_PREFIX" --no-color \
-            $STRICT_FLAG || SCAN_EXIT=$?
+          REPORT_FILE="${REPORT_PREFIX}.txt"
+          python -m safe2 gate skill "$SKILL_PATH" \
+            $STRICT_FLAG > "$REPORT_FILE" 2>&1 || SCAN_EXIT=$?
+          cat "$REPORT_FILE"
           echo "scan_exit=$SCAN_EXIT" >> "$GITHUB_OUTPUT"
 
-          if [ -f "${REPORT_PREFIX}.json" ]; then
-            DECISION=$(python3 -c "import json; d=json.load(open('${REPORT_PREFIX}.json')); print(d['decision'])")
-            SEVERITY=$(python3 -c "import json; d=json.load(open('${REPORT_PREFIX}.json')); print(d['severity'])")
-            AISM=$(python3 -c "import json; d=json.load(open('${REPORT_PREFIX}.json')); print(d['aism_level'])")
+          if [ -f "$REPORT_FILE" ]; then
+            DECISION=$(python3 -c "import re; t=open('$REPORT_FILE', encoding='utf-8').read(); m=re.search(r'GATE: (APPROVE|HOLD FOR REVIEW|REJECT)', t); print(m.group(1) if m else 'HOLD FOR REVIEW')")
+            SEVERITY=$(python3 -c "import re; t=open('$REPORT_FILE', encoding='utf-8').read(); m=re.search(r'highest severity: ([A-Z]+)', t); print(m.group(1) if m else 'UNKNOWN')")
+            AISM="NOT_ASSESSED"
           else
             DECISION="HOLD FOR REVIEW"
             SEVERITY="UNKNOWN"
-            AISM="UNKNOWN"
+            AISM="NOT_ASSESSED"
           fi
           echo "decision=$DECISION" >> "$GITHUB_OUTPUT"
           echo "severity=$SEVERITY" >> "$GITHUB_OUTPUT"
@@ -168,8 +172,7 @@ jobs:
         with:
           name: trust-gate-report-${{ steps.scan.outputs.skill_name }}
           path: |
-            trust-gate-*.json
-            trust-gate-*.md
+            trust-gate-*.txt
             skill-card-validation.json
           retention-days: 90
 

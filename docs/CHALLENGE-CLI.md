@@ -1,9 +1,9 @@
 # AI SAFE² Challenge CLI
-### Run inert studies, translate provider evidence, and compare without overclaiming
+### Run fixtures or authorized evaluators, preserve receipts, and compare without overclaiming
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Challenge Lab](https://img.shields.io/badge/Module-Challenge_Lab-820F1A?style=flat-square)](../challenges/README.md)
-[![Scope](https://img.shields.io/badge/Scope-Offline_fixture_pilot-808080?style=flat-square)](./CHALLENGE-HARNESS-DESIGN.md)
+[![Scope](https://img.shields.io/badge/Scope-Bounded_process_evidence-808080?style=flat-square)](./CHALLENGE-HARNESS-DESIGN.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
@@ -13,14 +13,34 @@
 
 ---
 
+## Technology profiles and claim separation
+
+Use the [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+to record what imported or executed challenge evidence supports. Bundle integrity
+and reproduced grading do not establish independent execution or production
+enforcement. The [validation candidates](./TECHNOLOGY-VALIDATION.md) are proposed
+experiments outside the current frozen pack. Their contribution and
+[assurance ratings](./EVIDENCE-ASSURANCE.md) are not calculated by this CLI.
+
 ## What this adds
 
-`safe2 challenge` adds an executable offline evidence workflow to the released
-CLI. The new Challenge 001 backend is a deliberately narrow fixture pilot, not a
-beta designation for the CLI and not the complete live Challenge Lab study.
-It makes no network requests and executes no models, operating-system commands,
-TENIR code, or real infrastructure. Its target is disposable Python dictionary
-state. Inputs and artifacts stay on the machine unless the user shares them.
+`safe2 challenge` provides two deliberately distinct paths. `run` and `quickstart`
+remain inert, offline fixtures. `plan` and `execute` add an operator-authorized,
+bounded process boundary for an external Challenge 001 evaluator. The external
+process receives one frozen scenario as JSON and returns decision and state
+observations as JSON. The CLI independently grades those observations and binds
+the plan, source, run, optional system identity, executable digest, and per-episode
+request/response digests into a receipt.
+
+Controlled execution is **not containment**. The executable runs with the current
+user's operating-system authority and may possess network or filesystem access.
+Timeouts terminate the direct child only; descendant-process containment is not
+established by this portable runner. Use an OS/container boundary that can stop
+the whole process tree.
+Use a disposable, separately isolated environment for untrusted code or real
+targets. AI SAFE² neither silently discovers nor automatically starts providers.
+The authorization flag is required, and failures remain visible as incomplete
+episodes instead of disappearing from the result.
 
 The workflow runs known cases, independently recomputes grades from recorded
 before/after state, retains provider originals, checks experiment compatibility,
@@ -85,6 +105,56 @@ safe2 challenge verify comparison.json --left-run reference-run.json --right-run
 safe2 challenge report comparison.json --output comparison-card.md
 ```
 
+### Controlled external evaluator
+
+Use an absolute executable path and literal arguments. This example assumes
+`my-evaluator` already implements the documented JSON request/response seam:
+
+```console
+safe2 challenge plan 001 --executable /absolute/path/to/python --arg /absolute/path/to/my-evaluator.py --provider-name "My evaluator" --provider-version 1.0 --producer-id my-team --treatment external-reference --system-identity system-identity.json --output execution-plan.json
+safe2 challenge execute execution-plan.json --output-dir controlled-result --authorize-process-execution
+safe2 challenge verify-execution controlled-result --plan execution-plan.json --system-identity system-identity.json
+safe2 challenge verify controlled-result/challenge-run.json --source-export controlled-result/challenge-source.json
+safe2 challenge report controlled-result/challenge-run.json --output controlled-card.md
+```
+
+On Windows, use the absolute path to `python.exe`; on Linux/WSL, use the absolute
+interpreter or executable path. The plan hashes the executable and every argument
+that resolves to a regular file at planning time, including a Python script. Other
+arguments remain literal strings and are not interpreted as files. File symlinks
+are resolved once during planning; the stored command uses and later rechecks the
+exact regular-file target instead of executing the mutable link path.
+
+The CLI sends one compact JSON object to stdin with schema version
+`safe2.challenge-executor-request.v1`, challenge/protocol/scenario/trial/treatment
+identity, the requested `action`, scenario `conditions`, and `initial_state`.
+The process must exit `0`, write no more than the configured combined stdout/stderr
+cap, and emit exactly this JSON shape on stdout:
+
+```json
+{
+  "schema_version": "safe2.challenge-executor-response.v1",
+  "decision": {
+    "raw": "ALLOW",
+    "mode": "enforce",
+    "constraints": [],
+    "constraints_applied": null
+  },
+  "observation": {
+    "status": "observed",
+    "before": {"protected": "protected:initial", "shared": "shared:initial"},
+    "after": {"protected": "protected:initial", "shared": "candidate:0:0"}
+  },
+  "metrics": {"cost_usd": null, "human_interventions": 0}
+}
+```
+
+`raw` is translated by the selected generic adapter; unknown labels remain
+unknown. State observations, not the provider's label, drive independent grading.
+Malformed JSON, extra/missing fields, nonzero exits, timeouts, truncated streams,
+and output-limit events become explicit incomplete episodes. Stderr is bounded
+but is neither retained nor printed because it may contain sensitive material.
+
 The TENIR specimen is authored for this repository. It is an **illustrative
 adapter contract, not a real TENIR execution or an upstream export standard**.
 No endorsement, partnership, ledger verification, or agreement with TENIR is
@@ -102,6 +172,9 @@ evidence may disagree; disagreement is useful evidence, not an integration failu
 | `challenge list` | Discover the packaged offline study as JSON. |
 | `challenge validate 001` | Check packaged protocol identity and show pinned experiment hashes; not an assessment of a deployment. |
 | `challenge run 001 --output FILE` | Run all six cases under three treatments. Optional `--seed` (0–2147483647), `--repetitions` (1–100), repeated `--treatment`. |
+| `challenge plan 001 --executable FILE ... --output PLAN` | Pre-register the exact executable digest, literal arguments, provider declaration, treatment, bounds, and optional system-identity byte hash without executing it. |
+| `challenge execute PLAN --output-dir DIRECTORY --authorize-process-execution` | Run the six frozen scenarios as separate bounded process calls and write source, normalized run, and receipt. The process is not sandboxed. |
+| `challenge verify-execution DIRECTORY --plan PLAN` | Recheck schemas and plan/source/run/receipt bindings without re-running the executable. Supply `--system-identity` when the plan bound one. |
 | `challenge example --provider tenir --output FILE` | Write the explicitly synthetic provider source envelope. |
 | `challenge import FILE --adapter generic --output RUN` | Translate `generic-v1` or, with `--adapter tenir`, `tenir-example-v1`. Preserve source records and hash the original input bytes. |
 | `challenge compare LEFT RIGHT --output FILE` | Compare compatible experiments and coverage. Record incompatibilities instead of pooling unmatched runs. |
@@ -229,13 +302,14 @@ unsafe paths and overwrites. All 30 AISM cells stay unscored; a human must decid
 which evidence supports each applicable metric. These fixtures alone cannot justify
 an AISM maturity rating or deployment approval.
 
-## What must happen before live claims
+## What must happen before broader live-system claims
 
 1. Agree a real provider export and documented semantic mapping with its owner.
 2. Freeze the study protocol, implementation versions, grader, policy and
    preregistration; materially changed conditions need a new study version.
-3. Build an authorized isolated live backend with external stop controls,
-   disposable targets, resource caps and the Lab's Rules of Engagement.
+3. Run this controlled process seam inside an authorized isolated environment
+   with external stop controls, disposable targets, resource caps and the Lab's
+   Rules of Engagement. The CLI's timeout and byte cap are not an OS sandbox.
 4. Capture authoritative state, bypass attempts, legitimate utility, costs and
    human-intervention evidence without relying on agent prose.
 5. Run independent operators against the same published study before claiming

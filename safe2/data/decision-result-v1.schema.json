@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aisafe2.dev/schemas/decision-result-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "created_at", "decision_id", "request_sha256", "policy", "route", "provider_evidence", "review_plan", "authority", "decision_scope", "limitations"],
+  "properties": {
+    "schema_version": {"const": "safe2.decision-result.v1"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "decision_id": {"type": "string"},
+    "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "policy": {"type": "object"},
+    "route": {"type": "object"},
+    "provider_evidence": {"type": "array"},
+    "review_plan": {"type": "object"},
+    "authority": {
+      "type": "object", "additionalProperties": false,
+      "required": ["merge_authorized", "release_authorized", "deployment_authorized", "exception_authorized", "policy_change_authorized"],
+      "properties": {
+        "merge_authorized": {"const": false}, "release_authorized": {"const": false},
+        "deployment_authorized": {"const": false}, "exception_authorized": {"const": false},
+        "policy_change_authorized": {"const": false}
+      }
+    },
+    "decision_scope": {"const": "advisory_review_routing_only"},
+    "limitations": {"type": "array", "minItems": 4, "items": {"type": "string"}}
+  }
+}

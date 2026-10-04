@@ -11,6 +11,17 @@
 
 ---
 
+## Authorization, oversight, and accountability evidence
+
+Apply the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+to separate deterministic interception, probabilistic authorization judgment, and
+deterministic actuation. Review forged approval/process artifacts with paired
+clean/attacked cases and legitimate-task utility in the
+[validation guide](../docs/TECHNOLOGY-VALIDATION.md). Randomized oversight theory
+is design evidence, not an implemented control. Use the
+[incident workflow](../docs/INCIDENT-EVIDENCE.md) to assign notification ownership
+without treating a notice or subpoena as proof of a breach.
+
 ## 🎯 The Problem. The Realization. The Solution.
 
 **Problem:** Standard monitoring detects anomalies after they manifest as visible output problems. By then, the injection has succeeded, the memory has been corrupted, and the damage is done. Meanwhile, jailbreak attempts and adversarial probes happen continuously in production and are completely invisible; you see only the ones that succeed, through their effects. Cloud AI platform attacks like Bedrock Guardrail poisoning do not trigger standard CloudTrail alerts. Tool squatting passes through authenticated channels without raising a flag.

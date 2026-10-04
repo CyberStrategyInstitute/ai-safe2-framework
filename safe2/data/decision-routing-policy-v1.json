@@ -1,0 +1,13 @@
+{
+  "schema_version": "safe2.decision-routing-policy.v1",
+  "policy_id": "ai-safe2-shadow-routing",
+  "version": "1.0.0",
+  "mode": "shadow",
+  "primary": {"provider": "kev_local", "minimum_confidence": 0.82, "timeout_seconds": 8, "retries": 1},
+  "secondary": {"provider": "jev_external", "minimum_margin": 0.15, "timeout_seconds": 8, "retries": 0},
+  "external_permitted_data_classes": ["public", "internal_sanitized"],
+  "external_allowed_decision_classes": ["context_relevance", "review_module_selection", "test_plan_selection", "risk_signal", "review_finding_triage"],
+  "human_review_tiers": ["high", "critical"],
+  "model_prohibited_actions": ["merge", "release", "deploy", "approve_exception", "change_policy", "access_secret"],
+  "failures": {"provider_unavailable": "human_or_deterministic_fallback", "schema_failure": "deny_automation_and_log", "timeout": "deny_automation_and_log"}
+}
