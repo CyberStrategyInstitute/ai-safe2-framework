@@ -2,7 +2,7 @@
 
 AI SAFE² Framework remains v3.1. This release updates the CLI, not the framework's 161-control core.
 
-[CLI guide](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/README.md) · [Task-receipt walkthrough](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/TASK-RECEIPTS.md) · [Framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+[CLI guide](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/README.md) · [Task-receipt walkthrough](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/TASK-RECEIPTS.md) · [Framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
 
 ## 🟢 What changes
 
@@ -56,6 +56,6 @@ Usage remains source-declared—not verified billing, subscription-quota allocat
 
 ## ➡️ Start here
 
-Install from the merged repository using its [installation guide](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/README.md), then follow the [copyable receipt and capture examples](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/TASK-RECEIPTS.md). Python 3.11–3.14 are supported; the separately installed SkillSpector provider requires its own compatible runtime.
+Install from the merged repository using its [installation guide](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/README.md), then follow the [copyable receipt and capture examples](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/TASK-RECEIPTS.md). Python 3.11–3.14 are supported; the separately installed SkillSpector provider requires its own compatible runtime.
 
 Next priorities: externally isolated execution, source/environment snapshots, provider usage reconciliation, and opt-in harness adapters. These are roadmap items, not capabilities delivered in 0.3.0.

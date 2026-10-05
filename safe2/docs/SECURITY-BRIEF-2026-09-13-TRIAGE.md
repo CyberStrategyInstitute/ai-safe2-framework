@@ -1,9 +1,9 @@
 # Agentic AI security brief: CLI implementation triage
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
 [![Decision](https://img.shields.io/badge/Decision-Evidence_adoption_first-820F1A?style=flat-square)](./TASK-RECEIPTS.md)
 
-[Framework Home](../README.md) | [CLI](../safe2/README.md) | [Task Receipts](./TASK-RECEIPTS.md) | [Challenge Lab](./CHALLENGE-CLI.md)
+[Framework Home](../../README.md) | [CLI](../README.md) | [Task Receipts](./TASK-RECEIPTS.md) | [Challenge Lab](./CHALLENGE-CLI.md)
 
 ## Decision
 
@@ -29,9 +29,9 @@ or product capability.
 
 ## Pinned outside the active release path
 
-The separate [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
-and [Evidence Assurance v1.0](./EVIDENCE-ASSURANCE.md) now document a scoped review
-method for the [nine new examples](../research/technology-contribution-examples.md).
+The separate [Technology Contribution Profile](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [Evidence Assurance v1.0](../../docs/EVIDENCE-ASSURANCE.md) now document a scoped review
+method for the [nine new examples](../../research/technology-contribution-examples.md).
 They do not change current CLI E0-E5 weights or organizational scoring semantics.
 Their machine schema, integrations, and new live experiments remain outside the
 active release path under the constraints below.

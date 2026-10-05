@@ -1,7 +1,7 @@
 <!-- AI-SAFE2-UX:START -->
 [![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
 [![Surface: Example](https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square)](../README.md)
-[![Context: CLI 0.9](https://img.shields.io/badge/CLI-0.9-808080?style=flat-square)](../../docs/CHALLENGE-CLI.md)
+[![Context: CLI 0.9](https://img.shields.io/badge/CLI-0.9-808080?style=flat-square)](../../safe2/docs/CHALLENGE-CLI.md)
 
 [Framework Home](../../README.md) | [Cross-Pillar Controls](../../00-cross-pillar/) | [Examples Index](../README.md) | [Challenge Lab](../../challenges/) | [CLI](../../safe2/README.md)
 
@@ -45,7 +45,7 @@ untrusted implementations only inside a separately managed OS/container boundary
 
 ### Repository navigation
 
-[Examples Index](../README.md) | [Cross-Pillar Controls](../../00-cross-pillar/) | [Challenge CLI](../../docs/CHALLENGE-CLI.md) | [Framework Home](../../README.md)
+[Examples Index](../README.md) | [Cross-Pillar Controls](../../00-cross-pillar/) | [Challenge CLI](../../safe2/docs/CHALLENGE-CLI.md) | [Framework Home](../../README.md)
 
 *AI SAFE² v3.1 | Cyber Strategy Institute*
 <!-- AI-SAFE2-UX-FOOTER:END -->

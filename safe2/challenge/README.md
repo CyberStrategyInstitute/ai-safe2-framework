@@ -3,14 +3,14 @@
 Offline fixture experiments, provider-neutral translation, and reproducible grading.
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
-[![Module](https://img.shields.io/badge/Module-Challenge_Evidence-820F1A?style=flat-square)](../../docs/CHALLENGE-CLI.md)
+[![Module](https://img.shields.io/badge/Module-Challenge_Evidence-820F1A?style=flat-square)](../docs/CHALLENGE-CLI.md)
 
 [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
 
-Start with the [command reference and runnable workflow](../../docs/CHALLENGE-CLI.md).
-The [design contract](../../docs/CHALLENGE-HARNESS-DESIGN.md) explains the wire format.
+Start with the [command reference and runnable workflow](../docs/CHALLENGE-CLI.md).
+The [design contract](../docs/CHALLENGE-HARNESS-DESIGN.md) explains the wire format.
 The [Challenge Lab](../../challenges/) owns study protocols and evidence standards;
 this directory is the installable Python implementation, not a separate framework.
 

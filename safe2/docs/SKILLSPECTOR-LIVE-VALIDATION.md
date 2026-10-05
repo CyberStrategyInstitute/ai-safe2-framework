@@ -1,6 +1,6 @@
 # NVIDIA SkillSpector live acceptance — 2026-09-09
 
-[CLI setup](./PYTHON-COMPATIBILITY.md) | [Security advisory](./advisories/2026-09-09-skill-gate-executable-scope.md) | [Release notes](./RELEASE-NOTES-CLI-0.2.0.md)
+[CLI setup](./PYTHON-COMPATIBILITY.md) | [Security advisory](../../docs/advisories/2026-09-09-skill-gate-executable-scope.md) | [Release notes](../../releases/RELEASE-NOTES-CLI-0.2.0.md)
 
 ## Result: passed for these static fixtures
 

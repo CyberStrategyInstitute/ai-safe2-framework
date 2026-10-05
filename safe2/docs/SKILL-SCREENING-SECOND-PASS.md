@@ -1,6 +1,6 @@
 # Skill screening: second pass and lessons learned
 
-[Demo](./SKILL-SCREENING-DEMO.md) | [Initial live validation](./SKILLSPECTOR-LIVE-VALIDATION.md) | [Advisory](./advisories/2026-09-09-skill-gate-executable-scope.md)
+[Demo](./SKILL-SCREENING-DEMO.md) | [Initial live validation](./SKILLSPECTOR-LIVE-VALIDATION.md) | [Advisory](../../docs/advisories/2026-09-09-skill-gate-executable-scope.md)
 
 ## Scope and provenance
 

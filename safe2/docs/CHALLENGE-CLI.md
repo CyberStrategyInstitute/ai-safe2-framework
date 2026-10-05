@@ -1,13 +1,13 @@
 # AI SAFE² Challenge CLI
 ### Run fixtures or authorized evaluators, preserve receipts, and compare without overclaiming
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
-[![Challenge Lab](https://img.shields.io/badge/Module-Challenge_Lab-820F1A?style=flat-square)](../challenges/README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![Challenge Lab](https://img.shields.io/badge/Module-Challenge_Lab-820F1A?style=flat-square)](../../challenges/README.md)
 [![Scope](https://img.shields.io/badge/Scope-Bounded_process_evidence-808080?style=flat-square)](./CHALLENGE-HARNESS-DESIGN.md)
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/README.md) | [NEXUS](../../NEXUS/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-[CLI Home](../safe2/README.md) | [Challenge 001](../challenges/001-anthropic-multi-agent-turf-war/README.md) | [Design](./CHALLENGE-HARNESS-DESIGN.md) | [Rules of Engagement](../challenges/001-anthropic-multi-agent-turf-war/ROE.md)
+[CLI Home](../README.md) | [Challenge 001](../../challenges/001-anthropic-multi-agent-turf-war/README.md) | [Design](./CHALLENGE-HARNESS-DESIGN.md) | [Rules of Engagement](../../challenges/001-anthropic-multi-agent-turf-war/ROE.md)
 
 [Validation results and remaining limits](./CHALLENGE-CLI-VALIDATION.md)
 
@@ -15,12 +15,12 @@
 
 ## Technology profiles and claim separation
 
-Use the [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to record what imported or executed challenge evidence supports. Bundle integrity
 and reproduced grading do not establish independent execution or production
-enforcement. The [validation candidates](./TECHNOLOGY-VALIDATION.md) are proposed
+enforcement. The [validation candidates](../../docs/TECHNOLOGY-VALIDATION.md) are proposed
 experiments outside the current frozen pack. Their contribution and
-[assurance ratings](./EVIDENCE-ASSURANCE.md) are not calculated by this CLI.
+[assurance ratings](../../docs/EVIDENCE-ASSURANCE.md) are not calculated by this CLI.
 
 ## What this adds
 
@@ -85,7 +85,7 @@ a new name for another attempt. Do not reuse it as a completed result.
 ### Individual commands and integration checks
 
 Use a checkout containing this capability and install the CLI as described in
-the [CLI README](../safe2/README.md). Run these commands from an existing writable
+the [CLI README](../README.md). Run these commands from an existing writable
 directory. Every output filename must be new; files are never overwritten and
 parent directories are not implicitly created.
 
@@ -318,6 +318,6 @@ an AISM maturity rating or deployment approval.
 
 ---
 
-[CLI Home](../safe2/README.md) | [Challenge Lab](../challenges/README.md) | [Framework Home](../README.md)
+[CLI Home](../README.md) | [Challenge Lab](../../challenges/README.md) | [Framework Home](../../README.md)
 
 *AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

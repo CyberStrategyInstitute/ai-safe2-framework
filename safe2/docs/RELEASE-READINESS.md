@@ -1,21 +1,21 @@
 # Release-Readiness Card
 
-[CLI guide](../safe2/README.md) | [Assessment scope](./ASSESSMENT-SCOPE.md) | [Change attribution](./CHANGE-ATTRIBUTION.md)
+[CLI guide](../README.md) | [Assessment scope](../../docs/ASSESSMENT-SCOPE.md) | [Change attribution](../../docs/CHANGE-ATTRIBUTION.md)
 
 `safe2 evidence readiness` combines the system identity, assessment boundary,
 change attribution, required-check status, residual risks, owners, actions,
 assumptions, and rollback plan into canonical agent JSON and a readable Markdown
 card. It supports—but never replaces—the named human release decision.
 
-Start from [`safe2/data/release-readiness-source-demo.json`](../safe2/data/release-readiness-source-demo.json)
+Start from [`safe2/data/release-readiness-source-demo.json`](../data/release-readiness-source-demo.json)
 and replace every placeholder with evidence for the exact candidate revision.
 
 ## Technology adoption and release evidence
 
-Attach a [Technology Card](./templates/TECHNOLOGY-CARD.md) when a
+Attach a [Technology Card](../../docs/templates/TECHNOLOGY-CARD.md) when a
 release depends on a new runtime, technique, or benchmark. Review actual control
 fit, failure behavior, retained authority, residual paths, and integration needs
-under the [adoption rule](./TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule).
+under the [adoption rule](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule).
 Contribution and assurance cannot substitute for required release checks or
 named human acceptance. No readiness schema fields change in this proposal.
 

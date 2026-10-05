@@ -19,7 +19,7 @@ The existing SkillSpector adapter adds safer inventory handling, strict JSON, an
 acceptance passed: the clean fixture returned SAFE with zero issues; the inert
 hostile fixture returned DO_NOT_INSTALL with seven issues. Direct and adapter
 findings agreed, and AISM kept all 30 maturity cells unscored.
-[Live acceptance evidence and limits](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/SKILLSPECTOR-LIVE-VALIDATION.md).
+[Live acceptance evidence and limits](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/SKILLSPECTOR-LIVE-VALIDATION.md).
 No NVIDIA endorsement or general deployment-safety claim is implied.
 
 ## 🔎 Tested against our own skill, not just easy fixtures
@@ -30,20 +30,20 @@ test-path and IP-address context without silently downgrading attacker-controlle
 content. We document false-positive candidates, residual risks, and why a scanner
 score is evidence—not an installation decision.
 
-[Beginner demo](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/SKILL-SCREENING-DEMO.md) · [Second-pass results and lessons](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/SKILL-SCREENING-SECOND-PASS.md).
+[Beginner demo](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/SKILL-SCREENING-DEMO.md) · [Second-pass results and lessons](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/SKILL-SCREENING-SECOND-PASS.md).
 Universal background interception is a proposed integration, not a feature claimed
 by this release.
 
 Python 3.11 remains the minimum; release CI now covers standard Python 3.11–3.14.
 Check the release commit's results before treating configured coverage as verified.
-[Runtime policy and setup](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/PYTHON-COMPATIBILITY.md).
+[Runtime policy and setup](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/PYTHON-COMPATIBILITY.md).
 
 ## 🧭 One-command Challenge evidence
 
 Local Windows validation after the second pass: **522 tests passed** on each of Python 3.11–3.14,
 with four platform-specific skips per run. The rebuilt Python 3.14 wheel passed
 installed starter verification and rejected the inert hostile fixture.
-[Hardening validation and remaining limits](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/SKILL-GATE-HARDENING-VALIDATION.md).
+[Hardening validation and remaining limits](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/SKILL-GATE-HARDENING-VALIDATION.md).
 
 Create an offline Challenge 001 evidence bundle with one command, inspect its
 Decision Card, and let another user verify the complete folder.
@@ -102,8 +102,8 @@ AI SAFE² remains v3.1 with **161 core controls and CP.1–CP.10**. UAS remains 
 ## 🔗 Start here
 
 - [CLI installation and command map](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/README.md)
-- [Challenge quick start and verification guide](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/CHALLENGE-CLI.md)
-- [Validation results and remaining limits](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/CHALLENGE-CLI-VALIDATION.md)
+- [Challenge quick start and verification guide](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/CHALLENGE-CLI.md)
+- [Validation results and remaining limits](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/CHALLENGE-CLI-VALIDATION.md)
 - [Challenge 001 participation and study design](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/challenges/001-anthropic-multi-agent-turf-war)
 
 **Compatibility note:** AISM ingestion now rejects ambiguous JSON, unsafe paths,

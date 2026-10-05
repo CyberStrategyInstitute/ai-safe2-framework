@@ -15,9 +15,9 @@ capabilities until their implementation, validation, and release evidence exist.
 
 ## Technology-profile implementation proposal
 
-The [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md),
-[assurance rubric](./EVIDENCE-ASSURANCE.md), and
-[candidate backlog](../research/technology-contribution-examples.md) provide v1.0
+The [Technology Contribution Profile](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md),
+[assurance rubric](../../docs/EVIDENCE-ASSURANCE.md), and
+[candidate backlog](../../research/technology-contribution-examples.md) provide v1.0
 assessment methods. A machine schema, CLI command, adapter, and dashboard
 view remain unimplemented, separately scoped work. Their capability gate requires
 claim-level provenance, strict unknown/N/A states, validated control IDs,

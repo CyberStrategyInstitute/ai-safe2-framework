@@ -1,6 +1,6 @@
 # Agent system identity manifests
 
-[Framework Home](../README.md) | [CLI Guide](../safe2/README.md) | [Harness Evidence](./TASK-RECEIPTS.md#provider-neutral-harness-evidence-intake) | [Challenge Lab](./CHALLENGE-CLI.md)
+[Framework Home](../../README.md) | [CLI Guide](../README.md) | [Harness Evidence](./TASK-RECEIPTS.md#provider-neutral-harness-evidence-intake) | [Challenge Lab](./CHALLENGE-CLI.md)
 
 ## Purpose
 
