@@ -105,7 +105,6 @@ examples/lovable-sovereign-runtime/
 │   └── policy.yaml                 Machine-readable control registry
 │
 ├── integrations/
-│   ├── NEXUS-love-equation.md      Cross-framework mesh + SIEM
 │   └── mcp-server-security.md      MCP project allowlist + tool risk matrix
 │
 ├── ci-cd/
@@ -184,6 +183,8 @@ guard.scan_subagent_file_access(file_paths, project_id="proj-dev-001")
 ---
 
 ## Connect to the NEXUS Mesh
+
+See the centralized [Lovable legacy integration guide](../../NEXUS/integrations/legacy-sovereign-runtimes/lovable-love-equation.md).
 
 ```
 examples/

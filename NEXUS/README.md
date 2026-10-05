@@ -9,7 +9,7 @@
 
 *Cyber Strategy Institute reference implementation for governed agent-to-agent, agent-to-tool, and agent-to-payment enforcement*
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM) | [MCP Profile](../00-cross-pillar/cp5_mcp_server_security.md) | [**Payments Profile**](payments/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+[Framework Home](../README.md) | [Documentation Map](DOCUMENTATION.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM) | [MCP Profile](../00-cross-pillar/cp5_mcp_server_security.md) | [**Payments Profile**](payments/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 **Previous:** [← AISM](../AISM) | **Next:** [Gateway / Runtime Enforcement →](../gateway)
 

@@ -1,4 +1,8 @@
 # NEXUS Love Equation — Lovable Integration
+
+> **Legacy integration note:** this page documents an AI SAFE² sovereign-runtime
+> example, not the current NEXUS SDK or Sovereign Payment Gateway contract.
+
 ## Cross-Framework Compliance Mesh
 **AI SAFE2 v3.0 | Cyber Strategy Institute**
 

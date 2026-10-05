@@ -81,7 +81,6 @@ examples/cursor-sovereign-runtime/
 │
 ├── integrations/
 │   ├── nomshub-defense.md          CVE-2026-26268 + NomShub kill chain analysis
-│   └── NEXUS-love-equation.md      MCPoison state + unified score
 │
 ├── cursor-skill/
 │   └── ai-safe2-cursor.md          Claude/Cursor skill for Cursor sessions
@@ -155,6 +154,8 @@ guard.scan_mcp_install(package, install_cmd)     # CU-SUPPLY (CVE-2025-64106)
 ---
 
 ## Connect to the NEXUS Mesh
+
+See the centralized [Cursor legacy integration guide](../../NEXUS/integrations/legacy-sovereign-runtimes/cursor-love-equation.md).
 
 ```
 examples/

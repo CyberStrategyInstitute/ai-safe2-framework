@@ -147,7 +147,6 @@ examples/xai-grok-sovereign-runtime/
 │   └── policy.yaml                 Machine-readable control registry
 │
 ├── integrations/
-│   ├── NEXUS-love-equation.md      Cross-framework mesh + SIEM integration
 │   └── mtls-enterprise.md          mTLS + ZDR enterprise guide + NHI registry
 │
 ├── ci-cd/
@@ -269,7 +268,7 @@ examples/
 
 Pass a shared `AISAFE2Engine` instance to all runtimes for a unified
 Love Equation score and audit chain across your entire agentic stack.
-See `integrations/NEXUS-love-equation.md`.
+See the centralized [xAI/Grok legacy integration guide](../../NEXUS/integrations/legacy-sovereign-runtimes/xai-grok-love-equation.md).
 
 ---
 
