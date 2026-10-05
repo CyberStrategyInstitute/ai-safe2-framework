@@ -1,0 +1,29 @@
+{
+  "format": "nexus-documentation-manifest",
+  "manifest_version": "1.0.0",
+  "component": "NEXUS",
+  "component_version": "0.5.0",
+  "distribution": "nexus-a2a-sdk",
+  "python_import": "nexus_sdk",
+  "canonical_root": "NEXUS/",
+  "production_assurance": false,
+  "status_vocabulary": ["implemented", "reference", "requires-binding", "experimental", "not-production-assured"],
+  "entry_points": [
+    {"audience": "all", "purpose": "navigation", "path": "DOCUMENTATION.md"},
+    {"audience": "human", "purpose": "overview", "path": "README.md"},
+    {"audience": "agent", "purpose": "instructions", "path": "AGENTS.md"},
+    {"audience": "agent", "purpose": "retrieval-index", "path": "llms.txt"},
+    {"audience": "developer", "purpose": "sdk", "path": "sdk/python/README.md"},
+    {"audience": "security-reviewer", "purpose": "threat-model", "path": "payments/THREAT-MODEL.md"},
+    {"audience": "operator", "purpose": "deployment-readiness", "path": "payments/DEPLOYMENT-READINESS.md"}
+  ],
+  "payment_gateway": {
+    "status": "reference",
+    "profile": "payments/README.md",
+    "architecture": "payments/SOVEREIGN-GATEWAY.md",
+    "controls": "payments/CONTROLS.md",
+    "adapter_guide": "payments/ADAPTER-GUIDE.md",
+    "schemas": "schemas/",
+    "policy": "opa/"
+  }
+}

@@ -11,6 +11,20 @@ NEXUS Payment Integrity Gateway. Its objective is simple: compromising an agent
 process must not be sufficient to obtain a payment key, widen authority, replay
 authorization, restore spent capacity, or hide what value moved.
 
+## Contents
+
+- [Deterministic boundary](#deterministic-boundary)
+- [Monotonic execution](#monotonic-execution)
+- [Security invariant](#security-invariant)
+- [Gateway State Vault](#gateway-state-vault)
+- [Key Guardian](#key-guardian)
+- [Policy and runtime authorities](#policy-authority)
+- [Human Intent Authority](#human-intent-authority)
+- [Settlement Truth Authority](#settlement-truth-authority)
+- [Sovereign Payment Coordinator](#sovereign-payment-coordinator)
+- [Governed Payment Recovery](#governed-payment-recovery)
+- [Sandbox Rail Readiness](#sandbox-rail-readiness)
+
 ## Deterministic boundary
 
 The execution plane requires seven independently evidenced components:

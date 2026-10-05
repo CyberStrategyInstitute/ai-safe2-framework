@@ -1,0 +1,27 @@
+# NEXUS v0.5.0
+
+> Deterministic governance for agent-to-agent, agent-to-tool, and agent-to-payment execution. NEXUS is an optional AI SAFE² reference implementation; it is not required for framework conformance and is not production-assured by default.
+
+## Essential
+
+- [Documentation map](DOCUMENTATION.md): Audience and task-based navigation
+- [Agent instructions](AGENTS.md): Deterministic interpretation and change rules
+- [Machine manifest](nexus-docs.manifest.json): Versioned canonical document index
+- [Overview](README.md): Architecture, install, scope, and assurance boundaries
+- [Python SDK](sdk/python/README.md): Package installation and minimal example
+
+## Sovereign Payment Gateway
+
+- [Payment profile](payments/README.md): Status, design, controls, and acceptance gates
+- [Threat model](payments/THREAT-MODEL.md): Adversaries, risks, and known limits
+- [Gateway](payments/SOVEREIGN-GATEWAY.md): Protected execution components
+- [Controls](payments/CONTROLS.md): APAY-01 through APAY-20
+- [Deployment readiness](payments/DEPLOYMENT-READINESS.md): Evidence-based activation decision
+- [Adapter guide](payments/ADAPTER-GUIDE.md): Integration and fail-closed boundaries
+
+## Machine resources
+
+- [Schemas](schemas/): Versioned JSON contracts
+- [OPA policy](opa/): Deterministic policy artifacts
+- [Examples](examples/): Integration examples
+- [Changelog](CHANGELOG.md): Release history

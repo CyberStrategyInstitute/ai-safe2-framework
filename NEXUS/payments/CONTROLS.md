@@ -8,6 +8,15 @@ Twenty controls for the agent-to-payment enforcement plane. Each entry gives the
 
 Test references are to `NEXUS/sdk/python/tests/test_apay.py` unless noted.
 
+## Contents
+
+- [Control foundation](#reuse-not-duplication)
+- [APAY-01 through APAY-05](#apay-01--principal-and-owner-binding): ownership, intent, policy, and runtime
+- [APAY-06 through APAY-10](#apay-06--non-exportable-signing-authority): keys, duties, delegation, and containment
+- [APAY-11 through APAY-15](#apay-11--freshness-and-replay-resistance): continuity, revocation, downgrade, and provenance
+- [APAY-16 through APAY-20](#apay-16--settlement-atomicity): settlement, privacy, recovery, evidence, and validation
+- [Conformance levels](#conformance-levels)
+
 ---
 
 ## Reuse, not duplication

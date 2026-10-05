@@ -8,6 +8,19 @@
 
 ---
 
+## Contents
+
+- [Status](#status)
+- [Why this profile exists](#why-this-profile-exists)
+- [Position in the stack](#position-in-the-stack)
+- [Standards landscape](#standards-landscape)
+- [Control set](#the-control-set)
+- [Execution sequence](#execution-sequence)
+- [Quick start](#quick-start)
+- [MVP acceptance gates](#mvp-acceptance-gates)
+- [Buyer position](#buyer-position)
+- [Standards engagement](#standards-engagement)
+
 ## Status
 
 | Component | Status |
