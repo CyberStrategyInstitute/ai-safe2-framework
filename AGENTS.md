@@ -145,7 +145,7 @@ required. It must remain understandable without access to an agent's chat log.
 ## Version model
 
 - AI SAFE² Framework: v3.1.0
-- NEXUS: v0.4
+- NEXUS: v0.5.0
 - Gateway: v3.0
 - MCP primary specification binding: 2026-07-28
 - MCP legacy compatibility binding: 2025-11-25

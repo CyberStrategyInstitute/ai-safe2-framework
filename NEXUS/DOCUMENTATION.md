@@ -5,6 +5,31 @@ payment controls, integration notes, release records, and governance documents.
 NEXUS-owned documentation must remain inside `NEXUS/` so people and agents can
 discover the complete implementation from one boundary.
 
+## Choose your path
+
+| I need to… | Start here | Then verify with |
+| --- | --- | --- |
+| Understand what NEXUS protects | [Overview](README.md) | [Threat model](payments/THREAT-MODEL.md) |
+| Install and integrate the SDK | [Python SDK](sdk/python/README.md) | [Examples](examples/) and SDK tests |
+| Protect agent-initiated payments | [Payment profile](payments/README.md) | [Gateway](payments/SOVEREIGN-GATEWAY.md) and [controls](payments/CONTROLS.md) |
+| Decide whether a deployment is ready | [Deployment readiness](payments/DEPLOYMENT-READINESS.md) | [Sandbox readiness](payments/SANDBOX-READINESS.md) |
+| Review security or assurance claims | [Security policy](SECURITY.md) | [Threat model](payments/THREAT-MODEL.md) and [Challenge Lab](payments/CHALLENGE-LAB.md) |
+| Extend an adapter or payment rail | [Adapter guide](payments/ADAPTER-GUIDE.md) | [Hardening and extension](payments/HARDENING-AND-EXTENSION.md) |
+| Consume NEXUS with an agent | [Agent instructions](AGENTS.md) | [Machine manifest](nexus-docs.manifest.json) and [LLM index](llms.txt) |
+
+## Status legend
+
+Status is always expressed in text; color is supplemental and never carries
+meaning by itself.
+
+| Label | Meaning |
+| --- | --- |
+| **Implemented** | Code exists and its stated behavior is covered by repository tests |
+| **Reference** | A working example or contract that still requires deployment-specific controls |
+| **Requires binding** | The interface fails closed until an external verifier, signer, store, or rail is connected |
+| **Experimental** | Useful for evaluation; compatibility or assurance may change |
+| **Not production-assured** | No claim that the complete deployment boundary has passed production acceptance gates |
+
 ## Start here
 
 - [NEXUS overview and installation](README.md)
