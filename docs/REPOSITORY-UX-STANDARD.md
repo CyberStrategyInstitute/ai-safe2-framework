@@ -29,6 +29,44 @@ Every user-facing README, guide, implementation page, research index, example la
 
 This standard defines the common visual and navigation grammar for AI SAFE² v3.1.
 
+## Outcome-first landing pages
+
+A landing page is not a file index. Before architecture, history, exhaustive
+commands, or a reference-link collection, it must tell a first-time human:
+
+1. what the capability does for them;
+2. when they should and should not use it;
+3. the shortest safe workflow;
+4. what artifact or decision support they will receive;
+5. what the capability does not prove or authorize; and
+6. where to go next for their specific use case.
+
+For an agent-facing tool, include one copyable instruction that a human can give
+to an agent. The instruction must constrain privileges, secrets, remote access,
+overwrites, remediation, deployment, and risk acceptance. It must require the
+agent to report facts, assumptions, missing coverage, conflicts, outputs, and
+the next human decision.
+
+Use a small “choose your outcome” table when a tool serves several materially
+different jobs. Prefer a command plus its resulting artifact over a bare link.
+Do not make a first-time reader infer the product's value from module names.
+
+Keep the primary navigation line to the destinations needed for the first user
+journey. Move the broader document catalog into a labeled reference section and
+group related links by task. A sequence of one-link paragraphs is a link wall,
+not usable navigation.
+
+Named harnesses and integrations require explicit support language:
+
+- **direct CLI use** means the harness can invoke the executable;
+- **discovery** means bounded indicators can be inventoried;
+- **translation** means an explicit native export can be normalized;
+- **native integration** means a maintained provider-specific hook or adapter
+  exists and passes its stated conformance tests.
+
+Never use these levels interchangeably. Product lists age quickly; describe the
+stable interface first and treat product names as examples with a stated level.
+
 ## Brand and semantic colors
 
 Use color to convey meaning consistently rather than decorating individual pages arbitrarily.

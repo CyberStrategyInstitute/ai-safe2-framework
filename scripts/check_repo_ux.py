@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 MAJOR_PAGES = [
     "README.md",
+    "safe2/README.md",
     "00-cross-pillar/README.md",
     "01-sanitize-isolate/README.md",
     "02-audit-inventory/README.md",
@@ -48,6 +49,23 @@ STALE_CURRENT_PATTERNS = (
     re.compile(r"\bcurrent framework(?: version)?\s*[:=]?\s*v3\.0\b", re.IGNORECASE),
 )
 
+OUTCOME_FIRST_REQUIREMENTS = {
+    "README.md": (
+        "## Use AI SAFE² with an agent",
+        "### The shortest safe start",
+        "### Prefer to delegate setup?",
+        "| What you want | Start here |",
+    ),
+    "safe2/README.md": (
+        "## Start with the outcome",
+        "## Give this to your agent",
+        "## Choose a workflow",
+        "## Harness compatibility",
+        "## What it does not do",
+        "## Reference library",
+    ),
+}
+
 
 def read(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
@@ -73,6 +91,10 @@ def check_page(path: Path) -> list[str]:
 
     if rel != "README.md" and "F6921E" not in text.upper():
         errors.append(f"{rel}: missing standard AI SAFE² release color #F6921E")
+
+    for requirement in OUTCOME_FIRST_REQUIREMENTS.get(rel, ()):
+        if requirement not in text:
+            errors.append(f"{rel}: missing outcome-first landing-page element {requirement}")
 
     return errors
 

@@ -15,11 +15,59 @@
 [![Scope](https://img.shields.io/badge/Scope-161_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm_%7C_CP.1--CP.10-red)](https://cyberstrategyinstitute.com/ai-safe2/)
 [![MCP](https://img.shields.io/badge/MCP-2026--07--28-blue.svg)](00-cross-pillar/cp5_mcp_server_security.md)
 
-**[Why AI SAFE²](#what-ai-safe-is-for)** · **[What Changed in v3.1](#what-changed-in-v31)** · **[Architecture](#the-core-architecture)** · **[MCP Security](#mcp-security-in-v31)** · **[Technology Reviews](#assess-organizations-technologies-and-evidence-separately)** · **[Examples](#examples-sovereign-runtimes-in-the-wild)** · **[Challenge Lab](#challenge-lab-falsification-before-claims)** · **[32 Frameworks](#the-universal-rosetta-stone-32-frameworks)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
+**[Use the CLI](#use-ai-safe-with-an-agent)** · **[Why AI SAFE²](#what-ai-safe-is-for)** · **[Architecture](#the-core-architecture)** · **[MCP Security](#mcp-security-in-v31)** · **[Challenge Lab](#challenge-lab-falsification-before-claims)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
 
 </div>
 
 ---
+
+## Use AI SAFE² with an agent
+
+If your immediate goal is to inspect an agent project—not read the entire
+framework—start with the [`safe2` CLI](safe2/README.md).
+
+Use it when you need to:
+
+- inventory a machine or repository running one or several agent harnesses;
+- assess a project without treating missing evidence as “safe”;
+- screen a downloaded or newly created skill before activation;
+- bind results to the model, harness, tools, memory, environment, and policy
+  that were actually assessed;
+- check an agent's completion claim against receipts and test evidence;
+- turn AISM findings into a human-owned remediation decision; or
+- create replayable Challenge Lab evidence.
+
+### The shortest safe start
+
+```bash
+python -m pip install "ai-safe2[all]==1.0.0"
+safe2 self-check --strict
+mkdir review-project
+cd review-project
+safe2 init .
+safe2 assess . --scan-content --inspect-config
+```
+
+The assessment writes canonical JSON for agents and a readable Decision Card
+for people. It does not authorize a fix, deployment, exception, or compliance
+claim.
+
+### Prefer to delegate setup?
+
+Give your agent the copyable instruction in
+[Give this to your agent](safe2/README.md#give-this-to-your-agent). The same
+provider-neutral workflow can be invoked from Codex, Claude Code, Hermes,
+OpenClaw, Antigravity, MiroFish, TinyFish, bots, CI, or another harness that can
+run a local command and preserve evidence files. That means the harness can use
+the CLI; it does not imply that every named product has a native adapter.
+
+| What you want | Start here |
+|---|---|
+| One bounded project assessment | [CLI outcome guide](safe2/README.md#start-with-the-outcome) |
+| Multiple harnesses or environments | [Multi-harness discovery](safe2/README.md#multi-harness-environment-discovery) |
+| A new skill checked before use | [Skill-screening demo](docs/SKILL-SCREENING-DEMO.md) |
+| Human-readable facts, gaps, alternatives, and next actions | [CLI 1.0 operator workflow](docs/CLI-1.0-WORKFLOW.md) |
+| Framework controls and governance model | Continue with the framework overview below |
 
 ## The 10-Second Version
 
@@ -280,7 +328,7 @@ alternatives, history, and recommendations. Machine-readable JSON remains the
 canonical exchange format. An automated pass is not a claim of full framework
 conformance or organizational maturity.
 
-CLI 0.8 binds proposed remediation to the exact assessment, system identity,
+CLI 1.0 binds proposed remediation to the exact assessment, system identity,
 and deployment scope. It validates control and AISM-cell traceability,
 evidence, assumptions, owners, dependencies, alternatives, impacts, exit
 criteria, completion evidence, residual risk, and status history. It never
@@ -294,9 +342,9 @@ See the executable [environment Decision Card workflow](examples/environment-dec
 Evidence ingestion is conservative: collectors suggest candidate AISM cells but never invent maturity ratings. Evidence without verification provenance is labeled and capped until a human confirms the mapping.
 
 See the complete [AI SAFE² CLI command and architecture guide](safe2/README.md).
-See the capability-gated [CLI roadmap to 1.0](docs/CLI-ROADMAP-TO-1.0.md).
+See [what 1.0 includes and what should be built next](docs/CLI-POST-1.0-PRIORITIES.md).
 
-CLI 0.3.0 adds [task receipts and usage evidence](docs/TASK-RECEIPTS.md):
+The CLI includes [task receipts and usage evidence](docs/TASK-RECEIPTS.md) to
 check artifact and test/tool claims, capture explicit local runs, recheck fresh
 pytest evidence, authenticate report bytes, and correlate declared per-task
 resource use. These checks do not establish task completion or verified billing.

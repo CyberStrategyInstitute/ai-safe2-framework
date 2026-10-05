@@ -262,6 +262,11 @@ The 1.0 release gate requires:
 
 ## After 1.0
 
+The ranked, capability-gated continuation is maintained in
+[CLI post-1.0 priorities](CLI-POST-1.0-PRIORITIES.md). The first priority is a
+guided agent onboarding workflow; the next layer adds admission hooks and
+maintained native adapters without weakening the provider-neutral core.
+
 Post-1.0 work should normally extend the stable core through:
 
 - native direct hooks for Codex, Claude Code, Hermes, OpenClaw, and other
