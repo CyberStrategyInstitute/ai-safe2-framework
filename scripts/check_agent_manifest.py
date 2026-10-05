@@ -30,6 +30,7 @@ def main() -> int:
     uas_profile = manifest.get("profiles", {}).get("uas_regulatory", {})
     persistence = manifest.get("persistence", {})
     implementations = manifest.get("implementations", {})
+    discovery = manifest.get("discovery", {})
 
     expected = {
         "framework.version": (framework.get("version"), "3.1.0"),
@@ -46,7 +47,7 @@ def main() -> int:
             uas_profile.get("adds_cross_pillar_control"),
             False,
         ),
-        "nexus.version": (implementations.get("nexus", {}).get("version"), "0.4"),
+        "nexus.version": (implementations.get("nexus", {}).get("version"), "0.5.0"),
         "gateway.version": (implementations.get("gateway", {}).get("version"), "3.0"),
         "scanner.rule_count": (implementations.get("scanner", {}).get("rule_count"), 64),
         "scanner.mcp_profile_rule_count": (
@@ -80,6 +81,8 @@ def main() -> int:
         implementations.get("nexus", {}).get("mcp_adapter"),
         implementations.get("gateway", {}).get("entrypoint"),
         implementations.get("scanner", {}).get("entrypoint"),
+        discovery.get("topic_registry"),
+        discovery.get("shared_documentation"),
     ]
     required_paths.extend(
         value
