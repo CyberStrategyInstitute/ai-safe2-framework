@@ -214,6 +214,10 @@ access, native harness hooks, or enforcement integrations.
 
 ## CLI 1.0: stable core and integration platform
 
+**Status:** Release qualification implemented on the 1.0 release branch. Final
+status depends on the exact release revision's hosted checks and accountable
+release-owner decision; this roadmap is not itself a release declaration.
+
 **User outcome:** Install one supported CLI and obtain a complete, reviewable
 picture of an agent system's safety, security, governance, compliance evidence,
 operational performance, and unresolved decisions.
@@ -257,6 +261,11 @@ The 1.0 release gate requires:
    rollback path, and next integration priorities.
 
 ## After 1.0
+
+The ranked, capability-gated continuation is maintained in
+[CLI post-1.0 priorities](CLI-POST-1.0-PRIORITIES.md). The first priority is a
+guided agent onboarding workflow; the next layer adds admission hooks and
+maintained native adapters without weakening the provider-neutral core.
 
 Post-1.0 work should normally extend the stable core through:
 

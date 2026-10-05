@@ -1,45 +1,117 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-0.9.9-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-1.0.0-F6921E?style=flat-square)](../README.md)
+[![Framework](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-820F1A?style=flat-square)](../README.md)
 
-[Documentation map](docs/README.md) | [Security advisories](../docs/advisories/README.md) | [Python and SkillSpector setup](docs/PYTHON-COMPATIBILITY.md)
+[Start](#start-with-the-outcome) | [Give this to your agent](#give-this-to-your-agent) | [Install](#install) | [Choose a workflow](#choose-a-workflow) | [Harness compatibility](#harness-compatibility) | [Command reference](#command-map) | [Limits](#what-it-does-not-do)
 
-[Try the skill-screening demo](docs/SKILL-SCREENING-DEMO.md) | [Our own-skill results and lessons](docs/SKILL-SCREENING-SECOND-PASS.md)
+---
 
-[Task receipts: local artifact verification](docs/TASK-RECEIPTS.md)
-[Installation self-check](docs/INSTALLATION-CHECK.md)
-[Stranger acceptance](docs/STRANGER-ACCEPTANCE.md)
+The CLI helps a person or an agent answer four practical questions:
 
-[Development method: plan, prove, and receipt changes](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md)
+1. **What agent systems and safety-relevant assets are here?**
+2. **What evidence do we actually have, and what is missing?**
+3. **What should a human review, block, remediate, or test next?**
+4. **Can another reviewer reproduce the result without trusting the chat?**
 
-[Agent system identity manifests](docs/SYSTEM-IDENTITY.md)
+It produces bounded JSON evidence for machines and readable Decision Cards for
+people. It does not silently connect to an agent account, approve deployment,
+or turn a self-assessment into a compliance claim.
 
-[Failure localization](docs/FAILURE-LOCALIZATION.md)
+## Start with the outcome
 
-[CLI roadmap to 1.0](docs/CLI-ROADMAP-TO-1.0.md)
+| If you need to... | Start here | What you receive |
+|---|---|---|
+| Understand a workstation or repository that runs several agents | `safe2 doctor . --assess --card-format markdown --card-output environment-card.md` | Harness inventory, coverage gaps, findings, and a human-readable Decision Card |
+| Assess a project before adoption or release | `safe2 assess . --scan-content --inspect-config` | A sealed assessment bundle with canonical JSON and a Decision Card |
+| Screen a downloaded or newly created agent skill | `safe2 gate skill PATH --strict` | An approve or reject decision with findings; the skill is never executed |
+| Check whether an agent's completion claim has receipts | `safe2 evidence claims ...` | Evidence-consistent, contradicted, unverifiable, or limited claim results |
+| Determine which model, harness, tools, memory, and policy were assessed | `safe2 evidence system ...` | A versioned system identity graph rather than only a model name |
+| Diagnose where an agent-system failure likely occurred | `safe2 evidence diagnose ...` | Evidence-backed investigation priorities, conflicts, assumptions, and next actions |
+| Turn an AISM assessment into an actionable plan | `safe2 aism plan ...` | A remediation card with owners, dependencies, alternatives, exit criteria, and residual risk |
+| Test a governance claim rather than merely document it | `safe2 challenge quickstart 001 ...` | Replayable Challenge Lab evidence with explicit provenance and limitations |
+| Give CI a deterministic gate | `safe2 gate project .` | Stable exit behavior and a human-readable findings report |
 
-[Unified project assessment](docs/UNIFIED-ASSESSMENT.md)
+If you are evaluating the CLI itself, begin with the offline
+[stranger-acceptance workflow](docs/STRANGER-ACCEPTANCE.md). It proves that
+the installed package can reproduce its fixed acceptance controls; it is not an
+independent security certification.
 
-[Provider-neutral adapter SDK](docs/ADAPTER-SDK.md)
+## Give this to your agent
 
-[Codex JSONL adapter](docs/CODEX-JSONL-ADAPTER.md)
+Paste this into Codex, Claude Code, Hermes, OpenClaw, Antigravity, or another
+agent that can run local commands and read files:
 
-[OpenTelemetry interoperability](docs/OPENTELEMETRY-ADAPTER.md)
+```text
+Install AI SAFE² CLI 1.0 in an isolated Python environment. Do not use elevated
+privileges, do not expose secrets, do not enable a daemon, and do not connect to
+remote systems unless I explicitly authorize a named target. Run `safe2
+self-check --strict`, initialize this project without overwriting existing
+configuration, then run the bounded project assessment. Explain: (1) facts,
+(2) assumptions, (3) missing coverage, (4) conflicts, (5) high-priority risks,
+(6) recommended next actions, and (7) the exact evidence files created. Stop
+before any remediation, deployment, policy change, network access, or risk
+acceptance and ask me to decide.
+```
 
-[Continuous local evidence](docs/CONTINUOUS-EVIDENCE.md)
+The agent should follow the complete [CLI 1.0 operator workflow](docs/CLI-1.0-WORKFLOW.md).
+That workflow deliberately separates machine evidence from human authority.
 
-[Agent claim audit](docs/CLAIM-AUDIT.md)
+## Choose a workflow
 
-[Assessment scope](../docs/ASSESSMENT-SCOPE.md)
+| Situation | Workflow | Guide |
+|---|---|---|
+| First installation or upgrade | Self-check and offline acceptance | [Installation](docs/INSTALLATION-CHECK.md) · [Acceptance](docs/STRANGER-ACCEPTANCE.md) |
+| New repository or unfamiliar agent environment | Initialize, discover, then assess | [Operator workflow](docs/CLI-1.0-WORKFLOW.md) · [Unified assessment](docs/UNIFIED-ASSESSMENT.md) |
+| New skill, plugin, or copied agent instruction | Quarantine, native gate, optional SkillSpector evidence, human decision | [Skill-screening demo](docs/SKILL-SCREENING-DEMO.md) · [Lessons learned](docs/SKILL-SCREENING-SECOND-PASS.md) |
+| Agent says work is complete | Capture or import receipts, then audit explicit claims | [Task receipts](docs/TASK-RECEIPTS.md) · [Claim audit](docs/CLAIM-AUDIT.md) |
+| Several harnesses contributed to one task | Normalize attributed exports and evaluate operational truth | [Operational truth](docs/OPERATIONAL-TRUTH.md) · [Adapter SDK](docs/ADAPTER-SDK.md) |
+| Release or deployment decision | Bind system identity, scope, changes, evidence, and residual risks | [Release readiness](docs/RELEASE-READINESS.md) · [Change attribution](../docs/CHANGE-ATTRIBUTION.md) |
+| Organization-level maturity decision | Ingest evidence conservatively, confirm mappings, score, and plan remediation | [AISM guide](../AISM/ASSESSMENT-GUIDE.md) · [AISM remediation](docs/AISM-REMEDIATION.md) |
+| Independent falsification or Challenge Lab participation | Run or import a bounded challenge and retain raw provider evidence | [Challenge CLI](docs/CHALLENGE-CLI.md) |
 
-[Change attribution](../docs/CHANGE-ATTRIBUTION.md)
+## Harness compatibility
 
-[Release-readiness card](docs/RELEASE-READINESS.md)
+The CLI is **harness-neutral by default**. Any agent or automation that can call
+a local executable, inspect JSON, and preserve files can use the core workflow.
+That includes coding agents, research agents, browser agents, bots, orchestrators,
+CI workers, and custom runtimes.
 
-[Operational truth and agent-input monitoring](docs/OPERATIONAL-TRUTH.md)
+| Integration level | Current support | Examples |
+|---|---|---|
+| Direct CLI use | Supported | Codex, Claude Code, Hermes, OpenClaw, Antigravity, MiroFish, TinyFish, bots, Muse/Dot-style assistants, CI, and custom agents that can run commands |
+| Metadata discovery | Named indicators for selected harnesses | Codex, Claude Code, Antigravity, Hermes, OpenClaw, and Grok indicators through `safe2 doctor` |
+| Native evidence translation | Supported where an explicit adapter exists | Codex JSONL and OpenTelemetry JSON exports |
+| Provider-neutral evidence | Supported | Versioned adapter, harness, system-identity, receipt, usage, scanner, and challenge contracts |
+| Automatic account/session access | Not supported | The CLI does not log into or scrape an agent service |
+| Universal pre-install or pre-action interception | Not supported in 1.0 | Requires a harness-specific hook or an external admission layer |
 
-[Framework Home](../README.md) | [AISM](../AISM/README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [Examples](../examples/README.md) | [NEXUS](../NEXUS/)
+Do not confuse “works when invoked by this harness” with “native integration.”
+Named products change quickly; adapters must preserve provider version, scope,
+raw evidence, missing coverage, and the distinction between evidence and an
+AI SAFE² decision.
+
+## What it does not do
+
+- It does not read private prompts, credentials, environment-variable values,
+  or arbitrary configuration contents by default.
+- It does not scan a network, discover cloud accounts, or connect to remote
+  hosts unless an operator supplies an explicit supported target.
+- It does not prove that a detected harness is active, current, securely
+  configured, or using the files found on disk.
+- It does not certify AI SAFE² conformance, organizational AISM maturity,
+  successful task completion, verified billing, or absence of vulnerabilities.
+- It does not authorize remediation, installation, release, deployment,
+  exceptions, or risk acceptance.
+
+## Reference library
+
+- [Security advisories](../docs/advisories/README.md) · [Python compatibility](docs/PYTHON-COMPATIBILITY.md) · [Stability policy](docs/CLI-STABILITY.md)
+- [System identity](docs/SYSTEM-IDENTITY.md) · [Assessment scope](../docs/ASSESSMENT-SCOPE.md) · [Failure localization](docs/FAILURE-LOCALIZATION.md)
+- [Continuous evidence](docs/CONTINUOUS-EVIDENCE.md) · [OpenTelemetry](docs/OPENTELEMETRY-ADAPTER.md) · [Codex JSONL](docs/CODEX-JSONL-ADAPTER.md)
+- [Development method](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) · [Post-1.0 priorities](docs/CLI-POST-1.0-PRIORITIES.md)
+- [Framework Home](../README.md) · [AISM](../AISM/README.md) · [Examples](../examples/README.md) · [NEXUS](../NEXUS/)
 
 The `safe2` package turns repository controls, assessment logic, and evidence
 contracts into a single command surface for agents, engineers, governance
@@ -538,12 +610,20 @@ scope, freshness, provenance, and independence of supplied evidence.
 Probability ranges are attributed assessment inputs, not predictions invented
 by the CLI.
 
-## Start Here
+## Continue from your result
 
-1. Read the [AISM model](../AISM/README.md).
-2. Run the [Decision Card example](../examples/aism-decision-card/README.md).
-3. Review the [five-minute quickstart](../QUICKSTART_5_MIN.md).
-4. Use `safe2 example verify aism-decision-card` as the first installation check.
+1. If installation evidence is incomplete, run the
+   [stranger-acceptance workflow](docs/STRANGER-ACCEPTANCE.md).
+2. If the assessment has missing coverage, authorize only the specific content,
+   configuration, target, or provider evidence needed for the decision.
+3. If risks are actionable, use the
+   [AISM remediation workflow](docs/AISM-REMEDIATION.md) and retain the human
+   decision owner.
+4. If a claim needs falsification, move the bounded question into the
+   [Challenge Lab](docs/CHALLENGE-CLI.md).
+5. If the core is sufficient but integration is manual, use the
+   [post-1.0 priorities](docs/CLI-POST-1.0-PRIORITIES.md) rather than inventing
+   an undocumented native integration.
 
 ## Navigation
 

@@ -113,7 +113,11 @@ def verify_example(name: str):
             if completed.exceeded:
                 errors.append("smoke test output exceeded the byte limit")
             elif completed.returncode != 0:
-                errors.append(f"smoke test failed with exit code {completed.returncode}")
+                stderr = completed.stderr.decode("utf-8", errors="replace").strip()
+                detail = f": {stderr[-2_000:]}" if stderr else ""
+                errors.append(
+                    f"smoke test failed with exit code {completed.returncode}{detail}"
+                )
             else:
                 candidate = json.loads(completed.stdout.decode("utf-8"))
                 if not isinstance(candidate, dict):

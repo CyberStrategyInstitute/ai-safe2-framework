@@ -2,3 +2,4 @@
 safe2/data/task-receipt-demo.txt text eol=lf
 safe2/data/test-result-demo.json text eol=lf
 safe2/data/tool-result-demo.json text eol=lf
+.github/workflows/publish.yml text eol=lf

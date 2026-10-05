@@ -1,4 +1,28 @@
-# safe2 CLI consolidation
+# safe2 CLI 1.0 migration and compatibility
+
+## Upgrade from 0.9.9 to 1.0.0
+
+CLI 1.0.0 promotes the hardened 0.9.9 command and schema surface without
+renaming public `safe2` commands. Upgrade in a new virtual environment when
+possible, retain evidence with the CLI version that produced it, and run:
+
+```console
+python -m pip install --upgrade "ai-safe2[all]==1.0.0"
+safe2 --version
+safe2 self-check --strict
+safe2 acceptance run ./safe2-1.0-acceptance --strict
+safe2 acceptance verify ./safe2-1.0-acceptance
+```
+
+Do not overwrite an earlier acceptance directory. To roll back, create a fresh
+environment with the previously trusted package version and replay artifacts
+using their producing version. A package downgrade does not migrate or rewrite
+evidence.
+
+The legacy `mcp-score`, `mcp-scan`, and `mcp-safe-wrap` entry points remain
+deprecated compatibility aliases for 1.0. New automation must use `safe2`.
+See [CLI stability policy](safe2/docs/CLI-STABILITY.md) for the supported contract and
+deprecation rules.
 
 ## Verify upgrades in the 0.9.x series
 

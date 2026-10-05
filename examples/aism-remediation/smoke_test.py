@@ -22,7 +22,10 @@ def main() -> None:
     identity = ingest_identity(data.joinpath("system-identity-source-demo.json").read_bytes())
     identity_data = encoded(identity)
     with tempfile.TemporaryDirectory(prefix="safe2-aism-remediation-") as temporary:
-        root = Path(temporary)
+        # macOS exposes its temporary directory through /var, which is a
+        # system-managed symlink to /private/var. Canonicalize the trusted
+        # directory before the scope engine applies its symlink defenses.
+        root = Path(temporary).resolve()
         (root / "safe2").mkdir()
         (root / "safe2" / "app.py").write_text("VALUE = 1\n", encoding="utf-8")
         scope = build_scope(
