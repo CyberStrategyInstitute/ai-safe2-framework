@@ -31,7 +31,7 @@ Participant feedback closed through documentation and three regression cases:
 nonsynthetic declarations, preserved outage disagreement with observed/missing
 state, and rejection of unimplemented adapter contracts. The existing challenge,
 grader, reference outcomes, and contract enum remain unchanged. See
-`docs/CHALLENGE-PROVIDER-FEEDBACK.md`. No participant execution or ledger proof
+`safe2/docs/CHALLENGE-PROVIDER-FEEDBACK.md`. No participant execution or ledger proof
 was independently verified; no provider-specific accommodation was introduced.
 
 No framework control count change: 161 core controls, CP.1–CP.10, UAS as a separate 27-requirement profile. No conformance or AISM score inferred.

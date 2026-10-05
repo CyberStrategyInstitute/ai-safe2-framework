@@ -99,7 +99,7 @@
   },
   "implementations": {
     "nexus": {
-      "version": "0.4",
+      "version": "0.5.0",
       "role": "CSI first-party reference implementation",
       "required_for_framework_conformance": false,
       "entrypoint": "NEXUS/README.md",
@@ -128,6 +128,8 @@
   "discovery": {
     "human": "README.md",
     "agent": "AGENTS.md",
+    "topic_registry": "repository-topics.manifest.json",
+    "shared_documentation": "docs/README.md",
     "examples": "examples/README.md",
     "research": "research/README.md",
     "challenge_lab": "challenges/README.md",
@@ -155,7 +157,7 @@
       "module": "python -m safe2",
       "entrypoint": "safe2/README.md",
       "assessment_schema": "safe2/data/aism-assessment-v1.schema.json",
-      "challenge_workflow": "docs/CHALLENGE-CLI.md",
+      "challenge_workflow": "safe2/docs/CHALLENGE-CLI.md",
       "challenge_quickstart": "safe2 challenge quickstart 001 --output-dir my-first-run",
       "challenge_verification": "safe2 challenge verify-bundle my-first-run",
       "challenge_controlled_execution": "safe2 challenge plan 001 ... then safe2 challenge execute PLAN --authorize-process-execution",

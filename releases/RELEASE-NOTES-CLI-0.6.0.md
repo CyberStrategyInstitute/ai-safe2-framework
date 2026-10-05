@@ -106,7 +106,7 @@ safe2 evidence readiness readiness-source.json \
 > execute hosted checks, authenticate provider claims, discover every risk, or
 > authorize a release.
 
-<a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/RELEASE-READINESS.md">Read the complete release-readiness guide</a>.
+<a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/RELEASE-READINESS.md">Read the complete release-readiness guide</a>.
 
 <a id="understand-the-result"></a>
 ## 🚦 Understand the result
@@ -183,7 +183,7 @@ These are roadmap priorities, not capabilities claimed by this release.
 
 <p>
   <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/README.md">Get Started</a> ·
-  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/RELEASE-READINESS.md">Readiness Guide</a> ·
+  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/RELEASE-READINESS.md">Readiness Guide</a> ·
   <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues">Report an Issue</a> ·
   <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework">Framework Home</a>
 </p>

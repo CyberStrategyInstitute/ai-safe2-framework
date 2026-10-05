@@ -136,11 +136,12 @@ required. It must remain understandable without access to an agent's chat log.
 ## Start here
 
 1. Parse `ai-safe2.manifest.json` first.
-2. Treat `README.md` and the framework control documents it links to as the human-readable framework entry point.
-3. Treat `skills/mcp/data/ai-safe2-controls-v3.0.json` as the stable machine-readable dataset for the unchanged 161-control core taxonomy.
-4. Treat `skills/mcp/data/mcp-profile-v3.1.json` as the machine-readable CP.5.MCP v3.1 overlay containing MCP-1 through MCP-19.
-5. Do not add the 19 MCP profile controls to the 161-control framework total.
-6. Treat `00-cross-pillar/unbiased-ai/uas-profile-v1.json` as the UAS regulatory profile extension. Its 27 profile requirements do not add to the 161-control framework total and do not create CP.11 as a core Cross-Pillar control.
+2. Parse `repository-topics.manifest.json` before placing or relocating documentation.
+3. Treat `README.md` and the framework control documents it links to as the human-readable framework entry point.
+4. Treat `skills/mcp/data/ai-safe2-controls-v3.0.json` as the stable machine-readable dataset for the unchanged 161-control core taxonomy.
+5. Treat `skills/mcp/data/mcp-profile-v3.1.json` as the machine-readable CP.5.MCP v3.1 overlay containing MCP-1 through MCP-19.
+6. Do not add the 19 MCP profile controls to the 161-control framework total.
+7. Treat `00-cross-pillar/unbiased-ai/uas-profile-v1.json` as the UAS regulatory profile extension. Its 27 profile requirements do not add to the 161-control framework total and do not create CP.11 as a core Cross-Pillar control.
 
 ## Version model
 

@@ -1,9 +1,9 @@
 # AI SAFE² Challenge Lab executable evidence workflow
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
 [![Design](https://img.shields.io/badge/Docs-Challenge_Harness-820F1A?style=flat-square)](./CHALLENGE-CLI.md)
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | [CLI guide](./CHALLENGE-CLI.md)
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) | [CLI guide](./CHALLENGE-CLI.md)
 
 ---
 
@@ -14,12 +14,12 @@ real-agent effectiveness, process containment, or independent replication.
 
 ## Technology validation candidates
 
-The [technology validation guide](./TECHNOLOGY-VALIDATION.md) frames
+The [technology validation guide](../../docs/TECHNOLOGY-VALIDATION.md) frames
 clean/attacked pairs, process-mimicking attacks, composed service capabilities,
 independent side-effect observation, and learned-policy integrity tests.
 These require separate owned/versioned experiment plans; they do not alter
 Challenge 001's frozen cases or the current execution boundary. Preserve
-[assurance](./EVIDENCE-ASSURANCE.md), challenge maturity, and contribution separately.
+[assurance](../../docs/EVIDENCE-ASSURANCE.md), challenge maturity, and contribution separately.
 
 ## Implementation boundary
 

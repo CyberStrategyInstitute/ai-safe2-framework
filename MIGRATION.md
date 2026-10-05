@@ -6,7 +6,7 @@ After installing or upgrading, run `safe2 self-check --strict`. The command is
 offline and distinguishes an unsupported runtime or missing dependency (`fail`)
 from an installation whose metadata or newer Python version is not yet qualified
 (`hold`). It also verifies that every packaged evidence contract can be loaded and
-fingerprints the catalog. See [Installation Self-Check](docs/INSTALLATION-CHECK.md).
+fingerprints the catalog. See [Installation Self-Check](safe2/docs/INSTALLATION-CHECK.md).
 
 Existing `mcp-score`, `mcp-scan`, and `mcp-safe-wrap` aliases remain available,
 but new automation should use the `safe2` command surface. New 0.9.x evidence

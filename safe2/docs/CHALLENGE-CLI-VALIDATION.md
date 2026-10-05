@@ -2,12 +2,12 @@
 
 Evidence-backed handoff for fixture, translation, and controlled execution stages.
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
 [![Review](https://img.shields.io/badge/Review-Offline_Evidence-820F1A?style=flat-square)](./CHALLENGE-CLI.md)
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-[User guide](./CHALLENGE-CLI.md) | [Design](./CHALLENGE-HARNESS-DESIGN.md) | [Implementation](../safe2/challenge/README.md)
+[User guide](./CHALLENGE-CLI.md) | [Design](./CHALLENGE-HARNESS-DESIGN.md) | [Implementation](../challenge/README.md)
 
 ---
 
@@ -139,7 +139,7 @@ a scored assessment of all 161 controls or any regulatory profile.
 1. Obtain a real TENIR export and its documented semantics; verify that the adapter
    preserves meaning. Do not describe the invented example contract as upstream support.
 2. Implement the isolated live backend with explicit targets, external stop controls,
-   resource caps, and the [Rules of Engagement](../challenges/001-anthropic-multi-agent-turf-war/ROE.md).
+   resource caps, and the [Rules of Engagement](../../challenges/001-anthropic-multi-agent-turf-war/ROE.md).
 3. Freeze the live protocol, implementation/policy digests, environments, observers,
    and preregistration. Publish failures, bypass tests, and utility costs alongside successes.
 4. Commission independent operators before any C5 claim. Neither translation nor
@@ -150,7 +150,7 @@ an attacker concurrently replacing parent directories. Source exports may contai
 sensitive material and are intentionally preserved, not automatically redacted.
 Seals without a trusted signature can be recomputed by an attacker. Even authenticated
 artifacts can contain false observations. Confirmatory evidence must satisfy the
-full [Challenge evidence requirements](../challenges/001-anthropic-multi-agent-turf-war/EVIDENCE.md),
+full [Challenge evidence requirements](../../challenges/001-anthropic-multi-agent-turf-war/EVIDENCE.md),
 not just this offline contract. The candidate package version is 0.2.0; review
 the PR and remote CI results before merging or publishing a release.
 

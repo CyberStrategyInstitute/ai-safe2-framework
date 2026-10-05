@@ -1,6 +1,6 @@
 # Skill-gate hardening validation
 
-[Advisory](./advisories/2026-09-09-skill-gate-executable-scope.md) | [Runtime policy](./PYTHON-COMPATIBILITY.md) | [Release notes](./RELEASE-NOTES-CLI-0.2.0.md)
+[Advisory](../../docs/advisories/2026-09-09-skill-gate-executable-scope.md) | [Runtime policy](./PYTHON-COMPATIBILITY.md) | [Release notes](../../releases/RELEASE-NOTES-CLI-0.2.0.md)
 
 ## Observed results — 2026-09-09
 
