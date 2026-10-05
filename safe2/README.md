@@ -23,15 +23,15 @@ or turn a self-assessment into a compliance claim.
 
 | If you need to... | Start here | What you receive |
 |---|---|---|
-| Understand a workstation or repository that runs several agents | `safe2 doctor . --assess` | Harness and asset inventory, coverage gaps, findings, and a human-readable card |
+| Understand a workstation or repository that runs several agents | `safe2 doctor . --assess --card-format markdown --card-output environment-card.md` | Harness inventory, coverage gaps, findings, and a human-readable Decision Card |
 | Assess a project before adoption or release | `safe2 assess . --scan-content --inspect-config` | A sealed assessment bundle with canonical JSON and a Decision Card |
-| Screen a downloaded or newly created agent skill | `safe2 gate skill PATH --strict` | An approve, reject, or review decision with findings; the skill is never executed |
+| Screen a downloaded or newly created agent skill | `safe2 gate skill PATH --strict` | An approve or reject decision with findings; the skill is never executed |
 | Check whether an agent's completion claim has receipts | `safe2 evidence claims ...` | Evidence-consistent, contradicted, unverifiable, or limited claim results |
 | Determine which model, harness, tools, memory, and policy were assessed | `safe2 evidence system ...` | A versioned system identity graph rather than only a model name |
 | Diagnose where an agent-system failure likely occurred | `safe2 evidence diagnose ...` | Evidence-backed investigation priorities, conflicts, assumptions, and next actions |
 | Turn an AISM assessment into an actionable plan | `safe2 aism plan ...` | A remediation card with owners, dependencies, alternatives, exit criteria, and residual risk |
 | Test a governance claim rather than merely document it | `safe2 challenge quickstart 001 ...` | Replayable Challenge Lab evidence with explicit provenance and limitations |
-| Give CI a deterministic gate | `safe2 gate project .` | Stable exit behavior and machine-readable findings |
+| Give CI a deterministic gate | `safe2 gate project .` | Stable exit behavior and a human-readable findings report |
 
 If you are evaluating the CLI itself, begin with the offline
 [stranger-acceptance workflow](docs/STRANGER-ACCEPTANCE.md). It proves that
