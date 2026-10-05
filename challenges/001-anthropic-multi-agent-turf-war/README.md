@@ -32,7 +32,7 @@ safe2 challenge quickstart 001 --output-dir my-first-run
 safe2 challenge verify-bundle my-first-run
 ```
 
-Install the build containing these commands first; see the [CLI guide](../../docs/CHALLENGE-CLI.md).
+Install the build containing these commands first; see the [CLI guide](../../safe2/docs/CHALLENGE-CLI.md).
 Open the generated `decision-card.html`. It shows safety outcomes, legitimate-work
 costs, evidence gaps and next actions. Verification checks fixture mechanics and
 translation, not full T0–T6 coverage or independent live replication.

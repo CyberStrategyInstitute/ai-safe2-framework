@@ -24,11 +24,11 @@ def test_release_version_is_consistent_across_package_and_qualification() -> Non
 
 def test_release_documentation_links_exist() -> None:
     for relative in (
-        "docs/CLI-1.0-WORKFLOW.md",
-        "docs/CLI-1.0-RELEASE-QUALIFICATION.md",
-        "docs/CLI-STABILITY.md",
-        "docs/PYTHON-COMPATIBILITY.md",
-        "docs/STRANGER-ACCEPTANCE.md",
+        "safe2/docs/CLI-1.0-WORKFLOW.md",
+        "safe2/docs/CLI-1.0-RELEASE-QUALIFICATION.md",
+        "safe2/docs/CLI-STABILITY.md",
+        "safe2/docs/PYTHON-COMPATIBILITY.md",
+        "safe2/docs/STRANGER-ACCEPTANCE.md",
         "MIGRATION.md",
     ):
         assert (ROOT / relative).is_file(), relative

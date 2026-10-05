@@ -34,7 +34,7 @@ or turn a self-assessment into a compliance claim.
 | Give CI a deterministic gate | `safe2 gate project .` | Stable exit behavior and machine-readable findings |
 
 If you are evaluating the CLI itself, begin with the offline
-[stranger-acceptance workflow](../docs/STRANGER-ACCEPTANCE.md). It proves that
+[stranger-acceptance workflow](docs/STRANGER-ACCEPTANCE.md). It proves that
 the installed package can reproduce its fixed acceptance controls; it is not an
 independent security certification.
 
@@ -55,21 +55,21 @@ before any remediation, deployment, policy change, network access, or risk
 acceptance and ask me to decide.
 ```
 
-The agent should follow the complete [CLI 1.0 operator workflow](../docs/CLI-1.0-WORKFLOW.md).
+The agent should follow the complete [CLI 1.0 operator workflow](docs/CLI-1.0-WORKFLOW.md).
 That workflow deliberately separates machine evidence from human authority.
 
 ## Choose a workflow
 
 | Situation | Workflow | Guide |
 |---|---|---|
-| First installation or upgrade | Self-check and offline acceptance | [Installation](../docs/INSTALLATION-CHECK.md) · [Acceptance](../docs/STRANGER-ACCEPTANCE.md) |
-| New repository or unfamiliar agent environment | Initialize, discover, then assess | [Operator workflow](../docs/CLI-1.0-WORKFLOW.md) · [Unified assessment](../docs/UNIFIED-ASSESSMENT.md) |
-| New skill, plugin, or copied agent instruction | Quarantine, native gate, optional SkillSpector evidence, human decision | [Skill-screening demo](../docs/SKILL-SCREENING-DEMO.md) · [Lessons learned](../docs/SKILL-SCREENING-SECOND-PASS.md) |
-| Agent says work is complete | Capture or import receipts, then audit explicit claims | [Task receipts](../docs/TASK-RECEIPTS.md) · [Claim audit](../docs/CLAIM-AUDIT.md) |
-| Several harnesses contributed to one task | Normalize attributed exports and evaluate operational truth | [Operational truth](../docs/OPERATIONAL-TRUTH.md) · [Adapter SDK](../docs/ADAPTER-SDK.md) |
-| Release or deployment decision | Bind system identity, scope, changes, evidence, and residual risks | [Release readiness](../docs/RELEASE-READINESS.md) · [Change attribution](../docs/CHANGE-ATTRIBUTION.md) |
-| Organization-level maturity decision | Ingest evidence conservatively, confirm mappings, score, and plan remediation | [AISM guide](../AISM/ASSESSMENT-GUIDE.md) · [AISM remediation](../docs/AISM-REMEDIATION.md) |
-| Independent falsification or Challenge Lab participation | Run or import a bounded challenge and retain raw provider evidence | [Challenge CLI](../docs/CHALLENGE-CLI.md) |
+| First installation or upgrade | Self-check and offline acceptance | [Installation](docs/INSTALLATION-CHECK.md) · [Acceptance](docs/STRANGER-ACCEPTANCE.md) |
+| New repository or unfamiliar agent environment | Initialize, discover, then assess | [Operator workflow](docs/CLI-1.0-WORKFLOW.md) · [Unified assessment](docs/UNIFIED-ASSESSMENT.md) |
+| New skill, plugin, or copied agent instruction | Quarantine, native gate, optional SkillSpector evidence, human decision | [Skill-screening demo](docs/SKILL-SCREENING-DEMO.md) · [Lessons learned](docs/SKILL-SCREENING-SECOND-PASS.md) |
+| Agent says work is complete | Capture or import receipts, then audit explicit claims | [Task receipts](docs/TASK-RECEIPTS.md) · [Claim audit](docs/CLAIM-AUDIT.md) |
+| Several harnesses contributed to one task | Normalize attributed exports and evaluate operational truth | [Operational truth](docs/OPERATIONAL-TRUTH.md) · [Adapter SDK](docs/ADAPTER-SDK.md) |
+| Release or deployment decision | Bind system identity, scope, changes, evidence, and residual risks | [Release readiness](docs/RELEASE-READINESS.md) · [Change attribution](../docs/CHANGE-ATTRIBUTION.md) |
+| Organization-level maturity decision | Ingest evidence conservatively, confirm mappings, score, and plan remediation | [AISM guide](../AISM/ASSESSMENT-GUIDE.md) · [AISM remediation](docs/AISM-REMEDIATION.md) |
+| Independent falsification or Challenge Lab participation | Run or import a bounded challenge and retain raw provider evidence | [Challenge CLI](docs/CHALLENGE-CLI.md) |
 
 ## Harness compatibility
 
@@ -107,10 +107,10 @@ AI SAFE² decision.
 
 ## Reference library
 
-- [Security advisories](../docs/advisories/README.md) · [Python compatibility](../docs/PYTHON-COMPATIBILITY.md) · [Stability policy](../docs/CLI-STABILITY.md)
-- [System identity](../docs/SYSTEM-IDENTITY.md) · [Assessment scope](../docs/ASSESSMENT-SCOPE.md) · [Failure localization](../docs/FAILURE-LOCALIZATION.md)
-- [Continuous evidence](../docs/CONTINUOUS-EVIDENCE.md) · [OpenTelemetry](../docs/OPENTELEMETRY-ADAPTER.md) · [Codex JSONL](../docs/CODEX-JSONL-ADAPTER.md)
-- [Development method](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) · [Post-1.0 priorities](../docs/CLI-POST-1.0-PRIORITIES.md)
+- [Security advisories](../docs/advisories/README.md) · [Python compatibility](docs/PYTHON-COMPATIBILITY.md) · [Stability policy](docs/CLI-STABILITY.md)
+- [System identity](docs/SYSTEM-IDENTITY.md) · [Assessment scope](../docs/ASSESSMENT-SCOPE.md) · [Failure localization](docs/FAILURE-LOCALIZATION.md)
+- [Continuous evidence](docs/CONTINUOUS-EVIDENCE.md) · [OpenTelemetry](docs/OPENTELEMETRY-ADAPTER.md) · [Codex JSONL](docs/CODEX-JSONL-ADAPTER.md)
+- [Development method](../docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) · [Post-1.0 priorities](docs/CLI-POST-1.0-PRIORITIES.md)
 - [Framework Home](../README.md) · [AISM](../AISM/README.md) · [Examples](../examples/README.md) · [NEXUS](../NEXUS/)
 
 The `safe2` package turns repository controls, assessment logic, and evidence
@@ -169,7 +169,7 @@ Initialization creates `.safe2/config.toml` exclusively and refuses to replace
 an existing file. The secure defaults collect no prompts, file contents,
 environment-variable values, or network telemetry. Configuration precedence is
 explicit command input, `SAFE2_CONFIG`, the nearest project configuration, then
-built-in defaults. See the [configuration contract](../docs/CLI-CONFIGURATION.md)
+built-in defaults. See the [configuration contract](docs/CLI-CONFIGURATION.md)
 for profiles, limits, trust boundaries, and recovery.
 
 `safe2 assess` is the bounded golden path. Without content consent it produces
@@ -247,11 +247,11 @@ pytest tests/ scanner/tests/
 | `safe2 schema list` | Discover packaged machine-readable contracts | Returns stable schema identifiers as JSON |
 | `safe2 schema export NAME` | Export one versioned JSON Schema | Writes to stdout or an integration-owned file |
 | `safe2 schema validate NAME FILE` | Validate an evidence artifact | Exit 0 valid, 1 contract violation, 2 unreadable input |
-| `safe2 challenge ...` | Run inert fixtures or explicitly authorized bounded evaluators; import, compare, verify, sign, and report evidence | [Challenge CLI guide](../docs/CHALLENGE-CLI.md); bounded execution is not sandboxing or independent replication |
+| `safe2 challenge ...` | Run inert fixtures or explicitly authorized bounded evaluators; import, compare, verify, sign, and report evidence | [Challenge CLI guide](docs/CHALLENGE-CLI.md); bounded execution is not sandboxing or independent replication |
 
 ## Challenge Lab Evidence Workflow
 
-The [Challenge CLI guide](../docs/CHALLENGE-CLI.md) provides an offline fixture
+The [Challenge CLI guide](docs/CHALLENGE-CLI.md) provides an offline fixture
 workflow and an opt-in controlled evaluator seam for the same six Challenge 001
 scenarios. Plans bind the named executable and limits before execution; receipts
 bind requests, responses, source evidence, normalized results, and optional system
@@ -516,8 +516,8 @@ accuracy, authorization, control effectiveness, or conformance.
 
 Validate third-party adapter descriptors and translate explicit Codex CLI JSONL
 exports without retaining prompts, commands, or output content. See the
-[adapter SDK](../docs/ADAPTER-SDK.md) and
-[Codex reference adapter](../docs/CODEX-JSONL-ADAPTER.md).
+[adapter SDK](docs/ADAPTER-SDK.md) and
+[Codex reference adapter](docs/CODEX-JSONL-ADAPTER.md).
 
 ```bash
 safe2 adapter codex-jsonl codex-trace.jsonl \
@@ -529,13 +529,13 @@ endorsements, independent truth verification, or AI SAFE² conformance claims.
 
 OpenTelemetry users can also import offline OTLP/JSON trace files and export
 non-content SAFE² metadata. See the
-[OpenTelemetry adapter](../docs/OPENTELEMETRY-ADAPTER.md).
+[OpenTelemetry adapter](docs/OPENTELEMETRY-ADAPTER.md).
 
 For opt-in repeated change evidence, see
-[Continuous Local Evidence](../docs/CONTINUOUS-EVIDENCE.md).
+[Continuous Local Evidence](docs/CONTINUOUS-EVIDENCE.md).
 
 For evidence-bounded completion and failure disclosure review, see the
-[Agent Claim Audit](../docs/CLAIM-AUDIT.md).
+[Agent Claim Audit](docs/CLAIM-AUDIT.md).
 
 ## Unified Evidence Run Manifest
 
@@ -613,16 +613,16 @@ by the CLI.
 ## Continue from your result
 
 1. If installation evidence is incomplete, run the
-   [stranger-acceptance workflow](../docs/STRANGER-ACCEPTANCE.md).
+   [stranger-acceptance workflow](docs/STRANGER-ACCEPTANCE.md).
 2. If the assessment has missing coverage, authorize only the specific content,
    configuration, target, or provider evidence needed for the decision.
 3. If risks are actionable, use the
-   [AISM remediation workflow](../docs/AISM-REMEDIATION.md) and retain the human
+   [AISM remediation workflow](docs/AISM-REMEDIATION.md) and retain the human
    decision owner.
 4. If a claim needs falsification, move the bounded question into the
-   [Challenge Lab](../docs/CHALLENGE-CLI.md).
+   [Challenge Lab](docs/CHALLENGE-CLI.md).
 5. If the core is sufficient but integration is manual, use the
-   [post-1.0 priorities](../docs/CLI-POST-1.0-PRIORITIES.md) rather than inventing
+   [post-1.0 priorities](docs/CLI-POST-1.0-PRIORITIES.md) rather than inventing
    an undocumented native integration.
 
 ## Navigation

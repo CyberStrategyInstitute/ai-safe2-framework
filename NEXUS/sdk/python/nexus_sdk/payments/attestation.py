@@ -50,8 +50,16 @@ class HMACTestAttestationVerifier(AttestationVerifier):
 
     @staticmethod
     def message(measurement: RuntimeMeasurement) -> bytes:
-        return "|".join((measurement.workload_id or "", measurement.baseline_digest(),
-                         measurement.measured_at, measurement.verifier_challenge or "")).encode()
+        return "|".join((
+            measurement.runtime_measurement_id,
+            measurement.workload_id or "",
+            str(measurement.attested),
+            measurement.attestation_method,
+            measurement.baseline_digest(),
+            measurement.measured_at,
+            str(measurement.max_age_seconds),
+            measurement.verifier_challenge or "",
+        )).encode()
 
     def verify(self, measurement: RuntimeMeasurement, *, expected_baseline: Optional[str],
                now: Optional[datetime] = None) -> AttestationResult:

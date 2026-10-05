@@ -141,6 +141,6 @@ scan patterns, sparse clone steps, and the hook JSON scan workflow on Windows.
 
 ## Next: Connect to the NEXUS Mesh
 
-See `integrations/NEXUS-love-equation.md` to share one `AISAFE2Engine`
+See the centralized [xAI/Grok legacy integration guide](../../NEXUS/integrations/legacy-sovereign-runtimes/xai-grok-love-equation.md) to share one `AISAFE2Engine`
 instance across all sovereign runtimes (LangChain, CrewAI, Make.com, Cursor)
 for a unified Love Score and audit chain across your entire agentic stack.

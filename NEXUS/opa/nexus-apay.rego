@@ -1,6 +1,6 @@
 # nexus-apay.rego
 # NEXUS CP.5.APAY - Agentic Payments Integrity Profile
-# Cyber Strategy Institute | AI SAFE2 v3.1 | NEXUS-A2A v0.4
+# Cyber Strategy Institute | AI SAFE2 v3.1 | NEXUS v0.5.0 | CP.5.APAY/0.4
 #
 # Deploy: opa run --server --bundle ./opa/
 # Query:  POST http://localhost:8181/v1/data/nexus/apay/decision

@@ -1,7 +1,7 @@
 <!-- AI-SAFE2-UX:START -->
 [![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
 [![Surface: Example](https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square)](../README.md)
-[![Context: CLI 0.8](https://img.shields.io/badge/CLI-0.8-808080?style=flat-square)](../../docs/AISM-REMEDIATION.md)
+[![Context: CLI 0.8](https://img.shields.io/badge/CLI-0.8-808080?style=flat-square)](../../safe2/docs/AISM-REMEDIATION.md)
 
 [Framework Home](../../README.md) | [Cross-Pillar Controls](../../00-cross-pillar/) | [Examples Index](../README.md) | [AISM](../../AISM/) | [CLI](../../safe2/README.md)
 
@@ -32,7 +32,7 @@ safe2 example verify aism-remediation
 ```
 
 For operational use, follow the complete
-[AISM remediation guide](../../docs/AISM-REMEDIATION.md) and replace every
+[AISM remediation guide](../../safe2/docs/AISM-REMEDIATION.md) and replace every
 fixture with evidence from the exact system and deployment scope under review.
 
 <!-- AI-SAFE2-UX-FOOTER:START -->

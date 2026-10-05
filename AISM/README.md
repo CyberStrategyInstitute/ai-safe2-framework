@@ -211,7 +211,7 @@ Completed actions require available completion evidence. Reassessment records
 status transitions without silently changing the normative maturity score or
 authorizing implementation.
 
-See the [AISM remediation guide](../docs/AISM-REMEDIATION.md).
+See the [AISM remediation guide](../safe2/docs/AISM-REMEDIATION.md).
 
 See the executable [Decision Card example](../examples/aism-decision-card/).
 

@@ -1,0 +1,94 @@
+name: Publish NEXUS to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Package index used for release-candidate validation
+        required: true
+        default: testpypi
+        type: choice
+        options:
+          - testpypi
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build:
+    name: Build and verify NEXUS distribution
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'nexus-v')
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: NEXUS
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.12"
+      - name: Install build tools
+        run: python -m pip install build twine pytest
+      - name: Run NEXUS tests
+        run: python -m pytest sdk/python/tests -q
+      - name: Build wheel and source distribution
+        run: python -m build --outdir dist
+      - name: Check package metadata
+        run: python -m twine check dist/*
+      - name: Verify clean wheel installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m venv wheel-smoke
+          wheel-smoke/bin/python -m pip install --no-deps dist/*.whl
+          cd /tmp
+          "$GITHUB_WORKSPACE/NEXUS/wheel-smoke/bin/python" -c \
+            "import nexus_sdk; import nexus_sdk.payments; assert nexus_sdk.__version__ == '0.5.0'; print(nexus_sdk.__version__)"
+      - name: Upload verified distribution
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: nexus-dist
+          path: NEXUS/dist/
+          if-no-files-found: error
+          retention-days: 30
+
+  publish-testpypi:
+    name: Publish NEXUS to TestPyPI
+    if: github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/project/nexus-a2a-sdk/
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: nexus-dist
+          path: dist/
+      - name: Publish verified NEXUS package
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-pypi:
+    name: Publish NEXUS to PyPI
+    if: github.event_name == 'release' && github.event.release.prerelease == false
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/nexus-a2a-sdk/
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: nexus-dist
+          path: dist/
+      - name: Publish verified NEXUS package
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1

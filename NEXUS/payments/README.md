@@ -2,11 +2,24 @@
 
 **Continuous Transaction Integrity and Authority Assurance for autonomous systems**
 
-[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM) | [NEXUS](../README.md) | [Adapter Guide](ADAPTER-GUIDE.md) | [Threat Model](THREAT-MODEL.md) | [Controls](CONTROLS.md) | [Challenge Lab](CHALLENGE-LAB.md)
+[Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM) | [NEXUS](../README.md) | [Adapter Guide](ADAPTER-GUIDE.md) | [Sovereign Payment Gateway](SOVEREIGN-GATEWAY.md) | [Threat Model](THREAT-MODEL.md) | [Controls](CONTROLS.md) | [Challenge Lab](CHALLENGE-LAB.md)
 
 **Previous:** [← NEXUS](../README.md) | **Next:** [Gateway / Runtime Enforcement →](../../gateway)
 
 ---
+
+## Contents
+
+- [Status](#status)
+- [Why this profile exists](#why-this-profile-exists)
+- [Position in the stack](#position-in-the-stack)
+- [Standards landscape](#standards-landscape)
+- [Control set](#the-control-set)
+- [Execution sequence](#execution-sequence)
+- [Quick start](#quick-start)
+- [MVP acceptance gates](#mvp-acceptance-gates)
+- [Buyer position](#buyer-position)
+- [Standards engagement](#standards-engagement)
 
 ## Status
 
@@ -19,7 +32,7 @@
 | Transaction firewall (deterministic PDP) | Implemented, tested |
 | Credential broker contract | Implemented; **no production signer binding ships here** |
 | Evidence ledger and PTR | Implemented, tested |
-| `opa/nexus-apay.rego` | Written; input contract test-enforced. **Not validated against a live OPA server in this repository's CI.** |
+| `opa/nexus-apay.rego` | Written; input contract and Policy Parity Guard test-enforced. **Not validated against a live OPA server in this repository's CI.** |
 | Mandate Bridge (AP2 v0.2) | **Authoritative reference profile; deployment verifier required** |
 | Card Trust Bridge (Visa TAP) | **Authoritative recognition profile; deployment verifier required** |
 | Agent Token Bridge (Mastercard AP4M) | **Verifier-evidence profile; no public wire compatibility claimed** |
@@ -307,6 +320,30 @@ A release does not claim production assurance unless it demonstrates **all** of 
 
 The reference implementation in `nexus_sdk.payments` demonstrates each of these **in test**. Narrow adapter profiles are implemented, but none is demonstrated against a live rail in this repository. That is the gap between a reference profile and a deployable product, and it is stated rather than papered over.
 
+Ambiguous post-submission outcomes are governed by the draft
+[Governed Payment Recovery](RECOVERY.md) extension. It requires durable,
+authorization-bound cases, bounded observation, authoritative truth, atomic
+exposure accounting, and exposure-preserving escalation rather than blind retry.
+
+Deployed rules are governed by the draft [Policy Parity Guard](POLICY-PARITY.md)
+extension. It requires authenticated evaluator identity, pinned policy-bundle
+identity, exact input binding, freshness, and deterministic agreement with the
+reference firewall before policy authorization can reach Key Guardian.
+
+Rail activation is governed by the draft
+[Sandbox Rail Readiness](SANDBOX-READINESS.md) extension. Authenticated sandbox
+evidence from independent counterparties must cover mutation, replay,
+downgrade, revocation, timeout, reconciliation, settlement, and failure paths;
+one passing run permits at most observe-only operation.
+
+Production admission is governed by the draft
+[Deployment Proof & Readiness](DEPLOYMENT-READINESS.md) extension. It binds the
+exact deployment, execution-plane result, sandbox report, policy profile,
+operational drills, evidence lifecycle, ownership, jurisdiction, independent
+assessors, and a separate change approver into one short-lived signed decision.
+Missing or untrusted proof produces a signed refusal and permits only disabled
+mode.
+
 ---
 
 ## Buyer position
@@ -364,4 +401,4 @@ NEXUS/sdk/python/tests/test_apay_opa_contract.py  policy/builder drift guard
 
 ---
 
-*AI SAFE² v3.1 · CP.5.APAY draft profile · NEXUS v0.4 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.1 · CP.5.APAY/0.4 draft profile · NEXUS v0.5.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*

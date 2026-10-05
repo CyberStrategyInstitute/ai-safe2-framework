@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "rule": "one canonical topic home, many contextual references",
+  "shared_documentation": {
+    "root": "docs/",
+    "entrypoint": "docs/README.md",
+    "scope": "repository-wide governance, assurance, engineering, templates, and advisories"
+  },
+  "topics": [
+    {"id": "framework", "root": ".", "human_entrypoint": "README.md", "agent_entrypoint": "AGENTS.md", "machine_entrypoint": "ai-safe2.manifest.json"},
+    {"id": "cross-pillar", "root": "00-cross-pillar/", "human_entrypoint": "00-cross-pillar/README.md"},
+    {"id": "pillar-1", "root": "01-sanitize-isolate/", "human_entrypoint": "01-sanitize-isolate/README.md"},
+    {"id": "pillar-2", "root": "02-audit-inventory/", "human_entrypoint": "02-audit-inventory/README.md"},
+    {"id": "pillar-3", "root": "03-fail-safe-recovery/", "human_entrypoint": "03-fail-safe-recovery/README.md"},
+    {"id": "pillar-4", "root": "04-engage-monitor/", "human_entrypoint": "04-engage-monitor/README.md"},
+    {"id": "pillar-5", "root": "05-evolve-educate/", "human_entrypoint": "05-evolve-educate/README.md"},
+    {"id": "aism", "root": "AISM/", "human_entrypoint": "AISM/README.md"},
+    {"id": "nexus", "root": "NEXUS/", "human_entrypoint": "NEXUS/DOCUMENTATION.md", "agent_entrypoint": "NEXUS/AGENTS.md", "machine_entrypoint": "NEXUS/nexus-docs.manifest.json"},
+    {"id": "safe2-cli", "root": "safe2/", "human_entrypoint": "safe2/README.md", "agent_entrypoint": "safe2/AGENTS.md", "machine_entrypoint": "safe2/safe2-docs.manifest.json"},
+    {"id": "examples", "root": "examples/", "human_entrypoint": "examples/README.md"},
+    {"id": "research", "root": "research/", "human_entrypoint": "research/README.md"},
+    {"id": "challenge-lab", "root": "challenges/", "human_entrypoint": "challenges/README.md"},
+    {"id": "scanner", "root": "scanner/", "human_entrypoint": "scanner/README.md"},
+    {"id": "gateway", "root": "gateway/", "human_entrypoint": "gateway/README.md"},
+    {"id": "dashboard", "root": "dashboard/", "human_entrypoint": "dashboard/README.md"},
+    {"id": "skills", "root": "skills/", "human_entrypoint": "skills/README.md"},
+    {"id": "forge-act", "root": "FORGE-Act/", "human_entrypoint": "FORGE-Act/README.md"},
+    {"id": "guides", "root": "guides/", "human_entrypoint": "guides/README.md"},
+    {"id": "releases", "root": "releases/", "human_entrypoint": "releases/README.md"},
+    {"id": "resources", "root": "resources/", "human_entrypoint": "resources/readme.md"}
+  ]
+}

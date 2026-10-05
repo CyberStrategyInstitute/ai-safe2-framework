@@ -1,0 +1,17 @@
+{
+  "format": "safe2-documentation-manifest",
+  "manifest_version": "1.0.0",
+  "component": "SAFE2 CLI",
+  "component_version": "1.0.0",
+  "canonical_root": "safe2/",
+  "entry_points": [
+    {"audience": "all", "purpose": "overview", "path": "README.md"},
+    {"audience": "human", "purpose": "documentation-map", "path": "docs/README.md"},
+    {"audience": "agent", "purpose": "instructions", "path": "AGENTS.md"},
+    {"audience": "operator", "purpose": "configuration", "path": "docs/CLI-CONFIGURATION.md"},
+    {"audience": "operator", "purpose": "first-run-workflow", "path": "docs/CLI-1.0-WORKFLOW.md"},
+    {"audience": "developer", "purpose": "adapter-sdk", "path": "docs/ADAPTER-SDK.md"},
+    {"audience": "reviewer", "purpose": "acceptance", "path": "docs/STRANGER-ACCEPTANCE.md"},
+    {"audience": "maintainer", "purpose": "post-1.0-priorities", "path": "docs/CLI-POST-1.0-PRIORITIES.md"}
+  ]
+}

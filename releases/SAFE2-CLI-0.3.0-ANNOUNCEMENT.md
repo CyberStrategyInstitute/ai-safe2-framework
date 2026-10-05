@@ -17,7 +17,7 @@ Those are evidence assessments—not a claim to measure an agent's intent or cer
 
 The framework remains AI SAFE² v3.1 with 161 controls. This update strengthens the CLI evidence workflow.
 
-[See the walkthrough](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/TASK-RECEIPTS.md)
+[See the walkthrough](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/TASK-RECEIPTS.md)
 
 Which missing receipt would save your team the most time: test results, tool failures, or the task that consumed the budget?
 
@@ -29,7 +29,7 @@ SAFE2 CLI 0.3.0 adds task receipts, fresh pytest evidence, offline rechecking, a
 
 Evidence—not an honesty score. Passing tests—not automatic task acceptance.
 
-[Walkthrough](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/docs/TASK-RECEIPTS.md)
+[Walkthrough](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/safe2/docs/TASK-RECEIPTS.md)
 
 ## Founder follow-up comment
 

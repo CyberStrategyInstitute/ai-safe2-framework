@@ -88,7 +88,7 @@ Legacy `Mcp-Session-Id` may be recorded as a compatibility state handle. It is n
 
 ## Evidence Quality Rules
 
-The [offline CLI fixture](../../docs/CHALLENGE-CLI.md) exercises a bounded subset
+The [offline CLI fixture](../../safe2/docs/CHALLENGE-CLI.md) exercises a bounded subset
 of these mechanics. It is not a complete confirmatory evidence bundle: it does
 not supply live-agent traces, cryptographic action approvals, container identity,
 or independent observers. Fixture C2 status must not be promoted to live C3/C5

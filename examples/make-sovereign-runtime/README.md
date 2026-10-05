@@ -114,7 +114,6 @@ examples/make-sovereign-runtime/
 │   └── policy.yaml                 Machine-readable control registry
 │
 ├── integrations/
-│   ├── NEXUS-love-equation.md      Scenario-boundary pattern + unified score
 │   └── make-mcp-security.md        MCP scope risk matrix + safe token guide
 │
 ├── make-skill/
@@ -169,6 +168,8 @@ PYTHONPATH=enforcement python3 examples/make_webhook_scenario.py
 ---
 
 ## Connect to the NEXUS Mesh
+
+See the centralized [Make.com legacy integration guide](../../NEXUS/integrations/legacy-sovereign-runtimes/make-love-equation.md).
 
 ```
 examples/

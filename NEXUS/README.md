@@ -1,15 +1,15 @@
-# NEXUS-A2A v0.4
+# NEXUS v0.5.0
 
 **Non-repudiable, Extensible, eXecutive-Unified, Sovereign Agent-to-Agent Governance**
 
-[![NEXUS](https://img.shields.io/badge/NEXUS-v0.4.0-820F1A?style=flat-square)](CHANGELOG.md)
+[![NEXUS](https://img.shields.io/badge/NEXUS-v0.5.0-820F1A?style=flat-square)](CHANGELOG.md)
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![License](https://img.shields.io/badge/License-Apache_2.0-808080?style=flat-square)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-298_passing-2ea44f?style=flat-square)](sdk/python/tests)
+[![NEXUS CI](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/workflows/ci.yml)
 
 *Cyber Strategy Institute reference implementation for governed agent-to-agent, agent-to-tool, and agent-to-payment enforcement*
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM) | [MCP Profile](../00-cross-pillar/cp5_mcp_server_security.md) | [**Payments Profile**](payments/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
+[Framework Home](../README.md) | [Documentation Map](DOCUMENTATION.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM) | [MCP Profile](../00-cross-pillar/cp5_mcp_server_security.md) | [**Payments Profile**](payments/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 **Previous:** [← AISM](../AISM) | **Next:** [Gateway / Runtime Enforcement →](../gateway)
 
@@ -39,7 +39,33 @@ Organizations do not have to deploy NEXUS to claim AI SAFE² conformance. They m
 
 ---
 
-## What changed in v0.4
+## What changed in v0.5
+
+v0.5 turns the payment integrity profile into a composed **Sovereign Payment
+Gateway** reference implementation. The agent can propose a payment, but it
+cannot obtain unrestricted keys, widen authority, reinterpret a timeout as
+permission to retry, or declare its own settlement truth.
+
+The release adds durable gateway state, Key Guardian, independent policy and
+runtime authorities, transaction-bound human approval, authoritative settlement
+observation, governed recovery, policy-parity enforcement, sandbox rail
+readiness, and deployment-proof decisions. These components remain reference
+implementations until an operator binds production storage, protected signing,
+authenticated rail integrations, and independently controlled trust roots.
+
+Start with the [Sovereign Payment Gateway](payments/SOVEREIGN-GATEWAY.md) and
+[Deployment Proof & Readiness](payments/DEPLOYMENT-READINESS.md) guides.
+
+### Compatibility boundary
+
+The Python distribution is `nexus-a2a-sdk`; applications import it as
+`nexus_sdk`. Package release 0.5.0 retains the `CP.5.APAY/0.4` profile,
+schema filenames, policy identifiers, and wire contracts introduced in v0.4.
+The new gateway composes and hardens those contracts; it does not silently
+revise them. A future profile revision will use new, explicitly versioned
+identifiers and migration guidance.
+
+## Payment foundation introduced in v0.4
 
 v0.4 adds the **agent-to-payment enforcement plane** as [CP.5.APAY](payments/README.md), the Agentic Payments Integrity Profile.
 
@@ -59,7 +85,7 @@ Two AISM invariants are added alongside the existing six: **I-7 Runtime-Bound Au
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                            NEXUS-A2A v0.4                                   │
+│                            NEXUS v0.5.0                                     │
 ├───────────┬─────────────────────────────────────────────────────────────────┤
 │ L7        │ Value Integrity        CP.5.APAY: mandates, runtime binding,    │
 │           │                        containment, revocation, PTR evidence    │
@@ -104,7 +130,7 @@ NEXUS wraps the user's stack. It does not replace the model, agent framework, to
 | ------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------- |
 | **East-west: agent to agent**   | Identity, delegation, authority, lineage, evidence | v0.3 implementation                                                     |
 | **Agent-to-tool: MCP/tool**     | CP.5.MCP enforcement contract and adapter path     | v3.1 adapter contract present; production implementation still required |
-| **Agent-to-payment: value**     | CP.5.APAY mandate, runtime, containment, evidence  | **v0.4 core and narrow reference adapters implemented and tested**      |
+| **Agent-to-payment: value**     | CP.5.APAY plus Sovereign Payment Gateway controls  | **v0.5 reference implementation; production bindings still required**   |
 | **North-south: model/provider** | Integrates with AI SAFE² gateway/runtime controls  | Reference integration path                                              |
 
 ### MCP status is intentionally explicit
@@ -145,6 +171,8 @@ pip install -e .
 ```
 
 > **v0.4 packaging fix.** Prior releases declared an invalid `build-backend`, which made the package uninstallable from source. Corrected to `setuptools.build_meta`.
+
+The PyPI distribution is `nexus-a2a-sdk`; the Python import is `nexus_sdk`.
 
 ---
 
@@ -371,4 +399,4 @@ See:
 
 ---
 
-*AI SAFE² v3.1 reference implementation · NEXUS v0.4 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.1 reference implementation · NEXUS v0.5.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*

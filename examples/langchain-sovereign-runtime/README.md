@@ -188,7 +188,7 @@ langchain_handler = SovereignCallbackHandler(engine=shared_engine)
 # → One compliance score. One audit chain. One HEAR gate.
 ```
 
-See [integrations/NEXUS-mesh.md](./integrations/NEXUS-mesh.md).
+See the centralized [legacy NEXUS Mesh guide](../../NEXUS/integrations/legacy-sovereign-runtimes/NEXUS-mesh.md).
 
 ---
 
@@ -234,7 +234,6 @@ langchain-sovereign-runtime/
 │   ├── pass1_static.sh          ← Import, config, policy integrity
 │   └── pass2_runtime.sh         ← Live enforcement verification
 ├── integrations/
-│   ├── NEXUS-mesh.md            ← Multi-framework shared engine guide
 │   └── langsmith-integration.md ← LangSmith + AI SAFE² tracing
 └── ci-cd/
     └── github-actions-langchain-safe.yml

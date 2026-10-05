@@ -1,6 +1,6 @@
 """
 nexus_sdk.payments - CP.5.APAY Agentic Payments Integrity Profile
-Cyber Strategy Institute | NEXUS-A2A v0.4 | AI SAFE2 v3.1
+Cyber Strategy Institute | NEXUS v0.5.0 | CP.5.APAY/0.4 | AI SAFE2 v3.1
 
 The agent-to-payment enforcement plane.
 
@@ -87,6 +87,95 @@ from nexus_sdk.payments.gateway import (
     SettlementState,
 )
 from nexus_sdk.payments.opa_input import OPA_INPUT_FIELDS, build_opa_input
+from nexus_sdk.payments.execution_plane import (
+    ComponentAssurance,
+    CredentialReleaseStateStore,
+    ExecutionRecord,
+    ExecutionState,
+    ExecutionTransitionError,
+    GatewayReadiness,
+    NEXUSPaymentExecutionPlane,
+    ReplayDecision,
+    SettlementStateStore,
+    TransactionalAuthorityStore,
+    TransactionalReplayStore,
+)
+from nexus_sdk.payments.sqlite_state import (
+    ExposureCeilingExceededError,
+    SQLiteGatewayStateStore,
+    StateConflictError,
+)
+from nexus_sdk.payments.key_guardian import (
+    CredentialReleaseEnvelope,
+    HumanIntentAuthorizationReceipt,
+    InProcessHMACReceiptAuthenticator,
+    InProcessHMACTestBackend,
+    KeyGuardianClient,
+    KeyGuardianTransport,
+    NullKeyGuardianTransport,
+    PolicyAuthorizationReceipt,
+    ProtectedSigningBackend,
+    ReceiptAuthenticator,
+    ReferenceKeyGuardianService,
+    RuntimeAuthorizationReceipt,
+)
+from nexus_sdk.payments.policy_authority import (
+    DeterministicPolicyAuthority,
+    PolicyAuthorityDecision,
+    PolicyDefinition,
+    PolicyReceiptIssuer,
+)
+from nexus_sdk.payments.policy_parity import (
+    AuthenticatedPolicyEvaluator,
+    DeployedPolicyEvaluation,
+    ParityEnforcedPolicyAuthority,
+    ParityPolicyAuthorityDecision,
+    PolicyEvaluationAuthenticator,
+    PolicyInputProvider,
+    PolicyParityProfile,
+    PolicyParityReport,
+)
+from nexus_sdk.payments.runtime_verifier import (
+    IndependentRuntimeVerifier,
+    RuntimeReceiptIssuer,
+    RuntimeVerificationDecision,
+    RuntimeVerifierProfile,
+)
+from nexus_sdk.payments.human_intent import (
+    HumanApprovalEvidence,
+    HumanApprovalEvidenceVerifier,
+    HumanIntentAuthorityProfile,
+    InMemoryTestApprovalChallengeStore,
+    InProcessHMACTestHumanApprovalVerifier,
+    TrustedIntentAuthority,
+    TrustedTransactionRendering,
+)
+from nexus_sdk.payments.settlement_truth import (
+    AuthoritativeSettlementObserver,
+    RailSettlementEvidence,
+    RetryDirective,
+    SettlementEvidenceVerifier,
+    SettlementObservation,
+    SettlementObserverProfile,
+    SettlementTruth,
+)
+from nexus_sdk.payments.coordinator import (
+    CoordinatedPayment,
+    CoordinatorConflictError,
+    PaymentRailSubmitter,
+    PreparedPayment,
+    RailSubmissionReceipt,
+    RailSubmissionUncertainError,
+    SovereignPaymentCoordinator,
+)
+from nexus_sdk.payments.reconciliation import (
+    DeterministicReconciliationAuthority,
+    ReconciliationCase,
+    ReconciliationConflictError,
+    ReconciliationPolicy,
+    ReconciliationResult,
+    ReconciliationStatus,
+)
 from nexus_sdk.payments.adapters import (
     AP2Binding,
     AgenticTokenBinding,
@@ -112,6 +201,25 @@ from nexus_sdk.payments.user_control import UserControlDecision, UserControlPoli
 from nexus_sdk.payments.conformance import (
     ConformanceFinding, ConformanceReport, RailBindingCase, RailBindingConformanceSuite,
     RailBindingContract,
+)
+from nexus_sdk.payments.sandbox_readiness import (
+    RailActivationMode,
+    SandboxEvidenceVerifier,
+    SandboxRailReadinessGate,
+    SandboxReadinessProfile,
+    SandboxReadinessReport,
+    SandboxRunEvidence,
+)
+from nexus_sdk.payments.deployment_readiness import (
+    DEFAULT_DEPLOYMENT_CONTROLS,
+    DeploymentApprovalEvidence,
+    DeploymentApprovalVerifier,
+    DeploymentControlEvidence,
+    DeploymentEvidenceVerifier,
+    DeploymentReadinessAuthority,
+    DeploymentReadinessDecision,
+    DeploymentReadinessIssuer,
+    DeploymentReadinessProfile,
 )
 from nexus_sdk.payments.x402_variable import (
     EscrowPhase, VariableCharge, X402V2EscrowBinding, X402V2UptoBinding,
@@ -156,6 +264,48 @@ __all__ = [
     "SettlementState", "HumanApprovalVerifier", "NullHumanApprovalVerifier",
     # OPA binding
     "OPA_INPUT_FIELDS", "build_opa_input",
+    # Sovereign Payment Gateway execution contracts
+    "ComponentAssurance", "ExecutionRecord", "ExecutionState",
+    "ExecutionTransitionError", "GatewayReadiness", "NEXUSPaymentExecutionPlane",
+    "ReplayDecision",
+    "CredentialReleaseStateStore",
+    "SettlementStateStore", "TransactionalAuthorityStore", "TransactionalReplayStore",
+    "ExposureCeilingExceededError", "SQLiteGatewayStateStore", "StateConflictError",
+    # Isolated credential release
+    "CredentialReleaseEnvelope", "HumanIntentAuthorizationReceipt",
+    "InProcessHMACReceiptAuthenticator",
+    "InProcessHMACTestBackend", "KeyGuardianClient",
+    "KeyGuardianTransport", "NullKeyGuardianTransport", "PolicyAuthorizationReceipt",
+    "ProtectedSigningBackend", "ReceiptAuthenticator", "ReferenceKeyGuardianService",
+    "RuntimeAuthorizationReceipt",
+    # Independent deterministic policy issuance
+    "DeterministicPolicyAuthority", "PolicyAuthorityDecision",
+    "PolicyDefinition", "PolicyReceiptIssuer",
+    # Deployed policy parity and identity
+    "AuthenticatedPolicyEvaluator", "DeployedPolicyEvaluation",
+    "ParityEnforcedPolicyAuthority", "ParityPolicyAuthorityDecision",
+    "PolicyEvaluationAuthenticator",
+    "PolicyInputProvider", "PolicyParityProfile", "PolicyParityReport",
+    # Independent runtime attestation verification
+    "IndependentRuntimeVerifier", "RuntimeReceiptIssuer",
+    "RuntimeVerificationDecision", "RuntimeVerifierProfile",
+    # Trusted human intent and exact approval
+    "HumanApprovalEvidence", "HumanApprovalEvidenceVerifier",
+    "HumanIntentAuthorityProfile", "InMemoryTestApprovalChallengeStore",
+    "InProcessHMACTestHumanApprovalVerifier", "TrustedIntentAuthority",
+    "TrustedTransactionRendering",
+    # Authoritative settlement truth and retry discipline
+    "AuthoritativeSettlementObserver", "RailSettlementEvidence", "RetryDirective",
+    "SettlementEvidenceVerifier", "SettlementObservation",
+    "SettlementObserverProfile", "SettlementTruth",
+    # Fail-closed orchestration
+    "CoordinatedPayment", "CoordinatorConflictError", "PaymentRailSubmitter",
+    "PreparedPayment", "RailSubmissionReceipt", "RailSubmissionUncertainError",
+    "SovereignPaymentCoordinator",
+    # Governed ambiguous-payment recovery
+    "DeterministicReconciliationAuthority", "ReconciliationCase",
+    "ReconciliationConflictError", "ReconciliationPolicy",
+    "ReconciliationResult", "ReconciliationStatus",
     # adapters
     "AP2Binding", "AgenticTokenBinding", "BindingDecision", "BindingResult",
     "IdentityClaim", "IdentityNormalizer", "IdentitySource", "KYAOSBinding",
@@ -168,6 +318,16 @@ __all__ = [
     # RailGuard Contract and Lab
     "ConformanceFinding", "ConformanceReport", "RailBindingCase",
     "RailBindingConformanceSuite", "RailBindingContract",
+    # Sandbox rail activation evidence
+    "RailActivationMode", "SandboxEvidenceVerifier",
+    "SandboxRailReadinessGate", "SandboxReadinessProfile",
+    "SandboxReadinessReport", "SandboxRunEvidence",
+    # Signed production admission
+    "DEFAULT_DEPLOYMENT_CONTROLS", "DeploymentControlEvidence",
+    "DeploymentApprovalEvidence", "DeploymentApprovalVerifier",
+    "DeploymentEvidenceVerifier", "DeploymentReadinessAuthority",
+    "DeploymentReadinessDecision", "DeploymentReadinessIssuer",
+    "DeploymentReadinessProfile",
     "EscrowPhase", "VariableCharge", "X402V2EscrowBinding", "X402V2UptoBinding",
     # Mandate Bridge
     "AP2AuthoritativeVerifier", "AP2ReceiptEvidence", "AP2V02Binding",

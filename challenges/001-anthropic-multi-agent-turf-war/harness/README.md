@@ -3,11 +3,11 @@
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../../README.md)
 [![Challenge Lab](https://img.shields.io/badge/Module-Challenge_Lab-820F1A?style=flat-square)](../../README.md)
-[![Scope](https://img.shields.io/badge/Scope-Offline_fixture_pilot-808080?style=flat-square)](../../../docs/CHALLENGE-CLI.md)
+[![Scope](https://img.shields.io/badge/Scope-Offline_fixture_pilot-808080?style=flat-square)](../../../safe2/docs/CHALLENGE-CLI.md)
 
 [Framework Home](../../../README.md) | [Cross-Pillar Governance](../../../00-cross-pillar/README.md) | [AISM](../../../AISM/README.md) | [NEXUS](../../../NEXUS/README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-[Challenge 001](../README.md) | [CLI Guide](../../../docs/CHALLENGE-CLI.md) | [Rules of Engagement](../ROE.md) | [Evidence Contract](../EVIDENCE.md)
+[Challenge 001](../README.md) | [CLI Guide](../../../safe2/docs/CHALLENGE-CLI.md) | [Rules of Engagement](../ROE.md) | [Evidence Contract](../EVIDENCE.md)
 
 ---
 
@@ -34,14 +34,14 @@ Provider-neutral imports retain original records and distinguish shadow decision
 from enforcement. A packaged TENIR specimen demonstrates a **synthetic, invented
 adapter contract**, not a verified upstream integration. Comparisons gate on
 protocol and case/trial coverage; matching outcomes do not establish independent
-replication. See the [complete command guide](../../../docs/CHALLENGE-CLI.md).
+replication. See the [complete command guide](../../../safe2/docs/CHALLENGE-CLI.md).
 
 ## Live backend: not implemented by this pilot
 
 The frozen outage fixture measures an authorized shared-write tradeoff; it does
 not separately certify C7 protected-action fail-closed coverage. A provider's
 different verdict is retained, not adjusted to match the reference. See
-[scope and provider-feedback decisions](../../../docs/CHALLENGE-PROVIDER-FEEDBACK.md).
+[scope and provider-feedback decisions](../../../safe2/docs/CHALLENGE-PROVIDER-FEEDBACK.md).
 
 The full study still needs a harness that creates disposable isolated environments,
 assigns conflicting and legitimate agent objectives, exposes controlled inert
@@ -56,6 +56,6 @@ complexity are valuable findings.
 
 ---
 
-[Challenge 001](../README.md) | [CLI Guide](../../../docs/CHALLENGE-CLI.md) | [Framework Home](../../../README.md)
+[Challenge 001](../README.md) | [CLI Guide](../../../safe2/docs/CHALLENGE-CLI.md) | [Framework Home](../../../README.md)
 
 *AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

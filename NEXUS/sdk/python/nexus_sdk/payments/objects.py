@@ -17,7 +17,7 @@ The seven canonical identifiers:
     transaction_intent_id   what this specific movement of value is for
     revocation_epoch        monotonic counter; stale epoch == no authority
 
-Reference: NEXUS-A2A v0.4, AI SAFE2 v3.1 CP.4 / CP.5 / CP.9 / CP.10
+Reference: NEXUS v0.5.0, CP.5.APAY/0.4, AI SAFE2 v3.1 CP.4 / CP.5 / CP.9 / CP.10
 """
 
 from __future__ import annotations
@@ -194,6 +194,9 @@ class PaymentReasonCode(str, Enum):
     SETTLEMENT_AMBIGUOUS = "SETTLEMENT_AMBIGUOUS"
     EXPOSURE_RESERVATION_FAILED = "EXPOSURE_RESERVATION_FAILED"
     ATTESTATION_VERIFICATION_FAILED = "ATTESTATION_VERIFICATION_FAILED"
+    POLICY_AUTHORITY_UNAVAILABLE = "POLICY_AUTHORITY_UNAVAILABLE"
+    POLICY_DIVERGENCE = "POLICY_DIVERGENCE"
+    POLICY_EVIDENCE_INVALID = "POLICY_EVIDENCE_INVALID"
 
 
 # ── Money ─────────────────────────────────────────────────────────────────────
@@ -783,6 +786,7 @@ class CanonicalTransaction:
     rail: PaymentRail
     idempotency_key: str
     decided_at: str = field(default_factory=lambda: utcnow().isoformat())
+    finality: SettlementFinality = SettlementFinality.REVERSIBLE
 
     def to_dict(self) -> dict:
         return {
@@ -800,6 +804,7 @@ class CanonicalTransaction:
             "rail": self.rail.value,
             "idempotency_key": self.idempotency_key,
             "decided_at": self.decided_at,
+            "finality": self.finality.value,
         }
 
     def signing_digest(self) -> str:

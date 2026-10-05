@@ -29,6 +29,55 @@ Every user-facing README, guide, implementation page, research index, example la
 
 This standard defines the common visual and navigation grammar for AI SAFE² v3.1.
 
+## Canonical topic homes
+
+Repository information follows **one canonical topic home, many contextual
+references**. When a dedicated directory exists, primary documentation,
+implementation guidance, machine indexes, and topic-specific validation belong
+inside that directory. Other surfaces link to the canonical source instead of
+maintaining a second copy.
+
+The machine-readable registry is
+[`repository-topics.manifest.json`](../repository-topics.manifest.json).
+
+| Topic | Canonical home | Primary entry point |
+| --- | --- | --- |
+| Framework and shared governance | repository root and `docs/` | `README.md`, `docs/README.md` |
+| NEXUS | `NEXUS/` | `NEXUS/DOCUMENTATION.md` |
+| SAFE2 CLI | `safe2/` | `safe2/README.md`, `safe2/docs/README.md` |
+| Examples | `examples/` | `examples/README.md` |
+| Research | `research/` | `research/README.md` |
+| Challenge Lab | `challenges/` | `challenges/README.md` |
+| AISM | `AISM/` | `AISM/README.md` |
+| Scanner, gateway, dashboard, and skills | their named directories | the local `README.md` |
+| Historical release records | `releases/` | `releases/README.md` |
+
+A contextual page may remain beside the system that executes or evidences it—for
+example, a challenge-local control record or an example README. It must link to
+the canonical topic home and must not become a competing general-purpose guide.
+Document kind resolves overlap: release records belong in `releases/`, examples
+in `examples/`, research in `research/`, and product operating guidance in the
+product directory.
+
+## Human- and agent-ready content
+
+Major topic entry points should provide, in this order where applicable:
+
+1. a plain-language purpose and scope;
+2. task- or audience-based navigation;
+3. explicit text status and assurance boundaries;
+4. a copyable quick start;
+5. tables for repeated mappings, controls, compatibility, or comparisons;
+6. lists for short actions and prerequisites;
+7. limitations, evidence, and verification paths; and
+8. machine-readable discovery through the repository manifest, a local
+   manifest, `AGENTS.md`, or `llms.txt` when the topic is complex enough.
+
+Color and icons are supplemental. A status, risk, decision, or instruction must
+remain understandable in plain text, in a monochrome view, and to a parser.
+Tables should not hide required steps in prose-only cells, and diagrams must
+have an adjacent textual explanation.
+
 ## Outcome-first landing pages
 
 A landing page is not a file index. Before architecture, history, exhaustive

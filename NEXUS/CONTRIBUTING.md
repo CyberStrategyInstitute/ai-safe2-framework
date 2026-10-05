@@ -48,7 +48,7 @@ network calls for the core test suite. Use stub modes where real infrastructure
 
 ```bash
 git clone https://github.com/CyberStrategyInstitute/ai-safe2-framework
-cd ai-safe2-framework/nexus-a2a/sdk/python
+cd ai-safe2-framework/NEXUS
 pip install -e ".[dev]"
 pytest tests/ -v
 ```

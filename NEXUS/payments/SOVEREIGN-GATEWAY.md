@@ -1,0 +1,245 @@
+# Sovereign Payment Gateway
+
+**Human name:** Sovereign Payment Gateway
+
+**Technical name:** `NEXUSPaymentExecutionPlane`
+
+**Status:** NEXUS v0.5.0 reference contract; no production assurance claim
+
+The Sovereign Payment Gateway is the protected execution boundary around the
+NEXUS Payment Integrity Gateway. Its objective is simple: compromising an agent
+process must not be sufficient to obtain a payment key, widen authority, replay
+authorization, restore spent capacity, or hide what value moved.
+
+## Contents
+
+- [Deterministic boundary](#deterministic-boundary)
+- [Monotonic execution](#monotonic-execution)
+- [Security invariant](#security-invariant)
+- [Gateway State Vault](#gateway-state-vault)
+- [Key Guardian](#key-guardian)
+- [Policy and runtime authorities](#policy-authority)
+- [Human Intent Authority](#human-intent-authority)
+- [Settlement Truth Authority](#settlement-truth-authority)
+- [Sovereign Payment Coordinator](#sovereign-payment-coordinator)
+- [Governed Payment Recovery](#governed-payment-recovery)
+- [Sandbox Rail Readiness](#sandbox-rail-readiness)
+
+## Deterministic boundary
+
+The execution plane requires seven independently evidenced components:
+
+1. a durable transactional authority and exposure store;
+2. an atomic replay and idempotency store;
+3. a compare-and-swap settlement state store;
+4. a deterministic policy engine;
+5. an isolated credential broker;
+6. a durable evidence ledger; and
+7. an independent runtime-attestation verifier.
+
+Reference or in-process implementations do not satisfy deployment readiness.
+`NEXUSPaymentExecutionPlane.readiness()` names every unbound or reference-only
+boundary instead of returning an unexplained success value.
+
+## Monotonic execution
+
+```text
+PROPOSED
+  -> POLICY_ACCEPTED
+  -> RESERVED
+  -> CREDENTIAL_RELEASED
+  -> SUBMITTED
+  -> SETTLED
+```
+
+Failures terminate. An ambiguous result can only enter `RECONCILING`; it cannot
+release exposure directly. Reconciliation may establish settlement, establish
+safe release, or escalate for governed resolution. Terminal states cannot be
+reopened.
+
+Canonical transaction identity, idempotency key, authority grant, and
+revocation epoch are immutable across the lifecycle. Durable implementations
+must use compare-and-swap or equivalent transactional semantics; process-local
+locks do not establish crash or multi-worker safety.
+
+## Security invariant
+
+Probabilistic risk signals may reduce limits, request stronger proof, or require
+human review. They cannot override a failed deterministic control or authorize
+credential release.
+
+## Planned implementation stack
+
+1. durable authority, reservation, replay, and settlement state;
+2. isolated signer service and protected key backends;
+3. live OPA evaluation with policy identity and divergence testing;
+4. atomic gateway orchestration and governed reconciliation;
+5. sandbox rail validation only after the preceding boundaries pass.
+
+Each layer will ship with concurrency, crash-recovery, replay, revocation, and
+negative-path evidence before the next layer is allowed to depend on it.
+
+## Gateway State Vault
+
+`SQLiteGatewayStateStore` is the first durable reference implementation. It
+uses database uniqueness, immediate write transactions, and compare-and-swap
+versions to preserve replay keys, revocation epochs, authority-tree exposure,
+reservations, and execution state across workers and restarts.
+
+It remains `REFERENCE` assurance rather than self-declaring deployment status.
+A deployment must separately establish protected storage, access control,
+backup and recovery, availability, monitoring, and operational ownership.
+
+## Key Guardian
+
+`KeyGuardianClient` is the agent-side credential-release client. It holds no
+payment key and defaults to `NullKeyGuardianTransport`, which refuses every
+request. A guardian accepts only a `CredentialReleaseEnvelope` containing the
+durable reservation, canonical transaction, deterministic policy receipt,
+runtime-verifier receipt, and observed revocation epoch.
+
+`ReferenceKeyGuardianService` independently verifies exact transaction and
+signing digests, policy identity, runtime identity, the current revocation
+epoch, reservation state, and accept-once replay state before calling a
+`ProtectedSigningBackend`. It cannot sign arbitrary agent-supplied bytes.
+Active-reservation validation and replay consumption occur in one state-store
+transaction, so a released or concurrently cancelled hold cannot authorize a
+signature. An identical request may recover the same deterministic authorization
+identity while that reservation remains active; a conflicting digest or any
+request after the execution advances is refused.
+
+The included HMAC backend is test-only. Deployment assurance requires a
+separate authenticated guardian service, a KMS/HSM/TEE or managed signer with
+non-exportable keys, protected trust roots, and durable idempotent response
+retrieval.
+
+## Policy Authority
+
+`DeterministicPolicyAuthority` is the independent **Policy Authority**. It
+reuses the deterministic transaction firewall, binds an ALLOW decision to the
+exact canonical transaction and a content-addressed `PolicyDefinition`, and
+issues an authenticated `PolicyAuthorizationReceipt`. Deny, escalate, and
+reconcile outcomes carry no signing authority.
+
+The authority will not issue a receipt without a runtime identity, complete
+grant lineage, an idempotency key, a matching policy identifier, and proof from
+the configured receipt issuer. Key Guardian additionally requires a non-empty
+policy snapshot digest pinned by policy identifier, so a policy label cannot
+silently stand in for different rules or configuration.
+
+## Runtime Verifier
+
+`IndependentRuntimeVerifier` is the independent **Runtime Verifier**. It checks
+the exact runtime identity bound into the canonical transaction, a fresh
+single-use verifier challenge, an expected workload baseline, an attested
+workload identity, an allowed attestation method, and the underlying evidence
+verifier before issuing a `RuntimeAuthorizationReceipt`.
+
+`RuntimeVerifierProfile` content-addresses the verifier version, allowed
+methods, permitted workload identities, maximum measurement age, and trust-root
+configuration. Key Guardian pins that profile digest by verifier identifier,
+preventing a familiar verifier name from silently using different trust roots
+or weaker evidence rules.
+
+The portable reference verifier cryptographically binds the runtime measurement
+identity, workload identity, attested status, attestation method, baseline,
+measurement time, freshness lifetime, and single-use verifier challenge into
+the evidence. Changing any bound field invalidates the evidence before a
+runtime authorization receipt can be issued.
+
+## Policy Parity Guard
+
+`ParityEnforcedPolicyAuthority` is the **Policy Parity Guard**. It binds a
+deployed evaluator response to the exact policy input, evaluator identity,
+pinned policy-bundle digest, policy identifier, freshness window, and
+independently verified proof. It then requires exact agreement with the
+reference firewall across decision, all reason codes, policy identity, and
+consequence before preserving the policy authorization receipt.
+
+Outage, malformed evidence, unknown values, duplicate reasons, stale proof, or
+any divergence returns a fail-closed decision with no canonical transaction and
+no signing authority. The reference contract does not claim that a synthetic
+evaluator proves live OPA deployment; production assurance requires an
+authenticated transport, protected trust roots, bounded availability behavior,
+and independently verifiable policy-bundle provenance.
+
+## Human Intent Authority
+
+`TrustedIntentAuthority` is the independent **Human Intent Authority**. A
+trusted surface renders the exact amount, currency, merchant, destination,
+rail, and canonical signing digest without agent-authored prose. The authority
+accepts only authenticated approval from an allowlisted accountable person,
+bound to that rendering and a fresh single-use challenge.
+
+Policy receipts explicitly state whether fresh human approval is required.
+When required, Key Guardian refuses credential release unless it also receives
+an authenticated `HumanIntentAuthorizationReceipt` whose transaction,
+rendering, validity window, authority identity, and pinned authority profile all
+match. Routine transactions can continue under existing delegated mandate
+authority without prompting the user for every payment.
+
+## Settlement Truth Authority
+
+`AuthoritativeSettlementObserver` is the independent **Settlement Truth
+Authority**. It accepts only authenticated rail evidence bound to the exact
+canonical transaction and Key Guardian authorization, including amount,
+currency, destination, rail, finality, and signing digest.
+
+Identical observations are idempotent and conflicting claims for the same
+authorization halt once terminal truth is established. Ambiguous observations
+remain eligible to progress to authoritative terminal evidence. A settled
+outcome requires a settlement identifier and the
+profile-defined finality threshold. Unknown, timed-out, or insufficiently final
+outcomes become `AMBIGUOUS` with a reconciliation directive—never a blind retry.
+Even an authoritative failure requires a new authorization before another
+payment attempt.
+
+## Sovereign Payment Coordinator
+
+`SovereignPaymentCoordinator` is the **Sovereign Payment Coordinator**. It
+composes the independent controls without merging their trust boundaries. It
+creates one durable execution, verifies policy and runtime proof, atomically
+reserves exposure, obtains a transaction-bound authorization from Key Guardian,
+and submits through a rail contract that must implement `submit_or_retrieve`
+with the execution's stable idempotency key. A timeout is ambiguous and enters
+reconciliation; it is never interpreted as permission to send a second payment.
+
+Authoritative settlement commits held exposure in the same database transaction
+that records `SETTLED`. Authoritative rejection or failure releases exposure in
+the same transaction that records the terminal result. Conflicting or stale
+state fails closed. The SQLite implementation demonstrates these invariants on
+one host; production deployments still need equivalent transactional semantics,
+protected storage, an isolated Key Guardian transport, and authenticated rail
+and settlement integrations before claiming deployment assurance.
+
+## Governed Payment Recovery
+
+`DeterministicReconciliationAuthority` is **Governed Payment Recovery**. It
+opens exactly one durable case for an ambiguous execution, binds that case to
+the execution, Key Guardian authorization, signing digest, recovery policy, and
+retained exposure reservation, then queries Settlement Truth Authority on a
+fixed cadence. It has no payment-submission capability and cannot mint a new
+authorization.
+
+Authenticated settled evidence atomically commits exposure and closes the case.
+Authenticated failure atomically releases exposure and closes the case. Unknown
+or insufficient evidence advances the bounded observation count. Reaching the
+attempt or time limit escalates the execution while deliberately preserving the
+exposure hold; a timeout is not evidence that money did not move. Stale workers,
+duplicate cases, early polling, conflicting truth, and artifact substitution all
+fail closed.
+
+## Sandbox Rail Readiness
+
+`SandboxRailReadinessGate` is **Sandbox Rail Readiness**. It binds authenticated
+sandbox runs to the exact RailGuard contract, binding implementation, policy
+stack, and execution profile, and requires explicit success across mutation,
+replay, downgrade, revocation, timeout, reconciliation, settlement, and failure
+tests. Evidence must be fresh, payload-minimized, sandbox-only, and prove that no
+production credential or real value was used.
+
+One passing run permits at most observe-only operation. Enforced eligibility
+requires at least two allowlisted independent counterparties and environments,
+plus a deployment-ready execution plane. Conflicting, forged, incomplete, or
+failed evidence blocks enforcement. The report states the maximum permissible
+mode; it never activates a rail or substitutes for operator change control.

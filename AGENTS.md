@@ -136,17 +136,18 @@ required. It must remain understandable without access to an agent's chat log.
 ## Start here
 
 1. Parse `ai-safe2.manifest.json` first.
-2. Treat `README.md` and the framework control documents it links to as the human-readable framework entry point.
-3. Treat `skills/mcp/data/ai-safe2-controls-v3.0.json` as the stable machine-readable dataset for the unchanged 161-control core taxonomy.
-4. Treat `skills/mcp/data/mcp-profile-v3.1.json` as the machine-readable CP.5.MCP v3.1 overlay containing MCP-1 through MCP-19.
-5. Do not add the 19 MCP profile controls to the 161-control framework total.
-6. Treat `00-cross-pillar/unbiased-ai/uas-profile-v1.json` as the UAS regulatory profile extension. Its 27 profile requirements do not add to the 161-control framework total and do not create CP.11 as a core Cross-Pillar control.
+2. Parse `repository-topics.manifest.json` before placing or relocating documentation.
+3. Treat `README.md` and the framework control documents it links to as the human-readable framework entry point.
+4. Treat `skills/mcp/data/ai-safe2-controls-v3.0.json` as the stable machine-readable dataset for the unchanged 161-control core taxonomy.
+5. Treat `skills/mcp/data/mcp-profile-v3.1.json` as the machine-readable CP.5.MCP v3.1 overlay containing MCP-1 through MCP-19.
+6. Do not add the 19 MCP profile controls to the 161-control framework total.
+7. Treat `00-cross-pillar/unbiased-ai/uas-profile-v1.json` as the UAS regulatory profile extension. Its 27 profile requirements do not add to the 161-control framework total and do not create CP.11 as a core Cross-Pillar control.
 
 ## Version model
 
 - AI SAFE² Framework: v3.1.0
 - AI SAFE² CLI: v1.0.0 release candidate; release status depends on exact-revision gates
-- NEXUS: v0.4
+- NEXUS: v0.5.0
 - Gateway: v3.0
 - MCP primary specification binding: 2026-07-28
 - MCP legacy compatibility binding: 2025-11-25
@@ -238,6 +239,7 @@ For automated assessment or implementation guidance:
 - AISM: `AISM/README.md`
 - NEXUS: `NEXUS/README.md`
 - Payment adapter usage: `NEXUS/payments/ADAPTER-GUIDE.md`
+- Sovereign Payment Gateway: `NEXUS/payments/SOVEREIGN-GATEWAY.md`
 - Scanner: `scanner/README.md`
 - Examples: `examples/README.md`
 - Research: `research/README.md`

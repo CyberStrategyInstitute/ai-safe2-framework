@@ -4,7 +4,7 @@
 
 # AI SAFE² Framework v3.1
 
-[Security advisories](docs/advisories/README.md) · [CLI 1.0 workflow](docs/CLI-1.0-WORKFLOW.md) · [CLI stability](docs/CLI-STABILITY.md) · [CLI runtime compatibility](docs/PYTHON-COMPATIBILITY.md)
+[Documentation map](docs/README.md) · [CLI 1.0 workflow](safe2/docs/CLI-1.0-WORKFLOW.md) · [Security advisories](docs/advisories/README.md) · [Topic registry](repository-topics.manifest.json)
 
 ### The Universal GRC Standard for Agentic AI, Swarm Governance, and Runtime Enforcement
 
@@ -65,8 +65,8 @@ the CLI; it does not imply that every named product has a native adapter.
 |---|---|
 | One bounded project assessment | [CLI outcome guide](safe2/README.md#start-with-the-outcome) |
 | Multiple harnesses or environments | [Multi-harness discovery](safe2/README.md#multi-harness-environment-discovery) |
-| A new skill checked before use | [Skill-screening demo](docs/SKILL-SCREENING-DEMO.md) |
-| Human-readable facts, gaps, alternatives, and next actions | [CLI 1.0 operator workflow](docs/CLI-1.0-WORKFLOW.md) |
+| A new skill checked before use | [Skill-screening demo](safe2/docs/SKILL-SCREENING-DEMO.md) |
+| Human-readable facts, gaps, alternatives, and next actions | [CLI 1.0 operator workflow](safe2/docs/CLI-1.0-WORKFLOW.md) |
 | Framework controls and governance model | Continue with the framework overview below |
 
 ## The 10-Second Version
@@ -306,7 +306,7 @@ safe2 aism plan remediation-source.json assessment.json --system-identity system
 ```
 
 `safe2 init` creates a versioned secure-default project configuration without
-overwriting an existing file. See the [CLI configuration contract](docs/CLI-CONFIGURATION.md).
+overwriting an existing file. See the [CLI configuration contract](safe2/docs/CLI-CONFIGURATION.md).
 
 `safe2 doctor` provides metadata-only discovery for multi-harness workstations,
 including known Codex, Claude Code, Antigravity, Hermes, OpenClaw, and Grok
@@ -335,42 +335,42 @@ criteria, completion evidence, residual risk, and status history. It never
 executes or authorizes the proposed work and never increases the normative AISM
 score merely because an action is marked complete.
 
-See the [AISM implementation and remediation guide](docs/AISM-REMEDIATION.md).
+See the [AISM implementation and remediation guide](safe2/docs/AISM-REMEDIATION.md).
 
 See the executable [AISM Decision Card example](examples/aism-decision-card/).
 See the executable [environment Decision Card workflow](examples/environment-decision-card/).
 Evidence ingestion is conservative: collectors suggest candidate AISM cells but never invent maturity ratings. Evidence without verification provenance is labeled and capped until a human confirms the mapping.
 
 See the complete [AI SAFE² CLI command and architecture guide](safe2/README.md).
-See [what 1.0 includes and what should be built next](docs/CLI-POST-1.0-PRIORITIES.md).
+See [what 1.0 includes and what should be built next](safe2/docs/CLI-POST-1.0-PRIORITIES.md).
 
-The CLI includes [task receipts and usage evidence](docs/TASK-RECEIPTS.md) to
+The CLI includes [task receipts and usage evidence](safe2/docs/TASK-RECEIPTS.md) to
 check artifact and test/tool claims, capture explicit local runs, recheck fresh
 pytest evidence, authenticate report bytes, and correlate declared per-task
 resource use. These checks do not establish task completion or verified billing.
 
 The CLI includes a provider-neutral
-[harness evidence intake](docs/TASK-RECEIPTS.md#provider-neutral-harness-evidence-intake)
+[harness evidence intake](safe2/docs/TASK-RECEIPTS.md#provider-neutral-harness-evidence-intake)
 that makes declared, observed, partial, and missing coverage visible before native
 harness adapters are introduced.
 
-The provider-neutral [adapter SDK](docs/ADAPTER-SDK.md), privacy-preserving
-[Codex JSONL translator](docs/CODEX-JSONL-ADAPTER.md), and
-[OpenTelemetry exchange](docs/OPENTELEMETRY-ADAPTER.md) let external harnesses
+The provider-neutral [adapter SDK](safe2/docs/ADAPTER-SDK.md), privacy-preserving
+[Codex JSONL translator](safe2/docs/CODEX-JSONL-ADAPTER.md), and
+[OpenTelemetry exchange](safe2/docs/OPENTELEMETRY-ADAPTER.md) let external harnesses
 contribute attributed evidence without becoming AI SAFE² decision authorities.
 
-The [continuous local evidence runner](docs/CONTINUOUS-EVIDENCE.md) preserves
+The [continuous local evidence runner](safe2/docs/CONTINUOUS-EVIDENCE.md) preserves
 repeated skill and harness-configuration change reports. The
-[agent claim audit](docs/CLAIM-AUDIT.md) separates evidence-consistent,
+[agent claim audit](safe2/docs/CLAIM-AUDIT.md) separates evidence-consistent,
 contradicted, unverifiable, and explicitly limited outcomes without assigning a
 speculative honesty score or inferring deception.
 
-The [agent system identity manifest](docs/SYSTEM-IDENTITY.md) adds the next layer,
+The [agent system identity manifest](safe2/docs/SYSTEM-IDENTITY.md) adds the next layer,
 harness, tools, skills, memory, environment, policies, evaluator, authority and
 relationships to one assessment subject without claiming the declared deployment
 was independently verified.
 
-[Failure localization](docs/FAILURE-LOCALIZATION.md) binds task observations and
+[Failure localization](safe2/docs/FAILURE-LOCALIZATION.md) binds task observations and
 competing failure candidates to that complete system identity. It ranks where to
 investigate, exposes assumptions and contradictions, and recommends a repair
 owner and next action without claiming a verified root cause or probability.
@@ -386,11 +386,11 @@ against an explicitly trusted baseline, binds both revisions to their assessment
 scope artifacts, and separates inherited, introduced, changed, resolved, and
 unknown states without claiming causation or conformance.
 
-[Release readiness](docs/RELEASE-READINESS.md) combines identity, scope, change
+[Release readiness](safe2/docs/RELEASE-READINESS.md) combines identity, scope, change
 attribution, required checks, risks, ownership, next actions, and rollback into
 agent JSON plus a human card while preserving human release authority.
 
-[Operational truth](docs/OPERATIONAL-TRUTH.md) correlates provider-attributed
+[Operational truth](safe2/docs/OPERATIONAL-TRUTH.md) correlates provider-attributed
 harness evidence, task receipts, coverage, usage declarations, and completion
 claims without promoting agreement into verified completion or billing. The
 bounded one-shot change monitor supports local or CI use; the explicit polling
@@ -400,7 +400,7 @@ turns detection into prevention.
 
 For release boundaries, verified behavior, and external checks that still
 require human or production execution, see the
-[Stranger-Ready CLI Review](docs/STRANGER-READY-CLI-REVIEW.md),
+[Stranger-Ready CLI Review](safe2/docs/STRANGER-READY-CLI-REVIEW.md),
 [Security Policy](SECURITY.md), and [Support Policy](SUPPORT.md).
 
 ### MCP-19 and legacy bearer tokens
@@ -450,7 +450,7 @@ Material normative framework, protocol-profile, implementation, policy, or grade
 
 See [Challenge 001](challenges/001-anthropic-multi-agent-turf-war/).
 
-The [Challenge CLI workflow](docs/CHALLENGE-CLI.md) runs an offline fixture or an
+The [Challenge CLI workflow](safe2/docs/CHALLENGE-CLI.md) runs an offline fixture or an
 explicitly authorized, bounded external evaluator, independently grades recorded
 state, and translates third-party evidence through a versioned contract. Plans and
 receipts bind the evaluator, requests, responses, optional system identity, source,

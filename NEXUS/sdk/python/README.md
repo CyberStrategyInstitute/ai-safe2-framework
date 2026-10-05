@@ -1,12 +1,12 @@
 # nexus-a2a-sdk
 
-**NEXUS-A2A Python SDK** -- Cryptographic governance for agentic AI communication.
+**NEXUS Python SDK**: deterministic governance for agent, tool, and payment execution.
 
 [![Version](https://img.shields.io/pypi/v/nexus-a2a-sdk)](https://pypi.org/project/nexus-a2a-sdk/)
-[![License](https://img.shields.io/pypi/l/nexus-a2a-sdk)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/nexus-a2a/LICENSE)
+[![License](https://img.shields.io/pypi/l/nexus-a2a-sdk)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/NEXUS/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/nexus-a2a-sdk)](https://pypi.org/project/nexus-a2a-sdk/)
 
-The Python SDK for the [NEXUS-A2A Protocol](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/nexus-a2a) -- the sovereign security layer for agentic AI that MCP, ACS, and A2A don't provide.
+The Python SDK for [NEXUS](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/NEXUS), an optional AI SAFE² reference implementation for governed agent actions.
 
 ## Install
 
@@ -27,6 +27,7 @@ pip install "nexus-a2a-sdk[full]"
 | `nexus_sdk.otel` | NOR output receipts, OpenTelemetry/OCSF audit export |
 | `nexus_sdk.agbom` | Dynamic Agent Bill of Materials: real-time, hash-chained |
 | `nexus_sdk.bridges` | Protocol bridges: MCP, ACS, A2A, LangChain, CrewAI, n8n, REST |
+| `nexus_sdk.payments` | Sovereign Payment Gateway contracts, deterministic controls, evidence, and readiness gates |
 
 ## Quick Example
 
@@ -51,8 +52,8 @@ print(verdict.decision)   # deny
 ## Documentation
 
 Full documentation, reference deployment, OPA policies, JSON schemas, and the IETF draft:
-[github.com/CyberStrategyInstitute/ai-safe2-framework/nexus-a2a](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/nexus-a2a)
+[github.com/CyberStrategyInstitute/ai-safe2-framework/NEXUS](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/NEXUS)
 
 ## License
 
-Apache 2.0. See [LICENSE](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/nexus-a2a/LICENSE).
+Apache 2.0. See [LICENSE](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/NEXUS/LICENSE).
