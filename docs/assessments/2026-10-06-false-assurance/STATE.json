@@ -98,8 +98,10 @@
       "commit": "3353be4"
     },
     "full-gates+pr": {
-      "status": "in_progress",
-      "gates": "30/30 PASS at bfe324b"
+      "status": "blocked_on_owner",
+      "gates": "30/30 PASS at bfe324b",
+      "pr_body": "PR_DESCRIPTION.md",
+      "blocker": "no GitHub API credential in session (gh token invalid); owner opens draft PR from compare link"
     },
     "nexus-memory": {
       "status": "done",
@@ -199,5 +201,5 @@
       "status": "open"
     }
   ],
-  "next_step": "Open draft PR from fix/v31-false-assurance-hardening to main with the completion record; Greptile if configured (AGENTS.md 4.6). Then owner decisions D1-D4; publication (D2) only after merge."
+  "next_step": "Owner opens draft PR (compare main...fix/v31-false-assurance-hardening, body = PR_DESCRIPTION.md). Then hosted CI + Greptile results, then decisions D1-D4."
 }
