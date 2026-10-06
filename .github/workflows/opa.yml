@@ -28,7 +28,11 @@ jobs:
       matrix:
         # 0.65.0 is pinned by NEXUS/docker/docker-compose.yml; 1.x is current OPA,
         # which rejects Rego v0 syntax by default. Policies must load on both.
-        opa: ["0.65.0", "1.4.2"]
+        include:
+          - opa: "0.65.0"
+            sha256: "cd6b0b2d762571a746f0261890b155e6dd71cca90dad6b42b6fcf6dd7f619f08"
+          - opa: "1.4.2"
+            sha256: "2c0ccdbbe0b8e2a5d12d9c42d92f1f34f494ffb32d1f3c4ddc36101be637d66f"
 
     steps:
       - name: Checkout
@@ -39,8 +43,10 @@ jobs:
       - name: Install OPA ${{ matrix.opa }}
         env:
           OPA_VERSION: ${{ matrix.opa }}
+          OPA_SHA256: ${{ matrix.sha256 }}
         run: |
           curl -fsSL -o opa "https://github.com/open-policy-agent/opa/releases/download/v${OPA_VERSION}/opa_linux_amd64_static"
+          echo "${OPA_SHA256}  opa" | sha256sum -c -
           chmod +x opa
           sudo mv opa /usr/local/bin/opa
           opa version
