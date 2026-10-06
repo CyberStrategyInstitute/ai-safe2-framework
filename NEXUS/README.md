@@ -200,6 +200,14 @@ step = build_tool_call_step(
 verdict = guardian.evaluate(step)
 ```
 
+Arguments are normalized before matching: percent-decoded, NFKC, `\` to `/`,
+slashes collapsed. Built-in detectors run alongside your patterns: credential
+paths, path traversal, cloud metadata endpoints in any IP spelling, secret
+material, and download-to-interpreter pipes. Always declare `act_tier`. An
+omitted tier is treated as ACT-4, so HEAR applies (`ACT_TIER_UNDECLARED`), and
+ACT-3/4 reasoning must be substantive enough to review. See the
+[CHANGELOG](CHANGELOG.md) for the opt-outs.
+
 ### Payments: authority that narrows and cannot be widened
 
 ```python
@@ -353,7 +361,7 @@ NEXUS/
 ├── payments/                   CP.5.APAY profile, threat model, controls, challenge lab
 ├── sdk/python/nexus_sdk/       Core SDK
 │   └── payments/               Payment Integrity Gateway
-├── sdk/python/tests/           SDK tests (298 passing)
+├── sdk/python/tests/           SDK tests (run them; see Testing)
 ├── opa/                        Authorization, AISM invariant, and APAY policies
 ├── schemas/                    AIM, NOR, AgBOM, Guardian, APAY grant, APAY PTR schemas
 ├── docker/                     Reference deployment assets
@@ -370,6 +378,7 @@ NEXUS/
 cd NEXUS
 pip install -e ".[dev]"
 pytest sdk/python/tests -q
+opa check --strict opa/ && opa test opa/   # policies: OPA 0.65 (compose pin) and 1.x
 ```
 
 The payment suite is structured so that a control with only a happy-path test does not count as a control: every APAY control has at least one test proving it denies what it claims to deny, and the `TestHonesty` class fails if anyone makes a fail-closed default permissive. Run the current suite rather than relying on a documentation test count.
