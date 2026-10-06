@@ -93,12 +93,25 @@ def is_comment_line(line: str, filepath: str = "") -> bool:
     return bool(stripped.startswith("<!--"))
 
 
+_TEST_DIRS = {"test", "tests", "spec", "specs", "__tests__", "testdata", "fixtures"}
+
+
 def is_test_file(filepath: str) -> bool:
-    """Return True if the file looks like a test file."""
-    lower = filepath.lower()
-    return any(
-        part in lower
-        for part in ("/test", "/tests", "/spec", "/specs", "_test.", "_spec.", ".test.", ".spec.")
+    """Return True if the file looks like a test file.
+
+    Pass a path RELATIVE to the scan root. Matching is by whole path segment or
+    test-file naming convention. The previous substring check on the absolute path
+    treated every file under e.g. /srv/testbed/ or ~/test-env/ as a test file and
+    suppressed all non-critical findings, including secret detection.
+    """
+    parts = [p for p in filepath.replace("\\", "/").lower().split("/") if p]
+    if not parts:
+        return False
+    *dirs, name = parts
+    return (
+        any(d in _TEST_DIRS for d in dirs)
+        or name.startswith("test_")
+        or any(tag in name for tag in ("_test.", "_spec.", ".test.", ".spec."))
     )
 
 

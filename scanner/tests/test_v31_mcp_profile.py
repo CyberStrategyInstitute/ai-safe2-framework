@@ -5,8 +5,8 @@ from scanner.rules.mcp_profile import MCP_RULES
 
 
 def test_v31_total_rule_count() -> None:
-    """v3.1 preserves 52 existing rules and adds 12 MCP profile rules."""
-    assert len(ALL_RULES) == 64
+    """52 original rules + 12 MCP profile rules + 1 model-output execution-sink rule."""
+    assert len(ALL_RULES) == 65
 
 
 def test_mcp_profile_rule_count() -> None:
