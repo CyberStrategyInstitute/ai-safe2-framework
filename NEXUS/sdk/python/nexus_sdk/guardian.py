@@ -34,8 +34,12 @@ AI SAFE2 v3.0: S1.5, A2.5, F3.1, M4.4, CP.4, CP.5
 
 from __future__ import annotations
 import hashlib
+import ipaddress
 import json
+import re
+import unicodedata
 import uuid
+from urllib.parse import unquote
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from enum import Enum
@@ -303,6 +307,126 @@ class GuardianVerdictResult:
 
 # ── Built-in Guardian Policies ─────────────────────────────────────────────────
 
+
+# ── Argument normalization and built-in detectors ─────────────────────────────
+#
+# v0.3 substring-matched a short list against the raw JSON of the arguments, so
+# encoding (%2e%2e%2f), Windows separators, doubled slashes, numeric IP spellings
+# (2852039166, 0xa9fea9fe) and secrets carried as values all passed. Every string
+# leaf and key is now normalized before matching, and the detectors below run in
+# addition to any caller-supplied pattern list.
+
+_CREDENTIAL_PATHS = (
+    "/.ssh/", ".ssh/", "/.aws/credentials", "/.aws/config", ".aws/credentials",
+    "/.kube/config", ".kube/config", "/.config/gcloud", ".config/gcloud",
+    "/.netrc", ".git-credentials", "/.docker/config.json", "/.gnupg/",
+    "/etc/shadow", "/etc/sudoers", "/etc/gshadow",
+)
+_TRAVERSAL = re.compile(r"(^|/)\.\.(/|$)")
+_SECRET_MATERIAL = (
+    re.compile(r"-----begin [a-z0-9 ]*private key-----"),
+    re.compile(r"\b(akia|asia)[0-9a-z]{16}\b"),
+    re.compile(r"\b(ghp|gho|ghu|ghs|ghr)_[a-z0-9]{36}\b|\bgithub_pat_[a-z0-9_]{40,}"),
+    re.compile(r"\bsk-(live|proj|ant|test)-[a-z0-9_-]{20,}"),
+    re.compile(r"\bxox[abposr]-[a-z0-9-]{10,}"),
+)
+_REMOTE_CODE_PIPE = re.compile(
+    r"\b(curl|wget|fetch|iwr|invoke-webrequest|invoke-restmethod)\b[^|;&\n]*\|\s*(sudo\s+)?"
+    r"((ba|z|da|k|fi)?sh|python3?|perl|ruby|node|iex|invoke-expression)\b"
+)
+_URL_HOST = re.compile(r"[a-z][a-z0-9+.-]*://(?:[^/@\s]*@)?(\[[^\]]+\]|[^/:?#\s]+)")
+_METADATA_HOSTNAMES = {"metadata.google.internal", "metadata", "metadata.azure.com", "instance-data",
+                       "instance-data.ec2.internal"}
+_METADATA_NETS = (ipaddress.ip_network("169.254.0.0/16"), ipaddress.ip_network("fd00:ec2::254/128"),
+                  ipaddress.ip_network("100.100.100.200/32"))
+
+
+def _normalized_views(value: Any, _depth: int = 0) -> list[str]:
+    """Every string leaf and dict key, decoded and canonicalized for matching."""
+    if _depth > 32:
+        return ["<depth-limit>"]
+    out: list[str] = []
+    if isinstance(value, dict):
+        for k, v in value.items():
+            out.extend(_normalized_views(str(k), _depth + 1))
+            out.extend(_normalized_views(v, _depth + 1))
+    elif isinstance(value, (list, tuple, set)):
+        for v in value:
+            out.extend(_normalized_views(v, _depth + 1))
+    elif value is not None:
+        text = str(value)
+        for _ in range(3):  # repeated percent-decoding defeats double encoding
+            decoded = unquote(text)
+            if decoded == text:
+                break
+            text = decoded
+        text = unicodedata.normalize("NFKC", text).lower().replace("\\", "/")
+        text = re.sub(r"(?<!:)/{2,}", "/", text)  # keep scheme://
+        out.append(text)
+    return out
+
+
+def _parse_ipv4_any_radix(host: str) -> Optional[ipaddress.IPv4Address]:
+    """inet_aton semantics: 1-4 parts, each decimal, 0x-hex or 0-octal."""
+    parts = host.split(".")
+    if not 1 <= len(parts) <= 4:
+        return None
+    try:
+        nums = [int(p, 16) if p.startswith("0x") else int(p, 8) if len(p) > 1 and p.startswith("0") else int(p)
+                for p in parts]
+    except ValueError:
+        return None
+    *head, last = nums
+    if any(n > 255 for n in head) or last >= 256 ** (5 - len(parts)):
+        return None
+    value = 0
+    for n in head:
+        value = value * 256 + n
+    value = value * 256 ** (5 - len(parts)) + last
+    return ipaddress.IPv4Address(value) if value < 2 ** 32 else None
+
+
+def _is_metadata_host(host: str) -> bool:
+    host = host.strip("[]").rstrip(".")
+    if host in _METADATA_HOSTNAMES:
+        return True
+    addr: Any = None
+    try:
+        addr = ipaddress.ip_address(host)
+    except ValueError:
+        addr = _parse_ipv4_any_radix(host)
+    if addr is None:
+        return False
+    if isinstance(addr, ipaddress.IPv6Address) and addr.ipv4_mapped:
+        addr = addr.ipv4_mapped
+    return any(addr in net for net in _METADATA_NETS if addr.version == net.version)
+
+
+def _builtin_findings(views: list[str]) -> list[tuple[str, str]]:
+    """Return (reason_code, description) for every built-in detector that fires."""
+    found: list[tuple[str, str]] = []
+    for v in views:
+        if any(p in v for p in _CREDENTIAL_PATHS) or v.startswith((".ssh/", "~/.ssh", "~/.aws/", "~/.kube/")):
+            found.append(("CREDENTIAL_PATH", "argument references a credential store"))
+        if _TRAVERSAL.search(v):
+            found.append(("PATH_TRAVERSAL", "argument contains a parent-directory segment"))
+        if any(rx.search(v) for rx in _SECRET_MATERIAL):
+            found.append(("SECRET_IN_ARGUMENTS", "argument carries credential material"))
+        if _REMOTE_CODE_PIPE.search(v):
+            found.append(("REMOTE_CODE_PIPE", "argument pipes downloaded content into an interpreter"))
+        for host in _URL_HOST.findall(v):
+            if _is_metadata_host(host):
+                found.append(("METADATA_ENDPOINT", f"URL targets a cloud metadata endpoint ({host})"))
+    return found
+
+
+def _reasoning_is_substantive(reasoning: Optional[str], min_chars: int, min_words: int) -> bool:
+    if not reasoning:
+        return False
+    text = " ".join(reasoning.split())
+    return len(text) >= min_chars and len(text.split(" ")) >= min_words and len(set(text)) > 4
+
+
 class GuardianPolicy:
     """
     Inline Guardian policy evaluator. Runs per-call argument inspection.
@@ -328,7 +452,11 @@ class GuardianPolicy:
                  revoked_dids: Optional[list[str]] = None,
                  blocked_argument_patterns: Optional[list[str]] = None,
                  max_delegation_depth: int = 4,
-                 require_reasoning_for_act_tiers: Optional[list[int]] = None):
+                 require_reasoning_for_act_tiers: Optional[list[int]] = None,
+                 builtin_detectors: bool = True,
+                 treat_undeclared_tier_as: Optional[int] = 4,
+                 min_reasoning_chars: int = 40,
+                 min_reasoning_words: int = 5):
         self.revoked_dids = set(revoked_dids or [])
         self.blocked_argument_patterns = blocked_argument_patterns or [
             "/etc/passwd", "/etc/shadow", "/etc/sudoers",
@@ -338,6 +466,15 @@ class GuardianPolicy:
         self.max_delegation_depth = max_delegation_depth
         # ACT-3 and ACT-4 require reasoning chain before execution
         self.require_reasoning_for_act_tiers = require_reasoning_for_act_tiers or [3, 4]
+        # Credential paths, traversal, metadata endpoints, secret material and
+        # download-to-interpreter pipes, matched on normalized arguments.
+        self.builtin_detectors = builtin_detectors
+        # An undeclared tier is unknown capability: treat it as ACT-4 so HEAR
+        # applies. None restores v0.3 behavior (undeclared tier skips HEAR).
+        self.treat_undeclared_tier_as = treat_undeclared_tier_as
+        # HEAR needs a reason a reviewer can act on, not any non-empty string.
+        self.min_reasoning_chars = min_reasoning_chars
+        self.min_reasoning_words = min_reasoning_words
 
     def evaluate(self, ctx: GuardianStepContext) -> GuardianVerdictResult:
         """
@@ -386,14 +523,33 @@ class GuardianPolicy:
             if verdict is not None:
                 return verdict
 
-        # Rule 6: ACT tier reasoning requirement
-        if ctx.agent.act_tier in self.require_reasoning_for_act_tiers:
-            if ctx.method == StepMethod.TOOL_CALL_REQUEST and not ctx.reasoning:
+        # Rule 6: ACT tier reasoning requirement (HEAR)
+        tier = ctx.agent.act_tier
+        tier_codes: list[str] = []
+        if tier is None and self.treat_undeclared_tier_as is not None:
+            tier, tier_codes = self.treat_undeclared_tier_as, ["ACT_TIER_UNDECLARED"]
+        if tier is not None and not (isinstance(tier, int) and 1 <= tier <= 4):
+            return GuardianVerdictResult(
+                decision=GuardianVerdict.DENY,
+                step_id=ctx.step_id,
+                reasoning=f"ACT tier {tier!r} is not one of 1-4",
+                reason_codes=["ACT_TIER_INVALID"],
+            )
+        if tier in self.require_reasoning_for_act_tiers and ctx.method == StepMethod.TOOL_CALL_REQUEST:
+            if not ctx.reasoning:
                 return GuardianVerdictResult(
                     decision=GuardianVerdict.DENY,
                     step_id=ctx.step_id,
-                    reasoning=f"ACT-{ctx.agent.act_tier} agents must provide reasoning chain before tool execution",
-                    reason_codes=["REASONING_REQUIRED", "HEAR_DOCTRINE"],
+                    reasoning=f"ACT-{tier} agents must provide reasoning chain before tool execution",
+                    reason_codes=["REASONING_REQUIRED", "HEAR_DOCTRINE", *tier_codes],
+                )
+            if not _reasoning_is_substantive(ctx.reasoning, self.min_reasoning_chars, self.min_reasoning_words):
+                return GuardianVerdictResult(
+                    decision=GuardianVerdict.DENY,
+                    step_id=ctx.step_id,
+                    reasoning=(f"ACT-{tier} reasoning is too thin to review (need >= {self.min_reasoning_chars} "
+                               f"chars and >= {self.min_reasoning_words} words)"),
+                    reason_codes=["REASONING_INSUFFICIENT", "HEAR_DOCTRINE", *tier_codes],
                 )
 
         # Rule 7: PERMANENT memory write requires mandate
@@ -462,16 +618,24 @@ class GuardianPolicy:
         Guardian enforces specific argument values.
         """
         args = ctx.action_arguments or {}
-        args_str = json.dumps(args, default=str).lower()
+        views = _normalized_views(args)
 
+        findings: list[tuple[str, str]] = []
         for pattern in self.blocked_argument_patterns:
-            if pattern.lower() in args_str:
-                return GuardianVerdictResult(
-                    decision=GuardianVerdict.DENY,
-                    step_id=ctx.step_id,
-                    reasoning=f"Tool argument matches blocked pattern: {pattern}",
-                    reason_codes=["BLOCKED_ARGUMENT_PATTERN", "POTENTIAL_PATH_TRAVERSAL"],
-                )
+            needle = pattern.lower()
+            if any(needle in v for v in views):
+                findings.append(("BLOCKED_ARGUMENT_PATTERN", f"Tool argument matches blocked pattern: {pattern}"))
+                findings.append(("POTENTIAL_PATH_TRAVERSAL", f"Tool argument matches blocked pattern: {pattern}"))
+        if self.builtin_detectors:
+            findings.extend(_builtin_findings(views))
+        if findings:
+            # Report every rule that fired, so a denial explains itself completely.
+            return GuardianVerdictResult(
+                decision=GuardianVerdict.DENY,
+                step_id=ctx.step_id,
+                reasoning="; ".join(sorted({desc for _, desc in findings})),
+                reason_codes=sorted({code for code, _ in findings}),
+            )
 
         # Detect credential: tool scope in wrong context (belt and suspenders over OPA)
         tool_name = ctx.action_method or ""

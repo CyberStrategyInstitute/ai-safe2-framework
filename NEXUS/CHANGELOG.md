@@ -7,6 +7,59 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
+## [Unreleased] -- false-assurance hardening (2026-10-06)
+
+Found by the four-area battery in `tests/battery/`. Assessment record:
+`docs/assessments/2026-10-06-false-assurance/`.
+
+### Security
+
+- **Guardian inline policy no longer substring-matches raw JSON.** String leaves and
+  keys are percent-decoded (up to three rounds), NFKC-normalized, lower-cased, given
+  `/` separators and collapsed slashes before matching. Built-in detectors now run in
+  addition to `blocked_argument_patterns`:
+  - `CREDENTIAL_PATH`: `.ssh/`, `.aws/`, `.kube/config`, `.netrc`, gcloud, docker
+    config, `/etc/shadow`, `/etc/sudoers`
+  - `PATH_TRAVERSAL`: any `..` segment
+  - `METADATA_ENDPOINT`: `169.254.0.0/16` in decimal, hex, or octal spellings;
+    `fd00:ec2::254`; `100.100.100.200`; metadata hostnames
+  - `SECRET_IN_ARGUMENTS`: private-key headers, cloud and VCS tokens
+  - `REMOTE_CODE_PIPE`: a download piped into an interpreter
+
+  Of 24 evasions that v0.3 allowed, 24 are now denied. Denials report every rule that
+  fired.
+- **HEAR reasoning must be reviewable.** ACT-3/4 reasoning shorter than 40 characters
+  or 5 words is denied (`REASONING_INSUFFICIENT`). Previously, `"x"` satisfied it.
+- **OPA authz (`NEXUS/opa/nexus-authz.rego`):**
+  - Decisions are always defined. Previously they were undefined for any call with no
+    persistence declaration.
+  - The most restrictive declared persistence scope wins. A `request` label no longer
+    downgrades a `PERMANENT` write.
+  - Explicit deny rules now gate `allow`.
+  - `deny_reason` is populated.
+
+### Changed (behavior)
+
+- **Breaking for callers that omit `act_tier`:** Guardian now treats an undeclared ACT
+  tier as ACT-4, so HEAR applies (`ACT_TIER_UNDECLARED`). A tier outside 1-4 is denied
+  (`ACT_TIER_INVALID`). To restore v0.3 behavior, pass
+  `GuardianPolicy(treat_undeclared_tier_as=None)`.
+- Policies migrated to Rego v1 syntax. They load on OPA 0.65.0 (compose pin) and on
+  1.x. Previously they failed on 1.x, and `nexus-aism-invariants.rego` failed
+  type-checking on every version. The APay migration is decision-identical on 873
+  differential inputs.
+
+### Fixed
+
+- `docker/docker-compose.yml` mounted `./opa` and `./schemas`, which resolve under
+  `docker/` and do not exist. It now mounts `../opa` and `../schemas`. The OPA
+  healthcheck no longer calls `curl`, which is absent from the `-static` image, so the
+  gateway's `service_healthy` dependency can clear.
+- `.github/workflows/opa.yml` watched a non-existent `opa/**` path. It now checks and
+  tests `NEXUS/opa` on OPA 0.65.0 and 1.4.2.
+
+---
+
 ## [0.5.0] -- 2026-10-04
 
 ### Summary
