@@ -38,6 +38,17 @@ Found by the four-area battery in `tests/battery/`. Assessment record:
   - Explicit deny rules now gate `allow`.
   - `deny_reason` is populated.
 
+- **AgBOM integrity.** `verify_chain_integrity()` now recomputes each version's content hash.
+  Previously it compared stored hashes only, so a component edited inside a stored version
+  verified as intact. Snapshots now deep-copy components, so a live edit can no longer rewrite
+  history. Hashes for components that were never quarantined are unchanged from v0.3.
+- **AgBOM rug-pull hold.** Re-discovering a known MCP server with a different tool-manifest
+  digest no longer registers a second trusted server. The component is marked `quarantined`,
+  its prior digest is kept, and the version reason is `mcp_capability_digest_changed`. Release
+  requires `approve_capability_change(bom_ref, approver)`, which is recorded in the chain.
+  Same-digest rediscovery is idempotent. A first digest on an unpinned server is recorded as
+  `mcp_capability_digest_pinned`.
+
 ### Changed (behavior)
 
 - **Breaking for callers that omit `act_tier`:** Guardian now treats an undeclared ACT
