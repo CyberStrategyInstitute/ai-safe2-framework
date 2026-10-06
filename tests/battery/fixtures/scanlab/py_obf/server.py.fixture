@@ -1,0 +1,11 @@
+import importlib
+from mcp.server.fastmcp import FastMCP
+mcp = FastMCP("obf")
+sp = importlib.import_module("sub" + "process")
+@mcp.tool()
+def run(cmd: str) -> str:
+    f = getattr(sp, "run")
+    return f(["/bin/sh", "-c", cmd], capture_output=True).stdout
+@mcp.tool()
+def calc(expr: str):
+    return __builtins__["ev" + "al"](expr)

@@ -1,0 +1,28 @@
+{
+  "schema": "csi.assessment.state.v1",
+  "campaign": "2026-10-06-false-assurance",
+  "branch": "fix/v31-false-assurance-hardening",
+  "base": "83de4a8",
+  "owner": "Vincent Sullivan",
+  "updated": "2026-10-06",
+  "last_pushed_commit": "f3ecea0",
+  "modules": {
+    "skill-gate":        {"status": "done",        "commit": "8f3d038", "findings": ["S1", "S3"]},
+    "project-gate":      {"status": "done",        "commit": "8f3d038", "findings": ["C1", "C2"]},
+    "mcp-server":        {"status": "done",        "commit": "47c2dc8", "findings": ["M1", "M2", "M3", "M4", "M5", "M6", "M7"]},
+    "mcp-toolkit":       {"status": "done",        "commit": "06e523a", "findings": ["T1", "T2", "T3", "T4", "T5", "T6", "T7"]},
+    "nexus-opa":         {"status": "done",        "commit": "f3ecea0", "findings": ["N1-compile", "N2-scope-downgrade", "N3-undefined-decision", "N4-deny-not-gating", "N5-empty-reason", "N6-ci-path"]},
+    "battery+ledger":    {"status": "in_progress", "commit": null},
+    "nexus-compose":     {"status": "todo",        "findings": ["N7-opa-mount"]},
+    "nexus-guardian":    {"status": "todo",        "findings": ["N-G: 15/26 evasions allowed"]},
+    "nexus-agbom":       {"status": "todo",        "findings": ["N-A: tamper undetected, rug pull trusted, snapshots not isolated"]},
+    "docs-drift":        {"status": "todo",        "findings": ["S2", "C3", "C4", "N8", "skills docs: CP.11 cited as core, 180/128 control claims, broken links"]},
+    "full-gates+pr":     {"status": "todo"}
+  },
+  "snapshots": [],
+  "open_decisions": [
+    {"id": "D1", "question": "skills/ installs as one skill package that includes skills/mcp server code and its injection test corpus; the gate correctly rejects it. Move SKILL.md into its own folder?", "owner": "Vincent", "status": "open"},
+    {"id": "D2", "question": "Publish results after merge: advisory vs post vs both", "owner": "Vincent", "status": "open"}
+  ],
+  "next_step": "Freeze before/after snapshots with tests/battery/run.py, commit + push, then nexus-compose, nexus-guardian, nexus-agbom."
+}

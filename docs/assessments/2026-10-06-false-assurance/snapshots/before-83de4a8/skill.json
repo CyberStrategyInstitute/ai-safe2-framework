@@ -1,0 +1,207 @@
+{
+ "schema": "csi.battery.area-result.v1",
+ "label": "before",
+ "area": "SKILL",
+ "repo": "/root/ai-safe2-framework",
+ "revision": "83de4a8",
+ "venv": "/root/venv",
+ "duration_s": 6.9,
+ "results": [
+  {
+   "area": "SKILL",
+   "id": "structure+referential integrity",
+   "status": "FAIL",
+   "want": "0 FAIL",
+   "detail": "PASS 24  WARN 8  FAIL 5"
+  },
+  {
+   "area": "SKILL",
+   "id": "  struct: skills/SKILL.md: all 35 cited control IDs exist - UNKNO",
+   "status": "FAIL",
+   "want": "",
+   "detail": "skills/SKILL.md: all 35 cited control IDs exist - UNKNOWN: ['CP.11']"
+  },
+  {
+   "area": "SKILL",
+   "id": "  struct: skills/codex/ai-safe2-secure-build-copilot/SKILL.md: de",
+   "status": "FAIL",
+   "want": "",
+   "detail": "skills/codex/ai-safe2-secure-build-copilot/SKILL.md: description does not advertise retired v3.0"
+  },
+  {
+   "area": "SKILL",
+   "id": "  struct: skills/mcp/README.md: claims 180 controls",
+   "status": "FAIL",
+   "want": "",
+   "detail": "skills/mcp/README.md: claims 180 controls"
+  },
+  {
+   "area": "SKILL",
+   "id": "  struct: skills/skill_md_root_redirect.md: broken links ['skills",
+   "status": "FAIL",
+   "want": "",
+   "detail": "skills/skill_md_root_redirect.md: broken links ['skills/SKILL.md', 'skills/mcp/README.md']"
+  },
+  {
+   "area": "SKILL",
+   "id": "  struct: skills/skill_md_root_redirect.md: claims 128 controls",
+   "status": "FAIL",
+   "want": "",
+   "detail": "skills/skill_md_root_redirect.md: claims 128 controls"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate benign B1-plain",
+   "status": "PASS",
+   "want": "APPROVE (B3: HOLD/REJECT)",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate benign B2-script",
+   "status": "PASS",
+   "want": "APPROVE (B3: HOLD/REJECT)",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate benign B3-security-docs",
+   "status": "PASS",
+   "want": "APPROVE (B3: HOLD/REJECT)",
+   "detail": "REJECT"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H01-curl-sh",
+   "status": "PASS",
+   "want": "not APPROVE",
+   "detail": "REJECT"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H02-plain-injection",
+   "status": "PASS",
+   "want": "not APPROVE",
+   "detail": "REJECT"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H03-paraphrase",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H04-unicode-tags",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H05-b64-exec",
+   "status": "PASS",
+   "want": "not APPROVE",
+   "detail": "REJECT"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H06-env-exfil",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H07-aws-creds",
+   "status": "PASS",
+   "want": "not APPROVE",
+   "detail": "REJECT"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H08-symlink",
+   "status": "PASS",
+   "want": "not APPROVE",
+   "detail": "REJECT"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H09-html-comment",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H10-concat",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H11-homoglyph",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H12-json-directive",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H13-oversize",
+   "status": "PASS",
+   "want": "not APPROVE",
+   "detail": "REJECT"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H14-trigger-hijack",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H15-persistence",
+   "status": "PASS",
+   "want": "not APPROVE",
+   "detail": "REJECT"
+  },
+  {
+   "area": "SKILL",
+   "id": "gate hostile H16-getattr",
+   "status": "FAIL",
+   "want": "not APPROVE",
+   "detail": "APPROVE"
+  },
+  {
+   "area": "SKILL",
+   "id": "hostile skills approved (total)",
+   "status": "FAIL",
+   "want": "0",
+   "detail": "9/16 ['H03-paraphrase', 'H04-unicode-tags', 'H06-env-exfil', 'H09-html-comment', 'H10-concat', 'H11-homoglyph', 'H12-json-directive', 'H14-trigger-hijack', 'H16-getattr']"
+  },
+  {
+   "area": "SKILL",
+   "id": "INFO skills/ root package boundary",
+   "status": "INFO",
+   "want": "packaging finding, not a gate defect",
+   "detail": "exit=1; package includes MCP test corpus=True"
+  },
+  {
+   "area": "SKILL",
+   "id": "repo's codex skills not rejected",
+   "status": "PASS",
+   "want": "none",
+   "detail": "rejected=[]"
+  }
+ ]
+}

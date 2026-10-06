@@ -1,0 +1,130 @@
+{
+ "schema": "csi.battery.area-result.v1",
+ "label": "before",
+ "area": "MCP",
+ "repo": "/root/ai-safe2-framework",
+ "revision": "83de4a8",
+ "venv": "/root/venv",
+ "duration_s": 45.3,
+ "results": [
+  {
+   "area": "MCP",
+   "id": "score: self-attestation adds no points",
+   "status": "FAIL",
+   "want": "attest == poisoned",
+   "detail": "poisoned=32 poisoned+attest=57"
+  },
+  {
+   "area": "MCP",
+   "id": "score: grade-gaming poisoned server",
+   "status": "FAIL",
+   "want": "<50, no badge",
+   "detail": "score=87 badge=True"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp URL: poisoned+gamed fails CI",
+   "status": "FAIL",
+   "want": "exit 1",
+   "detail": "exit=0"
+  },
+  {
+   "area": "MCP",
+   "id": "score: honest server outranks poisoned",
+   "status": "FAIL",
+   "want": "clean > gamed",
+   "detail": "clean=65 gamed=87"
+  },
+  {
+   "area": "MCP",
+   "id": "score: cites v3.1 profile",
+   "status": "FAIL",
+   "want": "no v3.0",
+   "detail": "banner"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: py_clean",
+   "status": "FAIL",
+   "want": "exit 0",
+   "detail": "exit=1"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: py_vuln",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: py_obf",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: ts_vuln",
+   "status": "FAIL",
+   "want": "exit 1",
+   "detail": "exit=0"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: evade",
+   "status": "FAIL",
+   "want": "exit 1",
+   "detail": "exit=0"
+  },
+  {
+   "area": "MCP",
+   "id": "wrap-stdio --block: payload not delivered",
+   "status": "FAIL",
+   "want": "none",
+   "detail": "leaked=['id_rsa', 'Do not tell the user', 'evil.example/x | sh'] exit=TIMEOUT"
+  },
+  {
+   "area": "MCP",
+   "id": "wrap-stdio: client EOF terminates wrapper",
+   "status": "FAIL",
+   "want": "exits",
+   "detail": "exit=TIMEOUT"
+  },
+  {
+   "area": "MCP",
+   "id": "wrap audit attributes tool/method",
+   "status": "FAIL",
+   "want": "populated",
+   "detail": "2 records"
+  },
+  {
+   "area": "MCP",
+   "id": "wrap-proxy --pin-schema: rug pull withheld",
+   "status": "FAIL",
+   "want": "withheld",
+   "detail": "first_ok=True rug_delivered=True"
+  },
+  {
+   "area": "MCP",
+   "id": "knowledge server: imports after documented install",
+   "status": "FAIL",
+   "want": "import ok",
+   "detail": "ModuleNotFoundError: No module named 'mcp.server.fastmcp'. This is mcp 2.x, where FastMCP was renamed to MCPServer (from mcp.server.mcpserve"
+  },
+  {
+   "area": "MCP",
+   "id": "knowledge server: stdio + tool calls",
+   "status": "NOT_RUN",
+   "want": "",
+   "detail": "server does not import"
+  },
+  {
+   "area": "MCP",
+   "id": "knowledge server HTTP: 401 unauth, 200 auth",
+   "status": "FAIL",
+   "want": "401 then 200",
+   "detail": "UNAUTH 000 | AUTH 000 | AUTHLOWER 000"
+  }
+ ]
+}

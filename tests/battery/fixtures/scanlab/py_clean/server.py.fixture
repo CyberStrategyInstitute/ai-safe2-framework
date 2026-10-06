@@ -1,0 +1,9 @@
+import pathlib
+from mcp.server.fastmcp import FastMCP
+mcp = FastMCP("clean")
+ROOT = pathlib.Path("/srv/docs").resolve()
+@mcp.tool()
+def read(name: str) -> str:
+    p = (ROOT / name).resolve()
+    if ROOT not in p.parents: raise ValueError("outside root")
+    return p.read_text()[:10000]
