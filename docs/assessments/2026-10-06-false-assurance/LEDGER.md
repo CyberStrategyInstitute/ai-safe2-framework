@@ -94,3 +94,19 @@ Commit `f3ecea0`, pushed:
 Remaining 27: SKILL docs drift (6), NEXUS Guardian (15), AgBOM (5), compose OPA mount (1).
 Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
 **Next:** nexus-compose, nexus-guardian, nexus-agbom; snapshot after each.
+
+## 2026-10-06 E7: Compose and Guardian fixed
+
+- `5af8409` compose: mounts now resolve to `NEXUS/opa` and `NEXUS/schemas`
+  (`docker compose config`). The OPA healthcheck uses `/opa eval --fail`: exit 0
+  with policies, 1 with an empty mount, 2 with a broken policy. **Limit:** no Docker
+  daemon here, so there was no live `compose up`.
+- `904e289` Guardian:
+  - Arguments are normalized before matching, and five built-in detectors were added.
+  - HEAR reasoning has a quality floor.
+  - An undeclared tier is treated as ACT-4. This breaks callers that omit
+    `act_tier`; the opt-out is documented in the CHANGELOG.
+  - Red/green: 24/33 new tests fail on main, 33/33 pass on the branch. SDK suite
+    590/590. Example decisions are unchanged.
+
+**Next:** AgBOM.

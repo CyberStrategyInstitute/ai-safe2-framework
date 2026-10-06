@@ -5,7 +5,7 @@
   "base": "83de4a8",
   "owner": "Vincent Sullivan",
   "updated": "2026-10-06",
-  "last_pushed_commit": "225f45b",
+  "last_pushed_commit": "904e289",
   "modules": {
     "skill-gate": {
       "status": "done",
@@ -66,16 +66,18 @@
       "commit": "225f45b"
     },
     "nexus-compose": {
-      "status": "todo",
+      "status": "done",
       "findings": [
         "N7-opa-mount"
-      ]
+      ],
+      "commit": "5af8409"
     },
     "nexus-guardian": {
-      "status": "todo",
+      "status": "done",
       "findings": [
         "N-G: 15/26 evasions allowed"
-      ]
+      ],
+      "commit": "904e289"
     },
     "nexus-agbom": {
       "status": "todo",
@@ -131,5 +133,5 @@
       "status": "open"
     }
   ],
-  "next_step": "nexus-compose (fix ./opa mount -> ../opa), then nexus-guardian (15 evasions), then nexus-agbom (tamper/rug-pull/isolation). Rerun: tests/battery/run.py --areas nexus."
+  "next_step": "nexus-agbom: recompute version hashes in verify_chain_integrity, deep-copy snapshot components, hold on capability_digest change (rug pull). Red tests first; rerun tests/battery/run.py --areas nexus."
 }
