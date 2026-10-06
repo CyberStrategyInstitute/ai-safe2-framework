@@ -110,3 +110,21 @@ Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
     590/590. Example decisions are unchanged.
 
 **Next:** AgBOM.
+
+## 2026-10-06 E8: NEXUS complete
+
+- `04f6192` AgBOM: chain verification recomputes content, snapshots are isolated, and a
+  rug pull is quarantined with release only by explicit approval. Red/green: 7/9 → 9/9.
+  Hashes are byte-identical to v0.3 for components never quarantined.
+- `4f2cff2` Memory Vaccine: stub mode now labels drift as unmeasured (`drift_method`)
+  and warns. Red/green: 4/4.
+- `7b85788` nexus-score: checks are now behavioral, with a NOT ASSESSED state and
+  meaningful exit codes.
+  - **Headline:** main's own checker printed "10/10 verified, all v0.3 controls
+    satisfied". Run against main, the behavioral checker gives 7 verified, 3 failed.
+  - New battery case: the scorer's claims must agree with battery evidence.
+- Harness: Guardian benign cases now declare `act_tier=1`, because an omitted tier
+  is fail-closed by design and has its own case. Guardian battery: 27/27 on the
+  branch, 11/27 on main.
+
+**Next:** docs drift, then full gates, after snapshot, and draft PR.

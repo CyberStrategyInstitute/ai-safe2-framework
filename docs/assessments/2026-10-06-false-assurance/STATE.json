@@ -5,7 +5,7 @@
   "base": "83de4a8",
   "owner": "Vincent Sullivan",
   "updated": "2026-10-06",
-  "last_pushed_commit": "904e289",
+  "last_pushed_commit": "7b85788",
   "modules": {
     "skill-gate": {
       "status": "done",
@@ -80,10 +80,11 @@
       "commit": "904e289"
     },
     "nexus-agbom": {
-      "status": "todo",
+      "status": "done",
       "findings": [
         "N-A: tamper undetected, rug pull trusted, snapshots not isolated"
-      ]
+      ],
+      "commit": "04f6192"
     },
     "docs-drift": {
       "status": "todo",
@@ -97,6 +98,20 @@
     },
     "full-gates+pr": {
       "status": "todo"
+    },
+    "nexus-memory": {
+      "status": "done",
+      "commit": "4f2cff2",
+      "findings": [
+        "stub drift reported as measured"
+      ]
+    },
+    "nexus-score": {
+      "status": "done",
+      "commit": "7b85788",
+      "findings": [
+        "main self-check printed 10/10 satisfied; behavioral checks fail 3/10"
+      ]
     }
   },
   "snapshots": [
@@ -133,5 +148,5 @@
       "status": "open"
     }
   ],
-  "next_step": "nexus-agbom: recompute version hashes in verify_chain_integrity, deep-copy snapshot components, hold on capability_digest change (rug pull). Red tests first; rerun tests/battery/run.py --areas nexus."
+  "next_step": "docs-drift: skills/ CP.11-as-core citation, 180/128 control claims, broken links in skill_md_root_redirect.md, v3.0 labels; NEXUS README install path + version; safe2 README CLI badge. Then full gates + after snapshot + draft PR."
 }
