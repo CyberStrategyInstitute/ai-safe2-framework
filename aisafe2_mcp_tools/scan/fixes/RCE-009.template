@@ -1,0 +1,20 @@
+# Fix Template: RCE-009 — obfuscated dynamic import, attribute or shell invocation
+# AI SAFE2 v3.1 CP.5.MCP-1 (Command Construction Safety)
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+import importlib
+sp = importlib.import_module("sub" + "process")
+def run(cmd: str):
+    return getattr(sp, "ru" + "n")(["/bin/sh", "-c", cmd])
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+# Import by literal name, dispatch through an explicit allowlist, never `sh -c`.
+import subprocess
+
+COMMANDS = {"disk_usage": ["/usr/bin/df", "-h"], "uptime": ["/usr/bin/uptime"]}
+
+def run(name: str) -> str:
+    argv = COMMANDS.get(name)
+    if argv is None:
+        raise ValueError(f"command not allowed: {name}")
+    return subprocess.run(argv, capture_output=True, text=True, shell=False).stdout

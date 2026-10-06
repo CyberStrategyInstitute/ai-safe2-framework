@@ -150,13 +150,32 @@ class AuditLog:
             "schema_hash": schema_hash,
         })
 
-    def write_schema_changed(self, baseline_hash: str, current_hash: str) -> None:
-        """Alert on tools/list hash change vs. pinned baseline (MCP-11 + MCP-13)."""
+    def write_schema_changed(
+        self, baseline_hash: str, current_hash: str, enforced: bool = False
+    ) -> None:
+        """Alert on tools/list catalog change vs. pinned baseline (MCP-11 + MCP-13)."""
         self.write({
             "event": "schema_changed",
             "baseline_hash": baseline_hash,
             "current_hash": current_hash,
-            "action": "ALERT — schema change without documented release event",
+            "action": (
+                "WITHHELD — changed catalog not delivered; re-approve to accept"
+                if enforced else "ALERT — schema change without documented release event"
+            ),
+        })
+
+    def write_policy_action(
+        self, action: str, method: str = "", tool_name: str = "", client_ip: str = "",
+        detail: dict[str, Any] | None = None,
+    ) -> None:
+        """Record what enforcement did with a message (blocked, withheld, tools removed)."""
+        self.write({
+            "event": "policy_action",
+            "action": action,
+            "method": method,
+            "tool_name": tool_name,
+            "client_ip": client_ip,
+            **(detail or {}),
         })
 
     def write_proxy_start(self, target_url: str, local_port: int) -> None:

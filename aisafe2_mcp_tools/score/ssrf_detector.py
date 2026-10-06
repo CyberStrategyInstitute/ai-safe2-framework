@@ -38,7 +38,7 @@ def check_ssrf_surface(tools: list[dict[str, object]]) -> CheckResult:
     score = 5 if count == 0 else (2 if count <= 2 else 0)
 
     return CheckResult(
-        check_id="SSRF", name="SSRF Surface Detection", cp5_control="MCP-6",
+        check_id="SSRF", name="SSRF Surface Detection", cp5_control="MCP-19",
         passed=(score >= 3), score=score, max_score=5,
         severity="high" if count > 0 else "info",
         detail=(

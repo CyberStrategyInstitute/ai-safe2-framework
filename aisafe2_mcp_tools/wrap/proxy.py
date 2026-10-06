@@ -18,13 +18,13 @@ Limitation: SSE streaming not supported (roadmap item for v1.1)
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import sys
 from collections import defaultdict
 
 import structlog
 
+from aisafe2_mcp_tools.wrap import policy
 from aisafe2_mcp_tools.wrap.audit import AuditLog
 from aisafe2_mcp_tools.wrap.ratelimit import AsyncTokenBucket, make_async_bucket
 from aisafe2_mcp_tools.wrap.scanner import MessageScanner
@@ -41,6 +41,7 @@ async def run_proxy(
     audit_log_path: str | None,
     rate_limit: int,
     pin_schema: bool = False,
+    block: bool = True,
 ) -> None:
     """
     Start the HTTP proxy server.
@@ -103,6 +104,8 @@ async def run_proxy(
             )
 
         method = str(body.get("method", ""))
+        params = body.get("params")
+        tool_name = str(params.get("name", "")) if isinstance(params, dict) else ""
 
         # Scan outbound (input) with injection + SSRF checks
         if scan_inputs:
@@ -111,9 +114,16 @@ async def run_proxy(
             all_input = list(input_findings) + ssrf_findings
             if all_input:
                 log.warning("proxy.input_injection", ip=client_ip, count=len(all_input))
-                audit.write_injection("input", all_input, method, client_ip)
+                audit.write_injection("input", all_input, method, client_ip, tool_name=tool_name)
                 for sf in ssrf_findings:
                     audit.write_ssrf_blocked(sf.get("field_path", ""), client_ip)
+                if block:
+                    audit.write_policy_action("input_blocked", method, tool_name, client_ip)
+                    return JSONResponse(policy.jsonrpc_error(
+                        body.get("id"), policy.CODE_INPUT_BLOCKED,
+                        "AI SAFE2: request blocked - hostile content in arguments",
+                        {"families": sorted({str(f.get("family", "")) for f in all_input})},
+                    ))
             body = sanitized_body if isinstance(sanitized_body, dict) else body
 
         # Forward to upstream
@@ -133,36 +143,46 @@ async def run_proxy(
                 )
 
         # Scan inbound (output) — tool responses going to LLM client
+        original = response_data
         if scan_outputs:
             sanitized_resp, output_findings = scanner.scan(response_data, "output")
             if output_findings:
                 log.warning("proxy.output_injection", ip=client_ip, count=len(output_findings))
-                audit.write_injection(
-                    "output", output_findings, method, client_ip,
-                    scanner.extract_tool_name(body),
+                audit.write_injection("output", output_findings, method, client_ip, tool_name)
+            sanitized_dict = sanitized_resp if isinstance(sanitized_resp, dict) else response_data
+            response_data, action = policy.enforce_output(
+                response_data, sanitized_dict, output_findings, method, block)
+            if action in ("tools_removed", "withheld"):
+                audit.write_policy_action(
+                    action, method, tool_name, client_ip,
+                    detail={"removed_tools": policy.removed_tool_names(original, response_data)}
+                    if action == "tools_removed" else None,
                 )
-            response_data = sanitized_resp if isinstance(sanitized_resp, dict) else response_data
 
         # Audit tool invocations (MCP-5)
         if "tool" in method.lower() or method == "tools/call":
-            audit.write_tool_invocation(method, scanner.extract_tool_name(body), client_ip)
+            audit.write_tool_invocation(method, tool_name, client_ip)
 
-        # MCP-11: Schema temporal profiling — detect tools/list hash changes
+        # MCP-11: catalog pinning. Hash the catalog only (not the envelope id), and
+        # in block mode withhold a changed catalog instead of delivering it.
         if pin_schema and method == "tools/list":
-            response_hash = hashlib.sha256(
-                json.dumps(response_data, sort_keys=True).encode()
-            ).hexdigest()
-            if not _schema_baseline:
-                _schema_baseline["hash"] = response_hash
-                audit.write_schema_pinned(response_hash)
-                log.info("proxy.schema_pinned", hash=response_hash[:16])
-            elif _schema_baseline["hash"] != response_hash:
-                log.warning(
-                    "proxy.schema_changed",
-                    baseline=_schema_baseline["hash"][:16],
-                    current=response_hash[:16],
-                )
-                audit.write_schema_changed(_schema_baseline["hash"], response_hash)
+            current = policy.catalog_hash(original)
+            if current is not None:
+                if not _schema_baseline:
+                    _schema_baseline["hash"] = current
+                    audit.write_schema_pinned(current)
+                    log.info("proxy.schema_pinned", hash=current[:16])
+                elif _schema_baseline["hash"] != current:
+                    log.warning("proxy.schema_changed", baseline=_schema_baseline["hash"][:16],
+                                current=current[:16])
+                    audit.write_schema_changed(_schema_baseline["hash"], current, enforced=block)
+                    if block:
+                        response_data = policy.jsonrpc_error(
+                            original.get("id"), policy.CODE_CATALOG_CHANGED,
+                            "AI SAFE2: tool catalog changed since it was pinned; "
+                            "restart the proxy to re-approve",
+                            {"baseline_hash": _schema_baseline["hash"], "current_hash": current},
+                        )
 
         return JSONResponse(response_data)
 
@@ -177,11 +197,13 @@ async def run_proxy(
 
     audit.write_proxy_start(target_url, local_port)
     print(
-        f"\nmcp-safe-wrap HTTP Proxy — AI SAFE2 v3.0 CP.5.MCP\n"
+        f"\nmcp-safe-wrap HTTP Proxy — AI SAFE2 v3.1 CP.5.MCP\n"
         f"  Target:       {target_url}\n"
         f"  Local:        http://127.0.0.1:{local_port}/proxy\n"
         f"  Scan inputs:  {scan_inputs}\n"
         f"  Scan outputs: {scan_outputs}\n"
+        f"  Mode:         {'block' if block else 'log-only'}"
+        f"{' + catalog pinning' if pin_schema else ''}\n"
         f"  Rate limit:   {f'{rate_limit}/hr per IP' if rate_limit > 0 else 'disabled'}\n"
         f"  Audit log:    {audit_log_path or 'disabled'}\n\n"
         f"  Connect Claude Code to: http://127.0.0.1:{local_port}/proxy\n",

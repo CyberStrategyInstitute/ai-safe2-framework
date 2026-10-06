@@ -12,7 +12,10 @@ Rubric (100 points max):
   Rate limiting         0–10
   Session ID in URL     0–5
   SSRF surface          0–5
-  Builder attestation   0–25 bonus (capped at 100 total)
+  Builder attestation   reported as claimed weight only; NEVER added to the score
+                        (a server cannot raise its own grade by publishing a file)
+  Blocking findings     detected tool-description injection or schema poisoning caps
+                        the score at 29 (Critical) and withholds the badge
 
 Badge threshold: 70+
 """

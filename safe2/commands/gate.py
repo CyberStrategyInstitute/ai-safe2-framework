@@ -111,6 +111,13 @@ def gate_mcp(target, ci_fail_below, token, timeout, max_files, max_file_bytes, m
             raise click.ClickException(str(exc)) from exc
         report = asyncio.run(assessor.assess())
         print_terminal_report(report)
+        if report.blocking_findings:
+            click.echo(
+                "\nGATE: FAIL - hostile content observed in tool schemas: "
+                + ", ".join(report.blocking_findings),
+                err=True,
+            )
+            sys.exit(EXIT_FAIL)
         if report.total_score < ci_fail_below:
             click.echo(f"\nGATE: FAIL - {report.total_score}/100 below {ci_fail_below}", err=True)
             sys.exit(EXIT_FAIL)

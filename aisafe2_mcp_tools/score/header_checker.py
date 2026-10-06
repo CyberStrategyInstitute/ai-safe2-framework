@@ -60,7 +60,7 @@ def check_security_headers(headers: dict[str, str]) -> CheckResult:
         detail_parts.append(f"Missing: {', '.join(missing)}")
 
     return CheckResult(
-        check_id="HEADERS", name="Security Response Headers", cp5_control="MCP-6",
+        check_id="HEADERS", name="Security Response Headers", cp5_control="MCP-4",
         passed=(score >= 8), score=min(10, score), max_score=10,
         severity="medium" if score < 8 else "info",
         detail=". ".join(detail_parts) if detail_parts else "No headers available.",

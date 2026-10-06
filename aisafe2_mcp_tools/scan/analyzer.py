@@ -21,7 +21,7 @@ from pathlib import Path
 from aisafe2_mcp_tools.scan.ast_analyzer import ASTAnalyzer
 from aisafe2_mcp_tools.scan.dep_checker import DependencyChecker
 from aisafe2_mcp_tools.scan.findings import SEVERITY_ORDER, Finding
-from aisafe2_mcp_tools.scan.pattern_scanner import PatternScanner
+from aisafe2_mcp_tools.scan.pattern_scanner import JS_SUFFIXES, PatternScanner
 from aisafe2_mcp_tools.scan.reporter import html_report, json_report, terminal_report
 
 logger = logging.getLogger(__name__)
@@ -67,7 +67,10 @@ class MCPScanner:
                 if name not in EXCLUDED_DIRS and not name.startswith((".test-temp", "pytest-"))
             )
             for name in sorted(files):
-                if not name.endswith(".py") or name.startswith("test_"):
+                # Every source file is scanned. Skipping `test_*` let a hostile server
+                # evade the scan by naming its entrypoint test_server.py.
+                is_js = name.endswith(JS_SUFFIXES) and not name.endswith(".d.ts")
+                if not (name.endswith(".py") or is_js):
                     continue
                 py_file = Path(current) / name
                 file_count += 1
@@ -90,6 +93,10 @@ class MCPScanner:
                     rel = str(py_file.relative_to(self.target))
                 except OSError as exc:
                     logger.warning("Skipping unreadable source file %s: %s", py_file, exc)
+                    continue
+
+                if is_js:
+                    raw.extend(self._patterns.scan_js_file(source, rel, lines))
                     continue
 
             # AST analysis (data-flow checks)

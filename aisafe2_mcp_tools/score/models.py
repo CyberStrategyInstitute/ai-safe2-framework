@@ -75,3 +75,10 @@ class ScoreReport:
     tools_scanned: list[str]
     errors: list[str]
     duration_seconds: float
+    # Self-declared /.well-known/mcp-security.json claims. Reported, never scored:
+    # an unauthenticated server-published file cannot raise its own grade.
+    attestation_claimed_points: int = 0
+    # Checks whose failure means hostile content was observed (tool-description
+    # injection / schema poisoning). Any entry caps the score and blocks the badge
+    # and the CI gate, regardless of the total.
+    blocking_findings: list[str] = field(default_factory=list)

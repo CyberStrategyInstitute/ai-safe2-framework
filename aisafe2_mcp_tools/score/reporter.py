@@ -26,7 +26,7 @@ def print_terminal_report(report: ScoreReport) -> None:
 
     console.print()
     console.print(Panel(
-        f"[bold]AI SAFE2 v3.0 CP.5.MCP — Remote Security Assessment[/bold]\n"
+        f"[bold]AI SAFE2 v3.1 CP.5.MCP — Remote Security Assessment[/bold]\n"
         f"Server: [cyan]{report.server_url}[/cyan]\n"
         f"Assessed: {report.assessment_timestamp} ({report.duration_seconds}s)",
         style="blue",
@@ -45,7 +45,10 @@ def print_terminal_report(report: ScoreReport) -> None:
         f"— [{score_color}]{report.rating}[/{score_color}]"
     )
     if report.attestation.present:
-        console.print(f"  Base (remote): {report.base_score}/100 + Attestation bonus: +{report.attestation_bonus}")
+        console.print(
+            f"  Score is remote evidence only. Self-declared attestation claims "
+            f"{report.attestation_claimed_points} points of controls; claims are not scored."
+        )
     console.print(f"  Tools scanned: {report.tool_count} | Badge eligible: {'YES' if report.badge_eligible else 'NO'}\n")
 
     # Checks table
@@ -74,13 +77,16 @@ def print_terminal_report(report: ScoreReport) -> None:
 
     # Attestation
     if report.attestation.present:
-        console.print("\n  [green]✓[/green] Builder attestation found (/.well-known/mcp-security.json)")
+        console.print(
+            "\n  [yellow]i[/yellow] Builder attestation found (/.well-known/mcp-security.json) "
+            "- self-declared, not verified, not scored"
+        )
         console.print(f"    Server: {report.attestation.server_name}")
         console.print(f"    Framework: {report.attestation.framework}")
     else:
         console.print(
             "\n  [yellow]![/yellow] No builder attestation found. "
-            "Add /.well-known/mcp-security.json to unlock up to +25 bonus points."
+            "Self-attestation is reported for context only and never changes the score."
         )
 
     # Errors
@@ -108,7 +114,7 @@ def print_terminal_report(report: ScoreReport) -> None:
 
 def print_plain_report(report: ScoreReport) -> None:
     """Plain text fallback when Rich is not available."""
-    print("\nAI SAFE2 v3.0 CP.5.MCP — Remote Security Assessment")
+    print("\nAI SAFE2 v3.1 CP.5.MCP — Remote Security Assessment")
     print(f"Server: {report.server_url}")
     print(f"Score: {report.total_score}/100 — {report.rating}")
     print(f"Badge eligible: {'YES' if report.badge_eligible else 'NO'}\n")
@@ -134,13 +140,16 @@ def to_json(report: ScoreReport) -> str:
             "total": report.total_score,
             "base_remote": report.base_score,
             "attestation_bonus": report.attestation_bonus,
+            "attestation_claimed_points": report.attestation_claimed_points,
+            "attestation_scored": False,
+            "blocking_findings": report.blocking_findings,
             "max_possible": report.max_possible,
         },
         "rating": report.rating,
         "badge_eligible": report.badge_eligible,
         "tool_count": report.tool_count,
         "tools_scanned": report.tools_scanned,
-        "framework": "AI SAFE2 v3.0 CP.5.MCP",
+        "framework": "AI SAFE2 v3.1 CP.5.MCP",
         "checks": [
             {
                 "check_id": c.check_id,
@@ -223,16 +232,16 @@ def to_html(report: ScoreReport) -> str:
     if report.attestation.present:
         att_html = f"""
         <div class="attestation found">
-          <h3>✅ Builder Attestation Found</h3>
+          <h3>Builder Attestation Found (self-declared)</h3>
           <p>Server: <strong>{report.attestation.server_name}</strong> |
           Framework: {report.attestation.framework} |
-          Bonus points: +{report.attestation_bonus}</p>
+          Self-declared, not verified, not scored (claimed weight {report.attestation_claimed_points})</p>
         </div>"""
     else:
         att_html = """
         <div class="attestation missing">
           <h3>⚠️ No Builder Attestation</h3>
-          <p>Add <code>/.well-known/mcp-security.json</code> to unlock up to +25 bonus points
+          <p><code>/.well-known/mcp-security.json</code> is optional context and never changes the score
           for controls that cannot be verified remotely (MCP-1, MCP-4, MCP-5, MCP-6).</p>
         </div>"""
 
@@ -284,15 +293,15 @@ def to_html(report: ScoreReport) -> str:
 </head>
 <body>
 <div class="header">
-  <h1>AI SAFE2 v3.0 CP.5.MCP — Remote Security Assessment</h1>
+  <h1>AI SAFE2 v3.1 CP.5.MCP — Remote Security Assessment</h1>
   <p>{report.server_url} | Assessed: {report.assessment_timestamp} ({report.duration_seconds}s) | {report.tool_count} tools scanned</p>
 </div>
 
 <div class="score-hero">
   <div class="score-number">{report.total_score}</div>
   <div class="score-label">{report.rating}</div>
-  <div class="meta">out of 100 | AI SAFE2 v3.0 CP.5.MCP
-  {f" | Base: {report.base_score} + Attestation: +{report.attestation_bonus}" if report.attestation.present else ""}</div>
+  <div class="meta">out of 100 | AI SAFE2 v3.1 CP.5.MCP
+  {" | Attestation present (self-declared, not scored)" if report.attestation.present else ""}</div>
 </div>
 
 <div class="badge-strip">
@@ -321,7 +330,7 @@ def to_html(report: ScoreReport) -> str:
   <div style="background:white;padding:1.5rem;border-radius:8px;margin-top:1.5rem;box-shadow:0 1px 4px rgba(0,0,0,.1);">
     <h2>About This Assessment</h2>
     <p>This report was generated by <strong>aisafe2-mcp-tools mcp-score v1.0</strong> against the
-    <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework">AI SAFE2 v3.0 framework</a>
+    <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework">AI SAFE2 v3.1 framework</a>
     CP.5.MCP controls.</p>
     <p><strong>What remote assessment covers:</strong> Authentication posture, TLS enforcement,
     tool description injection patterns (MCP-2), Full Schema Poisoning (CyberArk research),

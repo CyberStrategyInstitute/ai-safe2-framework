@@ -20,6 +20,7 @@ import sys
 
 import structlog
 
+from aisafe2_mcp_tools.wrap import policy
 from aisafe2_mcp_tools.wrap.audit import AuditLog
 from aisafe2_mcp_tools.wrap.ratelimit import SyncTokenBucket, make_sync_bucket
 from aisafe2_mcp_tools.wrap.scanner import MessageScanner
@@ -38,6 +39,7 @@ class StdioWrapper:
         scan_outputs: bool = True,
         block_on_match: bool = True,
         rate_limit: int = 0,
+        pin_schema: bool = False,
     ) -> None:
         if not command:
             raise ValueError("command must be non-empty")
@@ -48,6 +50,15 @@ class StdioWrapper:
         self._scanner = MessageScanner()
         self._audit = AuditLog(audit_log)
         self._bucket: SyncTokenBucket | None = make_sync_bucket(rate_limit)
+        self.pin_schema = pin_schema
+        self._pinned_catalog: str | None = None
+        # JSON-RPC id -> (method, tool name): responses carry neither, and the
+        # audit trail previously recorded empty method/tool fields.
+        self._pending: dict[str, tuple[str, str]] = {}
+
+    def _emit(self, msg: dict) -> None:
+        sys.stdout.buffer.write(json.dumps(msg).encode() + b"\n")
+        sys.stdout.buffer.flush()
 
     async def run(self) -> None:
         proc = await asyncio.create_subprocess_exec(
@@ -90,15 +101,31 @@ class StdioWrapper:
                 if self._bucket and not self._bucket.consume():
                     log.warning("wrap.stdio.rate_limited")
                     continue
+                msg = self._scanner.parse_json_line(line)
+                if msg is not None and "id" in msg and "method" in msg:
+                    tool = ""
+                    params = msg.get("params")
+                    if isinstance(params, dict):
+                        tool = str(params.get("name", ""))
+                    self._pending[str(msg["id"])] = (str(msg["method"]), tool)
                 if self.scan_inputs:
-                    msg = self._scanner.parse_json_line(line)
                     if msg is not None:
                         sanitized, findings = self._scanner.scan(msg, "input")
                         ssrf = self._scanner.check_ssrf(msg)
                         all_f = findings + ssrf
                         if all_f:
-                            self._audit.write_injection("input", all_f, msg.get("method", ""))
+                            method, tool = self._pending.get(str(msg.get("id")), (msg.get("method", ""), ""))
+                            self._audit.write_injection("input", all_f, method, tool_name=tool)
                             if self.block_on_match:
+                                self._audit.write_policy_action("input_blocked", method, tool)
+                                if "id" in msg:
+                                    # Answer the client instead of leaving it waiting forever.
+                                    self._pending.pop(str(msg["id"]), None)
+                                    self._emit(policy.jsonrpc_error(
+                                        msg["id"], policy.CODE_INPUT_BLOCKED,
+                                        "AI SAFE2: request blocked - hostile content in arguments",
+                                        {"families": sorted({str(f.get("family", "")) for f in all_f})},
+                                    ))
                                 continue
                         stdin.write(json.dumps(sanitized).encode() + b"\n")
                     else:
@@ -108,6 +135,13 @@ class StdioWrapper:
                 await stdin.drain()
             except (asyncio.CancelledError, BrokenPipeError, ConnectionResetError):
                 break
+        # Client closed its side: propagate EOF so the server can exit. Without
+        # this the server waited on stdin forever and the wrapper never returned,
+        # leaving orphaned wrapper/server pairs after every client disconnect.
+        try:
+            stdin.close()
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     async def _server_to_client(self, proc: asyncio.subprocess.Process) -> None:
         stdout = proc.stdout
@@ -118,23 +152,53 @@ class StdioWrapper:
                 line = await stdout.readline()
                 if not line:
                     break
-                if self.scan_outputs:
-                    msg = self._scanner.parse_json_line(line)
-                    if msg is not None:
-                        sanitized, findings = self._scanner.scan(msg, "output")
-                        if findings:
-                            self._audit.write_injection("output", findings,
-                                                        msg.get("method", ""),
-                                                        tool_name=self._scanner.extract_tool_name(msg))
-                            log.warning("wrap.stdio.injection", count=len(findings))
-                        sys.stdout.buffer.write(json.dumps(sanitized).encode() + b"\n")
-                    else:
-                        sys.stdout.buffer.write(line)
-                else:
+                msg = self._scanner.parse_json_line(line) if (
+                    self.scan_outputs or self.pin_schema) else None
+                if msg is None:
                     sys.stdout.buffer.write(line)  # BUG-2 fix: unchanged bytes
-                sys.stdout.buffer.flush()
+                    sys.stdout.buffer.flush()
+                    continue
+                method, tool = self._pending.pop(str(msg.get("id")), ("", ""))
+                out: dict = msg
+                if self.scan_outputs:
+                    sanitized, findings = self._scanner.scan(msg, "output")
+                    if findings:
+                        self._audit.write_injection("output", findings, method, tool_name=tool)
+                        log.warning("wrap.stdio.injection", count=len(findings))
+                    out, action = policy.enforce_output(
+                        msg, sanitized, findings, method, self.block_on_match)
+                    if action in ("tools_removed", "withheld"):
+                        self._audit.write_policy_action(
+                            action, method, tool,
+                            detail={"removed_tools": policy.removed_tool_names(msg, out)}
+                            if action == "tools_removed" else None,
+                        )
+                if self.pin_schema and method == "tools/list":
+                    out = self._check_catalog(msg, out)
+                self._emit(out)
             except (asyncio.CancelledError, BrokenPipeError, ConnectionResetError):
                 break
+
+    def _check_catalog(self, original: dict, out: dict) -> dict:
+        """MCP-11: pin the first catalog; withhold a changed one in block mode."""
+        current = policy.catalog_hash(original)
+        if current is None:
+            return out
+        if self._pinned_catalog is None:
+            self._pinned_catalog = current
+            self._audit.write_schema_pinned(current)
+            return out
+        if current == self._pinned_catalog:
+            return out
+        self._audit.write_schema_changed(self._pinned_catalog, current, enforced=self.block_on_match)
+        log.warning("wrap.stdio.catalog_changed", baseline=self._pinned_catalog[:16])
+        if not self.block_on_match:
+            return out
+        return policy.jsonrpc_error(
+            original.get("id"), policy.CODE_CATALOG_CHANGED,
+            "AI SAFE2: tool catalog changed since it was pinned; restart to re-approve",
+            {"baseline_hash": self._pinned_catalog, "current_hash": current},
+        )
 
     async def _relay_stderr(self, proc: asyncio.subprocess.Process) -> None:
         stderr = proc.stderr
