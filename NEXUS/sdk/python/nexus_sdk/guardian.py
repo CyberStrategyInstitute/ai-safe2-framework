@@ -740,9 +740,12 @@ class NEXUSGuardianClient:
                 reason_codes=result_data.get("reasonCode", []),
                 modified_request=result_data.get("modifiedRequest"),
             )
-        except ImportError:
-            # httpx not installed: fall back to inline
-            return self.inline_policy.evaluate(ctx)
+        except ImportError as exc:
+            # A configured remote Guardian that cannot be called is unavailable.
+            # v0.3 silently evaluated the default inline policy here, bypassing
+            # the remote policy and the configured fail mode.
+            raise RuntimeError("httpx is not installed; remote Guardian cannot be invoked "
+                               "(pip install 'nexus-a2a-sdk[full]')") from exc
 
     def _handle_guardian_unavailable(self, ctx: GuardianStepContext,
                                       error: str) -> GuardianVerdictResult:

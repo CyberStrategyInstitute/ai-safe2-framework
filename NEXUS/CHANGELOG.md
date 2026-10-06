@@ -28,6 +28,11 @@ Found by the four-area battery in `tests/battery/`. Assessment record:
 
   Of 24 evasions that v0.3 allowed, 24 are now denied. Denials report every rule that
   fired.
+- **Remote Guardian no longer silently downgrades.** When `guardian_url` was set and
+  `httpx` was not installed, `NEXUSGuardianClient` evaluated the default *inline* policy.
+  That bypassed the remote policy and never engaged FAIL_CLOSED. A missing HTTP client is now
+  an unavailable Guardian, and the configured fail mode applies. Found when the behavioral
+  `nexus-score` failover check ran in a clean environment.
 - **HEAR reasoning must be reviewable.** ACT-3/4 reasoning shorter than 40 characters
   or 5 words is denied (`REASONING_INSUFFICIENT`). Previously, `"x"` satisfied it.
 - **OPA authz (`NEXUS/opa/nexus-authz.rego`):**
