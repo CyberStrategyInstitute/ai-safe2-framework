@@ -1,73 +1,56 @@
 name: OPA Policy Lint
 
+# The NEXUS policies live in NEXUS/opa/. This workflow previously watched a
+# non-existent root `opa/**` path, so it never ran against them while
+# nexus-aism-invariants.rego failed type-checking on every OPA version.
+
 on:
   push:
     paths:
-      - "opa/**"
+      - "NEXUS/opa/**"
+      - "NEXUS/docker/docker-compose.yml"
       - ".github/workflows/opa.yml"
   pull_request:
     paths:
-      - "opa/**"
+      - "NEXUS/opa/**"
+      - "NEXUS/docker/docker-compose.yml"
+      - ".github/workflows/opa.yml"
+
+permissions:
+  contents: read
 
 jobs:
   opa-check:
-    name: OPA Format and Parse Check
+    name: OPA check, test and format (${{ matrix.opa }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 0.65.0 is pinned by NEXUS/docker/docker-compose.yml; 1.x is current OPA,
+        # which rejects Rego v0 syntax by default. Policies must load on both.
+        opa: ["0.65.0", "1.4.2"]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
-      - name: Install OPA
+      - name: Install OPA ${{ matrix.opa }}
+        env:
+          OPA_VERSION: ${{ matrix.opa }}
         run: |
-          curl -L -o opa https://openpolicyagent.org/downloads/v0.65.0/opa_linux_amd64_static
+          curl -fsSL -o opa "https://github.com/open-policy-agent/opa/releases/download/v${OPA_VERSION}/opa_linux_amd64_static"
           chmod +x opa
           sudo mv opa /usr/local/bin/opa
           opa version
 
-      - name: Check Rego formatting
-        run: |
-          for f in opa/*.rego; do
-            echo "Checking format: $f"
-            opa fmt --diff "$f"
-          done
+      - name: Type-check policies
+        run: opa check --strict NEXUS/opa/
 
-      - name: Parse check (syntax validation)
-        run: |
-          for f in opa/*.rego; do
-            echo "Parsing: $f"
-            opa parse "$f"
-          done
+      - name: Run policy tests
+        run: opa test NEXUS/opa/ -v
 
-      - name: Test AISM invariants with example inputs
-        run: |
-          echo "Testing I-1 (Authenticated Borders) -- valid DID + SPIFFE..."
-          echo '{
-            "agent": {
-              "did": "did:nexus:agent:test",
-              "spiffe_id": "spiffe://nexus.local/agent/test",
-              "aim_digest": "abc123"
-            }
-          }' | opa eval -I -d opa/nexus-aism-invariants.rego \
-              "data.nexus.aism.invariant_1_authenticated_borders" | grep -q "true" \
-              && echo "  PASS" || { echo "  FAIL"; exit 1; }
-
-          echo "Testing I-1 -- missing DID (should violate)..."
-          echo '{
-            "agent": {
-              "spiffe_id": "spiffe://nexus.local/agent/test",
-              "aim_digest": "abc123"
-            }
-          }' | opa eval -I -d opa/nexus-aism-invariants.rego \
-              "data.nexus.aism.invariant_1_authenticated_borders" | grep -q "false" \
-              && echo "  PASS (correctly identified violation)" || { echo "  FAIL"; exit 1; }
-
-          echo "Testing I-2 (Monotonic Scope) -- depth=0 root agent..."
-          echo '{
-            "delegation": {"depth": 0},
-            "agent": {"vcc": {"granted_scopes": ["read", "write"]}}
-          }' | opa eval -I -d opa/nexus-aism-invariants.rego \
-              "data.nexus.aism.invariant_2_monotonic_scope" | grep -q "true" \
-              && echo "  PASS" || { echo "  FAIL"; exit 1; }
-
-          echo "All OPA policy checks passed."
+      - name: Check formatting
+        if: matrix.opa != '0.65.0'
+        run: opa fmt --list --fail NEXUS/opa/
