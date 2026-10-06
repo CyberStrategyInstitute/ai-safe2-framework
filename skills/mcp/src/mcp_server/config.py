@@ -51,6 +51,15 @@ FREE_FRAMEWORK_LIMIT = 5
 FREE_CONTROL_LIMIT = 30
 PRO_RATE_LIMIT = 1000
 FREE_RATE_LIMIT = 30
+# Failed-authentication budget per client IP per hour. When exhausted, every
+# request from that IP is refused before token validation so the lockout does
+# not become a guessing oracle (a correct guess must not be distinguishable).
+AUTH_FAIL_RATE_LIMIT = int(os.getenv("AUTH_FAIL_RATE_LIMIT", "20"))
+# Tier granted to local stdio sessions. The design and docs state local stdio
+# is Pro; this makes that explicit and lets an operator choose "free".
+STDIO_TIER: str = os.getenv("MCP_STDIO_TIER", "pro")
+# Maximum characters accepted by code_review before refusing the request.
+CODE_REVIEW_MAX_CHARS = int(os.getenv("CODE_REVIEW_MAX_CHARS", "100000"))
 
 MCP_SOURCE_HASH: str = os.getenv("MCP_SOURCE_HASH", "")
 MCP_INSTALL_PATH: str = os.getenv("MCP_INSTALL_PATH", "")
@@ -64,6 +73,10 @@ ALLOWED_STDIO_MODULE_PATTERNS: list[str] = [
     "mcp_server",
     "ai-safe2-mcp",
     "__main__",
+]
+# Operators may ADD entrypoint patterns (comma-separated); defaults are never removed.
+ALLOWED_STDIO_MODULE_PATTERNS += [
+    p.strip() for p in os.getenv("ALLOWED_STDIO_MODULE_PATTERNS", "").split(",") if p.strip()
 ]
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")

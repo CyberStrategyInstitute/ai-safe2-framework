@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ai-safe2-mcp-server"
-version = "3.0.0"
-description = "AI SAFE2 v3.0 MCP Server — 161-control governance toolkit for agentic AI"
+version = "3.1.0"
+description = "AI SAFE2 v3.1 MCP Server — 161-control governance toolkit with the CP.5.MCP profile"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -16,7 +16,9 @@ keywords = ["ai-safety", "mcp", "governance", "agentic-ai", "grc", "iso42001"]
 
 dependencies = [
     # MCP server framework
-    "mcp>=1.3.0",
+    # mcp 2.x removed FastMCP (renamed MCPServer) and other v1 APIs; this server
+    # is written against the v1 API. Streamable HTTP + session_manager need >=1.12.
+    "mcp>=1.12,<2",
     # ASGI / HTTP serving
     "uvicorn[standard]>=0.30.0",
     "starlette>=0.40.0",

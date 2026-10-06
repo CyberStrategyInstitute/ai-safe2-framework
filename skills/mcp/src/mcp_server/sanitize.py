@@ -127,7 +127,14 @@ _INJECTION_PATTERNS: list[tuple[re.Pattern[str], str]] = [
         re.IGNORECASE,
     ), "permission_escalation"),
 
-    (re.compile(r"\bjailbreak\b", re.IGNORECASE), "permission_escalation"),
+    # Directive forms only: a bare topic word ("jailbreak") is not an instruction,
+    # and redacting it corrupted the server's own control taxonomy (P1.T1.2 tags).
+    (re.compile(
+        r"\b(?:enable|enter|activate|start|perform|initiate|use)\s+(?:a\s+|the\s+)?jailbreak\b"
+        r"|\bjailbreak\s+(?:mode|prompt|enabled|activated|yourself"
+        r"|(?:this|the|your)\s+(?:model|assistant|ai|system|agent))\b"
+        r"|\byou\s+are\s+(?:now\s+)?jailbroken\b",
+        re.IGNORECASE), "permission_escalation"),
 
     (re.compile(r"\bDAN\s+(mode|prompt|jailbreak|version)\b", re.IGNORECASE), "permission_escalation"),
 
