@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """
 nexus-score.py
-AI SAFE2 v3.0 Compliance Checker for NEXUS-A2A deployments.
-v0.3 update: adds Guardian Integration Profile, AgBOM, OTel NOR, ACS Bridge checks.
+NEXUS-A2A implementation self-check against AI SAFE2 v3.1 controls.
+
+This is an implementation checker, not independent framework validation or a
+conformance claim. Each v0.3 check exercises behavior (a hostile input must be
+denied, tampering must be detected); a check whose evidence is unavailable is
+reported NOT ASSESSED, never OK.
 
 Usage:
     python nexus-score.py --aim path/to/agent.aim.json
@@ -10,13 +14,17 @@ Usage:
     python nexus-score.py --report             # Full report
     python nexus-score.py --v03-checks         # Run v0.3-specific control checks
 
-Output: SAFE2 v3.0 pillar scores, AAF estimate, missing controls, recommendations.
+Output: SAFE2 v3.1 pillar scores, AAF estimate, missing controls, recommendations.
+Exit (--v03-checks): 0 all verified, 1 any check failed, 2 none failed but some not assessed.
 """
 
 import argparse
 import json
 import os
+import shutil
+import subprocess
 import sys
+import warnings
 from dataclasses import dataclass
 
 
@@ -29,6 +37,7 @@ class ControlCheck:
     check_fn: str           # What we're checking
     passed: bool = False
     note: str = ""
+    assessed: bool = True   # False: evidence unavailable; never counted as passed
 
 
 def check_environment() -> list[ControlCheck]:
@@ -320,26 +329,39 @@ def check_v03_controls() -> list[ControlCheck]:
     """
     checks = []
 
-    # Guardian Integration Profile (P0 -- S1.3)
+    # Guardian Integration Profile (P0 -- S1.3): behavior, not import
     try:
         from nexus_sdk.guardian import GuardianPolicy, build_tool_call_step
-        from nexus_sdk.guardian import NEXUSAgentContext, GuardianVerdictResult
         policy = GuardianPolicy()
-        checks.append(ControlCheck("S1.3-GIP", "Guardian Integration Profile (per-call verdict)", "P1",
-                                   "NEXUS-Full", "GuardianPolicy + build_tool_call_step", passed=True))
+        hostile = policy.evaluate(build_tool_call_step(
+            "did:nexus:score", "spiffe://nexus.local/score", "read_file",
+            {"path": "C:\\Users\\u\\.ssh\\id_ed25519"}, act_tier=1))
+        benign = policy.evaluate(build_tool_call_step(
+            "did:nexus:score", "spiffe://nexus.local/score", "read_file",
+            {"path": "docs/readme.md"}, act_tier=1))
+        thin_hear = policy.evaluate(build_tool_call_step(
+            "did:nexus:score", "spiffe://nexus.local/score", "wire_money",
+            {"amount": 1}, act_tier=4, reasoning="x"))
+        ok = hostile.denied and benign.allowed and thin_hear.denied
+        checks.append(ControlCheck("S1.3-GIP", "Guardian per-call verdict (hostile denied, benign allowed, HEAR)", "P1",
+                                   "NEXUS-Full", "GuardianPolicy.evaluate on 3 probes", passed=ok,
+                                   note="" if ok else f"hostile={hostile.decision} benign={benign.decision} thin_hear={thin_hear.decision}"))
     except Exception as e:
         checks.append(ControlCheck("S1.3-GIP", "Guardian Integration Profile", "P1",
                                    "NEXUS-Full", "guardian.py", passed=False, note=str(e)))
 
-    # Guardian Failover Modes
+    # Guardian Failover Modes: an unreachable remote Guardian must deny when FAIL_CLOSED
     try:
-        from nexus_sdk.guardian import NEXUSGuardianClient
-        # fail_mode is a string constant on NEXUSGuardianClient
-        client_closed = NEXUSGuardianClient(fail_mode=NEXUSGuardianClient.FAIL_CLOSED)
-        client_open = NEXUSGuardianClient(fail_mode=NEXUSGuardianClient.FAIL_OPEN)
-        assert client_closed.fail_mode == "fail_closed"
-        checks.append(ControlCheck("S1.3-FAILOVER", "Guardian failover (FAIL_CLOSED default)", "P1",
-                                   "All", "NEXUSGuardianClient.FAIL_CLOSED / FAIL_OPEN", passed=True))
+        from nexus_sdk.guardian import NEXUSGuardianClient, build_tool_call_step
+        client = NEXUSGuardianClient(guardian_url="http://127.0.0.1:9/unreachable",
+                                     fail_mode=NEXUSGuardianClient.FAIL_CLOSED)
+        v = client.evaluate(build_tool_call_step("did:nexus:score", "spiffe://nexus.local/score",
+                                                 "search", {"q": "x"}, act_tier=1))
+        default_closed = NEXUSGuardianClient().fail_mode == NEXUSGuardianClient.FAIL_CLOSED
+        ok = v.denied and default_closed
+        checks.append(ControlCheck("S1.3-FAILOVER", "Guardian unreachable -> deny (FAIL_CLOSED default)", "P1",
+                                   "All", "NEXUSGuardianClient against an unreachable Guardian", passed=ok,
+                                   note="" if ok else f"decision={v.decision} default_closed={default_closed}"))
     except Exception as e:
         checks.append(ControlCheck("S1.3-FAILOVER", "Guardian failover modes", "P1",
                                    "All", "NEXUSGuardianClient fail_mode", passed=False, note=str(e)))
@@ -363,19 +385,22 @@ def check_v03_controls() -> list[ControlCheck]:
         checks.append(ControlCheck("A2.5-NOR", "NOR OTel export", "P2",
                                    "All", "otel.py", passed=False, note=str(e)))
 
-    # AgBOM dynamic inventory (A2.3, M4.6)
+    # AgBOM dynamic inventory (A2.3, M4.6): tampering detected, rug pull held
     try:
-        from nexus_sdk.agbom import AgBOMManager, AgBOMComponentType
+        from nexus_sdk.agbom import AgBOMManager
         mgr = AgBOMManager("did:nexus:test-agent")
-        mgr.discover_mcp_server("test-server", "1.0.0", "http://localhost:3000")
-        chain_result = mgr.verify_chain_integrity()
-        # verify_chain_integrity returns (bool, list) -- True means chain is intact
-        chain_ok = chain_result[0] if isinstance(chain_result, tuple) else len(chain_result) == 0
-        violations = chain_result[1] if isinstance(chain_result, tuple) else chain_result
-        checks.append(ControlCheck("A2.3-AGBOM", "Dynamic AgBOM with hash chain", "P2",
-                                   "All", "AgBOMManager + MCP discovery + verify_chain_integrity",
-                                   passed=chain_ok,
-                                   note=f"Chain violations: {violations}" if not chain_ok else ""))
+        mgr.discover_mcp_server("test-server", "http://localhost:3000", tool_manifest_digest="a" * 64, version="1.0.0")
+        mgr.discover_mcp_server("other-server", "http://localhost:3001", tool_manifest_digest="b" * 64)
+        clean_ok = mgr.verify_chain_integrity()[0]
+        mgr.discover_mcp_server("test-server", "http://localhost:3000", tool_manifest_digest="c" * 64)
+        rug_held = [c.name for c in mgr.get_quarantined_components()] == ["test-server"]
+        mgr._version_history[0].components[0].supplier = "http://evil.example"
+        tamper_caught = not mgr.verify_chain_integrity()[0]
+        ok = clean_ok and rug_held and tamper_caught
+        checks.append(ControlCheck("A2.3-AGBOM", "AgBOM hash chain (tamper detected, rug pull held)", "P2",
+                                   "All", "AgBOMManager: clean verify, digest change, stored-version edit",
+                                   passed=ok,
+                                   note="" if ok else f"clean={clean_ok} rug_held={rug_held} tamper_caught={tamper_caught}"))
     except Exception as e:
         checks.append(ControlCheck("A2.3-AGBOM", "Dynamic AgBOM", "P2",
                                    "All", "agbom.py", passed=False, note=str(e)))
@@ -399,7 +424,9 @@ def check_v03_controls() -> list[ControlCheck]:
     # Memory Vaccine ACS export (I-3 provenance integration)
     try:
         from nexus_sdk.memory import MemoryVaccine, MemoryZone
-        mv = MemoryVaccine("test-agent", "test purpose", use_stub_embeddings=True)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            mv = MemoryVaccine("test-agent", "test purpose", use_stub_embeddings=True)
         decision = mv.validate_write(content="test memory", zone=MemoryZone.CROSS_SESSION,
                                      owner_did="did:nexus:test-agent")
         ctx = mv.to_acs_guardian_context(content="test memory", zone=MemoryZone.CROSS_SESSION,
@@ -409,19 +436,31 @@ def check_v03_controls() -> list[ControlCheck]:
         assert "source_did" in ctx or "provenance" in ctx
         assert "embedding_hash" in ctx
         checks.append(ControlCheck("I3-MV-ACS", "Memory Vaccine ACS context export (I-3)", "P1",
-                                   "All", "MemoryVaccine.to_acs_guardian_context", passed=True))
+                                   "All", "MemoryVaccine.to_acs_guardian_context", passed=True,
+                                   note="export contract only; drift detection itself is not assessed here"))
     except Exception as e:
         checks.append(ControlCheck("I3-MV-ACS", "Memory Vaccine ACS export", "P1",
                                    "All", "to_acs_guardian_context", passed=False, note=str(e)))
 
-    # AISM Invariant OPA policies present
+    # AISM invariant / authz OPA policies: must type-check, not merely exist
     import os
-    opa_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../opa/nexus-aism-invariants.rego")
-    opa_exists = os.path.isfile(opa_path)
-    checks.append(ControlCheck("AISM-OPA", "AISM invariants OPA policy file", "P3",
-                               "NEXUS-Full", "opa/nexus-aism-invariants.rego",
-                               passed=opa_exists,
-                               note="Missing: opa/nexus-aism-invariants.rego" if not opa_exists else ""))
+    opa_dir = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../opa"))
+    opa_bin = os.environ.get("OPA_BIN") or shutil.which("opa")
+    if not os.path.isfile(os.path.join(opa_dir, "nexus-aism-invariants.rego")):
+        checks.append(ControlCheck("AISM-OPA", "AISM invariants + authz OPA policies type-check", "P3",
+                                   "NEXUS-Full", opa_dir, passed=False,
+                                   note="Missing: opa/nexus-aism-invariants.rego"))
+    elif not opa_bin:
+        checks.append(ControlCheck("AISM-OPA", "AISM invariants + authz OPA policies type-check", "P3",
+                                   "NEXUS-Full", opa_dir, passed=False, assessed=False,
+                                   note="NOT ASSESSED: no opa binary (set OPA_BIN); file presence is not evidence"))
+    else:
+        r = subprocess.run([opa_bin, "check", "--strict", opa_dir], capture_output=True, text=True)
+        t = subprocess.run([opa_bin, "test", opa_dir], capture_output=True, text=True)
+        ok = r.returncode == 0 and t.returncode == 0
+        checks.append(ControlCheck("AISM-OPA", "AISM invariants + authz OPA policies type-check and pass tests", "P3",
+                                   "NEXUS-Full", f"{opa_bin} check --strict + opa test", passed=ok,
+                                   note="" if ok else (r.stderr or r.stdout or t.stdout)[:200].strip()))
 
     # JSON schemas present
     schema_base = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../schemas")
@@ -436,26 +475,28 @@ def check_v03_controls() -> list[ControlCheck]:
     return checks
 
 
-def print_v03_report(checks: list[ControlCheck]) -> None:
+def print_v03_report(checks: list[ControlCheck]) -> int:
     print(f"\n{'='*60}")
-    print(f"NEXUS-A2A v0.3 Control Checks")
+    print("NEXUS-A2A v0.3 implementation self-check (not a conformance claim)")
     print(f"{'='*60}")
     passed = sum(1 for c in checks if c.passed)
-    total = len(checks)
+    failed = sum(1 for c in checks if c.assessed and not c.passed)
+    unassessed = sum(1 for c in checks if not c.assessed)
     for c in checks:
-        status = "OK " if c.passed else "---"
-        note = f"  ({c.note})" if c.note and not c.passed else ""
+        status = "OK " if c.passed else ("?? " if not c.assessed else "---")
+        note = f"  ({c.note})" if c.note else ""
         print(f"  [{status}] {c.control_id} ({c.pillar}): {c.name}{note}")
-    print(f"\n{passed}/{total} v0.3 controls verified")
-    if passed == total:
-        print("All v0.3 controls satisfied. SAFE2 score impact: +1 P1, +2 P2 (target 25/25 with OPA+SPIRE).")
-    else:
-        print(f"\nAddress {total - passed} failing controls before claiming full v0.3 compliance.")
+    print(f"\n{passed} verified, {failed} failed, {unassessed} not assessed (of {len(checks)})")
+    if failed:
+        print(f"Address {failed} failing checks.")
+    if unassessed:
+        print(f"{unassessed} checks lacked evidence; they are not counted as passing.")
     print()
+    return 1 if failed else (2 if unassessed else 0)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="NEXUS-A2A / AI SAFE2 v3.0 Compliance Checker")
+    parser = argparse.ArgumentParser(description="NEXUS-A2A implementation self-check (AI SAFE2 v3.1)")
     parser.add_argument("--aim", help="Path to AIM JSON file to score")
     parser.add_argument("--check-env", action="store_true", help="Check local environment")
     parser.add_argument("--report", action="store_true", help="Run all checks")
@@ -466,9 +507,10 @@ if __name__ == "__main__":
         checks = check_environment()
         print_env_report(checks)
 
+    exit_code = 0
     if args.v03_checks or args.report:
         v03_checks = check_v03_controls()
-        print_v03_report(v03_checks)
+        exit_code = print_v03_report(v03_checks)
 
     if args.aim:
         result = score_aim(args.aim)
@@ -476,3 +518,4 @@ if __name__ == "__main__":
 
     if not (args.aim or args.check_env or args.report or args.v03_checks):
         parser.print_help()
+    sys.exit(exit_code)

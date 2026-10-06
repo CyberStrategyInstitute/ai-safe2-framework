@@ -31,8 +31,11 @@ cases = [
  ("ACT-4 no reasoning", "DENY", "wire_money", {"amt": 1e6}, {"act_tier": 4}),
  ("ACT-4 reasoning='x'", "DENY", "wire_money", {"amt": 1e6}, {"act_tier": 4, "reasoning": "x"}),
  ("tier omitted (None)", "DENY", "wire_money", {"amt": 1e6}, {}),
- ("benign read", "ALLOW", "read_file", {"path": "docs/readme.md"}, {}),
- ("benign fetch", "ALLOW", "fetch", {"url": "https://example.com/"}, {}),
+ # Benign cases declare a tier: since the 2026-10-06 Guardian fix an omitted tier
+ # is treated as ACT-4 (see "tier omitted (None)"), which is the intended default.
+ ("benign read", "ALLOW", "read_file", {"path": "docs/readme.md"}, {"act_tier": 1}),
+ ("benign fetch", "ALLOW", "fetch", {"url": "https://example.com/"}, {"act_tier": 1}),
+ ("benign search, tier omitted", "DENY", "search", {"q": "governance"}, {}),
  ("ACT-3 with real reasoning", "ALLOW", "deploy", {"env": "staging"}, {"act_tier": 3, "reasoning": "Ticket OPS-12 approved by owner; staging only; rollback plan R-4."}),
 ]
 res = []

@@ -49,6 +49,19 @@ Found by the four-area battery in `tests/battery/`. Assessment record:
   Same-digest rediscovery is idempotent. A first digest on an unpinned server is recorded as
   `mcp_capability_digest_pinned`.
 
+- **`nexus-score --v03-checks` tests behavior, not imports.** Guardian must deny a hostile
+  argument, allow a benign one, and reject thin HEAR reasoning. A FAIL_CLOSED Guardian must
+  deny when unreachable. AgBOM must detect a stored-version edit and hold a rug pull. OPA
+  policies must pass `opa check --strict` and `opa test`; file presence no longer counts.
+  On `main` the old checker printed "10/10 verified, all v0.3 controls satisfied", while
+  the behavioral checks fail 3 of 10. Missing evidence (no `opa` binary) is NOT ASSESSED,
+  never OK. Exit codes: 0 verified, 1 failed, 2 not assessed. Output is labeled an
+  implementation self-check, not a conformance claim.
+- **Memory Vaccine stub honesty.** Stub mode scores any text that lacks its test keywords at
+  drift 0.05, including an explicit exfiltration instruction. Decisions and Guardian exports
+  now carry `drift_method` (`stub:keyword-fixture`, `embedding:all-MiniLM-L6-v2`, or
+  `not_assessed:request_scope`), and constructing a stub-mode vaccine emits a warning.
+
 ### Changed (behavior)
 
 - **Breaking for callers that omit `act_tier`:** Guardian now treats an undeclared ACT

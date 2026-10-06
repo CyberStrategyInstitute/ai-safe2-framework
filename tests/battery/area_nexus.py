@@ -58,5 +58,23 @@ def run(ctx):
     mounts = re.findall(r"^\s*-\s*(\S+):/policies", compose.read_text(), re.M) if compose.exists() else []
     ok = bool(mounts) and all((compose.parent / m).resolve().joinpath("nexus-authz.rego").exists() for m in mounts)
     ctx.rec(AREA, "compose OPA mount resolves to the policies", ok, f"mounts={mounts}", "points at NEXUS/opa")
-    rc, out = ctx.run([ctx.py, ctx.repo / "NEXUS/compliance/scoring/nexus-score.py", "--help"], timeout=60)
-    ctx.rec(AREA, "nexus-score utility runs", rc == 0, out.strip().splitlines()[-1][:120] if out.strip() else rc, "exit 0")
+    _scorer_agrees_with_evidence(ctx)
+
+
+def _scorer_agrees_with_evidence(ctx):
+    """nexus-score must not report OK for a control this battery just showed broken."""
+    mine = {r["id"]: r["status"] for r in ctx.results if r["area"] == AREA}
+    broken = {
+        "S1.3-GIP": any(k.startswith("guardian:") and v == "FAIL" for k, v in mine.items()),
+        "A2.3-AGBOM": any(k.startswith("agbom:") and v == "FAIL" for k, v in mine.items()),
+        "AISM-OPA": mine.get("OPA 1.x: policies compile (--strict)") == "FAIL"
+                    or mine.get("OPA 0.65 (compose pin): policies compile") == "FAIL",
+    }
+    env = {**ctx.env, **({"OPA_BIN": ctx.opa} if ctx.opa else {})}
+    rc, out = ctx.run([ctx.py, ctx.repo / "NEXUS/compliance/scoring/nexus-score.py", "--v03-checks"], timeout=120, env=env)
+    (ctx.out_dir / "nexus_score_raw.txt").write_text(out)
+    claims = {cid: ("OK" if f"[OK ] {cid} " in out else "not OK") for cid in broken}
+    contradictions = [cid for cid, is_broken in broken.items() if is_broken and claims[cid] == "OK"]
+    ctx.rec(AREA, "nexus-score claims agree with battery evidence", not contradictions,
+            f"claims OK for broken: {contradictions}" if contradictions else f"exit={rc} claims={claims}",
+            "no OK on a broken control")
