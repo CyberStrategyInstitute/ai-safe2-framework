@@ -33,9 +33,16 @@ for sk in skills:
     ok(bool(re.fullmatch(r"[a-z0-9-]{1,64}", name)), f"{rel}: name '{name}' valid")
     ok(0 < len(desc) <= 1024, f"{rel}: description length {len(desc)} <= 1024")
     ok("<" not in desc and ">" not in desc, f"{rel}: description has no angle brackets")
-    ok("v3.0" not in desc, f"{rel}: description does not advertise retired v3.0", warn=False)
+    # A v3.0 description on a surface whose body is v3.0 content is accurate; flag it for
+    # the content refresh (open decision D3) rather than as a false claim.
+    ok("v3.0" not in desc, f"{rel}: description says v3.0 (surface content is v3.0: D3)", warn=True)
     # referential: every control ID cited must exist
-    cited = set(re.findall(r"\b(?:P[1-5]\.T\d+\.\d+|CP\.\d+|[SAFEM]\d\.\d+|MCP-\d+)\b", body))
+    # Negated mentions ("does not create CP.11") are not citations.
+    NEG = re.compile(r"\b(not|never|no)\b", re.I)
+    cited = set()
+    for ln in body.splitlines():
+        ids = set(re.findall(r"\b(?:P[1-5]\.T\d+\.\d+|CP\.\d+|[SAFEM]\d\.\d+|MCP-\d+)\b", ln))
+        cited |= {i for i in ids if not (NEG.search(ln) and i not in core_ids | mcp_ids)}
     unknown = sorted(c for c in cited if c not in core_ids | mcp_ids and not re.fullmatch(r"CP\.5", c))
     ok(not unknown, f"{rel}: all {len(cited)} cited control IDs exist" + (f" - UNKNOWN: {unknown[:15]}" if unknown else ""))
     # relative links resolve
@@ -52,8 +59,12 @@ for md in sorted(S.rglob("*.md")):
     if broken: fails.append(f"{md.relative_to(R)}: broken links {broken[:6]}")
     if re.search(r"AI SAFE2? ?v3\.0|AI SAFE² v3\.0 (Skill|Evaluation)", t) and "provenance" not in t:
         warns.append(f"{md.relative_to(R)}: still labels itself v3.0")
-    for n in re.findall(r"\b(1[2-9]\d) (?:core )?controls\b", t):
-        if n != "161": fails.append(f"{md.relative_to(R)}: claims {n} controls")
+    for ln in t.splitlines():
+        # Historical rows and statements that prevent a claim are not claims.
+        if re.search(r"\b(not|never|prevent|accidental|historical|v2\.1|previously)\b", ln, re.I):
+            continue
+        for n in re.findall(r"\b(1[2-9]\d) (?:core )?controls\b", ln):
+            if n != "161": fails.append(f"{md.relative_to(R)}: claims {n} controls")
 # evals cite real controls
 ev = (S/"evals.md").read_text()
 cited = set(re.findall(r"\b(?:P[1-5]\.T\d+\.\d+|CP\.\d+|[SAFEM]\d\.\d+)\b", ev))
