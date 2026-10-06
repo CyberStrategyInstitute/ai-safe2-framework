@@ -128,3 +128,36 @@ Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
   branch, 11/27 on main.
 
 **Next:** docs drift, then full gates, after snapshot, and draft PR.
+
+## 2026-10-06 E9: Docs, CI, secrets, gates. Ready for PR.
+
+- `2dac2ff` **New bug found by the behavioral scorer:** with `guardian_url` set and no
+  `httpx`, the remote Guardian silently evaluated the default inline policy, so
+  FAIL_CLOSED never engaged. It now fails per its configured mode. 2 red tests fixed.
+- `3353be4` docs: retired a stale `skills/` redirect copy with broken links, and
+  documented Guardian behavior and OPA tests in the NEXUS README. The six v3.0 skill
+  surfaces were deliberately not relabeled: their content is v3.0 (decision D3).
+- `517357f` harness: the skills checker now reads negation and historical context.
+  Three false structural fails are gone; main still shows its one real defect.
+- `5b38495` CI:
+  - The compliance job installs a pinned, sha256-verified OPA.
+  - A new `mcp-server` job runs `skills/mcp` tests via the documented install.
+  - `opa.yml` verifies checksums.
+  - Both jobs were simulated from clean venvs.
+- `b24d040` gitleaks (full history): three fixture literals from this branch were fixed
+  at source and baselined for their historical commits. Result: no leaks.
+- `bfe324b` `gates.sh`, the local CI mirror: **30/30 PASS**.
+
+**Final battery, identical harness (`bfe324b`):**
+
+| | PASS | FAIL | NOT_RUN | INFO |
+|---|---|---|---|---|
+| main `83de4a8` | 61 | 60 | 1 | 1 |
+| branch `bfe324b` | 124 | 0 | 0 | 1 |
+
+**Limits:**
+- There was no live `docker compose up`, because no daemon was available.
+- Hosted CI results are pending until the PR runs.
+- All results are self-assessment; none has been independently reviewed.
+
+**Next:** draft PR, then owner decisions D1-D4.
