@@ -83,3 +83,14 @@ Commit `f3ecea0`, pushed:
 - Added `RUNBOOK.md`, `STATE.json`, and this ledger.
 
 **Next:** freeze before and after snapshots, push, then Guardian (N-G) and AgBOM (N-A).
+
+## 2026-10-06 E6 - Snapshots frozen
+
+| Snapshot | Revision | PASS | FAIL | NOT_RUN | INFO |
+|---|---|---|---|---|---|
+| `before-83de4a8` | main | 61 | 63 | 1 | 1 |
+| `after-225f45b` | branch | 101 | 27 | 0 | 1 |
+
+Remaining 27: SKILL docs drift (6), NEXUS Guardian (15), AgBOM (5), compose OPA mount (1).
+Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
+**Next:** nexus-compose, nexus-guardian, nexus-agbom; snapshot after each.

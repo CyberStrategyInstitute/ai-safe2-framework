@@ -1,0 +1,36 @@
+{
+ "schema": "csi.battery.summary.v1",
+ "areas": {
+  "SKILL": {
+   "revision": "225f45b",
+   "counts": {
+    "FAIL": 6,
+    "PASS": 21,
+    "INFO": 1
+   },
+   "duration_s": 7.1
+  },
+  "MCP": {
+   "revision": "225f45b",
+   "counts": {
+    "PASS": 20
+   },
+   "duration_s": 16.8
+  },
+  "CLI": {
+   "revision": "225f45b",
+   "counts": {
+    "PASS": 25
+   },
+   "duration_s": 12.5
+  },
+  "NEXUS": {
+   "revision": "225f45b",
+   "counts": {
+    "PASS": 35,
+    "FAIL": 21
+   },
+   "duration_s": 2.3
+  }
+ }
+}

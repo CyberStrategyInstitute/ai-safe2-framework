@@ -1,0 +1,35 @@
+self-check                         exit=0   want=0      PASS  Console entry point: present
+init-clean                         exit=0   want=0      PASS  Privacy defaults: no prompts, content, environment values, or network export.
+init-again-no-overwrite            exit=1   want=1 2    PASS  Error: configuration already exists: /tmp/battery-after-5am_wszx/cli/clean/.safe
+config-show                        exit=0   want=0      PASS  }
+scan-project-vuln                  exit=0   want=0      PASS      Fix: Bind approved MCP servers to a manifest, checksum, signature, endpoint 
+score-project-vuln                 exit=0   want=0 1    PASS    CP Cross-Pillar             #################### 100
+gate-project-vuln-Tier2            exit=1   want=1      PASS  GATE: FAIL - score below threshold (49.0/100)
+gate-project-clean                 exit=0   want=0 1    PASS  GATE: PASS - score 100.0/100
+report-all                         exit=0   want=0      PASS  Markdown report: rep/vuln.md
+assess-vuln                        exit=0   want=0 1 2  PASS  Evidence bundle: /tmp/battery-after-5am_wszx/cli/vuln/.safe2/evidence
+doctor-assess                      exit=0   want=0      PASS  }
+doctor-baseline-same               exit=0   want=0      PASS  }
+doctor-drift                       exit=0   want=0      PASS  }
+doctor-policy-deny                 exit=1   want=1      PASS  Evidence bundle: dec.json
+doctor-policy-hold-nobase          exit=1   want=2 1    PASS  Evidence bundle: dec2.json
+doctor-tampered-baseline           exit=1   want=1 2    PASS  Error: baseline integrity verification failed
+schema-list                        exit=0   want=0      PASS  }
+schema-validate-good               exit=0   want=0      PASS  }
+schema-validate-bad                exit=1   want=1      PASS  }
+schema-validate-garbage            exit=2   want=2      PASS  {"schema": "discovery-v1", "valid": false, "error": "JSONDecodeError"}
+feedback-record                    exit=0   want=0      PASS  }
+feedback-verified-no-evid          exit=1   want=1      PASS  Error: verified_done requires at least one external evidence reference
+feedback-summary                   exit=0   want=0      PASS  Friction summary: fbs.json
+feedback-summary-tampered          exit=1   want=1 2    PASS  Error: friction event integrity verification failed on line 1
+manifest-strict-invalid            exit=1   want=1      PASS  Evidence bundle: man.json
+manifest-ok                        exit=0   want=0      PASS  Evidence bundle: man2.json
+challenge-quickstart               exit=0   want=0      PASS  }
+challenge-verify                   exit=0   want=0      PASS  }
+challenge-verify-tampered          exit=1   want=1 2    PASS  }
+aism-init                          exit=0   want=0      PASS  AISM assessment template: a.json
+aism-score-unscored                exit=0   want=0 1 2  PASS  AISM json output: d.json
+acceptance-run                     exit=0   want=0      PASS  {"output_dir": "acc", "status": "passed", "independent_review_claim": false, "co
+watch-once                         exit=0   want=0 1 2  PASS  {"run": 1, "report": "/tmp/battery-after-5am_wszx/cli/ev/change-2026-10-06T22490
+evidence-nexus                     exit=0   want=0      PASS  Evidence bundle: nx.json
+unknown-command                    exit=2   want=2      PASS  Error: No such command 'frobnicate'.
