@@ -146,8 +146,13 @@
       "followup": "21a8333 (Codex SKILL-CARD)"
     },
     "aim-bound-act-tier": {
-      "status": "todo",
-      "note": "separate PR after #393"
+      "status": "in_review",
+      "commit": "5bc3c03",
+      "branch": "feat/aim-bound-act-tier",
+      "pr": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/394",
+      "base": "fix/v31-false-assurance-hardening (retarget to main after #393 merges)",
+      "evidence": "18/18 py, opa 25/25 (0.65, 1.4.2), gates 30/30, battery 126/126, SDK 626/626; red on #393 head incl. config_change allow=true",
+      "hosted_ci": "7 checks only (workflows filter PRs to main); full CI after retarget"
     },
     "ci-least-privilege": {
       "status": "done",
@@ -256,5 +261,5 @@
       "decision": "Keep undeclared-tier=ACT-4 as interim floor in PR #393; registry-bound ACT tiers (AIM v0.3) as a separate follow-up PR. (owner, 2026-10-07)"
     }
   ],
-  "next_step": "Owner reviews and merges PR #393. Then D4 follow-up PR (registry-bound ACT tiers), then publication (D2)."
+  "next_step": "Owner merges #393 (merge commit or rebase, not squash). Then retarget #394 to main, let full CI run, review and merge. Then publication (D2)."
 }

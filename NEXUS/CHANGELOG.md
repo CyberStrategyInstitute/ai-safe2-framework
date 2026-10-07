@@ -67,12 +67,29 @@ Found by the four-area battery in `tests/battery/`. Assessment record:
   now carry `drift_method` (`stub:keyword-fixture`, `embedding:all-MiniLM-L6-v2`, or
   `not_assessed:request_scope`), and constructing a stub-mode vaccine emits a warning.
 
+- **Registry-bound ACT tiers (AIM v0.3).** An agent's ACT tier is now an identity property set by its
+  owner of record in the registered AIM, as the IETF draft (section 3.1.1) already specified.
+  - With `GuardianPolicy(aim_registry=...)`:
+    - The registered tier governs HEAR (`ACT_TIER_FROM_REGISTRY`), so a lower claim cannot skip it.
+    - A claim above the registered tier is denied (`ACT_TIER_EXCEEDS_REGISTERED`).
+    - An unregistered agent is denied (`AIM_NOT_REGISTERED`).
+    - A presented AIM digest that differs from the registered one is denied (`AIM_DIGEST_MISMATCH`).
+  - `nexus-authz.rego` and `nexus-aism-invariants.rego` read the tier from `data.nexus.aim.agents[<did>]`
+    and expose `effective_act_tier`. Previously, a `config_change` that omitted `act_tier` skipped the
+    ACT-2+ out-of-band approval, and an agent with no tier passed I-4 without any kill path. Both now
+    treat a missing tier as ACT-4.
+  - `AIMRegistry.to_opa_data()` produces the OPA document.
+
 ### Changed (behavior)
 
 - **Breaking for callers that omit `act_tier`:** Guardian now treats an undeclared ACT
   tier as ACT-4, so HEAR applies (`ACT_TIER_UNDECLARED`). A tier outside 1-4 is denied
   (`ACT_TIER_INVALID`). To restore v0.3 behavior, pass
   `GuardianPolicy(treat_undeclared_tier_as=None)`.
+- `schemas/aim-v0.3.schema.json`: v0.2 plus required `actTier` (1-4) and optional `maxDelegationDepth`,
+  using v0.2's camelCase field names. The IETF draft's example uses snake_case (`act_tier`); that naming
+  conflict is recorded here, not resolved. `nexus_sdk.aim` provides `AIMRegistry`, which records every
+  AIM version, and `aim_digest`. The undeclared-tier-as-ACT-4 floor still applies when no registry is configured.
 - Policies migrated to Rego v1 syntax. They load on OPA 0.65.0 (compose pin) and on
   1.x. Previously they failed on 1.x, and `nexus-aism-invariants.rego` failed
   type-checking on every version. The APay migration is decision-identical on 873

@@ -228,3 +228,19 @@ Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
 On `82ed851` PR-Agent published a bounded review: one hunk, `ci.yml` permissions, with
 "no actionable issue". Its first run had published nothing. Greptile still posted no
 review. At `82ed851` all 41 checks pass and the PR is `mergeable: clean`.
+
+## 2026-10-07 E14: D4 follow-up, PR #394 (stacked on #393)
+
+- `5bc3c03` on `feat/aim-bound-act-tier` adds registry-bound ACT tiers (AIM v0.3). The IETF
+  draft section 3.1.1 already specified them, and the schema file the draft cites did not exist.
+- Also closes the same bug class in OPA:
+  - A `config_change` that omitted `act_tier` skipped the approval; on #393's head it returned
+    `allow=true`.
+  - An agent with no tier passed I-4 with no kill path.
+- **Red on #393's head:** the Python test file fails at collection and the Rego tests fail to
+  type-check. **Green here:** 18/18, `opa test` 25/25 on 0.65 and 1.4.2, SDK 626/626,
+  gates 30/30, battery 126/126.
+- PR #394 targets the #393 branch, so only 7 hosted checks ran (most workflows filter PRs to
+  `main`). Retarget #394 to `main` after #393 merges to run full CI.
+
+**Next:** the owner merges #393 (merge commit or rebase); #394 is retargeted and reviewed.
