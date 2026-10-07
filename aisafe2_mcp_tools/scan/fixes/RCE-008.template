@@ -1,0 +1,18 @@
+# Fix Template: RCE-008 — unsafe deserialization (pickle / marshal / dill)
+# AI SAFE2 v3.1 CP.5.MCP-1 (Command Construction Safety)
+#
+# ── BEFORE (vulnerable) ───────────────────────────────────────────
+import pickle
+def load(blob: bytes):
+    return pickle.loads(blob)        # executes code embedded in the payload
+#
+# ── AFTER (safe) ──────────────────────────────────────────────────
+import json
+
+ALLOWED_KEYS = {"name", "value"}
+
+def load(blob: bytes) -> dict:
+    data = json.loads(blob.decode("utf-8"))
+    if not isinstance(data, dict) or set(data) - ALLOWED_KEYS:
+        raise ValueError("unexpected structure")
+    return data

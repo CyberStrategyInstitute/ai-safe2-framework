@@ -1,0 +1,260 @@
+{
+  "schema": "csi.assessment.state.v1",
+  "campaign": "2026-10-06-false-assurance",
+  "branch": "fix/v31-false-assurance-hardening",
+  "base": "83de4a8",
+  "owner": "Vincent Sullivan",
+  "updated": "2026-10-07",
+  "last_pushed_commit": "82ed851",
+  "modules": {
+    "skill-gate": {
+      "status": "done",
+      "commit": "8f3d038",
+      "findings": [
+        "S1",
+        "S3"
+      ]
+    },
+    "project-gate": {
+      "status": "done",
+      "commit": "8f3d038",
+      "findings": [
+        "C1",
+        "C2"
+      ]
+    },
+    "mcp-server": {
+      "status": "done",
+      "commit": "47c2dc8",
+      "findings": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+        "M7"
+      ]
+    },
+    "mcp-toolkit": {
+      "status": "done",
+      "commit": "06e523a",
+      "findings": [
+        "T1",
+        "T2",
+        "T3",
+        "T4",
+        "T5",
+        "T6",
+        "T7"
+      ]
+    },
+    "nexus-opa": {
+      "status": "done",
+      "commit": "f3ecea0",
+      "findings": [
+        "N1-compile",
+        "N2-scope-downgrade",
+        "N3-undefined-decision",
+        "N4-deny-not-gating",
+        "N5-empty-reason",
+        "N6-ci-path"
+      ]
+    },
+    "battery+ledger": {
+      "status": "done",
+      "commit": "225f45b"
+    },
+    "nexus-compose": {
+      "status": "done",
+      "findings": [
+        "N7-opa-mount"
+      ],
+      "commit": "5af8409"
+    },
+    "nexus-guardian": {
+      "status": "done",
+      "findings": [
+        "N-G: 15/26 evasions allowed"
+      ],
+      "commit": "904e289"
+    },
+    "nexus-agbom": {
+      "status": "done",
+      "findings": [
+        "N-A: tamper undetected, rug pull trusted, snapshots not isolated"
+      ],
+      "commit": "04f6192"
+    },
+    "docs-drift": {
+      "status": "done",
+      "findings": [
+        "S2",
+        "C3",
+        "C4",
+        "N8",
+        "skills docs: CP.11 cited as core, 180/128 control claims, broken links"
+      ],
+      "commit": "3353be4"
+    },
+    "full-gates+pr": {
+      "status": "ready_for_owner",
+      "revision": "21a8333",
+      "gates": "30/30 PASS (98598ed; 21a8333 adds only Codex SKILL-CARD.md)",
+      "hosted_ci": "39 success, 2 advisory skipped, CodeQL no new alerts",
+      "receipt": "receipt/development-receipt.json: review_required (23/27 supported; human, codeowner, security review and release decision outstanding)",
+      "pr": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/393",
+      "review_providers": "Greptile: no review posted (advisory status passes). PR-Agent: bounded one-hunk review of ci.yml on 82ed851, no actionable issue; first run published nothing. CodeQL threads resolved.",
+      "pr_state": "ready_for_review; 41/41 checks at 82ed851; mergeable clean"
+    },
+    "nexus-memory": {
+      "status": "done",
+      "commit": "4f2cff2",
+      "findings": [
+        "stub drift reported as measured"
+      ]
+    },
+    "nexus-score": {
+      "status": "done",
+      "commit": "7b85788",
+      "findings": [
+        "main self-check printed 10/10 satisfied; behavioral checks fail 3/10"
+      ]
+    },
+    "nexus-guardian-failover": {
+      "status": "done",
+      "commit": "2dac2ff",
+      "findings": [
+        "remote Guardian silently fell back to inline policy without httpx"
+      ]
+    },
+    "ci-wiring": {
+      "status": "done",
+      "commit": "5b38495"
+    },
+    "secret-literals": {
+      "status": "done",
+      "commit": "b24d040"
+    },
+    "skill-relocation": {
+      "status": "done",
+      "commit": "c59cc40"
+    },
+    "skill-surfaces-v31": {
+      "status": "done",
+      "commit": "8c71410",
+      "followup": "21a8333 (Codex SKILL-CARD)"
+    },
+    "aim-bound-act-tier": {
+      "status": "todo",
+      "note": "separate PR after #393"
+    },
+    "ci-least-privilege": {
+      "status": "done",
+      "commit": "e0637f7"
+    },
+    "battery-port-isolation": {
+      "status": "done",
+      "commit": "98598ed",
+      "findings": [
+        "fixed ports let a stale branch server answer for main (before-83de4a8-harness-bfe324b MCP HTTP case invalid)"
+      ]
+    }
+  },
+  "snapshots": [
+    {
+      "label": "before",
+      "revision": "83de4a8",
+      "harness": "225f45b",
+      "path": "snapshots/before-83de4a8",
+      "pass": 61,
+      "fail": 63,
+      "not_run": 1,
+      "info": 1
+    },
+    {
+      "label": "after",
+      "revision": "225f45b",
+      "harness": "225f45b",
+      "path": "snapshots/after-225f45b",
+      "pass": 101,
+      "fail": 27,
+      "not_run": 0,
+      "info": 1
+    },
+    {
+      "label": "before",
+      "revision": "83de4a8",
+      "harness": "bfe324b",
+      "path": "snapshots/before-83de4a8-harness-bfe324b",
+      "pass": 61,
+      "fail": 60,
+      "not_run": 1,
+      "info": 1,
+      "invalid": "MCP 'knowledge server HTTP' PASS was a stale branch server answering on fixed port 9790; superseded by harness 98598ed"
+    },
+    {
+      "label": "after",
+      "revision": "bfe324b",
+      "harness": "bfe324b",
+      "path": "snapshots/after-bfe324b",
+      "pass": 124,
+      "fail": 0,
+      "not_run": 0,
+      "info": 1
+    },
+    {
+      "label": "before",
+      "revision": "83de4a8",
+      "harness": "98598ed",
+      "path": "snapshots/before-83de4a8-harness-98598ed",
+      "pass": 60,
+      "fail": 65,
+      "not_run": 1,
+      "info": 0
+    },
+    {
+      "label": "after",
+      "revision": "21a8333",
+      "harness": "98598ed",
+      "path": "snapshots/after-21a8333",
+      "pass": 126,
+      "fail": 0,
+      "not_run": 0,
+      "info": 0
+    }
+  ],
+  "open_decisions": [
+    {
+      "id": "D1",
+      "question": "skills/ installs as one skill package that includes skills/mcp server code and its injection test corpus; the gate correctly rejects it. Move SKILL.md into its own folder?",
+      "owner": "Vincent",
+      "status": "decided",
+      "decision": "Option A: move the canonical skill to skills/ai-safe2-secure-build-copilot/, frontmatter-free redirect at skills/SKILL.md. In PR #393. (owner, 2026-10-07)"
+    },
+    {
+      "id": "D2",
+      "question": "Publish results after merge: advisory vs post vs both",
+      "owner": "Vincent",
+      "status": "decided",
+      "decision": "Publish only after the PR merges (owner, 2026-10-07)"
+    },
+    {
+      "id": "D3",
+      "question": "skills/codex, chatgpt, gemini, perplexity, evals.md, skill-spec.md teach v3.0 content (no MCP-14..19, enforcement planes, v3.1 persistence vocabulary). Refresh content to v3.1, or mark them as v3.0-legacy surfaces?",
+      "owner": "Vincent",
+      "status": "decided",
+      "note": "Verified 2026-10-07: surfaces cite no MCP IDs or persistence terms; core 161 unchanged in v3.1. Missed by the v3.1 sweep (#307). Fix = retag + short v3.1 delta block, not a rewrite.",
+      "decision": "Retag the six surfaces to v3.1 and add a short v3.1 delta block. In PR #393. (owner, 2026-10-07)"
+    },
+    {
+      "id": "D4",
+      "question": "Guardian now treats an omitted act_tier as ACT-4 (breaking for callers that omit it; opt-out documented). Accept as the default for the next NEXUS release?",
+      "owner": "Vincent",
+      "status": "decided",
+      "note": "AIM v0.2 schema has no ACT tier; tier is caller-asserted per call. ACT-4 default only covers omission, not a false low claim. Framework-correct fix: tier bound to registered AIM, resolved by Guardian.",
+      "decision": "Keep undeclared-tier=ACT-4 as interim floor in PR #393; registry-bound ACT tiers (AIM v0.3) as a separate follow-up PR. (owner, 2026-10-07)"
+    }
+  ],
+  "next_step": "Owner reviews and merges PR #393. Then D4 follow-up PR (registry-bound ACT tiers), then publication (D2)."
+}

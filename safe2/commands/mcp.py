@@ -34,7 +34,9 @@ def mcp():
 @click.option("--scan-outputs/--no-scan-outputs", default=True)
 @click.option("--block/--log-only", default=True, help="Block injections (default) or log-only mode")
 @click.option("--rate-limit", default=0, type=int, help="Max requests/hour/session (0=disabled)")
-def wrap_stdio(command, audit_log, scan_inputs, scan_outputs, block, rate_limit):
+@click.option("--pin-schema", is_flag=True, default=False,
+              help="MCP-11: pin the first tool catalog; in block mode a changed catalog is withheld")
+def wrap_stdio(command, audit_log, scan_inputs, scan_outputs, block, rate_limit, pin_schema):
     """Wrap a STDIO MCP server with injection scanning and audit logging.
 
     \b
@@ -50,6 +52,7 @@ def wrap_stdio(command, audit_log, scan_inputs, scan_outputs, block, rate_limit)
         scan_outputs=scan_outputs,
         block_on_match=block,
         rate_limit=rate_limit,
+        pin_schema=pin_schema,
     )
     try:
         asyncio.run(wrapper.run())
@@ -65,8 +68,12 @@ def wrap_stdio(command, audit_log, scan_inputs, scan_outputs, block, rate_limit)
 @click.option("--scan-outputs/--no-scan-outputs", default=True)
 @click.option("--audit-log", default="~/.safe2/mcp-audit.jsonl")
 @click.option("--rate-limit", default=100, type=int, help="Max requests/hour/IP")
-@click.option("--pin-schema", is_flag=True, default=False, help="MCP-11: alert on tools/list schema drift")
-def wrap_proxy(target_url, token, local_port, scan_inputs, scan_outputs, audit_log, rate_limit, pin_schema):
+@click.option("--pin-schema", is_flag=True, default=False,
+              help="MCP-11: pin the first tool catalog; in block mode a changed catalog is withheld")
+@click.option("--block/--log-only", default=True,
+              help="Block hostile requests/responses (default) or record and redact only")
+def wrap_proxy(target_url, token, local_port, scan_inputs, scan_outputs, audit_log, rate_limit,
+               pin_schema, block):
     """Run a local HTTP proxy wrapping a remote MCP server."""
     from aisafe2_mcp_tools.wrap.proxy import run_proxy
 
@@ -81,6 +88,7 @@ def wrap_proxy(target_url, token, local_port, scan_inputs, scan_outputs, audit_l
                 audit_log_path=audit_log,
                 rate_limit=rate_limit,
                 pin_schema=pin_schema,
+                block=block,
             )
         )
     except KeyboardInterrupt:

@@ -1,0 +1,18 @@
+
+============================================================
+NEXUS-A2A v0.3 Control Checks
+============================================================
+  [OK ] S1.3-GIP (P1): Guardian Integration Profile (per-call verdict)
+  [OK ] S1.3-FAILOVER (P1): Guardian failover (FAIL_CLOSED default)
+  [OK ] A2.5-NOR (P2): NOR OTel export + OCSF deny -> POLICY_VIOLATION
+  [OK ] A2.3-AGBOM (P2): Dynamic AgBOM with hash chain
+  [OK ] CP5-ACS (P1): NEXUS-ACS Bridge v0.1 (AOS JSON-RPC 2.0)
+  [OK ] I3-MV-ACS (P1): Memory Vaccine ACS context export (I-3)
+  [OK ] AISM-OPA (P3): AISM invariants OPA policy file
+  [OK ] SCHEMA-NOR (P2): JSON schema: nor-v0.3.schema.json
+  [OK ] SCHEMA-AGBOM (P2): JSON schema: agbom-v0.3.schema.json
+  [OK ] SCHEMA-GUARDIAN (P2): JSON schema: guardian-v0.3.schema.json
+
+10/10 v0.3 controls verified
+All v0.3 controls satisfied. SAFE2 score impact: +1 P1, +2 P2 (target 25/25 with OPA+SPIRE).
+

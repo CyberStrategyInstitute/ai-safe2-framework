@@ -1,0 +1,39 @@
+{
+ "schema": "csi.battery.summary.v1",
+ "areas": {
+  "SKILL": {
+   "revision": "83de4a8",
+   "counts": {
+    "FAIL": 16,
+    "PASS": 11,
+    "INFO": 1
+   },
+   "duration_s": 6.9
+  },
+  "MCP": {
+   "revision": "83de4a8",
+   "counts": {
+    "FAIL": 14,
+    "PASS": 2,
+    "NOT_RUN": 1
+   },
+   "duration_s": 45.3
+  },
+  "CLI": {
+   "revision": "83de4a8",
+   "counts": {
+    "PASS": 24,
+    "FAIL": 1
+   },
+   "duration_s": 12.4
+  },
+  "NEXUS": {
+   "revision": "83de4a8",
+   "counts": {
+    "PASS": 24,
+    "FAIL": 32
+   },
+   "duration_s": 2.2
+  }
+ }
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "safe2.development-plan-source.v1",
+  "task_id": "pr.393.false-assurance-hardening",
+  "title": "Close false-assurance defects across skills gate, MCP toolkit, CLI, and NEXUS",
+  "outcome": "No AI SAFE2 component reports safe, compliant, or blocked when the four-area battery shows otherwise.",
+  "delivery_shape": "architectural",
+  "risk_tier": "high",
+  "change_kind": "code",
+  "work_product": "reusable",
+  "acceptance_conditions": [
+    "Four-area battery: 0 FAIL and 0 NOT_RUN on the branch under the same harness that records main's failures.",
+    "Every fixed defect has a regression test that fails on main and passes on the branch.",
+    "Local CI mirror (gates.sh) passes every gate at the final revision.",
+    "Hosted CI on PR #393 passes at the final revision with no new CodeQL alerts.",
+    "Owner decisions D1-D4 are recorded and D1, D3 implemented; D4 interim floor in place and follow-up scoped."
+  ],
+  "scope": {
+    "include": ["aisafe2_mcp_tools/**", "scanner/**", "safe2/**", "skills/**", "skill.md", "INTEGRATIONS.md", "NEXUS/**", "tests/**", ".github/workflows/ci.yml", ".github/workflows/opa.yml", ".gitleaks-baseline.json", "docs/assessments/2026-10-06-false-assurance/**"],
+    "exclude": ["branch protection", "release tags and package publication", "framework control taxonomy (161 core)", "registry-bound ACT tiers (follow-up PR)"]
+  },
+  "trust_boundaries": [
+    "MCP client to untrusted MCP server (remote scoring, wrap-stdio, wrap-proxy)",
+    "Agent tool call to NEXUS Guardian and OPA policy decision point",
+    "Untrusted skill package to model context (skill trust gate)",
+    "CI runner to downloaded OPA and gitleaks binaries (checksum-verified)"
+  ],
+  "assumptions": [
+    "OPA 0.65.0 remains the docker-compose pin; 1.x support is additive.",
+    "Battery results are self-assessment by the authoring agent, not independent validation."
+  ],
+  "unknowns": [
+    "Live docker compose up was not exercised (no Docker daemon in the assessment environment).",
+    "Greptile review has not run on this PR."
+  ],
+  "design": {
+    "summary": "One commit per module; each defect gets a red-on-main regression test; hostile fixtures inert in tree; evidence frozen in docs/assessments/2026-10-06-false-assurance.",
+    "artifact": "docs/assessments/2026-10-06-false-assurance/PR_DESCRIPTION.md",
+    "approved": true,
+    "approval_reference": "docs/assessments/2026-10-06-false-assurance/STATE.json#open_decisions (owner decisions D1-D4, 2026-10-07)"
+  },
+  "threat_model_reference": "docs/assessments/2026-10-06-false-assurance/LEDGER.md",
+  "isolation": {"strategy": "branch", "reference": "fix/v31-false-assurance-hardening"},
+  "testing": {"mode": "tdd", "rationale": "Every fix is preceded by a test observed failing on main (83de4a8)."}
+}

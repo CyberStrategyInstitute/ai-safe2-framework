@@ -20,6 +20,7 @@ Usage:
 """
 from __future__ import annotations
 
+import contextlib
 import sys
 
 import structlog
@@ -30,6 +31,7 @@ from starlette.responses import JSONResponse
 from starlette.routing import Route
 
 from mcp_server.auth import BearerAuthMiddleware, verify_stdio_security
+from mcp_server.context import set_tier
 from mcp_server.config import (
     HOST,
     LOG_FORMAT,
@@ -343,7 +345,15 @@ def main() -> None:
         # Verifies command allowlist + install path + source integrity hash.
         # sys.exit(1) on any failure (fail-closed).
         verify_stdio_security()
-        log.info("transport.stdio", note="Local mode — security verified, no network exposure")
+        # The HTTP middleware never runs on stdio, so the stdio tier must be set
+        # here, before the server's task group starts (child tasks inherit it).
+        from mcp_server.config import STDIO_TIER
+        set_tier(STDIO_TIER)
+        log.info(
+            "transport.stdio",
+            tier=STDIO_TIER,
+            note="Local mode — security verified, no network exposure",
+        )
         mcp.run(transport="stdio")
 
     elif TRANSPORT == "streamable-http":
@@ -351,7 +361,16 @@ def main() -> None:
 
         mcp_app = mcp.streamable_http_app()
 
+        # The streamable-HTTP session manager must be running for /mcp to serve
+        # requests. Mounting the sub-app in an outer Starlette drops its
+        # lifespan, so the outer app must run the session manager itself.
+        @contextlib.asynccontextmanager
+        async def lifespan(_app):
+            async with mcp.session_manager.run():
+                yield
+
         app = Starlette(
+            lifespan=lifespan,
             routes=[
                 Route("/health", health_check),
                 Route("/mcp", mcp_app),

@@ -84,6 +84,11 @@ def calculate_risk_score(
             "Upgrade: cyberstrategyinstitute.com/ai-safe2/"
         )
         aaf_breakdown = {}
+        aaf_completeness = {
+            "assessed_factors": 0,
+            "total_factors": len(AAF_FACTOR_LABELS),
+            "score_is_lower_bound": True,
+        }
     else:
         # Pro tier: compute AAF
         if aaf_factors is None:
@@ -93,19 +98,31 @@ def calculate_risk_score(
         aaf_breakdown = {}
         aaf_total = 0.0
 
+        assessed = 0
         for factor in known_factors:
-            val = float(aaf_factors.get(factor, 0))
+            supplied = factor in aaf_factors and aaf_factors[factor] is not None
+            val = float(aaf_factors[factor]) if supplied else 0.0
             val = max(0.0, min(10.0, val))  # clamp
+            assessed += supplied
+            # Missing evidence stays unassessed. It counts as 0 in the arithmetic,
+            # which makes the combined score a lower bound, never a safety claim.
             aaf_breakdown[factor] = {
                 "value": val,
+                "assessed": supplied,
                 "description": AAF_FACTOR_LABELS[factor],
                 "governance": (
-                    "architecturally prevented" if val == 0
+                    "not assessed (no value supplied)" if not supplied
+                    else "reported absent (caller-supplied, not verified)" if val == 0
                     else "governed by SAFE2 controls" if val <= 5
                     else "UNCONTROLLED — governance failure"
                 ),
             }
             aaf_total += val
+        aaf_completeness = {
+            "assessed_factors": assessed,
+            "total_factors": len(known_factors),
+            "score_is_lower_bound": assessed < len(known_factors),
+        }
 
         aaf_component = aaf_total / 10
         aaf_note = None
@@ -125,7 +142,13 @@ def calculate_risk_score(
         },
         "formula": db.risk_formula["formula"],
         "tier": tier,
+        "aaf_completeness": aaf_completeness,
     }
+    if aaf_completeness["score_is_lower_bound"]:
+        result["interpretation"] += (
+            f" (lower bound: {aaf_completeness['assessed_factors']}/"
+            f"{aaf_completeness['total_factors']} AAF factors assessed)"
+        )
 
     if aaf_breakdown:
         result["aaf_breakdown"] = aaf_breakdown

@@ -1,0 +1,343 @@
+{
+  "schema_version": "safe2.development-receipt.v1",
+  "receipt_id": "pr.393.receipt.21a8333",
+  "task_id": "pr.393.false-assurance-hardening",
+  "revision": "21a8333",
+  "plan_sha256": "2848104ec41c33a46a3cace986d3cfd2c24e58db8679f5fdc2c9ed08f704deb0",
+  "source_sha256": "70f803a93bf364a0053e3f63da1221adac4ed1035c1fdd769603493c3268f4da",
+  "claim_status": "review_required",
+  "required_evidence": [
+    {
+      "evidence_id": "adversarial-tests",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "battery-after-branch.md",
+      "expected_sha256": "362e1ecb57919521e4204bb536242f986295cb0a7880fcfda0d1d52eae83daea",
+      "observed_sha256": "362e1ecb57919521e4204bb536242f986295cb0a7880fcfda0d1d52eae83daea"
+    },
+    {
+      "evidence_id": "codeowner-review",
+      "declared_status": "unavailable",
+      "status": "unverifiable",
+      "reason": "operator_declared_unavailable",
+      "artifact_path": null,
+      "expected_sha256": null,
+      "observed_sha256": null
+    },
+    {
+      "evidence_id": "contract-tests",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "contract-tests.md",
+      "expected_sha256": "fc347bc01200fe00ebd31d6a7fdc55745c1c7a9f8e29f5131a85a442cf4b65c7",
+      "observed_sha256": "fc347bc01200fe00ebd31d6a7fdc55745c1c7a9f8e29f5131a85a442cf4b65c7"
+    },
+    {
+      "evidence_id": "dependency-audit",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "hosted-ci.json",
+      "expected_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9",
+      "observed_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9"
+    },
+    {
+      "evidence_id": "design-specification",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "design-specification.md",
+      "expected_sha256": "beb1b03cd80c82d269597f9c010f31d7bcbcc49f425b747ca3aa55e3ea16a63f",
+      "observed_sha256": "beb1b03cd80c82d269597f9c010f31d7bcbcc49f425b747ca3aa55e3ea16a63f"
+    },
+    {
+      "evidence_id": "documentation-validation",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "gates.md",
+      "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76",
+      "observed_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+    },
+    {
+      "evidence_id": "full-tests",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "gates.md",
+      "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76",
+      "observed_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+    },
+    {
+      "evidence_id": "green-state",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "red-green.md",
+      "expected_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f",
+      "observed_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f"
+    },
+    {
+      "evidence_id": "human-release-decision",
+      "declared_status": "unavailable",
+      "status": "unverifiable",
+      "reason": "operator_declared_unavailable",
+      "artifact_path": null,
+      "expected_sha256": null,
+      "observed_sha256": null
+    },
+    {
+      "evidence_id": "human-review",
+      "declared_status": "unavailable",
+      "status": "unverifiable",
+      "reason": "operator_declared_unavailable",
+      "artifact_path": null,
+      "expected_sha256": null,
+      "observed_sha256": null
+    },
+    {
+      "evidence_id": "implementation-plan",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "implementation-runbook.md",
+      "expected_sha256": "8be72f3b819e6e9795a98519d7ed178f34569da668e96a2b2fd10261a2c0daed",
+      "observed_sha256": "8be72f3b819e6e9795a98519d7ed178f34569da668e96a2b2fd10261a2c0daed"
+    },
+    {
+      "evidence_id": "installed-wheel",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "gates.md",
+      "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76",
+      "observed_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+    },
+    {
+      "evidence_id": "least-privilege-review",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "least-privilege.md",
+      "expected_sha256": "7ec29c64c7273c22a2bff0a3a09218623644717405770b3a62136bca64d0587d",
+      "observed_sha256": "7ec29c64c7273c22a2bff0a3a09218623644717405770b3a62136bca64d0587d"
+    },
+    {
+      "evidence_id": "manifest-consistency",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "gates.md",
+      "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76",
+      "observed_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+    },
+    {
+      "evidence_id": "negative-tests",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "battery-delta.md",
+      "expected_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b",
+      "observed_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b"
+    },
+    {
+      "evidence_id": "negative-validation",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "battery-delta.md",
+      "expected_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b",
+      "observed_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b"
+    },
+    {
+      "evidence_id": "pinned-actions",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "pinned-actions.md",
+      "expected_sha256": "5a848f01b73112a5829a4bc02ff7765d922d1edb609522c665aa4d118cbc808f",
+      "observed_sha256": "5a848f01b73112a5829a4bc02ff7765d922d1edb609522c665aa4d118cbc808f"
+    },
+    {
+      "evidence_id": "red-state",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "red-green.md",
+      "expected_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f",
+      "observed_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f"
+    },
+    {
+      "evidence_id": "release-invariants",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "gates.md",
+      "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76",
+      "observed_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+    },
+    {
+      "evidence_id": "relevant-tests",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "gates.md",
+      "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76",
+      "observed_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+    },
+    {
+      "evidence_id": "security-gates",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "gates.md",
+      "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76",
+      "observed_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+    },
+    {
+      "evidence_id": "security-review",
+      "declared_status": "unavailable",
+      "status": "unverifiable",
+      "reason": "operator_declared_unavailable",
+      "artifact_path": null,
+      "expected_sha256": null,
+      "observed_sha256": null
+    },
+    {
+      "evidence_id": "security-validation",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "hosted-ci.json",
+      "expected_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9",
+      "observed_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9"
+    },
+    {
+      "evidence_id": "targeted-tests",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "red-green.md",
+      "expected_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f",
+      "observed_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f"
+    },
+    {
+      "evidence_id": "targeted-validation",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "battery-delta.md",
+      "expected_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b",
+      "observed_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b"
+    },
+    {
+      "evidence_id": "threat-model",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "THREAT-MODEL.md",
+      "expected_sha256": "928a9b2cfada4be89f85914b1b1bddf94b80fed10172ab088c22ba463d507483",
+      "observed_sha256": "928a9b2cfada4be89f85914b1b1bddf94b80fed10172ab088c22ba463d507483"
+    },
+    {
+      "evidence_id": "workflow-validation",
+      "declared_status": "passed",
+      "status": "supported",
+      "reason": "artifact_hash_matched",
+      "artifact_path": "hosted-ci.json",
+      "expected_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9",
+      "observed_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9"
+    }
+  ],
+  "additional_evidence": [],
+  "process_checks": [
+    {
+      "id": "plan-disposition",
+      "status": "supported",
+      "reason": "plan_ready"
+    },
+    {
+      "id": "test-cycle",
+      "mode": "tdd",
+      "status": "supported",
+      "reason": "red_and_green_evidence_supported"
+    },
+    {
+      "id": "before-after",
+      "status": "supported",
+      "reason": "comparable_evidence_supported"
+    },
+    {
+      "id": "independent-review",
+      "status": "unverifiable",
+      "reason": "human_review_missing"
+    },
+    {
+      "id": "specialist-review",
+      "status": "unverifiable",
+      "reason": "security_review_evidence_missing"
+    },
+    {
+      "id": "rollback",
+      "status": "supported",
+      "reason": "rollback_recorded"
+    },
+    {
+      "id": "open-findings",
+      "status": "supported",
+      "reason": "no_open_findings_declared"
+    }
+  ],
+  "reviews": [
+    {
+      "kind": "human",
+      "status": "unavailable"
+    },
+    {
+      "kind": "greptile",
+      "status": "unavailable"
+    },
+    {
+      "kind": "pr-agent",
+      "status": "unavailable"
+    },
+    {
+      "kind": "security",
+      "status": "unavailable"
+    }
+  ],
+  "open_findings": [],
+  "residual_risks": [
+    "All results are self-assessment by the authoring agent; no independent or specialist review has run.",
+    "Guardian ACT tier remains caller-asserted; undeclared tier is treated as ACT-4 (interim). Registry-bound tiers are a follow-up PR.",
+    "Pattern-based injection and secret detectors are a floor; paraphrased or novel payloads can pass.",
+    "AgBOM signatures are a stub; a full-history rewriter can recompute hashes until ML-DSA-65 signing ships.",
+    "Live docker compose up was not exercised; compose fix verified by docker compose config and an OPA bundle server.",
+    "capture-pytest cannot launch a symlinked venv interpreter; those tests skip in venvs and run in CI.",
+    "Inbound links to the old blob URL skills/SKILL.md now 404; the folder URL resolves with a moved notice."
+  ],
+  "rollback": "Each module is an independent commit on fix/v31-false-assurance-hardening; revert the module's commit. The battery (tests/battery/run.py --areas <area>) shows which cases regress.",
+  "completion_claim": "Implementation for PR #393 is complete at 21a8333: battery 126/126 on the branch versus 60 pass / 65 fail / 1 not run on main under the same harness; all 13 new test files red on main and green here; local CI mirror 30/30; hosted CI 39 success, 2 advisory skips, no new CodeQL alerts. Human review, codeowner review, specialist security review and the merge decision are outstanding and belong to the owner.",
+  "authorization": {
+    "completion": false,
+    "merge": false,
+    "release": false,
+    "deploy": false,
+    "risk_acceptance": false
+  },
+  "limitations": [
+    "Artifact hashes prove byte equality, not correctness or execution authenticity.",
+    "Review and finding states are operator-supplied declarations.",
+    "Supported means the declared evidence is internally consistent with this plan.",
+    "A named human decision owner retains merge, release, deployment, and risk authority."
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "json-sort-keys-compact-utf8-v1",
+    "digest": "1e624a6613e292b098bd60e22d7ab3e7a24339a1236405c3d7c1e75055f9d2c9",
+    "verification_scope": "all top-level content except integrity",
+    "authenticity": "unsigned"
+  }
+}

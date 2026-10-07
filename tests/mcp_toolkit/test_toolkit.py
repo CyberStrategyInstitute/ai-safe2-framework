@@ -1000,8 +1000,9 @@ class TestMCP8SessionEconomicsMapping:
     def test_rl002_maps_to_mcp8(self):
         assert Finding.control_for("RL-002") == "MCP-8"
 
-    def test_rl001_maps_to_mcp6(self):
-        assert Finding.control_for("RL-001") == "MCP-6"
+    def test_rl001_maps_to_v31_economic_ceiling(self):
+        # v3.1 profile: rate limiting is consumption accounting, MCP-8 Economic Ceiling.
+        assert Finding.control_for("RL-001") == "MCP-8"
 
     def test_rl002_detected_on_llm_api_usage(self, tmp_path):
         code = (tmp_path / "server.py")
@@ -1133,8 +1134,9 @@ class TestMCP12SwarmC2Detection:
         findings = self._scan("result = orchestrate_pipeline(steps)\n", tmp_path)
         assert any(f.finding_id == "SWM-001" for f in findings)
 
-    def test_swm001_maps_to_mcp12(self):
-        assert Finding.control_for("SWM-001") == "MCP-12"
+    def test_swm001_maps_to_v31_delegation_edge_monitoring(self):
+        # v3.1 profile: MCP-12 is Principal-Scoped State; swarm C2 is MCP-10.
+        assert Finding.control_for("SWM-001") == "MCP-10"
 
     def test_swm001_has_verify_language(self, tmp_path):
         """SWM-001 must use verify language — topology monitoring requires human review."""

@@ -1,9 +1,20 @@
-# AI SAFE2 v3.0 Canonical Skill Specification
+# AI SAFE2 v3.1 Canonical Skill Specification
 ## Model-neutral. Platform adapters live in platform-specific files.
 
-**Version:** 3.0.0
-**Framework:** AI SAFE2 v3.0 (161 controls, 32 frameworks)
+**Version:** 3.1.0
+**Framework:** AI SAFE2 v3.1 (161 controls, 32 frameworks)
 **Validation source:** `mcp/data/ai-safe2-controls-v3.0.json`
+
+---
+
+## What changed in v3.1
+
+- The core is unchanged: 161 controls (151 pillar + CP.1 to CP.10). The core taxonomy file keeps its v3.0 filename for provenance.
+- Profiles are overlays and never add to the 161. MCP work uses the CP.5.MCP v3.1 profile, MCP-1 through MCP-19, aligned to MCP `2026-07-28` with legacy `2025-11-25` compatibility. The UAS regulatory profile has 27 requirements and is not a CP.11.
+- Name the enforcement plane before claiming coverage: north-south (agent to model), east-west (agent to agent), agent-to-tool (agent to MCP server or tool). Evidence from one plane does not validate another.
+- Persistence scopes are `request`, `handle_scoped`, `durable` and `swarm_shared` (legacy SESSION, CROSS_SESSION and PERMANENT map to the first three). A state handle or legacy session ID is not identity and not an authorization boundary.
+- MCP-19 requires intended-resource or audience binding; holding a bearer token does not prove it. `server/discover` is optional, so its absence is not a failure.
+- NEXUS is CSI's reference implementation, not a conformance requirement.
 
 ---
 
@@ -32,7 +43,7 @@
 ## Core Operating Instructions
 
 ### Primary Goal
-Produce control-anchored, actionable security guidance with specific AI SAFE2 v3.0
+Produce control-anchored, actionable security guidance with specific AI SAFE2 v3.1
 control IDs, code-level recommendations, and compliance evidence artifacts.
 
 ### Decision Rules
@@ -115,7 +126,7 @@ When the AI SAFE2 MCP server is connected:
 | `get_governance_resource` | Fetching policy templates, checklists, HEAR forms |
 | `get_workflow_prompt` | Starting a structured architecture review or runbook |
 
-Without MCP: use the pillar summaries in SKILL.md and the control IDs embedded
+Without MCP: use the pillar summaries in ai-safe2-secure-build-copilot/SKILL.md and the control IDs embedded
 throughout. The canonical taxonomy is in `mcp/data/ai-safe2-controls-v3.0.json`
 if the host model supports file reading.
 
@@ -124,7 +135,7 @@ if the host model supports file reading.
 ## Knowledge Layer
 
 **Live data (MCP):** `ai-safe2-controls-v3.0.json` — 161 controls with full metadata
-**Static reference:** SKILL.md — framework structure, ACT tiers, workflows, tool list
+**Static reference:** ai-safe2-secure-build-copilot/SKILL.md — framework structure, ACT tiers, workflows, tool list
 **Templates:** Available via `get_governance_resource` tool (pro tier)
 **Evals:** `evals.md` — regression test suite for skill validation
 
@@ -159,4 +170,4 @@ A failing response by this skill:
 - Omits HEAR requirement for ACT-3/ACT-4
 - Provides only prose recommendations without code
 - Cites a framework without mapping it to specific controls
-- Fabricates a control ID that does not exist in v3.0
+- Fabricates a control ID that does not exist in the v3.1 core taxonomy or MCP profile

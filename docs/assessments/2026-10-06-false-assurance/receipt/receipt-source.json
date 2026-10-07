@@ -1,0 +1,212 @@
+{
+ "schema_version": "safe2.development-receipt-source.v1",
+ "receipt_id": "pr.393.receipt.21a8333",
+ "task_id": "pr.393.false-assurance-hardening",
+ "revision": "21a8333",
+ "evidence": [
+  {
+   "evidence_id": "adversarial-tests",
+   "status": "passed",
+   "artifact_path": "battery-after-branch.md",
+   "expected_sha256": "362e1ecb57919521e4204bb536242f986295cb0a7880fcfda0d1d52eae83daea"
+  },
+  {
+   "evidence_id": "contract-tests",
+   "status": "passed",
+   "artifact_path": "contract-tests.md",
+   "expected_sha256": "fc347bc01200fe00ebd31d6a7fdc55745c1c7a9f8e29f5131a85a442cf4b65c7"
+  },
+  {
+   "evidence_id": "dependency-audit",
+   "status": "passed",
+   "artifact_path": "hosted-ci.json",
+   "expected_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9"
+  },
+  {
+   "evidence_id": "design-specification",
+   "status": "passed",
+   "artifact_path": "design-specification.md",
+   "expected_sha256": "beb1b03cd80c82d269597f9c010f31d7bcbcc49f425b747ca3aa55e3ea16a63f"
+  },
+  {
+   "evidence_id": "documentation-validation",
+   "status": "passed",
+   "artifact_path": "gates.md",
+   "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+  },
+  {
+   "evidence_id": "full-tests",
+   "status": "passed",
+   "artifact_path": "gates.md",
+   "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+  },
+  {
+   "evidence_id": "green-state",
+   "status": "passed",
+   "artifact_path": "red-green.md",
+   "expected_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f"
+  },
+  {
+   "evidence_id": "implementation-plan",
+   "status": "passed",
+   "artifact_path": "implementation-runbook.md",
+   "expected_sha256": "8be72f3b819e6e9795a98519d7ed178f34569da668e96a2b2fd10261a2c0daed"
+  },
+  {
+   "evidence_id": "installed-wheel",
+   "status": "passed",
+   "artifact_path": "gates.md",
+   "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+  },
+  {
+   "evidence_id": "least-privilege-review",
+   "status": "passed",
+   "artifact_path": "least-privilege.md",
+   "expected_sha256": "7ec29c64c7273c22a2bff0a3a09218623644717405770b3a62136bca64d0587d"
+  },
+  {
+   "evidence_id": "manifest-consistency",
+   "status": "passed",
+   "artifact_path": "gates.md",
+   "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+  },
+  {
+   "evidence_id": "negative-tests",
+   "status": "passed",
+   "artifact_path": "battery-delta.md",
+   "expected_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b"
+  },
+  {
+   "evidence_id": "negative-validation",
+   "status": "passed",
+   "artifact_path": "battery-delta.md",
+   "expected_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b"
+  },
+  {
+   "evidence_id": "pinned-actions",
+   "status": "passed",
+   "artifact_path": "pinned-actions.md",
+   "expected_sha256": "5a848f01b73112a5829a4bc02ff7765d922d1edb609522c665aa4d118cbc808f"
+  },
+  {
+   "evidence_id": "red-state",
+   "status": "passed",
+   "artifact_path": "red-green.md",
+   "expected_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f"
+  },
+  {
+   "evidence_id": "release-invariants",
+   "status": "passed",
+   "artifact_path": "gates.md",
+   "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+  },
+  {
+   "evidence_id": "relevant-tests",
+   "status": "passed",
+   "artifact_path": "gates.md",
+   "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+  },
+  {
+   "evidence_id": "security-gates",
+   "status": "passed",
+   "artifact_path": "gates.md",
+   "expected_sha256": "10688ceab8ea7e09d13255524ea1c36860c64f308c988433feb459354d606e76"
+  },
+  {
+   "evidence_id": "security-validation",
+   "status": "passed",
+   "artifact_path": "hosted-ci.json",
+   "expected_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9"
+  },
+  {
+   "evidence_id": "targeted-tests",
+   "status": "passed",
+   "artifact_path": "red-green.md",
+   "expected_sha256": "0824f9c1d2f755c46e21ce9357f9aec7c3e7522790ab795433bc41c6b739c16f"
+  },
+  {
+   "evidence_id": "targeted-validation",
+   "status": "passed",
+   "artifact_path": "battery-delta.md",
+   "expected_sha256": "7b131a33fc32e89457f1999b267b0f71a47e10df0ce2560e257f19f85d912b4b"
+  },
+  {
+   "evidence_id": "threat-model",
+   "status": "passed",
+   "artifact_path": "THREAT-MODEL.md",
+   "expected_sha256": "928a9b2cfada4be89f85914b1b1bddf94b80fed10172ab088c22ba463d507483"
+  },
+  {
+   "evidence_id": "workflow-validation",
+   "status": "passed",
+   "artifact_path": "hosted-ci.json",
+   "expected_sha256": "564de9b114283b12498a21a4b6dbcb70654bfce40778c76c048f682ef0b66fa9"
+  },
+  {
+   "evidence_id": "human-review",
+   "status": "unavailable"
+  },
+  {
+   "evidence_id": "codeowner-review",
+   "status": "unavailable"
+  },
+  {
+   "evidence_id": "security-review",
+   "status": "unavailable"
+  },
+  {
+   "evidence_id": "human-release-decision",
+   "status": "unavailable"
+  }
+ ],
+ "test_cycle": {
+  "mode": "tdd",
+  "red": {
+   "status": "observed",
+   "evidence_id": "red-state"
+  },
+  "green": {
+   "status": "observed",
+   "evidence_id": "green-state"
+  }
+ },
+ "before_after": {
+  "status": "compared",
+  "evidence_ids": [
+   "red-state",
+   "green-state",
+   "adversarial-tests",
+   "negative-validation"
+  ]
+ },
+ "reviews": [
+  {
+   "kind": "human",
+   "status": "unavailable"
+  },
+  {
+   "kind": "greptile",
+   "status": "unavailable"
+  },
+  {
+   "kind": "pr-agent",
+   "status": "unavailable"
+  },
+  {
+   "kind": "security",
+   "status": "unavailable"
+  }
+ ],
+ "open_findings": [],
+ "residual_risks": [
+  "All results are self-assessment by the authoring agent; no independent or specialist review has run.",
+  "Guardian ACT tier remains caller-asserted; undeclared tier is treated as ACT-4 (interim). Registry-bound tiers are a follow-up PR.",
+  "Pattern-based injection and secret detectors are a floor; paraphrased or novel payloads can pass.",
+  "AgBOM signatures are a stub; a full-history rewriter can recompute hashes until ML-DSA-65 signing ships.",
+  "Live docker compose up was not exercised; compose fix verified by docker compose config and an OPA bundle server.",
+  "capture-pytest cannot launch a symlinked venv interpreter; those tests skip in venvs and run in CI.",
+  "Inbound links to the old blob URL skills/SKILL.md now 404; the folder URL resolves with a moved notice."
+ ],
+ "rollback": "Each module is an independent commit on fix/v31-false-assurance-hardening; revert the module's commit. The battery (tests/battery/run.py --areas <area>) shows which cases regress.",
+ "completion_claim": "Implementation for PR #393 is complete at 21a8333: battery 126/126 on the branch versus 60 pass / 65 fail / 1 not run on main under the same harness; all 13 new test files red on main and green here; local CI mirror 30/30; hosted CI 39 success, 2 advisory skips, no new CodeQL alerts. Human review, codeowner review, specialist security review and the merge decision are outstanding and belong to the owner."
+}

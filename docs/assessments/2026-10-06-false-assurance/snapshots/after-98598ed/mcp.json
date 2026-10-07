@@ -1,0 +1,151 @@
+{
+ "schema": "csi.battery.area-result.v1",
+ "label": "after",
+ "area": "MCP",
+ "repo": "/home/claude/ai-safe2-framework",
+ "revision": "98598ed",
+ "venv": "/root/venv-dev",
+ "duration_s": 25.2,
+ "results": [
+  {
+   "area": "MCP",
+   "id": "score: self-attestation adds no points",
+   "status": "PASS",
+   "want": "attest == poisoned",
+   "detail": "poisoned=29 poisoned+attest=29"
+  },
+  {
+   "area": "MCP",
+   "id": "score: grade-gaming poisoned server",
+   "status": "PASS",
+   "want": "<50, no badge",
+   "detail": "score=29 badge=False"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp URL: poisoned+gamed fails CI",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1"
+  },
+  {
+   "area": "MCP",
+   "id": "score: honest server outranks poisoned",
+   "status": "PASS",
+   "want": "clean > gamed",
+   "detail": "clean=65 gamed=29"
+  },
+  {
+   "area": "MCP",
+   "id": "score: cites v3.1 profile",
+   "status": "PASS",
+   "want": "no v3.0",
+   "detail": "banner"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: py_clean",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: py_vuln",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: py_obf",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: ts_vuln",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1"
+  },
+  {
+   "area": "MCP",
+   "id": "gate mcp PATH: evade",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1"
+  },
+  {
+   "area": "MCP",
+   "id": "wrap-stdio --block: payload not delivered",
+   "status": "PASS",
+   "want": "none",
+   "detail": "leaked=[] exit=0"
+  },
+  {
+   "area": "MCP",
+   "id": "wrap-stdio: client EOF terminates wrapper",
+   "status": "PASS",
+   "want": "exits",
+   "detail": "exit=0"
+  },
+  {
+   "area": "MCP",
+   "id": "wrap audit attributes tool/method",
+   "status": "PASS",
+   "want": "populated",
+   "detail": "4 records"
+  },
+  {
+   "area": "MCP",
+   "id": "wrap-proxy --pin-schema: rug pull withheld",
+   "status": "PASS",
+   "want": "withheld",
+   "detail": "first_ok=True rug_delivered=False"
+  },
+  {
+   "area": "MCP",
+   "id": "knowledge server: imports after documented install",
+   "status": "PASS",
+   "want": "import ok",
+   "detail": "import ok"
+  },
+  {
+   "area": "MCP",
+   "id": "knowledge server: stdio initialize + tools/list",
+   "status": "PASS",
+   "want": ">=5",
+   "detail": "7 tools"
+  },
+  {
+   "area": "MCP",
+   "id": "knowledge server: tool calls succeed",
+   "status": "PASS",
+   "want": "no errors",
+   "detail": "18 calls, unexpected errors=[]"
+  },
+  {
+   "area": "MCP",
+   "id": "risk_score: missing factors not called 'prevented'",
+   "status": "PASS",
+   "want": "not assessed",
+   "detail": "honest"
+  },
+  {
+   "area": "MCP",
+   "id": "code_review: bounded input",
+   "status": "PASS",
+   "want": "<200k",
+   "detail": "len=174"
+  },
+  {
+   "area": "MCP",
+   "id": "knowledge server HTTP: 401 unauth, 200 auth",
+   "status": "PASS",
+   "want": "401 then 200",
+   "detail": "UNAUTH 401 | AUTH 200 | AUTHLOWER 200"
+  }
+ ]
+}

@@ -86,7 +86,7 @@ The Skills ecosystem provides model-facing AI SAFE² guidance. The MCP server ad
 Current entry points:
 
 - [Skills overview](skills/README.md)
-- [Canonical skill](skills/SKILL.md)
+- [Canonical skill](skills/ai-safe2-secure-build-copilot/SKILL.md)
 - [MCP server](skills/mcp/README.md)
 
 The MCP server can query the 161-control core taxonomy and the separate 19-control MCP profile overlay without double-counting profile controls as core controls.
@@ -154,7 +154,7 @@ MCP `2025-11-25` remains a legacy compatibility binding during the migration win
 
 | Need | Start here |
 |---|---|
-| Teach an AI coding assistant the framework | [skills/SKILL.md](skills/SKILL.md) |
+| Teach an AI coding assistant the framework | [skills/ai-safe2-secure-build-copilot/SKILL.md](skills/ai-safe2-secure-build-copilot/SKILL.md) |
 | Query controls/profile data live | [skills/mcp/README.md](skills/mcp/README.md) |
 | Catch code/config governance gaps in CI | [scanner/README.md](scanner/README.md) |
 | Enforce the model/provider boundary | [gateway/README.md](gateway/README.md) |

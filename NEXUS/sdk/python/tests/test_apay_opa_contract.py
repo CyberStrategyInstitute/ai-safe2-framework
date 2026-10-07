@@ -174,14 +174,14 @@ class TestOPAContract:
         """There must be no rule body that grants allow without evaluating reasons."""
         assert "default allow := false" in policy_text
         assert "default decision" in policy_text
-        allow_bodies = re.findall(r"^allow\s*\{(.*?)^\}", policy_text,
+        allow_bodies = re.findall(r"^allow\s*(?:if\s*)?\{(.*?)^\}", policy_text,
                                   re.DOTALL | re.MULTILINE)
         assert allow_bodies, "policy defines no allow rule"
         for body in allow_bodies:
             assert "reason_codes" in body, f"allow rule bypasses reason evaluation: {body!r}"
 
     def test_credential_release_gate_rechecks_revocation(self, policy_text):
-        gate = re.search(r"release_credential\s*\{(.*?)^\}", policy_text,
+        gate = re.search(r"release_credential\s*(?:if\s*)?\{(.*?)^\}", policy_text,
                          re.DOTALL | re.MULTILINE)
         assert gate, "policy defines no credential release gate"
         body = gate.group(1)

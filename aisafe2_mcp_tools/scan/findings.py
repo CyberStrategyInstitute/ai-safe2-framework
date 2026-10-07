@@ -32,34 +32,48 @@ SEVERITY_ORDER: dict[str, int] = {
 }
 
 # CP.5.MCP control mapping for each finding prefix
+# Mapped to the CP.5.MCP v3.1 profile (MCP-1..MCP-19, 00-cross-pillar/
+# cp5_mcp_server_security.md). The previous map used the retired 13-control
+# numbering, so every finding cited the wrong control.
 CONTROL_MAP: dict[str, str] = {
-    "RCE": "MCP-1",   # No Dynamic Command Construction
-    "INJ": "MCP-2",   # Output Sanitization Before LLM Return
-    "SEC": "MCP-4",   # STDIO Transport Integrity / Auth
-    "AUTH": "MCP-4",
-    "RL": "MCP-6",    # Network Isolation / Rate Limiting (default; RL-002 overridden below)
-    "LOG": "MCP-5",   # Tool Invocation Audit Log (LOG-002 also maps here)
-    "MEM": "MCP-10",  # Multi-Agent Provenance and Delegation Edge Monitoring
-    "DEP": "MCP-3",   # Registry Provenance Verification
-    "CONF": "MCP-6",
-    "CTI": "MCP-9",   # Context-Tool Isolation
-    "STP": "MCP-11",  # Schema Temporal Profiling
-    "SWM": "MCP-12",  # Swarm C2 Detection Controls
+    "RCE": "MCP-1",   # Command Construction Safety
+    "INJ": "MCP-2",   # Return-Path Content Sanitization
+    "SEC": "MCP-7",   # Trust Establishment (overrides below)
+    "AUTH": "MCP-4",  # Server/Binary Integrity (stdio verification)
+    "RL": "MCP-8",    # Economic Ceiling
+    "LOG": "MCP-5",   # Tool Invocation Audit
+    "MEM": "MCP-12",  # Principal-Scoped State
+    "DEP": "MCP-4",   # Server/Binary Integrity (supply chain)
+    "CONF": "MCP-9",  # Secret Boundary
+    "CTI": "MCP-9",   # Secret Boundary (retrieval-to-disclosure chain)
+    "STP": "MCP-11",  # Catalog Provenance
+    "SWM": "MCP-10",  # Delegation Edge Monitoring
 }
 
 # Finding-ID-level overrides applied before class prefix lookup.
-# Use when a single prefix class spans multiple CP.5.MCP controls.
 FINDING_CONTROL_OVERRIDE: dict[str, str] = {
-    "RL-002": "MCP-8",  # LLM API cost budget — Session Economics, not Network Isolation
+    "RCE-005": "MCP-6",   # path traversal: input validation against authorized schema
+    "INJ-003": "MCP-19",  # SSRF boundaries are part of authorization-chain integrity
+    "INJ-103": "MCP-19",
+    "INJ-005": "MCP-11",  # dynamic registration / rug pull: catalog provenance
+    "SEC-001": "MCP-3",   # 0.0.0.0 bind: least-privilege exposure
+    "SEC-003": "MCP-19",  # token forwarding: intended resource / audience
+    "SEC-004": "MCP-19",  # redirect_uri: redirect/resource binding
+    "SEC-005": "MCP-12",  # shared session/tenant state
+    "SEC-006": "MCP-6",   # path containment
+    "SEC-106": "MCP-6",
+    "SEC-007": "MCP-9",   # hardcoded credential
 }
 
 # All valid finding IDs — used for ID format validation
 VALID_FINDING_IDS: set[str] = {
     # Critical — RCE class
     "RCE-001", "RCE-002", "RCE-003", "RCE-004", "RCE-005", "RCE-006",
+    "RCE-007", "RCE-008", "RCE-009", "RCE-101", "RCE-102", "RCE-103",
     # High — Injection and security
     "INJ-001", "INJ-002", "INJ-003", "INJ-004", "INJ-005",
     "SEC-001", "SEC-002", "SEC-003", "SEC-004", "SEC-005", "SEC-006",
+    "SEC-007", "SEC-106", "INJ-103",
     # Medium — Operational
     "RL-001", "RL-002", "LOG-001", "LOG-002", "MEM-001",
     "CTI-001", "STP-001", "SWM-001",

@@ -18,6 +18,7 @@ from __future__ import annotations
 import hashlib
 import time
 import uuid
+import warnings
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
@@ -94,6 +95,10 @@ class MemoryWriteDecision:
     threshold: Optional[float] = None
     action: Optional[str] = None
     alert: Optional[str] = None
+    # How drift_score was produced. "stub:keyword-fixture" means no semantic drift
+    # was measured: the stub returns a fixed low score for any text that lacks the
+    # test keywords, so a real poisoning attempt reads as low drift.
+    drift_method: Optional[str] = None
 
 
 class MemoryVaccine:
@@ -116,6 +121,11 @@ class MemoryVaccine:
         self._checkpoint_log: list[dict] = []
 
         if use_stub_embeddings:
+            warnings.warn(
+                "MemoryVaccine(use_stub_embeddings=True) does not measure semantic drift; "
+                "decisions carry drift_method='stub:keyword-fixture'. Use only in tests.",
+                stacklevel=2,
+            )
             self._baseline_hash = hashlib.sha256(purpose_declaration.encode()).hexdigest()
         else:
             try:
@@ -150,6 +160,10 @@ class MemoryVaccine:
         )
         return float(1 - cosine_sim)
 
+    @property
+    def drift_method(self) -> str:
+        return "stub:keyword-fixture" if self._use_stub else "embedding:all-MiniLM-L6-v2"
+
     def validate_write(
         self,
         content: str,
@@ -158,6 +172,20 @@ class MemoryVaccine:
         mandate_id: Optional[str] = None,
     ) -> MemoryWriteDecision:
         """Validate a proposed write using canonical v3.1 persistence semantics."""
+        decision = self._validate_write(content, zone, owner_did, mandate_id)
+        if decision.drift_score is not None and decision.drift_method is None:
+            # Request-scope writes are not drift-checked; their 0.0 is not a measurement.
+            decision.drift_method = "not_assessed:request_scope" if decision.drift_score == 0.0 and \
+                MemoryZone(zone) is MemoryZone.REQUEST else self.drift_method
+        return decision
+
+    def _validate_write(
+        self,
+        content: str,
+        zone: MemoryZone,
+        owner_did: str,
+        mandate_id: Optional[str] = None,
+    ) -> MemoryWriteDecision:
         zone = MemoryZone(zone)
 
         if zone.requires_mandate and not mandate_id:
@@ -279,6 +307,7 @@ class MemoryVaccine:
         }
         if decision.drift_score is not None:
             provenance_dict["drift_score"] = round(decision.drift_score, 4)
+            provenance_dict["drift_method"] = decision.drift_method or self.drift_method
         if decision.provenance:
             provenance_dict["embedding_hash"] = decision.provenance.embedding_hash
             provenance_dict["state_handle_id"] = decision.provenance.state_handle_id

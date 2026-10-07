@@ -335,6 +335,24 @@ P1_RULES: list[Rule] = [
     # ── P1.T2.x Isolate ───────────────────────────────────────────────────────
     Rule(
         control_id="P1.T2.1",
+        severity="CRITICAL",
+        description=(
+            "Model or tool output flows directly into a code/command execution sink "
+            "(prompt injection becomes remote code execution)."
+        ),
+        remediation=(
+            "Never execute model output. Map model decisions onto an allowlisted set of "
+            "functions with validated arguments; run commands as argument lists, shell=False."
+        ),
+        pattern=(
+            r"\b(?:eval|exec|os\.system|os\.popen|subprocess\.\w+|Popen)\s*\([^)\n]*\b"
+            r"(?:llm|model|completion|response|output|generat\w*|tool_input|agent_\w*|"
+            r"assistant|chat\w*|message)\w*"
+        ),
+        file_exts=(".py",),
+    ),
+    Rule(
+        control_id="P1.T2.1",
         severity="HIGH",
         description="subprocess with shell=True — shell injection risk if any argument is user-controlled.",
         remediation="Use shell=False with a list of arguments. Validate all inputs before subprocess calls.",
@@ -343,7 +361,8 @@ P1_RULES: list[Rule] = [
     ),
     Rule(
         control_id="P1.T2.1",
-        severity="HIGH",
+        # eval/exec execute arbitrary code; there is no safe use on agent data.
+        severity="CRITICAL",
         description="eval() usage — code injection risk, especially with any external data.",
         remediation="Remove eval(). Use ast.literal_eval() for safe deserialization of literals, "
         "or a proper parser for structured data.",

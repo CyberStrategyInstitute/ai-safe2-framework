@@ -151,6 +151,18 @@ _ENTROPY_FALSE_POSITIVE_PATTERNS = re.compile(
 )
 
 
+_CRITICAL_SCORE_CAP = 49.0  # below Tier1 (50), so every tier gate fails
+_BARE_DEF = re.compile(
+    r"\s*(?:async\s+)?def\s+\w+\s*\(.*\)\s*(?:->\s*[^:]+)?:\s*(?:#.*)?$"
+    r"|\s*(?:async\s+)?def\s+\w+\s*\([^)]*$"
+)
+_KNOWN_SECRET = re.compile(
+    r"\b(?:sk-(?:live|proj|ant|test)?-?[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{36}"
+    r"|github_pat_[A-Za-z0-9_]{40,}|xox[baprs]-[A-Za-z0-9-]{10,}"
+    r"|(?:AKIA|ASIA)[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35})\b"
+)
+
+
 def _check_entropy(word: str, line: str) -> bool:
     """Return True if word is likely a secret based on entropy."""
     if len(word) < 20:
@@ -419,7 +431,7 @@ class StaticScanner:
 
                 scanned_files += 1
 
-                is_test = is_test_file(filepath_str)
+                is_test = is_test_file(os.path.relpath(filepath_str, root_path))
 
                 # ── Line-by-line regex scan ────────────────────────────────
                 for i, line in enumerate(lines):
@@ -427,9 +439,28 @@ class StaticScanner:
                     if is_comment_line(line, filepath_str):
                         continue
 
+                    # Known provider credential formats
+                    if not is_test:
+                        secret = _KNOWN_SECRET.search(line)
+                        if secret:
+                            findings.append(
+                                Finding(
+                                    control_id="P1.T1.4_ADV",
+                                    severity="HIGH",
+                                    file_path=filepath_str,
+                                    line_number=i + 1,
+                                    evidence=f"Credential format: {secret.group(0)[:8]}...",
+                                    description="Provider credential embedded in source.",
+                                    remediation="Revoke it and load credentials from a secret "
+                                    "manager or the environment at runtime.",
+                                )
+                            )
+
                     # Entropy scan (secrets that bypass regex)
                     if not is_test:
-                        for word in line.split():
+                        for raw_word in line.split():
+                            # Quotes and delimiters around a literal hid quoted keys.
+                            word = raw_word.strip("\"'`,;:()[]{}<>")
                             if _check_entropy(word, line):
                                 findings.append(
                                     Finding(
@@ -459,7 +490,10 @@ class StaticScanner:
                         # A function declaration names behavior but does not execute it.
                         # Treating e.g. ``def load_model()`` as a model-load event
                         # produced a high-confidence false positive in agent UAT.
-                        if re.match(r"\s*(?:async\s+)?def\s+\w+\s*\(", line):
+                        # Skip bare signatures only. A one-liner such as
+                        # `def act(x): subprocess.run(x, shell=True)` has a body and
+                        # was previously invisible to every rule.
+                        if _BARE_DEF.match(line):
                             continue
                         if re.search(rule.pattern, line, re.IGNORECASE):
                             # Reduce noise from test files for non-critical findings
@@ -558,6 +592,11 @@ class StaticScanner:
             )
         penalty = sum(penalty_by_control.values())
         raw_score = max(0.0, 100.0 - penalty)
+        # Per-control penalty capping kept large projects from scoring zero, but it
+        # also let code that executes model output pass Tier2 at 90/100. Any
+        # CRITICAL finding now holds the score below every tier threshold.
+        if any(f.severity == "CRITICAL" for f in findings):
+            raw_score = min(raw_score, _CRITICAL_SCORE_CAP)
 
         # Pillar sub-scores
         pillar_scores: dict[str, float] = {}

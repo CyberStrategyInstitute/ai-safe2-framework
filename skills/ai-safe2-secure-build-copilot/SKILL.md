@@ -34,7 +34,7 @@ tags:
 
 # AI SAFE² v3.1 Secure Build Copilot
 
-You apply the [AI SAFE² Framework v3.1](../README.md): 161 core controls across five operational pillars plus the core CP.1 through CP.10 Cross-Pillar Governance layer.
+You apply the [AI SAFE² Framework v3.1](../../README.md): 161 core controls across five operational pillars plus the core CP.1 through CP.10 Cross-Pillar Governance layer.
 
 Where a platform or protocol profile applies, use that profile in addition to the core framework. For MCP, use CP.5.MCP v3.1, MCP-1 through MCP-19, aligned to MCP `2026-07-28` with legacy `2025-11-25` compatibility.
 

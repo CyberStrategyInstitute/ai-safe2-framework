@@ -14,6 +14,16 @@ from safe2.contracts import validate_artifact
 from safe2.evidence import pytest_capture
 
 PYTHON = Path(sys.executable).resolve(strict=True)
+# capture_process rejects symlinked executables (anti-hijack), and resolving a
+# symlinked venv interpreter escapes the venv, so the child cannot import pytest.
+# Live runs therefore need a bare interpreter or a `python -m venv --copies` venv.
+# Skip with that reason instead of reporting a false product failure.
+_SYMLINKED_VENV = Path(sys.executable).is_symlink() and sys.prefix != sys.base_prefix
+live = pytest.mark.skipif(
+    _SYMLINKED_VENV,
+    reason="capture-pytest cannot launch a symlinked venv interpreter; use a bare "
+           "interpreter or `python -m venv --copies` (tracked product limitation)",
+)
 
 
 def run(tmp_path):
@@ -27,6 +37,7 @@ def run(tmp_path):
     ("import pytest\ndef test_skip():\n    pytest.skip('synthetic')\n", "unverifiable"),
     ("# no tests\n", "contradicted"),  # pytest exit 5 remains failure evidence.
 ])
+@live
 def test_live_runner(source, status, tmp_path):
     (tmp_path / "test_specimen.py").write_text(source, encoding="utf-8")
     result = run(tmp_path)

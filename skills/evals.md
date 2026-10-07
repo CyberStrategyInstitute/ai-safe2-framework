@@ -1,4 +1,4 @@
-# AI SAFE2 v3.0 Skill Evaluation Suite
+# AI SAFE2 v3.1 Skill Evaluation Suite
 
 Use these prompts and expected outputs to validate that the skill is functioning
 correctly after any update to SKILL.md, skill-spec.md, or the MCP server.
@@ -229,6 +229,25 @@ Run manually or automate using the evals tool in your IDE.
 
 ---
 
+## Eval 11: v3.1 Profile Separation and Enforcement Planes
+
+**Input prompt:**
+> Our MCP server passes all 19 MCP profile controls. Does that make us 180-control
+> compliant with AI SAFE2? Our agents also talk to each other over A2A.
+
+**Expected output must include:**
+- The core is 161 controls; the CP.5.MCP profile (MCP-1 to MCP-19) is an overlay and does not add to it
+- MCP profile evidence covers the agent-to-tool plane only
+- Agent-to-agent traffic is the east-west plane and needs its own evidence
+- Persistence or session state named with v3.1 scopes, not treated as identity
+
+**Failure indicators:**
+- Accepts or repeats the 180-control figure
+- Treats MCP-profile evidence as covering east-west traffic
+- Treats a session ID or state handle as an authorization boundary
+
+---
+
 ## Running Evals
 
 **Manual:** Feed each input prompt to the model with the skill loaded.
@@ -244,9 +263,9 @@ for eval in evals:
         assert criterion.lower() in response.lower(), f"FAIL: missing '{criterion}'"
 ```
 
-**Pass threshold:** 90% of criteria must be met across all 10 evals.
+**Pass threshold:** 90% of criteria must be met across all 11 evals.
 Any failure on HEAR, CP.9, or ACT tier classification evals is a blocking failure.
 
 ---
 
-*AI SAFE2 v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com/ai-safe2/*
+*AI SAFE2 v3.1 | Cyber Strategy Institute | cyberstrategyinstitute.com/ai-safe2/*

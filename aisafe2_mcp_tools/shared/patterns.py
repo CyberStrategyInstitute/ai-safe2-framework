@@ -254,6 +254,34 @@ INJECTION_PATTERNS: list[Pattern] = [
     ), "mcp_upd", "critical",
         "MCP-UPD disclosure phase — data transmission instruction",
         "MCP-2"),
+
+    # ── Concealment and credential access (paraphrased rug-pull payloads) ─────
+    # A poisoned tool description rarely says "ignore previous instructions"; it
+    # tells the model to fetch a secret and hide that it did. These two families
+    # caught the paraphrased payloads that passed every earlier pattern.
+    Pattern(re.compile(
+        # Hiding the ACTION from the person: "don't tell the user", "don't mention
+        # this", "without informing the operator". Withholding a secret from
+        # someone ("never reveal the key to anyone") is benign and not matched.
+        r"\b(?:do\s+not|don'?t|never)\s+(?:tell|inform|notify|alert|warn)\s+"
+        r"(?:the\s+)?(?:user|human|operator|requester)\b"
+        r"|\b(?:do\s+not|don'?t|never)\s+(?:mention|reveal|disclose|show|report)\s+"
+        r"(?:this|it|that|any\s+of\s+this|these\s+steps)\b"
+        r"|\bwithout\s+(?:telling|informing|notifying|alerting)\s+(?:the\s+)?"
+        r"(?:user|human|operator)\b",
+        re.IGNORECASE,
+    ), "concealment", "high",
+        "Instruction to hide actions from the user — hallmark of a poisoned tool description",
+        "MCP-2"),
+
+    Pattern(re.compile(
+        r"\b(?:read|cat|open|load|send|include|attach|upload|pass|copy|exfiltrate|print)\b"
+        r"[^.\n]{0,60}(?:~|\$HOME|/home/[\w.-]+|/root|%USERPROFILE%)?[/\\]?"
+        r"\.(?:ssh|aws|kube|gnupg|docker|netrc|git-credentials|pgpass)\b",
+        re.IGNORECASE,
+    ), "credential_access", "high",
+        "Instruction to read or transmit credential files",
+        "MCP-9"),
 ]
 
 # ── SSRF-enabling URL parameter patterns ──────────────────────────────────────

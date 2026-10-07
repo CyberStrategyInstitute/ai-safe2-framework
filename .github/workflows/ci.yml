@@ -31,6 +31,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# No job here writes to the repository or calls the API; artifact upload uses
+# the runtime token. Read-only instead of the repository default scope.
+permissions:
+  contents: read
+
 jobs:
   safe2-cli:
     name: SAFE2 CLI / AISM (Python ${{ matrix.python-version }})
@@ -150,12 +155,45 @@ jobs:
       - name: Install test dependencies
         run: python -m pip install -r NEXUS/sdk/python/requirements.txt
 
+      # nexus-score type-checks and tests the OPA policies; without an opa binary
+      # that check is NOT ASSESSED and the script exits 2 rather than passing.
+      - name: Install OPA (pinned, checksum-verified)
+        env:
+          OPA_VERSION: "1.4.2"
+          OPA_SHA256: "2c0ccdbbe0b8e2a5d12d9c42d92f1f34f494ffb32d1f3c4ddc36101be637d66f"
+        run: |
+          curl -fsSL -o opa "https://github.com/open-policy-agent/opa/releases/download/v${OPA_VERSION}/opa_linux_amd64_static"
+          echo "${OPA_SHA256}  opa" | sha256sum -c -
+          chmod +x opa && sudo mv opa /usr/local/bin/opa
+
       - name: Run NEXUS v0.3 compliance checks
         env:
           PYTHONPATH: NEXUS/sdk/python
         run: |
           python NEXUS/compliance/scoring/nexus-score.py --v03-checks
           python NEXUS/compliance/scoring/nexus-score.py --check-env
+
+  mcp-server:
+    name: AI SAFE2 MCP knowledge server (install, start, auth)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.11"
+
+      # The documented install path. A fresh resolve once pulled mcp 2.x, which
+      # removed FastMCP, and the server could not start; this job catches that.
+      - name: Install skills/mcp as documented
+        run: python -m pip install -e "skills/mcp[dev]"
+
+      - name: Test (includes real stdio and HTTP transport start-up)
+        working-directory: skills/mcp
+        run: python -m pytest tests -q -rs
 
   lint:
     name: Python Correctness Lint

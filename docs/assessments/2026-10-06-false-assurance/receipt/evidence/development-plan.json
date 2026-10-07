@@ -1,0 +1,270 @@
+{
+  "schema_version": "safe2.development-plan.v1",
+  "plan_id": "pr.393.false-assurance-hardening",
+  "policy": {
+    "id": "ai-safe2-development-method-v1",
+    "sha256": "7d3aa324e6490a5fc55952cbed201c077a2c1abf2d4d6d788f4126daee79b6f3",
+    "risk_policy_id": "ai-safe2-framework-review-v1",
+    "risk_policy_sha256": "d1fb8515513dc0a555e5bcdf0b5030061bc247a2b4da3c4e8fec20e262996b40"
+  },
+  "source_sha256": "2d422b29fdca282cfdbada22e23904d2fe9420274612d9c1f3f5b1e3995e9827",
+  "task": {
+    "title": "Close false-assurance defects across skills gate, MCP toolkit, CLI, and NEXUS",
+    "outcome": "No AI SAFE2 component reports safe, compliant, or blocked when the four-area battery shows otherwise.",
+    "delivery_shape": "architectural",
+    "declared_risk_tier": "high",
+    "risk_tier": "critical",
+    "change_kind": "code",
+    "work_product": "reusable",
+    "acceptance_conditions": [
+      "Four-area battery: 0 FAIL and 0 NOT_RUN on the branch under the same harness that records main's failures.",
+      "Every fixed defect has a regression test that fails on main and passes on the branch.",
+      "Local CI mirror (gates.sh) passes every gate at the final revision.",
+      "Hosted CI on PR #393 passes at the final revision with no new CodeQL alerts.",
+      "Owner decisions D1-D4 are recorded and D1, D3 implemented; D4 interim floor in place and follow-up scoped."
+    ],
+    "scope": {
+      "include": [
+        "aisafe2_mcp_tools/**",
+        "scanner/**",
+        "safe2/**",
+        "skills/**",
+        "skill.md",
+        "INTEGRATIONS.md",
+        "NEXUS/**",
+        "tests/**",
+        ".github/workflows/ci.yml",
+        ".github/workflows/opa.yml",
+        ".gitleaks-baseline.json",
+        "docs/assessments/2026-10-06-false-assurance/**"
+      ],
+      "exclude": [
+        "branch protection",
+        "release tags and package publication",
+        "framework control taxonomy (161 core)",
+        "registry-bound ACT tiers (follow-up PR)"
+      ]
+    },
+    "trust_boundaries": [
+      "MCP client to untrusted MCP server (remote scoring, wrap-stdio, wrap-proxy)",
+      "Agent tool call to NEXUS Guardian and OPA policy decision point",
+      "Untrusted skill package to model context (skill trust gate)",
+      "CI runner to downloaded OPA and gitleaks binaries (checksum-verified)"
+    ],
+    "assumptions": [
+      "OPA 0.65.0 remains the docker-compose pin; 1.x support is additive.",
+      "Battery results are self-assessment by the authoring agent, not independent validation."
+    ],
+    "unknowns": [
+      "Live docker compose up was not exercised (no Docker daemon in the assessment environment).",
+      "Greptile review has not run on this PR."
+    ]
+  },
+  "risk_classification": {
+    "declared_tier": "high",
+    "policy_floor": "critical",
+    "effective_tier": "critical",
+    "matched_rules": [
+      {
+        "id": "release-and-supply-chain",
+        "tier": "critical",
+        "reason": "Changes can alter shipped CLI behavior, package identity, provenance, or release authorization evidence.",
+        "matched_paths": [
+          "safe2/**"
+        ],
+        "required_evidence": [
+          "full-tests",
+          "installed-wheel",
+          "release-invariants",
+          "dependency-audit",
+          "human-release-decision"
+        ],
+        "review_lenses": [
+          "supply-chain",
+          "evidence-integrity",
+          "rollback"
+        ]
+      },
+      {
+        "id": "authority-and-enforcement",
+        "tier": "critical",
+        "reason": "Changes cross authorization, policy, settlement, protocol, or governance boundaries.",
+        "matched_paths": [
+          "NEXUS/**"
+        ],
+        "required_evidence": [
+          "targeted-tests",
+          "negative-tests",
+          "security-gates",
+          "codeowner-review"
+        ],
+        "review_lenses": [
+          "authorization",
+          "fail-closed",
+          "replay",
+          "boundary-confusion"
+        ]
+      },
+      {
+        "id": "agent-and-evidence-contracts",
+        "tier": "high",
+        "reason": "Changes affect agent instructions, evidence contracts, evaluators, or falsification behavior.",
+        "matched_paths": [
+          "safe2/**",
+          "skills/**"
+        ],
+        "required_evidence": [
+          "contract-tests",
+          "adversarial-tests",
+          "manifest-consistency",
+          "human-review"
+        ],
+        "review_lenses": [
+          "prompt-injection",
+          "evidence-integrity",
+          "evaluator-independence",
+          "unknown-state"
+        ]
+      },
+      {
+        "id": "ci-and-security-controls",
+        "tier": "high",
+        "reason": "Changes can weaken required checks or the independence of security evidence.",
+        "matched_paths": [
+          ".github/workflows/ci.yml",
+          ".github/workflows/opa.yml",
+          ".gitleaks-baseline.json"
+        ],
+        "required_evidence": [
+          "workflow-validation",
+          "least-privilege-review",
+          "pinned-actions",
+          "human-review"
+        ],
+        "review_lenses": [
+          "workflow-injection",
+          "permissions",
+          "supply-chain",
+          "gate-bypass"
+        ]
+      },
+      {
+        "id": "tests-and-documentation",
+        "tier": "medium",
+        "reason": "Changes affect proof, examples, or the claims a reviewer and user will rely on.",
+        "matched_paths": [
+          "docs/assessments/2026-10-06-false-assurance/**",
+          "scanner/**",
+          "tests/**"
+        ],
+        "required_evidence": [
+          "relevant-tests",
+          "documentation-validation"
+        ],
+        "review_lenses": [
+          "claim-evidence-alignment",
+          "regression-coverage"
+        ]
+      }
+    ],
+    "risk_raised": true
+  },
+  "requirements": {
+    "design_artifact": "written-spec-and-plan",
+    "human_design_approval": true,
+    "threat_model": true,
+    "reusable_output_allowed": true,
+    "isolation_required": true,
+    "allowed_test_modes": [
+      "tdd",
+      "characterization-first",
+      "contract-first",
+      "approved-spike"
+    ],
+    "review_cadence": "task-and-specialist",
+    "before_after": true,
+    "independent_review": true,
+    "specialist_review": true,
+    "rollback": true,
+    "greptile_recommended": true,
+    "verification_before_completion": true,
+    "required_evidence": [
+      "adversarial-tests",
+      "codeowner-review",
+      "contract-tests",
+      "dependency-audit",
+      "design-specification",
+      "documentation-validation",
+      "full-tests",
+      "green-state",
+      "human-release-decision",
+      "human-review",
+      "implementation-plan",
+      "installed-wheel",
+      "least-privilege-review",
+      "manifest-consistency",
+      "negative-tests",
+      "negative-validation",
+      "pinned-actions",
+      "red-state",
+      "release-invariants",
+      "relevant-tests",
+      "security-gates",
+      "security-review",
+      "security-validation",
+      "targeted-tests",
+      "targeted-validation",
+      "threat-model",
+      "workflow-validation"
+    ],
+    "review_lenses": [
+      "authorization",
+      "boundary-confusion",
+      "claim-evidence-alignment",
+      "evaluator-independence",
+      "evidence-integrity",
+      "fail-closed",
+      "gate-bypass",
+      "permissions",
+      "prompt-injection",
+      "regression-coverage",
+      "replay",
+      "rollback",
+      "supply-chain",
+      "unknown-state",
+      "workflow-injection"
+    ]
+  },
+  "observations": {
+    "design_summary_present": true,
+    "design_artifact": "docs/assessments/2026-10-06-false-assurance/PR_DESCRIPTION.md",
+    "design_approved": true,
+    "approval_reference": "docs/assessments/2026-10-06-false-assurance/STATE.json#open_decisions (owner decisions D1-D4, 2026-10-07)",
+    "threat_model_reference": "docs/assessments/2026-10-06-false-assurance/LEDGER.md",
+    "isolation_strategy": "branch",
+    "isolation_reference": "fix/v31-false-assurance-hardening",
+    "test_mode": "tdd",
+    "test_rationale": "Every fix is preceded by a test observed failing on main (83de4a8)."
+  },
+  "gaps": [],
+  "disposition": "ready",
+  "authorization": {
+    "merge": false,
+    "release": false,
+    "deploy": false,
+    "exception": false,
+    "policy_change": false
+  },
+  "limitations": [
+    "The plan is derived from operator-supplied declarations and repository policy.",
+    "Ready means planning prerequisites are represented; it does not prove implementation quality.",
+    "Provider reviews are attributed evidence and cannot grant authority."
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "json-sort-keys-compact-utf8-v1",
+    "digest": "2848104ec41c33a46a3cace986d3cfd2c24e58db8679f5fdc2c9ed08f704deb0",
+    "verification_scope": "all top-level content except integrity",
+    "authenticity": "unsigned"
+  }
+}

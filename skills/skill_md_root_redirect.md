@@ -1,34 +1,14 @@
-# AI SAFE2 Secure Build Copilot — v3.0
+# AI SAFE² Secure Build Copilot: Redirect (stale copy retired)
 
-> This file (root `skill.md`) covered AI SAFE2 v2.1 (128 controls, 14 frameworks).
-> It has been superseded by the v3.0 skill ecosystem in the `skills/` folder.
+This file used to hold a copy of the repository-root `skill.md` redirect. That copy
+drifted: it described the v2.1 to v3.0 transition, and its links pointed at
+`skills/...` from inside `skills/`, so they broke.
 
-## For Claude Projects / Claude Desktop
+Use the maintained files instead:
 
-Upload **`skills/SKILL.md`** to your Project Knowledge instead of this file.
+- Canonical AI SAFE² v3.1 skill: [ai-safe2-secure-build-copilot/SKILL.md](ai-safe2-secure-build-copilot/SKILL.md)
+- Root compatibility redirect: [../skill.md](../skill.md)
+- MCP knowledge server: [mcp/README.md](mcp/README.md)
 
-AI SAFE2 v3.0: 161 controls, 32 frameworks, CP.1-CP.10 cross-pillar governance,
-HEAR Doctrine, Agent Replication Governance, AIVSS AAF scoring integration.
-
-## For Live Tool Access (Claude Code, Codex)
-
-See **`skills/mcp/README.md`** for the MCP server setup guide.
-Local stdio: 5 minutes, no token. Remote HTTPS: 15 minutes via Railway.
-
-## What Changed in v3.0
-
-| | v2.1 (this file) | v3.0 (skills/) |
-|---|---|---|
-| Controls | 128 | 161 (151 pillar + 10 CP) |
-| Frameworks | 14 | 32 |
-| MCP server | Referenced only | Fully built |
-| HEAR Doctrine | Not defined | CP.10 (first in field) |
-| Agent Replication | Not defined | CP.9 (first in field) |
-| Risk formula | CVSS + Pillar | CVSS + Pillar + AAF |
-
-## Links
-
-- v3.0 Skill: [skills/SKILL.md](skills/SKILL.md)
-- MCP Server: [skills/mcp/README.md](skills/mcp/README.md)
-- Framework: https://github.com/CyberStrategyInstitute/ai-safe2-framework
-- Toolkit: https://cyberstrategyinstitute.com/ai-safe2/
+AI SAFE² v3.1 keeps the **161 core controls**. The CP.5.MCP profile overlay
+(MCP-1 through MCP-19) is separate from that total.

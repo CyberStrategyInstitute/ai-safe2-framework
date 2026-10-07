@@ -9,6 +9,15 @@
 
 ---
 
+> **The canonical skill moved** (2026-10). It now lives at
+> [`ai-safe2-secure-build-copilot/SKILL.md`](./ai-safe2-secure-build-copilot/SKILL.md).
+> `skills/` is no longer a skill package. A skill is the whole folder around its
+> `SKILL.md`, and this folder also holds the MCP server's code and its
+> prompt-injection test corpus, so installing `skills/` as a skill would hand that
+> corpus to the model. The skill trust gate correctly rejected it.
+
+---
+
 ## Technology review and evidence boundaries
 
 Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
@@ -38,7 +47,9 @@ The v3.0 filename on the core taxonomy is intentional historical provenance. AI 
 ```text
 skills/
 ├── README.md
-├── SKILL.md                         Canonical framework skill
+├── ai-safe2-secure-build-copilot/  Canonical framework skill (installable package)
+│   ├── SKILL.md
+│   └── SKILL-CARD.md
 ├── skill-spec.md                    Model-neutral behavior specification
 ├── evals.md                         Regression/evaluation expectations
 ├── chatgpt/gpt-instructions.md      ChatGPT-facing instructions
@@ -59,7 +70,7 @@ skills/
 
 ### AI project or knowledge context
 
-Use [`SKILL.md`](./SKILL.md) as the primary framework context and follow the target product's supported method for project or system instructions.
+Use [`ai-safe2-secure-build-copilot/SKILL.md`](./ai-safe2-secure-build-copilot/SKILL.md) as the primary framework context and follow the target product's supported method for project or system instructions.
 
 ### Live control lookup and MCP workflows
 
@@ -99,7 +110,7 @@ See [skills/mcp/README.md](./mcp/README.md) for current transport, authenticatio
 | MCP profile controls | **MCP-1 through MCP-19** |
 | Current MCP binding | **2026-07-28** |
 | Legacy MCP binding | **2025-11-25, migration compatibility** |
-| Canonical skill | **skills/SKILL.md** |
+| Canonical skill | **skills/ai-safe2-secure-build-copilot/SKILL.md** |
 | NEXUS role | **CSI reference implementation, not mandatory dependency** |
 
 UAS is a 27-requirement regulatory profile extension, not CP.11, and does not add new controls to the 161-control core.

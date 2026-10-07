@@ -1,0 +1,186 @@
+{
+ "schema": "csi.battery.area-result.v1",
+ "label": "before",
+ "area": "CLI",
+ "repo": "/root/ai-safe2-framework",
+ "revision": "83de4a8",
+ "venv": "/root/venv",
+ "duration_s": 25.2,
+ "results": [
+  {
+   "area": "CLI",
+   "id": "self-check",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 Console entry point: present"
+  },
+  {
+   "area": "CLI",
+   "id": "init-clean",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 Privacy defaults: no prompts, content, environment values, or network export."
+  },
+  {
+   "area": "CLI",
+   "id": "config-show",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "scan-project-vuln",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 Fix: Bind approved MCP servers to a manifest, checksum, signature, endpoint "
+  },
+  {
+   "area": "CLI",
+   "id": "gate-project-vuln-Tier2",
+   "status": "FAIL",
+   "want": "exit 1",
+   "detail": "exit=0 GATE: PASS - score 90.0/100"
+  },
+  {
+   "area": "CLI",
+   "id": "report-all",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 Markdown report: rep/vuln.md"
+  },
+  {
+   "area": "CLI",
+   "id": "doctor-assess",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "doctor-baseline-same",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "doctor-drift",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "doctor-policy-deny",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1 Evidence bundle: dec.json"
+  },
+  {
+   "area": "CLI",
+   "id": "schema-list",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "schema-validate-good",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "schema-validate-bad",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1 }"
+  },
+  {
+   "area": "CLI",
+   "id": "schema-validate-garbage",
+   "status": "PASS",
+   "want": "exit 2",
+   "detail": "exit=2 {\"schema\": \"discovery-v1\", \"valid\": false, \"error\": \"JSONDecodeError\"}"
+  },
+  {
+   "area": "CLI",
+   "id": "feedback-record",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "feedback-verified-no-evid",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1 Error: verified_done requires at least one external evidence reference"
+  },
+  {
+   "area": "CLI",
+   "id": "feedback-summary",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 Friction summary: fbs.json"
+  },
+  {
+   "area": "CLI",
+   "id": "manifest-strict-invalid",
+   "status": "PASS",
+   "want": "exit 1",
+   "detail": "exit=1 Evidence bundle: man.json"
+  },
+  {
+   "area": "CLI",
+   "id": "manifest-ok",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 Evidence bundle: man2.json"
+  },
+  {
+   "area": "CLI",
+   "id": "challenge-quickstart",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "challenge-verify",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 }"
+  },
+  {
+   "area": "CLI",
+   "id": "aism-init",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 AISM assessment template: a.json"
+  },
+  {
+   "area": "CLI",
+   "id": "acceptance-run",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 {\"output_dir\": \"acc\", \"status\": \"passed\", \"independent_review_claim\": false, \"co"
+  },
+  {
+   "area": "CLI",
+   "id": "evidence-nexus",
+   "status": "PASS",
+   "want": "exit 0",
+   "detail": "exit=0 Evidence bundle: nx.json"
+  },
+  {
+   "area": "CLI",
+   "id": "unknown-command",
+   "status": "PASS",
+   "want": "exit 2",
+   "detail": "exit=2 Error: No such command 'frobnicate'."
+  }
+ ]
+}

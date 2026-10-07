@@ -162,6 +162,7 @@ class TestGuardianCore:
             vcc_id=VCC_ID,
             vcc_capabilities=["search:web"],
             parent_vcc_capabilities=["search:web", "email:read"],
+            act_tier=1,
         )
         verdict = guardian.evaluate(ctx)
         assert verdict.decision == GuardianVerdict.ALLOW
@@ -260,7 +261,7 @@ class TestGuardianCore:
 
     def test_allow_verdict_has_nor_fingerprint(self, guardian):
         """Allow verdicts must include NOR fingerprint for audit chain inclusion."""
-        ctx = build_tool_call_step(AGENT_DID, SPIFFE_ID, "search:web", {"q": "test"})
+        ctx = build_tool_call_step(AGENT_DID, SPIFFE_ID, "search:web", {"q": "test"}, act_tier=1)
         verdict = guardian.evaluate(ctx)
         assert verdict.nor_fingerprint is not None
         assert len(verdict.nor_fingerprint) == 64  # SHA-256 hex
@@ -531,11 +532,11 @@ class TestGuardianReasoningChain:
         """Each unique reasoning chain produces a unique NOR fingerprint."""
         ctx1 = build_tool_call_step(
             AGENT_DID, SPIFFE_ID, "tool:call", {},
-            reasoning="Reasoning chain A",
+            reasoning="Reasoning chain A", act_tier=1,
         )
         ctx2 = build_tool_call_step(
             AGENT_DID, SPIFFE_ID, "tool:call", {},
-            reasoning="Reasoning chain B",
+            reasoning="Reasoning chain B", act_tier=1,
         )
         v1 = guardian.evaluate(ctx1)
         v2 = guardian.evaluate(ctx2)
@@ -1097,6 +1098,7 @@ class TestIntegrationStack:
             vcc_id=VCC_ID,
             vcc_capabilities=["github:search"],
             parent_vcc_capabilities=["github:search", "github:read"],
+            act_tier=1,
         )
         verdict = guardian.evaluate(ctx)
         assert verdict.allowed is True

@@ -52,7 +52,7 @@ from typing import NamedTuple
 
 import structlog
 
-from mcp_server.config import FREE_RATE_LIMIT, PRO_RATE_LIMIT
+from mcp_server.config import AUTH_FAIL_RATE_LIMIT, FREE_RATE_LIMIT, PRO_RATE_LIMIT
 
 log = structlog.get_logger()
 
@@ -94,7 +94,28 @@ class _TokenBucketLimiter:
 
     @staticmethod
     def _limit_for_key(key: str) -> int:
+        if key.startswith("authfail:"):
+            return AUTH_FAIL_RATE_LIMIT
         return PRO_RATE_LIMIT if key.startswith("pro:") else FREE_RATE_LIMIT
+
+    def is_exhausted(self, key: str) -> RateLimitResult | None:
+        """Return a denial result if `key` has no tokens left, without consuming one.
+
+        Used for failed-authentication lockout: a locked-out client is refused
+        before its credential is evaluated.
+        """
+        limit = self._limit_for_key(key)
+        rate = limit / _WINDOW_SECONDS
+        now = time.monotonic()
+        with self._lock:
+            bucket = self._buckets.get(key)
+            if bucket is None:
+                return None
+            tokens = min(float(limit), bucket.tokens + (now - bucket.last_refill) * rate)
+            if tokens >= 1.0:
+                return None
+            retry_after = max(1, int((1.0 - tokens) / rate))
+            return self._result(allowed=False, limit=limit, remaining=0, retry_after=retry_after)
 
     def check(self, key: str) -> RateLimitResult:
         """

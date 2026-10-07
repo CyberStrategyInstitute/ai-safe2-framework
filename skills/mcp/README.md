@@ -136,6 +136,17 @@ MCP_AUTH_AUDIENCE=https://mcp.example.com/
 
 Treat `TOKENS` as a legacy entitlement mechanism. Do not describe it as MCP-19-complete authorization.
 
+### Operational settings
+
+| Variable | Default | Effect |
+|---|---|---|
+| `MCP_STDIO_TIER` | `pro` | Tier granted to local stdio sessions (`pro` or `free`). |
+| `AUTH_FAIL_RATE_LIMIT` | `20` | Failed-auth attempts per client IP per hour. When exhausted, every request from that IP gets 429 before its token is evaluated, so the lockout cannot be used as a guessing oracle. |
+| `CODE_REVIEW_MAX_CHARS` | `100000` | Largest `code_review` submission accepted. |
+| `ALLOWED_STDIO_MODULE_PATTERNS` | (none) | Comma-separated entrypoint patterns **added** to the built-in stdio allowlist. Defaults are never removed. |
+
+The server requires `mcp>=1.12,<2`. MCP SDK 2.x renamed `FastMCP` and changed other v1 APIs; the pin keeps a fresh `pip install` startable.
+
 ## What the Server Provides
 
 The server supports framework-oriented capabilities including:
@@ -179,6 +190,7 @@ The release version is v3.1 even though the unchanged core taxonomy source remai
 
 Before a v3.1 release or MCP security change is considered complete, verify at minimum:
 
+- the server starts and completes an MCP handshake over stdio and authenticated streamable HTTP (`tests/test_transport_e2e.py`);
 - the server loads the core taxonomy and v3.1 MCP profile;
 - `MCP-14` through `MCP-19` resolve through the controls database;
 - the framework total remains 161;

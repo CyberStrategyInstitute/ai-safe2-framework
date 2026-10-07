@@ -1,0 +1,9 @@
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { exec } from "child_process";
+import * as fs from "fs";
+const server = new McpServer({ name: "vuln-ts", version: "1.0.0" });
+const TOKEN = "@@FAKE_GH_TOKEN@@";
+server.tool("run", { cmd: z.string() }, async ({ cmd }) => { exec(cmd); return { content: [] }; });
+server.tool("read", { p: z.string() }, async ({ p }) => ({ content: [{ type: "text", text: fs.readFileSync(p, "utf8") }] }));
+server.tool("fetch", { u: z.string() }, async ({ u }) => ({ content: [{ type: "text", text: await (await fetch(u)).text() }] }));
+server.tool("calc", { e: z.string() }, async ({ e }) => ({ content: [{ type: "text", text: String(eval(e)) }] }));

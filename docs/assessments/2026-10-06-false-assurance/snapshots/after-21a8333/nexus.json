@@ -1,0 +1,410 @@
+{
+ "schema": "csi.battery.area-result.v1",
+ "label": "after",
+ "area": "NEXUS",
+ "repo": "/home/claude/ai-safe2-framework",
+ "revision": "21a8333",
+ "venv": "/root/venv-dev",
+ "duration_s": 6.7,
+ "results": [
+  {
+   "area": "NEXUS",
+   "id": "guardian: baseline id_rsa",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: id_ed25519 key",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: windows backslash",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: url-encoded traversal",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: single ../",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: absolute /etc/shadow",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: case /ETC/PASSWD",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: double slash //etc//passwd",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: nested list arg",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: IMDS decimal IP",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: IMDS hex IP",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: IMDS IPv6",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: GCP metadata host",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: aws creds file",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: kube config",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: private key in arg",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: pipe to shell",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: revoked DID",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: scope overflow",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: delegation depth 9",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: ACT-4 no reasoning",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: ACT-4 reasoning='x'",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: tier omitted (None)",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: benign read",
+   "status": "PASS",
+   "want": "ALLOW",
+   "detail": "got ALLOW"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: benign fetch",
+   "status": "PASS",
+   "want": "ALLOW",
+   "detail": "got ALLOW"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: benign search, tier omitted",
+   "status": "PASS",
+   "want": "DENY",
+   "detail": "got DENY"
+  },
+  {
+   "area": "NEXUS",
+   "id": "guardian: ACT-3 with real reasoning",
+   "status": "PASS",
+   "want": "ALLOW",
+   "detail": "got ALLOW"
+  },
+  {
+   "area": "NEXUS",
+   "id": "agbom: tampered historical component detected",
+   "status": "PASS",
+   "want": "",
+   "detail": "chain_ok=False violations=1"
+  },
+  {
+   "area": "NEXUS",
+   "id": "agbom: tampered latest component detected",
+   "status": "PASS",
+   "want": "",
+   "detail": "chain_ok=False"
+  },
+  {
+   "area": "NEXUS",
+   "id": "agbom: historical snapshot isolated from live edits",
+   "status": "PASS",
+   "want": "",
+   "detail": "https://fs.example/mcp -> https://fs.example/mcp"
+  },
+  {
+   "area": "NEXUS",
+   "id": "agbom: manifest digest change surfaced (rug pull)",
+   "status": "PASS",
+   "want": "",
+   "detail": "reason=mcp_capability_digest_changed held=1 wx_entries=1"
+  },
+  {
+   "area": "NEXUS",
+   "id": "agbom: changed digest not silently trusted",
+   "status": "PASS",
+   "want": "",
+   "detail": "trusted_new_digest=0"
+  },
+  {
+   "area": "NEXUS",
+   "id": "agbom: unchanged digest: no false alarm",
+   "status": "PASS",
+   "want": "",
+   "detail": "held=0"
+  },
+  {
+   "area": "NEXUS",
+   "id": "agbom: unsigned/undigested server reported",
+   "status": "PASS",
+   "want": "",
+   "detail": "unsigned=1"
+  },
+  {
+   "area": "NEXUS",
+   "id": "SDK test suite",
+   "status": "PASS",
+   "want": "all pass",
+   "detail": "608 passed"
+  },
+  {
+   "area": "NEXUS",
+   "id": "OPA 1.x: policies compile (--strict)",
+   "status": "PASS",
+   "want": "compiles",
+   "detail": "ok"
+  },
+  {
+   "area": "NEXUS",
+   "id": "OPA 1.x: opa test",
+   "status": "PASS",
+   "want": "all pass",
+   "detail": "16 pass 0 fail rc=0"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: evaluates on OPA 1.x",
+   "status": "PASS",
+   "want": "",
+   "detail": "yes"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: baseline capability allowed",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=True"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: durable memory write w/o mandate denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='durable memory writes require a Memory Mandate'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: durable memory write with mandate allowed",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=True"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: scope downgrade: PERMANENT zone + 'request' scope denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='durable memory writes require a Memory Mandate'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: unrecognized scope 'Durable ' w/o mandate denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='swarm_shared memory writes require a Memory Mandate'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: credential: tool from TASK_CONTEXT denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='TASK_CONTEXT cannot access credential: tools'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: config_change ACT-2 w/o approval denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='ConfigChange requires out-of-band approval for ACT-2+ agents'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: config_change ACT-2 with approval allowed",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=True"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: revoked agent denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='agent revoked or under hard brake'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: scope widening denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='requested capabilities exceed parent VCC'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: delegation depth 5 denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='delegation depth missing or above 4'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: missing delegation depth denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='delegation depth missing or above 4'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: unknown compartment denied",
+   "status": "PASS",
+   "want": "",
+   "detail": "allow=False deny_reason='unrecognized context compartment'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: decision defined for every input",
+   "status": "PASS",
+   "want": "",
+   "detail": "undefined for 0/13"
+  },
+  {
+   "area": "NEXUS",
+   "id": "opa: deny_reason explains a denial",
+   "status": "PASS",
+   "want": "",
+   "detail": "'TASK_CONTEXT cannot access credential: tools'"
+  },
+  {
+   "area": "NEXUS",
+   "id": "OPA 0.65 (compose pin): policies compile",
+   "status": "PASS",
+   "want": "compiles",
+   "detail": "ok"
+  },
+  {
+   "area": "NEXUS",
+   "id": "CI runs OPA on NEXUS/opa",
+   "status": "PASS",
+   "want": "NEXUS/opa",
+   "detail": "path filter present"
+  },
+  {
+   "area": "NEXUS",
+   "id": "compose OPA mount resolves to the policies",
+   "status": "PASS",
+   "want": "points at NEXUS/opa",
+   "detail": "mounts=['../opa']"
+  },
+  {
+   "area": "NEXUS",
+   "id": "nexus-score claims agree with battery evidence",
+   "status": "PASS",
+   "want": "no OK on a broken control",
+   "detail": "exit=0 claims={'S1.3-GIP': 'OK', 'A2.3-AGBOM': 'OK', 'AISM-OPA': 'OK'}"
+  }
+ ]
+}

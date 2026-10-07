@@ -1,0 +1,33 @@
+{
+ "schema": "csi.battery.summary.v1",
+ "areas": {
+  "SKILL": {
+   "revision": "98598ed",
+   "counts": {
+    "PASS": 24
+   },
+   "duration_s": 15.6
+  },
+  "MCP": {
+   "revision": "98598ed",
+   "counts": {
+    "PASS": 20
+   },
+   "duration_s": 25.2
+  },
+  "CLI": {
+   "revision": "98598ed",
+   "counts": {
+    "PASS": 25
+   },
+   "duration_s": 26.0
+  },
+  "NEXUS": {
+   "revision": "98598ed",
+   "counts": {
+    "PASS": 57
+   },
+   "duration_s": 6.8
+  }
+ }
+}

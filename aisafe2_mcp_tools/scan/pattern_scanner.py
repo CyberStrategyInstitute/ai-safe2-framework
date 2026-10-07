@@ -50,8 +50,9 @@ _CTI_MAX_LINE_GAP = 15
 CRITICAL_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str]] = [
 
     ("RCE-002",
-     re.compile(r'\bsubprocess\b.*\bshell\s*=\s*True\b|\bshell\s*=\s*True\b.*\bsubprocess\b',
-                re.DOTALL),
+     # Line-anchored: the previous file-wide DOTALL match attributed the finding
+     # to the `import subprocess` line instead of the call site.
+     re.compile(r'^[^#\n]*\bshell\s*=\s*True\b', re.MULTILINE),
      "shell=True in subprocess call",
      "shell=True enables shell injection. Any user-controlled content in the command string "
      "becomes arbitrary OS command execution. Root cause pattern of OX Security April 2026 "
@@ -70,8 +71,11 @@ CRITICAL_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str]] =
      "routing. Never execute dynamic code strings. See fixes/RCE-003.template"),
 
     ("RCE-004",
-     re.compile(r'\byaml\.load\s*\([^,\)]*\)(?!\s*,\s*Loader)', re.DOTALL),
-     "Unsafe yaml.load() without Loader argument",
+     # Any loader other than SafeLoader/CSafeLoader constructs arbitrary objects;
+     # the previous pattern accepted yaml.load(s, Loader=yaml.Loader).
+     re.compile(r'\byaml\.(?:load|load_all)\s*\((?![^)]*\bC?SafeLoader\b)[^)]*\)'
+                r'|\byaml\.(?:unsafe_load|full_load)\s*\('),
+     "Unsafe yaml.load() without SafeLoader",
      "yaml.load() without an explicit Loader executes arbitrary Python constructors. "
      "Equivalent to eval() on attacker-controlled YAML. CVE-2025-68145 class.",
      ["CVE-2025-68145"],
@@ -100,6 +104,36 @@ CRITICAL_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str]] =
      "Use the kubernetes Python client library instead of subprocess+kubectl. "
      "from kubernetes import client, config. Never pass tool params into kubectl strings. "
      "See fixes/RCE-006.template"),
+
+    ("RCE-007",
+     re.compile(r'\bos\.(?:system|popen|popen2|popen3|execl|execlp|execv|execvp)\s*\('
+                r'(?!\s*["\'][^"\'{}]*["\']\s*\))'),
+     "os.system/os.popen with a non-literal command",
+     "Shell execution with an f-string, concatenation, or variable makes any tool argument "
+     "that reaches it an OS command. Same root cause as shell=True.",
+     [],
+     "Use subprocess.run([...], shell=False) with an argument list and an allowlisted binary."),
+
+    ("RCE-008",
+     re.compile(r'\b(?:pickle|cPickle|_pickle|dill|marshal|jsonpickle)\s*\.\s*'
+                r'(?:loads?|decode|Unpickler)\s*\('),
+     "Unsafe deserialization (pickle/marshal/dill)",
+     "Deserializing attacker-influenced bytes with pickle-family loaders executes arbitrary "
+     "code during load. Equivalent to eval() on the payload.",
+     [],
+     "Use json or a schema-validated format. Never unpickle data that crossed a trust boundary."),
+
+    ("RCE-009",
+     re.compile(r'__import__\s*\([^)]*\+|importlib\.import_module\s*\([^)]*\+'
+                r'|getattr\s*\([^,]+,\s*["\'][^"\']*["\']\s*\+'
+                r'|__builtins__\s*(?:\[|\.__dict__)'
+                r'|\[\s*["\']/(?:usr/)?bin/(?:ba|z|da|k)?sh["\']\s*,\s*["\']-c["\']'),
+     "Obfuscated dynamic import, attribute or shell invocation",
+     "String-concatenated imports or attribute names, __builtins__ indexing, and explicit "
+     "`sh -c` argument lists are common ways to hide command execution or eval from "
+     "pattern scanners. Treat as command construction until proven otherwise.",
+     [],
+     "Import modules and call functions by literal name; pass argument lists, never `sh -c`."),
 ]
 
 
@@ -107,19 +141,17 @@ CRITICAL_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str]] =
 
 HIGH_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool]] = [
 
-    ("INJ-001",
-     re.compile(r'@mcp\.tool[^#\n]*\n(?:(?!@mcp\.tool)[^\n]*\n)*?[^\n]*\breturn\b(?!\s*sanitize)',
-                re.MULTILINE),
-     "No output sanitization on tool return",
-     "MCP tool returns raw data to LLM clients without injection scanning. "
-     "Supply chain compromise of the data source (JSON file, DB, API) could deliver "
-     "prompt injection payloads as trusted tool-response content. "
-     "AI SAFE2 v3.0 CP.5.MCP-2.",
+    ("SEC-007",
+     re.compile(r'\b(?:sk-(?:live|proj|ant|test)?-?[A-Za-z0-9_-]{20,}|ghp_[A-Za-z0-9]{36}'
+                r'|github_pat_[A-Za-z0-9_]{40,}|xox[baprs]-[A-Za-z0-9-]{10,}'
+                r'|(?:AKIA|ASIA)[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{35})\b'),
+     "Hardcoded credential in a known token format",
+     "A provider credential is embedded in source. Anyone with read access to the server "
+     "package, image, or logs can use it.",
      [],
-     "Wrap every tool return: sanitized, _ = sanitize_value(result, 'tool_name'); return sanitized. "
-     "from aisafe2_mcp_tools.shared.patterns import sanitize_value. "
-     "See fixes/INJ-001.template",
-     True),  # auto_fixable
+     "Revoke the credential and load it from a secret manager or the environment at runtime.",
+     False),
+
 
     ("INJ-003",
      re.compile(r'(?:requests|httpx|aiohttp)\s*\.\s*(?:get|post|put|delete|request)\s*\([^\'\"]*'
@@ -136,18 +168,6 @@ HIGH_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool]]
      "See fixes/INJ-003.template",
      False),
 
-    ("INJ-005",
-     re.compile(r'tools_?list|tool_list|register_tool|add_tool|@mcp\.tool', re.IGNORECASE),
-     "Dynamic tool registration — verify rug pull protection",
-     "Dynamically registered tools are not locked at install time. Rug pull attack: "
-     "legitimate server mutates tool descriptions after trust is established. "
-     "Detection requires schema-change monitoring at runtime. "
-     "AI SAFE2 v3.0 CP.5.MCP-3.",
-     [],
-     "Implement schema-change detection: hash tools/list response at startup, "
-     "alert on unexpected changes between sessions. "
-     "See mcp-safe-wrap schema monitoring and AI SAFE2 CP.5.MCP-3.",
-     False),
 
     ("SEC-001",
      re.compile(r'host\s*=\s*["\']0\.0\.0\.0["\']|MCP_HOST.*0\.0\.0\.0'),
@@ -222,6 +242,37 @@ HIGH_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool]]
 # in PatternScanner._check_cti001() and is called from _scan_medium().
 
 MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool]] = [
+
+    # INJ-001 / INJ-005 fire on essentially every MCP server. As HIGH they made the
+    # path gate fail clean servers, so it could not distinguish clean from hostile.
+    # They remain advisories (verify), not evidence of a vulnerability.
+    ("INJ-001",
+     re.compile(r'@mcp\.tool[^#\n]*\n(?:(?!@mcp\.tool)[^\n]*\n)*?[^\n]*\breturn\b(?!\s*sanitize)',
+                re.MULTILINE),
+     "No output sanitization on tool return",
+     "MCP tool returns raw data to LLM clients without injection scanning. "
+     "Supply chain compromise of the data source (JSON file, DB, API) could deliver "
+     "prompt injection payloads as trusted tool-response content. "
+     "AI SAFE2 v3.0 CP.5.MCP-2.",
+     [],
+     "Wrap every tool return: sanitized, _ = sanitize_value(result, 'tool_name'); return sanitized. "
+     "from aisafe2_mcp_tools.shared.patterns import sanitize_value. "
+     "See fixes/INJ-001.template",
+     True),  # auto_fixable
+
+    ("INJ-005",
+     re.compile(r'tools_?list|tool_list|register_tool|add_tool|@mcp\.tool', re.IGNORECASE),
+     "Dynamic tool registration — verify rug pull protection",
+     "Dynamically registered tools are not locked at install time. Rug pull attack: "
+     "legitimate server mutates tool descriptions after trust is established. "
+     "Detection requires schema-change monitoring at runtime. "
+     "AI SAFE2 v3.0 CP.5.MCP-3.",
+     [],
+     "Implement schema-change detection: hash tools/list response at startup, "
+     "alert on unexpected changes between sessions. "
+     "See mcp-safe-wrap schema monitoring and AI SAFE2 CP.5.MCP-3.",
+     False),
+
 
     ("RL-001",
      re.compile(r'FastMCP|fastmcp|streamable_http_app|Starlette\('),
@@ -375,6 +426,49 @@ LOW_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str]] = [
 ]
 
 
+# Advisories that would otherwise repeat for every tool in a file.
+_ONCE_PER_FILE = {"INJ-001", "INJ-005"}
+
+# ── JavaScript / TypeScript patterns ──────────────────────────────────────────
+# Most published MCP servers are TypeScript. Before these rules, a TS server
+# with exec(cmd), eval and a hardcoded token produced zero findings.
+JS_SUFFIXES = (".js", ".mjs", ".cjs", ".jsx", ".ts", ".mts", ".cts", ".tsx")
+
+JS_PATTERNS: list[tuple[str, str, re.Pattern[str], str, str, str]] = [
+    ("RCE-101", "critical",
+     re.compile(r'\b(?:exec|execSync)\s*\(\s*(?![\'"`][^\'"`$]*[\'"`]\s*[,)])'
+                r'|\bspawn(?:Sync)?\s*\([^)]*\bshell\s*:\s*true'),
+     "child_process exec/spawn with a non-literal command or shell:true",
+     "Command strings built from tool arguments become OS command execution.",
+     "Use execFile/spawn with an argument array, shell:false, and an allowlisted binary."),
+    ("RCE-102", "critical",
+     re.compile(r'(?<![.\w])eval\s*\(|\bnew\s+Function\s*\('),
+     "eval() or new Function()",
+     "Evaluates a string as code. Any path from tool input to this call is RCE.",
+     "Remove dynamic evaluation; parse data with JSON.parse and dispatch explicitly."),
+    ("RCE-103", "critical",
+     re.compile(r'\bvm\.(?:runIn(?:New|This)?Context|compileFunction|Script)\s*\('
+                r'|\brequire\s*\(\s*(?![\'"`])'),
+     "vm execution or dynamic require()",
+     "Node's vm module is not a security boundary; dynamic require loads attacker-chosen code.",
+     "Do not execute or load code chosen at runtime; use a static module map."),
+    ("SEC-106", "high",
+     re.compile(r'\bfs(?:\.promises)?\.(?:readFile|readFileSync|createReadStream|writeFile'
+                r'|writeFileSync|appendFile|rm|rmSync|unlink|unlinkSync)\s*\(\s*(?![\'"`])'),
+     "File system access with a non-literal path",
+     "A tool-supplied path reaching fs without realpath + base-directory containment allows "
+     "traversal (../, absolute paths, symlinks).",
+     "Resolve with path.resolve/realpath and reject results outside an allowlisted root."),
+    ("INJ-103", "high",
+     re.compile(r'\b(?:fetch|axios(?:\.(?:get|post|put|delete|request))?|got|request'
+                r'|https?\.(?:get|request))\s*\(\s*(?![\'"`]https?://[^\'"`$]*[\'"`])'),
+     "Outbound HTTP to a non-literal URL - SSRF risk",
+     "Fetching a tool-supplied URL reaches cloud metadata (169.254.169.254), localhost "
+     "admin ports and internal services.",
+     "Allowlist destinations; block link-local, loopback and private ranges after DNS resolution."),
+]
+
+
 class PatternScanner:
     """
     Regex-based vulnerability scanner for MCP server source code.
@@ -398,6 +492,35 @@ class PatternScanner:
         yield from self._scan_high(source, filepath, lines)
         yield from self._scan_medium(source, filepath, lines)
         yield from self._scan_low(source, filepath, lines)
+
+    def scan_js_file(
+        self,
+        source: str,
+        filepath: str,
+        lines: list[str],
+    ) -> Iterator[Finding]:
+        """Scan one JavaScript/TypeScript file. Comment-only lines are skipped."""
+        seen: set[tuple[str, int]] = set()
+        for finding_id, severity, pattern, title, desc, remediation in JS_PATTERNS:
+            for m in pattern.finditer(source):
+                line_no = source[:m.start()].count("\n") + 1
+                text = lines[line_no - 1].lstrip() if line_no <= len(lines) else ""
+                if text.startswith(("//", "*", "/*")) or (finding_id, line_no) in seen:
+                    continue
+                seen.add((finding_id, line_no))
+                yield self._match_to_finding(
+                    m, source, filepath, lines, finding_id, severity, title, desc, [],
+                    remediation, False,
+                )
+        # Known credential formats apply to every language.
+        for finding_id, pattern, title, desc, cves, remediation, auto_fix in HIGH_PATTERNS:
+            if finding_id != "SEC-007":
+                continue
+            for m in pattern.finditer(source):
+                yield self._match_to_finding(
+                    m, source, filepath, lines, finding_id, "high", title, desc, cves,
+                    remediation, auto_fix,
+                )
 
     def _match_to_finding(
         self,
@@ -518,6 +641,8 @@ class PatternScanner:
                     m, source, filepath, lines,
                     finding_id, "medium", title, desc, cves, remediation, auto_fix,
                 )
+                if finding_id in _ONCE_PER_FILE:
+                    break
 
         # CTI-001: proximity-based retrieval-to-disclosure chain detection
         yield from self._check_cti001(source, filepath, lines)

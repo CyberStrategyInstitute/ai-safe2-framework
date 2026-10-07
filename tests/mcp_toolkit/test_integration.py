@@ -419,7 +419,7 @@ class TestScoreSystemValidation:
         assert bonus <= 25, "Attestation bonus must not exceed 25"
 
     @pytest.mark.asyncio
-    async def test_attestation_increases_score(self):
+    async def test_attestation_is_reported_but_never_scored(self):
         """Builder attestation must produce higher score than no attestation."""
         well_known = {
             "mcp_security_version": "1.0",
@@ -462,10 +462,13 @@ class TestScoreSystemValidation:
                     "https://example.com/mcp", token="token"
                 ).assess()
 
-        assert report_with.attestation_bonus > 0, "Attestation should give bonus points"
-        assert report_with.total_score >= report_without.total_score, (
-            "Attestation must not decrease score"
-        )
+        # Self-attestation is an unauthenticated file published by the server under
+        # assessment. Scoring it let a poisoned server lift itself to a badge
+        # (87/100, gate exit 0 in the 2026-10-06 assessment). It is now context only.
+        assert report_with.attestation.present
+        assert report_with.attestation_claimed_points > 0
+        assert report_with.attestation_bonus == 0
+        assert report_with.total_score == report_without.total_score
 
     @pytest.mark.asyncio
     async def test_poisoned_tools_reduce_injection_score(self):
@@ -912,6 +915,6 @@ class TestMCP8to13Integration:
         log2 = next(f for f in findings if f.finding_id == "LOG-002")
 
         assert cti.cp5_control == "MCP-9"
-        assert swm.cp5_control == "MCP-12"
+        assert swm.cp5_control == "MCP-10"  # v3.1 profile numbering
         assert stp.cp5_control == "MCP-11"
         assert log2.cp5_control == "MCP-5"

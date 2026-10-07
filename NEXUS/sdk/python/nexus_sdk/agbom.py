@@ -41,6 +41,7 @@ AI SAFE2 v3.0: A2.3, A2.5, T3.1, T3.3 (supply chain security)
 """
 
 from __future__ import annotations
+import copy
 import hashlib
 import json
 import uuid
@@ -102,6 +103,12 @@ class AgBOMComponent:
     purl: Optional[str] = None  # Package URL (pkg:mcp/server-name@version)
     bom_ref: str = field(default_factory=lambda: f"comp-{uuid.uuid4().hex[:8]}")
 
+    # Rug-pull hold: set when a known server presents a different tool-manifest
+    # digest. A quarantined component must not be trusted until
+    # AgBOMManager.approve_capability_change() records an explicit decision.
+    quarantined: bool = False
+    previous_capability_digest: Optional[str] = None
+
     def to_cyclonedx_component(self) -> dict:
         """Serialize to CycloneDX v1.6 component format."""
         comp: dict = {
@@ -129,6 +136,8 @@ class AgBOMComponent:
             properties.append({"name": "nexus:signedManifest", "value": "true"})
         if self.discovered_at:
             properties.append({"name": "nexus:discoveredAt", "value": self.discovered_at})
+        if self.quarantined:
+            properties.append({"name": "nexus:quarantined", "value": "true"})
         if properties:
             comp["properties"] = properties
         return comp
@@ -146,6 +155,10 @@ class AgBOMComponent:
             "signed_manifest": self.signed_manifest,
             "discovered_at": self.discovered_at,
             "purl": self.purl,
+            # Emitted only when set, so hashes of components that were never
+            # quarantined are unchanged from v0.3.
+            "quarantined": True if self.quarantined else None,
+            "previous_capability_digest": self.previous_capability_digest,
         }.items() if v is not None}
 
 
@@ -171,17 +184,12 @@ class AgBOMVersion:
     version_hash: Optional[str] = None
     signature: Optional[str] = None
 
-    def compute_version_hash(self) -> str:
-        """
-        Compute SHA-256 over this version's canonical content.
-        Hash chain: version_hash = SHA-256(parent_hash + agent_did + version + components_digest)
-        Tampering any component invalidates this version and all successors.
-        """
+    def content_hash(self) -> str:
+        """SHA-256 over this version's current content, without storing it."""
         components_digest = hashlib.sha256(
             json.dumps([c.to_dict() for c in sorted(self.components, key=lambda x: x.bom_ref)],
                        sort_keys=True).encode()
         ).hexdigest()
-
         chain_input = json.dumps({
             "parent_hash": self.parent_hash or "GENESIS",
             "agent_did": self.agent_did,
@@ -189,7 +197,15 @@ class AgBOMVersion:
             "timestamp": self.timestamp,
             "components_digest": components_digest,
         }, sort_keys=True)
-        self.version_hash = hashlib.sha256(chain_input.encode()).hexdigest()
+        return hashlib.sha256(chain_input.encode()).hexdigest()
+
+    def compute_version_hash(self) -> str:
+        """
+        Compute and store SHA-256 over this version's canonical content.
+        Hash chain: version_hash = SHA-256(parent_hash + agent_did + version + components_digest)
+        Tampering any component invalidates this version and all successors.
+        """
+        self.version_hash = self.content_hash()
         return self.version_hash
 
     def sign(self) -> "AgBOMVersion":
@@ -285,6 +301,24 @@ class AgBOMManager:
         Register a newly-discovered MCP server as an AgBOM component.
         Sets purl in pkg:mcp/ namespace for standardized reference.
         """
+        existing = next((c for c in self._components.values()
+                         if c.component_type == AgBOMComponentType.MCP_SERVER
+                         and c.name == server_name and c.supplier == server_url), None)
+        if existing is not None:
+            if tool_manifest_digest is None or tool_manifest_digest == existing.capability_digest:
+                # Same server, same manifest: idempotent, no new version.
+                return self._version_history[-1]
+            if existing.capability_digest is None:
+                existing.capability_digest = tool_manifest_digest
+                existing.signed_manifest = existing.signed_manifest or signed
+                return self._snapshot("mcp_capability_digest_pinned")
+            # Known server, different tool manifest: rug-pull hold. The new digest
+            # is recorded but not trusted until an explicit approval.
+            existing.previous_capability_digest = existing.capability_digest
+            existing.capability_digest = tool_manifest_digest
+            existing.quarantined = True
+            return self._snapshot("mcp_capability_digest_changed")
+
         component = AgBOMComponent(
             name=server_name,
             component_type=AgBOMComponentType.MCP_SERVER,
@@ -297,6 +331,20 @@ class AgBOMManager:
         )
         return self.add_component(component, reason="mcp_server_discovered")
 
+    def get_quarantined_components(self) -> list[AgBOMComponent]:
+        """Components held after a capability change; do not route traffic to them."""
+        return [c for c in self._components.values() if c.quarantined]
+
+    def approve_capability_change(self, bom_ref: str, approver: str) -> AgBOMVersion:
+        """Record an explicit human decision to trust a changed tool manifest."""
+        component = self._components.get(bom_ref)
+        if component is None or not component.quarantined:
+            raise ValueError(f"{bom_ref} is not a quarantined component")
+        if not approver or not approver.strip():
+            raise ValueError("approver is required: release is an owner decision")
+        component.quarantined = False
+        return self._snapshot(f"capability_change_approved:{approver.strip()}")
+
     def _snapshot(self, change_reason: str) -> AgBOMVersion:
         """Create a signed AgBOM version snapshot."""
         parent_hash = self._version_history[-1].version_hash if self._version_history else None
@@ -305,7 +353,8 @@ class AgBOMManager:
         version = AgBOMVersion(
             version=self._current_version,
             agent_did=self.agent_did,
-            components=list(self._components.values()),
+            # Deep copies: a snapshot must not change when a live component does.
+            components=[copy.deepcopy(c) for c in self._components.values()],
             parent_hash=parent_hash,
             change_reason=change_reason,
         )
@@ -330,6 +379,12 @@ class AgBOMManager:
                 )
             if not version.version_hash:
                 violations.append(f"Version {version.version} missing version_hash")
+            elif version.content_hash() != version.version_hash:
+                # v0.3 only compared stored hashes, so editing a component inside
+                # a stored version went undetected.
+                violations.append(
+                    f"Version {version.version} content does not match its version_hash (tampered)"
+                )
 
         return (len(violations) == 0, violations)
 

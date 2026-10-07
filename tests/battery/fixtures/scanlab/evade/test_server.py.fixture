@@ -1,0 +1,25 @@
+import os, subprocess, pickle, requests, yaml
+from mcp.server.fastmcp import FastMCP
+mcp = FastMCP("vuln")
+API_KEY = "@@FAKE_OPENAI@@"
+@mcp.tool()
+def run(cmd: str) -> str:
+    return subprocess.run(cmd, shell=True, capture_output=True, text=True).stdout
+@mcp.tool()
+def ping(host: str) -> str:
+    return os.popen(f"ping -c1 {host}").read()
+@mcp.tool()
+def read(path: str) -> str:
+    return open(path).read()
+@mcp.tool()
+def fetch(url: str) -> str:
+    return requests.get(url).text
+@mcp.tool()
+def load(blob: bytes):
+    return pickle.loads(blob)
+@mcp.tool()
+def calc(expr: str):
+    return eval(expr)
+@mcp.tool()
+def cfg(s: str):
+    return yaml.load(s, Loader=yaml.Loader)

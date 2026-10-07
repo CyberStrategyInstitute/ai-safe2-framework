@@ -30,6 +30,7 @@ from mcp_server.config import (
     ALLOWED_STDIO_MODULE_PATTERNS,
     MCP_INSTALL_PATH,
     MCP_SOURCE_HASH,
+    STDIO_TIER,
     TOKEN_MAP,
     TRANSPORT,
 )
@@ -87,7 +88,8 @@ def _verify_command_allowlist() -> tuple[bool, str]:
         return False, (
             f"sys.argv '{args_flat}' does not match any allowed module pattern. "
             f"Expected one of: {ALLOWED_STDIO_MODULE_PATTERNS}. "
-            "Configure ALLOWED_STDIO_MODULE_PATTERNS if using a custom entrypoint."
+            "Set ALLOWED_STDIO_MODULE_PATTERNS (comma-separated, added to the defaults) "
+            "if using a custom entrypoint."
         )
 
     # Check 3: install path (opt-in)
@@ -195,16 +197,36 @@ class BearerAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # ── STDIO: security checks ran at startup; grant Pro and proceed ─────
         if TRANSPORT == "stdio":
-            set_tier("pro")
+            set_tier(STDIO_TIER)
             return await call_next(request)
 
         # ── Public paths: no auth, no rate limit ─────────────────────────────
         if request.url.path in _PUBLIC_PATHS:
             return await call_next(request)
 
+        # ── Failed-auth lockout (checked BEFORE validating the credential) ──
+        # A locked-out client is refused regardless of what it presents, so a
+        # correct guess cannot be distinguished from a wrong one.
+        client_ip = (request.client.host if request.client else "unknown")
+        fail_key = f"authfail:{client_ip}"
+        locked = get_limiter().is_exhausted(fail_key)
+        if locked is not None:
+            log.warning("auth.lockout", ip=client_ip, retry_after=locked.retry_after_seconds)
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "error": "Too many failed authentication attempts",
+                    "retry_after_seconds": locked.retry_after_seconds,
+                },
+                headers={**locked.headers, "WWW-Authenticate": "Bearer"},
+            )
+
         # ── Bearer token validation ───────────────────────────────────────────
+        # RFC 7235: the auth-scheme token is case-insensitive.
         auth_header = request.headers.get("Authorization", "")
-        if not auth_header.startswith("Bearer "):
+        scheme, _, credential = auth_header.strip().partition(" ")
+        if scheme.lower() != "bearer" or not credential.strip():
+            get_limiter().check(fail_key)
             log.warning("auth.missing_token", path=request.url.path)
             return JSONResponse(
                 status_code=401,
@@ -218,10 +240,11 @@ class BearerAuthMiddleware(BaseHTTPMiddleware):
                 headers={"WWW-Authenticate": "Bearer"},
             )
 
-        token = auth_header.removeprefix("Bearer ").strip()
+        token = credential.strip()
         tier = TOKEN_MAP.get(token)
 
         if tier is None:
+            get_limiter().check(fail_key)
             log.warning("auth.invalid_token", path=request.url.path)
             return JSONResponse(
                 status_code=401,
@@ -241,7 +264,6 @@ class BearerAuthMiddleware(BaseHTTPMiddleware):
         log.debug("auth.ok", tier=tier, path=request.url.path)
 
         # ── Rate limiting (RISK-3 FIX) ────────────────────────────────────────
-        client_ip = (request.client.host if request.client else "unknown")
         rate_key = f"{tier}:{client_ip}"
         rl_result = get_limiter().check(rate_key)
 

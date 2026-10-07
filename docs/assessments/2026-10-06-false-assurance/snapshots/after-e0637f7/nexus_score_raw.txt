@@ -1,0 +1,17 @@
+
+============================================================
+NEXUS-A2A v0.3 implementation self-check (not a conformance claim)
+============================================================
+  [OK ] S1.3-GIP (P1): Guardian per-call verdict (hostile denied, benign allowed, HEAR)
+  [OK ] S1.3-FAILOVER (P1): Guardian unreachable -> deny (FAIL_CLOSED default)
+  [OK ] A2.5-NOR (P2): NOR OTel export + OCSF deny -> POLICY_VIOLATION
+  [OK ] A2.3-AGBOM (P2): AgBOM hash chain (tamper detected, rug pull held)
+  [OK ] CP5-ACS (P1): NEXUS-ACS Bridge v0.1 (AOS JSON-RPC 2.0)
+  [OK ] I3-MV-ACS (P1): Memory Vaccine ACS context export (I-3)  (export contract only; drift detection itself is not assessed here)
+  [OK ] AISM-OPA (P3): AISM invariants + authz OPA policies type-check and pass tests
+  [OK ] SCHEMA-NOR (P2): JSON schema: nor-v0.3.schema.json
+  [OK ] SCHEMA-AGBOM (P2): JSON schema: agbom-v0.3.schema.json
+  [OK ] SCHEMA-GUARDIAN (P2): JSON schema: guardian-v0.3.schema.json
+
+10 verified, 0 failed, 0 not assessed (of 10)
+

@@ -69,8 +69,8 @@ services:
       # PQC: set to 1 to enable ML-KEM-1024 + ML-DSA-65 in NEXUS-Full mode
       NEXUS_PQC_ENABLED: "${NEXUS_PQC_ENABLED:-0}"
     volumes:
-      - ./opa:/app/opa:ro
-      - ./schemas:/app/schemas:ro
+      - ../opa:/app/opa:ro
+      - ../schemas:/app/schemas:ro
       - spire-agent-socket:/run/spire:ro
       - nexus-logs:/app/logs
     depends_on:
@@ -97,7 +97,8 @@ services:
   # --------------------------------------------------------------------------
   # OPEN POLICY AGENT -- NEXUS POLICY SIDECAR
   # Runs as isolated sidecar. Agents cannot reach this container directly.
-  # Only the gateway can query OPA. Policies load from ./opa/ at startup.
+  # Only the gateway can query OPA. Policies load from NEXUS/opa/ at startup
+  # (mounted as ../opa: compose paths resolve relative to this file).
   # --------------------------------------------------------------------------
   opa:
     image: openpolicyagent/opa:0.65.0-static
@@ -112,13 +113,16 @@ services:
       - "--bundle"
       - "/policies"
     volumes:
-      - ./opa:/policies:ro
+      - ../opa:/policies:ro
     networks:
       - nexus-internal
     expose:
       - "8181"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8181/health"]
+      # The -static image has no shell or curl. Evaluate the mounted policies
+      # directly: healthy only if the authz package loads. `allow` has a default,
+      # so it is defined without input; an empty or broken mount fails the check.
+      test: ["CMD", "/opa", "eval", "--fail", "--data", "/policies", "data.nexus.authz.allow"]
       interval: 5s
       timeout: 3s
       retries: 5

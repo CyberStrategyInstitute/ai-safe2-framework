@@ -127,6 +127,28 @@ def _remediation(check_id: str) -> str:
     return "See AI SAFE2 v3.0 CP.5.MCP documentation."
 
 
+_BLOCKING_CHECKS = {"INJECTION", "FSP"}
+_BLOCKING_SCORE_CAP = 29  # top of the "Critical" band
+
+
+def _valid_as_metadata(resp: httpx.Response, server_url: str) -> bool:
+    """True only for RFC 8414 metadata whose issuer is this server's origin."""
+    try:
+        data = resp.json()
+    except (json.JSONDecodeError, ValueError):
+        return False
+    if not isinstance(data, dict):
+        return False
+    parsed = urlparse(server_url)
+    origin = f"{parsed.scheme}://{parsed.netloc}"
+    issuer = str(data.get("issuer", "")).rstrip("/")
+    endpoints = [data.get("token_endpoint"), data.get("authorization_endpoint")]
+    return (
+        issuer == origin
+        and any(isinstance(e, str) and e.startswith("https://") for e in endpoints)
+    )
+
+
 def _iso_now() -> str:
     from datetime import datetime
     return datetime.now(UTC).isoformat()
@@ -225,8 +247,8 @@ class MCPAssessor:
                 for check_id, name, control, max_s in [
                     ("INJECTION", "Tool Injection Scan", "MCP-2", 20),
                     ("FSP", "Full Schema Poisoning Scan", "MCP-2", 10),
-                    ("SSRF", "SSRF Surface", "MCP-6", 5),
-                    ("SESSION", "Session ID in URL", "MCP-4", 5),
+                    ("SSRF", "SSRF Surface", "MCP-19", 5),
+                    ("SESSION", "Session ID in URL", "MCP-16", 5),
                 ]:
                     checks.append(CheckResult(
                         check_id=check_id, name=name, cp5_control=control,
@@ -239,8 +261,23 @@ class MCPAssessor:
             attestation = await self._fetch_attestation(client)
 
         base_score = min(100, sum(c.score for c in checks))
-        att_bonus = self._compute_attestation_bonus(attestation) if attestation.present else 0
-        total_score = min(100, base_score + att_bonus)
+        # Self-attestation is an unauthenticated claim published by the server
+        # being assessed. It is reported as claimed weight and never scored.
+        claimed = self._compute_attestation_bonus(attestation) if attestation.present else 0
+        att_bonus = 0
+        total_score = base_score
+        blocking = [
+            c.check_id for c in checks
+            if c.check_id in _BLOCKING_CHECKS and not c.passed
+            and not c.detail.startswith("Could not assess")
+        ]
+        if blocking:
+            total_score = min(total_score, _BLOCKING_SCORE_CAP)
+            errors.append(
+                "Hostile content observed in tool schemas ("
+                + ", ".join(blocking)
+                + "). Score capped and badge withheld regardless of other checks."
+            )
         duration = round(time.monotonic() - start, 2)
 
         return ScoreReport(
@@ -251,13 +288,16 @@ class MCPAssessor:
             base_score=base_score,
             attestation_bonus=att_bonus,
             rating=_rating(total_score),
-            badge_eligible=(total_score >= 70),
+            # A badge requires the tool catalog to have been inspected and found clean.
+            badge_eligible=(total_score >= 70 and not blocking and tool_count > 0),
             checks=checks,
             attestation=attestation,
             tool_count=tool_count,
             tools_scanned=tools_scanned,
             errors=errors,
             duration_seconds=duration,
+            attestation_claimed_points=claimed,
+            blocking_findings=blocking,
         )
 
     # ── Individual checks ─────────────────────────────────────────────────────
@@ -269,7 +309,7 @@ class MCPAssessor:
         """
         if self.server_url.startswith("http://"):
             return CheckResult(
-                check_id="TLS", name="TLS Encryption", cp5_control="MCP-6",
+                check_id="TLS", name="TLS Encryption", cp5_control="MCP-4",
                 passed=False, score=0, max_score=15, severity="critical",
                 detail="Server uses plain HTTP. All credentials and tool payloads are exposed in transit.",
                 remediation=_remediation("TLS"),
@@ -283,7 +323,7 @@ class MCPAssessor:
                     break
             except httpx.ConnectError as exc:
                 return CheckResult(
-                    check_id="TLS", name="TLS Encryption", cp5_control="MCP-6",
+                    check_id="TLS", name="TLS Encryption", cp5_control="MCP-4",
                     passed=False, score=0, max_score=15, severity="critical",
                     detail=f"Could not connect: {exc}. Verify the URL and that the server is running.",
                     remediation=_remediation("TLS"),
@@ -293,7 +333,7 @@ class MCPAssessor:
                 continue
 
         return CheckResult(
-            check_id="TLS", name="TLS Encryption", cp5_control="MCP-6",
+            check_id="TLS", name="TLS Encryption", cp5_control="MCP-4",
             passed=True, score=12, max_score=15, severity="info",
             detail=(
                 "HTTPS confirmed (TLS active). "
@@ -335,9 +375,20 @@ class MCPAssessor:
                         f"{base_url}/.well-known/oauth-authorization-server",
                         headers=self._unauth_headers,
                     )
-                    if oauth_resp.status_code == 200:
+                    if oauth_resp.status_code == 200 and _valid_as_metadata(
+                        oauth_resp, self.server_url
+                    ):
                         base_score = 25
-                        detail = "OAuth 2.1 authorization server metadata found. Maximum auth score."
+                        detail = (
+                            "RFC 8414 authorization server metadata found with an issuer "
+                            "matching this origin. Audience/resource validation (MCP-19) "
+                            "is not verifiable remotely."
+                        )
+                    elif oauth_resp.status_code == 200:
+                        detail += (
+                            " OAuth metadata endpoint returned content that is not valid "
+                            "RFC 8414 metadata for this origin; not credited."
+                        )
                 except httpx.HTTPError as exc:
                     log.debug("auth.oauth_discovery_failed", error=type(exc).__name__)
 
@@ -401,7 +452,7 @@ class MCPAssessor:
             detail += f"Missing: {', '.join(missing)}."
 
         return CheckResult(
-            check_id="HEADERS", name="Security Response Headers", cp5_control="MCP-6",
+            check_id="HEADERS", name="Security Response Headers", cp5_control="MCP-4",
             passed=(score >= 8), score=min(10, score), max_score=10,
             severity="medium" if score < 8 else "info",
             detail=detail.strip() or "No headers available.",
@@ -428,14 +479,14 @@ class MCPAssessor:
                         if has_retry_after:
                             return CheckResult(
                                 check_id="RATE", name="Application-Layer Rate Limiting",
-                                cp5_control="MCP-6", passed=True, score=10, max_score=10,
+                                cp5_control="MCP-8", passed=True, score=10, max_score=10,
                                 severity="info",
                                 detail="Rate limiting enforced with Retry-After header. Full points.",
                                 remediation="",
                             )
                         return CheckResult(
                             check_id="RATE", name="Application-Layer Rate Limiting",
-                            cp5_control="MCP-6", passed=True, score=5, max_score=10,
+                            cp5_control="MCP-8", passed=True, score=5, max_score=10,
                             severity="low",
                             detail="Rate limiting enforced but Retry-After header absent. Add for RFC 7231 compliance.",
                             remediation="Add Retry-After header to 429 responses.",
@@ -445,7 +496,7 @@ class MCPAssessor:
                 continue
 
         return CheckResult(
-            check_id="RATE", name="Application-Layer Rate Limiting", cp5_control="MCP-6",
+            check_id="RATE", name="Application-Layer Rate Limiting", cp5_control="MCP-8",
             passed=False, score=0, max_score=10, severity="medium",
             detail=(
                 "No application-layer rate limiting detected after rapid probing. "
@@ -535,7 +586,7 @@ class MCPAssessor:
         ]
         ssrf_score = 5 if not ssrf_tools else (2 if len(ssrf_tools) <= 2 else 0)
         results.append(CheckResult(
-            check_id="SSRF", name="SSRF Surface Detection", cp5_control="MCP-6",
+            check_id="SSRF", name="SSRF Surface Detection", cp5_control="MCP-19",
             passed=(ssrf_score >= 3), score=ssrf_score, max_score=5,
             severity="high" if ssrf_tools else "info",
             detail=(
@@ -550,7 +601,7 @@ class MCPAssessor:
         session_markers = ["sessionid", "session_id", "sid=", "jsessionid"]
         session_found = any(m in raw_json.lower() for m in session_markers)
         results.append(CheckResult(
-            check_id="SESSION", name="Session ID in URL Check", cp5_control="MCP-4",
+            check_id="SESSION", name="Session ID in URL Check", cp5_control="MCP-16",
             passed=(not session_found), score=0 if session_found else 5, max_score=5,
             severity="medium" if session_found else "info",
             detail=(
