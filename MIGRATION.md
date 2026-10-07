@@ -14,6 +14,9 @@ safe2 acceptance run ./safe2-1.0-acceptance --strict
 safe2 acceptance verify ./safe2-1.0-acceptance
 ```
 
+Until 1.0.0 is on PyPI (it currently serves 0.9.0), install the release tag:
+`python -m pip install "ai-safe2[all] @ git+https://github.com/CyberStrategyInstitute/ai-safe2-framework@2026-10-5_CLI_1.0.0"`.
+
 Do not overwrite an earlier acceptance directory. To roll back, create a fresh
 environment with the previously trusted package version and replay artifacts
 using their producing version. A package downgrade does not migrate or rewrite

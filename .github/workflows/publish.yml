@@ -9,6 +9,21 @@ permissions:
   id-token: write   # Required for OIDC trusted publishing (no API key needed)
 
 jobs:
+  # A CLI release whose tag does not follow the vX.Y.Z convention used to skip
+  # every job silently (CLI 1.0.0 was released as `2026-10-5_CLI_1.0.0` and never
+  # reached PyPI). Fail visibly instead, so the release owner sees it.
+  tag-convention:
+    name: CLI release tag must be vX.Y.Z
+    runs-on: ubuntu-latest
+    if: contains(github.event.release.tag_name, 'CLI') && !startsWith(github.event.release.tag_name, 'v')
+    steps:
+      - name: Explain why nothing will be published
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          echo "::error::Release tag '$TAG' names a CLI release but does not start with 'v'. Publish to PyPI only runs for tags like v1.0.1 that match pyproject.toml. Re-release with a vX.Y.Z tag."
+          exit 1
+
   build:
     name: Build distribution
     runs-on: ubuntu-latest

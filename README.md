@@ -48,6 +48,14 @@ safe2 init .
 safe2 assess . --scan-content --inspect-config
 ```
 
+If pip reports `No matching distribution found for ai-safe2==1.0.0`, PyPI has not
+received 1.0.0 yet (it currently serves 0.9.0). Install the published 1.0.0
+release tag instead, then continue from `safe2 self-check --strict`:
+
+```bash
+python -m pip install "ai-safe2[all] @ git+https://github.com/CyberStrategyInstitute/ai-safe2-framework@2026-10-5_CLI_1.0.0"
+```
+
 The assessment writes canonical JSON for agents and a readable Decision Card
 for people. It does not authorize a fix, deployment, exception, or compliance
 claim.
