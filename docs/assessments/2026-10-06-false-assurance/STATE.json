@@ -5,7 +5,7 @@
   "base": "83de4a8",
   "owner": "Vincent Sullivan",
   "updated": "2026-10-07",
-  "last_pushed_commit": "bfe324b",
+  "last_pushed_commit": "09d3f15",
   "modules": {
     "skill-gate": {
       "status": "done",
@@ -98,10 +98,11 @@
       "commit": "3353be4"
     },
     "full-gates+pr": {
-      "status": "blocked_on_owner",
-      "gates": "30/30 PASS at bfe324b",
-      "pr_body": "PR_DESCRIPTION.md",
-      "blocker": "no GitHub API credential in session (gh token invalid); owner opens draft PR from compare link"
+      "status": "in_review",
+      "gates": "30/30 PASS at bfe324b (local)",
+      "pr": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/393",
+      "pr_state": "draft",
+      "how": "gh api -X POST repos/{owner}/{repo}/pulls (REST). gh pr create fails: GraphQL is blocked in Claude Code sessions; gh auth status falsely reports the proxied token invalid."
     },
     "nexus-memory": {
       "status": "done",
@@ -204,5 +205,5 @@
       "note": "AIM v0.2 schema has no ACT tier; tier is caller-asserted per call. ACT-4 default only covers omission, not a false low claim. Framework-correct fix: tier bound to registered AIM, resolved by Guardian."
     }
   ],
-  "next_step": "Owner opens draft PR (compare main...fix/v31-false-assurance-hardening, body = PR_DESCRIPTION.md). Then hosted CI + Greptile results, then decisions D1-D4."
+  "next_step": "Watch hosted CI on PR #393; Greptile is advisory/skipped on draft. Then owner decisions D1, D3, D4."
 }
