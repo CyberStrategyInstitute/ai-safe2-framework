@@ -37,6 +37,12 @@ from nexus_sdk.agbom import (
     AgBOMComponentType,
     AgBOMManager,
 )
+from nexus_sdk.aim import (
+    AIMRecord,
+    AIMRegistry,
+    AIMValidationError,
+    aim_digest,
+)
 from nexus_sdk.bridges import (
     NEXUSACSBridge,
     NEXUSAIBridge,
@@ -103,6 +109,8 @@ __all__ = [
     "OCSFEventClass", "build_tool_call_nor", "build_memory_nor",
     # AgBOM (v0.3)
     "AgBOMManager", "AgBOMComponent", "AgBOMComponentType",
+    # AIM registry (v0.3 identity: registry-bound ACT tier)
+    "AIMRegistry", "AIMRecord", "AIMValidationError", "aim_digest",
     # Bridges
     "NEXUSMCPBridge", "NEXUSACSBridge", "NEXUSAIBridge", "NEXUSOpenAIBridge",
     "NEXUSRESTBridge", "ProtocolBridgeFactory",

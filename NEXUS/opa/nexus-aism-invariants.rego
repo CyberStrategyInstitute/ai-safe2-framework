@@ -191,37 +191,68 @@ violation_i3 contains msg if {
 }
 
 # ---------------------------------------------------------------------------
+# Registry-bound ACT tier (AIM v0.3, IETF draft section 3.1.1)
+# ---------------------------------------------------------------------------
+
+# The tier an agent operates at is an identity property set by its owner of
+# record in the registered AIM (data.nexus.aim.agents[<did>].act_tier). A tier
+# in the request is only a claim: it may not exceed the registered tier and can
+# never lower it. With no registry entry the declared tier is used, and an
+# agent that declares nothing is treated as ACT-4 so tier-gated requirements
+# cannot be skipped by omission.
+_registered_tier := t if {
+	t := data.nexus.aim.agents[input.agent.did].act_tier
+	is_number(t)
+}
+
+_has_registered_tier if is_number(_registered_tier)
+
+_has_declared_tier if is_number(input.agent.act_tier)
+
+effective_act_tier := _registered_tier if _has_registered_tier
+
+effective_act_tier := input.agent.act_tier if {
+	not _has_registered_tier
+	_has_declared_tier
+}
+
+effective_act_tier := 4 if {
+	not _has_registered_tier
+	not _has_declared_tier
+}
+
+# ---------------------------------------------------------------------------
 # I-4: INDEPENDENT KILL PATH
 # ---------------------------------------------------------------------------
 
 default invariant_4_kill_switch := false
 
 invariant_4_kill_switch if {
-	input.agent.act_tier < 2
+	effective_act_tier < 2
 }
 
 invariant_4_kill_switch if {
-	input.agent.act_tier >= 2
+	effective_act_tier >= 2
 	input.agent.kill_switch.operator_registered == true
 }
 
 invariant_4_kill_switch if {
-	input.agent.act_tier >= 2
+	effective_act_tier >= 2
 	input.agent.kill_switch.domain_registered == true
 }
 
 violation_i4 contains msg if {
-	input.agent.act_tier >= 2
+	effective_act_tier >= 2
 	not input.agent.kill_switch.operator_registered
 	not input.agent.kill_switch.domain_registered
 	msg := concat("", [
-		"I-4 VIOLATED: ACT-", format_int(input.agent.act_tier, 10),
+		"I-4 VIOLATED: ACT-", format_int(effective_act_tier, 10),
 		" agent '", input.agent.did, "' has no registered kill pathway",
 	])
 }
 
 violation_i4 contains msg if {
-	input.agent.act_tier >= 4
+	effective_act_tier >= 4
 	not input.agent.kill_switch.cryptographic_kill_confirmed
 	msg := concat("", [
 		"I-4 VIOLATED: ACT-4 agent '", input.agent.did,
@@ -256,7 +287,7 @@ violation_i5 contains msg if {
 }
 
 violation_i5 contains msg if {
-	input.agent.act_tier >= 3
+	effective_act_tier >= 3
 	not input.agent.aim.oor_escalation_contact
 	msg := concat("", [
 		"I-5 VIOLATED: ACT-3+ agent '", input.agent.did,
