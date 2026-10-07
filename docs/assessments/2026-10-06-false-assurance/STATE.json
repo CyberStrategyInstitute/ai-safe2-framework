@@ -4,7 +4,7 @@
   "branch": "fix/v31-false-assurance-hardening",
   "base": "83de4a8",
   "owner": "Vincent Sullivan",
-  "updated": "2026-10-06",
+  "updated": "2026-10-07",
   "last_pushed_commit": "bfe324b",
   "modules": {
     "skill-gate": {
@@ -186,19 +186,22 @@
       "id": "D2",
       "question": "Publish results after merge: advisory vs post vs both",
       "owner": "Vincent",
-      "status": "open"
+      "status": "decided",
+      "decision": "Publish only after the PR merges (owner, 2026-10-07)"
     },
     {
       "id": "D3",
       "question": "skills/codex, chatgpt, gemini, perplexity, evals.md, skill-spec.md teach v3.0 content (no MCP-14..19, enforcement planes, v3.1 persistence vocabulary). Refresh content to v3.1, or mark them as v3.0-legacy surfaces?",
       "owner": "Vincent",
-      "status": "open"
+      "status": "open",
+      "note": "Verified 2026-10-07: surfaces cite no MCP IDs or persistence terms; core 161 unchanged in v3.1. Missed by the v3.1 sweep (#307). Fix = retag + short v3.1 delta block, not a rewrite."
     },
     {
       "id": "D4",
       "question": "Guardian now treats an omitted act_tier as ACT-4 (breaking for callers that omit it; opt-out documented). Accept as the default for the next NEXUS release?",
       "owner": "Vincent",
-      "status": "open"
+      "status": "open",
+      "note": "AIM v0.2 schema has no ACT tier; tier is caller-asserted per call. ACT-4 default only covers omission, not a false low claim. Framework-correct fix: tier bound to registered AIM, resolved by Guardian."
     }
   ],
   "next_step": "Owner opens draft PR (compare main...fix/v31-false-assurance-hardening, body = PR_DESCRIPTION.md). Then hosted CI + Greptile results, then decisions D1-D4."
