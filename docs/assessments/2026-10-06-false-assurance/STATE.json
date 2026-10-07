@@ -132,6 +132,16 @@
     "secret-literals": {
       "status": "done",
       "commit": "b24d040"
+    },
+    "skill-relocation": {
+      "status": "in_progress"
+    },
+    "skill-surfaces-v31": {
+      "status": "todo"
+    },
+    "aim-bound-act-tier": {
+      "status": "todo",
+      "note": "separate PR after #393"
     }
   },
   "snapshots": [
@@ -181,7 +191,8 @@
       "id": "D1",
       "question": "skills/ installs as one skill package that includes skills/mcp server code and its injection test corpus; the gate correctly rejects it. Move SKILL.md into its own folder?",
       "owner": "Vincent",
-      "status": "open"
+      "status": "decided",
+      "decision": "Option A: move the canonical skill to skills/ai-safe2-secure-build-copilot/, frontmatter-free redirect at skills/SKILL.md. In PR #393. (owner, 2026-10-07)"
     },
     {
       "id": "D2",
@@ -194,16 +205,18 @@
       "id": "D3",
       "question": "skills/codex, chatgpt, gemini, perplexity, evals.md, skill-spec.md teach v3.0 content (no MCP-14..19, enforcement planes, v3.1 persistence vocabulary). Refresh content to v3.1, or mark them as v3.0-legacy surfaces?",
       "owner": "Vincent",
-      "status": "open",
-      "note": "Verified 2026-10-07: surfaces cite no MCP IDs or persistence terms; core 161 unchanged in v3.1. Missed by the v3.1 sweep (#307). Fix = retag + short v3.1 delta block, not a rewrite."
+      "status": "decided",
+      "note": "Verified 2026-10-07: surfaces cite no MCP IDs or persistence terms; core 161 unchanged in v3.1. Missed by the v3.1 sweep (#307). Fix = retag + short v3.1 delta block, not a rewrite.",
+      "decision": "Retag the six surfaces to v3.1 and add a short v3.1 delta block. In PR #393. (owner, 2026-10-07)"
     },
     {
       "id": "D4",
       "question": "Guardian now treats an omitted act_tier as ACT-4 (breaking for callers that omit it; opt-out documented). Accept as the default for the next NEXUS release?",
       "owner": "Vincent",
-      "status": "open",
-      "note": "AIM v0.2 schema has no ACT tier; tier is caller-asserted per call. ACT-4 default only covers omission, not a false low claim. Framework-correct fix: tier bound to registered AIM, resolved by Guardian."
+      "status": "decided",
+      "note": "AIM v0.2 schema has no ACT tier; tier is caller-asserted per call. ACT-4 default only covers omission, not a false low claim. Framework-correct fix: tier bound to registered AIM, resolved by Guardian.",
+      "decision": "Keep undeclared-tier=ACT-4 as interim floor in PR #393; registry-bound ACT tiers (AIM v0.3) as a separate follow-up PR. (owner, 2026-10-07)"
     }
   ],
-  "next_step": "Watch hosted CI on PR #393; Greptile is advisory/skipped on draft. Then owner decisions D1, D3, D4."
+  "next_step": "D1 skill relocation, D3 surface retag, then gates + battery + dev receipt, mark #393 ready for review (owner merges). Then D4 follow-up PR."
 }
