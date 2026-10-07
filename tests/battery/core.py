@@ -19,9 +19,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 FIXTURES = HERE / "fixtures"
 
-# Key-shaped strings are assembled at run time so the repository never stores a
-# literal that looks like a live credential (push protection, secret scanners).
-FAKE_SECRETS = {
+# Synthetic, credential-SHAPED placeholder fills. None is a credential: each is
+# assembled at run time so the repository never stores a literal that pattern
+# scanners (push protection, gitleaks) would read as a live key.
+PLACEHOLDER_FILLS = {
     "@@FAKE_OPENAI@@": "sk-" + "live-" + "9f8e7d6c5b4a3928" + "1706f5e4d3c2b1a0",
     "@@FAKE_OPENAI_PROJ@@": "sk-" + "proj-" + "abcdefghijklmnopqrstuvwxyz" + "0123456789",
     "@@FAKE_GH_TOKEN@@": "ghp" + "_" + "abcdefghijklmnopqrstuvwxyz" + "0123456789",
@@ -43,7 +44,7 @@ def materialize(src: Path, dst: Path) -> Path:
         out = dst / rel.parent / name
         out.parent.mkdir(parents=True, exist_ok=True)
         text = p.read_text(encoding="utf-8")
-        for k, v in FAKE_SECRETS.items():
+        for k, v in PLACEHOLDER_FILLS.items():
             text = text.replace(k, v)
         out.write_text(text, encoding="utf-8")
     return dst

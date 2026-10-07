@@ -34,5 +34,5 @@ class H(BaseHTTPRequestHandler):
 import ssl, os
 srv=HTTPServer(("127.0.0.1",PORT),H)
 if os.environ.get("TLS"):
-    ctx=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER); ctx.load_cert_chain("c.pem","k.pem"); srv.socket=ctx.wrap_socket(srv.socket, server_side=True)
+    ctx=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER); ctx.minimum_version=ssl.TLSVersion.TLSv1_2; ctx.load_cert_chain("c.pem","k.pem"); srv.socket=ctx.wrap_socket(srv.socket, server_side=True)
 srv.serve_forever()
