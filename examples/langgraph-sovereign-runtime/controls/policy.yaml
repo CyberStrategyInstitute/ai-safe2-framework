@@ -1,7 +1,7 @@
-# AI SAFE² v3.0 — LangGraph Sovereign Runtime Control Registry
+# AI SAFE² v3.1 — LangGraph Sovereign Runtime Control Registry
 # All IDs verified from github.com/CyberStrategyInstitute/ai-safe2-framework
 
-framework_version: "AI SAFE² v3.0"
+framework_version: "AI SAFE² v3.1"
 package: "langgraph-sovereign-runtime"
 package_version: "1.0.0"
 test_coverage: "15/15"

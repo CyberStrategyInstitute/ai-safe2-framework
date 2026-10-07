@@ -11,9 +11,9 @@
 <div align="center">
 
 # Lovable Sovereign Runtime
-### AI SAFE2 v3.0 Defense Package for Lovable Agent mode + MCP
+### AI SAFE2 v3.1 Defense Package for Lovable Agent mode + MCP
 
-**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.1
 
 </div>
 

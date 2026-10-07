@@ -14,9 +14,9 @@
 <div align="center">
 
 # LangGraph Sovereign Runtime
-### AI SAFE² v3.0 Defense Package for LangGraph
+### AI SAFE² v3.1 Defense Package for LangGraph
 
-[![AI SAFE² v3.0](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
 [![Tests](https://img.shields.io/badge/Tests-15%2F15_passing-brightgreen?style=flat-square)](./smoke_test.py)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
 
@@ -142,7 +142,7 @@ sovereign_lg = SovereignStateGraph(engine=shared_engine)
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+*AI SAFE² v3.1 | Cyber Strategy Institute | cyberstrategyinstitute.com*
 
 <!-- AI-SAFE2-UX-FOOTER:START -->
 ---

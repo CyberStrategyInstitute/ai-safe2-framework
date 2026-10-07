@@ -1,5 +1,5 @@
 """
-safe2_guardian_component.py — AI SAFE2 v3.0 Inline DAG Node
+safe2_guardian_component.py — AI SAFE2 v3.1 Inline DAG Node
 Cyber Strategy Institute
 
 Drop this component into any Langflow flow between a data-fetching
@@ -60,7 +60,7 @@ def _scan_text(text: str) -> tuple[bool, str]:
 
 class AISAFE2GuardianComponent(Component):
     display_name = "AI SAFE2 Guardian"
-    description  = "AI SAFE2 v3.0 LF-COMP enforcement: scans DAG component output for injection before it reaches Agent nodes."
+    description  = "AI SAFE2 v3.1 LF-COMP enforcement: scans DAG component output for injection before it reaches Agent nodes."
     icon         = "shield"
     name         = "AISAFE2Guardian"
 
@@ -92,7 +92,7 @@ class AISAFE2GuardianComponent(Component):
             self.status = f"[AI SAFE2 BLOCKED] {violation_msg}"
             # Return safe placeholder — never pass injected content downstream
             blocked_msg = (
-                "[AI SAFE2 GUARDIAN] Content blocked by AI SAFE2 v3.0 LF-COMP control. "
+                "[AI SAFE2 GUARDIAN] Content blocked by AI SAFE2 v3.1 LF-COMP control. "
                 "Injection pattern detected in upstream component output. "
                 f"Violation: {violation_msg}"
             )

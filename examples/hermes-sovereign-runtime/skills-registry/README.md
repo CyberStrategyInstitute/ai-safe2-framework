@@ -1,5 +1,5 @@
 # Sovereign Skills Registry
-### Hermes Sovereign Runtime · AI SAFE² v3.0 · P2.A-C01 + P5.E-C05
+### Hermes Sovereign Runtime · AI SAFE² v3.1 · P2.A-C01 + P5.E-C05
 
 ---
 
@@ -94,4 +94,4 @@ Populate the `hermes-skills` volume with approved skills before first run.
 
 ---
 
-*Sovereign Skills Registry · Cyber Strategy Institute · AI SAFE² v3.0*
+*Sovereign Skills Registry · Cyber Strategy Institute · AI SAFE² v3.1*

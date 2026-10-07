@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AI SAFE² v3.0 — LangChain Sovereign Runtime
+# AI SAFE² v3.1 — LangChain Sovereign Runtime
 # Pass 2: Runtime Validation
 # Runs the adversarial smoke test suite and verifies audit log integrity.
 # Usage: bash validation/pass2_runtime.sh
@@ -16,7 +16,7 @@ fail() { echo -e "  ${RED}✗${NC} $1"; ((FAIL++)) || true; }
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║   AI SAFE² v3.0 — Pass 2: Runtime Validation                ║"
+echo "║   AI SAFE² v3.1 — Pass 2: Runtime Validation                ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 
 # ── 1. Full adversarial smoke test suite ─────────────────────────────────

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Pass 5: Operational Readiness
-# Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+# Hermes Sovereign Runtime (HSR) | AI SAFE² v3.1
 # Cyber Strategy Institute
 #
 # Final gate before production promotion. Validates:
@@ -35,7 +35,7 @@ check() {
 }
 
 echo ""
-echo -e "${BOLD}${CYAN}HSR Pass 5: Operational Readiness — AI SAFE2 v3.0${NC}"
+echo -e "${BOLD}${CYAN}HSR Pass 5: Operational Readiness — AI SAFE2 v3.1${NC}"
 echo ""
 
 # A: Documentation completeness

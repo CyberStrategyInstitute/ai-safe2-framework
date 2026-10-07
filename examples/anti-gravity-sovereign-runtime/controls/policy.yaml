@@ -9,7 +9,7 @@
 #   planned     - roadmap item, not yet built
 
 schema_version: "1.0"
-framework: "AI SAFE² v3.0"
+framework: "AI SAFE² v3.1"
 profile: "Antigravity 2.0 Sovereign Runtime"
 last_updated: "2026-06-09"
 maintainer: "Cyber Strategy Institute"

@@ -1,6 +1,6 @@
 """
 ai_safe2_engine.py — NEXUS Kernel
-AI SAFE2 v3.0 Sovereign Runtime Engine
+AI SAFE2 v3.1 Sovereign Runtime Engine
 Cyber Strategy Institute
 
 stdlib only. No external dependencies.

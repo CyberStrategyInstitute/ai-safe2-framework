@@ -1,4 +1,4 @@
-"""AI SAFE² v3.0 — LangChain Sovereign Runtime enforcement package."""
+"""AI SAFE² v3.1 — LangChain Sovereign Runtime enforcement package."""
 
 from enforcement.ai_safe2_engine import (
     AISAFE2Engine,

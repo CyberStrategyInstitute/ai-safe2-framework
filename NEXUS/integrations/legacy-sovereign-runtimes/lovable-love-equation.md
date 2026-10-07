@@ -4,14 +4,14 @@
 > example, not the current NEXUS SDK or Sovereign Payment Gateway contract.
 
 ## Cross-Framework Compliance Mesh
-**AI SAFE2 v3.0 | Cyber Strategy Institute**
+**AI SAFE2 v3.1 | Cyber Strategy Institute**
 
 ---
 
 ## Lovable-Specific Compliance Evidence
 
 The Lovable Sovereign Runtime produces the following evidence artifacts,
-all mapped to the 32 AI SAFE2 v3.0 compliance frameworks:
+all mapped to the 32 AI SAFE2 v3.1 compliance frameworks:
 
 | Evidence | Control | File | Framework(s) |
 |---|---|---|---|

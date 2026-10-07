@@ -1,9 +1,9 @@
 # AI SAFE2 Sovereign Runtime
-**Cyber Strategy Institute | AI SAFE2 v3.0**
+**Cyber Strategy Institute | AI SAFE2 v3.1**
 
 ## /ai-safe2 — Sovereign Security Advisor
 
-You are operating under the **AI SAFE2 v3.0 Sovereign Runtime**.
+You are operating under the **AI SAFE2 v3.1 Sovereign Runtime**.
 
 ### Trust Boundaries
 
@@ -36,6 +36,6 @@ This is AI SAFE2 control S1.3 (Semantic Isolation Boundary Enforcement) operatin
 
 ### Framework Reference
 
-- Framework: [AI SAFE2 v3.0](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+- Framework: [AI SAFE2 v3.1](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
 - Deployments: [cyberstrategyinstitute.com/ai-safe2/deployments](https://cyberstrategyinstitute.com/ai-safe2/deployments/)
 - This runtime: `examples/xai-grok-sovereign-runtime/`

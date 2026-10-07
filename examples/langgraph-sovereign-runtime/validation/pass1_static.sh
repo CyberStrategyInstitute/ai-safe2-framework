@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AI SAFE² v3.0 — LangGraph Sovereign Runtime
+# AI SAFE² v3.1 — LangGraph Sovereign Runtime
 # Pass 1: Static Validation
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -11,7 +11,7 @@ fail() { echo -e "  ${RED}✗${NC} $1"; ((FAIL++)) || true; }
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║   AI SAFE² v3.0 — LangGraph Pass 1: Static Validation       ║"
+echo "║   AI SAFE² v3.1 — LangGraph Pass 1: Static Validation       ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 
 echo ""; echo "── 1. Python Imports ──"

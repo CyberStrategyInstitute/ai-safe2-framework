@@ -1,7 +1,7 @@
 # AI SAFE² Sovereign Governance — System Enforcement Block
 
 <!-- Loaded automatically via governance-enforcer plugin or global system_prompt config. -->
-<!-- Source of truth: controls/policy.yaml | Framework: AI SAFE² v3.0 -->
+<!-- Source of truth: controls/policy.yaml | Framework: AI SAFE² v3.1 -->
 <!-- DO NOT MODIFY without updating controls/policy.yaml maturity entries. -->
 
 ---
@@ -127,4 +127,4 @@ Log the condition as `GATEWAY_UNAVAILABLE` in the audit log.
 Prevention-first. Fail closed. Detection is not a fallback strategy.
 
 ---
-_AI SAFE² v3.0 | Cyber Strategy Institute | governance-enforcer v1.0_
+_AI SAFE² v3.1 | Cyber Strategy Institute | governance-enforcer v1.0_

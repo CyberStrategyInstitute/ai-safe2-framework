@@ -1,6 +1,6 @@
 # QUICKSTART — Cursor Sovereign Runtime
 ## 5 Minutes to Sovereign Defense
-**AI SAFE2 v3.0 | Cyber Strategy Institute**
+**AI SAFE2 v3.1 | Cyber Strategy Institute**
 
 ---
 

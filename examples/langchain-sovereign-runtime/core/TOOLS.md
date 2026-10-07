@@ -1,5 +1,5 @@
 # Tool Authorization — P1.T2.5
-## AI SAFE² v3.0 Function Access Control
+## AI SAFE² v3.1 Function Access Control
 
 ---
 
@@ -76,4 +76,4 @@ containing Class-H patterns.
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | P1.T2.5 Function Access Control*
+*AI SAFE² v3.1 | Cyber Strategy Institute | P1.T2.5 Function Access Control*

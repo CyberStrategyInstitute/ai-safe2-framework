@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Pass 1: Static Configuration Review
-# Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+# Hermes Sovereign Runtime (HSR) | AI SAFE² v3.1
 # Cyber Strategy Institute
 #
 # SCOPE: File-system and configuration validation. No network calls, no
@@ -61,7 +61,7 @@ env_var_value() {
 echo ""
 echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════${NC}"
 echo -e "${BOLD}${CYAN}  HSR Pass 1: Static Configuration Review${NC}"
-echo -e "${BOLD}${CYAN}  AI SAFE² v3.0 | Cyber Strategy Institute${NC}"
+echo -e "${BOLD}${CYAN}  AI SAFE² v3.1 | Cyber Strategy Institute${NC}"
 echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════${NC}"
 echo ""
 

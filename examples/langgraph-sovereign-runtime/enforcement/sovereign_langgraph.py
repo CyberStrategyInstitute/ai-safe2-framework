@@ -1,5 +1,5 @@
 """
-AI SAFE² v3.0 — LangGraph Sovereign Enforcement Layer
+AI SAFE² v3.1 — LangGraph Sovereign Enforcement Layer
 ======================================================
 LangGraph's threat surface differs fundamentally from LangChain's.
 There is no BaseCallbackHandler. Enforcement hooks into node functions directly.
@@ -249,7 +249,7 @@ class RoutingGuard:
 
 class SovereignStateGraph:
     """
-    AI SAFE² v3.0 sovereign enforcement for LangGraph StateGraph.
+    AI SAFE² v3.1 sovereign enforcement for LangGraph StateGraph.
 
     Usage — wrap nodes before adding to graph:
         sovereign = SovereignStateGraph(act_tier=ACTTier.ACT3)

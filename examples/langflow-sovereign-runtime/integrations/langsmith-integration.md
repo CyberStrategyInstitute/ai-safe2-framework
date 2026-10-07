@@ -1,5 +1,5 @@
 # LangSmith Observability Integration
-## AI SAFE2 v3.0 + Langflow | Cyber Strategy Institute
+## AI SAFE2 v3.1 + Langflow | Cyber Strategy Institute
 
 ## AI SAFE2 + LangSmith: Complementary Evidence
 

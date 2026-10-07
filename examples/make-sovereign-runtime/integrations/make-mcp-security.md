@@ -1,5 +1,5 @@
 # Make MCP Server Security Guide
-## AI SAFE2 v3.0 | Cyber Strategy Institute
+## AI SAFE2 v3.1 | Cyber Strategy Institute
 
 ## Scope Risk Matrix (Verified from developers.make.com, June 2026)
 

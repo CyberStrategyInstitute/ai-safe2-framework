@@ -14,9 +14,9 @@
 <div align="center">
 
 # xAI/Grok Sovereign Runtime
-### AI SAFE2 v3.0 Defense Package for xAI Grok CLI + API + Multi-Agent
+### AI SAFE2 v3.1 Defense Package for xAI Grok CLI + API + Multi-Agent
 
-**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.1
 
 </div>
 
@@ -34,7 +34,7 @@
 
 Every other runtime in this series addresses one or two novel attack surfaces.
 Grok ships six — simultaneously. The table below maps each surface to the
-specific xAI capability that creates it and the AI SAFE2 v3.0 control that blocks it.
+specific xAI capability that creates it and the AI SAFE2 v3.1 control that blocks it.
 
 | Surface | xAI/Grok-Specific Threat | AI SAFE2 Control | Method |
 |---|---|---|---|
@@ -308,7 +308,7 @@ These surfaces exist but are not yet enforced by this package (documented for tr
 
 | Resource | Link |
 |---|---|
-| AI SAFE2 v3.0 Framework | [github.com/CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework) |
+| AI SAFE2 v3.1 Framework | [github.com/CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework) |
 | All Sovereign Runtimes | [cyberstrategyinstitute.com/ai-safe2/deployments](https://cyberstrategyinstitute.com/ai-safe2/deployments/) |
 | NEXUS Dashboard | [cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) |
 | Implementation Toolkit | [cyberstrategyinstitute.com/ai-safe2](https://cyberstrategyinstitute.com/ai-safe2/) |

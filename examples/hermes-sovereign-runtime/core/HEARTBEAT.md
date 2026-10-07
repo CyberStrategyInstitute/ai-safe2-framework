@@ -1,6 +1,6 @@
 # HEARTBEAT.md — Scheduled Health Check Protocol
 
-**Framework:** Hermes Sovereign Runtime · AI SAFE² v3.0 · P4 Engage & Monitor
+**Framework:** Hermes Sovereign Runtime · AI SAFE² v3.1 · P4 Engage & Monitor
 **Deploy path:** `~/.hermes/memories/004_HEARTBEAT.md`
 
 ---
@@ -68,4 +68,4 @@ operations until operator reviews.
 
 ---
 
-*HSR HEARTBEAT.md · Cyber Strategy Institute · AI SAFE² v3.0*
+*HSR HEARTBEAT.md · Cyber Strategy Institute · AI SAFE² v3.1*

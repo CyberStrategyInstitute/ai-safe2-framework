@@ -2,7 +2,7 @@ package hsr.tool_approval
 
 # =============================================================================
 # Tool Approval Policy — Hermes Sovereign Runtime
-# AI SAFE² v3.0 | Cyber Strategy Institute
+# AI SAFE² v3.1 | Cyber Strategy Institute
 #
 # Evaluated by Ishi supervisor agent via OPA sidecar.
 # Input: { tool, parameters, agent_id, alignment_score, context }
@@ -164,4 +164,4 @@ safe_tool(tool) if {
 
 policy_version := "1.0.0"
 policy_author := "Cyber Strategy Institute"
-framework := "AI SAFE² v3.0"
+framework := "AI SAFE² v3.1"

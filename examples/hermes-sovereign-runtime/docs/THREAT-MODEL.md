@@ -1,5 +1,5 @@
 # Hermes Agent Threat Model
-**Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0**
+**Hermes Sovereign Runtime (HSR) | AI SAFE² v3.1**
 **Cyber Strategy Institute**
 
 ---
@@ -202,4 +202,4 @@ Residual risk is acceptable for enterprise and government use cases when all fiv
 
 ---
 
-*Threat model version: 1.0 | AI SAFE² v3.0 | Cyber Strategy Institute*
+*Threat model version: 1.0 | AI SAFE² v3.1 | Cyber Strategy Institute*

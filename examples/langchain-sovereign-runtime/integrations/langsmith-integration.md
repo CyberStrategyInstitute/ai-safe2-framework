@@ -1,4 +1,4 @@
-# LangSmith Integration — AI SAFE² v3.0
+# LangSmith Integration — AI SAFE² v3.1
 ## Combining LangSmith Tracing with Sovereign Enforcement
 
 ---
@@ -135,4 +135,4 @@ Set keys via environment variables, not in code.
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | A2.5 Semantic Execution Trace Logging*
+*AI SAFE² v3.1 | Cyber Strategy Institute | A2.5 Semantic Execution Trace Logging*

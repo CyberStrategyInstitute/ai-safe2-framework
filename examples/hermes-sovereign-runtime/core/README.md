@@ -1,5 +1,5 @@
 # Core Governance Files
-### Hermes Sovereign Runtime · AI SAFE² v3.0
+### Hermes Sovereign Runtime · AI SAFE² v3.1
 
 These files are the semantic layer of the sovereign runtime.
 They load into Hermes' memory system and establish governance directives
@@ -87,4 +87,4 @@ If you need to customize:
 
 ---
 
-*Core Governance Files · Cyber Strategy Institute · AI SAFE² v3.0*
+*Core Governance Files · Cyber Strategy Institute · AI SAFE² v3.1*

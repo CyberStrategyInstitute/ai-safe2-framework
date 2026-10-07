@@ -7,4 +7,4 @@
 - `/ai-safe2 mcp-audit` — List approved MCP servers and their command hashes
 
 ## Framework
-- AI SAFE2 v3.0: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+- AI SAFE2 v3.1: https://github.com/CyberStrategyInstitute/ai-safe2-framework

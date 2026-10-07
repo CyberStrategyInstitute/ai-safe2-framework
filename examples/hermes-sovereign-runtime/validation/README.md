@@ -1,5 +1,5 @@
 # HSR Validation Suite — 5-Pass QA
-### Hermes Sovereign Runtime · AI SAFE² v3.0
+### Hermes Sovereign Runtime · AI SAFE² v3.1
 
 ---
 
@@ -142,4 +142,4 @@ python3 monitoring/memory_auditor.py --watch &  # Continuous memory audit
 
 ---
 
-*HSR Validation Suite · Cyber Strategy Institute · AI SAFE² v3.0*
+*HSR Validation Suite · Cyber Strategy Institute · AI SAFE² v3.1*

@@ -44,6 +44,14 @@
       "reason": "Gateway v3.0 component: its runtime FRAMEWORK_REF and docstrings identify the framework it was built and assessed against. Gateway evidence keeps v3.0 identity until a separately tested gateway release (gateway/README.md, Version and Conformance Boundary; AGENTS.md version model)."
     },
     {
+      "glob": "examples/openclaw/gateway/**",
+      "reason": "OpenClaw copy of the Gateway v3.0 component; same evidence-identity rule as gateway/main.py."
+    },
+    {
+      "glob": "examples/hermes-sovereign-runtime/gateway/**",
+      "reason": "Hermes copy of the Gateway v3.0 component; same evidence-identity rule as gateway/main.py."
+    },
+    {
       "glob": "NEXUS/schemas/aim-v0.2.schema.json",
       "reason": "Published, frozen AIM v0.2 schema; v0.3 is the current schema."
     },

@@ -12,9 +12,9 @@
 <!-- description: Closes four critical audit findings identified in the Hermes agent. -->
 
 # Hermes Sovereign Runtime (HSR)
-### AI SAFE² v3.0 Defense Package for NousResearch/hermes-agent
+### AI SAFE² v3.1 Defense Package for NousResearch/hermes-agent
 
-**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.1
 
 ---
 
@@ -266,7 +266,7 @@ Hermes Agent's self-improving skill loop and multi-platform gateway require cont
 
 ## Built On
 
-- **AI SAFE² Framework v3.0** — Cyber Strategy Institute
+- **AI SAFE² Framework v3.1** — Cyber Strategy Institute
 - **Hermes Agent** — NousResearch (MIT License)
 - **Love Equation alignment dynamics** — Brian Roemmele
 - **NEXUS-A2A v0.2** — Non-repudiable agent-to-agent attestation

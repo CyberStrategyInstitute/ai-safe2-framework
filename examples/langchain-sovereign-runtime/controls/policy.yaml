@@ -1,8 +1,8 @@
-# AI SAFE² v3.0 — LangChain Sovereign Runtime Control Registry
+# AI SAFE² v3.1 — LangChain Sovereign Runtime Control Registry
 # Machine-readable. Used by CI/CD gate to verify coverage.
 # All control IDs verified from github.com/CyberStrategyInstitute/ai-safe2-framework
 
-framework_version: "AI SAFE² v3.0"
+framework_version: "AI SAFE² v3.1"
 package: "langchain-sovereign-runtime"
 package_version: "1.0.0"
 test_coverage: "15/15"

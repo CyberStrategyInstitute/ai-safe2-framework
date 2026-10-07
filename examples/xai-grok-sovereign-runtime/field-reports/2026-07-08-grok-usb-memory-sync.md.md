@@ -4,7 +4,7 @@
 **From:** Daniel J. Comp · Carbon Steward · Intelligent Netware / Scotomaville  
 **Date:** 2026-07-08  
 **Machine:** `arnie_garwis` · Lenovo IdeaPad L340-15IWL (sandbox / polishing grounds)  
-**Framework:** [AI SAFE² v3.0](https://github.com/CyberStrategyInstitute/ai-safe2-framework) · `examples/xai-grok-sovereign-runtime`  
+**Framework:** [AI SAFE² v3.1](https://github.com/CyberStrategyInstitute/ai-safe2-framework) · `examples/xai-grok-sovereign-runtime`  
 **Governing context:** Initium Principia MA5 Helical Charter v6.3 · Codex v3.0  
 
 ---

@@ -17,8 +17,8 @@ The `mcp-score`, `mcp-scan` and `mcp-safe-wrap` code that used to live here was 
 pre-migration copy. It now ships as `aisafe2_mcp_tools` inside the `ai-safe2`
 package and is reached through `safe2`. The copy in this folder was removed on
 2026-10-07 because it still contained the remote scorer that could be gamed by
-self-attestation (fixed in the packaged toolkit) and cited retired v3.0 control
-numbers. Do not install from this path.
+self-attestation (fixed in the packaged toolkit) and cited retired control
+numbers from before the v3.1 MCP profile. Do not install from this path.
 
 | You want to | Run |
 |---|---|

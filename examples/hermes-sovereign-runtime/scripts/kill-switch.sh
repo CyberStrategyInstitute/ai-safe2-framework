@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # HSR Kill Switch — Immediate Execution Suspension
-# AI SAFE² v3.0 · P3.F-C05
+# AI SAFE² v3.1 · P3.F-C05
 # Cyber Strategy Institute
 #
 # Suspends ALL Hermes tool execution in under 1 second.
@@ -28,7 +28,7 @@ NC='\033[0m'
 print_banner() {
   echo -e "${RED}"
   echo "╔══════════════════════════════════════════════════════════╗"
-  echo "║         HSR KILL SWITCH — AI SAFE² v3.0                  ║"
+  echo "║         HSR KILL SWITCH — AI SAFE² v3.1                  ║"
   echo "║         Cyber Strategy Institute                         ║"
   echo "╚══════════════════════════════════════════════════════════╝"
   echo -e "${NC}"

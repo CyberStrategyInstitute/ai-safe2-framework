@@ -1,6 +1,6 @@
 """
 sovereign_lovable.py — Lovable Enforcement Layer
-AI SAFE2 v3.0 Sovereign Runtime
+AI SAFE2 v3.1 Sovereign Runtime
 Cyber Strategy Institute
 
 Six enforcement surfaces confirmed against live Lovable documentation:
@@ -176,7 +176,7 @@ _SUBAGENT_SENSITIVE_PATHS: List[str] = [
 
 class LovableSovereignRuntime:
     """
-    AI SAFE2 v3.0 Sovereign Runtime for Lovable.
+    AI SAFE2 v3.1 Sovereign Runtime for Lovable.
 
     Lovable doesn't just suggest code — it writes, deploys, and executes
     against a live database and production environment on your behalf.

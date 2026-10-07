@@ -13,9 +13,9 @@
 <div align="center">
 
 # Cursor Sovereign Runtime
-### AI SAFE2 v3.0 Defense Package for Cursor (11+ CVEs, 8 Surfaces, 4 Architectural Attack Patterns)
+### AI SAFE2 v3.1 Defense Package for Cursor (11+ CVEs, 8 Surfaces, 4 Architectural Attack Patterns)
 
-**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.1
 
 </div>
 

@@ -1,5 +1,5 @@
 # Memory Governance Policy — S1.5
-## AI SAFE² v3.0 Memory Boundary Controls
+## AI SAFE² v3.1 Memory Boundary Controls
 
 ---
 
@@ -64,4 +64,4 @@ clean_state = engine.rollback_state()
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | S1.5 Memory Governance*
+*AI SAFE² v3.1 | Cyber Strategy Institute | S1.5 Memory Governance*

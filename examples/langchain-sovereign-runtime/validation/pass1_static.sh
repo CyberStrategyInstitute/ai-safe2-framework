@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AI SAFE² v3.0 — LangChain Sovereign Runtime
+# AI SAFE² v3.1 — LangChain Sovereign Runtime
 # Pass 1: Static Validation
 # Verifies: imports, config completeness, policy.yaml control coverage
 # Usage: bash validation/pass1_static.sh
@@ -17,7 +17,7 @@ warn() { echo -e "  ${YELLOW}!${NC} $1"; }
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║   AI SAFE² v3.0 — Pass 1: Static Validation                 ║"
+echo "║   AI SAFE² v3.1 — Pass 1: Static Validation                 ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 
 # ── 1. Python imports ─────────────────────────────────────────────────────

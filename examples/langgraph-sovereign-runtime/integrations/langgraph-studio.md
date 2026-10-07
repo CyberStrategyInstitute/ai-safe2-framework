@@ -1,4 +1,4 @@
-# LangGraph Studio Notes — AI SAFE² v3.0
+# LangGraph Studio Notes — AI SAFE² v3.1
 
 ## Local Deployment (Standard)
 

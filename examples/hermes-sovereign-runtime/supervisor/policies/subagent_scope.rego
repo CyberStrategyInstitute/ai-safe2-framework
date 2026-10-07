@@ -2,7 +2,7 @@ package hsr.subagent_scope
 
 # =============================================================================
 # Subagent Scope & Capability Inheritance Policy — Hermes Sovereign Runtime
-# AI SAFE² v3.0 | Cyber Strategy Institute
+# AI SAFE² v3.1 | Cyber Strategy Institute
 #
 # Hermes supports delegated subagent orchestration. Each subagent spawn is a
 # capability delegation event. This policy enforces:
@@ -131,6 +131,6 @@ denied_tools[tool] if {
 # ---------------------------------------------------------------------------
 
 policy_version := "1.0.0"
-framework := "AI SAFE² v3.0"
+framework := "AI SAFE² v3.1"
 pillar := "P1-Sanitize-Isolate"
 cross_pillar := "CP.9-Agent-Replication-Governance"

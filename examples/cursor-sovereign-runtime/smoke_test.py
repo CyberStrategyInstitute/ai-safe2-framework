@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 smoke_test.py — Cursor Sovereign Runtime
-AI SAFE2 v3.0 Adversarial Test Suite
+AI SAFE2 v3.1 Adversarial Test Suite
 Cyber Strategy Institute
 
 21 tests across 3 tiers:
@@ -376,7 +376,7 @@ dist/
 def main():
     print("=" * 60)
     print("  AI SAFE2 Cursor Sovereign Runtime — Smoke Test")
-    print("  Cyber Strategy Institute | AI SAFE2 v3.0")
+    print("  Cyber Strategy Institute | AI SAFE2 v3.1")
     print("=" * 60)
 
     tier1()

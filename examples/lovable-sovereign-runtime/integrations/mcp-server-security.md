@@ -1,5 +1,5 @@
 # Lovable MCP Server Security
-## AI SAFE2 v3.0 Integration Guide
+## AI SAFE2 v3.1 Integration Guide
 **Cyber Strategy Institute**
 
 ---

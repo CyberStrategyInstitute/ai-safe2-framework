@@ -1,9 +1,9 @@
 # controls/policy.yaml
-# AI SAFE2 v3.0 Control Registry — Lovable Sovereign Runtime
+# AI SAFE2 v3.1 Control Registry — Lovable Sovereign Runtime
 # Cyber Strategy Institute
 #
 # All surfaces and control IDs verified against:
-#   - live AI SAFE2 v3.0 framework (raw.githubusercontent.com)
+#   - live AI SAFE2 v3.1 framework (raw.githubusercontent.com)
 #   - live Lovable documentation (docs.lovable.dev)
 
 runtime:
@@ -222,7 +222,7 @@ surfaces:
     blocked_path_patterns:
       - .env, .env.local, .env.production, .env.staging
       - id_rsa, id_ed25519, id_ecdsa
-      - *.pem, *.key, *.p12, *.pfx
+      - "*.pem, *.key, *.p12, *.pfx"
       - service_account.json, credentials.json
       - .aws/credentials, .aws/config
       - secrets.yaml, secrets.json

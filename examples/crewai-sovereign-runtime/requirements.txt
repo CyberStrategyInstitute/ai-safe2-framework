@@ -1,4 +1,4 @@
-# AI SAFE² v3.0 — CrewAI Sovereign Runtime
+# AI SAFE² v3.1 — CrewAI Sovereign Runtime
 # Enforcement engine has ZERO external dependencies (stdlib only).
 
 # CrewAI — required for production use with real Crew/Agent/Task objects

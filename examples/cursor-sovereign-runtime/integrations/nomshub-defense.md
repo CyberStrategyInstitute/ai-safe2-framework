@@ -1,5 +1,5 @@
 # NomShub + CVE-2026-26268 Defense Guide
-## AI SAFE2 v3.0 Kill Chain Analysis
+## AI SAFE2 v3.1 Kill Chain Analysis
 **Cyber Strategy Institute**
 
 ---

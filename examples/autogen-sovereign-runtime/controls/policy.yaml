@@ -1,8 +1,8 @@
-# AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime Control Registry
+# AI SAFE² v3.1 — AutoGen 0.4 Sovereign Runtime Control Registry
 # AutoGen 0.4 (autogen_agentchat) only. 0.2 = redirect to upgrade.
 # All IDs verified from github.com/CyberStrategyInstitute/ai-safe2-framework
 
-framework_version: "AI SAFE² v3.0"
+framework_version: "AI SAFE² v3.1"
 package: "autogen-sovereign-runtime"
 package_version: "1.0.0"
 autogen_version: "0.4.x (autogen_agentchat)"

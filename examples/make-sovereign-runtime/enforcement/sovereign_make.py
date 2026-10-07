@@ -1,6 +1,6 @@
 """
 sovereign_make.py — Make.com Enforcement Layer
-AI SAFE2 v3.0 Sovereign Runtime
+AI SAFE2 v3.1 Sovereign Runtime
 Cyber Strategy Institute
 
 Seven enforcement surfaces unique to Make.com visual automation platform.
@@ -218,7 +218,7 @@ _SENSITIVE_DS_KEY_PATTERNS: List[str] = [
 
 class MakeSovereignRuntime:
     """
-    AI SAFE2 v3.0 Sovereign Runtime for Make.com.
+    AI SAFE2 v3.1 Sovereign Runtime for Make.com.
 
     Make is a visual no-code canvas where automation logic is built by
     connecting modules in sequence. AI Agents live inside this canvas
