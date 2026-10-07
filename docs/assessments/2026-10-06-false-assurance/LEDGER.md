@@ -177,3 +177,33 @@ Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
   CodeQL reports no new alerts.
 
 **Next:** owner decisions D1, D3, D4. Greptile review once the PR is ready-for-review.
+
+## 2026-10-07 E11: Owner decisions implemented; PR #393 ready for owner
+
+- `c59cc40` **D1:** the canonical skill moved to `skills/ai-safe2-secure-build-copilot/`
+  and gates APPROVE under `--strict`. No `SKILL.md` redirect was left at `skills/`,
+  because CI gates the directory of any changed `SKILL.md`.
+- `8c71410` **D3:** six surfaces retagged to v3.1, with a v3.1 delta and Eval 11.
+  - `21a8333`: the hosted trust gate blocked the Codex package because it had no
+    `SKILL-CARD.md`, a gap that predates this PR. The card was added and validates at 100%.
+- `e0637f7` CI: `ci.yml` had the repository default token scope and is now
+  `contents: read`. `opa.yml`'s checkout is SHA-pinned.
+- `98598ed` **Harness defect (mine):** fixed ports let a stale branch knowledge server answer
+  for main. The `before-83de4a8-harness-bfe324b` snapshot recorded a false PASS for
+  main's HTTP case. Ports are now kernel-assigned and checked, and an occupied port
+  makes the case NOT_RUN. That snapshot is marked invalid in STATE.
+- **Final, same harness:**
+
+  | | PASS | FAIL | NOT_RUN |
+  |---|---|---|---|
+  | main | 60 | 65 | 1 |
+  | branch `21a8333` | 126 | 0 | 0 |
+
+  62 cases red→green; 0 regressions.
+- **Red/green:** all 13 new test files fail on main and pass here (`receipt/evidence/red-green.md`).
+- **Gates:** 30/30. Hosted CI: 39 success, 2 advisory skips, CodeQL no new alerts.
+- **Receipt** (`safe2 dev`): integrity valid, `review_required`. 23 of 27 evidence items
+  are supported; human, codeowner and security review and the release decision belong to the owner.
+- **D4:** the interim floor is in #393. Registry-bound tiers come as a follow-up PR.
+
+**Next:** the owner merges #393. Then the D4 follow-up PR.

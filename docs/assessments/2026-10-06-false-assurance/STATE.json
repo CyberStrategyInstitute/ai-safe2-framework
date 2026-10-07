@@ -5,7 +5,7 @@
   "base": "83de4a8",
   "owner": "Vincent Sullivan",
   "updated": "2026-10-07",
-  "last_pushed_commit": "09d3f15",
+  "last_pushed_commit": "21a8333",
   "modules": {
     "skill-gate": {
       "status": "done",
@@ -98,11 +98,12 @@
       "commit": "3353be4"
     },
     "full-gates+pr": {
-      "status": "in_review",
-      "gates": "30/30 PASS at bfe324b (local)",
-      "pr": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/393",
-      "pr_state": "draft",
-      "how": "gh api -X POST repos/{owner}/{repo}/pulls (REST). gh pr create fails: GraphQL is blocked in Claude Code sessions; gh auth status falsely reports the proxied token invalid."
+      "status": "ready_for_owner",
+      "revision": "21a8333",
+      "gates": "30/30 PASS (98598ed; 21a8333 adds only Codex SKILL-CARD.md)",
+      "hosted_ci": "39 success, 2 advisory skipped, CodeQL no new alerts",
+      "receipt": "receipt/development-receipt.json: review_required (23/27 supported; human, codeowner, security review and release decision outstanding)",
+      "pr": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/393"
     },
     "nexus-memory": {
       "status": "done",
@@ -134,14 +135,28 @@
       "commit": "b24d040"
     },
     "skill-relocation": {
-      "status": "in_progress"
+      "status": "done",
+      "commit": "c59cc40"
     },
     "skill-surfaces-v31": {
-      "status": "todo"
+      "status": "done",
+      "commit": "8c71410",
+      "followup": "21a8333 (Codex SKILL-CARD)"
     },
     "aim-bound-act-tier": {
       "status": "todo",
       "note": "separate PR after #393"
+    },
+    "ci-least-privilege": {
+      "status": "done",
+      "commit": "e0637f7"
+    },
+    "battery-port-isolation": {
+      "status": "done",
+      "commit": "98598ed",
+      "findings": [
+        "fixed ports let a stale branch server answer for main (before-83de4a8-harness-bfe324b MCP HTTP case invalid)"
+      ]
     }
   },
   "snapshots": [
@@ -173,7 +188,8 @@
       "pass": 61,
       "fail": 60,
       "not_run": 1,
-      "info": 1
+      "info": 1,
+      "invalid": "MCP 'knowledge server HTTP' PASS was a stale branch server answering on fixed port 9790; superseded by harness 98598ed"
     },
     {
       "label": "after",
@@ -184,6 +200,26 @@
       "fail": 0,
       "not_run": 0,
       "info": 1
+    },
+    {
+      "label": "before",
+      "revision": "83de4a8",
+      "harness": "98598ed",
+      "path": "snapshots/before-83de4a8-harness-98598ed",
+      "pass": 60,
+      "fail": 65,
+      "not_run": 1,
+      "info": 0
+    },
+    {
+      "label": "after",
+      "revision": "21a8333",
+      "harness": "98598ed",
+      "path": "snapshots/after-21a8333",
+      "pass": 126,
+      "fail": 0,
+      "not_run": 0,
+      "info": 0
     }
   ],
   "open_decisions": [
@@ -218,5 +254,5 @@
       "decision": "Keep undeclared-tier=ACT-4 as interim floor in PR #393; registry-bound ACT tiers (AIM v0.3) as a separate follow-up PR. (owner, 2026-10-07)"
     }
   ],
-  "next_step": "D1 skill relocation, D3 surface retag, then gates + battery + dev receipt, mark #393 ready for review (owner merges). Then D4 follow-up PR."
+  "next_step": "Owner reviews and merges PR #393. Then D4 follow-up PR (registry-bound ACT tiers), then publication (D2)."
 }
