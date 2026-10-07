@@ -207,3 +207,18 @@ Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
 - **D4:** the interim floor is in #393. Registry-bound tiers come as a follow-up PR.
 
 **Next:** the owner merges #393. Then the D4 follow-up PR.
+
+## 2026-10-07 E12: PR #393 ready for review
+
+- Marked ready via the CCR route; the PR body was replaced with `PR_DESCRIPTION.md`.
+- Hosted CI on head: every deterministic check passed. The "Decision evidence" run cancelled
+  by the ready_for_review event was superseded by a successful run.
+- **AI reviewers, recorded rather than assumed:**
+  - Greptile posted no review; its advisory status check passes by design.
+  - PR-Agent's advisory check failed: no substantive review was published by its model
+    provider.
+  - Neither counts as approval or as a finding. The receipt already lists both as unavailable.
+- Both CodeQL review threads from the first run are resolved (fixed in `e91ee9a`).
+- GitHub reports the PR `mergeable`, state `unstable` because the advisory check is red.
+
+**Next:** the owner reviews and merges. Then the D4 follow-up PR.

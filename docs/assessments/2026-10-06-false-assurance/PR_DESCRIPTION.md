@@ -91,7 +91,11 @@ Each of the 13 new test files was run against `main`'s code and then against thi
   - OPA 0.65.0 and 1.4.2
   - ruff, semgrep, and gitleaks across full history
   - repo UX and v3.1 consistency checks
-- **Hosted CI at `21a8333`:** 39 checks succeed. 2 advisory checks were skipped because the PR was a draft. CodeQL reports no new alerts.
+- **Hosted CI:** every deterministic check passes; at `21a8333`, 39 succeeded and CodeQL reported no new alerts. Both CodeQL review threads from the first run were fixed in `e91ee9a` and are resolved.
+- **AI reviewers (advisory, recorded per AGENTS.md §4.6):**
+  - **Greptile:** did not post a review on this PR. Its status check passes because it is advisory.
+  - **PR-Agent:** the "Advisory availability" check fails with "did not publish a substantive review": no review was produced by its model provider. Neither is an approval or a finding.
+  - The PR is `mergeable` with this advisory check red.
 - **Development receipt** (`receipt/development-receipt.json`): `safe2 dev verify` reports integrity valid. Status is **`review_required`**: 23 of 27 required evidence items are supported. The four open items are human review, codeowner review, specialist security review and the release decision. Those belong to the owner.
 - **Self-assessment boundary (AGENTS.md §4.2):** none of this is independent validation.
 

@@ -103,7 +103,9 @@
       "gates": "30/30 PASS (98598ed; 21a8333 adds only Codex SKILL-CARD.md)",
       "hosted_ci": "39 success, 2 advisory skipped, CodeQL no new alerts",
       "receipt": "receipt/development-receipt.json: review_required (23/27 supported; human, codeowner, security review and release decision outstanding)",
-      "pr": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/393"
+      "pr": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/393",
+      "review_providers": "Greptile: no review posted (advisory status passes). PR-Agent: advisory check failed, no substantive review published. CodeQL threads resolved.",
+      "pr_state": "ready_for_review, mergeable (state unstable: advisory PR-Agent check red)"
     },
     "nexus-memory": {
       "status": "done",
