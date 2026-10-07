@@ -1,0 +1,626 @@
+.github/ISSUE_TEMPLATE/bug_report.yml:85: [STALE_LABEL] label: AI SAFE2 v3.0 Impact (if applicable)
+.github/ISSUE_TEMPLATE/feature_request.yml:52: [STALE_LABEL] label: AI SAFE2 v3.0 Control Mapping
+00-cross-pillar/unbiased-ai/examples/vendor-attestation-sample.md:5: [STALE_LABEL] UAS v1.0 | AI SAFE² v3.0 | ACT Tier: ACT-3
+NEXUS/CONTRIBUTING.md:84: [STALE_LABEL] 4. For specification changes: AI SAFE2 v3.0 control mapping in PR description
+NEXUS/compliance/scoring/nexus-score.py:46: [STALE_LABEL] Each check maps to a SAFE2 v3.0 control.
+NEXUS/compliance/scoring/nexus-score.py:113: [STALE_LABEL] Score an AIM against AI SAFE2 v3.0 requirements.
+NEXUS/compliance/scoring/nexus-score.py:222: [STALE_LABEL] # AAF estimation (AI SAFE2 v3.0 Section 8)
+NEXUS/compliance/scoring/nexus-score.py:245: [STALE_LABEL] Reference: AI SAFE2 v3.0 Section 8
+NEXUS/compliance/scoring/nexus-score.py:280: [STALE_LABEL] print(f"NEXUS-A2A / AI SAFE2 v3.0 Compliance Report")
+NEXUS/compliance/scoring/nexus-score.py:328: [STALE_LABEL] Maps to the eight ACS-derived improvements and the SAFE2 v3.0 gap closures.
+NEXUS/docker/docker-compose.yml:2: [STALE_LABEL] # Cyber Strategy Institute | NEXUS-A2A v0.3 | AI SAFE2 v3.0
+NEXUS/governance/GOVERNANCE.md:80: [STALE_LABEL] - The AI SAFE2 v3.0 compliance mapping matrix
+NEXUS/governance/GOVERNANCE.md:96: [STALE_LABEL] - AI SAFE2 v3.0 control mapping for any new security requirement
+NEXUS/integrations/legacy-sovereign-runtimes/NEXUS-mesh.md:7: [STALE_LABEL] ## AI SAFE² v3.0 Multi-Framework Sovereign Architecture
+NEXUS/integrations/legacy-sovereign-runtimes/NEXUS-mesh.md:186: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | NEXUS Mesh Architecture*
+NEXUS/integrations/legacy-sovereign-runtimes/cursor-love-equation.md:6: [STALE_LABEL] ## AI SAFE2 v3.0 | Cyber Strategy Institute
+NEXUS/integrations/legacy-sovereign-runtimes/langflow-love-equation.md:6: [STALE_LABEL] ## AI SAFE2 v3.0 | Cyber Strategy Institute
+NEXUS/integrations/legacy-sovereign-runtimes/lovable-love-equation.md:7: [STALE_LABEL] **AI SAFE2 v3.0 | Cyber Strategy Institute**
+NEXUS/integrations/legacy-sovereign-runtimes/lovable-love-equation.md:14: [STALE_LABEL] all mapped to the 32 AI SAFE2 v3.0 compliance frameworks:
+NEXUS/integrations/legacy-sovereign-runtimes/make-love-equation.md:6: [STALE_LABEL] ## AI SAFE2 v3.0 | Cyber Strategy Institute
+NEXUS/integrations/legacy-sovereign-runtimes/xai-grok-love-equation.md:7: [STALE_LABEL] **AI SAFE2 v3.0 | Cyber Strategy Institute**
+NEXUS/integrations/legacy-sovereign-runtimes/xai-grok-love-equation.md:13: [STALE_LABEL] The Love Equation is the AI SAFE2 v3.0 scoring mechanism (E5.1) that
+NEXUS/sdk/python/nexus_sdk/agbom.py:40: [STALE_LABEL] AI SAFE2 v3.0: A2.3, A2.5, T3.1, T3.3 (supply chain security)
+NEXUS/sdk/python/nexus_sdk/bridges/__init__.py:130: [STALE_LABEL] AI SAFE2 v3.0: S1.3, F3.1, CP.4, CP.5.MCP-7
+NEXUS/sdk/python/nexus_sdk/cael.py:27: [STALE_LABEL] """NEXUS L5 canonical performatives (APEM Section 9, AI SAFE2 v3.0)."""
+NEXUS/sdk/python/nexus_sdk/guardian.py:32: [STALE_LABEL] AI SAFE2 v3.0: S1.5, A2.5, F3.1, M4.4, CP.4, CP.5
+NEXUS/sdk/python/nexus_sdk/otel.py:29: [STALE_LABEL] AI SAFE2 v3.0: A2.5, A2.6, CP.10 (HEAR audit requirement)
+NEXUS/sdk/python/tests/test_nexus_complete.py:22: [STALE_LABEL] TestSAFE2Compliance - AI SAFE2 v3.0 alignment checks
+NEXUS/sdk/python/tests/test_nexus_complete.py:694: [STALE_LABEL] # ── SAFE2 v3.0 Compliance Tests ───────────────────────────────────────────────
+NEXUS/sdk/python/tests/test_nexus_complete.py:698: [STALE_LABEL] AI SAFE2 v3.0 alignment validation.
+NEXUS/sdk/python/tests/test_nexus_complete.py:699: [STALE_LABEL] Each test maps to a specific SAFE2 v3.0 control.
+NEXUS/sdk/python/tests/test_nexus_complete.py:797: [STALE_LABEL] print("  - SAFE2 v3.0 controls: TestSAFE2Compliance")
+aisafe2_mcp_tools/scan/__main__.py:24: [STALE_LABEL] mcp-scan — AI SAFE2 v3.0 CP.5.MCP Static Code Analysis
+aisafe2_mcp_tools/scan/dep_checker.py:206: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-3 requires registry provenance verification."
+aisafe2_mcp_tools/scan/findings.py:92: [STALE_LABEL] cp5_control: AI SAFE2 v3.0 CP.5.MCP control reference (e.g., "MCP-1")
+aisafe2_mcp_tools/scan/fixes/CTI-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation)
+aisafe2_mcp_tools/scan/fixes/CTI-001.template:2: [MCP_NAME] MCP-9 (Context-Tool Isolation); v3.1 name is 'Secret Boundary'
+aisafe2_mcp_tools/scan/fixes/CTI-001.template:42: [STALE_LABEL] # Per AI SAFE2 v3.0 CP.5.MCP-9, the Agentic Control Plane (CP.4) MUST enforce
+aisafe2_mcp_tools/scan/fixes/CTI-001.template:46: [STALE_LABEL] # Full specification: AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation)
+aisafe2_mcp_tools/scan/fixes/CTI-001.template:46: [MCP_NAME] MCP-9 (Context-Tool Isolation); v3.1 name is 'Secret Boundary'
+aisafe2_mcp_tools/scan/fixes/INJ-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-2
+aisafe2_mcp_tools/scan/fixes/LOG-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-5
+aisafe2_mcp_tools/scan/fixes/LOG-001.template:21: [STALE_LABEL] # Minimum required fields per AI SAFE2 v3.0 CP.5.MCP-5:
+aisafe2_mcp_tools/scan/fixes/RCE-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-30623, CVE-2026-30615
+aisafe2_mcp_tools/scan/fixes/RCE-002.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-30623
+aisafe2_mcp_tools/scan/fixes/RCE-003.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1
+aisafe2_mcp_tools/scan/fixes/RCE-004.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2025-68145
+aisafe2_mcp_tools/scan/fixes/RCE-005.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2025-68143
+aisafe2_mcp_tools/scan/fixes/RCE-006.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-39884
+aisafe2_mcp_tools/scan/fixes/SEC-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-6
+aisafe2_mcp_tools/scan/fixes/STP-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling)
+aisafe2_mcp_tools/scan/fixes/STP-001.template:2: [MCP_NAME] MCP-11 (Schema Temporal Profiling); v3.1 name is 'Catalog Provenance'
+aisafe2_mcp_tools/scan/fixes/STP-001.template:65: [STALE_LABEL] # Full specification: AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling)
+aisafe2_mcp_tools/scan/fixes/STP-001.template:65: [MCP_NAME] MCP-11 (Schema Temporal Profiling); v3.1 name is 'Catalog Provenance'
+aisafe2_mcp_tools/scan/pattern_scanner.py:256: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-2.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:269: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-3.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:283: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-6.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:297: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-8.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:301: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-8 (Session Economics).",
+aisafe2_mcp_tools/scan/pattern_scanner.py:301: [MCP_NAME] MCP-8 (Session Economics); v3.1 name is 'Economic Ceiling'
+aisafe2_mcp_tools/scan/pattern_scanner.py:309: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-5.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:323: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-5.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:341: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-10.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:357: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-11.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:363: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling).",
+aisafe2_mcp_tools/scan/pattern_scanner.py:363: [MCP_NAME] MCP-11 (Schema Temporal Profiling); v3.1 name is 'Catalog Provenance'
+aisafe2_mcp_tools/scan/pattern_scanner.py:379: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-12.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:384: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-12 (Swarm C2 Detection Controls).",
+aisafe2_mcp_tools/scan/pattern_scanner.py:384: [MCP_NAME] MCP-12 (Swarm C2 Detection Controls); v3.1 name is 'Principal-Scoped State'
+aisafe2_mcp_tools/scan/pattern_scanner.py:410: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-3.",
+aisafe2_mcp_tools/scan/pattern_scanner.py:673: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-9."
+aisafe2_mcp_tools/scan/pattern_scanner.py:680: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation) and fixes/CTI-001.template."
+aisafe2_mcp_tools/scan/pattern_scanner.py:680: [MCP_NAME] MCP-9 (Context-Tool Isolation); v3.1 name is 'Secret Boundary'
+aisafe2_mcp_tools/scan/reporter.py:83: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP gaps: " + ", ".join(sorted({f.cp5_control for f in findings})),
+aisafe2_mcp_tools/scan/reporter.py:162: [STALE_LABEL] <h1>mcp-scan — AI SAFE2 v3.0 CP.5.MCP Static Analysis</h1>
+aisafe2_mcp_tools/scan/reporter.py:180: [STALE_LABEL] AI SAFE2 v3.0 | Cyber Strategy Institute |
+aisafe2_mcp_tools/score/__main__.py:58: [STALE_LABEL] mcp-score — AI SAFE2 v3.0 CP.5.MCP Remote Security Assessment
+aisafe2_mcp_tools/score/assessor.py:4: [STALE_LABEL] Scores any MCP HTTP server against AI SAFE2 v3.0 CP.5.MCP controls.
+aisafe2_mcp_tools/score/assessor.py:80: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-7. "
+aisafe2_mcp_tools/score/assessor.py:86: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6. "
+aisafe2_mcp_tools/score/assessor.py:92: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-2."
+aisafe2_mcp_tools/score/assessor.py:97: [STALE_LABEL] "CyberArk FSP research (April 2026). See AI SAFE2 v3.0 CP.5.MCP-2."
+aisafe2_mcp_tools/score/assessor.py:102: [STALE_LABEL] "Remove Server header. See AI SAFE2 v3.0 CP.5.MCP-6."
+aisafe2_mcp_tools/score/assessor.py:108: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6."
+aisafe2_mcp_tools/score/assessor.py:113: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-4 and CVE-2025-6515."
+aisafe2_mcp_tools/score/assessor.py:118: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6 and CVE-2026-26118."
+aisafe2_mcp_tools/score/assessor.py:127: [STALE_LABEL] return "See AI SAFE2 v3.0 CP.5.MCP documentation."
+aisafe2_mcp_tools/score/assessor.py:504: [STALE_LABEL] "local dev). AI SAFE2 v3.0 CP.5.MCP-6."
+aisafe2_mcp_tools/score/auth_checker.py:3: [MCP_NAME] MCP-7 (Zero-Trust Client Configuration); v3.1 name is 'Trust Establishment'
+aisafe2_mcp_tools/score/auth_checker.py:24: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-7. "
+aisafe2_mcp_tools/score/badge.py:142: [STALE_LABEL] "framework": "AI SAFE2 v3.0 CP.5.MCP",
+aisafe2_mcp_tools/score/header_checker.py:29: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6."
+aisafe2_mcp_tools/score/reporter.py:348: [STALE_LABEL] <p>AI SAFE2 v3.0 | Cyber Strategy Institute |
+aisafe2_mcp_tools/score/schema_scanner.py:28: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-2."
+aisafe2_mcp_tools/score/schema_scanner.py:34: [STALE_LABEL] "CyberArk FSP research April 2026. See AI SAFE2 v3.0 CP.5.MCP-2."
+aisafe2_mcp_tools/score/ssrf_detector.py:26: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6 and CVE-2026-26118."
+aisafe2_mcp_tools/shared/patterns.py:5: [STALE_LABEL] Pattern coverage aligns with AI SAFE2 v3.0 CP.5.MCP-2 (Output Sanitization)
+aisafe2_mcp_tools/shared/patterns.py:5: [MCP_NAME] MCP-2 (Output Sanitization); v3.1 name is 'Return-Path Content Sanitization'
+aisafe2_mcp_tools/shared/patterns.py:6: [MCP_NAME] MCP-9 (Context–Tool Isolation); v3.1 name is 'Secret Boundary'
+aisafe2_mcp_tools/wrap/__main__.py:12: [STALE_LABEL] mcp-safe-wrap — AI SAFE2 v3.0 Consumer-Side MCP Protection
+aisafe2_mcp_tools/wrap/audit.py:19: [STALE_LABEL] AI SAFE2 v3.0 CP.5.MCP-5 compliance:
+dashboard/index.html:6: [STALE_LABEL] <title>AI SAFE² v3.0 — Interactive Framework Dashboard</title>
+dashboard/index.html:151: [STALE_LABEL] <span class="text-sm font-mono" style="color: #f6921e;">AI SAFE² v3.0</span>
+dashboard/index.html:406: [STALE_LABEL] <span class="text-slate-300 ml-1">One AI SAFE² v3.0 implementation generates evidence artifacts for 32 compliance frameworks simultaneously.
+dashboard/index.html:711: [STALE_LABEL] 35 structured questions that answer one question before you ship: <strong class="text-slate-200">is this agent actually ready?</strong> Cove
+dashboard/index.html:740: [STALE_LABEL] <div>✓ Maps to AI SAFE² v3.0 controls</div>
+dashboard/index.html:773: [STALE_LABEL] <p class="text-sm text-slate-400">The AI SAFE² v3.0 scanner checks your code against 40+ rules covering all 5 pillars and CP.1-CP.10. ACT ti
+dashboard/index.html:802: [STALE_LABEL] <div class="text-sm mt-1">See which AI SAFE² v3.0 controls satisfy each requirement</div>
+dashboard/index.html:1041: [STALE_LABEL] <h2 class="font-bold text-white">23 New v3.0 Controls</h2>
+dashboard/index.html:1110: [STALE_LABEL] <p>AI SAFE² v3.0 | 161 Controls | 32 Frameworks | CC-BY-SA 4.0 (Docs) / MIT (Code)</p>
+examples/anti-gravity-sovereign-runtime/README.md:18: [STALE_LABEL] A runnable reference implementation of the **AI SAFE² Framework v3.0** — designed to govern and harden the **Antigravity 2.0 Agentic Platfor
+examples/anti-gravity-sovereign-runtime/README.md:403: [STALE_LABEL] Built on **AI SAFE² v3.0** — the Sovereign Agent Security Standard.
+examples/anti-gravity-sovereign-runtime/config/governance-system-prompt.md:4: [STALE_LABEL] <!-- Source of truth: controls/policy.yaml | Framework: AI SAFE² v3.0 -->
+examples/anti-gravity-sovereign-runtime/config/governance-system-prompt.md:130: [STALE_LABEL] _AI SAFE² v3.0 | Cyber Strategy Institute | governance-enforcer v1.0_
+examples/anti-gravity-sovereign-runtime/controls/policy.yaml:12: [STALE_LABEL] framework: "AI SAFE² v3.0"
+examples/anti-gravity-sovereign-runtime/plugins/governance-enforcer/plugin.json:5: [STALE_LABEL] "description": "Automatically loads AI SAFE² v3.0 sovereign governance constraints into every Antigravity session. Enforces identity lock, h
+examples/anti-gravity-sovereign-runtime/plugins/governance-enforcer/prompts/system-governance.md:109: [STALE_LABEL] _AI SAFE² v3.0 | governance-enforcer plugin v1.0 | Cyber Strategy Institute_
+examples/anti-gravity-sovereign-runtime/plugins/governance-enforcer/skills/governance/SKILL.md:4: [STALE_LABEL] Enforce AI SAFE² v3.0 sovereign governance constraints for every session.
+examples/anti-gravity-sovereign-runtime/plugins/governance-enforcer/skills/governance/SKILL.md:10: [STALE_LABEL] framework: "AI SAFE² v3.0"
+examples/autogen-sovereign-runtime/.env.example:1: [STALE_LABEL] # AI SAFE² v3.0 — LangChain Sovereign Runtime Configuration
+examples/autogen-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE² v3.0 | Cyber Strategy Institute**
+examples/autogen-sovereign-runtime/QUICKSTART.md:149: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/autogen-sovereign-runtime/README.md:17: [STALE_LABEL] ### AI SAFE² v3.0 Defense Package for AutoGen 0.4 (autogen_agentchat)
+examples/autogen-sovereign-runtime/README.md:19: [STALE_LABEL] [![AI SAFE² v3.0](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyI
+examples/autogen-sovereign-runtime/README.md:142: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/autogen-sovereign-runtime/SECURITY.md:3: [STALE_LABEL] **AI SAFE² v3.0 | Cyber Strategy Institute**
+examples/autogen-sovereign-runtime/SECURITY.md:11: [STALE_LABEL] | AI SAFE² v3.0 (current) | ✅ Active |
+examples/autogen-sovereign-runtime/SECURITY.md:38: [STALE_LABEL] We classify AI SAFE² vulnerabilities using AI SAFE² v3.0 severity levels:
+examples/autogen-sovereign-runtime/SECURITY.md:76: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | security@cyberstrategyinstitute.com*
+examples/autogen-sovereign-runtime/controls/policy.yaml:1: [STALE_LABEL] # AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime Control Registry
+examples/autogen-sovereign-runtime/controls/policy.yaml:5: [STALE_LABEL] framework_version: "AI SAFE² v3.0"
+examples/autogen-sovereign-runtime/core/IDENTITY.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Agentic Control Plane Governance
+examples/autogen-sovereign-runtime/core/IDENTITY.md:87: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | CP.4 Agentic Control Plane*
+examples/autogen-sovereign-runtime/core/MEMORY.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Memory Boundary Controls
+examples/autogen-sovereign-runtime/core/MEMORY.md:67: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | S1.5 Memory Governance*
+examples/autogen-sovereign-runtime/core/SOUL.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Semantic Isolation Boundary Enforcement
+examples/autogen-sovereign-runtime/core/SOUL.md:11: [STALE_LABEL] You are `[AGENT_ID]`, a LangChain agent governed by the AI SAFE² v3.0 framework.
+examples/autogen-sovereign-runtime/core/SOUL.md:77: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | S1.3 Semantic Isolation Boundary*
+examples/autogen-sovereign-runtime/core/TOOLS.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Function Access Control
+examples/autogen-sovereign-runtime/core/TOOLS.md:79: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | P1.T2.5 Function Access Control*
+examples/autogen-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime enforcement package."""
+examples/autogen-sovereign-runtime/enforcement/ai_safe2_engine.py:2: [STALE_LABEL] AI SAFE² v3.0 — NEXUS Enforcement Kernel
+examples/autogen-sovereign-runtime/enforcement/ai_safe2_engine.py:191: [STALE_LABEL] AI SAFE² v3.0 NEXUS Enforcement Kernel.
+examples/autogen-sovereign-runtime/enforcement/ai_safe2_engine.py:289: [STALE_LABEL] "framework": "AI SAFE² v3.0",
+examples/autogen-sovereign-runtime/enforcement/ai_safe2_engine.py:807: [STALE_LABEL] "framework_version": "AI SAFE² v3.0",
+examples/autogen-sovereign-runtime/enforcement/ai_safe2_engine.py:831: [STALE_LABEL] return f"""# AI SAFE² v3.0 — LangChain Sovereign Runtime Compliance Report
+examples/autogen-sovereign-runtime/enforcement/ai_safe2_engine.py:861: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/autogen-sovereign-runtime/enforcement/sovereign_autogen.py:2: [STALE_LABEL] AI SAFE² v3.0 — AutoGen 0.4 Sovereign Enforcement Layer
+examples/autogen-sovereign-runtime/enforcement/sovereign_autogen.py:504: [STALE_LABEL] AI SAFE² v3.0 sovereign enforcement runtime for AutoGen 0.4.
+examples/autogen-sovereign-runtime/integrations/code-executor-safety.md:1: [STALE_LABEL] # Code Executor Safety Guide — AI SAFE² v3.0
+examples/autogen-sovereign-runtime/requirements.txt:1: [STALE_LABEL] # AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime
+examples/autogen-sovereign-runtime/smoke_test.py:3: [STALE_LABEL] AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime Adversarial Smoke Tests
+examples/autogen-sovereign-runtime/smoke_test.py:536: [STALE_LABEL] assert "AI SAFE² v3.0" in report
+examples/autogen-sovereign-runtime/smoke_test.py:553: [STALE_LABEL] print("║   AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime Smoke Tests ║")
+examples/autogen-sovereign-runtime/validation/pass1_static.sh:2: [STALE_LABEL] # AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime — Pass 1: Static Validation
+examples/autogen-sovereign-runtime/validation/pass1_static.sh:13: [STALE_LABEL] echo "║   AI SAFE² v3.0 — AutoGen Pass 1: Static Validation         ║"
+examples/autogen-sovereign-runtime/validation/pass2_runtime.sh:2: [STALE_LABEL] # AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime — Pass 2: Runtime Validation
+examples/autogen-sovereign-runtime/validation/pass2_runtime.sh:13: [STALE_LABEL] echo "║   AI SAFE² v3.0 — AutoGen Pass 2: Runtime Validation        ║"
+examples/crewai-sovereign-runtime/.env.example:1: [STALE_LABEL] # AI SAFE² v3.0 — LangChain Sovereign Runtime Configuration
+examples/crewai-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE² v3.0 | Cyber Strategy Institute**
+examples/crewai-sovereign-runtime/QUICKSTART.md:149: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/crewai-sovereign-runtime/README.md:17: [STALE_LABEL] ### AI SAFE² v3.0 Defense Package for CrewAI
+examples/crewai-sovereign-runtime/README.md:19: [STALE_LABEL] [![AI SAFE² v3.0](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyI
+examples/crewai-sovereign-runtime/README.md:127: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/crewai-sovereign-runtime/SECURITY.md:3: [STALE_LABEL] **AI SAFE² v3.0 | Cyber Strategy Institute**
+examples/crewai-sovereign-runtime/SECURITY.md:11: [STALE_LABEL] | AI SAFE² v3.0 (current) | ✅ Active |
+examples/crewai-sovereign-runtime/SECURITY.md:38: [STALE_LABEL] We classify AI SAFE² vulnerabilities using AI SAFE² v3.0 severity levels:
+examples/crewai-sovereign-runtime/SECURITY.md:76: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | security@cyberstrategyinstitute.com*
+examples/crewai-sovereign-runtime/controls/policy.yaml:1: [STALE_LABEL] # AI SAFE² v3.0 — CrewAI Sovereign Runtime Control Registry
+examples/crewai-sovereign-runtime/controls/policy.yaml:4: [STALE_LABEL] framework_version: "AI SAFE² v3.0"
+examples/crewai-sovereign-runtime/core/IDENTITY.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Agentic Control Plane Governance
+examples/crewai-sovereign-runtime/core/IDENTITY.md:87: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | CP.4 Agentic Control Plane*
+examples/crewai-sovereign-runtime/core/MEMORY.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Memory Boundary Controls
+examples/crewai-sovereign-runtime/core/MEMORY.md:67: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | S1.5 Memory Governance*
+examples/crewai-sovereign-runtime/core/SOUL.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Semantic Isolation Boundary Enforcement
+examples/crewai-sovereign-runtime/core/SOUL.md:11: [STALE_LABEL] You are `[AGENT_ID]`, a LangChain agent governed by the AI SAFE² v3.0 framework.
+examples/crewai-sovereign-runtime/core/SOUL.md:77: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | S1.3 Semantic Isolation Boundary*
+examples/crewai-sovereign-runtime/core/TOOLS.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Function Access Control
+examples/crewai-sovereign-runtime/core/TOOLS.md:79: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | P1.T2.5 Function Access Control*
+examples/crewai-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE² v3.0 — CrewAI Sovereign Runtime enforcement package."""
+examples/crewai-sovereign-runtime/enforcement/ai_safe2_engine.py:2: [STALE_LABEL] AI SAFE² v3.0 — NEXUS Enforcement Kernel
+examples/crewai-sovereign-runtime/enforcement/ai_safe2_engine.py:191: [STALE_LABEL] AI SAFE² v3.0 NEXUS Enforcement Kernel.
+examples/crewai-sovereign-runtime/enforcement/ai_safe2_engine.py:289: [STALE_LABEL] "framework": "AI SAFE² v3.0",
+examples/crewai-sovereign-runtime/enforcement/ai_safe2_engine.py:807: [STALE_LABEL] "framework_version": "AI SAFE² v3.0",
+examples/crewai-sovereign-runtime/enforcement/ai_safe2_engine.py:831: [STALE_LABEL] return f"""# AI SAFE² v3.0 — LangChain Sovereign Runtime Compliance Report
+examples/crewai-sovereign-runtime/enforcement/ai_safe2_engine.py:861: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/crewai-sovereign-runtime/enforcement/sovereign_crewai.py:2: [STALE_LABEL] AI SAFE² v3.0 — CrewAI Sovereign Enforcement Layer
+examples/crewai-sovereign-runtime/enforcement/sovereign_crewai.py:211: [STALE_LABEL] AI SAFE² v3.0 sovereign enforcement for CrewAI agents, tasks, and crews.
+examples/crewai-sovereign-runtime/integrations/crewai-flows.md:1: [STALE_LABEL] # CrewAI Flows Integration — AI SAFE² v3.0
+examples/crewai-sovereign-runtime/requirements.txt:1: [STALE_LABEL] # AI SAFE² v3.0 — CrewAI Sovereign Runtime
+examples/crewai-sovereign-runtime/smoke_test.py:3: [STALE_LABEL] AI SAFE² v3.0 — CrewAI Sovereign Runtime Adversarial Smoke Tests
+examples/crewai-sovereign-runtime/smoke_test.py:529: [STALE_LABEL] assert "AI SAFE² v3.0" in report
+examples/crewai-sovereign-runtime/smoke_test.py:547: [STALE_LABEL] print("║   AI SAFE² v3.0 — CrewAI Sovereign Runtime Smoke Tests      ║")
+examples/crewai-sovereign-runtime/validation/pass1_static.sh:2: [STALE_LABEL] # AI SAFE² v3.0 — CrewAI Sovereign Runtime — Pass 1: Static Validation
+examples/crewai-sovereign-runtime/validation/pass1_static.sh:13: [STALE_LABEL] echo "║   AI SAFE² v3.0 — CrewAI Pass 1: Static Validation          ║"
+examples/crewai-sovereign-runtime/validation/pass2_runtime.sh:2: [STALE_LABEL] # AI SAFE² v3.0 — CrewAI Sovereign Runtime — Pass 2: Runtime Validation
+examples/crewai-sovereign-runtime/validation/pass2_runtime.sh:13: [STALE_LABEL] echo "║   AI SAFE² v3.0 — CrewAI Pass 2: Runtime Validation         ║"
+examples/cursor-sovereign-runtime/.cursor/rules/ai-safe2-sovereign.mdc:3: [STALE_LABEL] description: AI SAFE2 v3.0 Sovereign Security Rules for Cursor
+examples/cursor-sovereign-runtime/.cursor/rules/ai-safe2-sovereign.mdc:8: [STALE_LABEL] You operate under the AI SAFE2 v3.0 Sovereign Runtime for Cursor.
+examples/cursor-sovereign-runtime/.cursor/rules/ai-safe2-sovereign.mdc:36: [STALE_LABEL] - AI SAFE2 v3.0: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+examples/cursor-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE2 v3.0 | Cyber Strategy Institute**
+examples/cursor-sovereign-runtime/README.md:16: [STALE_LABEL] ### AI SAFE2 v3.0 Defense Package for Cursor (11+ CVEs, 8 Surfaces, 4 Architectural Attack Patterns)
+examples/cursor-sovereign-runtime/README.md:18: [STALE_LABEL] **Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+examples/cursor-sovereign-runtime/ci-cd/github-actions-cursor-gate.yml:2: [STALE_LABEL] # AI SAFE2 v3.0 CI/CD Gate — Cursor Sovereign Runtime
+examples/cursor-sovereign-runtime/controls/policy.yaml:2: [STALE_LABEL] # AI SAFE2 v3.0 Control Registry — Cursor Sovereign Runtime
+examples/cursor-sovereign-runtime/cursor-skill/ai-safe2-cursor.md:10: [STALE_LABEL] - AI SAFE2 v3.0: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+examples/cursor-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE2 v3.0 Cursor Sovereign Runtime — enforcement package."""
+examples/cursor-sovereign-runtime/enforcement/ai_safe2_engine.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime Engine
+examples/cursor-sovereign-runtime/enforcement/sovereign_cursor.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime
+examples/cursor-sovereign-runtime/enforcement/sovereign_cursor.py:219: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime for Cursor.
+examples/cursor-sovereign-runtime/integrations/nomshub-defense.md:2: [STALE_LABEL] ## AI SAFE2 v3.0 Kill Chain Analysis
+examples/cursor-sovereign-runtime/requirements.txt:2: [STALE_LABEL] # AI SAFE2 v3.0 | Cyber Strategy Institute
+examples/cursor-sovereign-runtime/smoke_test.py:4: [STALE_LABEL] AI SAFE2 v3.0 Adversarial Test Suite
+examples/cursor-sovereign-runtime/smoke_test.py:379: [STALE_LABEL] print("  Cyber Strategy Institute | AI SAFE2 v3.0")
+examples/hermes-sovereign-runtime/.env.example:2: [STALE_LABEL] # Cyber Strategy Institute · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/README.md:15: [STALE_LABEL] ### AI SAFE² v3.0 Defense Package for NousResearch/hermes-agent
+examples/hermes-sovereign-runtime/README.md:17: [STALE_LABEL] **Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+examples/hermes-sovereign-runtime/README.md:269: [STALE_LABEL] - **AI SAFE² Framework v3.0** — Cyber Strategy Institute
+examples/hermes-sovereign-runtime/core/HEARTBEAT.md:3: [STALE_LABEL] **Framework:** Hermes Sovereign Runtime · AI SAFE² v3.0 · P4 Engage & Monitor
+examples/hermes-sovereign-runtime/core/HEARTBEAT.md:71: [STALE_LABEL] *HSR HEARTBEAT.md · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/core/IDENTITY.md:3: [STALE_LABEL] **Framework:** AI SAFE² v3.0 · Cyber Strategy Institute
+examples/hermes-sovereign-runtime/core/IDENTITY.md:14: [STALE_LABEL] **My governance framework:** AI SAFE² v3.0, Cyber Strategy Institute.
+examples/hermes-sovereign-runtime/core/IDENTITY.md:42: [STALE_LABEL] 2. I operate under AI SAFE² v3.0
+examples/hermes-sovereign-runtime/core/IDENTITY.md:49: [STALE_LABEL] *HSR IDENTITY.md · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/core/README.md:2: [STALE_LABEL] ### Hermes Sovereign Runtime · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/core/README.md:90: [STALE_LABEL] *Core Governance Files · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/core/SOUL.md:3: [STALE_LABEL] **Framework:** Hermes Sovereign Runtime · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/core/SOUL.md:110: [STALE_LABEL] *HSR SOUL.md · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/core/SUBAGENT-POLICY.md:3: [STALE_LABEL] **Framework:** AI SAFE² v3.0 · Cyber Strategy Institute
+examples/hermes-sovereign-runtime/core/SUBAGENT-POLICY.md:65: [STALE_LABEL] *HSR SUBAGENT-POLICY.md · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/core/hermes_memory_vaccine.md:3: [STALE_LABEL] **Maintainer:** Cyber Strategy Institute · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/core/hermes_memory_vaccine.md:13: [STALE_LABEL] maintained by the Cyber Strategy Institute under AI SAFE² v3.0.
+examples/hermes-sovereign-runtime/core/hermes_memory_vaccine.md:197: [STALE_LABEL] *HSR Memory Vaccine v1.0 · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/docker-compose.yml:2: [STALE_LABEL] # AI SAFE² v3.0 · Cyber Strategy Institute
+examples/hermes-sovereign-runtime/docs/ARCHITECTURE.md:2: [STALE_LABEL] ### Hermes Sovereign Runtime · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/docs/ARCHITECTURE.md:268: [STALE_LABEL] *HSR Architecture Reference · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/docs/COMPLIANCE-MAPPING.md:2: [STALE_LABEL] **Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0**
+examples/hermes-sovereign-runtime/docs/COMPLIANCE-MAPPING.md:145: [STALE_LABEL] *Compliance mapping version: 1.0 | AI SAFE² v3.0 | Cyber Strategy Institute*
+examples/hermes-sovereign-runtime/docs/INCIDENT-RESPONSE.md:2: [STALE_LABEL] ### Hermes Sovereign Runtime · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/docs/INCIDENT-RESPONSE.md:254: [STALE_LABEL] *HSR Incident Response Runbooks · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/docs/MIGRATION.md:2: [STALE_LABEL] **Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0**
+examples/hermes-sovereign-runtime/docs/MIGRATION.md:233: [STALE_LABEL] *Migration guide version: 1.0 | AI SAFE² v3.0 | Cyber Strategy Institute*
+examples/hermes-sovereign-runtime/docs/THREAT-MODEL.md:2: [STALE_LABEL] **Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0**
+examples/hermes-sovereign-runtime/docs/THREAT-MODEL.md:205: [STALE_LABEL] *Threat model version: 1.0 | AI SAFE² v3.0 | Cyber Strategy Institute*
+examples/hermes-sovereign-runtime/gateway/README.md:9: [STALE_LABEL] The gateway enforces AI SAFE² v3.0 controls at the semantic layer — the only layer
+examples/hermes-sovereign-runtime/gateway/config.yaml:2: [STALE_LABEL] # Cyber Strategy Institute · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/gateway/gateway.py:8: [STALE_LABEL] applies AI SAFE² v3.0 controls, and emits an immutable audit trail.
+examples/hermes-sovereign-runtime/gateway/scanner.py:4: [STALE_LABEL] Cyber Strategy Institute · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/monitoring/alerts.yaml:3: [STALE_LABEL] # AI SAFE² v3.0 Security & Governance Alerts
+examples/hermes-sovereign-runtime/monitoring/memory_auditor.py:4: [STALE_LABEL] AI SAFE² v3.0 · P4.M-C02
+examples/hermes-sovereign-runtime/monitoring/prometheus.yml:3: [STALE_LABEL] # AI SAFE² v3.0 Observability Stack
+examples/hermes-sovereign-runtime/scripts/audit-report.sh:4: [STALE_LABEL] # Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+examples/hermes-sovereign-runtime/scripts/audit-report.sh:127: [STALE_LABEL] echo -e "${BOLD}${CYAN}║              AI SAFE² v3.0 | ${DATE}                  ║${NC}"
+examples/hermes-sovereign-runtime/scripts/audit-report.sh:222: [STALE_LABEL] **Framework:** AI SAFE² v3.0 | Cyber Strategy Institute
+examples/hermes-sovereign-runtime/scripts/audit-report.sh:257: [STALE_LABEL] *Generated by HSR audit-report.sh | AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/scripts/audit-report.sh:267: [STALE_LABEL] 'framework': 'AI SAFE2 v3.0',
+examples/hermes-sovereign-runtime/scripts/kill-switch.sh:3: [STALE_LABEL] # AI SAFE² v3.0 · P3.F-C05
+examples/hermes-sovereign-runtime/scripts/kill-switch.sh:31: [STALE_LABEL] echo "║         HSR KILL SWITCH — AI SAFE² v3.0                  ║"
+examples/hermes-sovereign-runtime/scripts/pre-flight-check.sh:3: [STALE_LABEL] # AI SAFE² v3.0 · Cyber Strategy Institute
+examples/hermes-sovereign-runtime/scripts/pre-flight-check.sh:52: [STALE_LABEL] echo -e "${BOLD}║    HSR Pre-Flight Check · AI SAFE² v3.0                  ║${NC}"
+examples/hermes-sovereign-runtime/scripts/rotate-credentials.sh:4: [STALE_LABEL] # Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+examples/hermes-sovereign-runtime/scripts/rotate-credentials.sh:284: [STALE_LABEL] echo "║         HSR CREDENTIAL ROTATION — AI SAFE² v3.0          ║"
+examples/hermes-sovereign-runtime/skills-registry/README.md:2: [STALE_LABEL] ### Hermes Sovereign Runtime · AI SAFE² v3.0 · P2.A-C01 + P5.E-C05
+examples/hermes-sovereign-runtime/skills-registry/README.md:97: [STALE_LABEL] *Sovereign Skills Registry · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/skills-registry/skill_manifest_template.yaml:2: [STALE_LABEL] # AI SAFE² v3.0 · P2.A-C01
+examples/hermes-sovereign-runtime/supervisor/ishi_config.yaml:3: [STALE_LABEL] # Hermes Sovereign Runtime (HSR) — AI SAFE² v3.0
+examples/hermes-sovereign-runtime/supervisor/policies/cron_governance.rego:5: [STALE_LABEL] # AI SAFE² v3.0 | Cyber Strategy Institute
+examples/hermes-sovereign-runtime/supervisor/policies/cron_governance.rego:124: [STALE_LABEL] framework := "AI SAFE² v3.0"
+examples/hermes-sovereign-runtime/supervisor/policies/subagent_scope.rego:5: [STALE_LABEL] # AI SAFE² v3.0 | Cyber Strategy Institute
+examples/hermes-sovereign-runtime/supervisor/policies/subagent_scope.rego:134: [STALE_LABEL] framework := "AI SAFE² v3.0"
+examples/hermes-sovereign-runtime/supervisor/policies/tool_approval.rego:5: [STALE_LABEL] # AI SAFE² v3.0 | Cyber Strategy Institute
+examples/hermes-sovereign-runtime/supervisor/policies/tool_approval.rego:167: [STALE_LABEL] framework := "AI SAFE² v3.0"
+examples/hermes-sovereign-runtime/validation/README.md:2: [STALE_LABEL] ### Hermes Sovereign Runtime · AI SAFE² v3.0
+examples/hermes-sovereign-runtime/validation/README.md:145: [STALE_LABEL] *HSR Validation Suite · Cyber Strategy Institute · AI SAFE² v3.0*
+examples/hermes-sovereign-runtime/validation/pass1_static.sh:4: [STALE_LABEL] # Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+examples/hermes-sovereign-runtime/validation/pass1_static.sh:64: [STALE_LABEL] echo -e "${BOLD}${CYAN}  AI SAFE² v3.0 | Cyber Strategy Institute${NC}"
+examples/hermes-sovereign-runtime/validation/pass2_runtime.sh:4: [STALE_LABEL] # Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+examples/hermes-sovereign-runtime/validation/pass2_runtime.sh:37: [STALE_LABEL] echo -e "${BOLD}${CYAN}HSR Pass 2: Runtime Behavior Validation — AI SAFE2 v3.0${NC}"
+examples/hermes-sovereign-runtime/validation/pass3_adversarial.py:4: [STALE_LABEL] AI SAFE² v3.0 · Cyber Strategy Institute
+examples/hermes-sovereign-runtime/validation/pass3_adversarial.py:347: [STALE_LABEL] print("║  HSR Pass 3 — Adversarial Red Team · AI SAFE² v3.0       ║")
+examples/hermes-sovereign-runtime/validation/pass4_compliance.sh:4: [STALE_LABEL] # Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+examples/hermes-sovereign-runtime/validation/pass4_compliance.sh:42: [STALE_LABEL] echo -e "${BOLD}${CYAN}HSR Pass 4: Compliance Mapping Review — AI SAFE2 v3.0${NC}"
+examples/hermes-sovereign-runtime/validation/pass5_readiness.sh:4: [STALE_LABEL] # Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+examples/hermes-sovereign-runtime/validation/pass5_readiness.sh:38: [STALE_LABEL] echo -e "${BOLD}${CYAN}HSR Pass 5: Operational Readiness — AI SAFE2 v3.0${NC}"
+examples/langchain-sovereign-runtime/.env.example:1: [STALE_LABEL] # AI SAFE² v3.0 — LangChain Sovereign Runtime Configuration
+examples/langchain-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE² v3.0 | Cyber Strategy Institute**
+examples/langchain-sovereign-runtime/QUICKSTART.md:149: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/langchain-sovereign-runtime/README.md:17: [STALE_LABEL] ### AI SAFE² v3.0 Defense Package for LangChain
+examples/langchain-sovereign-runtime/README.md:19: [STALE_LABEL] [![AI SAFE² v3.0](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyI
+examples/langchain-sovereign-runtime/README.md:43: [STALE_LABEL] **This package enforces AI SAFE² v3.0 controls at the enforcement points that matter, without requiring any changes to your chains.**
+examples/langchain-sovereign-runtime/README.md:256: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | [cyberstrategyinstitute.com](https://cyberstrategyinstitute.com)*
+examples/langchain-sovereign-runtime/SECURITY.md:3: [STALE_LABEL] **AI SAFE² v3.0 | Cyber Strategy Institute**
+examples/langchain-sovereign-runtime/SECURITY.md:11: [STALE_LABEL] | AI SAFE² v3.0 (current) | ✅ Active |
+examples/langchain-sovereign-runtime/SECURITY.md:38: [STALE_LABEL] We classify AI SAFE² vulnerabilities using AI SAFE² v3.0 severity levels:
+examples/langchain-sovereign-runtime/SECURITY.md:76: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | security@cyberstrategyinstitute.com*
+examples/langchain-sovereign-runtime/controls/policy.yaml:1: [STALE_LABEL] # AI SAFE² v3.0 — LangChain Sovereign Runtime Control Registry
+examples/langchain-sovereign-runtime/controls/policy.yaml:5: [STALE_LABEL] framework_version: "AI SAFE² v3.0"
+examples/langchain-sovereign-runtime/core/IDENTITY.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Agentic Control Plane Governance
+examples/langchain-sovereign-runtime/core/IDENTITY.md:87: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | CP.4 Agentic Control Plane*
+examples/langchain-sovereign-runtime/core/MEMORY.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Memory Boundary Controls
+examples/langchain-sovereign-runtime/core/MEMORY.md:67: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | S1.5 Memory Governance*
+examples/langchain-sovereign-runtime/core/SOUL.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Semantic Isolation Boundary Enforcement
+examples/langchain-sovereign-runtime/core/SOUL.md:11: [STALE_LABEL] You are `[AGENT_ID]`, a LangChain agent governed by the AI SAFE² v3.0 framework.
+examples/langchain-sovereign-runtime/core/SOUL.md:77: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | S1.3 Semantic Isolation Boundary*
+examples/langchain-sovereign-runtime/core/TOOLS.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Function Access Control
+examples/langchain-sovereign-runtime/core/TOOLS.md:79: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | P1.T2.5 Function Access Control*
+examples/langchain-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE² v3.0 — LangChain Sovereign Runtime enforcement package."""
+examples/langchain-sovereign-runtime/enforcement/ai_safe2_engine.py:2: [STALE_LABEL] AI SAFE² v3.0 — NEXUS Enforcement Kernel
+examples/langchain-sovereign-runtime/enforcement/ai_safe2_engine.py:191: [STALE_LABEL] AI SAFE² v3.0 NEXUS Enforcement Kernel.
+examples/langchain-sovereign-runtime/enforcement/ai_safe2_engine.py:289: [STALE_LABEL] "framework": "AI SAFE² v3.0",
+examples/langchain-sovereign-runtime/enforcement/ai_safe2_engine.py:807: [STALE_LABEL] "framework_version": "AI SAFE² v3.0",
+examples/langchain-sovereign-runtime/enforcement/ai_safe2_engine.py:831: [STALE_LABEL] return f"""# AI SAFE² v3.0 — LangChain Sovereign Runtime Compliance Report
+examples/langchain-sovereign-runtime/enforcement/ai_safe2_engine.py:861: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/langchain-sovereign-runtime/enforcement/sovereign_langchain.py:2: [STALE_LABEL] AI SAFE² v3.0 — LangChain Sovereign Enforcement Layer
+examples/langchain-sovereign-runtime/enforcement/sovereign_langchain.py:60: [STALE_LABEL] Drop-in BaseCallbackHandler that enforces AI SAFE² v3.0 controls
+examples/langchain-sovereign-runtime/integrations/langsmith-integration.md:1: [STALE_LABEL] # LangSmith Integration — AI SAFE² v3.0
+examples/langchain-sovereign-runtime/integrations/langsmith-integration.md:138: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | A2.5 Semantic Execution Trace Logging*
+examples/langchain-sovereign-runtime/requirements.txt:1: [STALE_LABEL] # AI SAFE² v3.0 — LangChain Sovereign Runtime
+examples/langchain-sovereign-runtime/smoke_test.py:3: [STALE_LABEL] AI SAFE² v3.0 — LangChain Sovereign Runtime Adversarial Smoke Tests
+examples/langchain-sovereign-runtime/smoke_test.py:472: [STALE_LABEL] "AI SAFE² v3.0",
+examples/langchain-sovereign-runtime/smoke_test.py:494: [STALE_LABEL] print("║   AI SAFE² v3.0 — LangChain Sovereign Runtime Smoke Tests   ║")
+examples/langchain-sovereign-runtime/validation/pass1_static.sh:2: [STALE_LABEL] # AI SAFE² v3.0 — LangChain Sovereign Runtime
+examples/langchain-sovereign-runtime/validation/pass1_static.sh:20: [STALE_LABEL] echo "║   AI SAFE² v3.0 — Pass 1: Static Validation                 ║"
+examples/langchain-sovereign-runtime/validation/pass2_runtime.sh:2: [STALE_LABEL] # AI SAFE² v3.0 — LangChain Sovereign Runtime
+examples/langchain-sovereign-runtime/validation/pass2_runtime.sh:19: [STALE_LABEL] echo "║   AI SAFE² v3.0 — Pass 2: Runtime Validation                ║"
+examples/langflow-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE2 v3.0 | Cyber Strategy Institute**
+examples/langflow-sovereign-runtime/README.md:17: [STALE_LABEL] ### AI SAFE2 v3.0 Defense Package for Langflow (Visual DAG Builder + Webhook + MCP + RAG)
+examples/langflow-sovereign-runtime/README.md:19: [STALE_LABEL] **Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+examples/langflow-sovereign-runtime/ci-cd/github-actions-langflow-gate.yml:2: [STALE_LABEL] # AI SAFE2 v3.0 CI/CD Gate — Langflow Sovereign Runtime
+examples/langflow-sovereign-runtime/controls/policy.yaml:2: [STALE_LABEL] # AI SAFE2 v3.0 Control Registry — Langflow Sovereign Runtime
+examples/langflow-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE2 v3.0 Langflow Sovereign Runtime — enforcement package."""
+examples/langflow-sovereign-runtime/enforcement/ai_safe2_engine.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime Engine
+examples/langflow-sovereign-runtime/enforcement/sovereign_langflow.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime
+examples/langflow-sovereign-runtime/enforcement/sovereign_langflow.py:225: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime for Langflow.
+examples/langflow-sovereign-runtime/integrations/langsmith-integration.md:2: [STALE_LABEL] ## AI SAFE2 v3.0 + Langflow | Cyber Strategy Institute
+examples/langflow-sovereign-runtime/integrations/mcp-security.md:2: [STALE_LABEL] ## AI SAFE2 v3.0 | Cyber Strategy Institute
+examples/langflow-sovereign-runtime/langflow-component/safe2_guardian_component.py:2: [STALE_LABEL] safe2_guardian_component.py — AI SAFE2 v3.0 Inline DAG Node
+examples/langflow-sovereign-runtime/langflow-component/safe2_guardian_component.py:63: [STALE_LABEL] description  = "AI SAFE2 v3.0 LF-COMP enforcement: scans DAG component output for injection before it reaches Agent nodes."
+examples/langflow-sovereign-runtime/langflow-component/safe2_guardian_component.py:95: [STALE_LABEL] "[AI SAFE2 GUARDIAN] Content blocked by AI SAFE2 v3.0 LF-COMP control. "
+examples/langflow-sovereign-runtime/requirements.txt:2: [STALE_LABEL] # AI SAFE2 v3.0 | Cyber Strategy Institute
+examples/langflow-sovereign-runtime/smoke_test.py:4: [STALE_LABEL] AI SAFE2 v3.0 Adversarial Test Suite
+examples/langflow-sovereign-runtime/smoke_test.py:378: [STALE_LABEL] print("  Cyber Strategy Institute | AI SAFE2 v3.0")
+examples/langgraph-sovereign-runtime/.env.example:1: [STALE_LABEL] # AI SAFE² v3.0 — LangChain Sovereign Runtime Configuration
+examples/langgraph-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE² v3.0 | Cyber Strategy Institute**
+examples/langgraph-sovereign-runtime/QUICKSTART.md:149: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/langgraph-sovereign-runtime/README.md:17: [STALE_LABEL] ### AI SAFE² v3.0 Defense Package for LangGraph
+examples/langgraph-sovereign-runtime/README.md:19: [STALE_LABEL] [![AI SAFE² v3.0](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyI
+examples/langgraph-sovereign-runtime/README.md:145: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/langgraph-sovereign-runtime/SECURITY.md:3: [STALE_LABEL] **AI SAFE² v3.0 | Cyber Strategy Institute**
+examples/langgraph-sovereign-runtime/SECURITY.md:11: [STALE_LABEL] | AI SAFE² v3.0 (current) | ✅ Active |
+examples/langgraph-sovereign-runtime/SECURITY.md:38: [STALE_LABEL] We classify AI SAFE² vulnerabilities using AI SAFE² v3.0 severity levels:
+examples/langgraph-sovereign-runtime/SECURITY.md:76: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | security@cyberstrategyinstitute.com*
+examples/langgraph-sovereign-runtime/controls/policy.yaml:1: [STALE_LABEL] # AI SAFE² v3.0 — LangGraph Sovereign Runtime Control Registry
+examples/langgraph-sovereign-runtime/controls/policy.yaml:4: [STALE_LABEL] framework_version: "AI SAFE² v3.0"
+examples/langgraph-sovereign-runtime/core/IDENTITY.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Agentic Control Plane Governance
+examples/langgraph-sovereign-runtime/core/IDENTITY.md:87: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | CP.4 Agentic Control Plane*
+examples/langgraph-sovereign-runtime/core/MEMORY.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Memory Boundary Controls
+examples/langgraph-sovereign-runtime/core/MEMORY.md:67: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | S1.5 Memory Governance*
+examples/langgraph-sovereign-runtime/core/SOUL.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Semantic Isolation Boundary Enforcement
+examples/langgraph-sovereign-runtime/core/SOUL.md:11: [STALE_LABEL] You are `[AGENT_ID]`, a LangChain agent governed by the AI SAFE² v3.0 framework.
+examples/langgraph-sovereign-runtime/core/SOUL.md:77: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | S1.3 Semantic Isolation Boundary*
+examples/langgraph-sovereign-runtime/core/TOOLS.md:2: [STALE_LABEL] ## AI SAFE² v3.0 Function Access Control
+examples/langgraph-sovereign-runtime/core/TOOLS.md:79: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | P1.T2.5 Function Access Control*
+examples/langgraph-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE² v3.0 — LangGraph Sovereign Runtime enforcement package."""
+examples/langgraph-sovereign-runtime/enforcement/ai_safe2_engine.py:2: [STALE_LABEL] AI SAFE² v3.0 — NEXUS Enforcement Kernel
+examples/langgraph-sovereign-runtime/enforcement/ai_safe2_engine.py:191: [STALE_LABEL] AI SAFE² v3.0 NEXUS Enforcement Kernel.
+examples/langgraph-sovereign-runtime/enforcement/ai_safe2_engine.py:289: [STALE_LABEL] "framework": "AI SAFE² v3.0",
+examples/langgraph-sovereign-runtime/enforcement/ai_safe2_engine.py:807: [STALE_LABEL] "framework_version": "AI SAFE² v3.0",
+examples/langgraph-sovereign-runtime/enforcement/ai_safe2_engine.py:831: [STALE_LABEL] return f"""# AI SAFE² v3.0 — LangChain Sovereign Runtime Compliance Report
+examples/langgraph-sovereign-runtime/enforcement/ai_safe2_engine.py:861: [STALE_LABEL] *AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+examples/langgraph-sovereign-runtime/enforcement/sovereign_langgraph.py:2: [STALE_LABEL] AI SAFE² v3.0 — LangGraph Sovereign Enforcement Layer
+examples/langgraph-sovereign-runtime/enforcement/sovereign_langgraph.py:252: [STALE_LABEL] AI SAFE² v3.0 sovereign enforcement for LangGraph StateGraph.
+examples/langgraph-sovereign-runtime/integrations/langgraph-studio.md:1: [STALE_LABEL] # LangGraph Studio Notes — AI SAFE² v3.0
+examples/langgraph-sovereign-runtime/requirements.txt:1: [STALE_LABEL] # AI SAFE² v3.0 — LangGraph Sovereign Runtime
+examples/langgraph-sovereign-runtime/smoke_test.py:3: [STALE_LABEL] AI SAFE² v3.0 — LangGraph Sovereign Runtime Adversarial Smoke Tests
+examples/langgraph-sovereign-runtime/smoke_test.py:516: [STALE_LABEL] assert "AI SAFE² v3.0" in report
+examples/langgraph-sovereign-runtime/smoke_test.py:534: [STALE_LABEL] print("║   AI SAFE² v3.0 — LangGraph Sovereign Runtime Smoke Tests   ║")
+examples/langgraph-sovereign-runtime/validation/pass1_static.sh:2: [STALE_LABEL] # AI SAFE² v3.0 — LangGraph Sovereign Runtime
+examples/langgraph-sovereign-runtime/validation/pass1_static.sh:14: [STALE_LABEL] echo "║   AI SAFE² v3.0 — LangGraph Pass 1: Static Validation       ║"
+examples/langgraph-sovereign-runtime/validation/pass2_runtime.sh:2: [STALE_LABEL] # AI SAFE² v3.0 — LangGraph Sovereign Runtime
+examples/langgraph-sovereign-runtime/validation/pass2_runtime.sh:14: [STALE_LABEL] echo "║   AI SAFE² v3.0 — LangGraph Pass 2: Runtime Validation      ║"
+examples/lovable-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE2 v3.0 | Cyber Strategy Institute**
+examples/lovable-sovereign-runtime/README.md:14: [STALE_LABEL] ### AI SAFE2 v3.0 Defense Package for Lovable Agent mode + MCP
+examples/lovable-sovereign-runtime/README.md:16: [STALE_LABEL] **Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+examples/lovable-sovereign-runtime/ci-cd/github-actions-lovable-gate.yml:2: [STALE_LABEL] # AI SAFE2 v3.0 CI/CD Gate — Lovable Sovereign Runtime
+examples/lovable-sovereign-runtime/controls/policy.yaml:2: [STALE_LABEL] # AI SAFE2 v3.0 Control Registry — Lovable Sovereign Runtime
+examples/lovable-sovereign-runtime/controls/policy.yaml:6: [STALE_LABEL] #   - live AI SAFE2 v3.0 framework (raw.githubusercontent.com)
+examples/lovable-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE2 v3.0 Lovable Sovereign Runtime — enforcement package."""
+examples/lovable-sovereign-runtime/enforcement/ai_safe2_engine.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime Engine
+examples/lovable-sovereign-runtime/enforcement/sovereign_lovable.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime
+examples/lovable-sovereign-runtime/enforcement/sovereign_lovable.py:179: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime for Lovable.
+examples/lovable-sovereign-runtime/integrations/mcp-server-security.md:2: [STALE_LABEL] ## AI SAFE2 v3.0 Integration Guide
+examples/lovable-sovereign-runtime/lovable-skill/ai-safe2-lovable.md:3: [STALE_LABEL] Cyber Strategy Institute | AI SAFE2 v3.0
+examples/lovable-sovereign-runtime/lovable-skill/ai-safe2-lovable.md:9: [STALE_LABEL] You are a Lovable project secured by the AI SAFE2 v3.0 Sovereign Runtime.
+examples/lovable-sovereign-runtime/lovable-skill/ai-safe2-lovable.md:28: [STALE_LABEL] - AI SAFE2 v3.0: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+examples/lovable-sovereign-runtime/requirements.txt:2: [STALE_LABEL] # AI SAFE2 v3.0 | Cyber Strategy Institute
+examples/lovable-sovereign-runtime/smoke_test.py:4: [STALE_LABEL] AI SAFE2 v3.0 Adversarial Test Suite
+examples/lovable-sovereign-runtime/smoke_test.py:356: [STALE_LABEL] print("  Cyber Strategy Institute | AI SAFE2 v3.0")
+examples/lovable-sovereign-runtime/workspace-knowledge/ai-safe2-workspace-knowledge.md:3: [STALE_LABEL] Cyber Strategy Institute | AI SAFE2 v3.0
+examples/lovable-sovereign-runtime/workspace-knowledge/ai-safe2-workspace-knowledge.md:12: [STALE_LABEL] You operate under the AI SAFE2 v3.0 Sovereign Runtime. The following rules
+examples/lovable-sovereign-runtime/workspace-knowledge/ai-safe2-workspace-knowledge.md:48: [STALE_LABEL] - AI SAFE2 v3.0: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+examples/make-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE2 v3.0 | Cyber Strategy Institute**
+examples/make-sovereign-runtime/README.md:17: [STALE_LABEL] ### AI SAFE2 v3.0 Defense Package for Make.com Visual Automation + AI Agents + MCP Server
+examples/make-sovereign-runtime/README.md:19: [STALE_LABEL] **Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+examples/make-sovereign-runtime/ci-cd/github-actions-make-gate.yml:2: [STALE_LABEL] # AI SAFE2 v3.0 CI/CD Gate — Make.com Sovereign Runtime
+examples/make-sovereign-runtime/controls/policy.yaml:2: [STALE_LABEL] # AI SAFE2 v3.0 Control Registry — Make.com Sovereign Runtime
+examples/make-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE2 v3.0 Make.com Sovereign Runtime — enforcement package."""
+examples/make-sovereign-runtime/enforcement/ai_safe2_engine.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime Engine
+examples/make-sovereign-runtime/enforcement/sovereign_make.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime
+examples/make-sovereign-runtime/enforcement/sovereign_make.py:221: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime for Make.com.
+examples/make-sovereign-runtime/examples/make_webhook_scenario.py:4: [STALE_LABEL] AI SAFE2 v3.0 Make.com Sovereign Runtime
+examples/make-sovereign-runtime/integrations/make-mcp-security.md:2: [STALE_LABEL] ## AI SAFE2 v3.0 | Cyber Strategy Institute
+examples/make-sovereign-runtime/make-skill/ai-safe2-make.md:6: [STALE_LABEL] You are a Make.com agent operating under AI SAFE2 v3.0 Sovereign Runtime.
+examples/make-sovereign-runtime/make-skill/ai-safe2-make.md:38: [STALE_LABEL] - AI SAFE2 v3.0: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+examples/make-sovereign-runtime/requirements.txt:2: [STALE_LABEL] # AI SAFE2 v3.0 | Cyber Strategy Institute
+examples/make-sovereign-runtime/smoke_test.py:4: [STALE_LABEL] AI SAFE2 v3.0 Adversarial Test Suite
+examples/make-sovereign-runtime/smoke_test.py:357: [STALE_LABEL] print("  Cyber Strategy Institute | AI SAFE2 v3.0")
+examples/mcp-security-toolkit/README.md:26: [STALE_LABEL] > AI SAFE2 v3.0 CP.5.MCP — open-source, 195 tests passing.
+examples/mcp-security-toolkit/README.md:28: [STALE_LABEL] [![AI SAFE2](https://img.shields.io/badge/AI_SAFE2-v3.0-orange)](https://cyberstrategyinstitute.com/ai-safe2/)
+examples/mcp-security-toolkit/README.md:54: [STALE_LABEL] This toolkit implements AI SAFE2 v3.0 CP.5.MCP as three composable tools:
+examples/mcp-security-toolkit/README.md:171: [STALE_LABEL] "framework": "AI SAFE2 v3.0 CP.5.MCP",
+examples/mcp-security-toolkit/README.md:302: [STALE_LABEL] **Schema pinning (`--pin-schema`, MCP-11):** Records the `tools/list` response hash at first connection. Alerts and writes an audit event wi
+examples/mcp-security-toolkit/README.md:311: [STALE_LABEL] All audit events for injection-class and schema-mutation events are enriched with CP.1 taxonomy tags (`cp1_cognitive_surface`, `cp1_memory_p
+examples/mcp-security-toolkit/examples/mcp-security.json:5: [STALE_LABEL] "framework": "AI SAFE2 v3.0 CP.5.MCP",
+examples/mcp-security-toolkit/pyproject.toml:8: [STALE_LABEL] description = "AI SAFE2 v3.0 MCP Security Toolkit — score, scan, and wrap any MCP server"
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/__main__.py:20: [STALE_LABEL] mcp-scan — AI SAFE2 v3.0 CP.5.MCP Static Code Analysis
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/dep_checker.py:184: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-3 requires registry provenance verification."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/findings.py:77: [STALE_LABEL] cp5_control: AI SAFE2 v3.0 CP.5.MCP control reference (e.g., "MCP-1")
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/CTI-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation)
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/CTI-001.template:2: [MCP_NAME] MCP-9 (Context-Tool Isolation); v3.1 name is 'Secret Boundary'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/CTI-001.template:42: [STALE_LABEL] # Per AI SAFE2 v3.0 CP.5.MCP-9, the Agentic Control Plane (CP.4) MUST enforce
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/CTI-001.template:46: [STALE_LABEL] # Full specification: AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation)
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/CTI-001.template:46: [MCP_NAME] MCP-9 (Context-Tool Isolation); v3.1 name is 'Secret Boundary'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/INJ-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-2
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/LOG-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-5
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/LOG-001.template:21: [STALE_LABEL] # Minimum required fields per AI SAFE2 v3.0 CP.5.MCP-5:
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/RCE-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-30623, CVE-2026-30615
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/RCE-002.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-30623
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/RCE-003.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/RCE-004.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2025-68145
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/RCE-005.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2025-68143
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/RCE-006.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-39884
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/SEC-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-6
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/STP-001.template:2: [STALE_LABEL] # AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling)
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/STP-001.template:2: [MCP_NAME] MCP-11 (Schema Temporal Profiling); v3.1 name is 'Catalog Provenance'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/STP-001.template:65: [STALE_LABEL] # Full specification: AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling)
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/fixes/STP-001.template:65: [MCP_NAME] MCP-11 (Schema Temporal Profiling); v3.1 name is 'Catalog Provenance'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:117: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-2.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:145: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-3.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:232: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-6.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:246: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-8.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:250: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-8 (Session Economics).",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:250: [MCP_NAME] MCP-8 (Session Economics); v3.1 name is 'Economic Ceiling'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:258: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-5.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:272: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-5.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:290: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-10.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:306: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-11.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:312: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling).",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:312: [MCP_NAME] MCP-11 (Schema Temporal Profiling); v3.1 name is 'Catalog Provenance'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:328: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-12.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:333: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-12 (Swarm C2 Detection Controls).",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:333: [MCP_NAME] MCP-12 (Swarm C2 Detection Controls); v3.1 name is 'Principal-Scoped State'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:359: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-3.",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:548: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP-9."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:555: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation) and fixes/CTI-001.template."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/pattern_scanner.py:555: [MCP_NAME] MCP-9 (Context-Tool Isolation); v3.1 name is 'Secret Boundary'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/reporter.py:36: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP static analysis passed.\n"
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/reporter.py:48: [STALE_LABEL] f"\nmcp-scan — AI SAFE2 v3.0 CP.5.MCP Static Analysis",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/reporter.py:80: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP gaps: " + ", ".join(sorted({f.cp5_control for f in findings})),
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/reporter.py:157: [STALE_LABEL] <h1>mcp-scan — AI SAFE2 v3.0 CP.5.MCP Static Analysis</h1>
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/scan/reporter.py:175: [STALE_LABEL] AI SAFE2 v3.0 | Cyber Strategy Institute |
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/__main__.py:49: [STALE_LABEL] mcp-score — AI SAFE2 v3.0 CP.5.MCP Remote Security Assessment
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:4: [STALE_LABEL] Scores any MCP HTTP server against AI SAFE2 v3.0 CP.5.MCP controls.
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:86: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-7. "
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:92: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6. "
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:98: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-2."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:103: [STALE_LABEL] "CyberArk FSP research (April 2026). See AI SAFE2 v3.0 CP.5.MCP-2."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:108: [STALE_LABEL] "Remove Server header. See AI SAFE2 v3.0 CP.5.MCP-6."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:114: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:119: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-4 and CVE-2025-6515."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:124: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6 and CVE-2026-26118."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:133: [STALE_LABEL] return "See AI SAFE2 v3.0 CP.5.MCP documentation."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/assessor.py:452: [STALE_LABEL] "local dev). AI SAFE2 v3.0 CP.5.MCP-6."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/auth_checker.py:3: [MCP_NAME] MCP-7 (Zero-Trust Client Configuration); v3.1 name is 'Trust Establishment'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/auth_checker.py:24: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-7. "
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/badge.py:143: [STALE_LABEL] "framework": "AI SAFE2 v3.0 CP.5.MCP",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/header_checker.py:29: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/reporter.py:31: [STALE_LABEL] f"[bold]AI SAFE2 v3.0 CP.5.MCP — Remote Security Assessment[/bold]\n"
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/reporter.py:113: [STALE_LABEL] print(f"\nAI SAFE2 v3.0 CP.5.MCP — Remote Security Assessment")
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/reporter.py:145: [STALE_LABEL] "framework": "AI SAFE2 v3.0 CP.5.MCP",
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/reporter.py:290: [STALE_LABEL] <h1>AI SAFE2 v3.0 CP.5.MCP — Remote Security Assessment</h1>
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/reporter.py:297: [STALE_LABEL] <div class="meta">out of 100 | AI SAFE2 v3.0 CP.5.MCP
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/reporter.py:327: [STALE_LABEL] <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework">AI SAFE2 v3.0 framework</a>
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/reporter.py:342: [STALE_LABEL] <p>AI SAFE2 v3.0 | Cyber Strategy Institute |
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/schema_scanner.py:28: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-2."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/schema_scanner.py:34: [STALE_LABEL] "CyberArk FSP research April 2026. See AI SAFE2 v3.0 CP.5.MCP-2."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/score/ssrf_detector.py:27: [STALE_LABEL] "See AI SAFE2 v3.0 CP.5.MCP-6 and CVE-2026-26118."
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/shared/patterns.py:5: [STALE_LABEL] Pattern coverage aligns with AI SAFE2 v3.0 CP.5.MCP-2 (Output Sanitization)
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/shared/patterns.py:5: [MCP_NAME] MCP-2 (Output Sanitization); v3.1 name is 'Return-Path Content Sanitization'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/shared/patterns.py:6: [MCP_NAME] MCP-9 (Context–Tool Isolation); v3.1 name is 'Secret Boundary'
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/wrap/__main__.py:11: [STALE_LABEL] mcp-safe-wrap — AI SAFE2 v3.0 Consumer-Side MCP Protection
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/wrap/audit.py:19: [STALE_LABEL] AI SAFE2 v3.0 CP.5.MCP-5 compliance:
+examples/mcp-security-toolkit/src/aisafe2_mcp_tools/wrap/proxy.py:180: [STALE_LABEL] f"\nmcp-safe-wrap HTTP Proxy — AI SAFE2 v3.0 CP.5.MCP\n"
+examples/mcp-security-toolkit/tests/test_integration.py:85: [STALE_LABEL] "description": "Search AI SAFE2 v3.0 controls by keyword, pillar, or ID.",
+examples/mcp-security-toolkit/tests/test_integration.py:431: [STALE_LABEL] "framework": "AI SAFE2 v3.0 CP.5.MCP",
+examples/mcp-security-toolkit/tests/test_integration.py:714: [STALE_LABEL] "AI SAFE2 v3.0 CP.10 HEAR Doctrine: designate a named kill-switch authority.",
+examples/mcp-security-toolkit/tests/test_toolkit.py:131: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP — MCP Server Security Profile",
+examples/mcp-security-toolkit/tests/test_toolkit.py:386: [STALE_LABEL] assert data["framework"] == "AI SAFE2 v3.0 CP.5.MCP"
+examples/mcp-security-toolkit/tests/test_toolkit.py:431: [STALE_LABEL] "description": "Search AI SAFE2 v3.0 controls by keyword or ID.",
+examples/mcp-security-toolkit/tests/test_toolkit.py:528: [STALE_LABEL] assert "AI SAFE2 v3.0 CP.5.MCP" in html
+examples/mcp-security-toolkit/tests/test_toolkit.py:869: [STALE_LABEL] Validates the risk-weighted attestation rubric (AI SAFE2 v3.0 CP.5.MCP).
+examples/openclaw/README.md:38: [STALE_LABEL] A governed, secure, and auditable OpenClaw agent workspace — from identity through memory through multi-model routing — plus a production en
+examples/openclaw/README.md:53: [STALE_LABEL] The `gateway/` subfolder contains the AI SAFE² v3.0 enforcement proxy for OpenClaw. Every request is risk-scored, HITL-gated, and immutably 
+examples/openclaw/gateway/README.md:5: [STALE_LABEL] AI enforcement proxy implementing the full AI SAFE² v3.0 control stack for OpenClaw — risk scoring, 4-tier HITL, immutable audit, and heartb
+examples/openclaw/gateway/README.md:7: [STALE_LABEL] The `gateway/` subfolder contains the AI SAFE² v3.0 enforcement proxy for OpenClaw.
+examples/openclaw/gateway/README.md:9: [STALE_LABEL] This is the production-ready gateway component — not a demo, not a stub. It intercepts every request before it reaches the Anthropic API and
+examples/openclaw/gateway/gateway.py:5: [STALE_LABEL] AI enforcement proxy implementing the full AI SAFE² v3.0 governance stack.
+examples/openclaw/gateway/gateway.py:86: [STALE_LABEL] FRAMEWORK_REF   = "AI SAFE² v3.0"
+examples/xai-grok-sovereign-runtime/.grok/skills/ai-safe2/SKILL.md:2: [STALE_LABEL] **Cyber Strategy Institute | AI SAFE2 v3.0**
+examples/xai-grok-sovereign-runtime/.grok/skills/ai-safe2/SKILL.md:6: [STALE_LABEL] You are operating under the **AI SAFE2 v3.0 Sovereign Runtime**.
+examples/xai-grok-sovereign-runtime/.grok/skills/ai-safe2/SKILL.md:39: [STALE_LABEL] - Framework: [AI SAFE2 v3.0](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+examples/xai-grok-sovereign-runtime/QUICKSTART.md:3: [STALE_LABEL] **AI SAFE2 v3.0 | Cyber Strategy Institute**
+examples/xai-grok-sovereign-runtime/README.md:17: [STALE_LABEL] ### AI SAFE2 v3.0 Defense Package for xAI Grok CLI + API + Multi-Agent
+examples/xai-grok-sovereign-runtime/README.md:19: [STALE_LABEL] **Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.0
+examples/xai-grok-sovereign-runtime/README.md:37: [STALE_LABEL] specific xAI capability that creates it and the AI SAFE2 v3.0 control that blocks it.
+examples/xai-grok-sovereign-runtime/README.md:311: [STALE_LABEL] | AI SAFE2 v3.0 Framework | [github.com/CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framew
+examples/xai-grok-sovereign-runtime/ci-cd/github-actions-xai-grok-gate.yml:2: [STALE_LABEL] # AI SAFE2 v3.0 CI/CD Gate — xAI/Grok Sovereign Runtime
+examples/xai-grok-sovereign-runtime/controls/policy.yaml:2: [STALE_LABEL] # AI SAFE2 v3.0 Control Registry — xAI/Grok Sovereign Runtime
+examples/xai-grok-sovereign-runtime/controls/policy.yaml:7: [STALE_LABEL] # All control IDs verified against live AI SAFE2 v3.0 framework.
+examples/xai-grok-sovereign-runtime/enforcement/__init__.py:1: [STALE_LABEL] """AI SAFE2 v3.0 xAI/Grok Sovereign Runtime — enforcement package."""
+examples/xai-grok-sovereign-runtime/enforcement/ai_safe2_engine.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime Engine
+examples/xai-grok-sovereign-runtime/enforcement/sovereign_xai_grok.py:3: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime
+examples/xai-grok-sovereign-runtime/enforcement/sovereign_xai_grok.py:119: [STALE_LABEL] AI SAFE2 v3.0 Sovereign Runtime for xAI/Grok.
+examples/xai-grok-sovereign-runtime/field-reports/2026-07-08-grok-usb-memory-sync.md.md:7: [STALE_LABEL] **Framework:** [AI SAFE² v3.0](https://github.com/CyberStrategyInstitute/ai-safe2-framework) · `examples/xai-grok-sovereign-runtime`
+examples/xai-grok-sovereign-runtime/integrations/memory-governance-patterns.md:3: [STALE_LABEL] **AI SAFE2 v3.0 · S1.5 Memory Governance Boundary Controls**
+examples/xai-grok-sovereign-runtime/integrations/mtls-enterprise.md:3: [STALE_LABEL] **AI SAFE2 v3.0 | Cyber Strategy Institute**
+examples/xai-grok-sovereign-runtime/integrations/mtls-enterprise.md:97: [STALE_LABEL] # AI SAFE2 v3.0 Enterprise Baseline
+examples/xai-grok-sovereign-runtime/requirements.txt:2: [STALE_LABEL] # AI SAFE2 v3.0 | Cyber Strategy Institute
+examples/xai-grok-sovereign-runtime/smoke_test.py:4: [STALE_LABEL] AI SAFE2 v3.0 Adversarial Test Suite
+examples/xai-grok-sovereign-runtime/smoke_test.py:311: [STALE_LABEL] print("  Cyber Strategy Institute | AI SAFE2 v3.0")
+gateway/main.py:7: [STALE_LABEL] Embodies the "governor governs the governor" principle from AI SAFE² v3.0.
+gateway/main.py:29: [STALE_LABEL] Refs: AI SAFE² v3.0, P1.T1.2, P2.T3.1, P3.T5.1, CP.9, CP.10 (HEAR Doctrine)
+gateway/main.py:78: [STALE_LABEL] FRAMEWORK_REF = "AI SAFE² v3.0"
+safe2/commands/scan.py:31: [STALE_LABEL] """Scan a codebase against the 161 AI SAFE2 v3.0 controls."""
+safe2/commands/scan.py:32: [STALE_LABEL] click.echo(f"\n{BOLD}AI SAFE2 v3.0 Project Scan{RESET}\nTarget: {path}\n" + "-" * 60)
+safe2/commands/score.py:29: [STALE_LABEL] """Score a codebase against the 161 AI SAFE2 v3.0 controls."""
+scanner/__init__.py:1: [STALE_LABEL] """AI SAFE2 v3.0 Scanner"""
+scanner/cli.py:2: [STALE_LABEL] AI SAFE² v3.0 Scanner CLI
+scanner/cli.py:33: [STALE_LABEL] """AI SAFE² v3.0 Static Analysis Scanner\n
+scanner/cli.py:34: [STALE_LABEL] Scans code and configs against 161 AI SAFE² v3.0 controls across
+scanner/cli.py:86: [STALE_LABEL] """Scan a project path against AI SAFE² v3.0 controls.
+scanner/cli.py:96: [STALE_LABEL] click.echo(f"\n{BOLD}AI SAFE² v3.0 Scanner{RESET}")
+scanner/cli.py:248: [STALE_LABEL] click.echo(f"\n{BOLD}AI SAFE² v3.0 Compliance Report{RESET}")
+scanner/config/default_rules.yaml:1: [STALE_LABEL] # AI SAFE² v3.0 Scanner — Default Rule Configuration
+scanner/report.py:2: [STALE_LABEL] AI SAFE² v3.0 Report Generator
+scanner/report.py:86: [STALE_LABEL] Generate a v3.0 compliance evidence artifact.
+scanner/report.py:102: [STALE_LABEL] print(f"\nAI SAFE2 v3.0 Compliance Report: {output_path}")
+scanner/report.py:196: [STALE_LABEL] "report_type": "AI SAFE2 v3.0 Compliance Evidence",
+scanner/rules/p1_sanitize.py:2: [STALE_LABEL] AI SAFE2 v3.0 Scanner — Pillar 1: Sanitize & Isolate Rules
+scanner/rules/p1_sanitize.py:406: [STALE_LABEL] # ── S1.3-S1.7 New v3.0 Controls ──────────────────────────────────────────
+scanner/rules/p2_audit.py:2: [STALE_LABEL] AI SAFE2 v3.0 Scanner — Pillar 2: Audit & Inventory Rules
+scanner/rules/p2_audit.py:208: [STALE_LABEL] # ── A2.3-A2.6 New v3.0 Controls ──────────────────────────────────────────
+scanner/rules/p3_failsafe.py:2: [STALE_LABEL] AI SAFE2 v3.0 Scanner — Pillar 3: Fail-Safe & Recovery Rules
+scanner/rules/p3_failsafe.py:171: [STALE_LABEL] # ── F3.2-F3.5 New v3.0 Controls ──────────────────────────────────────────
+scanner/rules/p4_monitor.py:2: [STALE_LABEL] AI SAFE2 v3.0 Scanner — Pillar 4: Engage & Monitor Rules
+scanner/rules/p4_monitor.py:218: [STALE_LABEL] # ── M4.4-M4.8 New v3.0 Controls ──────────────────────────────────────────
+scanner/rules/p5_evolve.py:2: [STALE_LABEL] AI SAFE2 v3.0 Scanner — Pillar 5: Evolve & Educate Rules
+scanner/rules/p5_evolve.py:196: [STALE_LABEL] # ── E5.1-E5.4 New v3.0 Controls ──────────────────────────────────────────
+scanner/scanner.py:2: [STALE_LABEL] AI SAFE² v3.0 Static Analysis Engine
+scanner/scanner.py:714: [STALE_LABEL] "framework": "v3.0",
+skills/mcp/src/mcp_server/app.py:89: [STALE_LABEL] "Search and retrieve AI SAFE2 v3.0 controls by keyword, pillar, priority, "
+skills/mcp/src/mcp_server/app.py:105: [STALE_LABEL] """Look up AI SAFE2 v3.0 controls."""
+skills/mcp/src/mcp_server/app.py:118: [STALE_LABEL] "Calculate the AI SAFE2 v3.0 Combined Risk Score: "
+skills/mcp/src/mcp_server/app.py:133: [STALE_LABEL] """Calculate AI SAFE2 v3.0 Combined Risk Score."""
+skills/mcp/src/mcp_server/app.py:145: [STALE_LABEL] "Map a compliance requirement to AI SAFE2 v3.0 controls across up to 32 frameworks. "
+skills/mcp/src/mcp_server/app.py:156: [STALE_LABEL] """Map a compliance requirement to AI SAFE2 v3.0 controls."""
+skills/mcp/src/mcp_server/app.py:167: [STALE_LABEL] "Review code against AI SAFE2 v3.0 security controls. Light version: "
+skills/mcp/src/mcp_server/app.py:179: [STALE_LABEL] """Review code against AI SAFE2 v3.0 controls."""
+skills/mcp/src/mcp_server/app.py:220: [STALE_LABEL] "Retrieve an AI SAFE2 v3.0 governance resource: policy templates, audit schemas, "
+skills/mcp/src/mcp_server/app.py:239: [STALE_LABEL] "Get a reusable AI SAFE2 v3.0 workflow prompt. Available prompts: "
+skills/mcp/src/mcp_server/app.py:262: [STALE_LABEL] """AI SAFE2 v3.0 control count and framework summary."""
+skills/mcp/src/mcp_server/app.py:266: [STALE_LABEL] f"AI SAFE2 v3.0 Controls Summary\n"
+skills/mcp/src/mcp_server/app.py:277: [STALE_LABEL] """AI SAFE2 v3.0 risk scoring formula."""
+skills/mcp/src/mcp_server/app.py:281: [STALE_LABEL] f"AI SAFE2 v3.0 Combined Risk Score Formula\n"
+skills/mcp/src/mcp_server/app.py:296: [STALE_LABEL] """Start a comprehensive AI SAFE2 v3.0 security architecture review."""
+skills/mcp/src/mcp_server/prompts/registry.py:3: [STALE_LABEL] Reusable task-starter prompts for common AI SAFE2 v3.0 workflows.
+skills/mcp/src/mcp_server/prompts/registry.py:12: [STALE_LABEL] "description": "Start a comprehensive AI SAFE2 v3.0 security review of a system design or architecture.",
+skills/mcp/src/mcp_server/prompts/registry.py:19: [STALE_LABEL] "Conduct a comprehensive AI SAFE2 v3.0 security architecture review for: {system_description}\n\n"
+skills/mcp/src/mcp_server/prompts/registry.py:46: [STALE_LABEL] "1. Use map_to_frameworks with framework='{framework}' to retrieve all relevant AI SAFE2 v3.0 controls\n"
+skills/mcp/src/mcp_server/prompts/registry.py:63: [STALE_LABEL] "Generate an AI SAFE2 v3.0 incident response runbook for: {incident_type}\n"
+skills/mcp/src/mcp_server/prompts/registry.py:73: [STALE_LABEL] "Reference specific AI SAFE2 v3.0 control IDs throughout."
+skills/mcp/src/mcp_server/resources/registry.py:17: [STALE_LABEL] "name": "AI SAFE2 v3.0 Quick-Start Security Checklist",
+skills/mcp/src/mcp_server/resources/registry.py:20: [STALE_LABEL] "content": """# AI SAFE2 v3.0 Quick-Start Security Checklist
+skills/mcp/src/mcp_server/resources/registry.py:62: [STALE_LABEL] "name": "AI SAFE2 v3.0 Five-Pillar Overview",
+skills/mcp/src/mcp_server/resources/registry.py:65: [STALE_LABEL] "content": """# AI SAFE2 v3.0 — Five-Pillar + Cross-Pillar Overview
+skills/mcp/src/mcp_server/resources/registry.py:67: [STALE_LABEL] | Pillar | Role | Key v3.0 Controls |
+skills/mcp/src/mcp_server/resources/registry.py:103: [STALE_LABEL] "content": """# ACT Capability Tier Reference (AI SAFE2 v3.0 CP.3)
+skills/mcp/src/mcp_server/resources/registry.py:153: [STALE_LABEL] "name": "Enterprise AI Governance Policy Template (AI SAFE2 v3.0)",
+skills/mcp/src/mcp_server/resources/registry.py:157: [STALE_LABEL] ## AI SAFE2 v3.0 Aligned | ISO 42001 | EU AI Act
+skills/mcp/src/mcp_server/resources/registry.py:160: [STALE_LABEL] **Framework:** AI SAFE2 v3.0 — Cyber Strategy Institute
+skills/mcp/src/mcp_server/resources/registry.py:210: [STALE_LABEL] *Based on AI SAFE2 v3.0 — cyberstrategyinstitute.com/ai-safe2/*
+skills/mcp/src/mcp_server/resources/registry.py:215: [STALE_LABEL] "name": "AI SAFE2 v3.0 Audit Scorecard Schema",
+skills/mcp/src/mcp_server/resources/registry.py:220: [STALE_LABEL] "title": "AI SAFE2 v3.0 Audit Scorecard",
+skills/mcp/src/mcp_server/resources/registry.py:279: [STALE_LABEL] "content": """# HEAR Designation Record (AI SAFE2 v3.0 CP.10)
+skills/mcp/src/mcp_server/resources/registry.py:324: [STALE_LABEL] *AI SAFE2 v3.0 CP.10 | cyberstrategyinstitute.com/ai-safe2/*
+skills/mcp/src/mcp_server/tools/classify_agent.py:214: [STALE_LABEL] "meta": {"tier": tier, "framework_version": "v3.0"},
+skills/mcp/src/mcp_server/tools/code_review.py:3: [STALE_LABEL] Analyzes code against AI SAFE2 v3.0 controls using the control taxonomy as context.
+skills/mcp/src/mcp_server/tools/code_review.py:46: [STALE_LABEL] Review code against AI SAFE2 v3.0 controls and return structured findings.
+skills/mcp/src/mcp_server/tools/code_review.py:170: [STALE_LABEL] "This is a model-assisted review using the AI SAFE2 v3.0 control taxonomy. "
+skills/mcp/src/mcp_server/tools/compliance_mapping.py:3: [STALE_LABEL] Map a compliance requirement to AI SAFE2 v3.0 controls.
+skills/mcp/src/mcp_server/tools/compliance_mapping.py:56: [STALE_LABEL] Map a compliance requirement or framework to relevant AI SAFE2 v3.0 controls.
+skills/mcp/src/mcp_server/tools/control_lookup.py:3: [STALE_LABEL] Search and retrieve AI SAFE2 v3.0 controls by keyword, pillar, priority,
+skills/mcp/src/mcp_server/tools/control_lookup.py:27: [STALE_LABEL] Look up AI SAFE2 v3.0 controls.
+skills/mcp/src/mcp_server/tools/risk_scoring.py:3: [STALE_LABEL] Computes the AI SAFE2 v3.0 Combined Risk Score:
+skills/mcp/src/mcp_server/tools/risk_scoring.py:49: [STALE_LABEL] Calculate the AI SAFE2 v3.0 Combined Risk Score.
+skills/mcp/tests/test_tools.py:78: [STALE_LABEL] assert len(results) >= 23, f"Expected at least 23 v3.0 controls (includes CP), got {len(results)}"
+tests/mcp_toolkit/test_integration.py:81: [STALE_LABEL] "description": "Search AI SAFE2 v3.0 controls by keyword, pillar, or ID.",
+tests/mcp_toolkit/test_integration.py:426: [STALE_LABEL] "framework": "AI SAFE2 v3.0 CP.5.MCP",
+tests/mcp_toolkit/test_integration.py:712: [STALE_LABEL] "AI SAFE2 v3.0 CP.10 HEAR Doctrine: designate a named kill-switch authority.",
+tests/mcp_toolkit/test_toolkit.py:132: [STALE_LABEL] "AI SAFE2 v3.0 CP.5.MCP — MCP Server Security Profile",
+tests/mcp_toolkit/test_toolkit.py:387: [STALE_LABEL] assert data["framework"] == "AI SAFE2 v3.0 CP.5.MCP"
+tests/mcp_toolkit/test_toolkit.py:432: [STALE_LABEL] "description": "Search AI SAFE2 v3.0 controls by keyword or ID.",
+tests/mcp_toolkit/test_toolkit.py:529: [STALE_LABEL] assert "AI SAFE2 v3.0 CP.5.MCP" in html
+tests/mcp_toolkit/test_toolkit.py:873: [STALE_LABEL] Validates the risk-weighted attestation rubric (AI SAFE2 v3.0 CP.5.MCP).
+framework version labels: 624 finding(s)
+exit=1

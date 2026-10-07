@@ -1,5 +1,5 @@
 # Fix Template: SEC-001 — Server bound to 0.0.0.0
-# AI SAFE2 v3.0 CP.5.MCP-6
+# AI SAFE2 v3.1 CP.5.MCP-3 (Least-Privilege Tool Exposure)
 #
 # ── BEFORE (vulnerable) ───────────────────────────────────────────
 uvicorn.run(app, host="0.0.0.0", port=8000)

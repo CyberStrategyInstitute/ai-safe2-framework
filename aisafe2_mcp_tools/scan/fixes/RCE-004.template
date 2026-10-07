@@ -1,5 +1,5 @@
 # Fix Template: RCE-004 — Unsafe yaml.load()
-# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2025-68145
+# AI SAFE2 v3.1 CP.5.MCP-1 | CVE-2025-68145
 #
 # ── BEFORE (vulnerable) ───────────────────────────────────────────
 import yaml

@@ -80,7 +80,7 @@ def terminal_report(findings: list[Finding], target: str) -> str:
             lines.append("")
 
     lines += [
-        "AI SAFE2 v3.0 CP.5.MCP gaps: " + ", ".join(sorted({f.cp5_control for f in findings})),
+        "AI SAFE2 v3.1 CP.5.MCP gaps: " + ", ".join(sorted({f.cp5_control for f in findings})),
         "",
         "Next steps:",
         "  mcp-scan fix --interactive   -> step through fixes interactively",
@@ -159,7 +159,7 @@ def html_report(findings: list[Finding], target: str) -> str:
 </head>
 <body>
 <div class="header">
-  <h1>mcp-scan — AI SAFE2 v3.0 CP.5.MCP Static Analysis</h1>
+  <h1>mcp-scan — AI SAFE2 v3.1 CP.5.MCP Static Analysis</h1>
   <p style="margin:.4rem 0 0;opacity:.8;font-size:.85rem">Target: {target} | {total} findings</p>
 </div>
 <div class="summary">
@@ -177,7 +177,7 @@ def html_report(findings: list[Finding], target: str) -> str:
   </table>
 </div>
 <div class="footer">
-  AI SAFE2 v3.0 | Cyber Strategy Institute |
+  AI SAFE2 v3.1 | Cyber Strategy Institute |
   <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/mcp-security-toolkit">
     github.com/CyberStrategyInstitute/ai-safe2-framework
   </a>

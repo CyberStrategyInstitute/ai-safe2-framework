@@ -1,5 +1,5 @@
 # Fix Template: CTI-001 — Unguarded Retrieval-to-Disclosure Chain
-# AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation)
+# AI SAFE2 v3.1 CP.5.MCP-9 (Secret Boundary)
 #
 # Threat: MCP-UPD (Parasitic Toolchain Attack)
 # External data retrieved via MCP tools can carry injected instructions
@@ -39,8 +39,8 @@ async def summarize_and_notify(doc_path: str, owner_email: str) -> str:
     return "Notification sent."
 #
 # ── ARCHITECTURAL NOTE ────────────────────────────────────────────────────────
-# Per AI SAFE2 v3.0 CP.5.MCP-9, the Agentic Control Plane (CP.4) MUST enforce
+# Per AI SAFE2 v3.1 CP.5.MCP-9, the Agentic Control Plane (CP.4) MUST enforce
 # the isolation boundary at the orchestration layer. Per-tool sanitization is a
 # defense-in-depth measure, not a substitute for CP.4 enforcement.
 #
-# Full specification: AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation)
+# Full specification: AI SAFE2 v3.1 CP.5.MCP-9 (Secret Boundary)

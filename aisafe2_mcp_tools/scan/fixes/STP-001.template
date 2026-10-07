@@ -1,5 +1,5 @@
 # Fix Template: STP-001 — Schema Temporal Profiling
-# AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling)
+# AI SAFE2 v3.1 CP.5.MCP-11 (Catalog Provenance)
 #
 # Threat: Rug Pull Attack (temporal profile: delayed_weeks)
 # A server with established trust mutates its tool descriptions between sessions.
@@ -62,4 +62,4 @@ async def connect_to_server(client, server_url: str) -> list:
 # Use mcp-safe-wrap --pin-schema for automatic schema pinning without code changes:
 #   mcp-safe-wrap proxy https://server.example/mcp --pin-schema
 #
-# Full specification: AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling)
+# Full specification: AI SAFE2 v3.1 CP.5.MCP-11 (Catalog Provenance)

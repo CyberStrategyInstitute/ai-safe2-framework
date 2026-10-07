@@ -1,5 +1,5 @@
 # Fix Template: RCE-001 — Dynamic Command in StdioServerParameters
-# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-30623, CVE-2026-30615
+# AI SAFE2 v3.1 CP.5.MCP-1 | CVE-2026-30623, CVE-2026-30615
 #
 # CRITICAL: This fix requires manual review. The correct replacement
 # depends on what command your server is intended to run.

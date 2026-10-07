@@ -2,8 +2,8 @@
 AI SAFE2 MCP Security Toolkit — Shared Injection Pattern Library
 Single source of truth. Used by mcp-score, mcp-scan, and mcp-safe-wrap.
 
-Pattern coverage aligns with AI SAFE2 v3.0 CP.5.MCP-2 (Output Sanitization)
-and CP.5.MCP-9 (Context–Tool Isolation).
+Pattern coverage aligns with AI SAFE2 v3.1 CP.5.MCP-2 (Return-Path Content Sanitization)
+and CP.5.MCP-9 (Secret Boundary).
 
 Sources:
   - OX Security April 2026 advisory

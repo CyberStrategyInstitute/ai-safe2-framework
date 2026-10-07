@@ -129,7 +129,7 @@ class TestInjectionPatternCoverage:
             "Apply semantic isolation between agent roles in the system.",
             "Return the list of controls matching the query parameters.",
             "Calculate risk score using CVSS base, pillar score, and AAF factors.",
-            "AI SAFE2 v3.0 CP.5.MCP — MCP Server Security Profile",
+            "AI SAFE2 v3.1 CP.5.MCP — MCP Server Security Profile",
             "Control S1.5: Memory Governance Boundary Controls. Priority: HIGH.",
             "Scans MCP tool results for prompt injection patterns before returning.",
         ]
@@ -258,7 +258,8 @@ class TestAttestationBonus:
     def test_full_attestation_gives_25_points(self):
         """All 11 attested fields (full CP.5.MCP coverage) earns 25 points.
         Note: original 5-field attestation now earns 13pts under the risk-weighted rubric.
-        Full bonus requires implementing MCP-8 through MCP-13 in addition to MCP-1/2/4/5/6.
+        Full weight requires the MCP-8_* .. MCP-13_* attestation keys (retired v3.0
+        numbering, kept as the file contract) in addition to the original five.
         See TestAttestationBonusRiskWeighted for the detailed rubric tests.
         """
         assessor = MCPAssessor("https://example.com/mcp")
@@ -384,7 +385,7 @@ class TestBadgeEligibility:
         )
         data = json.loads(template)
         assert data["mcp_security_version"] == "1.0"
-        assert data["framework"] == "AI SAFE2 v3.0 CP.5.MCP"
+        assert data["framework"] == "AI SAFE2 v3.1 CP.5.MCP"
         assert data["aisafe2_score"] == 85
 
     def test_badge_section_for_eligible(self):
@@ -429,7 +430,7 @@ class TestToolInjectionAnalysis:
                 "tools": [
                     {
                         "name": "lookup_control",
-                        "description": "Search AI SAFE2 v3.0 controls by keyword or ID.",
+                        "description": "Search AI SAFE2 v3.1 controls by keyword or ID.",
                         "inputSchema": {
                             "type": "object",
                             "properties": {
@@ -526,7 +527,7 @@ class TestReportSerialization:
         report = self._make_full_report()
         html = to_html(report)
         assert "<!DOCTYPE html>" in html
-        assert "AI SAFE2 v3.0 CP.5.MCP" in html
+        assert "AI SAFE2 v3.1 CP.5.MCP" in html
         assert "75" in html
         assert "Acceptable" in html
         assert "test.example" in html
@@ -864,13 +865,17 @@ class TestEndToEndScoring:
 
 
 # =============================================================================
-# MCP-8 through MCP-13: Control coverage, false positive, and scoring tests
+# Attestation keys MCP-8_* .. MCP-13_* and later finding classes: coverage, false positive, scoring
 # =============================================================================
 
 
 class TestAttestationBonusRiskWeighted:
     """
-    Validates the risk-weighted attestation rubric (AI SAFE2 v3.0 CP.5.MCP).
+    Validates the risk-weighted attestation rubric (AI SAFE2 v3.1 CP.5.MCP scorer).
+
+    The MCP-N labels are the attestation file's key prefixes (schema v1.1), which
+    use the retired v3.0 CP.5.MCP numbering; they are not v3.1 control IDs.
+    Claimed weight is reported, never scored (see test_score_gaming.py).
 
     Risk tier 1 (RCE / confirmed attack surface):
       MCP-1 (5pts): OX Security RCE, biggest remote blind spot
@@ -915,7 +920,7 @@ class TestAttestationBonusRiskWeighted:
         assert bonus == 25, f"Full 11-field attestation must give 25. Got {bonus}"
 
     def test_high_risk_controls_earn_more_than_low_risk(self):
-        """MCP-1 + MCP-9 (risk tier 1) earns more than MCP-10 + MCP-12 + MCP-13 (tier 4)."""
+        """Keys MCP-1 + MCP-9 (risk tier 1) weigh more than MCP-10 + MCP-12 + MCP-13 (tier 4)."""
         assessor = MCPAssessor("https://example.com/mcp")
 
         tier1_att = AttestationData(
@@ -938,13 +943,13 @@ class TestAttestationBonusRiskWeighted:
         assert tier4_bonus == 3   # 1+1+1
 
     def test_mcp8_session_economics_earns_3_points(self):
-        """MCP-8 (session economics) earns 3 points — confirmed incident risk tier."""
+        """Key MCP-8_session_economics weighs 3 points — confirmed incident risk tier."""
         att = AttestationData(present=True, session_economics=True)
         bonus = MCPAssessor("https://example.com/mcp")._compute_attestation_bonus(att)
         assert bonus == 3
 
     def test_mcp9_context_isolation_earns_4_points(self):
-        """MCP-9 (context-tool isolation) earns 4 points — 92.9% attack surface."""
+        """Key MCP-9_context_tool_isolation weighs 4 points — 92.9% attack surface."""
         att = AttestationData(present=True, context_tool_isolation="aisafe2-mcp-tools>=1.0.0")
         bonus = MCPAssessor("https://example.com/mcp")._compute_attestation_bonus(att)
         assert bonus == 4
@@ -1114,7 +1119,7 @@ class TestMCP11SchemaTemporalProfiling:
         assert (fixes_dir / "STP-001.template").exists()
 
 
-class TestMCP12SwarmC2Detection:
+class TestSWM001SwarmC2Detection:
     """SWM-001: Multi-agent orchestration without topology monitoring."""
 
     def _scan(self, code: str, tmp_path) -> list:
@@ -1201,8 +1206,8 @@ class TestLOG002Implementation:
         assert "verify" in log2.title.lower() or "verify" in log2.description.lower()
 
 
-class TestMCP13AuditTaxonomy:
-    """CP.1 taxonomy tags auto-injected into audit records (MCP-13)."""
+class TestCP1AuditTaxonomy:
+    """CP.1 failure-taxonomy tags auto-injected into audit records."""
 
     def test_injection_event_gets_taxonomy(self, tmp_path):
         import json as _json

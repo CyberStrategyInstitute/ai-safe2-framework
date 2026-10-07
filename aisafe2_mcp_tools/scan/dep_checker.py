@@ -174,7 +174,7 @@ class DependencyChecker:
                     yield Finding(
                         finding_id="DEP-002",
                         severity=vuln.severity,
-                        cp5_control="MCP-3",
+                        cp5_control=Finding.control_for("DEP-002"),
                         title=f"Vulnerable dependency: {pkg_name} < {vuln.affected_below}",
                         description=(
                             f"{pkg_name} version {version} is affected by {vuln.cve}. "
@@ -198,12 +198,12 @@ class DependencyChecker:
                 yield Finding(
                     finding_id="DEP-001",
                     severity="low",
-                    cp5_control="MCP-3",
+                    cp5_control=Finding.control_for("DEP-001"),
                     title=f"Unpinned sensitive dependency: {pkg_name}",
                     description=(
                         f"{pkg_name} is a sensitive MCP-ecosystem package with no pinned version. "
                         "Unpinned dependencies can silently upgrade to vulnerable versions. "
-                        "AI SAFE2 v3.0 CP.5.MCP-3 requires registry provenance verification."
+                        "AI SAFE2 v3.1 CP.5.MCP-4 requires server and binary integrity verification."
                     ),
                     file=rel_path,
                     line=self._find_line(content, pkg_name),

@@ -1,5 +1,5 @@
 # Fix Template: RCE-002 — shell=True in subprocess
-# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2026-30623
+# AI SAFE2 v3.1 CP.5.MCP-1 | CVE-2026-30623
 #
 # ── BEFORE (vulnerable) ───────────────────────────────────────────
 subprocess.run(f"git clone {repo_url}", shell=True)

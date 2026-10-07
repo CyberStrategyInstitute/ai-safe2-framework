@@ -1,0 +1,93 @@
+{
+  "schema": "ai-safe2/version-label-allowlist/v1",
+  "purpose": "Every place a 'v3.0' framework label or a non-canonical 'MCP-N (Name)' citation is allowed to remain, with the reason. Anything not listed here fails scripts/check_framework_version_labels.py.",
+  "current_framework_version": "v3.1",
+  "paths": [
+    {
+      "glob": "research/**",
+      "reason": "Dated research notes; the version they cite is the version they were written against."
+    },
+    {
+      "glob": "releases/**",
+      "reason": "Release records."
+    },
+    {
+      "glob": "docs/assessments/**",
+      "reason": "Dated assessment records, including quoted pre-fix output."
+    },
+    {
+      "glob": "**/CHANGELOG*.md",
+      "reason": "Change history."
+    },
+    {
+      "glob": "EVOLUTION.md",
+      "reason": "Version history narrative."
+    },
+    {
+      "glob": "MIGRATION.md",
+      "reason": "Describes the move from v3.0 to v3.1."
+    },
+    {
+      "glob": "guides/v3-release-overview.md",
+      "reason": "The v3.0 release overview, kept as a dated record."
+    },
+    {
+      "glob": "examples/openclaw/gateway-release-v3.0.html",
+      "reason": "Gateway v3.0 component release page."
+    },
+    {
+      "glob": "NEXUS/schemas/aim-v0.2.schema.json",
+      "reason": "Published, frozen AIM v0.2 schema; v0.3 is the current schema."
+    },
+    {
+      "glob": "skills/mcp/data/ai-safe2-controls-v3.0.json",
+      "reason": "Core 161-control taxonomy dataset, unchanged in v3.1 and kept byte-stable for provenance (AGENTS.md)."
+    },
+    {
+      "glob": "safe2/data/ai-safe2-controls-v3.0.json",
+      "reason": "Packaged copy of the core taxonomy dataset; must stay byte-identical to the canonical copy."
+    },
+    {
+      "glob": "skills/mcp/data/generate_controls.py",
+      "reason": "Generator for the byte-stable taxonomy dataset; its output strings must match the dataset."
+    },
+    {
+      "glob": "scripts/check_repo_ux.py",
+      "reason": "Guard message text names the stale label it rejects."
+    },
+    {
+      "glob": "scripts/check_framework_version_labels.py",
+      "reason": "This guard; its patterns name what they reject."
+    },
+    {
+      "glob": "tests/test_framework_version_labels.py",
+      "reason": "Guard tests use stale labels as negative fixtures."
+    },
+    {
+      "glob": "tests/mcp_toolkit/test_control_citations.py",
+      "reason": "Test docstring quotes the retired names it guards against."
+    },
+    {
+      "glob": "tests/battery/**",
+      "reason": "Assessment harness; fixtures and checks quote pre-fix text."
+    }
+  ],
+  "line_patterns": [
+    {
+      "regex": "GENESIS:SAFE2:v3\\.0",
+      "reason": "Hash-chain genesis seed. Changing it breaks verification of existing audit chains."
+    },
+    {
+      "regex": "Gateway v3\\.0",
+      "reason": "Gateway component version (independent of the framework version, per AGENTS.md version model)."
+    },
+    {
+      "regex": "controls-v3\\.0\\.json",
+      "reason": "Dataset filename kept for provenance."
+    },
+    {
+      "regex": "MCP-\\d+_[a-z_]+",
+      "reason": "Attestation file keys are an external contract."
+    }
+  ]
+}

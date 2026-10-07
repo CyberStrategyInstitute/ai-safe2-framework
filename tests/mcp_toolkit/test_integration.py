@@ -78,7 +78,7 @@ def _make_secure_server_tools() -> list[dict]:
     return [
         {
             "name": "lookup_control",
-            "description": "Search AI SAFE2 v3.0 controls by keyword, pillar, or ID.",
+            "description": "Search AI SAFE2 v3.1 controls by keyword, pillar, or ID.",
             "inputSchema": {
                 "type": "object",
                 "properties": {
@@ -392,9 +392,9 @@ class TestScoreSystemValidation:
         assert check.score == 10, f"Full headers should score 10/10. Got {check.score}"
 
     def test_score_attestation_bonus_on_full_attestation(self):
-        """Full 11-field attestation (all CP.5.MCP controls) gives exactly 25 bonus points.
+        """Full 11-field attestation gives exactly 25 points of claimed weight.
 
-        Risk-weighted rubric (sum=25):
+        Rubric by attestation key prefix (retired v3.0 numbering; sum=25):
           MCP-1(5) + MCP-9(4) + MCP-2(3) + MCP-8(3) + MCP-11(2) +
           MCP-4(2) + MCP-5(2) + MCP-10(1) + MCP-6(1) + MCP-12(1) + MCP-13(1)
         """
@@ -423,7 +423,7 @@ class TestScoreSystemValidation:
         """Builder attestation must produce higher score than no attestation."""
         well_known = {
             "mcp_security_version": "1.0",
-            "framework": "AI SAFE2 v3.0 CP.5.MCP",
+            "framework": "AI SAFE2 v3.1 CP.5.MCP",
             "server_name": "test-server",
             "controls": {
                 "MCP-1_no_dynamic_commands": True,
@@ -709,7 +709,7 @@ class TestCrossToolConsistency:
             "Enforce output sanitization before returning to LLM clients.",
             "Verify STDIO transport integrity using source file hash.",
             "Apply CP.5.MCP-2: scan all tool results for injection patterns.",
-            "AI SAFE2 v3.0 CP.10 HEAR Doctrine: designate a named kill-switch authority.",
+            "AI SAFE2 v3.1 CP.10 HEAR Doctrine: designate a named kill-switch authority.",
             "Run: mcp-score https://server.example/mcp --output json",
             "Classification: TLP:WHITE — Unrestricted Distribution",
             "ACT-4 agents require CP.9 replication governance and lineage token propagation.",
@@ -744,12 +744,12 @@ class TestCrossToolConsistency:
 
 
 # =============================================================================
-# MCP-8 through MCP-13 Integration Tests
+# Later finding classes (RL-002, CTI, STP, SWM, MEM, LOG-002): v3.1 mapping, integration
 # =============================================================================
 
 
 class TestMCP8to13Integration:
-    """System-level validation for MCP-8 through MCP-13 controls."""
+    """System-level validation of the later finding classes against the v3.1 control map."""
 
     def test_rl002_maps_to_mcp8_at_system_level(self, tmp_path):
         """RL-002 (billing amplification) maps to MCP-8 end-to-end through the scanner."""

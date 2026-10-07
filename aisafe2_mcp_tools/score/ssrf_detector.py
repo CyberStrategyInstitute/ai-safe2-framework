@@ -23,7 +23,7 @@ _REMEDIATION = (
     "Validate all URL parameters against a blocklist before making requests. "
     "Block 169.254.x.x (AWS IMDS), RFC 1918 ranges, loopback, and file:// URIs. "
     "from aisafe2_mcp_tools.shared.patterns import SSRF_BLOCKED_PATTERNS. "
-    "See AI SAFE2 v3.0 CP.5.MCP-6 and CVE-2026-26118."
+    "See AI SAFE2 v3.1 CP.5.MCP-19 and CVE-2026-26118."
 )
 
 

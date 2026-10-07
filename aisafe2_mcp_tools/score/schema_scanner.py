@@ -25,13 +25,13 @@ _INJ_REMEDIATION = (
     "Apply output sanitization to all tool returns: "
     "from aisafe2_mcp_tools.shared.patterns import sanitize_value. "
     "return sanitize_value(result, 'tool_name')[0]. "
-    "See AI SAFE2 v3.0 CP.5.MCP-2."
+    "See AI SAFE2 v3.1 CP.5.MCP-2."
 )
 
 _FSP_REMEDIATION = (
     "Audit ALL tool schema fields for FSP markers — not just description fields. "
     "Check parameter names, enum values, and response schemas. "
-    "CyberArk FSP research April 2026. See AI SAFE2 v3.0 CP.5.MCP-2."
+    "CyberArk FSP research April 2026. See AI SAFE2 v3.1 CP.5.MCP-2."
 )
 
 

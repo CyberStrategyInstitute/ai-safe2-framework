@@ -9,7 +9,7 @@ import click
 @click.group()
 def cli() -> None:
     """
-    mcp-safe-wrap — AI SAFE2 v3.0 Consumer-Side MCP Protection
+    mcp-safe-wrap — AI SAFE2 v3.1 Consumer-Side MCP Protection
 
     \b
     STDIO mode:  mcp-safe-wrap stdio -- python -m mcp_server.app
@@ -75,7 +75,7 @@ def stdio(
 @click.option("--rate-limit", default=100, type=int,
               help="Max requests per hour per IP (default: 100)")
 @click.option("--pin-schema", is_flag=True, default=False,
-              help="MCP-11: Record tools/list hash at startup and alert on changes (schema temporal profiling)")
+              help="MCP-11: Record tools/list hash at startup and alert on changes (catalog provenance)")
 def proxy(
     target_url: str, token: str | None, local_port: int, scan_inputs: bool,
     scan_outputs: bool, audit_log: str | None, rate_limit: int, pin_schema: bool,

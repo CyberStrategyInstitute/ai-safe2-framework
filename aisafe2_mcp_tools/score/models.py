@@ -48,7 +48,8 @@ class AttestationData:
     rate_limiting: bool = False
     audit_logging: bool = False
     network_isolation: str = ""
-    # MCP-8 through MCP-13 attestation fields (schema v1.1)
+    # Attestation fields keyed MCP-8_* .. MCP-13_* in the file (schema v1.1).
+    # Those key prefixes use the retired v3.0 numbering and are not v3.1 control IDs.
     session_economics: bool = False         # MCP-8: token budget + cost ceiling declared
     context_tool_isolation: str = ""        # MCP-9: isolation library/method reference
     multi_agent_provenance: bool = False    # MCP-10: CP.9 lineage tokens in use

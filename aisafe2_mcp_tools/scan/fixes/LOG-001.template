@@ -1,5 +1,5 @@
 # Fix Template: LOG-001 — Missing tool audit logging
-# AI SAFE2 v3.0 CP.5.MCP-5
+# AI SAFE2 v3.1 CP.5.MCP-5
 #
 # ── BEFORE (missing log) ──────────────────────────────────────────
 @mcp.tool(description="Lookup control by ID")
@@ -18,7 +18,7 @@ def lookup_control(control_id: str, tier: str = "free") -> dict:
     result = db.get(control_id)
     return result
 #
-# Minimum required fields per AI SAFE2 v3.0 CP.5.MCP-5:
+# Minimum required fields per AI SAFE2 v3.1 CP.5.MCP-5:
 #   - tool name (in the log event name)
 #   - key parameters
 #   - calling agent identity (tier is a proxy for this)
