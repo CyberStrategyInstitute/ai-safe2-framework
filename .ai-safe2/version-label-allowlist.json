@@ -12,6 +12,10 @@
       "reason": "Release records."
     },
     {
+      "glob": "NEXUS/RELEASE-NOTES-*.md",
+      "reason": "Dated NEXUS release records; each names the version it released."
+    },
+    {
       "glob": "docs/assessments/**",
       "reason": "Dated assessment records, including quoted pre-fix output."
     },
@@ -33,7 +37,7 @@
     },
     {
       "glob": "guides/v3.1-release-overview.md",
-      "reason": "v3.1 framework release record; component versions are stated as of that release (a superseded note points to NEXUS v0.5.0)."
+      "reason": "v3.1 framework release record; component versions are stated as of that release (a superseded note points to the later NEXUS release)."
     },
     {
       "glob": "examples/openclaw/gateway-release-v3.0.html",

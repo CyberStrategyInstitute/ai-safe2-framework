@@ -82,6 +82,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = ap.add_subparsers(dest="cmd", required=True)
     w = sub.add_parser("wait")
     w.add_argument("--version", required=True)
+    w.add_argument("--package", default=PACKAGE)
     w.add_argument("--timeout", type=float, default=600)
     w.add_argument("--interval", type=float, default=20)
     a = sub.add_parser("audit")
@@ -89,10 +90,11 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     if args.cmd == "wait":
-        if wait_for(args.version, pypi_versions, args.timeout, args.interval):
-            print(f"PyPI serves {PACKAGE} {args.version}")
+        fetch = lambda: pypi_versions(args.package)  # noqa: E731
+        if wait_for(args.version, fetch, args.timeout, args.interval):
+            print(f"PyPI serves {args.package} {args.version}")
             return 0
-        print(f"::error::PyPI does not list {PACKAGE} {args.version} after {args.timeout:.0f}s")
+        print(f"::error::PyPI does not list {args.package} {args.version} after {args.timeout:.0f}s")
         return 1
 
     try:

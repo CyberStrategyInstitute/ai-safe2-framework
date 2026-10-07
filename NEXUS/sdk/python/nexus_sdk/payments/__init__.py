@@ -1,6 +1,6 @@
 """
 nexus_sdk.payments - CP.5.APAY Agentic Payments Integrity Profile
-Cyber Strategy Institute | NEXUS v0.5.0 | CP.5.APAY/0.4 | AI SAFE2 v3.1
+Cyber Strategy Institute | NEXUS v0.6.0 | CP.5.APAY/0.4 | AI SAFE2 v3.1
 
 The agent-to-payment enforcement plane.
 

@@ -4,7 +4,7 @@
 
 **Technical name:** `NEXUSPaymentExecutionPlane`
 
-**Status:** NEXUS v0.5.0 reference contract; no production assurance claim
+**Status:** NEXUS v0.6.0 reference contract; no production assurance claim
 
 The Sovereign Payment Gateway is the protected execution boundary around the
 NEXUS Payment Integrity Gateway. Its objective is simple: compromising an agent

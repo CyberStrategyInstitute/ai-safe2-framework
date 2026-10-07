@@ -14,14 +14,15 @@ on:
     types: [published]
 
 permissions:
-  contents: read
-  id-token: write
+  contents: read    # id-token: write is granted only to the publish jobs
 
 jobs:
   build:
     name: Build and verify NEXUS distribution
     if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'nexus-v')
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.package.outputs.version }}
     defaults:
       run:
         working-directory: NEXUS
@@ -36,6 +37,19 @@ jobs:
           python-version: "3.12"
       - name: Install build tools
         run: python -m pip install build twine pytest
+      - name: Read package version
+        id: package
+        run: echo "version=$(python -c 'import tomllib; print(tomllib.load(open("pyproject.toml","rb"))["project"]["version"])')" >> "$GITHUB_OUTPUT"
+      - name: Verify release tag matches package version
+        if: github.event_name == 'release'
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          VERSION: ${{ steps.package.outputs.version }}
+        run: |
+          if [ "$TAG" != "nexus-v$VERSION" ]; then
+            echo "::error::Release tag '$TAG' does not match NEXUS/pyproject.toml version $VERSION. Use tag nexus-v$VERSION."
+            exit 1
+          fi
       - name: Run NEXUS tests
         run: python -m pytest sdk/python/tests -q
       - name: Build wheel and source distribution
@@ -49,8 +63,8 @@ jobs:
           python -m venv wheel-smoke
           wheel-smoke/bin/python -m pip install --no-deps dist/*.whl
           cd /tmp
-          "$GITHUB_WORKSPACE/NEXUS/wheel-smoke/bin/python" -c \
-            "import nexus_sdk; import nexus_sdk.payments; assert nexus_sdk.__version__ == '0.5.0'; print(nexus_sdk.__version__)"
+          VERSION="${{ steps.package.outputs.version }}" "$GITHUB_WORKSPACE/NEXUS/wheel-smoke/bin/python" -c \
+            "import os, nexus_sdk, nexus_sdk.payments; assert nexus_sdk.__version__ == os.environ['VERSION'], nexus_sdk.__version__; print(nexus_sdk.__version__)"
       - name: Upload verified distribution
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
@@ -64,6 +78,9 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # OIDC trusted publishing
     environment:
       name: testpypi
       url: https://test.pypi.org/project/nexus-a2a-sdk/
@@ -82,6 +99,9 @@ jobs:
     if: github.event_name == 'release' && github.event.release.prerelease == false
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # OIDC trusted publishing
     environment:
       name: pypi
       url: https://pypi.org/project/nexus-a2a-sdk/
@@ -92,3 +112,36 @@ jobs:
           path: dist/
       - name: Publish verified NEXUS package
         uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+
+  verify-pypi:
+    name: Verify PyPI serves the NEXUS release
+    needs: [build, publish-pypi]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.12"
+      - name: Wait until PyPI lists the version
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+        run: python -I scripts/check_pypi_release.py wait --package nexus-a2a-sdk --version "$VERSION" --timeout 900
+      - name: Install from PyPI in a clean environment and check the version
+        shell: bash
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          set -euo pipefail
+          python -m venv /tmp/pypi-smoke
+          for attempt in 1 2 3 4 5; do
+            /tmp/pypi-smoke/bin/pip install --no-cache-dir "nexus-a2a-sdk==${VERSION}" && break
+            echo "index not consistent yet (attempt ${attempt}); retrying"; sleep 30
+          done
+          cd /tmp
+          /tmp/pypi-smoke/bin/python -c "import os, nexus_sdk; assert nexus_sdk.__version__ == os.environ['VERSION'], nexus_sdk.__version__; print('nexus-a2a-sdk', nexus_sdk.__version__)"

@@ -31,7 +31,7 @@ This distinction is intentional:
 
 - **AI SAFE² v3.1** is the current framework.
 - **Gateway v3.0** is the current gateway component.
-- **NEXUS v0.5** is the current NEXUS component (v0.5.0, released 2026-10-04).
+- **NEXUS v0.6** is the current NEXUS component (v0.6.0).
 - Component versions should not be rewritten merely for visual consistency.
 
 ---
