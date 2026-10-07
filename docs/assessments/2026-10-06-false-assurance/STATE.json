@@ -261,5 +261,40 @@
       "decision": "Keep undeclared-tier=ACT-4 as interim floor in PR #393; registry-bound ACT tiers (AIM v0.3) as a separate follow-up PR. (owner, 2026-10-07)"
     }
   ],
-  "next_step": "Owner merges #393 (merge commit or rebase, not squash). Then retarget #394 to main, let full CI run, review and merge. Then publication (D2)."
+  "next_step": "#395 retargeted to main; full hosted CI runs; owner merges #395 then #396, then publishes 1.0.1.",
+  "merged": {
+    "pr393": {
+      "into": "main",
+      "commit": "906c863",
+      "method": "squash"
+    },
+    "pr394": {
+      "into": "fix/v31-false-assurance-hardening",
+      "commit": "2c9c86e",
+      "method": "squash",
+      "note": "not on main; reaches main through #395"
+    }
+  },
+  "follow_up_prs": [
+    {
+      "pr": 395,
+      "branch": "fix/v31-consistency-sweep",
+      "base": "main",
+      "status": "draft",
+      "scope": "#394 D4 content (via base branch) + repo-wide v3.1 consistency, citation truth, publish path",
+      "evidence": "docs/assessments/2026-10-07-version-consistency/"
+    },
+    {
+      "pr": 396,
+      "branch": "release/cli-1.0.1",
+      "base": "fix/v31-consistency-sweep",
+      "status": "draft",
+      "scope": "bump ai-safe2 to 1.0.1; release note releases/RELEASE-NOTES-CLI-1.0.1.md"
+    }
+  ],
+  "owner_actions": [
+    "Merge #395 into main (carries #394)",
+    "Merge #396",
+    "Publish a GitHub release tagged v1.0.1 or <date>_CLI_1.0.1 with the 1.0.1 note"
+  ]
 }

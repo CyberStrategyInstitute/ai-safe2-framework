@@ -265,5 +265,5 @@ a retag of the example packages.
 Verification: guard clean; local gates 31/31; battery 126/0/0; example smoke results
 identical before/after. Evidence: `docs/assessments/2026-10-07-version-consistency/`.
 
-**Next:** the owner merges #393; this PR and #394 retarget to `main`. Publishing 1.0.x
+**PR:** #395 (draft). **Next:** the owner merges #393; #395 and #394 retarget to `main`. Publishing 1.0.x
 to PyPI is an owner release action (recommended: v1.0.1 after #393).
