@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-1.0.0-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-1.0.1-F6921E?style=flat-square)](../README.md)
 [![Framework](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-820F1A?style=flat-square)](../README.md)
 
 [Start](#start-with-the-outcome) | [Give this to your agent](#give-this-to-your-agent) | [Install](#install) | [Choose a workflow](#choose-a-workflow) | [Harness compatibility](#harness-compatibility) | [Command reference](#command-map) | [Limits](#what-it-does-not-do)
