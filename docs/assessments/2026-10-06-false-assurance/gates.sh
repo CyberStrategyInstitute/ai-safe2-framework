@@ -41,6 +41,7 @@ gate "skills/mcp tests"                        bash -c "cd skills/mcp && '$PY' -
 gate "ruff E9,F63,F7,F82"                      ruff check --select E9,F63,F7,F82 NEXUS/sdk/python/nexus_sdk/ NEXUS/sdk/python/tests/ NEXUS/examples/ scanner/ safe2/ aisafe2_mcp_tools/ tests/ skills/mcp/src/ scripts/
 # v31-consistency.yml
 gate "check_repo_ux"                           "$PY" scripts/check_repo_ux.py
+gate "framework version labels (repo-wide)"     "$PY" scripts/check_framework_version_labels.py
 gate "examples table --check"                  "$PY" scripts/generate_examples_table.py --check
 gate "v31 MCP profile tests"                   "$PY" -m pytest scanner/tests/test_v31_mcp_profile.py -q -p no:cacheprovider
 gate "v31 persistence compat"                  "$PY" -m pytest NEXUS/sdk/python/tests/test_v31_persistence_compat.py -q -p no:cacheprovider

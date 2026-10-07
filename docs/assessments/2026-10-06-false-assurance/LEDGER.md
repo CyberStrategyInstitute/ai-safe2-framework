@@ -244,3 +244,26 @@ review. At `82ed851` all 41 checks pass and the PR is `mergeable: clean`.
   `main`). Retarget #394 to `main` after #393 merges to run full CI.
 
 **Next:** the owner merges #393 (merge commit or rebase); #394 is retargeted and reviewed.
+
+## 2026-10-07 E15: Repository-wide consistency sweep (stacked on #393)
+
+The owner asked whether the skills update fixed v3.0/v3.1 mismatches repo-wide. It had
+not: the sweep in #393 covered `skills/` only. Branch `fix/v31-consistency-sweep`,
+based on `7286925`; owner chose a separate PR, a redirect for the stale toolkit, and
+a retag of the example packages.
+
+- `0be3c6f` MCP toolkit: printed control equals emitted control; v3.1 names. New
+  `test_control_citations.py` (9 red, then green) and repo-wide guard.
+- `bb22cce` Release truth: SECURITY.md (CLI was `0.1.x`), manifest (`0.9.9`), AGENTS.md,
+  README install fallback; `publish.yml` fails loudly on non-`v` CLI tags. Root cause
+  of 1.0.0 missing from PyPI recorded. Raised by the owner's daily run.
+- `4dc446b` Core retag; NEXUS current version 0.5 (was shown as v0.3 in 9 places).
+- `061e64b` `examples/mcp-security-toolkit/` replaced by a redirect.
+- `891a8e4` Example packages retagged; lovable `policy.yaml` parse error fixed.
+- #394 `2e37be6`: AIM v0.3 schema descriptions cite v3.1.
+
+Verification: guard clean; local gates 31/31; battery 126/0/0; example smoke results
+identical before/after. Evidence: `docs/assessments/2026-10-07-version-consistency/`.
+
+**Next:** the owner merges #393; this PR and #394 retarget to `main`. Publishing 1.0.x
+to PyPI is an owner release action (recommended: v1.0.1 after #393).

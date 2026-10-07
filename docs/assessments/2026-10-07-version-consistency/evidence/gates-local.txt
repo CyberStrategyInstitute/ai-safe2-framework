@@ -1,0 +1,32 @@
+PASS     pytest tests/ scanner/tests/
+PASS     check_agent_manifest
+PASS     example verify aism-decision-card
+PASS     example smoke aism-decision-card
+PASS     example verify aism-remediation
+PASS     example smoke aism-remediation
+PASS     example verify environment-decision-card
+PASS     example smoke environment-decision-card
+PASS     build sdist+wheel
+PASS     NEXUS SDK tests
+PASS     nexus-score --v03-checks (OPA)
+PASS     opa check --strict (1.x)
+PASS     opa test (1.x)
+PASS     opa fmt (1.x)
+PASS     opa check --strict (0.65)
+PASS     opa test (0.65)
+PASS     NEXUS example sovereign_gateway
+PASS     NEXUS example acs_bridge
+PASS     skills/mcp tests
+PASS     ruff E9,F63,F7,F82
+PASS     check_repo_ux
+PASS     framework version labels (repo-wide)
+PASS     examples table --check
+PASS     v31 MCP profile tests
+PASS     v31 persistence compat
+PASS     MCP profile / dashboard parity
+PASS     semgrep .semgrep/security.yml
+PASS     gitleaks (HEAD history, baseline)
+PASS     release: clean wheel install
+PASS     release: check_release_installation
+PASS     release: challenge offline workflow
+gates failed: 0  (logs: <local-logs>)
