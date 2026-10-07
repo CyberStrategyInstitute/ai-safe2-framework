@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,6 +12,34 @@ MANIFEST_PATH = ROOT / "ai-safe2.manifest.json"
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def package_version(pyproject: Path) -> str | None:
+    match = re.search(r'^version\s*=\s*"([^"]+)"', pyproject.read_text(encoding="utf-8"), re.MULTILINE)
+    return match.group(1) if match else None
+
+
+def check_published_versions(manifest: dict, agent_text: str) -> list[str]:
+    """Version claims that evaluators and agents read first must match the packages."""
+    errors: list[str] = []
+    cli = package_version(ROOT / "pyproject.toml")
+    nexus = package_version(ROOT / "NEXUS" / "pyproject.toml")
+    claimed_cli = manifest.get("discovery", {}).get("cli", {}).get("version")
+    if cli and claimed_cli != cli:
+        errors.append(f"discovery.cli.version: manifest says {claimed_cli!r}, pyproject.toml is {cli!r}")
+    claimed_nexus = manifest.get("implementations", {}).get("nexus", {}).get("version")
+    if nexus and claimed_nexus != nexus:
+        errors.append(f"implementations.nexus.version: manifest says {claimed_nexus!r}, NEXUS/pyproject.toml is {nexus!r}")
+    if cli:
+        line = next((ln for ln in agent_text.splitlines() if ln.startswith("- AI SAFE² CLI:")), "")
+        if f"v{cli}" not in line:
+            errors.append(f"AGENTS.md version model: CLI line does not state v{cli}: {line!r}")
+        security = ROOT / "SECURITY.md"
+        minor = ".".join(cli.split(".")[:2])
+        row = re.compile(r"^\|\s*`ai-safe2` CLI package\s*\|\s*" + re.escape(minor) + r"\.x\s*\|", re.MULTILINE)
+        if not security.exists() or not row.search(security.read_text(encoding="utf-8")):
+            errors.append(f"SECURITY.md: supported-versions table has no current '`ai-safe2` CLI package | {minor}.x' row")
+    return errors
 
 
 def main() -> int:
@@ -169,6 +198,8 @@ def main() -> int:
     ):
         if token not in agent_text:
             errors.append(f"AGENTS.md missing required machine-consumption guidance: {token}")
+
+    errors.extend(check_published_versions(manifest, agent_text))
 
     if errors:
         print("Agent manifest check FAILED")

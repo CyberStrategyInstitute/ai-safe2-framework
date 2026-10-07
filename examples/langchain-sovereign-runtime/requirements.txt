@@ -1,4 +1,4 @@
-# AI SAFE² v3.0 — LangChain Sovereign Runtime
+# AI SAFE² v3.1 — LangChain Sovereign Runtime
 # The enforcement engine (ai_safe2_engine.py) has ZERO external dependencies.
 # It uses Python stdlib only: re, hashlib, json, datetime, pathlib, sys, time, uuid, enum
 

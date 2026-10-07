@@ -77,7 +77,7 @@ on technical disputes but retains veto power over changes to:
 
 - The six AISM Invariants (I-1 through I-6)
 - The HEAR Doctrine constitutional constraints (CP.10)
-- The AI SAFE2 v3.0 compliance mapping matrix
+- The AI SAFE2 v3.1 compliance mapping matrix
 
 This veto is exercised only to prevent governance capture or regulatory
 non-compliance, not to block competitive technical evolution.
@@ -93,7 +93,7 @@ pull request to the NEXUS-A2A specification repository. An AP must include:
 
 - Problem statement with specific risk or interoperability gap addressed
 - Proposed normative language change (diff format)
-- AI SAFE2 v3.0 control mapping for any new security requirement
+- AI SAFE2 v3.1 control mapping for any new security requirement
 - Compliance impact statement (which of the 32 mapped frameworks are affected)
 - Reference implementation or test case demonstrating the change
 

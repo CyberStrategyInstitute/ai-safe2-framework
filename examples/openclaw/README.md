@@ -35,7 +35,7 @@
 
 **Cyber Strategy Institute** &nbsp;·&nbsp; [ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework) &nbsp;·&nbsp; MIT (code) + CC-BY-SA 4.0 (docs)
 
-A governed, secure, and auditable OpenClaw agent workspace — from identity through memory through multi-model routing — plus a production enforcement gateway that enforces AI SAFE² v3.0 controls between OpenClaw and any LLM provider.
+A governed, secure, and auditable OpenClaw agent workspace — from identity through memory through multi-model routing — plus a production enforcement gateway (Gateway v3.0 component) that enforces AI SAFE² core controls between OpenClaw and any LLM provider.
 
 ---
 
@@ -50,7 +50,7 @@ A governed, secure, and auditable OpenClaw agent workspace — from identity thr
 
 ## Gateway — v3.0 Enforcement Proxy
 
-The `gateway/` subfolder contains the AI SAFE² v3.0 enforcement proxy for OpenClaw. Every request is risk-scored, HITL-gated, and immutably logged before it reaches the upstream LLM — regardless of which provider is active.
+The `gateway/` subfolder contains the AI SAFE² Gateway v3.0 enforcement proxy for OpenClaw. Every request is risk-scored, HITL-gated, and immutably logged before it reaches the upstream LLM — regardless of which provider is active.
 
 **Supported providers:** Anthropic · OpenAI · Gemini · Ollama (local) · OpenRouter
 

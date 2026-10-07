@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # HSR Pre-Flight Check — 25-Point Deployment Validation
-# AI SAFE² v3.0 · Cyber Strategy Institute
+# AI SAFE² v3.1 · Cyber Strategy Institute
 #
 # Validates sovereign runtime configuration before deploy.
 # Run before every production deployment.
@@ -49,7 +49,7 @@ section() {
 
 echo ""
 echo -e "${BOLD}╔══════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}║    HSR Pre-Flight Check · AI SAFE² v3.0                  ║${NC}"
+echo -e "${BOLD}║    HSR Pre-Flight Check · AI SAFE² v3.1                  ║${NC}"
 echo -e "${BOLD}║    Cyber Strategy Institute                              ║${NC}"
 echo -e "${BOLD}╚══════════════════════════════════════════════════════════╝${NC}"
 echo ""

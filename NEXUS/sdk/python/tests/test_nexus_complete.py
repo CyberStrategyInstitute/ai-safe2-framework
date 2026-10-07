@@ -19,7 +19,7 @@ Agent type coverage:
   TestKillSwitch - 4-tier kill switch
   TestContextCompartment - L4 context namespace enforcement
   TestCAEL - CAEL envelope construction, signing, validation
-  TestSAFE2Compliance - AI SAFE2 v3.0 alignment checks
+  TestSAFE2Compliance - AI SAFE2 v3.1 alignment checks
 """
 
 import json
@@ -691,12 +691,12 @@ class TestContextCompartment:
             assert c.value in {"TASK_CONTEXT", "CREDENTIAL_SURFACE", "AGENT_STATE"}
 
 
-# ── SAFE2 v3.0 Compliance Tests ───────────────────────────────────────────────
+# ── SAFE2 v3.1 Compliance Tests ───────────────────────────────────────────────
 
 class TestSAFE2Compliance:
     """
-    AI SAFE2 v3.0 alignment validation.
-    Each test maps to a specific SAFE2 v3.0 control.
+    AI SAFE2 v3.1 alignment validation.
+    Each test maps to a specific SAFE2 v3.1 control.
     """
 
     def test_p1_s1_5_memory_governance_implemented(self):
@@ -794,4 +794,4 @@ if __name__ == "__main__":
     print("  - CrewAI: TestProtocolBridges::test_crewai_*")
     print("  - n8n / OpenClaw (REST): TestProtocolBridges::test_rest_* / test_n8n_*")
     print("  - OpenAI Agents SDK: TestProtocolBridges::test_openai_*")
-    print("  - SAFE2 v3.0 controls: TestSAFE2Compliance")
+    print("  - SAFE2 v3.1 controls: TestSAFE2Compliance")

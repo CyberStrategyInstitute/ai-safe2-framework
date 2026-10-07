@@ -94,7 +94,7 @@ CP.5.APAY is the **fourth enforcement plane**. It is not a wallet, an identity p
 ```
                        ┌──────────────────────────────────────────┐
   north-south          │  model / provider        (AI SAFE2 gateway)
-  east-west            │  agent ↔ agent           (NEXUS v0.3)
+  east-west            │  agent ↔ agent           (NEXUS v0.5)
   agent-to-tool        │  agent ↔ MCP/tools       (CP.5.MCP)
   agent-to-payment     │  agent ↔ VALUE           (CP.5.APAY)   ← this profile
                        └──────────────────────────────────────────┘

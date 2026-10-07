@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 HSR Validation — Pass 3: Adversarial Red Team
-AI SAFE² v3.0 · Cyber Strategy Institute
+AI SAFE² v3.1 · Cyber Strategy Institute
 
 Tests Hermes Sovereign Runtime defenses against real attack patterns:
   - Direct prompt injection through API
@@ -344,7 +344,7 @@ def run_red_team(gateway_url: str, verbose: bool) -> RedTeamReport:
     ]
 
     print("\n╔══════════════════════════════════════════════════════════╗")
-    print("║  HSR Pass 3 — Adversarial Red Team · AI SAFE² v3.0       ║")
+    print("║  HSR Pass 3 — Adversarial Red Team · AI SAFE² v3.1       ║")
     print("║  Cyber Strategy Institute                                ║")
     print("╚══════════════════════════════════════════════════════════╝\n")
     print(f"Gateway: {gateway_url}")

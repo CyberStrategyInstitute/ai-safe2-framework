@@ -1,5 +1,5 @@
 # Incident Response Runbooks
-### Hermes Sovereign Runtime · AI SAFE² v3.0
+### Hermes Sovereign Runtime · AI SAFE² v3.1
 
 **Keep this file accessible offline.** When an incident is active, you may not
 want to rely on Hermes to read it to you.
@@ -251,5 +251,5 @@ for k,v in sorted(counts.items())[-20:]: print(f'{k}: {v} requests')
 
 ---
 
-*HSR Incident Response Runbooks · Cyber Strategy Institute · AI SAFE² v3.0*
+*HSR Incident Response Runbooks · Cyber Strategy Institute · AI SAFE² v3.1*
 *Last updated: May 2026*

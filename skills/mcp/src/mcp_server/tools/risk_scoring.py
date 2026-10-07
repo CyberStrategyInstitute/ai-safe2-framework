@@ -1,6 +1,6 @@
 """
 AI SAFE2 Tool: calculate_risk_score
-Computes the AI SAFE2 v3.0 Combined Risk Score:
+Computes the AI SAFE2 v3.1 Combined Risk Score:
 
   Combined Risk Score = CVSS_Base + ((100 - Pillar_Score) / 10) + (AAF / 10)
 
@@ -46,7 +46,7 @@ def calculate_risk_score(
     tier: str = "free",
 ) -> dict:
     """
-    Calculate the AI SAFE2 v3.0 Combined Risk Score.
+    Calculate the AI SAFE2 v3.1 Combined Risk Score.
 
     Args:
         cvss_base: CVSS base score (0-10). Use the official CVSS calculator for your CVE.

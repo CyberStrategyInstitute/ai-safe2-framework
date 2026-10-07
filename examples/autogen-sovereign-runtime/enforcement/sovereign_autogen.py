@@ -1,5 +1,5 @@
 """
-AI SAFE² v3.0 — AutoGen 0.4 Sovereign Enforcement Layer
+AI SAFE² v3.1 — AutoGen 0.4 Sovereign Enforcement Layer
 =========================================================
 Target: autogen_agentchat (0.4 only).
 0.2 is end-of-life — redirect users to upgrade; do not build a 0.2 wrapper.
@@ -501,7 +501,7 @@ class SovereignCodeExecutorProxy:
 
 class SovereignRuntime:
     """
-    AI SAFE² v3.0 sovereign enforcement runtime for AutoGen 0.4.
+    AI SAFE² v3.1 sovereign enforcement runtime for AutoGen 0.4.
 
     Usage:
         sovereign = SovereignRuntime(act_tier=ACTTier.ACT3)

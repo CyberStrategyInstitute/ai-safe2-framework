@@ -14,9 +14,9 @@
 <div align="center">
 
 # LangChain Sovereign Runtime
-### AI SAFE² v3.0 Defense Package for LangChain
+### AI SAFE² v3.1 Defense Package for LangChain
 
-[![AI SAFE² v3.0](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
 [![Tests](https://img.shields.io/badge/Tests-15%2F15_passing-brightgreen?style=flat-square)](./smoke_test.py)
 [![ACT Tiers](https://img.shields.io/badge/CP.3-ACT_1--4_enforced-orange?style=flat-square)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/00-cross-pillar)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
@@ -40,7 +40,7 @@ That means:
 | Memory writes are ungoverned | Long-horizon memory poisoning — corrupts future sessions |
 | No credential scan on final output | API keys, private keys, PII leak from chain output to logs |
 
-**This package enforces AI SAFE² v3.0 controls at the enforcement points that matter, without requiring any changes to your chains.**
+**This package enforces AI SAFE² v3.1 controls at the enforcement points that matter, without requiring any changes to your chains.**
 
 ---
 
@@ -248,12 +248,12 @@ langchain-sovereign-runtime/
 | [langgraph-sovereign-runtime](../langgraph-sovereign-runtime/) | Pass shared `AISAFE2Engine` instance |
 | [crewai-sovereign-runtime](../crewai-sovereign-runtime/) | Pass shared `AISAFE2Engine` instance |
 | [autogen-sovereign-runtime](../autogen-sovereign-runtime/) | Pass shared `AISAFE2Engine` instance |
-| [mcp-security-toolkit](../mcp-security-toolkit/) | CP.5.MCP pre-scores any MCP server before use in tools |
+| [`safe2 score mcp`](../mcp-security-toolkit/) | CP.5.MCP pre-scores any MCP server before use in tools |
 | [hermes-sovereign-runtime](../hermes-sovereign-runtime/) | Full Docker stack pattern |
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | [cyberstrategyinstitute.com](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.1 | Cyber Strategy Institute | [cyberstrategyinstitute.com](https://cyberstrategyinstitute.com)*
 
 <!-- AI-SAFE2-UX-FOOTER:START -->
 ---

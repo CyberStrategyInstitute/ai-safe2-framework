@@ -1,0 +1,9 @@
+::warning::older CLI release 2026-09-24_CLI_0.8.0 (0.8.0) is not on PyPI
+::warning::older CLI release 2026_09_20_CLI_0.7.0 (0.7.0) is not on PyPI
+::warning::older CLI release 2026-09-17_CLI_0.6.0_Scope_Attribute_Decide (0.6.0) is not on PyPI
+::warning::older CLI release 2026-09-15_CLI_0.5.0_Find_Where_Agent_Work_Failed (0.5.0) is not on PyPI
+::warning::older CLI release 2026-09-14_CLI_0.4.0_Know_What_You_Actually_Tested (0.4.0) is not on PyPI
+::warning::older CLI release 2026-09-14_CLI_0.3.0_Provider_Neutral_Harness_Evidence_Intake (0.3.0) is not on PyPI
+::warning::older CLI release 2026-09-11_safe2_CLI_0.3.0 (0.3.0) is not on PyPI
+::warning::older CLI release 2026-09-09_safe2_CLI_0.2.0 (0.2.0) is not on PyPI
+::error::newest CLI release 2026-10-5_CLI_1.0.0 (2026-10-05T14:07:38Z) is version 1.0.0, which PyPI does not serve; `pip install ai-safe2==1.0.0` fails

@@ -29,7 +29,7 @@ TESTING:    GuardianPolicy.evaluate() runs inline with no network required.
             Stub mode validates the full verdict contract.
 
 Reference: ACS v0.1.0, AOS v0.1.0 (aos.owasp.org), NEXUS-A2A v0.3
-AI SAFE2 v3.0: S1.5, A2.5, F3.1, M4.4, CP.4, CP.5
+AI SAFE2 v3.1: S1.5, A2.5, F3.1, M4.4, CP.4, CP.5
 """
 
 from __future__ import annotations
@@ -43,7 +43,10 @@ from urllib.parse import unquote
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
+
+if TYPE_CHECKING:  # pragma: no cover
+    from nexus_sdk.aim import AIMRegistry
 
 
 # ── Verdict Types ─────────────────────────────────────────────────────────────
@@ -456,7 +459,8 @@ class GuardianPolicy:
                  builtin_detectors: bool = True,
                  treat_undeclared_tier_as: Optional[int] = 4,
                  min_reasoning_chars: int = 40,
-                 min_reasoning_words: int = 5):
+                 min_reasoning_words: int = 5,
+                 aim_registry: Optional["AIMRegistry"] = None):
         self.revoked_dids = set(revoked_dids or [])
         self.blocked_argument_patterns = blocked_argument_patterns or [
             "/etc/passwd", "/etc/shadow", "/etc/sudoers",
@@ -475,6 +479,9 @@ class GuardianPolicy:
         # HEAR needs a reason a reviewer can act on, not any non-empty string.
         self.min_reasoning_chars = min_reasoning_chars
         self.min_reasoning_words = min_reasoning_words
+        # AIM v0.3 registry: when set, the registered ACT tier governs and an
+        # unregistered agent is denied. Request-supplied tiers become claims.
+        self.aim_registry = aim_registry
 
     def evaluate(self, ctx: GuardianStepContext) -> GuardianVerdictResult:
         """
@@ -489,6 +496,33 @@ class GuardianPolicy:
                 reasoning="Agent DID is in revocation list",
                 reason_codes=["REVOKED_AGENT"],
             )
+
+        # Rule 1b: Registered identity and tier (AIM v0.3, IETF draft 3.1.1)
+        registered = None
+        if self.aim_registry is not None:
+            registered = self.aim_registry.resolve(ctx.agent.agent_did)
+            if registered is None:
+                return GuardianVerdictResult(
+                    decision=GuardianVerdict.DENY,
+                    step_id=ctx.step_id,
+                    reasoning="Agent has no registered AIM",
+                    reason_codes=["AIM_NOT_REGISTERED"],
+                )
+            if ctx.agent.aim_digest and ctx.agent.aim_digest != registered.aim_digest:
+                return GuardianVerdictResult(
+                    decision=GuardianVerdict.DENY,
+                    step_id=ctx.step_id,
+                    reasoning="Presented AIM digest does not match the registered AIM",
+                    reason_codes=["AIM_DIGEST_MISMATCH"],
+                )
+            claimed = ctx.agent.act_tier
+            if isinstance(claimed, int) and not isinstance(claimed, bool) and claimed > registered.act_tier:
+                return GuardianVerdictResult(
+                    decision=GuardianVerdict.DENY,
+                    step_id=ctx.step_id,
+                    reasoning=f"Declared ACT-{claimed} exceeds registered ACT-{registered.act_tier}",
+                    reason_codes=["ACT_TIER_EXCEEDS_REGISTERED"],
+                )
 
         # Rule 2: Delegation scope overflow (catch what OPA scope categories miss)
         if ctx.parent_vcc_capabilities and ctx.vcc_capabilities:
@@ -526,15 +560,18 @@ class GuardianPolicy:
         # Rule 6: ACT tier reasoning requirement (HEAR)
         tier = ctx.agent.act_tier
         tier_codes: list[str] = []
-        if tier is None and self.treat_undeclared_tier_as is not None:
-            tier, tier_codes = self.treat_undeclared_tier_as, ["ACT_TIER_UNDECLARED"]
-        if tier is not None and not (isinstance(tier, int) and 1 <= tier <= 4):
+        if tier is not None and (isinstance(tier, bool) or not (isinstance(tier, int) and 1 <= tier <= 4)):
             return GuardianVerdictResult(
                 decision=GuardianVerdict.DENY,
                 step_id=ctx.step_id,
                 reasoning=f"ACT tier {tier!r} is not one of 1-4",
                 reason_codes=["ACT_TIER_INVALID"],
             )
+        if registered is not None:
+            # The registered tier governs; a lower claim cannot skip HEAR.
+            tier, tier_codes = registered.act_tier, ["ACT_TIER_FROM_REGISTRY"]
+        elif tier is None and self.treat_undeclared_tier_as is not None:
+            tier, tier_codes = self.treat_undeclared_tier_as, ["ACT_TIER_UNDECLARED"]
         if tier in self.require_reasoning_for_act_tiers and ctx.method == StepMethod.TOOL_CALL_REQUEST:
             if not ctx.reasoning:
                 return GuardianVerdictResult(

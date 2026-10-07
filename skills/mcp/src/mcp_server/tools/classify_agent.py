@@ -211,7 +211,7 @@ def classify_agent(
         "governance_evidence_required": governance_evidence,
         "risk_flags": risk_flags,
         "next_steps": _next_steps(detected_tier, hear_required, cp9_required),
-        "meta": {"tier": tier, "framework_version": "v3.0"},
+        "meta": {"tier": tier, "framework_version": "v3.1"},
     }
 
 

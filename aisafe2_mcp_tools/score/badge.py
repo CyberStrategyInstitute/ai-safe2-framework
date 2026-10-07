@@ -126,7 +126,9 @@ def generate_well_known_template(
     It is publicly accessible without authentication (it is not a secret).
     It attests to controls that cannot be verified remotely by mcp-score.
     
-    Controls attested here receive bonus points during scoring:
+    Attested fields are reported as claimed weight and never added to the
+    score. Key prefixes (MCP-1_..MCP-13_) are the file contract and use the
+    retired v3.0 numbering; they are not v3.1 control IDs:
       no_dynamic_commands  +8 pts  (MCP-1 — biggest remote blind spot)
       output_sanitization  +5 pts  (MCP-2 — library reference)
       source_hash          +4 pts  (MCP-4 — integrity verification)
@@ -139,7 +141,7 @@ def generate_well_known_template(
     """
     data = {
         "mcp_security_version": "1.0",
-        "framework": "AI SAFE2 v3.0 CP.5.MCP",
+        "framework": "AI SAFE2 v3.1 CP.5.MCP",
         "server_name": server_name,
         "aisafe2_score": score,
         "last_assessed": assessment_timestamp,

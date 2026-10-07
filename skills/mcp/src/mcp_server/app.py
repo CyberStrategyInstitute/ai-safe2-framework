@@ -86,7 +86,7 @@ def _get_tier() -> str:
 
 @mcp.tool(
     description=(
-        "Search and retrieve AI SAFE2 v3.0 controls by keyword, pillar, priority, "
+        "Search and retrieve AI SAFE2 v3.1 controls by keyword, pillar, priority, "
         "compliance framework, ACT tier, or exact control ID. "
         "Free tier: 30 controls max. Pro tier: 500 controls max, all 32 frameworks. "
         "Example IDs: 'S1.5', 'CP.10', 'F3.2', 'P1.T1.10'."
@@ -102,7 +102,7 @@ def lookup_control(
     act_tier: str = "",
     include_cross_pillar: bool = True,
 ) -> dict:
-    """Look up AI SAFE2 v3.0 controls."""
+    """Look up AI SAFE2 v3.1 controls."""
     tier = _get_tier()
     log.info("tool.lookup_control", query=query, control_id=control_id, tier=tier)
     result = control_lookup(
@@ -115,7 +115,7 @@ def lookup_control(
 
 @mcp.tool(
     description=(
-        "Calculate the AI SAFE2 v3.0 Combined Risk Score: "
+        "Calculate the AI SAFE2 v3.1 Combined Risk Score: "
         "CVSS_Base + ((100 - Pillar_Score) / 10) + (AAF / 10). "
         "Free tier: basic formula (no AAF). "
         "Pro tier: full formula with OWASP AIVSS v0.8 Agentic Amplification Factor. "
@@ -130,7 +130,7 @@ def risk_score(
     pillar_score: float,
     aaf_factors: dict | None = None,
 ) -> dict:
-    """Calculate AI SAFE2 v3.0 Combined Risk Score."""
+    """Calculate AI SAFE2 v3.1 Combined Risk Score."""
     tier = _get_tier()
     log.info("tool.risk_score", cvss_base=cvss_base, pillar_score=pillar_score, tier=tier)
     result = calculate_risk_score(
@@ -142,7 +142,7 @@ def risk_score(
 
 @mcp.tool(
     description=(
-        "Map a compliance requirement to AI SAFE2 v3.0 controls across up to 32 frameworks. "
+        "Map a compliance requirement to AI SAFE2 v3.1 controls across up to 32 frameworks. "
         "Free tier: 5 frameworks (NIST AI RMF, ISO 42001, SOC 2, GDPR, OWASP LLM). "
         "Pro tier: all 32 frameworks. "
         "Example requirements: 'EU AI Act Article 14', 'SOC 2 CC.7.4', "
@@ -153,7 +153,7 @@ def compliance_map(
     requirement: str,
     framework_ids: list | None = None,
 ) -> dict:
-    """Map a compliance requirement to AI SAFE2 v3.0 controls."""
+    """Map a compliance requirement to AI SAFE2 v3.1 controls."""
     tier = _get_tier()
     log.info("tool.compliance_map", requirement=requirement, tier=tier)
     result = map_to_frameworks(
@@ -164,7 +164,7 @@ def compliance_map(
 
 @mcp.tool(
     description=(
-        "Review code against AI SAFE2 v3.0 security controls. Light version: "
+        "Review code against AI SAFE2 v3.1 security controls. Light version: "
         "provides control taxonomy context and structured findings template for model-based analysis. "
         "No code is executed on the server. "
         "Pro tier only. Returns review_controls context, findings_template, and instructions."
@@ -176,7 +176,7 @@ def code_review(
     context: str = "",
     focus_pillar: str = "",
 ) -> dict:
-    """Review code against AI SAFE2 v3.0 controls."""
+    """Review code against AI SAFE2 v3.1 controls."""
     tier = _get_tier()
     log.info("tool.code_review", language=language, code_len=len(code), tier=tier)
     result = review_code(code=code, language=language, context=context,
@@ -217,7 +217,7 @@ def agent_classify(
 
 @mcp.tool(
     description=(
-        "Retrieve an AI SAFE2 v3.0 governance resource: policy templates, audit schemas, "
+        "Retrieve an AI SAFE2 v3.1 governance resource: policy templates, audit schemas, "
         "HEAR designation forms, quick-start checklists, and reference documents. "
         "Free resources: quick_start_checklist, pillar_overview, act_tier_reference. "
         "Pro resources: governance_policy_template, audit_scorecard_schema, hear_designation_template."
@@ -236,7 +236,7 @@ def get_governance_resource(resource_name: str = "") -> dict:
 
 @mcp.tool(
     description=(
-        "Get a reusable AI SAFE2 v3.0 workflow prompt. Available prompts: "
+        "Get a reusable AI SAFE2 v3.1 workflow prompt. Available prompts: "
         "security_architecture_review, compliance_gap_analysis, "
         "incident_response_runbook, agent_deployment_checklist. "
         "Leave prompt_name empty to list all available prompts."
@@ -259,11 +259,11 @@ def get_workflow_prompt(
 
 @mcp.resource("aisafe2://controls/summary")
 def controls_summary() -> str:
-    """AI SAFE2 v3.0 control count and framework summary."""
+    """AI SAFE2 v3.1 control count and framework summary."""
     db = get_db()
     counts = db.count()
     return (
-        f"AI SAFE2 v3.0 Controls Summary\n"
+        f"AI SAFE2 v3.1 Controls Summary\n"
         f"Total: {counts['total']} controls\n"
         f"Pillar controls: {counts['pillar_controls']}\n"
         f"Cross-pillar governance controls: {counts['cross_pillar_controls']}\n"
@@ -274,11 +274,11 @@ def controls_summary() -> str:
 
 @mcp.resource("aisafe2://risk-formula")
 def risk_formula() -> str:
-    """AI SAFE2 v3.0 risk scoring formula."""
+    """AI SAFE2 v3.1 risk scoring formula."""
     db = get_db()
     f = db.risk_formula
     return (
-        f"AI SAFE2 v3.0 Combined Risk Score Formula\n"
+        f"AI SAFE2 v3.1 Combined Risk Score Formula\n"
         f"Formula: {f['formula']}\n\n"
         f"Components:\n"
         + "\n".join(f"  {k}: {v}" for k, v in f["components"].items())
@@ -293,7 +293,7 @@ def risk_formula() -> str:
 
 @mcp.prompt()
 def architecture_review(system_description: str, environment: str = "cloud") -> str:
-    """Start a comprehensive AI SAFE2 v3.0 security architecture review."""
+    """Start a comprehensive AI SAFE2 v3.1 security architecture review."""
     result = get_prompt(
         "security_architecture_review",
         {"system_description": system_description, "deployment_environment": environment,

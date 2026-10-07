@@ -1,5 +1,5 @@
 # requirements.txt — xAI/Grok Sovereign Runtime
-# AI SAFE2 v3.0 | Cyber Strategy Institute
+# AI SAFE2 v3.1 | Cyber Strategy Institute
 #
 # The enforcement/ package (ai_safe2_engine.py + sovereign_xai_grok.py)
 # is stdlib-only. No install required for core enforcement.

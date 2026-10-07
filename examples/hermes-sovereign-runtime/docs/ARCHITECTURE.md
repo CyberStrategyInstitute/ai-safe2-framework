@@ -1,5 +1,5 @@
 # HSR Architecture Reference
-### Hermes Sovereign Runtime · AI SAFE² v3.0
+### Hermes Sovereign Runtime · AI SAFE² v3.1
 
 ---
 
@@ -265,4 +265,4 @@ The HEAR Doctrine is violated if: (a) no operator is named, (b) audit log is dis
 
 ---
 
-*HSR Architecture Reference · Cyber Strategy Institute · AI SAFE² v3.0*
+*HSR Architecture Reference · Cyber Strategy Institute · AI SAFE² v3.1*

@@ -48,6 +48,14 @@ safe2 init .
 safe2 assess . --scan-content --inspect-config
 ```
 
+If pip reports `No matching distribution found for ai-safe2==1.0.0`, PyPI has not
+received 1.0.0 yet (it currently serves 0.9.0). Install the published 1.0.0
+release tag instead, then continue from `safe2 self-check --strict`:
+
+```bash
+python -m pip install "ai-safe2[all] @ git+https://github.com/CyberStrategyInstitute/ai-safe2-framework@2026-10-5_CLI_1.0.0"
+```
+
 The assessment writes canonical JSON for agents and a readable Decision Card
 for people. It does not authorize a fix, deployment, exception, or compliance
 claim.
@@ -266,7 +274,9 @@ safe2 --help
 | **`mcp-scan`** | Static analysis across MCP security patterns |
 | **`mcp-safe-wrap`** | Consumer-side inspection, policy, and audit proxy |
 
-See [examples/mcp-security-toolkit/](examples/mcp-security-toolkit/).
+All three ship in the `ai-safe2` package and run as `safe2 score mcp`, `safe2 scan mcp`,
+`safe2 gate mcp` and `safe2 mcp wrap-stdio` / `wrap-proxy`. See the
+[command map](safe2/README.md#command-map).
 
 ### Agent-facing governance and AISM decisions
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # rotate-credentials.sh — Emergency Credential Rotation
-# Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+# Hermes Sovereign Runtime (HSR) | AI SAFE² v3.1
 # Cyber Strategy Institute
 #
 # PURPOSE: Immediately rotate all credentials accessible to Hermes Agent.
@@ -281,7 +281,7 @@ print_summary() {
 main() {
     echo -e "${BOLD}${RED}"
     echo "╔══════════════════════════════════════════════════════════╗"
-    echo "║         HSR CREDENTIAL ROTATION — AI SAFE² v3.0          ║"
+    echo "║         HSR CREDENTIAL ROTATION — AI SAFE² v3.1          ║"
     echo "║              Cyber Strategy Institute                      ║"
     echo "╚══════════════════════════════════════════════════════════╝"
     echo -e "${NC}"

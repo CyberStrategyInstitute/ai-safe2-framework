@@ -89,7 +89,7 @@ class Finding:
 
     finding_id: Stable ID (e.g., "RCE-001"). Never changes after publication.
     severity: critical / high / medium / low
-    cp5_control: AI SAFE2 v3.0 CP.5.MCP control reference (e.g., "MCP-1")
+    cp5_control: AI SAFE2 v3.1 CP.5.MCP control reference (e.g., "MCP-1")
     title: Short title for display
     description: Detailed description of the vulnerability and why it matters
     file: Relative path to the file containing the finding

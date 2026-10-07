@@ -1,6 +1,6 @@
 """
 AI SAFE2 MCP Security Toolkit — mcp-score: Security Header Checker
-Checks response headers for CP.5.MCP-6 compliance.
+Checks response headers for CP.5.MCP-4 (Server and Binary Integrity) evidence.
 2 points per header, max 10. Server header removal counts as a header.
 
 Required headers:
@@ -26,13 +26,13 @@ _REMEDIATION = (
     "Strict-Transport-Security: max-age=31536000, "
     "X-Frame-Options: DENY, X-Content-Type-Options: nosniff, "
     "Referrer-Policy: strict-origin. Remove Server header. "
-    "See AI SAFE2 v3.0 CP.5.MCP-6."
+    "See AI SAFE2 v3.1 CP.5.MCP-4."
 )
 
 
 def check_security_headers(headers: dict[str, str]) -> CheckResult:
     """
-    Check response headers against CP.5.MCP-6 security requirements.
+    Check response headers against CP.5.MCP-4 transport-integrity expectations.
     Accepts a headers dict (keys lowercased).
     """
     headers_lower = {k.lower(): v for k, v in headers.items()}

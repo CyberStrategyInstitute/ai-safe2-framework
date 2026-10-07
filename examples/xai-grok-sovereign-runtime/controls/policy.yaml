@@ -1,10 +1,10 @@
 # controls/policy.yaml
-# AI SAFE2 v3.0 Control Registry — xAI/Grok Sovereign Runtime
+# AI SAFE2 v3.1 Control Registry — xAI/Grok Sovereign Runtime
 # Cyber Strategy Institute
 #
 # Machine-readable surface → control mapping.
 # Import into SIEM, policy engines, or NEXUS dashboard.
-# All control IDs verified against live AI SAFE2 v3.0 framework.
+# All control IDs verified against live AI SAFE2 v3.1 framework.
 
 runtime:
   name: xai-grok-sovereign-runtime

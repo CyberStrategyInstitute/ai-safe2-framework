@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 make_webhook_scenario.py — Live Scenario Simulation
-AI SAFE2 v3.0 Make.com Sovereign Runtime
+AI SAFE2 v3.1 Make.com Sovereign Runtime
 Cyber Strategy Institute
 
 Simulates a real Make.com scenario: Webhook → AI Agent → Slack notification

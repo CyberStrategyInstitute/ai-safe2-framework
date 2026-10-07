@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.0 Scanner — Pillar 1: Sanitize & Isolate Rules
+AI SAFE2 v3.1 Scanner — Pillar 1: Sanitize & Isolate Rules
 Covers: P1.T1.x (Sanitize), P1.T2.x (Isolate), S1.3-S1.7 (v3.0 new controls)
 """
 
@@ -403,7 +403,7 @@ P1_RULES: list[Rule] = [
         "Rotate any key that has been in source control.",
         pattern=r'(?i)(password|passwd|secret|token|credential)\s*=\s*["\'][^"\']{8,}["\']',
     ),
-    # ── S1.3-S1.7 New v3.0 Controls ──────────────────────────────────────────
+    # ── S1.3-S1.7 Controls added in v3.0 ─────────────────────────────────────────
     # S1.5 Memory write governance (NEW v3.0)
     Rule(
         control_id="S1.5",

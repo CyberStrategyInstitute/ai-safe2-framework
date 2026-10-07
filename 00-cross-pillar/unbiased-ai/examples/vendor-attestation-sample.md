@@ -2,7 +2,7 @@
 **UAS-ATTEST-001 example | For training and reference. Not legal advice, not a compliance guarantee.**
 
 Contract: GSAXXX-26-F-XXXX | Contractor: [redacted sample] | Date: July 2026
-UAS v1.0 | AI SAFE² v3.0 | ACT Tier: ACT-3
+UAS v1.0 | AI SAFE² v3.1 | ACT Tier: ACT-3
 
 ## Control summary
 | Category | Implemented | Evidence |

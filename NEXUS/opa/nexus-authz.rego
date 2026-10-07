@@ -76,6 +76,37 @@ requires_memory_mandate if {
 }
 
 # ---------------------------------------------------------------------------
+# Registry-bound ACT tier (AIM v0.3, IETF draft section 3.1.1)
+# ---------------------------------------------------------------------------
+
+# The tier an agent operates at is an identity property set by its owner of
+# record in the registered AIM (data.nexus.aim.agents[<did>].act_tier). A tier
+# in the request is only a claim: it may not exceed the registered tier and can
+# never lower it. With no registry entry the declared tier is used, and an
+# agent that declares nothing is treated as ACT-4 so tier-gated requirements
+# cannot be skipped by omission.
+_registered_tier := t if {
+	t := data.nexus.aim.agents[input.agent_id].act_tier
+	is_number(t)
+}
+
+_has_registered_tier if is_number(_registered_tier)
+
+_has_declared_tier if is_number(input.act_tier)
+
+effective_act_tier := _registered_tier if _has_registered_tier
+
+effective_act_tier := input.act_tier if {
+	not _has_registered_tier
+	_has_declared_tier
+}
+
+effective_act_tier := 4 if {
+	not _has_registered_tier
+	not _has_declared_tier
+}
+
+# ---------------------------------------------------------------------------
 # Primary allow rule
 # ---------------------------------------------------------------------------
 
@@ -171,8 +202,20 @@ deny_reasons contains concat("", [persistence_scope, " memory writes require a M
 
 deny_reasons contains "ConfigChange requires out-of-band approval for ACT-2+ agents" if {
 	input.performative == "config_change"
-	input.act_tier >= 2
+	effective_act_tier >= 2
 	not data.nexus.approvals.config_change[input.agent_id][input.change_hash]
+}
+
+deny_reasons contains "agent has no registered AIM (registry required)" if {
+	data.nexus.aim.required == true
+	not data.nexus.aim.agents[input.agent_id]
+}
+
+deny_reasons contains msg if {
+	_has_registered_tier
+	_has_declared_tier
+	input.act_tier > _registered_tier
+	msg := sprintf("declared ACT-%v exceeds registered ACT tier %v", [input.act_tier, _registered_tier])
 }
 
 deny if count(deny_reasons) > 0
@@ -214,5 +257,6 @@ authorize_tool_call := decision if {
 		"tool_name": object.get(input, "tool_name", null),
 		"delegation_depth": object.get(input, "delegation_depth", null),
 		"persistence_scope": persistence_scope,
+		"effective_act_tier": effective_act_tier,
 	}
 }

@@ -3,7 +3,7 @@
 > **Legacy integration note:** this page documents an AI SAFE² sovereign-runtime
 > example, not the current NEXUS SDK or Sovereign Payment Gateway contract.
 
-## AI SAFE2 v3.0 | Cyber Strategy Institute
+## AI SAFE2 v3.1 | Cyber Strategy Institute
 
 ## MCPoison State Tracking (Cursor-Unique)
 

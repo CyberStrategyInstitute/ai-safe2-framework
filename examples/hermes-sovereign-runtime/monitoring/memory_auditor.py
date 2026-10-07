@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 HSR Memory Auditor — Continuous Anomaly Detection Daemon
-AI SAFE² v3.0 · P4.M-C02
+AI SAFE² v3.1 · P4.M-C02
 Cyber Strategy Institute
 
 Runs continuously (or on-demand) against Hermes' SQLite memory stores and

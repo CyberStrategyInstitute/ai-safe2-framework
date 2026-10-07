@@ -1,5 +1,5 @@
 # Fix Template: RCE-003 — eval() / exec()
-# AI SAFE2 v3.0 CP.5.MCP-1
+# AI SAFE2 v3.1 CP.5.MCP-1
 #
 # ── BEFORE (vulnerable) ───────────────────────────────────────────
 def process(user_input):

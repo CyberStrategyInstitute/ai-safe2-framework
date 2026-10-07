@@ -1,6 +1,6 @@
 """
 sovereign_xai_grok.py — xAI/Grok Enforcement Layer
-AI SAFE2 v3.0 Sovereign Runtime
+AI SAFE2 v3.1 Sovereign Runtime
 Cyber Strategy Institute
 
 Six unique enforcement surfaces not found in other runtimes:
@@ -116,7 +116,7 @@ _HEAD_BLOCKED_VALUES = frozenset({"bypassPermissions", "alwaysAllow", "always-ap
 
 class GrokSovereignRuntime:
     """
-    AI SAFE2 v3.0 Sovereign Runtime for xAI/Grok.
+    AI SAFE2 v3.1 Sovereign Runtime for xAI/Grok.
 
     Wrap every Grok interaction through this class to enforce
     deterministic boundaries the agent cannot see or influence.

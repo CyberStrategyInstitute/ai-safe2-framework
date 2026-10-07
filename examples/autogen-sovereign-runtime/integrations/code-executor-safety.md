@@ -1,4 +1,4 @@
-# Code Executor Safety Guide — AI SAFE² v3.0
+# Code Executor Safety Guide — AI SAFE² v3.1
 
 ## Never Run CodeExecutorAgent Without sovereign.wrap_code_executor()
 

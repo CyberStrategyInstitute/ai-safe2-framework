@@ -1,5 +1,5 @@
 # Fix Template: RCE-005 — Path Traversal
-# AI SAFE2 v3.0 CP.5.MCP-1 | CVE-2025-68143
+# AI SAFE2 v3.1 CP.5.MCP-6 (Input Validation) | CVE-2025-68143
 #
 # ── BEFORE (vulnerable) ───────────────────────────────────────────
 path = os.path.join(base_dir, user_filename)

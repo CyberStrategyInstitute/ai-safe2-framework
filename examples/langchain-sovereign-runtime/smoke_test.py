@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AI SAFE² v3.0 — LangChain Sovereign Runtime Adversarial Smoke Tests
+AI SAFE² v3.1 — LangChain Sovereign Runtime Adversarial Smoke Tests
 ====================================================================
 15 tests across 3 tiers. Every test is mapped to a REAL AI SAFE² control ID
 and a MITRE ATLAS / OWASP LLM technique. No mocks on the enforcement layer.
@@ -469,7 +469,7 @@ def test_t3_05():
     report = engine.compliance_report()
     assert isinstance(report, str), "compliance_report must return a string"
     required_sections = [
-        "AI SAFE² v3.0",
+        "AI SAFE² v3.1",
         "Compliance Score",
         "Alignment Band",
         "Active Controls",
@@ -491,7 +491,7 @@ def main():
     ]
 
     print("\n╔══════════════════════════════════════════════════════════════╗")
-    print("║   AI SAFE² v3.0 — LangChain Sovereign Runtime Smoke Tests   ║")
+    print("║   AI SAFE² v3.1 — LangChain Sovereign Runtime Smoke Tests   ║")
     print("╚══════════════════════════════════════════════════════════════╝")
 
     for test_fn in tests:

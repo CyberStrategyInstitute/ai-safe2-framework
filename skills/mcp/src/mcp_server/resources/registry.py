@@ -14,10 +14,10 @@ from mcp_server.tiers import gate_tool
 RESOURCES: dict[str, dict] = {
     # ── Free tier resources ────────────────────────────────────────────────────
     "quick_start_checklist": {
-        "name": "AI SAFE2 v3.0 Quick-Start Security Checklist",
+        "name": "AI SAFE2 v3.1 Quick-Start Security Checklist",
         "tier_required": "free",
         "description": "5-minute security checklist for AI builders — top 20 critical controls across all 5 pillars.",
-        "content": """# AI SAFE2 v3.0 Quick-Start Security Checklist
+        "content": """# AI SAFE2 v3.1 Quick-Start Security Checklist
 **For builders deploying AI agents in production. Complete before launch.**
 
 ## Pillar 1: Sanitize & Isolate
@@ -59,12 +59,12 @@ Full 161-point audit: cyberstrategyinstitute.com/ai-safe2/
     },
 
     "pillar_overview": {
-        "name": "AI SAFE2 v3.0 Five-Pillar Overview",
+        "name": "AI SAFE2 v3.1 Five-Pillar Overview",
         "tier_required": "free",
         "description": "One-page reference for all 5 pillars plus cross-pillar governance layer.",
-        "content": """# AI SAFE2 v3.0 — Five-Pillar + Cross-Pillar Overview
+        "content": """# AI SAFE2 v3.1 — Five-Pillar + Cross-Pillar Overview
 
-| Pillar | Role | Key v3.0 Controls |
+| Pillar | Role | Key Controls |
 |--------|------|-------------------|
 | P1: Sanitize & Isolate | The Shield | S1.5 Memory Governance, S1.6 Cognitive Injection, S1.7 No-Code Security, P1.T1.10 Indirect Injection |
 | P2: Audit & Inventory | The Ledger | A2.5 Execution Trace Logging, A2.6 RAG Corpus Diff, A2.3 Model Lineage, A2.4 Agent State Inventory |
@@ -100,7 +100,7 @@ First framework to integrate AAF in a GRC formula.
         "name": "ACT Capability Tier Quick Reference",
         "tier_required": "free",
         "description": "Complete ACT tier definitions, mandatory controls per tier, and governance evidence required.",
-        "content": """# ACT Capability Tier Reference (AI SAFE2 v3.0 CP.3)
+        "content": """# ACT Capability Tier Reference (AI SAFE2 v3.1 CP.3)
 
 ## Tier Definitions
 
@@ -150,14 +150,14 @@ Agent controls other agents with enterprise-scale authority.
 
     # ── Pro tier resources ─────────────────────────────────────────────────────
     "governance_policy_template": {
-        "name": "Enterprise AI Governance Policy Template (AI SAFE2 v3.0)",
+        "name": "Enterprise AI Governance Policy Template (AI SAFE2 v3.1)",
         "tier_required": "pro",
         "description": "Word-document-ready governance policy template with ACT tier assignments, HEAR designation clauses, and CP.9 replication language. Maps to ISO 42001 and EU AI Act.",
         "content": """# Enterprise AI Governance Policy
-## AI SAFE2 v3.0 Aligned | ISO 42001 | EU AI Act
+## AI SAFE2 v3.1 Aligned | ISO 42001 | EU AI Act
 
 **Policy Version:** 3.0
-**Framework:** AI SAFE2 v3.0 — Cyber Strategy Institute
+**Framework:** AI SAFE2 v3.1 — Cyber Strategy Institute
 **Review Cycle:** Annual + triggered by significant model or system change
 
 ---
@@ -207,17 +207,17 @@ This policy satisfies:
 - SEC Cybersecurity Disclosure accountability requirements
 
 ---
-*Based on AI SAFE2 v3.0 — cyberstrategyinstitute.com/ai-safe2/*
+*Based on AI SAFE2 v3.1 — cyberstrategyinstitute.com/ai-safe2/*
 """,
     },
 
     "audit_scorecard_schema": {
-        "name": "AI SAFE2 v3.0 Audit Scorecard Schema",
+        "name": "AI SAFE2 v3.1 Audit Scorecard Schema",
         "tier_required": "pro",
         "description": "JSON schema for the 161-point audit scorecard. Use to build automated compliance assessment tools.",
         "content": """{
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "AI SAFE2 v3.0 Audit Scorecard",
+  "title": "AI SAFE2 v3.1 Audit Scorecard",
   "description": "161-point assessment across 5 pillars + 10 cross-pillar governance controls",
   "type": "object",
   "required": ["organization", "assessment_date", "assessor", "pillar_scores", "cp_scores"],
@@ -276,7 +276,7 @@ This policy satisfies:
         "name": "HEAR Designation and Class-H Action Protocol Template",
         "tier_required": "pro",
         "description": "Operational template for designating the Human Ethical Agent of Record and documenting Class-H action authorization. Satisfies EU AI Act Art. 14, SOC 2 CC.7.4, GDPR Art. 22.",
-        "content": """# HEAR Designation Record (AI SAFE2 v3.0 CP.10)
+        "content": """# HEAR Designation Record (AI SAFE2 v3.1 CP.10)
 
 ## Deployment Details
 - **Agent Name / ID:** _______________
@@ -321,7 +321,7 @@ accountability for Class-H action authorizations.
 **Witness:** _______________
 
 ---
-*AI SAFE2 v3.0 CP.10 | cyberstrategyinstitute.com/ai-safe2/*
+*AI SAFE2 v3.1 CP.10 | cyberstrategyinstitute.com/ai-safe2/*
 """,
     },
 }

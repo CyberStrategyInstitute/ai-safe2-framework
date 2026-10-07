@@ -228,3 +228,60 @@ Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
 On `82ed851` PR-Agent published a bounded review: one hunk, `ci.yml` permissions, with
 "no actionable issue". Its first run had published nothing. Greptile still posted no
 review. At `82ed851` all 41 checks pass and the PR is `mergeable: clean`.
+
+## 2026-10-07 E14: D4 follow-up, PR #394 (stacked on #393)
+
+- `5bc3c03` on `feat/aim-bound-act-tier` adds registry-bound ACT tiers (AIM v0.3). The IETF
+  draft section 3.1.1 already specified them, and the schema file the draft cites did not exist.
+- Also closes the same bug class in OPA:
+  - A `config_change` that omitted `act_tier` skipped the approval; on #393's head it returned
+    `allow=true`.
+  - An agent with no tier passed I-4 with no kill path.
+- **Red on #393's head:** the Python test file fails at collection and the Rego tests fail to
+  type-check. **Green here:** 18/18, `opa test` 25/25 on 0.65 and 1.4.2, SDK 626/626,
+  gates 30/30, battery 126/126.
+- PR #394 targets the #393 branch, so only 7 hosted checks ran (most workflows filter PRs to
+  `main`). Retarget #394 to `main` after #393 merges to run full CI.
+
+**Next:** the owner merges #393 (merge commit or rebase); #394 is retargeted and reviewed.
+
+## 2026-10-07 E15: Repository-wide consistency sweep (stacked on #393)
+
+The owner asked whether the skills update fixed v3.0/v3.1 mismatches repo-wide. It had
+not: the sweep in #393 covered `skills/` only. Branch `fix/v31-consistency-sweep`,
+based on `7286925`; owner chose a separate PR, a redirect for the stale toolkit, and
+a retag of the example packages.
+
+- `0be3c6f` MCP toolkit: printed control equals emitted control; v3.1 names. New
+  `test_control_citations.py` (9 red, then green) and repo-wide guard.
+- `bb22cce` Release truth: SECURITY.md (CLI was `0.1.x`), manifest (`0.9.9`), AGENTS.md,
+  README install fallback; `publish.yml` fails loudly on non-`v` CLI tags. Root cause
+  of 1.0.0 missing from PyPI recorded. Raised by the owner's daily run.
+- `4dc446b` Core retag; NEXUS current version 0.5 (was shown as v0.3 in 9 places).
+- `061e64b` `examples/mcp-security-toolkit/` replaced by a redirect.
+- `891a8e4` Example packages retagged; lovable `policy.yaml` parse error fixed.
+- #394 `2e37be6`: AIM v0.3 schema descriptions cite v3.1.
+
+Verification: guard clean; local gates 31/31; battery 126/0/0; example smoke results
+identical before/after. Evidence: `docs/assessments/2026-10-07-version-consistency/`.
+
+**PR:** #395 (draft). **Next:** the owner merges #393; #395 and #394 retarget to `main`. Publishing 1.0.x
+to PyPI is an owner release action (recommended: v1.0.1 after #393).
+
+## 2026-10-07 E16: CLI releases reach PyPI whatever the tag style (owner-approved)
+
+Owner approved hardening the publish path so the 1.0.0 gap cannot recur.
+
+- `check_release_installation.py`: tags `v1.0.1` and the dated house style
+  `<date>_CLI_1.0.1[_Title]` are both accepted; the version must equal
+  `pyproject.toml`, and a CLI tag that names no version fails closed.
+- `publish.yml`: build runs for `v*` or `*CLI*` tags; the silent-skip guard from
+  `bb22cce` is replaced by that check. New `verify-pypi` job polls PyPI, installs
+  `ai-safe2==X` in a clean venv and checks `safe2 --version`. The OIDC `id-token: write`
+  permission moved from workflow level to the two publish jobs (zizmor high finding,
+  pre-existing; the build job runs tests and should not hold a publishing token).
+- New weekly `release-drift.yml`: fails when the newest published CLI release is not
+  on PyPI. Live run today: fails on 1.0.0, and reports that only 0.9.0 of 10 CLI
+  releases ever reached PyPI.
+- Tests: `tests/test_release_publishing.py` (collection error on `8a1f6b0`, 24 passed).
+  Local gates 31/31.

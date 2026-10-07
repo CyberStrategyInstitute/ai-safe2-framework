@@ -1,6 +1,6 @@
 # Memory Governance Patterns — GK-HOOK + GK-SKILL
 ## Benign vs. Malicious Propagation
-**AI SAFE2 v3.0 · S1.5 Memory Governance Boundary Controls**
+**AI SAFE2 v3.1 · S1.5 Memory Governance Boundary Controls**
 
 ---
 

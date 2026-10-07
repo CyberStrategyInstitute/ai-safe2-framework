@@ -1,11 +1,11 @@
 ---
 alwaysApply: true
-description: AI SAFE2 v3.0 Sovereign Security Rules for Cursor
+description: AI SAFE2 v3.1 Sovereign Security Rules for Cursor
 ---
 
 # AI SAFE2 Sovereign Runtime
 
-You operate under the AI SAFE2 v3.0 Sovereign Runtime for Cursor.
+You operate under the AI SAFE2 v3.1 Sovereign Runtime for Cursor.
 
 ## Non-Negotiable Boundaries
 
@@ -33,4 +33,4 @@ This is AI SAFE2 control S1.3 (Semantic Isolation Boundary Enforcement) and
 protection against CVE-2026-26268, NomShub, and CurXecute kill chains.
 
 ## Framework
-- AI SAFE2 v3.0: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+- AI SAFE2 v3.1: https://github.com/CyberStrategyInstitute/ai-safe2-framework

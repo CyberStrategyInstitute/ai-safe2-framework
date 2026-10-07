@@ -1,0 +1,10 @@
+FAILED tests/mcp_toolkit/test_control_citations.py::test_pattern_text_cites_the_emitted_control[INJ-005]
+FAILED tests/mcp_toolkit/test_control_citations.py::test_pattern_text_cites_the_emitted_control[RL-001]
+FAILED tests/mcp_toolkit/test_control_citations.py::test_pattern_text_cites_the_emitted_control[MEM-001]
+FAILED tests/mcp_toolkit/test_control_citations.py::test_pattern_text_cites_the_emitted_control[SWM-001]
+FAILED tests/mcp_toolkit/test_control_citations.py::test_pattern_text_cites_the_emitted_control[DEP-001]
+FAILED tests/mcp_toolkit/test_control_citations.py::test_fix_template_cites_the_emitted_control[RCE-005]
+FAILED tests/mcp_toolkit/test_control_citations.py::test_fix_template_cites_the_emitted_control[SEC-001]
+FAILED tests/mcp_toolkit/test_control_citations.py::test_every_emitted_finding_uses_the_control_map
+FAILED tests/mcp_toolkit/test_control_citations.py::test_named_citations_use_v31_control_names
+9 failed, 40 passed in 0.25s

@@ -1,6 +1,6 @@
 # Security Policy — LangChain Sovereign Runtime
 
-**AI SAFE² v3.0 | Cyber Strategy Institute**
+**AI SAFE² v3.1 | Cyber Strategy Institute**
 
 ---
 
@@ -8,7 +8,7 @@
 
 | Version | Supported |
 |---|---|
-| AI SAFE² v3.0 (current) | ✅ Active |
+| AI SAFE² v3.1 (current) | ✅ Active |
 | AI SAFE² v2.1 | Security patches only |
 | AI SAFE² v2.0 and below | ❌ End of life |
 
@@ -35,7 +35,7 @@ Report vulnerabilities privately to:
 
 ## Severity Classification
 
-We classify AI SAFE² vulnerabilities using AI SAFE² v3.0 severity levels:
+We classify AI SAFE² vulnerabilities using AI SAFE² v3.1 severity levels:
 
 | Level | Criteria | Response SLA |
 |---|---|---|
@@ -73,4 +73,4 @@ We classify AI SAFE² vulnerabilities using AI SAFE² v3.0 severity levels:
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | security@cyberstrategyinstitute.com*
+*AI SAFE² v3.1 | Cyber Strategy Institute | security@cyberstrategyinstitute.com*

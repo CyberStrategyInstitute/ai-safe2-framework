@@ -28,8 +28,8 @@ def scan():
 @click.option("--max-findings", default=50, help="Maximum findings to display (default: 50)")
 @click.option("--max-files", default=10_000, type=click.IntRange(min=1), show_default=True)
 def scan_project(path, controls_json, max_findings, max_files):
-    """Scan a codebase against the 161 AI SAFE2 v3.0 controls."""
-    click.echo(f"\n{BOLD}AI SAFE2 v3.0 Project Scan{RESET}\nTarget: {path}\n" + "-" * 60)
+    """Scan a codebase against the 161 AI SAFE2 v3.1 controls."""
+    click.echo(f"\n{BOLD}AI SAFE2 v3.1 Project Scan{RESET}\nTarget: {path}\n" + "-" * 60)
     result = project_engine.run_scan(path, controls_json=controls_json, max_files=max_files)
     print_project_findings(result, max_findings=max_findings)
 

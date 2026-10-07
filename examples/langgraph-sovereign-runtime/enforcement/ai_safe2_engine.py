@@ -1,5 +1,5 @@
 """
-AI SAFE² v3.0 — NEXUS Enforcement Kernel
+AI SAFE² v3.1 — NEXUS Enforcement Kernel
 =========================================
 Self-contained enforcement engine. No LLM or LangChain dependencies.
 Zero external imports beyond Python stdlib.
@@ -188,7 +188,7 @@ _OCSF_SEVERITY: Dict[str, int] = {
 
 class AISAFE2Engine:
     """
-    AI SAFE² v3.0 NEXUS Enforcement Kernel.
+    AI SAFE² v3.1 NEXUS Enforcement Kernel.
 
     Drop-in enforcement engine for LangChain, LangGraph, CrewAI, AutoGen, n8n.
     Pass a single shared instance across all runtimes for a unified compliance
@@ -286,7 +286,7 @@ class AISAFE2Engine:
                     "version": "3.0",
                 },
                 "control_id": control_id,
-                "framework": "AI SAFE² v3.0",
+                "framework": "AI SAFE² v3.1",
                 "act_tier": self.act_tier.name,
             },
             "finding_info": {
@@ -804,7 +804,7 @@ class AISAFE2Engine:
                 "A2.5", "M4.5", "P2.T3.6",
                 "CP.3", "CP.4", "CP.8", "CP.10",
             ],
-            "framework_version": "AI SAFE² v3.0",
+            "framework_version": "AI SAFE² v3.1",
         }
 
     def _alignment_band(self) -> str:
@@ -828,7 +828,7 @@ class AISAFE2Engine:
             f"| {ctrl} | {count} |" for ctrl, count in sorted(violations_by_control.items())
         ) or "| — | 0 |"
 
-        return f"""# AI SAFE² v3.0 — LangChain Sovereign Runtime Compliance Report
+        return f"""# AI SAFE² v3.1 — LangChain Sovereign Runtime Compliance Report
 
 **Generated:** {datetime.now(timezone.utc).isoformat()}
 **Session:** {status['session_id']}
@@ -858,5 +858,5 @@ Last hash: `{self._last_hash[:24]}...`
 Log: `{self.audit_log_path}`
 
 ---
-*AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+*AI SAFE² v3.1 | Cyber Strategy Institute | cyberstrategyinstitute.com*
 """

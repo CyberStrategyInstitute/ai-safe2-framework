@@ -15,7 +15,7 @@
 
 > **Prevention over detection. Engineering over policy. Milliseconds beat committees.**
 
-A runnable reference implementation of the **AI SAFE² Framework v3.0** — designed to govern and harden the **Antigravity 2.0 Agentic Platform** against prompt injection, exfiltration, privilege escalation, and runaway execution.
+A runnable reference implementation of the **AI SAFE² Framework v3.1** — designed to govern and harden the **Antigravity 2.0 Agentic Platform** against prompt injection, exfiltration, privilege escalation, and runaway execution.
 
 ---
 
@@ -400,7 +400,7 @@ Plain-text logs are for humans. Structured logs with `control_id`, `category`, a
 
 ## Framework Reference
 
-Built on **AI SAFE² v3.0** — the Sovereign Agent Security Standard.
+Built on **AI SAFE² v3.1** — the Sovereign Agent Security Standard.
 
 - Framework docs: [CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
 - AISM Maturity Model: See framework repository

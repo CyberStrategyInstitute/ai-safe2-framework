@@ -4,7 +4,7 @@
 > sovereign-runtime engine pattern. It does not claim that the example engine
 > implements the current NEXUS SDK or Sovereign Payment Gateway contracts.
 
-## AI SAFE² v3.0 Multi-Framework Sovereign Architecture
+## AI SAFE² v3.1 Multi-Framework Sovereign Architecture
 
 ---
 
@@ -183,4 +183,4 @@ Full async-safe version is on the roadmap for v3.1.
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | NEXUS Mesh Architecture*
+*AI SAFE² v3.1 | Cyber Strategy Institute | NEXUS Mesh Architecture*

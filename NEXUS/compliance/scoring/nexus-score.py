@@ -43,7 +43,7 @@ class ControlCheck:
 def check_environment() -> list[ControlCheck]:
     """
     Check whether the local environment has NEXUS dependencies deployed.
-    Each check maps to a SAFE2 v3.0 control.
+    Each check maps to a SAFE2 v3.1 control.
     """
     checks = []
 
@@ -110,7 +110,7 @@ def check_environment() -> list[ControlCheck]:
 
 def score_aim(aim_path: str) -> dict:
     """
-    Score an AIM against AI SAFE2 v3.0 requirements.
+    Score an AIM against AI SAFE2 v3.1 requirements.
     Returns SAFE2 pillar scores and recommendations.
     """
     try:
@@ -219,7 +219,7 @@ def score_aim(aim_path: str) -> dict:
 
     total = sum(scores.values())
 
-    # AAF estimation (AI SAFE2 v3.0 Section 8)
+    # AAF estimation (AI SAFE2 Combined Risk Score, OWASP AIVSS AAF term)
     aaf = estimate_aaf(aim)
 
     return {
@@ -242,7 +242,7 @@ def estimate_aaf(aim: dict) -> dict:
     """
     Estimate AIVSS AAF (Agentic Amplification Factor) from AIM fields.
     Full AAF requires runtime data; this is a structural estimate only.
-    Reference: AI SAFE2 v3.0 Section 8
+    Reference: AI SAFE2 Combined Risk Score formula (AAF term, OWASP AIVSS)
     """
     factors = {}
 
@@ -277,7 +277,7 @@ def print_report(result: dict):
         return
 
     print(f"\n{'='*60}")
-    print(f"NEXUS-A2A / AI SAFE2 v3.0 Compliance Report")
+    print(f"NEXUS-A2A / AI SAFE2 v3.1 Compliance Report")
     print(f"{'='*60}")
     print(f"Agent DID:     {result['agent_did']}")
     print(f"Class:         {result['agent_class']}")
@@ -325,7 +325,7 @@ def print_env_report(checks: list):
 def check_v03_controls() -> list[ControlCheck]:
     """
     NEXUS v0.3 specific control checks.
-    Maps to the eight ACS-derived improvements and the SAFE2 v3.0 gap closures.
+    Maps to the eight ACS-derived improvements and the SAFE2 v3.1 gap closures.
     """
     checks = []
 

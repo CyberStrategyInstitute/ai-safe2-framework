@@ -253,7 +253,7 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "MCP tool returns raw data to LLM clients without injection scanning. "
      "Supply chain compromise of the data source (JSON file, DB, API) could deliver "
      "prompt injection payloads as trusted tool-response content. "
-     "AI SAFE2 v3.0 CP.5.MCP-2.",
+     "AI SAFE2 v3.1 CP.5.MCP-2.",
      [],
      "Wrap every tool return: sanitized, _ = sanitize_value(result, 'tool_name'); return sanitized. "
      "from aisafe2_mcp_tools.shared.patterns import sanitize_value. "
@@ -266,11 +266,11 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "Dynamically registered tools are not locked at install time. Rug pull attack: "
      "legitimate server mutates tool descriptions after trust is established. "
      "Detection requires schema-change monitoring at runtime. "
-     "AI SAFE2 v3.0 CP.5.MCP-3.",
+     "AI SAFE2 v3.1 CP.5.MCP-11.",
      [],
      "Implement schema-change detection: hash tools/list response at startup, "
      "alert on unexpected changes between sessions. "
-     "See mcp-safe-wrap schema monitoring and AI SAFE2 CP.5.MCP-3.",
+     "See mcp-safe-wrap schema monitoring and AI SAFE2 v3.1 CP.5.MCP-11 (Catalog Provenance).",
      False),
 
 
@@ -280,7 +280,7 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "HTTP MCP servers require application-layer rate limiting independent of any reverse "
      "proxy. Caddy/nginx rate limits are bypassed when uvicorn is accessed directly "
      "(Railway direct port, local dev, any deployment without Caddy in the stack). "
-     "AI SAFE2 v3.0 CP.5.MCP-6.",
+     "AI SAFE2 v3.1 CP.5.MCP-8.",
      [],
      "Wire rate limiting into the ASGI app. "
      "Use aisafe2-mcp-tools ratelimit.py or slowapi. "
@@ -294,11 +294,11 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "billing amplification (Phantom framework — 658x amplification, 97% miss rate). "
      "November 2025 incident: $47,000 API bill from 4-agent infinite retry loop. "
      "Verify per-session token budget and cost ceiling are implemented. "
-     "AI SAFE2 v3.0 CP.5.MCP-8.",
+     "AI SAFE2 v3.1 CP.5.MCP-8.",
      [],
      "Implement per-session token budget and cost ceiling. "
      "Halt and alert when session exceeds 2x expected daily spend. "
-     "See AI SAFE2 v3.0 CP.5.MCP-8 (Session Economics).",
+     "See AI SAFE2 v3.1 CP.5.MCP-8 (Economic Ceiling).",
      False),
 
     ("LOG-001",
@@ -306,7 +306,7 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "MCP tool handler — verify audit logging",
      "Every MCP tool invocation must generate an immutable audit record: "
      "tool name, parameters, response hash, timestamp, calling agent identity. "
-     "AI SAFE2 v3.0 CP.5.MCP-5.",
+     "AI SAFE2 v3.1 CP.5.MCP-5.",
      [],
      "Add structlog/logging to every @mcp.tool handler: "
      "log.info('tool.NAME', query=query, tier=tier). "
@@ -320,7 +320,7 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "calling agent identity, and immutable append-only guarantees required by MCP-5. "
      "Standard Python logging does not satisfy MCP-5 Tool Invocation Audit Log compliance. "
      "Verify that a structured, immutable JSONL audit trail is also implemented. "
-     "AI SAFE2 v3.0 CP.5.MCP-5.",
+     "AI SAFE2 v3.1 CP.5.MCP-5.",
      [],
      "Implement immutable JSONL audit logging alongside standard logging. "
      "Use aisafe2_mcp_tools.wrap.audit.AuditLog or equivalent. "
@@ -338,14 +338,14 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "trusted persistent context without guardrails. "
      "Poisoned tool results in persistent memory influence all future sessions. "
      "Verify memory contents are sanitized on read and that expiry is enforced. "
-     "AI SAFE2 v3.0 CP.5.MCP-10.",
+     "AI SAFE2 v3.1 CP.5.MCP-12.",
      [],
      "Implement memory decay/expiry. Validate memory contents on read "
      "using sanitize_value(). Provide a clear-memory endpoint. "
      "Document cross-session persistence in your security attestation.",
      False),
 
-    # ── Schema Temporal Profiling (MCP-11) ────────────────────────────────────
+    # ── Catalog provenance: tools/list pinning (MCP-11) ───────────────────────
     ("STP-001",
      re.compile(r'tools[/_]list|tools\.list|"tools/list"|list_tools', re.IGNORECASE),
      "tools/list call — verify schema hash pinning at session startup",
@@ -354,16 +354,16 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "A server with established trust can mutate its tool descriptions between sessions "
      "with no native client detection mechanism. "
      "Verify that tools/list responses are hashed and compared on each session startup. "
-     "AI SAFE2 v3.0 CP.5.MCP-11.",
+     "AI SAFE2 v3.1 CP.5.MCP-11.",
      [],
      "Record the tools/list response hash at deployment (baseline). "
      "Compare the hash at every session startup. "
      "Alert on any hash change not accompanied by a documented release event. "
      "Use mcp-safe-wrap --pin-schema for consumer-side enforcement. "
-     "See AI SAFE2 v3.0 CP.5.MCP-11 (Schema Temporal Profiling).",
+     "See AI SAFE2 v3.1 CP.5.MCP-11 (Catalog Provenance).",
      False),
 
-    # ── Swarm C2 Detection (MCP-12) — comment lines excluded in _scan_medium ──
+    # ── Delegation edge monitoring (MCP-10) — comment lines excluded in _scan_medium
     ("SWM-001",
      re.compile(
          r'\b(spawn_agent|create_agent|invoke_agent|agent_pool|orchestrat\w*|swarm\w*|'
@@ -376,12 +376,12 @@ MEDIUM_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str, bool
      "agent swarms. MCP-based C2 traffic is semantically indistinguishable from "
      "legitimate agent coordination at the per-request level. "
      "Verify that behavioral topology monitoring and CP.7 honeypot endpoints are deployed. "
-     "AI SAFE2 v3.0 CP.5.MCP-12.",
+     "AI SAFE2 v3.1 CP.5.MCP-10.",
      [],
      "Establish behavioral baselines for inter-agent communication topology. "
      "Deploy CP.7 honeypot tool endpoints as canaries. "
      "Implement semantic traffic analysis at the orchestration layer. "
-     "See AI SAFE2 v3.0 CP.5.MCP-12 (Swarm C2 Detection Controls).",
+     "See AI SAFE2 v3.1 CP.5.MCP-10 (Delegation Edge Monitoring).",
      False),
 ]
 
@@ -407,7 +407,7 @@ LOW_PATTERNS: list[tuple[str, re.Pattern[str], str, str, list[str], str]] = [
      "MCP dependency — verify version pinning and update policy",
      "Unpinned MCP dependencies can silently upgrade to vulnerable versions. "
      "Supply chain attacks succeed when dependencies are not pinned and verified. "
-     "AI SAFE2 v3.0 CP.5.MCP-3.",
+     "AI SAFE2 v3.1 CP.5.MCP-4.",
      [],
      "Pin all dependencies to exact versions. Use a lockfile (pip-compile or poetry.lock). "
      "Subscribe to security advisories for all MCP-related dependencies."),
@@ -670,14 +670,14 @@ class PatternScanner:
             "The attack requires zero direct victim interaction. "
             "Verify that externally retrieved data is classified as untrusted data-plane "
             "content and processed through a semantic firewall before any disclosure tool. "
-            "AI SAFE2 v3.0 CP.5.MCP-9."
+            "AI SAFE2 v3.1 CP.5.MCP-9."
         )
         _REMEDIATION = (
             "Apply sanitize_value() from aisafe2_mcp_tools.shared.patterns to all "
             "externally retrieved content before passing it to any disclosure tool. "
             "Ensure the Agentic Control Plane (CP.4) enforces context-tool isolation "
             "at the orchestration layer, not per-tool. "
-            "See AI SAFE2 v3.0 CP.5.MCP-9 (Context-Tool Isolation) and fixes/CTI-001.template."
+            "See AI SAFE2 v3.1 CP.5.MCP-9 (Secret Boundary) and fixes/CTI-001.template."
         )
 
         retrieval_hits = [

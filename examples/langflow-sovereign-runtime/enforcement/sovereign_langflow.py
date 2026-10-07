@@ -1,6 +1,6 @@
 """
 sovereign_langflow.py — Langflow Enforcement Layer
-AI SAFE2 v3.0 Sovereign Runtime
+AI SAFE2 v3.1 Sovereign Runtime
 Cyber Strategy Institute
 
 Eight enforcement surfaces unique to Langflow's visual DAG architecture.
@@ -222,7 +222,7 @@ _COMP_OUTPUT_PATTERNS: List[tuple] = [
 
 class LangflowSovereignRuntime:
     """
-    AI SAFE2 v3.0 Sovereign Runtime for Langflow.
+    AI SAFE2 v3.1 Sovereign Runtime for Langflow.
 
     ARCHITECTURAL NOTE: Langflow is a visual DAG builder. Unlike LangChain
     or CrewAI, there is no Python callback to intercept. This runtime

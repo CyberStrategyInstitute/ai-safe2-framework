@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AI SAFE² v3.0 — CrewAI Sovereign Runtime — Pass 1: Static Validation
+# AI SAFE² v3.1 — CrewAI Sovereign Runtime — Pass 1: Static Validation
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -10,7 +10,7 @@ fail() { echo -e "  ${RED}✗${NC} $1"; ((FAIL++)) || true; }
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║   AI SAFE² v3.0 — CrewAI Pass 1: Static Validation          ║"
+echo "║   AI SAFE² v3.1 — CrewAI Pass 1: Static Validation          ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 
 echo ""; echo "── 1. Python Imports ──"

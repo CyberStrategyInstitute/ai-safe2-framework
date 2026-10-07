@@ -1,6 +1,6 @@
 """
 AI SAFE2 Tool: review_code (Light Version)
-Analyzes code against AI SAFE2 v3.0 controls using the control taxonomy as context.
+Analyzes code against AI SAFE2 v3.1 controls using the control taxonomy as context.
 No server-side code execution. The model reasons about the code using the controls.
 
 Pro tier only.
@@ -43,7 +43,7 @@ def review_code(
     tier: str = "free",
 ) -> dict:
     """
-    Review code against AI SAFE2 v3.0 controls and return structured findings.
+    Review code against AI SAFE2 v3.1 controls and return structured findings.
 
     This is a light-version review: the function provides the control context
     and review framework so the model can reason about the code.
@@ -167,7 +167,7 @@ def review_code(
             "controls_loaded": len(review_controls),
             "tier": tier,
             "note": (
-                "This is a model-assisted review using the AI SAFE2 v3.0 control taxonomy. "
+                "This is a model-assisted review using the AI SAFE2 v3.1 control taxonomy. "
                 "Complement with static analysis tools (bandit, semgrep) for production systems."
             ),
         },

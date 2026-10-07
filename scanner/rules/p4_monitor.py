@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.0 Scanner — Pillar 4: Engage & Monitor Rules
+AI SAFE2 v3.1 Scanner — Pillar 4: Engage & Monitor Rules
 Covers: P4.T7.x (Engage/HITL), P4.T8.x (Monitor), M4.4-M4.8 (v3.0 new controls)
 """
 
@@ -215,7 +215,7 @@ P4_RULES: list[Rule] = [
         pattern=r"(?i)(token_count|usage\.total_tokens|prompt_tokens|completion_tokens)",
         file_exts=(".py", ".js", ".ts"),
     ),
-    # ── M4.4-M4.8 New v3.0 Controls ──────────────────────────────────────────
+    # ── M4.4-M4.8 Controls added in v3.0 ─────────────────────────────────────────
     # M4.5 — Tool-Misuse Detection
     Rule(
         control_id="M4.5",

@@ -22,6 +22,8 @@ jobs:
           python-version: "3.12"
       - name: Check repository navigation and branding
         run: python scripts/check_repo_ux.py
+      - name: Check framework version labels, MCP control names and component versions (repo-wide)
+        run: python scripts/check_framework_version_labels.py
       - name: Check examples index
         run: python scripts/generate_examples_table.py --check
 

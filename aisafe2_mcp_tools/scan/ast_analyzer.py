@@ -75,7 +75,7 @@ class ASTAnalyzer:
             yield Finding(
                 finding_id="RCE-001",
                 severity="critical",
-                cp5_control="MCP-1",
+                cp5_control=Finding.control_for("RCE-001"),
                 title="Dynamic command construction in StdioServerParameters",
                 description=(
                     "A non-constant value is passed as 'command' to StdioServerParameters. "

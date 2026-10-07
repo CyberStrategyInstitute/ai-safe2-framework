@@ -75,7 +75,7 @@ class TestControlsDB:
 
     def test_search_by_version_v3(self):
         results = self.db.search(version="v3.0")
-        assert len(results) >= 23, f"Expected at least 23 v3.0 controls (includes CP), got {len(results)}"
+        assert len(results) >= 23, f"Expected at least 23 controls added in v3.0 (includes CP), got {len(results)}"
 
     def test_search_by_framework(self):
         results = self.db.search(framework="EU_AI_Act")

@@ -21,7 +21,7 @@ def cli(
     ctx: click.Context, target_path: str, output: str, severity: str, ci: bool
 ) -> None:
     """
-    mcp-scan — AI SAFE2 v3.0 CP.5.MCP Static Code Analysis
+    mcp-scan — AI SAFE2 v3.1 CP.5.MCP Static Code Analysis
 
     Scans MCP server source code across all threat classes from the
     CSI MCP Threat Intelligence Report (April 2026).

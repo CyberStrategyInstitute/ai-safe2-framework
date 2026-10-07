@@ -1,5 +1,5 @@
 """
-AI SAFE² v3.0 — CrewAI Sovereign Enforcement Layer
+AI SAFE² v3.1 — CrewAI Sovereign Enforcement Layer
 ====================================================
 CrewAI's threat model is fundamentally different from LangChain and LangGraph.
 
@@ -208,7 +208,7 @@ class TaskContextGuard:
 
 class SovereignCrew:
     """
-    AI SAFE² v3.0 sovereign enforcement for CrewAI agents, tasks, and crews.
+    AI SAFE² v3.1 sovereign enforcement for CrewAI agents, tasks, and crews.
 
     Usage — wrap agents and protect task outputs:
 

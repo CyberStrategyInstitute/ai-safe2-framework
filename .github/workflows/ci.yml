@@ -137,7 +137,7 @@ jobs:
           retention-days: 7
 
   compliance:
-    name: AI SAFE2 v3.1 / NEXUS v0.3 Compliance
+    name: AI SAFE2 v3.1 / NEXUS Compliance (v0.3 control checks)
     runs-on: ubuntu-latest
     needs: test
 
@@ -166,7 +166,7 @@ jobs:
           echo "${OPA_SHA256}  opa" | sha256sum -c -
           chmod +x opa && sudo mv opa /usr/local/bin/opa
 
-      - name: Run NEXUS v0.3 compliance checks
+      - name: Run NEXUS v0.3 control checks
         env:
           PYTHONPATH: NEXUS/sdk/python
         run: |

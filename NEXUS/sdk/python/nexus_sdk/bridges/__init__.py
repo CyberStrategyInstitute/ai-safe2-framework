@@ -127,7 +127,7 @@ class NEXUSACSBridge:
 
     Deployment: place between NEXUS agent and any ACS-compatible Guardian.
     Reference: ACS v0.1.0, AOS v0.1.0 (aos.owasp.org), NEXUS-A2A v0.3
-    AI SAFE2 v3.0: S1.3, F3.1, CP.4, CP.5.MCP-7
+    AI SAFE2 v3.1: S1.3, F3.1, CP.4, CP.5.MCP-7
     """
 
     def build_tool_call_request(self, cael_tool_call: dict,

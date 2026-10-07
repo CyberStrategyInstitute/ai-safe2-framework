@@ -26,7 +26,7 @@ def score():
 @click.argument("path", default=".", type=click.Path(exists=True))
 @click.option("--controls-json", default=None)
 def score_project(path, controls_json):
-    """Score a codebase against the 161 AI SAFE2 v3.0 controls."""
+    """Score a codebase against the 161 AI SAFE2 v3.1 controls."""
     result = project_engine.run_scan(path, controls_json=controls_json)
     print_project_summary(result)
 

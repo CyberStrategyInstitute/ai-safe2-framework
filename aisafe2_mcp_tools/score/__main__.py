@@ -55,7 +55,7 @@ def cli(
     ci_fail_below: int,
 ) -> None:
     """
-    mcp-score — AI SAFE2 v3.0 CP.5.MCP Remote Security Assessment
+    mcp-score — AI SAFE2 v3.1 CP.5.MCP Remote Security Assessment
 
     Score any MCP HTTP server against the AI SAFE2 CP.5.MCP control profile.
     Servers scoring 70+ are eligible for the AI SAFE2 MCP badge.

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Pass 4: Compliance Mapping Review
-# Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0
+# Hermes Sovereign Runtime (HSR) | AI SAFE² v3.1
 # Cyber Strategy Institute
 #
 # Validates that HSR controls satisfy requirements across:
@@ -39,7 +39,7 @@ dir_exists() { [[ -d "$1" ]]; }
 env_contains() { grep -q "$1" "${HSR_ROOT}/.env" 2>/dev/null; }
 
 echo ""
-echo -e "${BOLD}${CYAN}HSR Pass 4: Compliance Mapping Review — AI SAFE2 v3.0${NC}"
+echo -e "${BOLD}${CYAN}HSR Pass 4: Compliance Mapping Review — AI SAFE2 v3.1${NC}"
 echo ""
 
 # ---------------------------------------------------------------------------

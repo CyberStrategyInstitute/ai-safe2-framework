@@ -1,5 +1,5 @@
 # NEXUS-A2A Sovereign Gateway -- Docker Compose Reference Deployment
-# Cyber Strategy Institute | NEXUS-A2A v0.3 | AI SAFE2 v3.0
+# Cyber Strategy Institute | NEXUS-A2A v0.3 | AI SAFE2 v3.1
 #
 # WHAT THIS DEPLOYS:
 #   A NEXUS sovereign gateway that wraps any MCP server or agentic workload.

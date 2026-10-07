@@ -1,6 +1,6 @@
 """
 AI SAFE2 MCP Server — Prompt Registry
-Reusable task-starter prompts for common AI SAFE2 v3.0 workflows.
+Reusable task-starter prompts for common AI SAFE2 v3.1 workflows.
 These are parameterized prompt fragments clients can invoke to bootstrap workflows.
 """
 from __future__ import annotations
@@ -9,14 +9,14 @@ from __future__ import annotations
 PROMPTS: dict[str, dict] = {
     "security_architecture_review": {
         "name": "AI System Security Architecture Review",
-        "description": "Start a comprehensive AI SAFE2 v3.0 security review of a system design or architecture.",
+        "description": "Start a comprehensive AI SAFE2 v3.1 security review of a system design or architecture.",
         "arguments": [
             {"name": "system_description", "description": "What the AI system does", "required": True},
             {"name": "deployment_environment", "description": "Where it runs (cloud, on-prem, edge)", "required": False},
             {"name": "compliance_requirements", "description": "Relevant regulations (HIPAA, GDPR, SOC 2, etc.)", "required": False},
         ],
         "template": (
-            "Conduct a comprehensive AI SAFE2 v3.0 security architecture review for: {system_description}\n\n"
+            "Conduct a comprehensive AI SAFE2 v3.1 security architecture review for: {system_description}\n\n"
             "Environment: {deployment_environment}\n"
             "Compliance requirements: {compliance_requirements}\n\n"
             "Structure your review across all 5 AI SAFE2 pillars plus the Cross-Pillar Governance Layer:\n"
@@ -43,7 +43,7 @@ PROMPTS: dict[str, dict] = {
             "Conduct a gap analysis between the current AI controls and {framework}.\n\n"
             "Current controls in place:\n{current_controls}\n\n"
             "Steps:\n"
-            "1. Use map_to_frameworks with framework='{framework}' to retrieve all relevant AI SAFE2 v3.0 controls\n"
+            "1. Use map_to_frameworks with framework='{framework}' to retrieve all relevant AI SAFE2 v3.1 controls\n"
             "2. For each required control, assess whether it is: Compliant / Partial / Gap\n"
             "3. Prioritize gaps by severity (CRITICAL first)\n"
             "4. For each gap, specify the exact AI SAFE2 control ID, implementation requirement, and evidence needed\n"
@@ -60,7 +60,7 @@ PROMPTS: dict[str, dict] = {
             {"name": "system_context", "description": "Brief description of the affected system", "required": False},
         ],
         "template": (
-            "Generate an AI SAFE2 v3.0 incident response runbook for: {incident_type}\n"
+            "Generate an AI SAFE2 v3.1 incident response runbook for: {incident_type}\n"
             "System context: {system_context}\n\n"
             "Structure the runbook as:\n"
             "1. Detection: How to identify this incident type\n"
@@ -70,7 +70,7 @@ PROMPTS: dict[str, dict] = {
             "5. Recovery: Restore from clean state using P3 recovery controls\n"
             "6. Post-incident: Update CP.6 AIID incident log, E5.4 red-team artifact, and CP.2 threat model\n"
             "7. Evidence preservation: What logs and artifacts to preserve for compliance reporting\n\n"
-            "Reference specific AI SAFE2 v3.0 control IDs throughout."
+            "Reference specific AI SAFE2 v3.1 control IDs throughout."
         ),
     },
 

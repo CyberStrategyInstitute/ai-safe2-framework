@@ -6,6 +6,7 @@ import argparse
 import importlib.metadata
 import json
 import os
+import re
 import subprocess
 import sys
 import sysconfig
@@ -89,12 +90,35 @@ def verify_uninstalled() -> None:
         raise RuntimeError("safe2 console entry point remains in the active environment after uninstall")
 
 
+# Accepted CLI release tags: `v1.0.1`, or the dated house style containing
+# `CLI_1.0.1` (for example `2026-10-05_CLI_1.0.1` or `2026-10-05_CLI_1.0.1_Title`). The version in the tag must
+# equal pyproject.toml; anything else fails before a build is published.
+_VERSION = r"(\d+\.\d+\.\d+(?:(?:a|b|rc)\d+)?(?:\.post\d+)?)"
+_V_TAG = re.compile(rf"^v{_VERSION}$")
+_CLI_TAG = re.compile(rf"(?:^|[_\-\s])CLI[_\-\s]v?{_VERSION}(?=$|[_\-\s][A-Za-z])", re.IGNORECASE)
+
+
+def cli_version_from_tag(tag: str) -> str | None:
+    """Return the CLI version a release tag names, or None if it names none."""
+    for pattern in (_V_TAG, _CLI_TAG):
+        match = pattern.search(tag.strip())
+        if match:
+            return match.group(1)
+    return None
+
+
 def check_tag(tag: str, expected_version: str) -> None:
-    normalized = tag.removeprefix("v")
-    if normalized != expected_version:
+    version = cli_version_from_tag(tag)
+    if version is None:
         raise RuntimeError(
-            f"release tag {tag!r} does not match package version {expected_version!r}"
+            f"release tag {tag!r} does not name a CLI version; use v{expected_version} "
+            f"or <date>_CLI_{expected_version}"
         )
+    if version != expected_version:
+        raise RuntimeError(
+            f"release tag {tag!r} names {version!r} but pyproject.toml is {expected_version!r}"
+        )
+    print(f"release tag {tag!r} matches package version {expected_version}")
 
 
 def main() -> None:

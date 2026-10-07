@@ -1,5 +1,5 @@
 # Fix Template: INJ-001 — Missing Output Sanitization
-# AI SAFE2 v3.0 CP.5.MCP-2
+# AI SAFE2 v3.1 CP.5.MCP-2
 #
 # ── BEFORE (vulnerable) ───────────────────────────────────────────
 @mcp.tool(description="Search controls")

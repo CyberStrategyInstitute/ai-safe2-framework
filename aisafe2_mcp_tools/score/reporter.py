@@ -345,7 +345,7 @@ def to_html(report: ScoreReport) -> str:
 </div>
 
 <div class="footer">
-  <p>AI SAFE2 v3.0 | Cyber Strategy Institute |
+  <p>AI SAFE2 v3.1 | Cyber Strategy Institute |
   <a href="https://cyberstrategyinstitute.com/ai-safe2/">cyberstrategyinstitute.com/ai-safe2/</a> |
   <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework">GitHub</a></p>
 </div>

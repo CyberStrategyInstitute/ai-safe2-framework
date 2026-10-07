@@ -14,6 +14,9 @@ safe2 acceptance run ./safe2-1.0-acceptance --strict
 safe2 acceptance verify ./safe2-1.0-acceptance
 ```
 
+Until 1.0.0 is on PyPI (it currently serves 0.9.0), install the release tag:
+`python -m pip install "ai-safe2[all] @ git+https://github.com/CyberStrategyInstitute/ai-safe2-framework@2026-10-5_CLI_1.0.0"`.
+
 Do not overwrite an earlier acceptance directory. To roll back, create a fresh
 environment with the previously trusted package version and replay artifacts
 using their producing version. A package downgrade does not migrate or rewrite
@@ -167,6 +170,10 @@ Leave `examples/mcp-security-toolkit/src` and `scripts/skill_trust_gate.py`
 in place until you're satisfied the new paths are solid in production, then
 `git rm -r examples/mcp-security-toolkit/src` (keep its README's redirect
 notice, or remove the whole directory) and the deprecated script.
+
+**Done 2026-10-07:** the duplicate `src/`, `tests/`, `examples/` and
+`pyproject.toml` under `examples/mcp-security-toolkit/` were removed; only the
+redirect README remains. The duplicate still carried the pre-fix remote scorer.
 
 ## Known pre-existing scanner limitation (not introduced by this change)
 

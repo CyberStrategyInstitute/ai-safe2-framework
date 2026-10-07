@@ -16,7 +16,7 @@ Record schema:
   families:      list of injection pattern families detected
   severities:    list of severities detected
 
-AI SAFE2 v3.0 CP.5.MCP-5 compliance:
+AI SAFE2 v3.1 CP.5.MCP-5 compliance:
   Every tool invocation generates an audit record.
   Every injection detection generates an audit record.
   Records are appended to a JSONL file (append-only = immutable).
@@ -43,7 +43,7 @@ EVENT_TYPES = {
     "schema_pinned",            # tools/list hash recorded at session start (MCP-11)
 }
 
-# CP.1 taxonomy tags for MCP failure classes (MCP-13).
+# CP.1 (Agent Failure Taxonomy) tags for MCP failure classes.
 # Applied to audit records so incident response teams classify correctly.
 # cognitive_surface: "model" | "memory" | "both"
 # memory_persistence: "session" | "cross_session" | "chronic" | "delayed_days" | "delayed_weeks"
@@ -81,13 +81,13 @@ class AuditLog:
     def write(self, record: dict[str, Any]) -> None:
         """Append a record to the audit log. Silent on failure.
 
-        Automatically enriches the record with CP.1 taxonomy tags (MCP-13)
+        Automatically enriches the record with CP.1 failure-taxonomy tags
         based on the event type, so incident response teams classify correctly.
         """
         if self._path is None:
             return
         record.setdefault("timestamp", _iso_now())
-        # MCP-13: Inject CP.1 taxonomy tags where applicable
+        # CP.1: inject failure-taxonomy tags where applicable
         event = record.get("event", "")
         taxonomy = CP1_TAXONOMY.get(event, {})
         if taxonomy:
@@ -153,7 +153,7 @@ class AuditLog:
     def write_schema_changed(
         self, baseline_hash: str, current_hash: str, enforced: bool = False
     ) -> None:
-        """Alert on tools/list catalog change vs. pinned baseline (MCP-11 + MCP-13)."""
+        """Alert on tools/list catalog change vs. pinned baseline (MCP-11, tagged per CP.1)."""
         self.write({
             "event": "schema_changed",
             "baseline_hash": baseline_hash,

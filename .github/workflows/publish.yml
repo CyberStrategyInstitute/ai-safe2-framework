@@ -5,14 +5,20 @@ on:
     types: [published]
 
 permissions:
-  contents: read
-  id-token: write   # Required for OIDC trusted publishing (no API key needed)
+  contents: read    # id-token: write is granted only to the two publish jobs
 
 jobs:
+  # CLI releases may be tagged `v1.0.1` or in the dated house style
+  # `2026-10-05_CLI_1.0.1[_Title]`. Until 2026-10-07 only `v*` tags ran, so the
+  # 1.0.0 release (`2026-10-5_CLI_1.0.0`) skipped every job and never reached
+  # PyPI. A tag that names no version, or a different version than
+  # pyproject.toml, now fails the build step with an explanation.
   build:
     name: Build distribution
     runs-on: ubuntu-latest
-    if: startsWith(github.event.release.tag_name, 'v')
+    if: startsWith(github.event.release.tag_name, 'v') || contains(github.event.release.tag_name, 'CLI')
+    outputs:
+      version: ${{ steps.package.outputs.version }}
 
     steps:
       - name: Checkout
@@ -108,7 +114,10 @@ jobs:
     name: Publish to PyPI
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.event.release.tag_name, 'v') && github.event.release.prerelease == false
+    if: github.event.release.prerelease == false
+    permissions:
+      contents: read
+      id-token: write   # OIDC trusted publishing (no API key needed)
     environment:
       name: pypi
       url: https://pypi.org/project/ai-safe2/
@@ -125,11 +134,52 @@ jobs:
         # No API token needed -- uses OIDC trusted publishing
         # Configure at: https://pypi.org/manage/project/ai-safe2/settings/publishing/
 
+  verify-pypi:
+    name: Verify PyPI serves the release
+    needs: [build, publish-pypi]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.11"
+
+      - name: Wait until PyPI lists the version
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+        run: python -I scripts/check_pypi_release.py wait --version "$VERSION" --timeout 900
+
+      - name: Install from PyPI in a clean environment and check the version
+        shell: bash
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          set -euo pipefail
+          python -m venv /tmp/pypi-smoke
+          for attempt in 1 2 3 4 5; do
+            /tmp/pypi-smoke/bin/pip install --no-cache-dir "ai-safe2==${VERSION}" && break
+            echo "index not consistent yet (attempt ${attempt}); retrying"; sleep 30
+          done
+          cd /tmp
+          reported="$(/tmp/pypi-smoke/bin/safe2 --version)"
+          echo "$reported"
+          [[ "$reported" == *"version ${VERSION}" ]] || { echo "::error::installed safe2 reports '$reported', expected ${VERSION}"; exit 1; }
+
   publish-testpypi:
     name: Publish to TestPyPI (pre-release)
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.event.release.tag_name, 'v') && github.event.release.prerelease == true
+    if: github.event.release.prerelease == true
+    permissions:
+      contents: read
+      id-token: write   # OIDC trusted publishing (no API key needed)
     environment:
       name: testpypi
       url: https://test.pypi.org/project/ai-safe2/

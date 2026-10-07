@@ -106,4 +106,4 @@ If `enforcement/safe_gateway.js` is unavailable: **DENY ALL TOOL ACTIONS** until
 Log as `GATEWAY_UNAVAILABLE`. Fail closed. Prevention-first.
 
 ---
-_AI SAFE² v3.0 | governance-enforcer plugin v1.0 | Cyber Strategy Institute_
+_AI SAFE² v3.1 | governance-enforcer plugin v1.0 | Cyber Strategy Institute_

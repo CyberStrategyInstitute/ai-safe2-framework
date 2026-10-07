@@ -1,13 +1,13 @@
 ---
 name: ai-safe2-sovereign-governance
 description: >
-  Enforce AI SAFE² v3.0 sovereign governance constraints for every session.
+  Enforce AI SAFE² v3.1 sovereign governance constraints for every session.
   Apply this skill automatically at session start and before any tool execution
   that involves file writes, network access, shell commands, or subagent spawning.
   Covers identity lock, hard security limits, context isolation, tool authorization,
   memory governance, and human-in-the-loop controls.
 version: "1.0"
-framework: "AI SAFE² v3.0"
+framework: "AI SAFE² v3.1"
 autoApply: true
 loadOrder: 1
 ---

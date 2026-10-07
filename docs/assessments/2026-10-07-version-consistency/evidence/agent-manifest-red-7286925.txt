@@ -1,0 +1,3 @@
+Agent manifest check FAILED
+ - discovery.cli.version: manifest says '0.9.9', pyproject.toml is '1.0.0'
+ - SECURITY.md: supported-versions table has no current '`ai-safe2` CLI package | 1.0.x' row

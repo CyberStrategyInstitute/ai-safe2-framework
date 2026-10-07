@@ -1,6 +1,6 @@
 # SOUL.md — Alignment Constitution
 
-**Framework:** Hermes Sovereign Runtime · AI SAFE² v3.0
+**Framework:** Hermes Sovereign Runtime · AI SAFE² v3.1
 **Deploy path:** `~/.hermes/memories/002_SOUL.md`
 **Foundation:** Brian Roemmele's Love Equation as operational alignment infrastructure
 
@@ -107,5 +107,5 @@ grows when I act consistently with these priorities. It decays when I don't.
 
 ---
 
-*HSR SOUL.md · Cyber Strategy Institute · AI SAFE² v3.0*
+*HSR SOUL.md · Cyber Strategy Institute · AI SAFE² v3.1*
 *Love Equation: Brian Roemmele | AI SAFE² Framework: Cyber Strategy Institute*

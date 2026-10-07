@@ -4,13 +4,13 @@
 > example, not the current NEXUS SDK or Sovereign Payment Gateway contract.
 
 ## Cross-Framework Compliance Mesh
-**AI SAFE2 v3.0 | Cyber Strategy Institute**
+**AI SAFE2 v3.1 | Cyber Strategy Institute**
 
 ---
 
 ## What the Love Equation Does
 
-The Love Equation is the AI SAFE2 v3.0 scoring mechanism (E5.1) that
+The Love Equation is the AI SAFE2 v3.1 scoring mechanism (E5.1) that
 translates raw violation counts into a quantitative alignment score and
 governance band — giving you a single metric that satisfies both engineering
 dashboards and compliance audits.

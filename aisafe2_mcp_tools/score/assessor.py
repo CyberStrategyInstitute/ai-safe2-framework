@@ -1,7 +1,7 @@
 """
 AI SAFE2 MCP Security Toolkit — mcp-score Remote Assessment Engine
 
-Scores any MCP HTTP server against AI SAFE2 v3.0 CP.5.MCP controls.
+Scores any MCP HTTP server against AI SAFE2 v3.1 CP.5.MCP controls.
 All findings include the CP.5.MCP control reference, severity, remediation,
 and where applicable the originating CVE.
 
@@ -77,45 +77,45 @@ _rating = get_rating
 _REMEDIATIONS: dict[str, str] = {
     "AUTH": (
         "Implement OAuth 2.1 with PKCE (RFC 9700). "
-        "See AI SAFE2 v3.0 CP.5.MCP-7. "
+        "See AI SAFE2 v3.1 CP.5.MCP-7. "
         "OX Advisory April 2026 shows unauthenticated servers allow any network "
         "actor to invoke all tools with full permissions."
     ),
     "TLS": (
         "Enforce HTTPS. Use Caddy (automatic TLS) or nginx with Let's Encrypt. "
-        "See AI SAFE2 v3.0 CP.5.MCP-6. "
+        "See AI SAFE2 v3.1 CP.5.MCP-4. "
         "Plain HTTP exposes all credentials and tool payloads in transit."
     ),
     "INJECTION": (
         "Apply output sanitization: from aisafe2_mcp_tools.shared.patterns import sanitize_value. "
         "Wrap every tool return: return sanitize_value(result, 'tool_name')[0]. "
-        "See AI SAFE2 v3.0 CP.5.MCP-2."
+        "See AI SAFE2 v3.1 CP.5.MCP-2."
     ),
     "FSP": (
         "Audit all tool schemas for FSP markers — not just description fields. "
         "Check parameter names, enum values, and response schemas. "
-        "CyberArk FSP research (April 2026). See AI SAFE2 v3.0 CP.5.MCP-2."
+        "CyberArk FSP research (April 2026). See AI SAFE2 v3.1 CP.5.MCP-2."
     ),
     "HEADERS": (
         "Add to your reverse proxy: Strict-Transport-Security, X-Frame-Options: DENY, "
         "X-Content-Type-Options: nosniff, Referrer-Policy: strict-origin. "
-        "Remove Server header. See AI SAFE2 v3.0 CP.5.MCP-6."
+        "Remove Server header. See AI SAFE2 v3.1 CP.5.MCP-4."
     ),
     "RATE": (
         "Wire application-layer rate limiting independent of Caddy/nginx. "
         "Use aisafe2-mcp-tools ratelimit.py or slowapi. "
         "Caddy-only rate limits are bypassed by direct port access. "
-        "See AI SAFE2 v3.0 CP.5.MCP-6."
+        "See AI SAFE2 v3.1 CP.5.MCP-8."
     ),
     "SESSION": (
         "Never include session identifiers in URL query parameters. "
         "Use Authorization headers or short-lived cookies. "
-        "See AI SAFE2 v3.0 CP.5.MCP-4 and CVE-2025-6515."
+        "See AI SAFE2 v3.1 CP.5.MCP-16 and CVE-2025-6515."
     ),
     "SSRF": (
         "Validate all URL parameters against a blocklist before making requests: "
         "block 169.254.x.x (IMDS), RFC 1918, loopback, file:// URIs. "
-        "See AI SAFE2 v3.0 CP.5.MCP-6 and CVE-2026-26118."
+        "See AI SAFE2 v3.1 CP.5.MCP-19 and CVE-2026-26118."
     ),
 }
 
@@ -124,7 +124,7 @@ def _remediation(check_id: str) -> str:
     for key, text in _REMEDIATIONS.items():
         if key in check_id:
             return text
-    return "See AI SAFE2 v3.0 CP.5.MCP documentation."
+    return "See AI SAFE2 v3.1 CP.5.MCP documentation."
 
 
 _BLOCKING_CHECKS = {"INJECTION", "FSP"}
@@ -501,7 +501,7 @@ class MCPAssessor:
             detail=(
                 "No application-layer rate limiting detected after rapid probing. "
                 "Caddy/proxy rate limits are bypassed by direct port access (e.g., Railway, "
-                "local dev). AI SAFE2 v3.0 CP.5.MCP-6."
+                "local dev). AI SAFE2 v3.1 CP.5.MCP-8."
             ),
             remediation=_remediation("RATE"),
         )
@@ -579,7 +579,7 @@ class MCPAssessor:
             remediation=_remediation("FSP") if fsp_hits else "",
         ))
 
-        # ── SSRF surface (MCP-6) ──
+        # ── SSRF surface (MCP-19) ──
         ssrf_tools = [
             t.get("name", "?") for t in tools
             if any(p.search(json.dumps(t.get("inputSchema", {}))) for p in SSRF_URL_PATTERNS)
@@ -650,7 +650,10 @@ class MCPAssessor:
 
     def _compute_attestation_bonus(self, att: AttestationData) -> int:
         """
-        Attestation bonus — risk-weighted across all 13 CP.5.MCP controls (max 25).
+        Claimed attestation weight across the 11 attestation-file fields (max 25).
+
+        Reported as claimed only; never added to the score. The MCP-N labels below
+        are the file's key prefixes (retired v3.0 numbering), not v3.1 control IDs.
 
         Points are weighted by threat likelihood and confirmed incident impact.
         Higher-risk controls earn more points per ATTESTATION_POINTS in scorer.py.

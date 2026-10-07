@@ -1,4 +1,4 @@
-# AI SAFE² v3.0 — AutoGen 0.4 Sovereign Runtime
+# AI SAFE² v3.1 — AutoGen 0.4 Sovereign Runtime
 # AutoGen 0.4 ONLY. 0.2 is end-of-life — upgrade.
 # Enforcement engine: stdlib only, no external deps.
 

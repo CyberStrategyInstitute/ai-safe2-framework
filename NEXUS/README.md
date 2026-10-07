@@ -208,6 +208,23 @@ omitted tier is treated as ACT-4, so HEAR applies (`ACT_TIER_UNDECLARED`), and
 ACT-3/4 reasoning must be substantive enough to review. See the
 [CHANGELOG](CHANGELOG.md) for the opt-outs.
 
+### Registry-bound ACT tiers (AIM v0.3)
+
+The tier an agent operates at belongs to its identity, not its request. Register the agent's
+AIM (owner of record sets `actTier`), then give the registry to Guardian and its export to OPA:
+
+```python
+from nexus_sdk import AIMRegistry, GuardianPolicy
+
+registry = AIMRegistry(signature_verifier=my_mldsa65_verifier)  # your FIPS 204 verifier
+registry.register(aim_document)                             # schemas/aim-v0.3.schema.json
+policy = GuardianPolicy(aim_registry=registry)              # registered tier governs HEAR
+opa_data = {"nexus": {"aim": registry.to_opa_data()}}       # data.nexus.aim for the OPA sidecar
+```
+
+A request-supplied `act_tier` is a claim. Above the registered tier it is denied; below it, it is
+ignored. Unregistered agents are denied. Raising a tier means registering a new AIM version.
+
 ### Payments: authority that narrows and cannot be widened
 
 ```python

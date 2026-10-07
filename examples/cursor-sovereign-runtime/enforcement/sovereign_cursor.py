@@ -1,6 +1,6 @@
 """
 sovereign_cursor.py — Cursor Enforcement Layer
-AI SAFE2 v3.0 Sovereign Runtime
+AI SAFE2 v3.1 Sovereign Runtime
 Cyber Strategy Institute
 
 Eight enforcement surfaces covering 11+ published Cursor CVEs (2025-2026):
@@ -216,7 +216,7 @@ _SUPPLY_CHAIN_PATTERNS: List[tuple] = [
 
 class CursorSovereignRuntime:
     """
-    AI SAFE2 v3.0 Sovereign Runtime for Cursor.
+    AI SAFE2 v3.1 Sovereign Runtime for Cursor.
 
     Cursor has the highest CVE count of any platform in this series:
     11+ documented in 2025-2026, covering 4 architectural attack patterns.

@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 # Union of scanner/requirements.txt, skills/mcp/pyproject.toml, and
-# examples/mcp-security-toolkit/pyproject.toml's core deps. gateway/'s deps
+# the former examples/mcp-security-toolkit/pyproject.toml core deps (removed 2026-10-07). gateway/'s deps
 # moved to the optional "gateway" extra below — `safe2 serve` degrades to a
 # clear install hint instead of hard-requiring fastapi/redis/prometheus for
 # everyone who only wants scan/gate/score/report/mcp.

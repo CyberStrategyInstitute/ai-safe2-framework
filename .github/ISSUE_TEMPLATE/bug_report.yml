@@ -82,7 +82,7 @@ body:
   - type: textarea
     id: safe2-impact
     attributes:
-      label: AI SAFE2 v3.0 Impact (if applicable)
+      label: AI SAFE2 v3.1 Impact (if applicable)
       description: Does this bug affect a specific SAFE2 control? E.g., S1.3 Guardian enforcement, A2.5 NOR audit trail.
 
   - type: checkboxes

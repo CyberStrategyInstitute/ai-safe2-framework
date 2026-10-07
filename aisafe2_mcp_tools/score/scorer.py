@@ -34,26 +34,31 @@ RATINGS = [
     (0,  "Critical"),
 ]
 
-# Attestation bonus points — risk-weighted across all 13 CP.5.MCP controls.
+# Claimed-attestation weights for the 11 attestation-file fields (schema v1.1).
+# The MCP-N prefixes below are the attestation file's own key names (schema v1.1),
+# which use the retired pre-v3.1 CP.5.MCP numbering. They are kept as the file
+# contract and are NOT v3.1 control IDs. Self-attestation is reported as a
+# claimed weight and never added to the score (see assessor.assess).
+#
 # Higher likelihood / confirmed impact of the threat the control addresses,
 # the more points attesting to it earns. Cap is 25; all 11 attested fields
 # sum to 25 so full implementation earns full bonus.
 #
 # Risk tier 1 — RCE / confirmed high-impact incidents:
-#   MCP-1 (5): OX Security RCE, biggest remote blind spot
-#   MCP-9 (4): MCP-UPD 92.9% attack surface, zero interaction required
+#   MCP-1 key (5): OX Security RCE, biggest remote blind spot
+#   MCP-9 key (4): MCP-UPD 92.9% attack surface, zero interaction required
 # Risk tier 2 — Confirmed financial / behavioral impact:
-#   MCP-2 (3): Core injection defense
-#   MCP-8 (3): $47K confirmed incident, 658x Phantom amplification
+#   MCP-2 key (3): Core injection defense
+#   MCP-8 key (3): $47K confirmed incident, 658x Phantom amplification
 # Risk tier 3 — Stealth / delayed-profile threats:
-#   MCP-11 (2): Rug pull, delayed_weeks temporal profile
-#   MCP-4 (2): Source tamper detection
-#   MCP-5 (2): Forensic foundation — audit trail
+#   MCP-11 key (2): Rug pull, delayed_weeks temporal profile
+#   MCP-4 key (2): Source tamper detection
+#   MCP-5 key (2): Forensic foundation — audit trail
 # Risk tier 4 — Architectural / emerging threats:
-#   MCP-10 (1): Multi-agent lateral movement
-#   MCP-6 (1): Egress control
-#   MCP-12 (1): Swarm C2, semantically indistinguishable traffic
-#   MCP-13 (1): Failure taxonomy correctness
+#   MCP-10 key (1): Multi-agent lateral movement
+#   MCP-6 key (1): Egress control
+#   MCP-12 key (1): Swarm C2, semantically indistinguishable traffic
+#   MCP-13 key (1): Failure taxonomy correctness
 ATTESTATION_POINTS = {
     "no_dynamic_commands": 5,       # MCP-1 — RCE tier, OX confirmed
     "context_tool_isolation": 4,    # MCP-9 — 92.9% attack surface (new)

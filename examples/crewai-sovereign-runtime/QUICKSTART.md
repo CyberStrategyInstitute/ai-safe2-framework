@@ -1,6 +1,6 @@
 # LangChain Sovereign Runtime — 15-Minute Quickstart
 
-**AI SAFE² v3.0 | Cyber Strategy Institute**
+**AI SAFE² v3.1 | Cyber Strategy Institute**
 
 ---
 
@@ -146,4 +146,4 @@ bash validation/pass2_runtime.sh  # live enforcement + audit log verification
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | cyberstrategyinstitute.com*
+*AI SAFE² v3.1 | Cyber Strategy Institute | cyberstrategyinstitute.com*

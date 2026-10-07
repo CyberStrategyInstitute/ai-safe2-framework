@@ -22,11 +22,6 @@ updates:
     open-pull-requests-limit: 3
     labels: [dependencies, python]
 
-  - package-ecosystem: pip
-    directory: /examples/mcp-security-toolkit
-    schedule: {interval: weekly, day: monday, time: "06:45"}
-    open-pull-requests-limit: 3
-    labels: [dependencies, python]
 
   - package-ecosystem: github-actions
     directory: /

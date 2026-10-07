@@ -75,7 +75,7 @@ async def run_proxy(
     ip_buckets: dict[str, AsyncTokenBucket] = defaultdict(
         lambda: make_async_bucket(rate_limit)
     )
-    # MCP-11: Schema temporal profiling — pinned hash of tools/list response
+    # MCP-11: Catalog provenance — pinned hash of tools/list response
     _schema_baseline: dict[str, str] = {}  # {"hash": "<sha256>"}
 
     upstream_headers: dict[str, str] = {"Content-Type": "application/json"}

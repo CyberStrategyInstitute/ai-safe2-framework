@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AI SAFE² v3.0 — LangGraph Sovereign Runtime Adversarial Smoke Tests
+AI SAFE² v3.1 — LangGraph Sovereign Runtime Adversarial Smoke Tests
 ====================================================================
 15 tests across 3 tiers. LangGraph-specific threat model:
 
@@ -513,7 +513,7 @@ def test_t3_05():
     assert "routing_key" in status["langgraph_specific"]
 
     report = sovereign.compliance_report()
-    assert "AI SAFE² v3.0" in report
+    assert "AI SAFE² v3.1" in report
     assert "Compliance Score" in report
     assert "Alignment Band" in report
     assert "Active Controls" in report
@@ -531,7 +531,7 @@ def main():
     ]
 
     print("\n╔══════════════════════════════════════════════════════════════╗")
-    print("║   AI SAFE² v3.0 — LangGraph Sovereign Runtime Smoke Tests   ║")
+    print("║   AI SAFE² v3.1 — LangGraph Sovereign Runtime Smoke Tests   ║")
     print("╚══════════════════════════════════════════════════════════════╝")
 
     for test_fn in tests:

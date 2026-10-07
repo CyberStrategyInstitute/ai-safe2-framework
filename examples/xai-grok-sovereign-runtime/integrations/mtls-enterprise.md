@@ -1,6 +1,6 @@
 # mTLS + ZDR Enterprise Guide
 ## xAI/Grok Sovereign Runtime — Enterprise Configuration
-**AI SAFE2 v3.0 | Cyber Strategy Institute**
+**AI SAFE2 v3.1 | Cyber Strategy Institute**
 
 ---
 
@@ -94,7 +94,7 @@ Copy to `/etc/grok/requirements.toml` (root-owned, mode 600):
 
 ```toml
 # /etc/grok/requirements.toml
-# AI SAFE2 v3.0 Enterprise Baseline
+# AI SAFE2 v3.1 Enterprise Baseline
 # Root-owned. This file takes precedence over all user config.
 
 [grok_com_config]

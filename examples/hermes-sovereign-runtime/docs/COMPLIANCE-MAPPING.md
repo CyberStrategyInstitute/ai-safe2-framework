@@ -1,5 +1,5 @@
 # Compliance Mapping
-**Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0**
+**Hermes Sovereign Runtime (HSR) | AI SAFE² v3.1**
 **Cyber Strategy Institute**
 
 This document maps HSR controls to applicable compliance frameworks. Use it to demonstrate control coverage during audits, vendor assessments, and enterprise procurement reviews.
@@ -142,4 +142,4 @@ curl http://localhost:8000/hsr/audit/tail > evidence/audit-log-$(date +%Y-%m-%d)
 
 ---
 
-*Compliance mapping version: 1.0 | AI SAFE² v3.0 | Cyber Strategy Institute*
+*Compliance mapping version: 1.0 | AI SAFE² v3.1 | Cyber Strategy Institute*

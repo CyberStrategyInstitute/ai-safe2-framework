@@ -1,5 +1,5 @@
 # Agent Identity Declaration — CP.4
-## AI SAFE² v3.0 Agentic Control Plane Governance
+## AI SAFE² v3.1 Agentic Control Plane Governance
 
 This file is the Non-Human Identity (NHI) registration record for this agent.
 Required for all ACT-3 and ACT-4 LangChain deployments.
@@ -84,4 +84,4 @@ engine.register_nhi(
 
 ---
 
-*AI SAFE² v3.0 | Cyber Strategy Institute | CP.4 Agentic Control Plane*
+*AI SAFE² v3.1 | Cyber Strategy Institute | CP.4 Agentic Control Plane*

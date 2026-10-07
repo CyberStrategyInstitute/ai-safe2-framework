@@ -1,5 +1,5 @@
 # Migration Guide
-**Hermes Sovereign Runtime (HSR) | AI SAFE² v3.0**
+**Hermes Sovereign Runtime (HSR) | AI SAFE² v3.1**
 **Cyber Strategy Institute**
 
 This guide covers migration from an unprotected Hermes installation to the full Hermes Sovereign Runtime.
@@ -230,4 +230,4 @@ hermes chat
 
 ---
 
-*Migration guide version: 1.0 | AI SAFE² v3.0 | Cyber Strategy Institute*
+*Migration guide version: 1.0 | AI SAFE² v3.1 | Cyber Strategy Institute*

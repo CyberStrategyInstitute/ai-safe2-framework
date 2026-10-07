@@ -2,7 +2,7 @@ package hsr.cron_governance
 
 # =============================================================================
 # Cron Automation Governance Policy — Hermes Sovereign Runtime
-# AI SAFE² v3.0 | Cyber Strategy Institute
+# AI SAFE² v3.1 | Cyber Strategy Institute
 #
 # All scheduled (cron) automation must pass this policy before execution.
 # Unattended AI automation is the highest-risk operational category.
@@ -121,5 +121,5 @@ allow_execute := false if {
 # ---------------------------------------------------------------------------
 
 policy_version := "1.0.0"
-framework := "AI SAFE² v3.0"
+framework := "AI SAFE² v3.1"
 pillar := "P3-Fail-Safe-Recovery"
