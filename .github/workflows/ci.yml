@@ -31,6 +31,11 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# No job here writes to the repository or calls the API; artifact upload uses
+# the runtime token. Read-only instead of the repository default scope.
+permissions:
+  contents: read
+
 jobs:
   safe2-cli:
     name: SAFE2 CLI / AISM (Python ${{ matrix.python-version }})
