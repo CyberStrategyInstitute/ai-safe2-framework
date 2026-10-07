@@ -94,8 +94,9 @@ Each of the 13 new test files was run against `main`'s code and then against thi
 - **Hosted CI:** every deterministic check passes; at `21a8333`, 39 succeeded and CodeQL reported no new alerts. Both CodeQL review threads from the first run were fixed in `e91ee9a` and are resolved.
 - **AI reviewers (advisory, recorded per AGENTS.md §4.6):**
   - **Greptile:** did not post a review on this PR. Its status check passes because it is advisory.
-  - **PR-Agent:** the "Advisory availability" check fails with "did not publish a substantive review": no review was produced by its model provider. Neither is an approval or a finding.
-  - The PR is `mergeable` with this advisory check red.
+  - **PR-Agent:** the first ready-for-review run published nothing; its model provider produced no review. On `82ed851` it published a bounded review of one risk-prioritized hunk (`.github/workflows/ci.yml`, the read-only `permissions` block): "No actionable issue was established in the bounded hunk." By its own label, that is advisory coverage of one hunk, not a full-PR review.
+  - Neither reviewer constitutes approval.
+  - At `82ed851`: 41/41 checks pass; GitHub reports `mergeable: clean`.
 - **Development receipt** (`receipt/development-receipt.json`): `safe2 dev verify` reports integrity valid. Status is **`review_required`**: 23 of 27 required evidence items are supported. The four open items are human review, codeowner review, specialist security review and the release decision. Those belong to the owner.
 - **Self-assessment boundary (AGENTS.md §4.2):** none of this is independent validation.
 

@@ -222,3 +222,9 @@ Repo semgrep rules clean on full tree. Pytest collects 0 battery files.
 - GitHub reports the PR `mergeable`, state `unstable` because the advisory check is red.
 
 **Next:** the owner reviews and merges. Then the D4 follow-up PR.
+
+## 2026-10-07 E13: Correction to E12
+
+On `82ed851` PR-Agent published a bounded review: one hunk, `ci.yml` permissions, with
+"no actionable issue". Its first run had published nothing. Greptile still posted no
+review. At `82ed851` all 41 checks pass and the PR is `mergeable: clean`.

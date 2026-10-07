@@ -5,7 +5,7 @@
   "base": "83de4a8",
   "owner": "Vincent Sullivan",
   "updated": "2026-10-07",
-  "last_pushed_commit": "21a8333",
+  "last_pushed_commit": "82ed851",
   "modules": {
     "skill-gate": {
       "status": "done",
@@ -104,8 +104,8 @@
       "hosted_ci": "39 success, 2 advisory skipped, CodeQL no new alerts",
       "receipt": "receipt/development-receipt.json: review_required (23/27 supported; human, codeowner, security review and release decision outstanding)",
       "pr": "https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/393",
-      "review_providers": "Greptile: no review posted (advisory status passes). PR-Agent: advisory check failed, no substantive review published. CodeQL threads resolved.",
-      "pr_state": "ready_for_review, mergeable (state unstable: advisory PR-Agent check red)"
+      "review_providers": "Greptile: no review posted (advisory status passes). PR-Agent: bounded one-hunk review of ci.yml on 82ed851, no actionable issue; first run published nothing. CodeQL threads resolved.",
+      "pr_state": "ready_for_review; 41/41 checks at 82ed851; mergeable clean"
     },
     "nexus-memory": {
       "status": "done",
