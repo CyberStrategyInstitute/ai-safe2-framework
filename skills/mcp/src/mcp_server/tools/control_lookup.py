@@ -1,6 +1,6 @@
 """
 AI SAFE2 Tool: control_lookup
-Search and retrieve AI SAFE2 v3.0 controls by keyword, pillar, priority,
+Search and retrieve AI SAFE2 v3.1 controls by keyword, pillar, priority,
 framework mapping, ACT tier, or exact ID.
 
 Free tier: returns up to 30 controls.
@@ -24,7 +24,7 @@ def control_lookup(
     tier: str = "free",
 ) -> dict:
     """
-    Look up AI SAFE2 v3.0 controls.
+    Look up AI SAFE2 v3.1 controls.
 
     Args:
         query: Keyword search across control name, description, builder problem, and tags.

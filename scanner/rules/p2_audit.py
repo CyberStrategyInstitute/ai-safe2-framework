@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.0 Scanner — Pillar 2: Audit & Inventory Rules
+AI SAFE2 v3.1 Scanner — Pillar 2: Audit & Inventory Rules
 Covers: P2.T3.x (Audit), P2.T4.x (Inventory), A2.3-A2.6 (v3.0 new controls)
 """
 
@@ -205,7 +205,7 @@ P2_RULES: list[Rule] = [
         pattern=r'from_pretrained\s*\(\s*["\'](?!.*["\s]revision)',
         file_exts=(".py",),
     ),
-    # ── A2.3-A2.6 New v3.0 Controls ──────────────────────────────────────────
+    # ── A2.3-A2.6 Controls added in v3.0 ─────────────────────────────────────────
     # A2.3 — Model Lineage Provenance
     Rule(
         control_id="A2.3",

@@ -29,7 +29,7 @@ TESTING:    GuardianPolicy.evaluate() runs inline with no network required.
             Stub mode validates the full verdict contract.
 
 Reference: ACS v0.1.0, AOS v0.1.0 (aos.owasp.org), NEXUS-A2A v0.3
-AI SAFE2 v3.0: S1.5, A2.5, F3.1, M4.4, CP.4, CP.5
+AI SAFE2 v3.1: S1.5, A2.5, F3.1, M4.4, CP.4, CP.5
 """
 
 from __future__ import annotations

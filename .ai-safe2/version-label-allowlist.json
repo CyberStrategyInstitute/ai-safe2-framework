@@ -32,8 +32,16 @@
       "reason": "The v3.0 release overview, kept as a dated record."
     },
     {
+      "glob": "guides/v3.1-release-overview.md",
+      "reason": "v3.1 framework release record; component versions are stated as of that release (a superseded note points to NEXUS v0.5.0)."
+    },
+    {
       "glob": "examples/openclaw/gateway-release-v3.0.html",
       "reason": "Gateway v3.0 component release page."
+    },
+    {
+      "glob": "gateway/main.py",
+      "reason": "Gateway v3.0 component: its runtime FRAMEWORK_REF and docstrings identify the framework it was built and assessed against. Gateway evidence keeps v3.0 identity until a separately tested gateway release (gateway/README.md, Version and Conformance Boundary; AGENTS.md version model)."
     },
     {
       "glob": "NEXUS/schemas/aim-v0.2.schema.json",

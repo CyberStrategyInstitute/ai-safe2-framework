@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.0 Scanner — Pillar 3: Fail-Safe & Recovery Rules
+AI SAFE2 v3.1 Scanner — Pillar 3: Fail-Safe & Recovery Rules
 Covers: P3.T5.x (Fail-Safe), P3.T6.x (Recovery), F3.2-F3.5 (v3.0 new controls)
 """
 
@@ -168,7 +168,7 @@ P3_RULES: list[Rule] = [
         pattern=r"(subprocess\.Popen|multiprocessing\.Process|threading\.Thread|asyncio\.create_task|spawn_agent|create_agent)",
         file_exts=(".py",),
     ),
-    # ── F3.2-F3.5 New v3.0 Controls ──────────────────────────────────────────
+    # ── F3.2-F3.5 Controls added in v3.0 ─────────────────────────────────────────
     # F3.2 — Recursion Limit Governor (structural check above + pattern)
     Rule(
         control_id="F3.2",

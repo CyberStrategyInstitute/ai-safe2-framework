@@ -1,5 +1,5 @@
 """
-AI SAFE² v3.0 Static Analysis Engine
+AI SAFE² v3.1 Static Analysis Engine
 Copyright (c) 2026 Cyber Strategy Institute
 
 Upgraded from v2.1 (7 patterns, 4 controls) to v3.0:
@@ -711,7 +711,7 @@ class StaticScanner:
                 "scanned_files": scanned_files,
                 "scan_truncated": scan_truncated,
                 "max_files": self.max_files,
-                "framework": "v3.0",
+                "framework": "v3.1",
                 "framework_url": "https://github.com/CyberStrategyInstitute/ai-safe2-framework",
                 "total_files_scanned": len(seen),
                 "controls_json_loaded": self.controls.loaded,

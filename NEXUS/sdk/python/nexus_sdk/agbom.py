@@ -37,7 +37,7 @@ TESTING:
     No network required; full API exercises all AgBOM operations.
 
 Reference: CycloneDX v1.6, SPDX 2.3, SWID ISO 19770-2, NEXUS-A2A v0.3
-AI SAFE2 v3.0: A2.3, A2.5, T3.1, T3.3 (supply chain security)
+AI SAFE2 v3.1: A2.3, A2.5, T3.1, T3.3 (supply chain security)
 """
 
 from __future__ import annotations

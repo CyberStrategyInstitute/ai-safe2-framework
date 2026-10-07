@@ -26,7 +26,7 @@ TESTING:
     No OTel SDK required in test mode.
 
 Reference: OpenTelemetry Semantic Conventions v1.24, OCSF v1.0, NEXUS-A2A v0.3
-AI SAFE2 v3.0: A2.5, A2.6, CP.10 (HEAR audit requirement)
+AI SAFE2 v3.1: A2.5, A2.6, CP.10 (HEAR audit requirement)
 """
 
 from __future__ import annotations

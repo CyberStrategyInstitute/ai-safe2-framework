@@ -84,6 +84,26 @@ def test_mcp_control_names_must_be_canonical(tmp_path, line, ok):
     assert (errors == []) is ok, errors
 
 
+@pytest.mark.parametrize("line,ok", [
+    ("| East-west runtime | NEXUS v0.3 |", False),
+    ("NEXUS remains v0.3 until it ships.", False),
+    ("[NEXUS v0.4](NEXUS/) is the reference implementation.", False),
+    ("NEXUS v0.5 is the current component.", True),
+    ("NEXUS v0.5.0 release", True),
+    ("NEXUS-A2A v0.3 specification", True),          # protocol spec, not the component
+    ("Legacy NEXUS v0.3 zone names remain accepted", True),
+    ("I-7 (added in NEXUS v0.4)", True),
+    ("Run NEXUS v0.3 control checks", True),
+])
+def test_nexus_component_version_must_be_current(tmp_path, line, ok):
+    repo = _repo(tmp_path, {"doc.md": line + "\n",
+                            "NEXUS/pyproject.toml": '[project]\nversion = "0.5.0"\n'})
+    errors = guard.scan(repo)
+    assert (errors == []) is ok, errors
+    if not ok:
+        assert "[COMPONENT]" in errors[0]
+
+
 def test_reasonless_allowlist_entry_is_a_configuration_error(tmp_path):
     repo = _repo(tmp_path, {"a.py": "x\n"})
     cfg = repo / ".ai-safe2/version-label-allowlist.json"

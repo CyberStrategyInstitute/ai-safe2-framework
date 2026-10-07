@@ -49,7 +49,7 @@ body:
   - type: textarea
     id: safe2-mapping
     attributes:
-      label: AI SAFE2 v3.0 Control Mapping
+      label: AI SAFE2 v3.1 Control Mapping
       description: Which SAFE2 controls does this address or enable? E.g., CP.9 (Agent Replication Governance), S1.3 (Guardian per-call enforcement).
 
   - type: textarea

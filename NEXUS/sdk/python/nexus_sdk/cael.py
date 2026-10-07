@@ -24,7 +24,7 @@ from enum import Enum
 
 
 class Performative(str, Enum):
-    """NEXUS L5 canonical performatives (APEM Section 9, AI SAFE2 v3.0)."""
+    """NEXUS L5 canonical performatives (APEM Section 9, AI SAFE2 v3.1)."""
     COMMAND = "command"
     OBSERVATION = "observation"
     TOOL_CALL = "tool_call"

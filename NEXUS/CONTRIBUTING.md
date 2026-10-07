@@ -81,7 +81,7 @@ test(agbom): add chain integrity violation test
 1. Passing tests (189+)
 2. No em dashes in any changed file
 3. CHANGELOG.md entry under [Unreleased]
-4. For specification changes: AI SAFE2 v3.0 control mapping in PR description
+4. For specification changes: AI SAFE2 v3.1 control mapping in PR description
 5. For new OPA policies: example input/expected output in the PR body
 6. For new bridges: integration test demonstrating round-trip with a real framework
 

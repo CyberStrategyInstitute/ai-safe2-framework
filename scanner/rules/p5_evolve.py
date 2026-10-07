@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.0 Scanner — Pillar 5: Evolve & Educate Rules
+AI SAFE2 v3.1 Scanner — Pillar 5: Evolve & Educate Rules
 Covers: P5.T9.x (Evolve), P5.T10.x (Educate), E5.x (v3.0 new controls)
 """
 
@@ -193,7 +193,7 @@ P5_RULES: list[Rule] = [
         check_fn=_check_missing_threat_intelligence,
         file_exts=(".py",),
     ),
-    # ── E5.1-E5.4 New v3.0 Controls ──────────────────────────────────────────
+    # ── E5.1-E5.4 Controls added in v3.0 ─────────────────────────────────────────
     # E5.1 — Continuous Adversarial Evaluation Cadence
     Rule(
         control_id="E5.1",

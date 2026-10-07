@@ -1,6 +1,6 @@
 """
 AI SAFE2 Tool: map_to_frameworks
-Map a compliance requirement to AI SAFE2 v3.0 controls.
+Map a compliance requirement to AI SAFE2 v3.1 controls.
 
 Free tier: returns 5 frameworks (NIST AI RMF, ISO 42001, SOC 2, GDPR, OWASP LLM).
 Pro tier:  returns all 32 frameworks.
@@ -53,7 +53,7 @@ def map_to_frameworks(
     tier: str = "free",
 ) -> dict:
     """
-    Map a compliance requirement or framework to relevant AI SAFE2 v3.0 controls.
+    Map a compliance requirement or framework to relevant AI SAFE2 v3.1 controls.
 
     Args:
         requirement: A compliance requirement, framework name, or keyword to map.

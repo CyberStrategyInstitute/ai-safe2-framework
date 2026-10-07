@@ -14,6 +14,10 @@ Rules, applied to every git-tracked text file:
                migration statements and pass.
   MCP_NAME     "MCP-N (Title Case Name)" where the name is not the canonical v3.1
                name of MCP-N in skills/mcp/data/mcp-profile-v3.1.json.
+  COMPONENT    "NEXUS vX.Y" presented as the current NEXUS component when the
+               package version (NEXUS/pyproject.toml) is different. Lines that say
+               legacy, compat or name a check set ("v0.3 control checks") pass.
+               NEXUS-A2A protocol-spec versions are not component versions.
 
 Exceptions live in .ai-safe2/version-label-allowlist.json, each with a reason.
 An allowlisted path glob that matches no tracked file is itself an error, so the
@@ -34,6 +38,7 @@ from pathlib import Path
 DEFAULT_ROOT = Path(__file__).resolve().parents[1]
 ALLOWLIST = Path(".ai-safe2/version-label-allowlist.json")
 PROFILE = Path("skills/mcp/data/mcp-profile-v3.1.json")
+NEXUS_PYPROJECT = Path("NEXUS/pyproject.toml")
 
 STALE_LABEL = re.compile(
     r"(?:AI\s*SAFE(?:2|²)?|SAFE(?:2|²)|\bframework)[^\n]{0,12}?\bv3\.0\b(?!\.\d)"
@@ -42,6 +47,8 @@ STALE_LABEL = re.compile(
 )
 MIGRATION_CONTEXT = re.compile(r"\bv3\.1\b")
 MCP_NAMED = re.compile(r"\bMCP-(\d{1,2})\s*\((?![^)]*\d{3})([A-Z][A-Za-z0-9–\- ]{3,60})\)")
+NEXUS_CLAIM = re.compile(r"(?<![-\w])NEXUS(?: remains(?: an optional)?)? v(\d+\.\d+)(?:\.\d+)?\b")
+NEXUS_EXEMPT = re.compile(r"legacy|compat|control checks|v\d+\.\d+ checks|added in|introduced in|canonical message", re.IGNORECASE)
 MAX_BYTES = 2_000_000
 
 
@@ -70,6 +77,13 @@ def path_allowed(rel: str, globs: list[str]) -> bool:
     return False
 
 
+def nexus_minor(root: Path) -> str:
+    m = re.search(r'^version\s*=\s*"(\d+\.\d+)', (root / NEXUS_PYPROJECT).read_text(encoding="utf-8"), re.M)
+    if not m:
+        raise ValueError(f"no version in {NEXUS_PYPROJECT}")
+    return m.group(1)
+
+
 def load_config(root: Path) -> tuple[list[str], list[re.Pattern[str]], dict[str, str]]:
     allow = json.loads((root / ALLOWLIST).read_text(encoding="utf-8"))
     for entry in allow["paths"] + allow["line_patterns"]:
@@ -84,6 +98,7 @@ def load_config(root: Path) -> tuple[list[str], list[re.Pattern[str]], dict[str,
 
 def scan(root: Path) -> list[str]:
     globs, line_allow, canonical = load_config(root)
+    nexus = nexus_minor(root) if (root / NEXUS_PYPROJECT).exists() else None
     files = tracked_files(root)
     errors: list[str] = []
 
@@ -102,7 +117,7 @@ def scan(root: Path) -> list[str]:
         if len(data) > MAX_BYTES or b"\0" in data[:8192]:
             continue
         text = data.decode("utf-8", "replace")
-        if "v3.0" not in text and "MCP-" not in text:
+        if "v3.0" not in text and "MCP-" not in text and "NEXUS" not in text:
             continue
         for lineno, line in enumerate(text.splitlines(), 1):
             if any(p.search(line) for p in line_allow):
@@ -115,6 +130,10 @@ def scan(root: Path) -> list[str]:
                     errors.append(f"{rel}:{lineno}: [MCP_NAME] MCP-{num} is not a v3.1 CP.5.MCP control")
                 elif not name_matches(name, want):
                     errors.append(f"{rel}:{lineno}: [MCP_NAME] MCP-{num} ({name}); v3.1 name is '{want}'")
+            if nexus and not NEXUS_EXEMPT.search(line):
+                for ver in NEXUS_CLAIM.findall(line):
+                    if ver != nexus:
+                        errors.append(f"{rel}:{lineno}: [COMPONENT] NEXUS v{ver}; current NEXUS is v{nexus}")
     return errors
 
 

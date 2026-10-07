@@ -1,4 +1,4 @@
-# AI SAFE² v3.0 Scanner — Default Rule Configuration
+# AI SAFE² v3.1 Scanner — Default Rule Configuration
 # Configurable thresholds per ACT tier and rule behavior.
 # Pass this file to the scanner with: --config scanner/config/default_rules.yaml
 

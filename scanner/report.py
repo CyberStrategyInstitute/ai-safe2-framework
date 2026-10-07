@@ -1,5 +1,5 @@
 """
-AI SAFE² v3.0 Report Generator
+AI SAFE² v3.1 Report Generator
 Generates structured compliance evidence artifacts.
 
 Upgraded from v2.1 (2 ISO clauses, one placeholder) to v3.0:
@@ -83,7 +83,7 @@ class ISO42001Report:
         include_sarif: bool = False,
     ) -> str:
         """
-        Generate a v3.0 compliance evidence artifact.
+        Generate an AI SAFE2 v3.1 compliance evidence artifact.
 
         Args:
             result:       ScanResult from StaticScanner.scan_project()
@@ -99,7 +99,7 @@ class ISO42001Report:
             json.dump(artifact, f, indent=2, ensure_ascii=False)
 
         # Keep console output ASCII-safe for Windows CI and agent subprocesses.
-        print(f"\nAI SAFE2 v3.0 Compliance Report: {output_path}")
+        print(f"\nAI SAFE2 v3.1 Compliance Report: {output_path}")
         print(f"   Score:   {result.score}/100 - {result.verdict}")
         print(
             f"   Findings: {len(result.violations)} violations across {len(result.controls_failed)} controls"
@@ -193,7 +193,7 @@ class ISO42001Report:
         sorted_violations = sorted(result.violations, key=lambda v: sev_order.get(v.severity, 5))
 
         artifact = {
-            "report_type": "AI SAFE2 v3.0 Compliance Evidence",
+            "report_type": "AI SAFE2 v3.1 Compliance Evidence",
             "framework_version": "3.0.0",
             "generated_at": datetime.now(UTC).isoformat(),
             "generated_at_ts": time.time(),
