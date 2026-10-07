@@ -52,7 +52,7 @@ Examples demonstrate implementation patterns. They do not create framework confo
 | [`lovable-sovereign-runtime/`](./lovable-sovereign-runtime/) | Lovable | Runtime enforcement package for Lovable Agent mode, database actions, deployments, and MCP integrations |
 | [`love_equation/`](./love_equation/) | Alignment research | Drift-scoring model adapted into AI SAFE2 behavioral monitoring. |
 | [`make-sovereign-runtime/`](./make-sovereign-runtime/) | Make.com | Sovereign runtime defense package for no-code automation scenarios. |
-| [`mcp-security-toolkit/`](./mcp-security-toolkit/) | MCP (protocol security) | mcp-score, mcp-scan, mcp-safe-wrap. CP.5.MCP toolkit, 134 tests. |
+| [`mcp-security-toolkit/`](./mcp-security-toolkit/) | MCP (protocol security) | Moved. Use safe2 scan mcp, safe2 score mcp, safe2 gate mcp and safe2 mcp wrap-stdio / wrap-proxy (CP.5.MCP v3.1). |
 | [`openclaw/`](./openclaw/) | OpenClaw | Full two-layer governance stack, internal identity and memory files plus external scanner and gateway. |
 | [`slowmist-overlay/`](./slowmist-overlay/) | SlowMist / OpenClaw | Threat-intelligence overlay mapping SlowMist OpenClaw security practices to AI SAFE² controls. |
 | [`xai-grok-sovereign-runtime/`](./xai-grok-sovereign-runtime/) | xAI Grok | Sovereign runtime defense package for Grok-based agents. |

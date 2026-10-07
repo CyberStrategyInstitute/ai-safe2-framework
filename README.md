@@ -274,7 +274,9 @@ safe2 --help
 | **`mcp-scan`** | Static analysis across MCP security patterns |
 | **`mcp-safe-wrap`** | Consumer-side inspection, policy, and audit proxy |
 
-See [examples/mcp-security-toolkit/](examples/mcp-security-toolkit/).
+All three ship in the `ai-safe2` package and run as `safe2 score mcp`, `safe2 scan mcp`,
+`safe2 gate mcp` and `safe2 mcp wrap-stdio` / `wrap-proxy`. See the
+[command map](safe2/README.md#command-map).
 
 ### Agent-facing governance and AISM decisions
 

@@ -248,7 +248,7 @@ langchain-sovereign-runtime/
 | [langgraph-sovereign-runtime](../langgraph-sovereign-runtime/) | Pass shared `AISAFE2Engine` instance |
 | [crewai-sovereign-runtime](../crewai-sovereign-runtime/) | Pass shared `AISAFE2Engine` instance |
 | [autogen-sovereign-runtime](../autogen-sovereign-runtime/) | Pass shared `AISAFE2Engine` instance |
-| [mcp-security-toolkit](../mcp-security-toolkit/) | CP.5.MCP pre-scores any MCP server before use in tools |
+| [`safe2 score mcp`](../mcp-security-toolkit/) | CP.5.MCP pre-scores any MCP server before use in tools |
 | [hermes-sovereign-runtime](../hermes-sovereign-runtime/) | Full Docker stack pattern |
 
 ---

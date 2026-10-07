@@ -171,6 +171,10 @@ in place until you're satisfied the new paths are solid in production, then
 `git rm -r examples/mcp-security-toolkit/src` (keep its README's redirect
 notice, or remove the whole directory) and the deprecated script.
 
+**Done 2026-10-07:** the duplicate `src/`, `tests/`, `examples/` and
+`pyproject.toml` under `examples/mcp-security-toolkit/` were removed; only the
+redirect README remains. The duplicate still carried the pre-fix remote scorer.
+
 ## Known pre-existing scanner limitation (not introduced by this change)
 
 Running `safe2 scan project` against `safe2/` itself surfaces false

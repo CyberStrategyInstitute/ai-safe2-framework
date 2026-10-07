@@ -178,7 +178,7 @@ def html_report(findings: list[Finding], target: str) -> str:
 </div>
 <div class="footer">
   AI SAFE2 v3.1 | Cyber Strategy Institute |
-  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/examples/mcp-security-toolkit">
+  <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/safe2#command-map">
     github.com/CyberStrategyInstitute/ai-safe2-framework
   </a>
 </div>
