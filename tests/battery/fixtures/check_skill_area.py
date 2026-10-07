@@ -23,7 +23,10 @@ def front(p):
     import yaml
     return yaml.safe_load(m.group(1)), t
 
-skills = [S/"SKILL.md"] + sorted(S.glob("codex/*/SKILL.md"))
+# The canonical skill lives in its own package folder; skills/ itself must not be one.
+skills = sorted(S.glob("*/SKILL.md")) + sorted(S.glob("codex/*/SKILL.md"))
+ok(not (S / "SKILL.md").exists(), "skills/ root is not a skill package (no skills/SKILL.md)")
+ok((S / "ai-safe2-secure-build-copilot" / "SKILL.md").exists(), "canonical skill package present")
 for sk in skills:
     fm, body = front(sk)
     rel = sk.relative_to(R)

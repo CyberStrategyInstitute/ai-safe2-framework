@@ -41,7 +41,7 @@ CP.8: Catastrophic Risk Thresholds — required before ACT-3/ACT-4 deployment
 
 ## Attached Knowledge Files
 The following files should be attached to this Gem for full offline reference:
-- SKILL.md (this repo): full framework reference and workflow patterns
+- skills/ai-safe2-secure-build-copilot/SKILL.md (this repo): full framework reference and workflow patterns
 - ai-safe2-controls-v3.0.json: complete 161-control taxonomy
 
 ## Toolkit

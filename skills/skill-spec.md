@@ -115,7 +115,7 @@ When the AI SAFE2 MCP server is connected:
 | `get_governance_resource` | Fetching policy templates, checklists, HEAR forms |
 | `get_workflow_prompt` | Starting a structured architecture review or runbook |
 
-Without MCP: use the pillar summaries in SKILL.md and the control IDs embedded
+Without MCP: use the pillar summaries in ai-safe2-secure-build-copilot/SKILL.md and the control IDs embedded
 throughout. The canonical taxonomy is in `mcp/data/ai-safe2-controls-v3.0.json`
 if the host model supports file reading.
 
@@ -124,7 +124,7 @@ if the host model supports file reading.
 ## Knowledge Layer
 
 **Live data (MCP):** `ai-safe2-controls-v3.0.json` — 161 controls with full metadata
-**Static reference:** SKILL.md — framework structure, ACT tiers, workflows, tool list
+**Static reference:** ai-safe2-secure-build-copilot/SKILL.md — framework structure, ACT tiers, workflows, tool list
 **Templates:** Available via `get_governance_resource` tool (pro tier)
 **Evals:** `evals.md` — regression test suite for skill validation
 

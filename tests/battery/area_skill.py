@@ -33,10 +33,18 @@ def run(ctx):
     hostile = len([d for d in lab.iterdir() if d.name.startswith("H")])
     ctx.rec(AREA, "hostile skills approved (total)", not approved, f"{len(approved)}/{hostile} {approved}", "0")
 
-    rc, out = ctx.run([ctx.safe2, "gate", "skill", ctx.repo / "skills"], timeout=120)
-    ctx.rec(AREA, "INFO skills/ root package boundary", True,
-            f"exit={rc}; package includes MCP test corpus={'skills/mcp/tests/' in out}",
-            "packaging finding, not a gate defect", status="INFO")
+    # D1 (2026-10-07): skills/ must not be an installable skill package; the
+    # canonical skill is its own package and must pass the gate under --strict.
+    root_pkg = (Path(ctx.repo) / "skills" / "SKILL.md").exists()
+    ctx.rec(AREA, "skills/ root is not a skill package", not root_pkg,
+            "skills/SKILL.md present: installs MCP code + injection corpus" if root_pkg else "no skills/SKILL.md",
+            "no SKILL.md at skills/ root")
+    canon = Path(ctx.repo) / "skills" / "ai-safe2-secure-build-copilot"
+    if (canon / "SKILL.md").exists():
+        rc, _ = ctx.run([ctx.safe2, "gate", "skill", canon, "--strict"], timeout=120)
+        ctx.rec(AREA, "canonical skill package passes --strict", rc == 0, f"exit={rc}", "APPROVE")
+    else:
+        ctx.rec(AREA, "canonical skill package passes --strict", False, "package folder absent", "APPROVE")
     rejected = []
     for d in sorted((Path(ctx.repo) / "skills/codex").glob("*/")):
         if (d / "SKILL.md").exists():
