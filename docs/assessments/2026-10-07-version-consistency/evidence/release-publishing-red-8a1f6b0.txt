@@ -1,0 +1,4 @@
+ImportError while importing test module '<repo>/tests/test_release_publishing.py'.
+E   ImportError: cannot import name 'cli_version_from_tag' from 'check_release_installation' (<repo>/scripts/check_release_installation.py)
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.20s

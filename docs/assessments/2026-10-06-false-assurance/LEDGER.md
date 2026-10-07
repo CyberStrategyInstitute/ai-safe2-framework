@@ -267,3 +267,21 @@ identical before/after. Evidence: `docs/assessments/2026-10-07-version-consisten
 
 **PR:** #395 (draft). **Next:** the owner merges #393; #395 and #394 retarget to `main`. Publishing 1.0.x
 to PyPI is an owner release action (recommended: v1.0.1 after #393).
+
+## 2026-10-07 E16: CLI releases reach PyPI whatever the tag style (owner-approved)
+
+Owner approved hardening the publish path so the 1.0.0 gap cannot recur.
+
+- `check_release_installation.py`: tags `v1.0.1` and the dated house style
+  `<date>_CLI_1.0.1[_Title]` are both accepted; the version must equal
+  `pyproject.toml`, and a CLI tag that names no version fails closed.
+- `publish.yml`: build runs for `v*` or `*CLI*` tags; the silent-skip guard from
+  `bb22cce` is replaced by that check. New `verify-pypi` job polls PyPI, installs
+  `ai-safe2==X` in a clean venv and checks `safe2 --version`. The OIDC `id-token: write`
+  permission moved from workflow level to the two publish jobs (zizmor high finding,
+  pre-existing; the build job runs tests and should not hold a publishing token).
+- New weekly `release-drift.yml`: fails when the newest published CLI release is not
+  on PyPI. Live run today: fails on 1.0.0, and reports that only 0.9.0 of 10 CLI
+  releases ever reached PyPI.
+- Tests: `tests/test_release_publishing.py` (collection error on `8a1f6b0`, 24 passed).
+  Local gates 31/31.

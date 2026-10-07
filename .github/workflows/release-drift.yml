@@ -1,0 +1,37 @@
+name: CLI Release Drift
+
+# Fails when the newest published CLI release on GitHub is not installable from
+# PyPI. CLI 1.0.0 sat in that state from 2026-10-05 with nothing reporting it.
+# The publish workflow verifies its own upload (verify-pypi); this weekly audit
+# catches releases that never reached that workflow. GitHub notifies the
+# workflow's last editor when a scheduled run fails.
+
+on:
+  schedule:
+    - cron: "17 7 * * 1"   # Mondays 07:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Newest CLI release is on PyPI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.11"
+
+      - name: Audit GitHub releases against PyPI
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" > releases.json
+          python -I scripts/check_pypi_release.py audit --releases-json releases.json
