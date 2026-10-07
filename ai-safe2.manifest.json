@@ -152,7 +152,7 @@
     "dashboard": "dashboard/README.md",
     "cli": {
       "package": "ai-safe2",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "command": "safe2",
       "module": "python -m safe2",
       "entrypoint": "safe2/README.md",
