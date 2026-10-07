@@ -1,5 +1,21 @@
 # safe2 CLI 1.0 migration and compatibility
 
+## Upgrade to 1.0.1
+
+1.0.1 is the first 1.0 build on PyPI; 1.0.0 was published on GitHub only.
+Commands and schemas are unchanged from 1.0.0. Scores and gate results can
+change: self-attested MCP controls no longer add points, detected tool-schema
+poisoning caps the score and fails `safe2 gate mcp`, the skill trust gate
+blocks more hostile patterns, and a CRITICAL finding caps the project gate.
+Re-run gates rather than reusing 1.0.0 or 0.9.x results. DEP findings now
+report CP.5.MCP control `MCP-4` (was `MCP-3`), matching the v3.1 control map.
+
+```console
+python -m pip install --upgrade "ai-safe2[all]==1.0.1"
+safe2 --version
+safe2 self-check --strict
+```
+
 ## Upgrade from 0.9.9 to 1.0.0
 
 CLI 1.0.0 promotes the hardened 0.9.9 command and schema surface without
@@ -14,7 +30,7 @@ safe2 acceptance run ./safe2-1.0-acceptance --strict
 safe2 acceptance verify ./safe2-1.0-acceptance
 ```
 
-Until 1.0.0 is on PyPI (it currently serves 0.9.0), install the release tag:
+1.0.0 never reached PyPI. To reproduce 1.0.0 evidence exactly, install its release tag:
 `python -m pip install "ai-safe2[all] @ git+https://github.com/CyberStrategyInstitute/ai-safe2-framework@2026-10-5_CLI_1.0.0"`.
 
 Do not overwrite an earlier acceptance directory. To roll back, create a fresh

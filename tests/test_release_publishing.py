@@ -104,3 +104,13 @@ def test_drift_audit_runs_weekly():
     assert triggers["schedule"] and "workflow_dispatch" in triggers
     assert wf["permissions"] == {"contents": "read"}
     assert "check_pypi_release.py audit" in " ".join(s.get("run", "") for s in wf["jobs"]["audit"]["steps"])
+
+
+def test_release_qualification_default_tracks_pyproject():
+    import re
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    version = re.search(r'^version\s*=\s*"([^"]+)"', pyproject, re.M).group(1)
+    script = (ROOT / "scripts" / "check_release_installation.py").read_text(encoding="utf-8")
+    assert f'"--expected-version", default="{version}"' in script
+    from safe2 import __package_version__
+    assert __package_version__ == version

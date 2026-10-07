@@ -123,7 +123,7 @@ def check_tag(tag: str, expected_version: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--expected-version", default="1.0.0")
+    parser.add_argument("--expected-version", default="1.0.1")
     parser.add_argument("--verify-uninstalled", action="store_true")
     parser.add_argument("--check-tag")
     args = parser.parse_args()

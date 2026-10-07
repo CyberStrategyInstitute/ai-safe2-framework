@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_release_version_is_consistent_across_package_and_qualification() -> None:
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    assert project["project"]["version"] == "1.0.0"
-    assert __package_version__ == __version__ == "1.0.0"
+    assert project["project"]["version"] == "1.0.1"
+    assert __package_version__ == __version__ == "1.0.1"
     workflow = (ROOT / ".github/workflows/cli-release-qualification.yml").read_text(
         encoding="utf-8"
     )
@@ -19,7 +19,7 @@ def test_release_version_is_consistent_across_package_and_qualification() -> Non
     for source in (workflow, publish):
         assert "tomllib.load" in source
         assert "steps.package.outputs.version" in source
-        assert "--expected-version 1.0.0" not in source
+        assert "--expected-version 1.0" not in source  # read from pyproject, never hardcoded
 
 
 def test_release_documentation_links_exist() -> None:
