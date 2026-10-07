@@ -4,9 +4,24 @@ import re
 import subprocess
 import time
 
+from core import free_port, port_answers
+
 AREA = "MCP"
-PORTS = {"clean": 9711, "poisoned": 9712, "poisoned_attest": 9713, "gamed": 9720, "gamed_gate": 9721,
-         "rug": 9740, "rug_proxy": 9741}
+# Ports are allocated fresh per run and checked before use. Fixed ports let a
+# server left over from an earlier run (or from the other tree) answer for the
+# one under test: on 2026-10-07 a stale branch server made main's knowledge
+# server look healthy.
+PORT_NAMES = ("clean", "poisoned", "poisoned_attest", "gamed", "gamed_gate", "rug", "rug_proxy", "http")
+
+
+def _ports():
+    ports = {}
+    for name in PORT_NAMES:
+        p = free_port()
+        while p in ports.values():
+            p = free_port()
+        ports[name] = p
+    return ports
 
 
 def _score(ctx, port):
@@ -17,10 +32,13 @@ def _score(ctx, port):
 
 
 def _serve(ctx, mode, port):
+    if port_answers(port):
+        raise RuntimeError(f"port {port} already in use before starting {mode} server")
     ctx.bg([ctx.py, "-I", ctx.fx / "evil_mcp.py", port, mode, "auth"], env={**ctx.env, "TLS": "1"}, cwd=ctx.fx)
 
 
 def scorer(ctx):
+    PORTS = ctx.ports
     for mode in ("clean", "poisoned", "poisoned_attest", "gamed"):
         _serve(ctx, mode, PORTS[mode])
     time.sleep(1.5)
@@ -49,6 +67,7 @@ def scanner(ctx):
 
 
 def wrappers(ctx):
+    PORTS = ctx.ports
     msgs = "\n".join(json.dumps(m) for m in [
         {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}},
         {"jsonrpc": "2.0", "id": 2, "method": "tools/list"},
@@ -70,6 +89,9 @@ def wrappers(ctx):
     ctx.rec(AREA, "wrap audit attributes tool/method", any(a.get("tool_name") or a.get("method") for a in att),
             f"{len(att)} records", "populated")
 
+    for name in ("rug", "rug_proxy"):
+        if port_answers(PORTS[name]):
+            raise RuntimeError(f"port {PORTS[name]} already in use before starting {name}")
     ctx.bg([ctx.py, "-I", ctx.fx / "rugpull.py", PORTS["rug"]])
     ctx.bg([ctx.safe2, "mcp", "wrap-proxy", f"http://127.0.0.1:{PORTS['rug']}/mcp", "--local-port",
             PORTS["rug_proxy"], "--pin-schema", "--audit-log", ctx.work / "rug.jsonl"])
@@ -112,13 +134,18 @@ def knowledge_server(ctx):
         cr = re.search(r"^### code review 2MB.*?len=(\d+)", out, re.M)
         if cr:
             ctx.rec(AREA, "code_review: bounded input", int(cr.group(1)) < 200000, f"len={cr.group(1)}", "<200k")
-    rc, out = ctx.run(["bash", ctx.fx / "http_auth.sh", ctx.mcp_venv, ctx.repo / "skills/mcp", ctx.work], timeout=120)
+    rc, out = ctx.run(["bash", ctx.fx / "http_auth.sh", ctx.mcp_venv, ctx.repo / "skills/mcp", ctx.work,
+                       ctx.ports["http"]], timeout=120)
+    if "PORT_IN_USE" in out:
+        ctx.not_run(AREA, "knowledge server HTTP: 401 unauth, 200 auth", "port already answered before start")
+        return
     ok = "UNAUTH 401" in out and re.search(r"^AUTH (200|202)", out, re.M) is not None
     summary = " | ".join(line for line in out.splitlines() if line.startswith(("UNAUTH", "AUTH")))
     ctx.rec(AREA, "knowledge server HTTP: 401 unauth, 200 auth", ok, summary[:160], "401 then 200")
 
 
 def run(ctx):
+    ctx.ports = _ports()
     for step in (scorer, scanner, wrappers, knowledge_server):
         try:
             step(ctx)

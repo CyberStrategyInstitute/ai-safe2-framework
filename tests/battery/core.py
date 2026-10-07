@@ -10,6 +10,7 @@ import json
 import os
 import shutil
 import signal
+import socket
 import subprocess
 import tempfile
 import time
@@ -124,6 +125,20 @@ class Ctx:
     def close(self):
         self.cleanup()
         shutil.rmtree(self.work, ignore_errors=True)
+
+
+def free_port() -> int:
+    """A port nothing is listening on right now (kernel-assigned)."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("127.0.0.1", 0))
+        return s.getsockname()[1]
+
+
+def port_answers(port: int) -> bool:
+    """True if something already accepts connections on 127.0.0.1:port."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(0.3)
+        return s.connect_ex(("127.0.0.1", port)) == 0
 
 
 def git_rev(repo: Path) -> str:
