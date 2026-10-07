@@ -18,7 +18,7 @@ dependencies = [
     # MCP server framework
     # mcp 2.x removed FastMCP (renamed MCPServer) and other v1 APIs; this server
     # is written against the v1 API. Streamable HTTP + session_manager need >=1.12.
-    "mcp>=1.12,<2",
+    "mcp>=1.12,<3",
     # ASGI / HTTP serving
     "uvicorn[standard]>=0.30.0",
     "starlette>=0.40.0",
