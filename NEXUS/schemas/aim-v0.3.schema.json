@@ -50,7 +50,7 @@
         "senior",
         "principal"
       ],
-      "description": "ATF maturity level with behavioral track record. Maps to ACT tiers in AI SAFE2 v3.0 CP.3"
+      "description": "ATF maturity level with behavioral track record. Maps to ACT tiers in AI SAFE2 v3.1 CP.3"
     },
     "actTier": {
       "type": "integer",
@@ -67,7 +67,7 @@
     "ownerChain": {
       "type": "string",
       "pattern": "^did:",
-      "description": "DID of the human sponsor (owner_of_record). Required per AI SAFE2 v3.0 A2.4"
+      "description": "DID of the human sponsor (owner_of_record). Required per AI SAFE2 v3.1 A2.4"
     },
     "purposeDeclaration": {
       "type": "string",
