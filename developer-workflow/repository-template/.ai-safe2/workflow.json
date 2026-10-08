@@ -1,0 +1,33 @@
+{
+  "schema_version": "ai-safe2.developer-workflow.v1",
+  "workflow_id": "REPLACE-project-workflow",
+  "minimum_cli_version": "1.0.1",
+  "profile": "game",
+  "decision_owner": "REPLACE-maintainer",
+  "routes": {
+    "standard": {
+      "required_capabilities": ["targeted-validation"],
+      "semantic_review": "optional"
+    },
+    "enhanced": {
+      "required_capabilities": ["targeted-validation", "regression-validation", "semantic-review"],
+      "semantic_review": "required"
+    },
+    "critical": {
+      "required_capabilities": ["targeted-validation", "regression-validation", "semantic-review", "security-diff", "human-specialist-review", "rollback-evidence"],
+      "semantic_review": "required",
+      "security_review": "required"
+    }
+  },
+  "providers": {
+    "semantic_review": ["codex-code-review", "claude-code-review"],
+    "security_review": ["codex-security", "claude-security-review"]
+  },
+  "invariants": {
+    "policy_may_raise_not_lower_risk": true,
+    "evidence_revision_bound": true,
+    "provider_failure_is_not_pass": true,
+    "human_authorizes_merge_release_and_risk": true
+  }
+}
+
