@@ -40,8 +40,10 @@ flowchart TB
 ### Level 1: Decision structure
 
 Install the profile, policy, schemas, classifier, validator, and agent
-instructions. Every PR receives a deterministic route and a decision-record
-skeleton. This is what the contract preview delivers directly.
+instructions. Every PR receives a deterministic route, a CLI decision-routing
+result, a revision-bound human decision record initialized to `hold`, and a
+repository-specific explanation. These are required defaults in the copyable
+repository template, not optional adapters.
 
 ### Level 2: Deterministic evidence
 

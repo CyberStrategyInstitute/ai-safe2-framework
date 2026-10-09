@@ -25,10 +25,12 @@ build system, Claude configuration, Codex configuration, or repository tests.
    boundaries, owner, review options, and limitations match the game.
 7. Commit the setup through a normal pull request.
 
-The starter GitHub workflow repeats this explanation on pull requests and
-uploads it with the route evidence. A green validation proves that the
-configuration is internally consistent. It does not prove that an optional AI
-reviewer ran or that the game is secure or ready to release.
+The starter GitHub workflow verifies the pinned CLI, creates the deterministic
+route, runs CLI decision routing, initializes the revision-bound human decision
+record to `hold`, repeats the repository explanation, and uploads those
+artifacts. A green validation proves that these required records were produced
+and that the configuration is internally consistent. It does not prove that an
+optional AI reviewer ran or that the game is secure or ready to release.
 
 ## What changes after installation
 

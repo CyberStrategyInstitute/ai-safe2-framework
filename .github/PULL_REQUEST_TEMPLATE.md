@@ -1,6 +1,14 @@
-## Summary
+## Decision Summary
 
-<!-- One paragraph: what does this PR do and why? -->
+<!-- What decision is the owner being asked to make, and what outcome does this PR enable? -->
+
+## Problem
+
+<!-- What is wrong, missing, unsafe, confusing, or unreleased today? -->
+
+## Scope and Included Changes
+
+<!-- State what is included, excluded, and whether this is a release candidate. -->
 
 ## Type of Change
 
@@ -53,6 +61,10 @@ tests/integrations separately from executed or released behavior. -->
 - [ ] Documentation and generated data are synchronized
 - [ ] No new em/en dashes are introduced where repository checks prohibit them
 
+### Hosted Evidence and CI Status
+
+<!-- Name passing, failing, unavailable, and not-run checks separately. A green wrapper is not a completed semantic review. -->
+
 ## Security Review Notes
 
 <!-- For identity, authorization, delegation, state, tool, payment, cryptography, or protocol changes, describe the trust boundary and fail-closed behavior. -->
@@ -66,6 +78,14 @@ tests/integrations separately from executed or released behavior. -->
 ## Compatibility and Recovery
 
 <!-- Describe compatibility impact and the rollback, migration, or recovery path. -->
+
+## Deferred and Post-Merge Work
+
+<!-- Identify intentionally deferred work, owner actions, publication steps, monitoring, or later integrations. -->
+
+## Owner Decision and Residual Risk
+
+<!-- State the decision requested, unresolved risks, and who retains merge, release, deployment, exception, and risk-acceptance authority. -->
 
 ## Changelog / Release Notes
 

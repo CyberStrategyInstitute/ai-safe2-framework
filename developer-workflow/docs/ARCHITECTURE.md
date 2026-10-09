@@ -78,6 +78,8 @@ flowchart LR
 | Module | Question it answers | Default posture |
 |---|---|---|
 | Product profile | What does this kind of repository need reviewed? | Required and repository-specific |
+| CLI decision routing | Which review plan follows from deterministic state and policy? | Required, pinned core capability |
+| Human decision record | What evidence, gaps, risks, and owner decision apply to this revision? | Required; starts at `hold` |
 | Development method | How should the work be planned, tested, debugged, and verified? | Optional; Superpowers is one supported method |
 | Deterministic checks | Did repeatable tests and scanners pass on this revision? | First evidence to integrate |
 | Semantic code review | What correctness, design, and maintainability risks remain? | Proportionate to route |
@@ -85,9 +87,11 @@ flowchart LR
 | Runtime adapter | What happened when an agent or production system acted? | Add when runtime actions are in scope |
 | Strategic reviewer | Would a second opinion materially improve a major integration or release decision? | Selective, not an every-change default |
 
-The repository template ships a game profile and manifests for optional
-adapters. A manifest is a declared integration boundary, not proof that the
-provider is connected or operational.
+The repository template ships a game profile. Optional adapter manifests live
+in the full package at `developer-workflow/adapters/manifests.json`; copy the
+selected declarations separately when adding an integration. A manifest is a
+declared integration boundary, not proof that the provider is connected or
+operational.
 
 ## Product surfaces
 

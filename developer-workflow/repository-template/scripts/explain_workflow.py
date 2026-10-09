@@ -99,10 +99,12 @@ flowchart LR
 
 ## Current preview boundary
 
-The installed contract preview classifies changes and creates replayable route
-and decision-record artifacts. It does not automatically convert every
-repository CI result into evidence unless this repository adds an evidence
-bridge. Without complete evidence, `hold` is the correct result.
+The installed contract preview classifies changes and creates a replayable
+route artifact, a CLI decision-routing result, a human decision record, and
+this explanation. The human record starts at `hold`. The preview does not
+automatically convert every repository CI result into evidence unless this
+repository adds an evidence bridge. Without complete evidence, `hold` is the
+correct result.
 
 ## Ways to extend this repository
 

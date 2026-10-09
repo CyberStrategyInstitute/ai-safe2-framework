@@ -53,6 +53,8 @@ The workflow may prepare a decision. It cannot authorize one.
 
 - stable adapter, evidence-envelope, decision-record, and workflow contracts;
 - deterministic standard, enhanced, and critical change routes;
+- required AI SAFE2 CLI decision routing and a revision-bound human decision
+  record initialized to `hold` on every pull request;
 - a ready-to-customize game-development profile;
 - a read-only starter GitHub workflow that emits a replayable route artifact;
 - shared Claude and Codex repository instructions without replacing either
@@ -65,8 +67,10 @@ The workflow may prepare a decision. It cannot authorize one.
   Drift/Love Equation integrations;
 - an upstream dependency policy that favors pinned, isolated upgrades.
 
-Provider execution remains opt-in. Installing this pack does not call an
-external model, add credentials, or change Claude or Codex settings.
+AI SAFE2 CLI decision routing and the human decision record are required core
+capabilities. External reviewer and scanner execution remains opt-in.
+Installing this pack does not call an external model, add credentials, or
+change Claude or Codex settings.
 
 ## Choose the rigor your repository needs
 

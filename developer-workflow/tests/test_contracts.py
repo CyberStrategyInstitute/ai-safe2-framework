@@ -167,4 +167,17 @@ def test_template_explainer_matches_release_and_describes_boundaries(tmp_path):
     assert "Superpowers" in outputs[0]
     assert "Codex Security" in outputs[0]
     assert "cannot merge, release, deploy, or" in outputs[0]
+    assert "a CLI decision-routing result, a human decision record" in outputs[0]
+
+
+def test_required_decision_tools_match_template():
+    for name in ("build_cli_decision_request.py", "build_decision_record.py", "evaluate_decision.py"):
+        assert (ROOT / "scripts" / name).read_text(encoding="utf-8").rstrip() == (
+            ROOT / "repository-template" / "scripts" / name
+        ).read_text(encoding="utf-8").rstrip()
+    assert json.loads((ROOT / "schemas" / "decision-record-v1.schema.json").read_text(encoding="utf-8")) == json.loads(
+        (ROOT / "repository-template" / ".ai-safe2" / "schemas" / "decision-record-v1.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
 

@@ -29,6 +29,8 @@
   separated by capability and status
 - [x] Repository-specific workflow explanation can be generated locally
 - [x] Starter CI publishes that explanation in its summary and as an artifact
+- [x] Starter CI verifies the pinned AI SAFE2 CLI and emits both CLI routing
+  and human decision records for the exact revision
 - [x] Explanation generation has a release/template parity contract test
 - [ ] Validate the onboarding flow in a clean external canary repository
 - [ ] Add mobile, API/service, and AI-agent profiles only after each has a

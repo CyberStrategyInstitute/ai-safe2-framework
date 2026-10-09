@@ -9,6 +9,8 @@
 - Adds a deterministic repository-specific workflow explainer.
 - Publishes the installed workflow explanation in the starter pull-request job
   summary and as a retained artifact.
+- Makes pinned AI SAFE2 CLI decision routing and a revision-bound human
+  decision record required starter artifacts rather than optional setup.
 - Clarifies which integrations are delivered, optional, manifest-only, or
   still require a repository-specific evidence bridge.
 

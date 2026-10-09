@@ -24,7 +24,12 @@ jobs:
           python-version: "3.12"
 
       - name: Install pinned validation dependencies
-        run: python -m pip install "jsonschema==4.25.1"
+        run: python -m pip install "ai-safe2[all]==1.0.1" "jsonschema==4.25.1"
+
+      - name: Verify required AI SAFE2 CLI
+        run: |
+          safe2 --version
+          safe2 self-check --strict
 
       - name: Validate workflow configuration
         run: python scripts/validate_workflow.py --root .
@@ -50,12 +55,46 @@ jobs:
           --paths-file "$RUNNER_TEMP/changed-paths.txt"
           --output "$RUNNER_TEMP/ai-safe2-change-route.json"
 
+      - name: Build required decision artifacts
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            SUBJECT="pr-$PR_NUMBER"
+          else
+            SUBJECT="workflow-dispatch"
+          fi
+          ROUTE="$(ROUTE_FILE="$RUNNER_TEMP/ai-safe2-change-route.json" python -c 'import json, os; print(json.load(open(os.environ["ROUTE_FILE"]))["route"])')"
+          python scripts/build_cli_decision_request.py \
+            --subject "$SUBJECT" \
+            --revision "$HEAD_SHA" \
+            --route-file "$RUNNER_TEMP/ai-safe2-change-route.json" \
+            --workflow .ai-safe2/workflow.json \
+            --output "$RUNNER_TEMP/ai-safe2-cli-decision-request.json"
+          safe2 decision evaluate \
+            "$RUNNER_TEMP/ai-safe2-cli-decision-request.json" \
+            --output "$RUNNER_TEMP/ai-safe2-cli-decision-result.json"
+          python scripts/build_decision_record.py \
+            --subject "$SUBJECT" \
+            --revision "$HEAD_SHA" \
+            --route "$ROUTE" \
+            --workflow .ai-safe2/workflow.json \
+            --output "$RUNNER_TEMP/ai-safe2-human-decision-record.json"
+          RECORD_FILE="$RUNNER_TEMP/ai-safe2-human-decision-record.json" python -c 'import json, jsonschema, os; jsonschema.validate(json.load(open(os.environ["RECORD_FILE"])), json.load(open(".ai-safe2/schemas/decision-record-v1.schema.json")))'
+
       - name: Summarize route
         shell: bash
         run: |
           echo "## AI SAFE2 change route" >> "$GITHUB_STEP_SUMMARY"
           echo '```json' >> "$GITHUB_STEP_SUMMARY"
           cat "$RUNNER_TEMP/ai-safe2-change-route.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "## AI SAFE2 decision state" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/ai-safe2-human-decision-record.json" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Explain the installed workflow
@@ -76,6 +115,17 @@ jobs:
           path: ${{ runner.temp }}/ai-safe2-change-route.json
           if-no-files-found: error
           retention-days: 14
+
+      - name: Upload required decision artifacts
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ai-safe2-decision-records
+          path: |
+            ${{ runner.temp }}/ai-safe2-cli-decision-request.json
+            ${{ runner.temp }}/ai-safe2-cli-decision-result.json
+            ${{ runner.temp }}/ai-safe2-human-decision-record.json
+          if-no-files-found: error
+          retention-days: 90
 
       - name: Upload workflow explanation
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
