@@ -17,6 +17,7 @@
     {"id": "aism", "root": "AISM/", "human_entrypoint": "AISM/README.md"},
     {"id": "nexus", "root": "NEXUS/", "human_entrypoint": "NEXUS/DOCUMENTATION.md", "agent_entrypoint": "NEXUS/AGENTS.md", "machine_entrypoint": "NEXUS/nexus-docs.manifest.json"},
     {"id": "safe2-cli", "root": "safe2/", "human_entrypoint": "safe2/README.md", "agent_entrypoint": "safe2/AGENTS.md", "machine_entrypoint": "safe2/safe2-docs.manifest.json"},
+    {"id": "developer-workflow", "root": "developer-workflow/", "human_entrypoint": "developer-workflow/README.md", "agent_entrypoint": "developer-workflow/repository-template/AGENTS.md", "machine_entrypoint": "developer-workflow/MANIFEST.json"},
     {"id": "examples", "root": "examples/", "human_entrypoint": "examples/README.md"},
     {"id": "research", "root": "research/", "human_entrypoint": "research/README.md"},
     {"id": "challenge-lab", "root": "challenges/", "human_entrypoint": "challenges/README.md"},

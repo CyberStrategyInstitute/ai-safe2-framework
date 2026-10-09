@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.cyberstrategyinstitute.com/ai-safe2/adapter-manifest-v1.schema.json",
+  "title": "AI SAFE2 Adapter Manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "adapter_id", "name", "category", "status", "authority", "capabilities", "data_boundary", "failure_states", "upgrade"],
+  "properties": {
+    "schema_version": {"const": "ai-safe2.adapter-manifest.v1"},
+    "adapter_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
+    "name": {"type": "string", "minLength": 1},
+    "category": {"enum": ["method", "semantic_review", "security_review", "deterministic", "runtime", "human_interface"]},
+    "status": {"enum": ["implemented", "manifest_only", "external", "planned"]},
+    "authority": {
+      "type": "array",
+      "items": {"enum": ["observe", "recommend", "enforce_existing_policy"]},
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "capabilities": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "data_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "source_may_leave_repository", "secrets_required"],
+      "properties": {
+        "mode": {"enum": ["local", "hosted", "hybrid", "deployment_specific"]},
+        "source_may_leave_repository": {"type": "boolean"},
+        "secrets_required": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "failure_states": {
+      "type": "array",
+      "items": {"enum": ["not_requested", "unavailable", "failed", "produced"]},
+      "allOf": [
+        {"contains": {"const": "unavailable"}},
+        {"contains": {"const": "failed"}},
+        {"contains": {"const": "produced"}}
+      ],
+      "uniqueItems": true
+    },
+    "upgrade": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["channel", "pin", "automatic_execution"],
+      "properties": {
+        "channel": {"enum": ["stable", "manual", "deployment_managed"]},
+        "pin": {"enum": ["exact_version", "commit_sha", "digest", "external_service"]},
+        "automatic_execution": {"const": false}
+      }
+    },
+    "reference": {"type": "string", "format": "uri"}
+  }
+}
+

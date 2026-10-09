@@ -4,7 +4,7 @@
 
 # AI SAFE² Framework v3.1
 
-[Documentation map](docs/README.md) · [CLI 1.0 workflow](safe2/docs/CLI-1.0-WORKFLOW.md) · [Security advisories](docs/advisories/README.md) · [Topic registry](repository-topics.manifest.json)
+[Documentation map](docs/README.md) · [Developer Workflow](developer-workflow/README.md) · [CLI 1.0 workflow](safe2/docs/CLI-1.0-WORKFLOW.md) · [Security advisories](docs/advisories/README.md) · [Topic registry](repository-topics.manifest.json)
 
 ### The Universal GRC Standard for Agentic AI, Swarm Governance, and Runtime Enforcement
 
@@ -25,6 +25,14 @@
 
 If your immediate goal is to inspect an agent project—not read the entire
 framework—start with the [`safe2` CLI](safe2/README.md).
+
+If your goal is to give a software team a repeatable, provider-neutral pull
+request and release process, start with the
+[AI SAFE² Developer Workflow](developer-workflow/README.md). The contract
+preview supports teams using Claude and Codex together without replacing either
+tool's configuration. It routes game and other software changes through
+proportionate evidence requirements, attributes each reviewer or scanner, and
+preserves the human merge and release decision.
 
 Use it when you need to:
 
@@ -63,6 +71,8 @@ the CLI; it does not imply that every named product has a native adapter.
 
 | What you want | Start here |
 |---|---|
+| A reusable developer pull-request and release workflow | [Developer Workflow](developer-workflow/README.md) |
+| A game repository using both Claude and Codex | [Game developer quickstart](developer-workflow/docs/GAME-DEVELOPER-QUICKSTART.md) |
 | One bounded project assessment | [CLI outcome guide](safe2/README.md#start-with-the-outcome) |
 | Multiple harnesses or environments | [Multi-harness discovery](safe2/README.md#multi-harness-environment-discovery) |
 | A new skill checked before use | [Skill-screening demo](safe2/docs/SKILL-SCREENING-DEMO.md) |
@@ -223,6 +233,7 @@ dashboard scoring integration is implemented by this update. See the
 | [AI Sovereign Maturity (AISM) Model](AISM/) | Organizational maturity model and control mapping |
 | [Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Artifact review, evidence assurance, adoption rule, and reusable card |
 | [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
+| [AI SAFE² Developer Workflow](developer-workflow/README.md) | Provider-neutral change routing, review evidence, game profile, and replayable human decision records |
 | [AI SAFE² Development Method](docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) | Risk-adjusted planning, implementation evidence, reviews, and completion receipts |
 | [NEXUS](NEXUS/) | CSI reference implementation for governed agent-to-agent and agent-to-tool interactions |
 | [Research](research/) | Threat research and deep-dive control evidence |

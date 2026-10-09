@@ -1,0 +1,30 @@
+{
+  "schema_version": "ai-safe2.developer-workflow-release.v1",
+  "name": "AI SAFE2 Developer Workflow",
+  "version": "0.1.0",
+  "released": "2026-10-08",
+  "status": "contract-preview",
+  "minimum_ai_safe2_cli": "1.0.1",
+  "default_profile": "game",
+  "stable_contracts": [
+    "ai-safe2.adapter-manifest.v1",
+    "ai-safe2.evidence-envelope.v1",
+    "ai-safe2.decision-record.v1",
+    "ai-safe2.developer-workflow.v1"
+  ],
+  "supported_coding_providers": ["codex", "claude"],
+  "authority": {
+    "merge": false,
+    "release": false,
+    "deploy": false,
+    "policy_change": false,
+    "risk_acceptance": false,
+    "everyday_action": false
+  },
+  "validation": {
+    "contract_tests": 9,
+    "schema_validation": "passed",
+    "validated_on": "2026-10-09"
+  }
+}
+
