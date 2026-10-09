@@ -42,3 +42,25 @@ def test_literal_newline_escape_is_rejected():
 
 def test_dependency_bot_is_exempt():
     assert validate(title="build(deps): bump tool", body="", author="dependabot[bot]") == []
+
+
+def test_plain_required_material_headings_pass():
+    body = """## Decision summary
+Ready for owner review.
+## Problem
+The integration route was not proven.
+## Scope
+Run one bounded provider canary.
+## Validation
+Focused tests pass.
+## Boundaries
+The reviewer remains advisory.
+## Compatibility
+The deterministic core is unchanged.
+## Deferred work
+Retire the adapter if the canary fails.
+## Owner decision
+A named human decides.
+"""
+
+    assert validate(title="fix: repair provider route", body=body) == []

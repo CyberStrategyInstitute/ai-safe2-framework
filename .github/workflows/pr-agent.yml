@@ -88,46 +88,35 @@ jobs:
           --policy .ai-safe2/pr-agent-preflight-policy.json
           --receipt pr-agent-preflight.json
 
-      - name: Publish bounded OpenRouter review
+      - name: Review with PR-Agent through OpenRouter
         id: pr-agent-free
         if: steps.route.outputs.route == 'solution' && steps.preflight.outputs.available == 'true'
         continue-on-error: true
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v8
+        timeout-minutes: 5
+        uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
         env:
-          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
-        with:
-          github-token: ${{ github.token }}
-          script: |
-            const fs = require('fs');
-            const receipt = JSON.parse(fs.readFileSync('pr-agent-preflight.json', 'utf8'));
-            const selected = receipt.tested_candidates.find(
-              item => item.model === receipt.selected_model && item.assessment?.passed
-            );
-            const review = selected?.assessment?.pr_context_review;
-            if (!review) {
-              core.setFailed('Selected model has no bounded PR-context review to publish.');
-              return;
-            }
-            const finding = review.potential_issue
-              ? `Potential issue: ${review.potential_issue}`
-              : 'No actionable issue was established in the bounded hunk.';
-            const body = [
-              '## Bounded OpenRouter Reviewer Guide',
-              '',
-              `Model: \`${receipt.selected_model}\` (canary ${selected.assessment.score}/100)`,
-              `Reviewed path: \`${review.path}\` (${receipt.pr_context.patch_characters} patch characters)`,
-              '',
-              finding,
-              '',
-              `Evidence: ${review.why}`,
-              '',
-              '> Coverage: one risk-prioritized hunk only. This is advisory, not a full-PR review or merge approval.',
-            ].join('\n');
-            await github.rest.issues.createComment({
-              ...context.repo,
-              issue_number: Number(process.env.PR_NUMBER),
-              body,
-            });
+          GITHUB_TOKEN: ${{ github.token }}
+          # PR-Agent expects the nested OpenRouter setting under this exact
+          # environment name. The repository secret keeps its existing name.
+          OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          config.model: openrouter/${{ steps.preflight.outputs.selected_model }}
+          config.fallback_models: '[]'
+          config.custom_model_max_tokens: "32000"
+          config.max_model_tokens: ${{ env.PR_AGENT_FREE_MAX_MODEL_TOKENS }}
+          config.ai_timeout: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
+          config.reasoning_effort: medium
+          pr_reviewer.enable_large_pr_chunking: "true"
+          pr_reviewer.max_number_of_calls: ${{ env.PR_AGENT_FREE_MAX_CALLS }}
+          config.duplicate_examples: "true"
+          config.num_retries: "0"
+          config.retry_same_model_on_timeout: "false"
+          config.output_run_details: "true"
+          config.output_run_cost: "true"
+          config.propagate_tool_errors: "true"
+          github_action_config.auto_review: "true"
+          github_action_config.auto_describe: "false"
+          github_action_config.auto_improve: "false"
+          github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
 
       - name: Check free-route publication
         id: free-publication
@@ -211,6 +200,7 @@ jobs:
           SELECTED_FREE_MODEL: ${{ steps.preflight.outputs.selected_model }}
           FREE_MODEL_POOL: ${{ env.PR_AGENT_FREE_MODEL_POOL }}
           PREFLIGHT_OUTCOME: ${{ steps.preflight.outcome }}
+          PREFLIGHT_QUALIFIED: ${{ steps.preflight.outputs.qualified }}
           PREFLIGHT_TESTED_COUNT: ${{ steps.preflight.outputs.tested_count }}
           PREFLIGHT_ELIGIBLE_COUNT: ${{ steps.preflight.outputs.eligible_count }}
           PREFLIGHT_RECEIPT_SHA256: ${{ steps.preflight.outputs.receipt_sha256 }}
@@ -322,11 +312,12 @@ jobs:
                 request_timeout_seconds: Number(process.env.REQUEST_TIMEOUT_SECONDS),
                 free_max_model_tokens: Number(process.env.FREE_MAX_MODEL_TOKENS),
                 free_max_number_of_calls: Number(process.env.FREE_MAX_CALLS),
-                free_coverage_mode: 'bounded_single_pass',
+                free_coverage_mode: 'pr_agent_full_diff_single_pass',
                 openai_max_model_tokens: Number(process.env.OPENAI_MAX_MODEL_TOKENS),
               },
               provider_execution: {
                 preflight_outcome: process.env.PREFLIGHT_OUTCOME,
+                preflight_qualified: process.env.PREFLIGHT_QUALIFIED === 'true',
                 preflight_tested_count: Number(process.env.PREFLIGHT_TESTED_COUNT || 0),
                 preflight_eligible_count: Number(process.env.PREFLIGHT_ELIGIBLE_COUNT || 0),
                 preflight_receipt_sha256: process.env.PREFLIGHT_RECEIPT_SHA256 || null,
@@ -335,7 +326,8 @@ jobs:
                 fallback_invoked: fallbackInvoked,
                 fallback_action_outcome: fallbackActionOutcome,
                 selected_models: observedModels,
-                final_model: observedModels.at(-1) || null,
+                final_model: observedModels.at(-1) ||
+                  (freeReviewProduced ? process.env.SELECTED_FREE_MODEL : null),
               },
               preflight,
               publication: {
@@ -364,6 +356,7 @@ jobs:
                 `Live health shortlist: ${Array.isArray(receipt.preflight.shortlisted_candidates) && receipt.preflight.shortlisted_candidates.length ? receipt.preflight.shortlisted_candidates.map(model => `\`${model}\``).join(' → ') : '**none**'}`,
                 `Selected free model: ${receipt.provider_policy.selected_free_model ? `\`${receipt.provider_policy.selected_free_model}\`` : '**none**'}`,
                 `Preflight status: **${receipt.preflight.status}**`,
+                `Preflight qualification: **${receipt.provider_execution.preflight_qualified ? 'qualified' : 'degraded or unavailable'}**`,
                 `Fallback order: ${receipt.provider_policy.fallback_models.map(model => `\`${model}\``).join(' → ')}`,
                 `Per-route timeout: **${receipt.provider_policy.request_timeout_seconds}s**`,
                 `Free review budget: **${receipt.provider_policy.free_max_model_tokens} tokens**`,

@@ -150,6 +150,27 @@ def test_canary_rejects_malformed_or_incomplete_answers():
     assert assess_response(json.dumps(incomplete), POLICY)["passed"] is False
 
 
+def test_degraded_candidate_can_remain_advisory_without_becoming_qualified():
+    partial = json.dumps(
+        {
+            "canary_findings": [
+                {
+                    "defect_id": "authorization-after-read",
+                    "line_id": "C2",
+                    "why": "Sensitive bytes are read before authorization.",
+                }
+            ],
+            "safe_line_findings": [],
+            "pr_context": {"path": "x.py", "potential_issue": None, "why": "bounded"},
+        }
+    )
+
+    result = assess_response(partial, POLICY)
+
+    assert result["passed"] is False
+    assert result["score"] == 70
+
+
 def test_canary_reserves_visible_output_budget_after_reasoning():
     request = POLICY["request"]
 
