@@ -426,6 +426,7 @@ def main() -> int:
         "tested_candidates": [],
         "selected_model": None,
         "status": "unavailable",
+        "qualified": False,
     }
     if not api_key:
         receipt["failure_reason"] = "OPENROUTER_API_KEY is not configured"
