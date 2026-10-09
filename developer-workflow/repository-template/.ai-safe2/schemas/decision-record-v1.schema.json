@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.cyberstrategyinstitute.com/ai-safe2/decision-record-v1.schema.json",
+  "title": "AI SAFE2 Human Decision Record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "decision_id", "subject", "route", "outcome", "required_evidence", "evidence", "risks", "human_authority", "replay"],
+  "properties": {
+    "schema_version": {"const": "ai-safe2.decision-record.v1"},
+    "decision_id": {"type": "string", "minLength": 1},
+    "subject": {"type": "object", "additionalProperties": false, "required": ["identifier", "revision"], "properties": {"identifier": {"type": "string", "minLength": 1}, "revision": {"type": "string", "minLength": 1}}},
+    "route": {"enum": ["standard", "enhanced", "critical", "everyday_decision"]},
+    "outcome": {"enum": ["hold", "ready_for_human_decision", "approved", "rejected", "deferred"]},
+    "required_evidence": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "evidence": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["evidence_id", "capability", "status", "subject_revision", "producer"], "properties": {"evidence_id": {"type": "string", "minLength": 1}, "capability": {"type": "string", "minLength": 1}, "status": {"enum": ["not_requested", "unavailable", "failed", "produced"]}, "subject_revision": {"type": "string", "minLength": 1}, "producer": {"type": "string", "minLength": 1}}}},
+    "risks": {"type": "array", "items": {"type": "object"}},
+    "human_authority": {"type": "object", "additionalProperties": false, "required": ["required", "decision_owner", "decision_at", "rationale"], "properties": {"required": {"const": true}, "decision_owner": {"type": ["string", "null"]}, "decision_at": {"type": ["string", "null"], "format": "date-time"}, "rationale": {"type": ["string", "null"]}}},
+    "replay": {"type": "object", "additionalProperties": false, "required": ["policy_digest", "configuration_digest", "producer_versions"], "properties": {"policy_digest": {"type": "string", "minLength": 1}, "configuration_digest": {"type": "string", "minLength": 1}, "producer_versions": {"type": "object"}}}
+  },
+  "allOf": [{"if": {"properties": {"outcome": {"enum": ["approved", "rejected"]}}, "required": ["outcome"]}, "then": {"properties": {"human_authority": {"properties": {"decision_owner": {"type": "string", "minLength": 1}, "decision_at": {"type": "string", "format": "date-time"}, "rationale": {"type": "string", "minLength": 1}}}}}}]
+}

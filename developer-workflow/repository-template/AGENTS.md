@@ -15,4 +15,8 @@ the repository.
   accept residual risk unless the human explicitly authorizes that action.
 - Claude, Codex, and other providers are interchangeable evidence producers.
   Do not modify another provider's configuration unless the user asks.
+- When explaining this installation, generate or refresh
+  `AI-SAFE2-DEVELOPER-WORKFLOW.md` with `scripts/explain_workflow.py`. Describe
+  the before/after process, active routes, optional modules, limitations, and
+  next choices. Do not imply that a listed provider is connected or ran.
 

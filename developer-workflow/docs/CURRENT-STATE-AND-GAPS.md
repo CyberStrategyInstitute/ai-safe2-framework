@@ -9,7 +9,7 @@ Reviewed: 2026-10-08
 | AI SAFE2 CLI | Consolidated scanning, gates, evidence, decisions, MCP controls, acceptance and self-check | Available; pin 1.0.1 |
 | NEXUS | Runtime/distributed trust and enforcement option | Adapter manifest included; deployment-specific integration remains separate |
 | Skills | Agent-facing governance and development methods | Supported surface; individual harness installation remains separate |
-| Developer Workflow | Existing GitHub pack with risk routing, evidence, and PR templates | Superseded by this provider-neutral contract preview |
+| Developer Workflow | Provider-neutral risk routing, evidence contracts, PR templates, adoption guide, and generated repository explanation | Contract preview available; repository-specific evidence bridge remains to be implemented |
 | MCP Pro | Public professional MCP product for coding tools | External product surface; adapter contract included |
 | Agency Check | Public everyday decision experience and Decision Card model | Deployment in progress; adapter contract included |
 | Codex and Claude | Both can continue coding and reviewing | Optional adapters; no configuration takeover |
@@ -36,6 +36,19 @@ Reviewed: 2026-10-08
 9. Add an evidence-backed calibration dataset for provider findings.
 10. Reconcile public AI SAFE2 version, control-count, licensing, and product
     descriptions before broader marketing.
+11. Add a scheduled, read-only upstream update monitor that reports new pinned
+    dependency versions without applying them automatically.
+
+## Adoption experience now delivered
+
+The package now explains what it changes before installation and generates a
+repository-specific report after configuration. The report shows the active
+profile, routes, critical paths, review options, authority boundary, preview
+limitations, and safe extension points. The starter workflow places this
+report in the GitHub Actions summary and retains it as an artifact.
+
+This closes the discoverability gap. It does not close the evidence-bridge or
+provider-execution gaps above.
 
 ## 0.1 exit criteria
 
