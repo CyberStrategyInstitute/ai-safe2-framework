@@ -70,7 +70,11 @@ def _verify_command_allowlist() -> tuple[bool, str]:
     if not sys.argv:
         return True, ""  # Cannot inspect args — allow (opt-in defense)
 
-    executable = Path(sys.executable).name
+    # Normalize both POSIX and Windows paths even when a test or launcher passes
+    # a foreign-platform path representation.
+    executable = sys.executable.replace("\\", "/").rsplit("/", 1)[-1]
+    if executable.lower().endswith(".exe"):
+        executable = executable[:-4]
     args_flat = " ".join(sys.argv)
 
     # Check 1: executable allowlist

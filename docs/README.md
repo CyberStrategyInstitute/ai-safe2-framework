@@ -16,6 +16,7 @@ canonical topic directory.
 | Security notices | [Advisories](advisories/) |
 | Reusable records | [Templates](templates/) |
 | SAFE2 CLI operating guides | [SAFE2 CLI documentation](../safe2/docs/README.md) |
+| Developer pull-request and release workflow | [AI SAFE2 Developer Workflow](../developer-workflow/README.md) |
 | NEXUS | [NEXUS documentation](../NEXUS/DOCUMENTATION.md) |
 
 The canonical ownership registry is

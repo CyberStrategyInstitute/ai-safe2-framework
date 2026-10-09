@@ -53,18 +53,23 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert 'PR_AGENT_FREE_MAX_MODEL_TOKENS: "16000"' in workflow
     assert 'PR_AGENT_FREE_MAX_CALLS: "1"' in workflow
     assert "config.reasoning_effort: medium" in workflow
-    assert "Bounded OpenRouter Reviewer Guide" in workflow
-    assert "pr_context_review" in workflow
-    assert "free_coverage_mode: 'bounded_single_pass'" in workflow
+    assert "OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}" in workflow
+    assert "config.model: openrouter/${{ steps.preflight.outputs.selected_model }}" in workflow
+    assert "preflight_qualified: process.env.PREFLIGHT_QUALIFIED === 'true'" in workflow
+    assert "free_coverage_mode: 'pr_agent_full_diff_single_pass'" in workflow
     assert "timeout-minutes: 5" in workflow
     assert "fallback_invoked: fallbackInvoked" in workflow
     assert "active_failure_count: activeFailures.length" in workflow
     assert "provider_execution:" in workflow
     assert "selected_model: modelMatch?.[1] || null" in workflow
-    assert "final_model: observedModels.at(-1) || null" in workflow
+    assert "final_model: observedModels.at(-1) ||" in workflow
+    assert "freeReviewProduced ? process.env.SELECTED_FREE_MODEL : null" in workflow
     assert "id: preflight" in workflow
     assert "steps.preflight.outputs.available == 'true'" in workflow
-    assert "receipt.selected_model" in workflow
+    assert "steps.preflight.outputs.selected_model" in workflow
+    assert '"qualified": str(bool(receipt.get("qualified"))).lower()' in (
+        (ROOT / "scripts" / "pr_agent_preflight.py").read_text(encoding="utf-8")
+    )
     assert "preflight_receipt_sha256" in workflow
 
 

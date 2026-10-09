@@ -1,0 +1,21 @@
+{
+  "schema_version": "ai-safe2.adapter-registry.v1",
+  "adapters": [
+    "codex-code-review",
+    "codex-security",
+    "claude-code-review",
+    "claude-security-review",
+    "pr-agent",
+    "greptile",
+    "codeql",
+    "semgrep",
+    "gitleaks",
+    "nexus",
+    "mcp-pro",
+    "agency-check",
+    "sovereign-runtime",
+    "drift-love-equation",
+    "superpowers"
+  ]
+}
+

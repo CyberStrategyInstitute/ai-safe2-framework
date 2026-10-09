@@ -1,0 +1,24 @@
+{
+  "schema_version": "ai-safe2.upstream-lock.v1",
+  "policy": {
+    "runtime_floating_refs_allowed": false,
+    "isolated_update_pr_required": true,
+    "security_updates": "prompt",
+    "patch_updates": "weekly_grouped",
+    "minor_cooldown_days": 7,
+    "major_cooldown_days": 14
+  },
+  "upstreams": [
+    {"id":"ai-safe2-cli","repository":"https://github.com/CyberStrategyInstitute/ai-safe2-framework","pin_type":"exact_version","pin":"1.0.1","role":"core-cli"},
+    {"id":"codex-security","repository":"https://github.com/openai/codex-security","pin_type":"exact_version","pin":"0.2.0","role":"optional-security-adapter"},
+    {"id":"codex","repository":"https://github.com/openai/codex","pin_type":"stable_release","pin":"resolve-during-adoption","role":"optional-review-adapter"},
+    {"id":"claude-code-action","repository":"https://github.com/anthropics/claude-code-action","pin_type":"commit_sha","pin":"resolve-during-adoption","role":"optional-review-adapter"},
+    {"id":"claude-security-review","repository":"https://github.com/anthropics/claude-code-security-review","pin_type":"commit_sha","pin":"resolve-during-adoption","role":"optional-security-adapter"},
+    {"id":"superpowers","repository":"https://github.com/obra/superpowers","pin_type":"commit_sha","pin":"resolve-during-adoption","role":"optional-method"},
+    {"id":"pr-agent","repository":"https://github.com/qodo-ai/pr-agent","pin_type":"commit_sha","pin":"resolve-during-adoption","role":"optional-review-adapter"},
+    {"id":"codeql-action","repository":"https://github.com/github/codeql-action","pin_type":"commit_sha","pin":"resolve-during-adoption","role":"deterministic-security"},
+    {"id":"semgrep","repository":"https://github.com/semgrep/semgrep","pin_type":"exact_version","pin":"resolve-during-adoption","role":"deterministic-security"},
+    {"id":"gitleaks","repository":"https://github.com/gitleaks/gitleaks","pin_type":"exact_version","pin":"resolve-during-adoption","role":"deterministic-security"}
+  ]
+}
+

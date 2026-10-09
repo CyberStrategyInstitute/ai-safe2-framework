@@ -426,6 +426,7 @@ def main() -> int:
         "tested_candidates": [],
         "selected_model": None,
         "status": "unavailable",
+        "qualified": False,
     }
     if not api_key:
         receipt["failure_reason"] = "OPENROUTER_API_KEY is not configured"
@@ -521,6 +522,27 @@ def main() -> int:
                 )
                 receipt["selected_model"] = passing[0]["model"]
                 receipt["status"] = "selected"
+                receipt["qualified"] = True
+            elif available := [
+                item
+                for item in receipt["tested_candidates"]
+                if item.get("available") and item.get("assessment")
+            ]:
+                available.sort(
+                    key=lambda item: (
+                        -int(item["assessment"]["score"]),
+                        int(item["assessment"]["response_characters"]),
+                        int(item["latency_ms"]),
+                        str(item["model"]),
+                    )
+                )
+                receipt["selected_model"] = available[0]["model"]
+                receipt["status"] = "selected_degraded"
+                receipt["qualified"] = False
+                receipt["failure_reason"] = (
+                    "no tested candidate passed the full review canary; selected the "
+                    "highest-scoring responding model for advisory PR-Agent execution"
+                )
             elif not candidates:
                 receipt["failure_reason"] = (
                     "no candidate passed live catalog, expiry, status, and uptime filters"
@@ -545,6 +567,7 @@ def main() -> int:
         os.environ.get("GITHUB_OUTPUT"),
         {
             "available": str(bool(selected)).lower(),
+            "qualified": str(bool(receipt.get("qualified"))).lower(),
             "selected_model": selected,
             "tested_count": str(len(receipt["tested_candidates"])),
             "eligible_count": str(receipt["eligible_free_models_in_catalog"] or 0),
