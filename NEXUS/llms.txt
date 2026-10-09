@@ -1,4 +1,4 @@
-# NEXUS v0.5.0
+# NEXUS v0.6.0
 
 > Deterministic governance for agent-to-agent, agent-to-tool, and agent-to-payment execution. NEXUS is an optional AI SAFE² reference implementation; it is not required for framework conformance and is not production-assured by default.
 

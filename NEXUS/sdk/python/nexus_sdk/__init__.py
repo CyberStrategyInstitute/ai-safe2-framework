@@ -1,6 +1,6 @@
 """
 nexus_sdk - NEXUS-A2A Python SDK
-Cyber Strategy Institute | v0.5.0 | AI SAFE2 v3.1 Compatible
+Cyber Strategy Institute | v0.6.0 | AI SAFE2 v3.1 Compatible
 
 v0.5 additions:
     payments/    Sovereign Payment Gateway execution controls, independent
@@ -91,7 +91,7 @@ from nexus_sdk.otel import (
     build_tool_call_nor,
 )
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 __all__ = [
     # CAEL core
     "CAELEnvelope", "CAELSender", "CAELPolicy", "CAELBudget", "CAELDelegation",

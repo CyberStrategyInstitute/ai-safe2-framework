@@ -147,7 +147,7 @@ required. It must remain understandable without access to an agent's chat log.
 
 - AI SAFE² Framework: v3.1.0
 - AI SAFE² CLI: v1.0.1 (1.0.0 was a GitHub-only release and never reached PyPI; verify with `safe2 --version`)
-- NEXUS: v0.5.0
+- NEXUS: v0.6.0
 - Gateway: v3.0
 - MCP primary specification binding: 2026-07-28
 - MCP legacy compatibility binding: 2025-11-25

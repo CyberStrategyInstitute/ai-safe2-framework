@@ -1,8 +1,8 @@
-# NEXUS v0.5.0
+# NEXUS v0.6.0
 
 **Non-repudiable, Extensible, eXecutive-Unified, Sovereign Agent-to-Agent Governance**
 
-[![NEXUS](https://img.shields.io/badge/NEXUS-v0.5.0-820F1A?style=flat-square)](CHANGELOG.md)
+[![NEXUS](https://img.shields.io/badge/NEXUS-v0.6.0-820F1A?style=flat-square)](CHANGELOG.md)
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![License](https://img.shields.io/badge/License-Apache_2.0-808080?style=flat-square)](LICENSE)
 [![NEXUS CI](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/workflows/ci.yml)
@@ -59,7 +59,7 @@ Start with the [Sovereign Payment Gateway](payments/SOVEREIGN-GATEWAY.md) and
 ### Compatibility boundary
 
 The Python distribution is `nexus-a2a-sdk`; applications import it as
-`nexus_sdk`. Package release 0.5.0 retains the `CP.5.APAY/0.4` profile,
+`nexus_sdk`. Package release 0.6.0 retains the `CP.5.APAY/0.4` profile,
 schema filenames, policy identifiers, and wire contracts introduced in v0.4.
 The new gateway composes and hardens those contracts; it does not silently
 revise them. A future profile revision will use new, explicitly versioned
@@ -85,7 +85,7 @@ Two AISM invariants are added alongside the existing six: **I-7 Runtime-Bound Au
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                            NEXUS v0.5.0                                     │
+│                            NEXUS v0.6.0                                     │
 ├───────────┬─────────────────────────────────────────────────────────────────┤
 │ L7        │ Value Integrity        CP.5.APAY: mandates, runtime binding,    │
 │           │                        containment, revocation, PTR evidence    │
@@ -425,4 +425,4 @@ See:
 
 ---
 
-*AI SAFE² v3.1 reference implementation · NEXUS v0.5.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.1 reference implementation · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*

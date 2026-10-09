@@ -48,7 +48,7 @@ STALE_LABEL = re.compile(
 MIGRATION_CONTEXT = re.compile(r"\bv3\.1\b")
 MCP_NAMED = re.compile(r"\bMCP-(\d{1,2})\s*\((?![^)]*\d{3})([A-Z][A-Za-z0-9–\- ]{3,60})\)")
 NEXUS_CLAIM = re.compile(r"(?<![-\w])NEXUS(?: remains(?: an optional)?)? v(\d+\.\d+)(?:\.\d+)?\b")
-NEXUS_EXEMPT = re.compile(r"legacy|compat|control checks|v\d+\.\d+ checks|added in|introduced in|canonical message", re.IGNORECASE)
+NEXUS_EXEMPT = re.compile(r"legacy|compat|control checks|v\d+\.\d+ checks|added in|introduced in|canonical message|release notes", re.IGNORECASE)
 MAX_BYTES = 2_000_000
 
 

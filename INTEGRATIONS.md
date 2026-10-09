@@ -20,10 +20,10 @@ The current v3.1 architecture separates five operational surfaces:
 | **Design-time** | `skills/`, MCP server | Framework guidance, control lookup, classification, code-review support |
 | **Pre-commit / CI** | `scanner/` | Static-analysis and governance-gap detection |
 | **North-south runtime** | Gateway v3.0 | Model/provider boundary enforcement and audit |
-| **East-west runtime** | NEXUS v0.5 | Agent identity, delegation, lineage, policy, revocation, receipts |
+| **East-west runtime** | NEXUS v0.6 | Agent identity, delegation, lineage, policy, revocation, receipts |
 | **Agent-to-tool runtime** | CP.5.MCP + NEXUS MCP adapter/toolkit | MCP/tool authorization, provenance, returned-content trust, state and resource binding |
 
-Component versions are independent from the framework version. AI SAFE² is currently v3.1; the Gateway remains v3.0 until it has its own tested release, and NEXUS is v0.5.0 (released 2026-10-04).
+Component versions are independent from the framework version. AI SAFE² is currently v3.1; the Gateway remains v3.0 until it has its own tested release, and NEXUS is v0.6.0.
 
 ---
 
@@ -51,7 +51,7 @@ Agent/model-provider interactions are governed for content boundaries, policy, e
 
 ### East-west
 
-Agent-to-agent interactions require identity, delegated authority, lineage, revocation, and evidence. [NEXUS v0.5](NEXUS/) is CSI's first-party reference implementation.
+Agent-to-agent interactions require identity, delegated authority, lineage, revocation, and evidence. [NEXUS v0.6](NEXUS/) is CSI's first-party reference implementation.
 
 ### Agent-to-tool
 
@@ -117,7 +117,7 @@ Do not rewrite Gateway v3.0 audit records as v3.1 merely because the framework a
 
 ## NEXUS
 
-[NEXUS v0.5](NEXUS/) is CSI's first-party reference implementation for governed agent-to-agent interactions and the reference path for the v3.1 agent-to-tool contract.
+[NEXUS v0.6](NEXUS/) is CSI's first-party reference implementation for governed agent-to-agent interactions and the reference path for the v3.1 agent-to-tool contract.
 
 AI SAFE² conformance does not require NEXUS specifically. Another implementation may conform when it satisfies the applicable controls and produces equivalent reconstructable evidence.
 
