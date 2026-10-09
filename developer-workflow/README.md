@@ -1,4 +1,20 @@
-# AI SAFE2 Developer Workflow
+<div align="center">
+
+# AI SAFE² Developer Workflow
+
+### Replayable evidence and human-owned decisions for software delivery
+
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![Developer Workflow](https://img.shields.io/badge/Developer_Workflow-v0.1.0-820F1A?style=flat-square)](docs/RELEASE-PLAN.md)
+[![CLI](https://img.shields.io/badge/CLI-1.0.1-808080?style=flat-square)](../safe2/README.md)
+
+[Framework Home](../README.md) | [Documentation Map](../docs/README.md) | [CLI](../safe2/README.md) | [Architecture](docs/ARCHITECTURE.md) | [Adoption Guide](docs/ADOPTION-GUIDE.md) | [Game Quickstart](docs/GAME-DEVELOPER-QUICKSTART.md)
+
+**Previous:** [← AI SAFE² CLI](../safe2/README.md) | **Next:** [NEXUS →](../NEXUS/)
+
+</div>
+
+---
 
 Version: 0.1.0 contract preview
 
