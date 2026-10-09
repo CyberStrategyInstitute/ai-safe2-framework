@@ -17,6 +17,7 @@ BASELINE_GROUPS = {
 
 MATERIAL_GROUPS = {
     "boundaries": (
+        "boundaries",
         "security and evidence boundaries",
         "product boundaries",
         "product and evidence boundaries",
@@ -25,7 +26,13 @@ MATERIAL_GROUPS = {
         "technology contribution and claim boundaries",
     ),
     "compatibility and recovery": ("compatibility and recovery", "compatibility", "rollback", "recovery"),
-    "deferred work": ("deferred and post-merge work", "follow-on work", "after merge", "deferred"),
+    "deferred work": (
+        "deferred work",
+        "deferred and post-merge work",
+        "follow-on work",
+        "after merge",
+        "deferred",
+    ),
 }
 
 
