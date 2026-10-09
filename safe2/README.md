@@ -1,7 +1,7 @@
 # AI SAFE² CLI
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
 
-[![CLI](https://img.shields.io/badge/CLI-1.0.1-F6921E?style=flat-square)](../README.md)
+[![CLI](https://img.shields.io/badge/CLI-1.1.0-F6921E?style=flat-square)](../README.md)
 [![Framework](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-820F1A?style=flat-square)](../README.md)
 
 [Start](#start-with-the-outcome) | [Give this to your agent](#give-this-to-your-agent) | [Install](#install) | [Choose a workflow](#choose-a-workflow) | [Harness compatibility](#harness-compatibility) | [Command reference](#command-map) | [Limits](#what-it-does-not-do)
@@ -23,6 +23,7 @@ or turn a self-assessment into a compliance claim.
 
 | If you need to... | Start here | What you receive |
 |---|---|---|
+| Get a first useful assessment without learning the command map | `safe2 start .` then `safe2 start . --execute` | A previewed, consent-bound local plan; canonical evidence; and two human next-step cards |
 | Understand a workstation or repository that runs several agents | `safe2 doctor . --assess --card-format markdown --card-output environment-card.md` | Harness inventory, coverage gaps, findings, and a human-readable Decision Card |
 | Assess a project before adoption or release | `safe2 assess . --scan-content --inspect-config` | A sealed assessment bundle with canonical JSON and a Decision Card |
 | Screen a downloaded or newly created agent skill | `safe2 gate skill PATH --strict` | An approve or reject decision with findings; the skill is never executed |
@@ -44,11 +45,13 @@ Paste this into Codex, Claude Code, Hermes, OpenClaw, Antigravity, or another
 agent that can run local commands and read files:
 
 ```text
-Install AI SAFE² CLI 1.0 in an isolated Python environment. Do not use elevated
+Install AI SAFE² CLI in an isolated Python environment. Do not use elevated
 privileges, do not expose secrets, do not enable a daemon, and do not connect to
 remote systems unless I explicitly authorize a named target. Run `safe2
-self-check --strict`, initialize this project without overwriting existing
-configuration, then run the bounded project assessment. Explain: (1) facts,
+self-check --strict`, then run `safe2 start .` and show me its read-only plan.
+Do not rerun it with `--execute` until I approve the plan and inspection scope.
+After approval, run the bounded guided assessment without overwriting existing
+configuration or evidence. Explain: (1) facts,
 (2) assumptions, (3) missing coverage, (4) conflicts, (5) high-priority risks,
 (6) recommended next actions, and (7) the exact evidence files created. Stop
 before any remediation, deployment, policy change, network access, or risk
@@ -62,6 +65,7 @@ That workflow deliberately separates machine evidence from human authority.
 
 | Situation | Workflow | Guide |
 |---|---|---|
+| First useful local assessment | Preview, approve, then execute `safe2 start` | [Guided start](docs/GUIDED-START.md) |
 | First installation or upgrade | Self-check and offline acceptance | [Installation](docs/INSTALLATION-CHECK.md) · [Acceptance](docs/STRANGER-ACCEPTANCE.md) |
 | New repository or unfamiliar agent environment | Initialize, discover, then assess | [Operator workflow](docs/CLI-1.0-WORKFLOW.md) · [Unified assessment](docs/UNIFIED-ASSESSMENT.md) |
 | New skill, plugin, or copied agent instruction | Quarantine, native gate, optional SkillSpector evidence, human decision | [Skill-screening demo](docs/SKILL-SCREENING-DEMO.md) · [Lessons learned](docs/SKILL-SCREENING-SECOND-PASS.md) |
@@ -156,7 +160,18 @@ safe2 --help
 
 ## Initialize a Project
 
-Create the versioned project configuration before the first assessment:
+The simplest first run previews every intended action and writes nothing:
+
+```bash
+safe2 start .
+safe2 start . --execute
+```
+
+Add `--scan-content --inspect-config` only after approving those local reads.
+For non-interactive automation, `--yes` records explicit operator authorization;
+it is not implied by `--execute`. See [guided start](docs/GUIDED-START.md).
+
+The lower-level workflow remains available when you need separate control:
 
 ```bash
 safe2 init . --profile local
@@ -191,6 +206,7 @@ pytest tests/ scanner/tests/
 
 | Command | Purpose | Decision behavior |
 |---|---|---|
+| `safe2 start PATH [--execute]` | Preview a consent-bound first local assessment and optionally create its evidence bundle | Preview-only by default; confirmation required; refuses overwrite and stops before remote access, remediation, deployment, publication, or conformance claims |
 | `safe2 init PATH` | Create a secure-default, versioned project configuration | Refuses overwrite and symbolic-link configuration paths |
 | `safe2 config show` | Show the normalized effective configuration and its precedence source | Inspection only; does not run an assessment |
 | `safe2 config validate FILE` | Validate bounded `safe2.config.v1` TOML | Rejects unknown keys, unsafe paths, symlinks, and malformed values |

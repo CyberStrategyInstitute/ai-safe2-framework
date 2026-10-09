@@ -48,8 +48,9 @@ Use it when you need to:
 ### The shortest safe start
 
 ```bash
-python -m pip install "ai-safe2[all]==1.0.1"
+python -m pip install "ai-safe2[all]==1.1.0"
 safe2 self-check --strict
+safe2 start .
 mkdir review-project
 cd review-project
 safe2 init .

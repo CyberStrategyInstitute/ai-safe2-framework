@@ -58,6 +58,9 @@ value and prerequisite relationships, not a calendar.
 
 ### Priority 1 — Guided agent onboarding and orchestration
 
+**Status:** Implemented in CLI 1.1.0 through `safe2 start`; retained here as
+the acceptance record for the capability.
+
 **Problem:** 1.0 has the necessary primitives, but a first-time user or agent
 must still assemble several commands and source artifacts.
 
@@ -70,6 +73,12 @@ and stop before remote access or remediation.
 **Done when:** A clean-install evaluator can move from “point my agent at this
 repository” to a reviewable local assessment without reading the full command
 reference, and every skipped or unauthorized evidence domain remains visible.
+
+**Delivered boundary:** The command previews without writing, requires
+`--execute` plus interactive confirmation or explicit `--yes`, preserves
+content/config inspection as separate consent, reuses but never replaces an
+existing project configuration, publishes into a new evidence directory, and
+performs no remote access or remediation.
 
 ### Priority 2 — Harness admission-hook kit
 

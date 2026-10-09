@@ -90,8 +90,8 @@ def verify_uninstalled() -> None:
         raise RuntimeError("safe2 console entry point remains in the active environment after uninstall")
 
 
-# Accepted CLI release tags: `v1.0.1`, or the dated house style containing
-# `CLI_1.0.1` (for example `2026-10-05_CLI_1.0.1` or `2026-10-05_CLI_1.0.1_Title`). The version in the tag must
+# Accepted CLI release tags: `v1.1.0`, or the dated house style containing
+# `CLI_1.1.0` (for example `2026-10-09_CLI_1.1.0` or `2026-10-09_CLI_1.1.0_Title`). The version in the tag must
 # equal pyproject.toml; anything else fails before a build is published.
 _VERSION = r"(\d+\.\d+\.\d+(?:(?:a|b|rc)\d+)?(?:\.post\d+)?)"
 _V_TAG = re.compile(rf"^v{_VERSION}$")
@@ -123,7 +123,7 @@ def check_tag(tag: str, expected_version: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--expected-version", default="1.0.1")
+    parser.add_argument("--expected-version", default="1.1.0")
     parser.add_argument("--verify-uninstalled", action="store_true")
     parser.add_argument("--check-tag")
     args = parser.parse_args()
