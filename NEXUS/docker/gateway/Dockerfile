@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 LABEL org.opencontainers.image.title="NEXUS Sovereign Gateway"
 LABEL org.opencontainers.image.description="NEXUS-A2A sovereign gateway wrapping MCP/ACS endpoints"
