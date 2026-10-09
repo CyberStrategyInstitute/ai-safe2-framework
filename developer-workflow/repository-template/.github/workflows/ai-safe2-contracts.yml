@@ -58,11 +58,30 @@ jobs:
           cat "$RUNNER_TEMP/ai-safe2-change-route.json" >> "$GITHUB_STEP_SUMMARY"
           echo '```' >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Explain the installed workflow
+        run: >-
+          python scripts/explain_workflow.py
+          --workflow .ai-safe2/workflow.json
+          --profile .ai-safe2/profiles/game.json
+          --output "$RUNNER_TEMP/AI-SAFE2-DEVELOPER-WORKFLOW.md"
+
+      - name: Add workflow explanation to the job summary
+        shell: bash
+        run: cat "$RUNNER_TEMP/AI-SAFE2-DEVELOPER-WORKFLOW.md" >> "$GITHUB_STEP_SUMMARY"
+
       - name: Upload replayable route evidence
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: ai-safe2-change-route
           path: ${{ runner.temp }}/ai-safe2-change-route.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload workflow explanation
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ai-safe2-workflow-explanation
+          path: ${{ runner.temp }}/AI-SAFE2-DEVELOPER-WORKFLOW.md
           if-no-files-found: error
           retention-days: 14
 

@@ -20,6 +20,20 @@
 - [x] Starter CI emits a replayable route artifact on every pull request
 - [x] Canonical evidence digest semantics documented
 
+## Adoption experience added after 0.1.0
+
+- [x] Before/after value is visible before installation
+- [x] Architecture and pull-request flow diagrams are included
+- [x] Folder structure and delivered components are explained
+- [x] Optional planning, code-review, security-review, and runtime modules are
+  separated by capability and status
+- [x] Repository-specific workflow explanation can be generated locally
+- [x] Starter CI publishes that explanation in its summary and as an artifact
+- [x] Explanation generation has a release/template parity contract test
+- [ ] Validate the onboarding flow in a clean external canary repository
+- [ ] Add mobile, API/service, and AI-agent profiles only after each has a
+  tested canary and documented trust boundaries
+
 ## Repository owner before publishing
 
 - [ ] Choose the GitHub repository name and visibility

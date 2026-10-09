@@ -49,6 +49,46 @@ Providers may change without changing these contracts. Additive schema fields
 are permitted within v1. Removing or changing the meaning of a required field
 requires a new major schema version.
 
+## Modular developer stack
+
+The Developer Workflow is assembled around capabilities, not brands. A team
+can replace a provider without rewriting its decision contract.
+
+```mermaid
+flowchart LR
+    GOAL[Repository goal and risk profile] --> ROUTE[Change route]
+    ROUTE --> METHOD[Development method]
+    ROUTE --> CHECKS[Deterministic checks]
+    ROUTE --> REVIEW[Semantic and security review]
+    ROUTE --> RUNTIME[Runtime or deployment evidence]
+
+    METHOD --> M1[Superpowers or team method]
+    CHECKS --> M2[Tests, build, lint, CodeQL, Semgrep, Gitleaks]
+    REVIEW --> M3[Codex, Claude, Greptile, human specialist]
+    RUNTIME --> M4[NEXUS, Sovereign Runtime, MCP or service receipts]
+
+    M1 --> E[Normalized evidence]
+    M2 --> E
+    M3 --> E
+    M4 --> E
+    E --> STATE[Hold or ready for human decision]
+    STATE --> HUMAN[Named human decision]
+```
+
+| Module | Question it answers | Default posture |
+|---|---|---|
+| Product profile | What does this kind of repository need reviewed? | Required and repository-specific |
+| Development method | How should the work be planned, tested, debugged, and verified? | Optional; Superpowers is one supported method |
+| Deterministic checks | Did repeatable tests and scanners pass on this revision? | First evidence to integrate |
+| Semantic code review | What correctness, design, and maintainability risks remain? | Proportionate to route |
+| Security review | Can the change violate a trust boundary or security property? | Required only when policy says so |
+| Runtime adapter | What happened when an agent or production system acted? | Add when runtime actions are in scope |
+| Strategic reviewer | Would a second opinion materially improve a major integration or release decision? | Selective, not an every-change default |
+
+The repository template ships a game profile and manifests for optional
+adapters. A manifest is a declared integration boundary, not proof that the
+provider is connected or operational.
+
 ## Product surfaces
 
 ### Developer Workflow

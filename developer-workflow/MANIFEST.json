@@ -22,7 +22,7 @@
     "everyday_action": false
   },
   "validation": {
-    "contract_tests": 9,
+    "contract_tests": 10,
     "schema_validation": "passed",
     "validated_on": "2026-10-09"
   }
