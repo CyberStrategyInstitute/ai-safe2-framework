@@ -40,7 +40,8 @@ report of the installed routes, review options, trust boundaries, limitations,
 and next extensions. Teams can begin with routing and deterministic checks,
 then add stronger planning with Superpowers, semantic review, Codex or Claude
 security review, strategic Greptile review, or runtime evidence where the risk
-justifies it. See the [Adoption Guide](developer-workflow/docs/ADOPTION-GUIDE.md)
+justifies it. See the [Adoption Guide](developer-workflow/docs/ADOPTION-GUIDE.md),
+[Tool Setup and Capability Selection](developer-workflow/docs/TOOL-SETUP-GUIDE.md),
 and [game quickstart](developer-workflow/docs/GAME-DEVELOPER-QUICKSTART.md).
 
 Use it when you need to:

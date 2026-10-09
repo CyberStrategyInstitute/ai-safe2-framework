@@ -40,6 +40,7 @@ jobs:
       PR_AGENT_FREE_MAX_MODEL_TOKENS: "16000"
       PR_AGENT_FREE_MAX_CALLS: "1"
       PR_AGENT_OPENAI_MAX_MODEL_TOKENS: "64000"
+      PR_AGENT_SOURCE_COMMIT: 1d01f24f455bb879c1d9c557ad7de3d72dcc7975
     steps:
       - name: Check out review policy and preflight
         uses: actions/checkout@v7
@@ -88,14 +89,31 @@ jobs:
           --policy .ai-safe2/pr-agent-preflight-policy.json
           --receipt pr-agent-preflight.json
 
+      - name: Set up Python for PR-Agent
+        if: steps.route.outputs.route == 'solution'
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install pinned PR-Agent source
+        if: steps.route.outputs.route == 'solution'
+        timeout-minutes: 3
+        shell: bash
+        run: >-
+          python -m pip install --disable-pip-version-check
+          "pr-agent @ git+https://github.com/The-PR-Agent/pr-agent.git@${PR_AGENT_SOURCE_COMMIT}"
+
       - name: Review with PR-Agent through OpenRouter
         id: pr-agent-free
         if: steps.route.outputs.route == 'solution' && steps.preflight.outputs.available == 'true'
         continue-on-error: true
         timeout-minutes: 5
-        uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
+        shell: bash
+        run: python -m pr_agent.cli --pr_url "$PR_URL" review
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          PR_URL: ${{ github.event.pull_request.html_url || format('{0}/{1}/pull/{2}', github.server_url, github.repository, github.event.issue.number) }}
+          GITHUB__USER_TOKEN: ${{ github.token }}
           # PR-Agent expects the nested OpenRouter setting under this exact
           # environment name. The repository secret keeps its existing name.
           OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}
@@ -165,10 +183,12 @@ jobs:
         if: always() && steps.route.outputs.route == 'solution' && steps.free-publication.outputs.produced != 'true'
         continue-on-error: true
         timeout-minutes: 5
-        uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
+        shell: bash
+        run: python -m pr_agent.cli --pr_url "$PR_URL" review
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          PR_URL: ${{ github.event.pull_request.html_url || format('{0}/{1}/pull/{2}', github.server_url, github.repository, github.event.issue.number) }}
+          GITHUB__USER_TOKEN: ${{ github.token }}
+          OPENAI__KEY: ${{ secrets.OPENAI_KEY }}
           config.model: ${{ env.PR_AGENT_OPENAI_FALLBACK_MODEL }}
           config.fallback_models: '[]'
           config.custom_model_max_tokens: "256000"
