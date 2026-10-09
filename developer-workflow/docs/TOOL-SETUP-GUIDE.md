@@ -176,7 +176,9 @@ and its [live model catalog API](https://openrouter.ai/docs/api/api-reference/mo
    - `.ai-safe2/pr-agent-preflight-policy.json`
    - `scripts/pr_agent_preflight.py`
    - `scripts/classify_pr_change.py`
-2. Keep `the-pr-agent/pr-agent` pinned to a reviewed commit SHA.
+2. Install PR-Agent's supported Python CLI from a reviewed commit SHA. The
+   reference workflow intentionally avoids the Docker-based action so Docker
+   Hub throttling cannot prevent the reviewer from starting.
 3. Map the route classifier to the adopting repository. Documentation and
    simple asset changes should not consume a semantic review by default.
 4. Keep live model discovery and the bounded canary. Free-model names and
