@@ -8,7 +8,7 @@
 [![Developer Workflow](https://img.shields.io/badge/Developer_Workflow-v0.1.0-820F1A?style=flat-square)](docs/RELEASE-PLAN.md)
 [![CLI](https://img.shields.io/badge/CLI-1.0.1-808080?style=flat-square)](../safe2/README.md)
 
-[Framework Home](../README.md) | [Documentation Map](../docs/README.md) | [CLI](../safe2/README.md) | [Architecture](docs/ARCHITECTURE.md) | [Adoption Guide](docs/ADOPTION-GUIDE.md) | [Game Quickstart](docs/GAME-DEVELOPER-QUICKSTART.md)
+[Framework Home](../README.md) | [Documentation Map](../docs/README.md) | [CLI](../safe2/README.md) | [Architecture](docs/ARCHITECTURE.md) | [Adoption Guide](docs/ADOPTION-GUIDE.md) | [Tool Setup](docs/TOOL-SETUP-GUIDE.md) | [Game Quickstart](docs/GAME-DEVELOPER-QUICKSTART.md)
 
 **Previous:** [← AI SAFE² CLI](../safe2/README.md) | **Next:** [NEXUS →](../NEXUS/)
 
@@ -78,6 +78,9 @@ The workflow may prepare a decision. It cannot authorize one.
 - revision-bound evidence evaluation that can only reach
   `ready_for_human_decision`;
 - an installation-explanation generator for the adopting repository;
+- a guided setup assistant that starts with the required core and recommends
+  optional planning, review, security, strategic-review, and runtime modules
+  from explicit repository goals;
 - manifests and boundaries for deterministic tools, AI reviewers, security
   reviewers, runtime systems, MCP Pro, Agency Check, Sovereign Runtime, and
   Drift/Love Equation integrations;
@@ -142,7 +145,16 @@ requests. It does not need to copy the AI SAFE2 framework content.
 2. Copy `repository-template/` into the game repository.
 3. Copy or adapt `profiles/game.json` as `.ai-safe2/profiles/game.json`.
 4. Replace repository owners and example commands with real values.
-5. Validate and generate the repository-specific explanation:
+5. Generate a goal-based setup plan. This asks what outcomes need help but
+   does not install services or add credentials:
+
+   ```console
+   python scripts/setup_assistant.py \
+     --interactive \
+     --output AI-SAFE2-SETUP-PLAN.md
+   ```
+
+6. Validate and generate the repository-specific explanation:
 
    ```console
    python scripts/validate_workflow.py --root .
@@ -152,12 +164,13 @@ requests. It does not need to copy the AI SAFE2 framework content.
      --output AI-SAFE2-DEVELOPER-WORKFLOW.md
    ```
 
-6. Read the generated explanation, confirm the paths and required evidence,
+7. Read the generated plan and explanation, confirm the paths, selected
+   modules, and required evidence,
    then open a setup pull request. Claude and Codex continue to work as they
    did before.
 
 See [Game Developer Quickstart](docs/GAME-DEVELOPER-QUICKSTART.md) and
-[Contract semantics](docs/CONTRACTS.md).
+[Tool Setup and Capability Selection](docs/TOOL-SETUP-GUIDE.md).
 
 ## Decision and provider states
 

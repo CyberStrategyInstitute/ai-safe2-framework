@@ -32,6 +32,10 @@
 - [x] Starter CI verifies the pinned AI SAFE2 CLI and emits both CLI routing
   and human decision records for the exact revision
 - [x] Explanation generation has a release/template parity contract test
+- [x] New users can generate a goal-based setup plan without enabling external
+  services or adding credentials
+- [x] OpenRouter/PR-Agent, Greptile, planning, security, runtime, and upstream
+  setup tasks have one linked owner/maintainer/acceptance guide
 - [ ] Validate the onboarding flow in a clean external canary repository
 - [ ] Add mobile, API/service, and AI-agent profiles only after each has a
   tested canary and documented trust boundaries
