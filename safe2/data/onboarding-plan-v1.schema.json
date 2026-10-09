@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyberstrategyinstitute.com/schemas/safe2/onboarding-plan-v1.schema.json",
+  "title": "AI SAFE2 Guided Onboarding Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "plan_id", "target", "configuration", "consent", "output_dir", "steps", "stops_before", "authority"],
+  "properties": {
+    "schema_version": {"const": "safe2.onboarding-plan.v1"},
+    "plan_id": {"type": "string", "pattern": "^safe2-start-[a-f0-9]{16}$"},
+    "target": {"type": "string", "minLength": 1},
+    "configuration": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "action", "profile", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "action": {"enum": ["create", "reuse"]},
+        "profile": {"enum": ["local", "ci", "enterprise"]},
+        "sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "consent": {
+      "type": "object", "additionalProperties": false,
+      "required": ["read_project_content", "read_project_content_source", "inspect_redacted_configuration_structure", "inventory_wsl_names", "network_access"],
+      "properties": {
+        "read_project_content": {"type": "boolean"},
+        "read_project_content_source": {"enum": ["none", "command", "configuration"]},
+        "inspect_redacted_configuration_structure": {"type": "boolean"},
+        "inventory_wsl_names": {"type": "boolean"},
+        "network_access": {"const": false}
+      }
+    },
+    "output_dir": {"type": "string", "minLength": 1},
+    "steps": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"type": "string", "minLength": 1}},
+    "stops_before": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"type": "string", "minLength": 1}},
+    "authority": {"type": "string", "minLength": 1}
+  }
+}

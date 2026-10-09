@@ -40,6 +40,7 @@ from safe2.commands.scan import scan
 from safe2.commands.schema import schema
 from safe2.commands.score import score
 from safe2.commands.self_check import self_check
+from safe2.commands.start import start
 
 
 @click.group()
@@ -50,6 +51,7 @@ def cli():
     \b
     safe2 scan project .            161-control static audit, findings only
     safe2 init .                    secure-default project configuration
+    safe2 start .                   preview a guided local first assessment
     safe2 assess .                  bounded project assessment bundle
     safe2 config show              effective configuration and source
     safe2 scan skill ./my-skill     skill package static scan, findings only
@@ -106,6 +108,7 @@ cli.add_command(report)
 cli.add_command(mcp)
 cli.add_command(schema)
 cli.add_command(self_check)
+cli.add_command(start)
 
 
 @cli.command("serve")

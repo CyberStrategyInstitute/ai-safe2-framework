@@ -9,6 +9,8 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
 SCHEMAS = {
+    "onboarding-plan-v1": "onboarding-plan-v1.schema.json",
+    "onboarding-result-v1": "onboarding-result-v1.schema.json",
     "adapter-descriptor-v1": "adapter-descriptor-v1.schema.json",
     "adapter-evidence-v1": "adapter-evidence-v1.schema.json",
     "adapter-conformance-v1": "adapter-conformance-v1.schema.json",

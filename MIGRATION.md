@@ -1,5 +1,24 @@
 # safe2 CLI 1.0 migration and compatibility
 
+## Upgrade to 1.1.0
+
+1.1.0 adds the backward-compatible `safe2 start` guided onboarding command and
+two additive contracts: `safe2.onboarding-plan.v1` and
+`safe2.onboarding-result.v1`. Existing 1.0 commands and evidence schemas remain
+available. The new command is preview-only unless `--execute` is supplied; an
+interactive confirmation or explicit `--yes` is also required. It never
+overwrites configuration or evidence.
+
+```console
+python -m pip install --upgrade "ai-safe2[all]==1.1.0"
+safe2 self-check --strict
+safe2 start .
+```
+
+Review the plan before adding `--execute`. Existing automation does not need to
+migrate unless it chooses the guided workflow. Rollback means using a fresh
+environment with 1.0.1; retain 1.1.0 evidence with its producing version.
+
 ## Upgrade to 1.0.1
 
 1.0.1 is the first 1.0 build on PyPI; 1.0.0 was published on GitHub only.

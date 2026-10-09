@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_release_version_is_consistent_across_package_and_qualification() -> None:
     project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
-    assert project["project"]["version"] == "1.0.1"
-    assert __package_version__ == __version__ == "1.0.1"
+    assert project["project"]["version"] == "1.1.0"
+    assert __package_version__ == __version__ == "1.1.0"
     workflow = (ROOT / ".github/workflows/cli-release-qualification.yml").read_text(
         encoding="utf-8"
     )
@@ -29,6 +29,7 @@ def test_release_documentation_links_exist() -> None:
         "safe2/docs/CLI-STABILITY.md",
         "safe2/docs/PYTHON-COMPATIBILITY.md",
         "safe2/docs/STRANGER-ACCEPTANCE.md",
+        "safe2/docs/GUIDED-START.md",
         "MIGRATION.md",
     ):
         assert (ROOT / relative).is_file(), relative

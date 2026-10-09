@@ -7,6 +7,7 @@ evidence operations, validation records, and product guidance.
 
 | I need to… | Start here |
 | --- | --- |
+| Get a first useful local assessment | [Guided start](GUIDED-START.md) |
 | Install or verify the CLI | [Installation self-check](INSTALLATION-CHECK.md) and [runtime compatibility](PYTHON-COMPATIBILITY.md) |
 | Delegate a bounded first run to an agent | [CLI 1.0 operator workflow](CLI-1.0-WORKFLOW.md) |
 | Configure deterministic behavior | [CLI configuration](CLI-CONFIGURATION.md) |

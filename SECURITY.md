@@ -3,7 +3,7 @@
 ## Supported Versions
 
 Framework, CLI and component versions are independent. The current framework is
-AI SAFE² v3.1. The current `ai-safe2` CLI is **1.0.1**, published to PyPI by the
+AI SAFE² v3.1. The current `ai-safe2` CLI is **1.1.0**, published to PyPI by the
 release workflow, which installs the uploaded version to confirm it. 1.0.0 was a
 GitHub-only release. Verify the version you run with `safe2 --version` and check
 release status against the published release, not a branch. CLI 0.2.0 and later include the skill-gate hardening described in
@@ -13,8 +13,9 @@ release status against the published release, not a branch. CLI 0.2.0 and later 
 | Surface | Version | Security support |
 | ------- | ------- | ---------------- |
 | AI SAFE² Framework | 3.1.x | Current |
-| `ai-safe2` CLI package | 1.0.x | Current (1.0.1 and later on PyPI) |
-| `ai-safe2` CLI package | 0.9.x and earlier | Upgrade to 1.0.1: 0.9.0 contains the gameable MCP scorer |
+| `ai-safe2` CLI package | 1.1.x | Current |
+| `ai-safe2` CLI package | 1.0.x | Security fixes only; upgrade to 1.1.0 for guided onboarding |
+| `ai-safe2` CLI package | 0.9.x and earlier | Upgrade to 1.1.0: 0.9.0 contains the gameable MCP scorer |
 | NEXUS reference implementation | 0.5.x | Current component |
 | Gateway | 3.0.x | Current component (north-south plane) |
 | Older framework, CLI and component releases | Earlier | No routine fixes |
