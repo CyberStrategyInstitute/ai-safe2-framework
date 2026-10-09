@@ -35,10 +35,17 @@ def classify(paths: list[str], profile: dict) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--profile", type=Path, required=True)
-    parser.add_argument("--paths-json", required=True)
+    paths_group = parser.add_mutually_exclusive_group(required=True)
+    paths_group.add_argument("--paths-json")
+    paths_group.add_argument("--paths-file", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    result = classify(json.loads(args.paths_json), json.loads(args.profile.read_text(encoding="utf-8")))
+    paths = (
+        json.loads(args.paths_json)
+        if args.paths_json is not None
+        else [line.strip() for line in args.paths_file.read_text(encoding="utf-8").splitlines() if line.strip()]
+    )
+    result = classify(paths, json.loads(args.profile.read_text(encoding="utf-8")))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result))

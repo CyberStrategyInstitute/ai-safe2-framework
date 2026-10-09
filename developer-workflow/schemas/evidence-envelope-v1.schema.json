@@ -22,11 +22,12 @@
     "producer": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["adapter_id", "name", "version"],
+      "required": ["adapter_id", "name", "version", "capabilities"],
       "properties": {
         "adapter_id": {"type": "string", "minLength": 1},
         "name": {"type": "string", "minLength": 1},
         "version": {"type": "string", "minLength": 1},
+        "capabilities": {"type": "array", "items": {"type": "string", "minLength": 1}, "minItems": 1, "uniqueItems": true},
         "model": {"type": ["string", "null"]}
       }
     },
@@ -55,6 +56,16 @@
         "signature": {"type": ["string", "null"]}
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"execution": {"properties": {"status": {"const": "produced"}}, "required": ["status"]}}},
+      "then": {"properties": {"execution": {"properties": {"started_at": {"type": "string", "format": "date-time"}, "completed_at": {"type": "string", "format": "date-time"}}}}}
+    },
+    {
+      "if": {"properties": {"execution": {"properties": {"status": {"enum": ["unavailable", "failed"]}}, "required": ["status"]}}},
+      "then": {"properties": {"execution": {"properties": {"failure_reason": {"type": "string", "minLength": 1}}, "required": ["failure_reason"]}}}
+    }
+  ]
 }
 

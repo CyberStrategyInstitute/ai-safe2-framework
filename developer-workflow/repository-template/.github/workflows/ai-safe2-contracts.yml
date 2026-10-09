@@ -2,11 +2,6 @@ name: AI SAFE2 Contract Validation
 
 on:
   pull_request:
-    paths:
-      - ".ai-safe2/**"
-      - "AGENTS.md"
-      - "CLAUDE.md"
-      - "scripts/validate_workflow.py"
   workflow_dispatch:
 
 permissions:
@@ -20,6 +15,7 @@ jobs:
       - name: Check out exact candidate
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - name: Set up Python
@@ -32,6 +28,43 @@ jobs:
 
       - name: Validate workflow configuration
         run: python scripts/validate_workflow.py --root .
+
+      - name: Identify changed paths
+        id: changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            git diff --name-only "$BASE_SHA...$HEAD_SHA" > "$RUNNER_TEMP/changed-paths.txt"
+          else
+            git diff-tree --no-commit-id --name-only -r HEAD > "$RUNNER_TEMP/changed-paths.txt"
+          fi
+
+      - name: Classify change route
+        run: >-
+          python scripts/classify_change.py
+          --profile .ai-safe2/profiles/game.json
+          --paths-file "$RUNNER_TEMP/changed-paths.txt"
+          --output "$RUNNER_TEMP/ai-safe2-change-route.json"
+
+      - name: Summarize route
+        shell: bash
+        run: |
+          echo "## AI SAFE2 change route" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$RUNNER_TEMP/ai-safe2-change-route.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload replayable route evidence
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ai-safe2-change-route
+          path: ${{ runner.temp }}/ai-safe2-change-route.json
+          if-no-files-found: error
+          retention-days: 14
 
       - name: Explain authority boundary
         run: echo "Validation supplies evidence. A named human still decides whether to merge or release." >> "$GITHUB_STEP_SUMMARY"

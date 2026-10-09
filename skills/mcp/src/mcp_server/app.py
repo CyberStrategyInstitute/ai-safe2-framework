@@ -55,6 +55,7 @@ from mcp_server.tools.risk_scoring import calculate_risk_score
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 structlog.configure(
+    logger_factory=structlog.PrintLoggerFactory(file=sys.stderr),
     wrapper_class=structlog.make_filtering_bound_logger(
         getattr(__import__("logging"), LOG_LEVEL, 20)
     ),

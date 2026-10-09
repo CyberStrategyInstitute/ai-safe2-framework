@@ -1,0 +1,39 @@
+{
+  "schema_version": "ai-safe2.product-profile.v1",
+  "profile_id": "game",
+  "name": "Game development",
+  "lenses": [
+    "deterministic-simulation",
+    "save-integrity-and-migration",
+    "client-server-authority",
+    "multiplayer-abuse-and-anti-cheat",
+    "economy-inventory-purchase-entitlements",
+    "user-generated-content",
+    "asset-and-dependency-provenance",
+    "frame-time-memory-loading",
+    "privacy-telemetry-platform-permissions",
+    "build-signing-store-release-rollback"
+  ],
+  "critical_patterns": [
+    ".github/workflows/**",
+    "**/auth/**",
+    "**/payments/**",
+    "**/economy/**",
+    "**/entitlements/**",
+    "**/multiplayer/**",
+    "**/server/**",
+    "**/save/migrations/**",
+    "**/signing/**"
+  ],
+  "enhanced_patterns": [
+    "**/*.cs",
+    "**/*.cpp",
+    "**/*.h",
+    "**/*.gd",
+    "**/*.lua",
+    "**/gameplay/**",
+    "**/ui/**",
+    "**/assets/**"
+  ],
+  "required_human_roles_for_critical": ["maintainer", "security-or-platform-owner"]
+}

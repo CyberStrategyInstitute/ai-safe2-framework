@@ -27,6 +27,10 @@ This preview provides:
   and Codex;
 - an upstream dependency inventory that favors pinned, isolated upgrades;
 - validation and example decision-record generation scripts.
+- deterministic change routing in the starter GitHub workflow, with a
+  replayable route artifact;
+- revision-bound evidence completeness evaluation that cannot authorize a
+  merge or release.
 
 Provider execution remains opt-in. Installing this pack does not call an
 external model or change a developer's Claude or Codex configuration.
@@ -74,6 +78,8 @@ the core itself. See [Architecture](docs/ARCHITECTURE.md).
    explicitly enabled.
 
 See [Game Developer Quickstart](docs/GAME-DEVELOPER-QUICKSTART.md).
+Contract semantics, including canonical evidence digests, are defined in
+[Contract semantics](docs/CONTRACTS.md).
 
 ## Decision states
 

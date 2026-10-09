@@ -315,6 +315,16 @@ class TestCommandAllowlist:
         ok, reason = self._call("python3.12", ["python3.12", "-m", "mcp_server.app"])
         assert ok, reason
 
+    def test_valid_windows_python_executable(self):
+        from mcp_server import auth as auth_module
+        with (
+            patch.object(auth_module, "MCP_INSTALL_PATH", ""),
+            patch("sys.executable", r"C:\\Python311\\python.exe"),
+            patch("sys.argv", ["python.exe", "-m", "mcp_server.app"]),
+        ):
+            ok, reason = auth_module._verify_command_allowlist()
+        assert ok, reason
+
     def test_valid_entry_point(self):
         ok, reason = self._call("python3", ["ai-safe2-mcp"])
         assert ok, reason

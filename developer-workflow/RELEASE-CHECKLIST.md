@@ -15,6 +15,10 @@
 - [x] Upstream dependency policy documented
 - [x] Contract tests passed
 - [x] JSON schemas validated against bundled examples
+- [x] Terminal approvals require an attributable human decision record
+- [x] Evidence completeness is capability- and revision-bound
+- [x] Starter CI emits a replayable route artifact on every pull request
+- [x] Canonical evidence digest semantics documented
 
 ## Repository owner before publishing
 
