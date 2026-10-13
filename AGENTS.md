@@ -93,11 +93,16 @@ completion, or risk-acceptance authority. See
    findings, document accepted residual risk, and stop when defined acceptance
    gates pass or a decision owner must intervene.
 6. For GitHub changes, complete local pre-push gates, then open a draft pull
-   request. When Greptile is configured, run `check-pr`, address valid findings,
-   rerun affected first-party checks, and use `greploop` for no more than five
-   review cycles before marking the pull request ready. If Greptile is absent,
-   unavailable, or degraded, record that state explicitly; never manufacture a
-   confidence score or treat missing provider output as approval.
+   request. Run `check-pr`, address valid findings, and rerun affected
+   first-party checks. Select independent review according to the development
+   policy and explicit owner instructions. Greptile is advisory and recommended
+   for critical integration points; configuring it does not require invoking it
+   on every PR. Use `greploop` only when the owner explicitly requests it, for
+   no more than five review cycles. Honor owner instructions not to trigger a
+   provider. Record skipped, absent, unavailable, or degraded review explicitly;
+   never manufacture a confidence score or treat missing provider output as
+   approval. Readiness depends on applicable first-party gates and required
+   evidence, not a vendor score.
 
 ### 5. Ship with receipts
 

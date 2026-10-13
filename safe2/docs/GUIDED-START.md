@@ -6,8 +6,9 @@ for an agent that needs a clear stopping point before it changes anything.
 
 ## Quick start
 
-Preview the plan. This reads only enough filesystem metadata to validate the
-target and existing AI SAFE² configuration; it writes no files:
+Preview the plan. This validates the target's filesystem metadata and, when
+present, reads and validates the bounded local AI SAFE² configuration to show
+the effective inspection scope. It writes no files:
 
 ```console
 safe2 start .
