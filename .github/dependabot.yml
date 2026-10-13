@@ -21,6 +21,11 @@ updates:
     schedule: {interval: weekly, day: monday, time: "06:30"}
     open-pull-requests-limit: 3
     labels: [dependencies, python]
+    # The knowledge server uses MCP SDK v1 APIs. A major upgrade requires
+    # skills/mcp/MCP-V2-MIGRATION.md, not a dependency-only range expansion.
+    ignore:
+      - dependency-name: mcp
+        update-types: [version-update:semver-major]
 
 
   - package-ecosystem: github-actions

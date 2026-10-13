@@ -147,6 +147,9 @@ Treat `TOKENS` as a legacy entitlement mechanism. Do not describe it as MCP-19-c
 
 The server requires `mcp>=1.12,<2`. MCP SDK 2.x renamed `FastMCP` and changed other v1 APIs; the pin keeps a fresh `pip install` startable.
 
+See the [v1-to-v2 migration matrix](MCP-V2-MIGRATION.md) before changing this
+compatibility boundary. A dependency-only range expansion is not a migration.
+
 ## What the Server Provides
 
 The server supports framework-oriented capabilities including:
