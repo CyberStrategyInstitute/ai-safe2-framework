@@ -4,14 +4,25 @@
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Review](https://img.shields.io/badge/Docs-Repository_Review-820F1A?style=flat-square)](./TECHNOLOGY-PROFILE-REPO-REVIEW.md)
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
 ---
 
 **Documentation updated:** 2026-10-02. TCP and Evidence Assurance v1.0 are CSI
 assessment methods for use and feedback. All AISM pages include a dated change
-summary and link the [practical assessment guide](../AISM/ASSESSMENT-GUIDE.md).
+summary and link the [practical assessment guide](ASSESSMENT-GUIDE.md).
 Release announcements are prepared outside the repository for owner publication.
+
+## Canonical-home update (2026-10-13)
+
+The complete TCP, Evidence Assurance, Technology Card, validation, incident-review,
+and repository-coverage documents now live under `AISM/`. Current repository links
+and machine-discovery pointers use these paths. The
+[technology evidence request](./TECHNOLOGY-EVIDENCE-REQUEST.md) supports provider
+and internal-owner intake before claim review. Earlier pinned revisions preserve
+the original paths; unpinned links to the former `docs/` files must be updated.
+The record below describes the original introduction; this relocation changes
+no method version, rubric, organizational formula, or runtime contract.
 
 ## Outcome and acceptance boundary
 
@@ -51,17 +62,17 @@ demonstrating improved deployed security.
 | [Command Center](../04-engage-monitor/README.md) | Probabilistic judgments, forged process evidence, accountable notification |
 | [Learning Engine](../05-evolve-educate/README.md) | Paired testing, benchmark limits, learned-policy integrity and owned regressions |
 | [Cross-Pillar Governance](../00-cross-pillar/README.md) | Applicable CP.5 profile/plane, CP.6 feedback, CP.10 rights/stopping authority |
-| [AISM README](../AISM/README.md), [methodology](../AISM/AISM-Scoring-Matrix-Methodology.md), [assessment](../AISM/AISM-Self-Assessment-Tool.md), [maturity ladder](../AISM/maturity-model.md) | Organizational subject retained; scoped technology evidence cannot assign organizational cells or levels automatically |
-| [Crosswalk](../AISM/AISM-Compliance-Crosswalk.md), [threat matrix](../AISM/agent-threat-control-matrix.md), [control stack](../AISM/control-stack.md), [operational loop](../AISM/operational-loop.md) | Procurement rule, evidence effect vocabulary, boundary tests, owned incident/policy-learning intake |
-| [AISM strategic architecture](../AISM/strategic-architecture.md), [sovereignty matrix](../AISM/sovereignty-matrix.md) | Reviewed organizational governance/control/autonomy context; no axis, architecture, or formula change needed |
+| [AISM README](README.md), [methodology](AISM-Scoring-Matrix-Methodology.md), [assessment](AISM-Self-Assessment-Tool.md), [maturity ladder](maturity-model.md) | Organizational subject retained; scoped technology evidence cannot assign organizational cells or levels automatically |
+| [Crosswalk](AISM-Compliance-Crosswalk.md), [threat matrix](agent-threat-control-matrix.md), [control stack](control-stack.md), [operational loop](operational-loop.md) | Procurement rule, evidence effect vocabulary, boundary tests, owned incident/policy-learning intake |
+| [AISM strategic architecture](strategic-architecture.md), [sovereignty matrix](sovereignty-matrix.md) | Reviewed organizational governance/control/autonomy context; no axis, architecture, or formula change needed |
 | [NEXUS](../NEXUS/README.md), [Gateway](../gateway/README.md) | Same claim discipline for first-party implementations; actual tested version and plane; native risk routing separate |
 | [Scanner](../scanner/README.md), [Skills](../skills/README.md), [MCP server](../skills/mcp/README.md) | Static/inspection evidence separate from runtime enforcement; native verdict/score semantics retained |
-| [CLI](../safe2/README.md), [scope guide](./ASSESSMENT-SCOPE.md), [readiness](./RELEASE-READINESS.md) | No TCP command or payload; existing intake/unscored cells, E weights/caps/categories, and human release authority retained |
+| [CLI](../safe2/README.md), [scope guide](../docs/ASSESSMENT-SCOPE.md), [readiness](../safe2/docs/RELEASE-READINESS.md) | No TCP command or payload; existing intake/unscored cells, E weights/caps/categories, and human release authority retained |
 | [Dashboard](../dashboard/README.md) | Proposed future presentation boundary; no new TCP view or relabeling of current scores |
 | [Examples index](../examples/README.md), [research index](../research/README.md) | Method/card pointers, nine-example review; no runnable integration added or generated table hand-edited |
-| [Challenge Lab](../challenges/README.md), [harness design](./CHALLENGE-HARNESS-DESIGN.md), [CLI guide](./CHALLENGE-CLI.md) | C scale distinct, new test candidates explicit; frozen Challenge 001 and current executable scope untouched |
+| [Challenge Lab](../challenges/README.md), [harness design](../safe2/docs/CHALLENGE-HARNESS-DESIGN.md), [CLI guide](../safe2/docs/CHALLENGE-CLI.md) | C scale distinct, new test candidates explicit; frozen Challenge 001 and current executable scope untouched |
 | [Contribution guidance](../CONTRIBUTING.md), [PR template](../.github/PULL_REQUEST_TEMPLATE.md) | Claim/control/boundary evidence requirements and separate proposal/result states |
-| [Evolution](../EVOLUTION.md), [CLI roadmap](./CLI-ROADMAP-TO-1.0.md), [brief triage](./SECURITY-BRIEF-2026-09-13-TRIAGE.md), [UX standard](./REPOSITORY-UX-STANDARD.md) | Assessment methods recorded; runtime work/version migration deferred; navigation and terminology rules linked |
+| [Evolution](../EVOLUTION.md), [CLI roadmap](../safe2/docs/CLI-ROADMAP-TO-1.0.md), [brief triage](../safe2/docs/SECURITY-BRIEF-2026-09-13-TRIAGE.md), [UX standard](../docs/REPOSITORY-UX-STANDARD.md) | Assessment methods recorded; runtime work/version migration deferred; navigation and terminology rules linked |
 | Core/profile datasets, NEXUS schemas, scanner rules, CLI schemas/scoring, dashboard generated data | Reviewed relevant IDs, versions, counts, discovery, grade/cap semantics; no contract change required for Markdown review instruments |
 | Historical notes, release notes, published assets | Kept as original records; new source-reviewed guidance is discoverable from current indexes rather than rewriting historical evidence |
 

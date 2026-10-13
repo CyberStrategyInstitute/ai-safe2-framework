@@ -19,11 +19,11 @@ identify their baseline; this update does not change scoring formulas.
 
 ## Assess the actual enforcement mechanism
 
-Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to bind technology claims to the layer and plane where they act. Record
 deterministic interception, probabilistic or deterministic authorization, actuation,
 bypass paths, and authority to change or stop the mechanism separately. The
-[validation guide](../docs/TECHNOLOGY-VALIDATION.md) requires actual side-effect
+[validation guide](TECHNOLOGY-VALIDATION.md) requires actual side-effect
 observation rather than inferring containment from agent output.
 
 ## Overview

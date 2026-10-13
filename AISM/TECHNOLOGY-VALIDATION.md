@@ -4,7 +4,7 @@
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Guide](https://img.shields.io/badge/Guide-Technology_Validation-820F1A?style=flat-square)](./TECHNOLOGY-VALIDATION.md)
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Challenge Lab](../challenges/README.md)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](README.md) | [NEXUS](../NEXUS/README.md) | [Challenge Lab](../challenges/README.md)
 
 ---
 
@@ -57,6 +57,6 @@ work; no test family here is claimed as executed by this documentation change.
 
 ---
 
-[Technology Card](./templates/TECHNOLOGY-CARD.md) | [Incident Evidence](./INCIDENT-EVIDENCE.md) | [Challenge CLI](./CHALLENGE-CLI.md)
+[Technology Card](./templates/TECHNOLOGY-CARD.md) | [Incident Evidence](./INCIDENT-EVIDENCE.md) | [Challenge CLI](../safe2/docs/CHALLENGE-CLI.md)
 
 *AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

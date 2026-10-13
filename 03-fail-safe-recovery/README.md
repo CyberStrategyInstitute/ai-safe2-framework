@@ -13,11 +13,11 @@
 
 ## Technology contribution and stopping authority
 
-Review circuit-breaker products through the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md), recording
+Review circuit-breaker products through the [Technology Contribution Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md), recording
 the actual actuator, named stopping authority, covered process/tool paths, and
 complementary controls. Test direct bypass, outage, timeout, restart, descendants,
-and revocation under the [validation guide](../docs/TECHNOLOGY-VALIDATION.md).
-The [incident workflow](../docs/INCIDENT-EVIDENCE.md) connects containment and recovery
+and revocation under the [validation guide](../AISM/TECHNOLOGY-VALIDATION.md).
+The [incident workflow](../AISM/INCIDENT-EVIDENCE.md) connects containment and recovery
 to retained evidence. A runtime component's tested contribution does not confer
 AISM maturity on its vendor or adopting organization.
 

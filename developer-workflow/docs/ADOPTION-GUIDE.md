@@ -37,6 +37,21 @@ flowchart TB
 
 ## Adoption levels
 
+Before selecting optional modules, run the repository template's guided setup:
+
+```console
+python scripts/setup_assistant.py \
+  --interactive \
+  --output AI-SAFE2-SETUP-PLAN.md
+```
+
+It always includes the required core, then asks whether the repository needs
+better planning, deterministic security, routine semantic review, specialized
+security review, strategic independent review, or runtime evidence. It writes
+a reviewable plan and does not install a service or add credentials. Follow
+[Tool Setup and Capability Selection](TOOL-SETUP-GUIDE.md) for owner,
+maintainer, acceptance, and rollback tasks.
+
 ### Level 1: Decision structure
 
 Install the profile, policy, schemas, classifier, validator, and agent
@@ -102,6 +117,9 @@ the intended modular structure, not delivered files.
 - It does not make a compliance or certification determination.
 - It does not merge, release, deploy, accept risk, or alter policy.
 - It does not automatically discover upstream updates.
+- The setup assistant does not create accounts, install external tools, add
+  secrets, enable repository apps, change branch protection, or authorize a
+  decision.
 
 ## Extending safely
 

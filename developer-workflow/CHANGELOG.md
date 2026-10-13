@@ -13,6 +13,12 @@
   decision record required starter artifacts rather than optional setup.
 - Clarifies which integrations are delivered, optional, manifest-only, or
   still require a repository-specific evidence bridge.
+- Adds a goal-based setup assistant that always includes the required core and
+  generates an explicit plan for selected planning, review, security,
+  strategic-review, and runtime modules.
+- Adds a task-oriented setup guide for OpenRouter/PR-Agent, Greptile,
+  Superpowers, CodeQL, Semgrep, Gitleaks, specialized AI security reviewers,
+  runtime adapters, credentials, acceptance tests, and upstream updates.
 
 ## 0.1.0 - 2026-10-08
 

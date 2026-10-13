@@ -11,11 +11,11 @@
 
 ## Technology profiles and new validation candidates
 
-Record challenge results in the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
-with [claim-level assurance](../docs/EVIDENCE-ASSURANCE.md). Keep C0-C5 claim
+Record challenge results in the [Technology Contribution Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+with [claim-level assurance](../AISM/EVIDENCE-ASSURANCE.md). Keep C0-C5 claim
 maturity, E0-E5 assurance v1.0, technology contribution 0-5, and organizational
 AISM maturity separate; there is no automatic conversion. The
-[validation guide](../docs/TECHNOLOGY-VALIDATION.md) and
+[validation guide](../AISM/TECHNOLOGY-VALIDATION.md) and
 [nine-example backlog](../research/technology-contribution-examples.md) frame new
 composed-capability, process-mimicking, side-effect, and policy-integrity tests.
 They do not modify frozen Challenge 001 or claim those experiments have run.

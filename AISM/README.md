@@ -5,8 +5,9 @@
 # AI Sovereign Maturity (AISM) Model
 ### The maturity and operating model for deterministic governance of probabilistic AI
 
-**Documentation updated:** 2026-10-02. Clarifies the existing Sovereignty Score
-and introduces TCP and Evidence Assurance v1.0 as separate assessment methods.
+**Documentation updated:** 2026-10-13. AISM now houses the full Sovereignty Score,
+Technology Contribution Profile (TCP), and Evidence Assurance v1.0 methods,
+with the Technology Card and evidence-collection workflow.
 See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
 Technology Card workflow, and worked example. Original methodology dates below
 identify their baseline; this update does not change scoring formulas.
@@ -20,8 +21,6 @@ identify their baseline; this update does not change scoring formulas.
 
 **Previous:** [← Cross-Pillar Governance](../00-cross-pillar/README.md) | **Next:** [NEXUS →](../NEXUS/)
 
-![AI SAFE2 Shield & Command Wheel](../assets/diagrams/command-wheel.png)
-
 **Tagline:** *"The Operating System for Safe Autonomous AI"*  
 **Core Principle:** *Probabilistic intelligence requires deterministic control.*  
 **Organization:** Cyber Strategy Institute  
@@ -30,13 +29,43 @@ identify their baseline; this update does not change scoring formulas.
 
 ---
 
+## Choose your assessment
+
+Use AISM to assess organizational maturity or evaluate what a product, solution,
+or technique contributes to specific controls. The full methods and review
+records live here in `/AISM`.
+
+| Your goal | Start here | Result |
+|---|---|---|
+| Assess organizational maturity | [Sovereignty Score methodology](./AISM-Scoring-Matrix-Methodology.md) and [self-assessment](./AISM-Self-Assessment-Tool.md) | Organizational maturity across five pillars and six dimensions |
+| Evaluate a product, solution, or technique | [Technology Contribution Profile v1.0](./TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Scoped control effects, contribution, coverage, and adoption conditions |
+| Evaluate the evidence behind a claim | [Evidence Assurance Level v1.0](./EVIDENCE-ASSURANCE.md) | Claim-level E0-E5 assessment with provenance, independence, and limits |
+| Collect evidence from a provider or internal owner | [Technology evidence request](./TECHNOLOGY-EVIDENCE-REQUEST.md) and [Technology Card](./templates/TECHNOLOGY-CARD.md) | A reviewable evidence record and explicit gaps |
+
+## Evaluate a technology in four steps
+
+1. **Define the gap and subject:** identify required controls, exact version,
+   intended deployment, and excluded paths using the [TCP workflow](./TECHNOLOGY-CONTRIBUTION-PROFILE.md#assessment-workflow).
+2. **Request and collect evidence:** copy the [provider evidence request](./TECHNOLOGY-EVIDENCE-REQUEST.md#copyable-request-to-a-provider-or-internal-owner)
+   and record the response in a [Technology Card](./templates/TECHNOLOGY-CARD.md).
+3. **Evaluate contribution and assurance separately:** map demonstrated effects
+   to controls with TCP, then apply the [Evidence Assurance rubric](./EVIDENCE-ASSURANCE.md#rubric-and-status)
+   to each claim. Preserve missing evidence, failures, and limits.
+4. **Decide the next action:** use the [adoption rule](./TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule)
+   to record adopt, pilot, hold, or reject, with a named owner and acceptance tests.
+
+Use the [assessment guide](./ASSESSMENT-GUIDE.md) for a worked example,
+[validation guide](./TECHNOLOGY-VALIDATION.md) for test planning, and
+[incident evidence guide](./INCIDENT-EVIDENCE.md) for reconstruction and follow-up.
+The output supports a human decision; it does not authorize deployment or certify a product.
+
 ## Organizational maturity and technology contribution
 
 The Sovereignty Score assesses an organization across five pillars and six
-dimensions. Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+dimensions. Use the [Technology Contribution Profile](TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 for a product, paper, benchmark, technique, investigation, or accountability input.
-Record its control effects and scoped contribution alongside the [Evidence Assurance Level](../docs/EVIDENCE-ASSURANCE.md); neither determines
-organizational maturity. Start with the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md)
+Record its control effects and scoped contribution alongside the [Evidence Assurance Level](EVIDENCE-ASSURANCE.md); neither determines
+organizational maturity. Start with the [Technology Card](templates/TECHNOLOGY-CARD.md)
 and [nine examples](../research/technology-contribution-examples.md).
 The existing CLI's E0-E5 numeric grades are separate from assurance v1.0 and keep
 their current formulas and verification caps. No TCP command is implemented here.

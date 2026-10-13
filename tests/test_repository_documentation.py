@@ -82,8 +82,28 @@ def test_shared_docs_do_not_regain_cli_or_nexus_primary_pages() -> None:
     assert misplaced == [], "Topic-owned pages found in shared docs: " + ", ".join(misplaced)
 
 
+def test_aism_assessment_discovery_stays_in_aism() -> None:
+    manifest = json.loads((ROOT / "ai-safe2.manifest.json").read_text(encoding="utf-8"))
+    review = manifest["discovery"]["technology_review"]
+    for key in (
+        "home", "assessment_guide", "evidence_request", "entrypoint",
+        "evidence_assurance", "card_template", "validation", "incident_evidence", "repo_review",
+    ):
+        path = ROOT / review[key]
+        assert path.resolve().is_relative_to((ROOT / "AISM").resolve())
+        assert path.is_file(), f"Missing AISM assessment document: {path}"
+
+    for name in (
+        "TECHNOLOGY-CONTRIBUTION-PROFILE.md", "EVIDENCE-ASSURANCE.md",
+        "TECHNOLOGY-VALIDATION.md", "INCIDENT-EVIDENCE.md", "TECHNOLOGY-PROFILE-REPO-REVIEW.md",
+        "templates/TECHNOLOGY-CARD.md",
+    ):
+        assert not (ROOT / "docs" / name).exists(), f"Competing AISM document in docs: {name}"
+
+
 def test_consolidated_documentation_local_links_resolve() -> None:
     pages = list((ROOT / "safe2" / "docs").glob("*.md"))
+    pages.extend((ROOT / "AISM").rglob("*.md"))
     pages.extend(
         [
             ROOT / "docs" / "README.md",
@@ -102,7 +122,11 @@ def test_consolidated_documentation_local_links_resolve() -> None:
             if "://" in target or target.startswith(("#", "mailto:")):
                 continue
             path = target.split("#", 1)[0]
-            if path and not (page.parent / path).resolve().exists():
-                missing.append(f"{page.relative_to(ROOT).as_posix()} -> {target}")
+            if path:
+                destination = (page.parent / path).resolve()
+                if not destination.exists() or (
+                    destination.is_dir() and not any(destination.iterdir())
+                ):
+                    missing.append(f"{page.relative_to(ROOT).as_posix()} -> {target}")
 
     assert missing == [], "Broken consolidated documentation links: " + ", ".join(missing)

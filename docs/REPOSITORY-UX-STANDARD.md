@@ -15,13 +15,18 @@ The Sovereignty Score and Sovereignty Matrix retain their distinct names.
 Preserve original terminology in historical records and asset filenames.
 
 Keep organizational AISM maturity,
-[technology contribution](./TECHNOLOGY-CONTRIBUTION-PROFILE.md),
-[assurance v1.0](./EVIDENCE-ASSURANCE.md), Challenge Lab C0-C5, and native tool
+[technology contribution](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md),
+[assurance v1.0](../AISM/EVIDENCE-ASSURANCE.md), Challenge Lab C0-C5, and native tool
 scores visibly separate. Major review/implementation surfaces should link to
-the method and [Technology Card](./templates/TECHNOLOGY-CARD.md) where relevant.
+the method and [Technology Card](../AISM/templates/TECHNOLOGY-CARD.md) where relevant.
 Do not present a candidate, design, or adoption backlog as a validated integration.
-The [repository coverage review](./TECHNOLOGY-PROFILE-REPO-REVIEW.md) records affected
+The [repository coverage review](../AISM/TECHNOLOGY-PROFILE-REPO-REVIEW.md) records affected
 surfaces, unchanged contracts, and deferred runtime work.
+
+AISM owns organizational assessment, the Technology Contribution Profile,
+Evidence Assurance, the Technology Card, and their evaluation/incident guides.
+Keep their full methods in `AISM/` and link them from shared `docs/` indexes.
+CLI operating guidance remains in `safe2/`; attributed research remains in `research/`.
 
 ## Purpose
 

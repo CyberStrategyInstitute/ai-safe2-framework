@@ -15,8 +15,8 @@ identify their baseline; this update does not change scoring formulas.
 The Sovereignty Score applies to an organization, not an individual product,
 paper, benchmark, or vendor feature. Technology evidence may support specific
 assessment cells only after the assessor evaluates organizational coverage,
-robustness, and sovereignty assurance. The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) and
-[Evidence Assurance Level](../docs/EVIDENCE-ASSURANCE.md) are separate review
+robustness, and sovereignty assurance. The [Technology Contribution Profile](TECHNOLOGY-CONTRIBUTION-PROFILE.md) and
+[Evidence Assurance Level](EVIDENCE-ASSURANCE.md) are separate review
 instruments. They do not change this scoring rubric, its weights, the current
 CLI evidence-grade calculation, or previously issued maturity results.
 

@@ -181,3 +181,37 @@ def test_required_decision_tools_match_template():
         )
     )
 
+
+def test_setup_assistant_matches_template_and_is_goal_based():
+    release = (ROOT / "scripts" / "setup_assistant.py").read_text(encoding="utf-8")
+    template = (ROOT / "repository-template" / "scripts" / "setup_assistant.py").read_text(
+        encoding="utf-8"
+    )
+    assert release.rstrip() == template.rstrip()
+    module = load_script("setup_assistant.py")
+    plan = module.render_plan({"planning", "semantic-review", "strategic-review"})
+    assert "Required core — always install" in plan
+    assert "Superpowers" in plan
+    assert "OPENROUTER_API_KEY" in plan
+    assert "Greptile" in plan
+    assert "does not install a" in plan
+    assert "named human" in plan
+
+
+def test_tool_setup_guide_is_linked_and_preserves_integration_boundaries():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    guide = (ROOT / "docs" / "TOOL-SETUP-GUIDE.md").read_text(encoding="utf-8")
+    assert "docs/TOOL-SETUP-GUIDE.md" in readme
+    for required in (
+        "OPENROUTER_API_KEY",
+        "PR-Agent with OpenRouter",
+        "Greptile",
+        "Superpowers",
+        "CodeQL",
+        "Semgrep",
+        "Gitleaks",
+        "manifest is not execution",
+        "exact pull-request revision",
+    ):
+        assert required in guide
+

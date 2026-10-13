@@ -1,13 +1,17 @@
 # AISM Technology Card template
 
-[Framework Home](../../README.md) | [AISM](../../AISM/README.md) | [Technology Profile](../TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Evidence Assurance](../EVIDENCE-ASSURANCE.md)
+[Framework Home](../../README.md) | [AISM](../README.md) | [Technology Profile](../TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Evidence Assurance](../EVIDENCE-ASSURANCE.md)
 
 Copy this template for one artifact/version and assessment boundary. This is a
 Markdown review record under AISM-TCP v1.0, not a CLI assessment payload.
 Replace placeholders; preserve `not_assessed`, unknowns, and reasons for N/A.
 
-Use the [AISM assessment guide](../../AISM/ASSESSMENT-GUIDE.md) for step-by-step
+Use the [AISM assessment guide](../ASSESSMENT-GUIDE.md) for step-by-step
 instructions and an illustrative review.
+
+Use the [technology evidence request](../TECHNOLOGY-EVIDENCE-REQUEST.md) to collect
+the supporting artifacts. Keep a dated record of requested, received, restricted,
+missing, and reviewed material; receipt of an artifact is not its validation.
 
 ## Identity and scope
 
@@ -18,6 +22,7 @@ instructions and an illustrative review.
 - Assessor and relationship to producer:
 - Claimed function:
 - Source URLs/artifacts and actual review dates:
+- Evidence request owner, request date, response date, and outstanding items:
 - System identity and deployment boundary:
 - Enforcement planes and excluded paths:
 - OS/kernel/cloud/service dependencies:

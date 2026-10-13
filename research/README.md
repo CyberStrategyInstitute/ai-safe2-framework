@@ -11,9 +11,9 @@
 
 ## Technology contribution reviews
 
-The [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+The [Technology Contribution Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 separates conceptual/design evidence, implementation, validation, and enforcement.
-Use the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) for claim-level
+Use the [Technology Card](../AISM/templates/TECHNOLOGY-CARD.md) for claim-level
 provenance, assurance, coverage, and limits. The
 [nine-example review and adoption backlog](./technology-contribution-examples.md)
 captures the supplied recommendations with primary source pointers, corrected

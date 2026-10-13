@@ -12,11 +12,11 @@ Technology Card workflow, and worked example. Original methodology dates below
 identify their baseline; this update does not change scoring formulas.
 ## Using technology evidence in an organizational assessment
 
-Record candidate evidence in the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) before deciding which
+Record candidate evidence in the [Technology Card](templates/TECHNOLOGY-CARD.md) before deciding which
 organizational assessment cells it supports. Confirm local deployment, ownership,
 control coverage, tested boundaries, and complementary controls. A paper, released
 code, or vendor test cannot fill an organizational cell by itself. Keep
-[assurance v1.0](../docs/EVIDENCE-ASSURANCE.md) separate from current CLI grades;
+[assurance v1.0](EVIDENCE-ASSURANCE.md) separate from current CLI grades;
 unreviewed cells remain unscored rather than inheriting a product contribution.
 
 ## AI Sovereign Maturity (AISM) Model: Organizational Assessment Questionnaire

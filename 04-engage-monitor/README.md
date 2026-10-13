@@ -13,13 +13,13 @@
 
 ## Authorization, oversight, and accountability evidence
 
-Apply the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Apply the [Technology Contribution Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to separate deterministic interception, probabilistic authorization judgment, and
 deterministic actuation. Review forged approval/process artifacts with paired
 clean/attacked cases and legitimate-task utility in the
-[validation guide](../docs/TECHNOLOGY-VALIDATION.md). Randomized oversight theory
+[validation guide](../AISM/TECHNOLOGY-VALIDATION.md). Randomized oversight theory
 is design evidence, not an implemented control. Use the
-[incident workflow](../docs/INCIDENT-EVIDENCE.md) to assign notification ownership
+[incident workflow](../AISM/INCIDENT-EVIDENCE.md) to assign notification ownership
 without treating a notice or subpoena as proof of a breach.
 
 ## 🎯 The Problem. The Realization. The Solution.

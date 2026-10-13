@@ -10,8 +10,8 @@ This guide will help you audit your current AI codebase for the three most commo
 
 This quick audit exercises configured scan and gateway paths; it does not
 assign organizational AISM maturity. To assess a candidate product or technique,
-use the [Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
-and [Technology Card](docs/templates/TECHNOLOGY-CARD.md), recording actual
+use the [Technology Contribution Profile](AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [Technology Card](AISM/templates/TECHNOLOGY-CARD.md), recording actual
 control effects, evidence, tested boundary, and gaps.
 
 ## 🏃 Step 1: Rapid Exposure Scan (2 Minutes)

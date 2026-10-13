@@ -73,6 +73,18 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert "preflight_receipt_sha256" in workflow
 
 
+def test_pr_agent_uses_pinned_cli_without_docker_hub():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "PR_AGENT_SOURCE_COMMIT: 1d01f24f455bb879c1d9c557ad7de3d72dcc7975" in workflow
+    assert '"pr-agent @ git+https://github.com/The-PR-Agent/pr-agent.git@${PR_AGENT_SOURCE_COMMIT}"' in workflow
+    assert 'python -m pr_agent.cli --pr_url "$PR_URL" review' in workflow
+    assert "GITHUB__USER_TOKEN: ${{ github.token }}" in workflow
+    assert "OPENAI__KEY: ${{ secrets.OPENAI_KEY }}" in workflow
+    assert "uses: the-pr-agent/pr-agent@" not in workflow
+    assert "pragent/pr-agent" not in workflow
+
+
 def test_unrelated_pr_comments_cannot_cancel_an_active_review():
     workflow = WORKFLOW.read_text(encoding="utf-8")
 
