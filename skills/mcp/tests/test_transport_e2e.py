@@ -16,7 +16,9 @@ import os
 import socket
 import subprocess
 import sys
+import tempfile
 import time
+from importlib.metadata import version
 from pathlib import Path
 
 import httpx
@@ -58,7 +60,8 @@ def test_server_module_imports_with_installed_mcp():
     """Regression for M1: the pinned mcp version must provide the v1 API used."""
     from mcp.server.fastmcp import FastMCP  # noqa: F401
 
-    major = int(mcp.__version__.split(".")[0]) if hasattr(mcp, "__version__") else 1
+    # The SDK need not export __version__; read installed distribution metadata.
+    major = int(version("mcp").split(".")[0])
     assert major < 2
 
 
@@ -93,21 +96,32 @@ def http_server():
     env = _env(MCP_TRANSPORT="streamable-http", MCP_HOST="127.0.0.1", MCP_PORT=str(port),
                TOKENS=f"{FREE}:free,{PRO}:pro", AUTH_FAIL_RATE_LIMIT="5",
                NO_PROXY="127.0.0.1,localhost", no_proxy="127.0.0.1,localhost")
-    proc = subprocess.Popen([sys.executable, "-m", "mcp_server.app"], env=env, cwd=str(SRC),
-                            stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
-    base = f"http://127.0.0.1:{port}"
-    for _ in range(100):
+    # Do not leave stderr in an undrained pipe: a small Windows pipe can fill
+    # after a few requests, blocking server logging and causing false timeouts.
+    with tempfile.TemporaryFile() as diagnostics:
+        proc = subprocess.Popen(
+            [sys.executable, "-m", "mcp_server.app"], env=env, cwd=str(SRC),
+            stdout=subprocess.DEVNULL, stderr=diagnostics,
+        )
+        base = f"http://127.0.0.1:{port}"
         try:
-            if httpx.get(f"{base}/health", timeout=0.5, trust_env=False).status_code == 200:
-                break
-        except httpx.HTTPError:
-            time.sleep(0.1)
-    else:
-        proc.kill()
-        pytest.fail("HTTP server did not start: " + proc.stderr.read().decode()[-500:])
-    yield base
-    proc.terminate()
-    proc.wait(timeout=10)
+            for _ in range(100):
+                try:
+                    if httpx.get(f"{base}/health", timeout=0.5, trust_env=False).status_code == 200:
+                        break
+                except httpx.HTTPError:
+                    time.sleep(0.1)
+            else:
+                diagnostics.seek(0)
+                pytest.fail("HTTP server did not start: " + diagnostics.read().decode()[-500:])
+            yield base
+        finally:
+            proc.terminate()
+            try:
+                proc.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.wait(timeout=10)
 
 
 async def _http_call(base: str, token: str, auth_scheme: str = "Bearer") -> tuple[int, str]:

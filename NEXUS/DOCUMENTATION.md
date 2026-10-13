@@ -35,6 +35,7 @@ meaning by itself.
 - [NEXUS overview and installation](README.md)
 - [Python SDK](sdk/python/README.md)
 - [Changelog](CHANGELOG.md)
+- [NEXUS v0.6.0 release notes](RELEASE-NOTES-v0.6.0.md)
 - [NEXUS v0.5.0 release notes](RELEASE-NOTES-v0.5.0.md)
 - [Security policy](SECURITY.md)
 - [Contributing](CONTRIBUTING.md)

@@ -5,17 +5,19 @@
 [![Method](https://img.shields.io/badge/Method-Evidence_Assurance-820F1A?style=flat-square)](./EVIDENCE-ASSURANCE.md)
 [![Status](https://img.shields.io/badge/Status-Method_v1.0-808080?style=flat-square)](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
 ---
 
 **Method version:** 1.0
 
-**Documentation updated:** 2026-10-02
+**Documentation updated:** 2026-10-13
 
 **Status:** CSI assessment method for use and feedback
 
-Start with the [AISM assessment guide](../AISM/ASSESSMENT-GUIDE.md) for a practical workflow.
+Start with the [AISM assessment guide](ASSESSMENT-GUIDE.md) for a practical workflow.
+Use the [technology evidence request](./TECHNOLOGY-EVIDENCE-REQUEST.md) to collect
+versioned artifacts from a provider or internal owner before rating claims.
 
 ## Rubric and status
 

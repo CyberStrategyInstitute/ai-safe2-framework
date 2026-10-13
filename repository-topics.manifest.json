@@ -4,7 +4,7 @@
   "shared_documentation": {
     "root": "docs/",
     "entrypoint": "docs/README.md",
-    "scope": "repository-wide governance, assurance, engineering, templates, and advisories"
+    "scope": "repository-wide governance, engineering, evidence-scope guidance, and advisories"
   },
   "topics": [
     {"id": "framework", "root": ".", "human_entrypoint": "README.md", "agent_entrypoint": "AGENTS.md", "machine_entrypoint": "ai-safe2.manifest.json"},

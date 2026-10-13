@@ -246,19 +246,22 @@ provides the final availability proof. The three healthiest routes
 receive the same bounded preflight call. The versioned benchmark contains two known
 security defects, a verified-safe control, and up to 12,000 characters from one
 risk-prioritized hunk in the actual PR. Strict JSON, correct defect location,
-false-positive discipline, and concision are hard gates. Only passing models are
-ranked; score is primary, then response length and latency. The PR hunk tests
-context compatibility but does not earn quality points because it has no established
-ground truth.
+false-positive discipline, and concision define full qualification. Passing models
+are preferred and ranked by score, then response length and latency. If no model
+fully qualifies but a model returns valid scored output, the best responder may be
+used for an explicitly degraded advisory attempt; it never inherits a passing
+qualification. The PR hunk tests context compatibility but does not earn quality
+points because it has no established ground truth.
 
-The winner publishes its risk-focused, bounded-hunk OpenRouter review directly. This
-free route is explicitly partial coverage for oversized PRs; its receipt records the
-bounded single-pass mode and reviewed path. This prevents a model
-that passes a moderate canary from being handed an unbounded large
-diff; PR #370 demonstrated that a 58.5K-token request could still stall. If no
-candidate passes, or the winner does not publish a substantive review,
-PR-Agent uses `gpt-5.6-luna` as the metered final fallback with multi-chunk coverage
-and a 64K budget.
+The selected OpenRouter model is passed to the pinned PR-Agent action as
+`openrouter/<model-id>`. The repository secret remains named
+`OPENROUTER_API_KEY`, but the action maps it to PR-Agent's required
+`OPENROUTER__KEY` setting. PR-Agent performs one bounded-budget, full-diff attempt
+with large-PR chunking enabled. The receipt records whether the model was fully
+qualified or degraded, the selected model, and whether a substantive publication
+appeared for the exact revision. If OpenRouter does not publish a review, PR-Agent
+uses `gpt-5.6-luna` as the metered final fallback with multi-chunk coverage and a
+64K budget; lack of OpenAI credits remains visible as provider unavailability.
 
 Manual `/review` runs explicitly check out `refs/pull/<number>/head`. GitHub loads
 `issue_comment` workflow definitions from the default branch, so this binding is

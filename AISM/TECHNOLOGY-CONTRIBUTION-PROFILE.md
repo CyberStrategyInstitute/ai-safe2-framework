@@ -5,17 +5,19 @@
 [![Method](https://img.shields.io/badge/Method-AISM_TCP-820F1A?style=flat-square)](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 [![Status](https://img.shields.io/badge/Status-Method_v1.0-808080?style=flat-square)](../EVOLUTION.md)
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Research](../research/README.md) | [Challenge Lab](../challenges/README.md)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](README.md) | [NEXUS](../NEXUS/README.md) | [Research](../research/README.md) | [Challenge Lab](../challenges/README.md)
 
 ---
 
 **Method version:** 1.0
 
-**Documentation updated:** 2026-10-02
+**Documentation updated:** 2026-10-13
 
 **Status:** CSI assessment method for use and feedback
 
-Start with the [AISM assessment guide](../AISM/ASSESSMENT-GUIDE.md) for a practical workflow.
+Start with the [AISM assessment guide](ASSESSMENT-GUIDE.md) for a practical workflow.
+Use the [technology evidence request](./TECHNOLOGY-EVIDENCE-REQUEST.md) to collect
+versioned artifacts from a provider or internal owner before rating claims.
 
 ## Purpose and status
 
@@ -33,7 +35,7 @@ runtime-control and research guidance with a scoped adoption method.
 
 | Instrument | Subject | Result | Does not establish |
 |---|---|---|---|
-| [AISM Sovereignty Score](../AISM/AISM-Scoring-Matrix-Methodology.md) | Organization across five pillars and six dimensions | Maturity using coverage, robustness, and sovereignty assurance | Product certification or framework conformance |
+| [AISM Sovereignty Score](AISM-Scoring-Matrix-Methodology.md) | Organization across five pillars and six dimensions | Maturity using coverage, robustness, and sovereignty assurance | Product certification or framework conformance |
 | AISM Technology Contribution Profile, v1.0 | Exact artifact and deployment/test boundary | Control effects, pillar contribution, coverage, limitations | Vendor or adopting organization maturity |
 | [AI SAFE² Evidence Assurance Level, v1.0](./EVIDENCE-ASSURANCE.md) | Each attributed claim and supporting artifacts | E0 through E5 under the named assurance rubric | Control completeness, independence by default, or universal prevention |
 
@@ -46,8 +48,8 @@ counts, and component versions remain unchanged.
 
 1. Identify artifact type, owner, exact version/commit, assessment date, assessor,
    source artifacts, and whether evidence is self-reported or independently reviewed.
-2. Define the [complete agent system](./SYSTEM-IDENTITY.md) and
-   [assessment scope](./ASSESSMENT-SCOPE.md): model, harness, tools, skills, memory,
+2. Define the [complete agent system](../safe2/docs/SYSTEM-IDENTITY.md) and
+   [assessment scope](../docs/ASSESSMENT-SCOPE.md): model, harness, tools, skills, memory,
    policy, credentials, OS/kernel, infrastructure, and external services.
 3. Select actual required controls from the [core dataset](../skills/mcp/data/ai-safe2-controls-v3.0.json)
    and applicable profiles. Record canonical ID, name, document, and version.
@@ -76,7 +78,7 @@ capability **within that stated boundary**; they do not imply pillar-wide covera
 | 4 | Control | Enforces or verifies a runtime control with measured outcomes |
 | 5 | Sovereignty | Demonstrates continuous adaptation, formal verification of critical behavior within scope, and durable evidence while retaining organizational authority |
 
-The names parallel the [maturity ladder](../AISM/maturity-model.md), but contribution
+The names parallel the [maturity ladder](maturity-model.md), but contribution
 1 means Conceptual, not organizational Level 1 Chaos. Use `contribution 4`, not
 `AISM Level 4`, for technology results.
 

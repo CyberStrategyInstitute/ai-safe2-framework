@@ -94,7 +94,7 @@ CP.5.APAY is the **fourth enforcement plane**. It is not a wallet, an identity p
 ```
                        ┌──────────────────────────────────────────┐
   north-south          │  model / provider        (AI SAFE2 gateway)
-  east-west            │  agent ↔ agent           (NEXUS v0.5)
+  east-west            │  agent ↔ agent           (NEXUS v0.6)
   agent-to-tool        │  agent ↔ MCP/tools       (CP.5.MCP)
   agent-to-payment     │  agent ↔ VALUE           (CP.5.APAY)   ← this profile
                        └──────────────────────────────────────────┘
@@ -401,4 +401,4 @@ NEXUS/sdk/python/tests/test_apay_opa_contract.py  policy/builder drift guard
 
 ---
 
-*AI SAFE² v3.1 · CP.5.APAY/0.4 draft profile · NEXUS v0.5.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.1 · CP.5.APAY/0.4 draft profile · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*

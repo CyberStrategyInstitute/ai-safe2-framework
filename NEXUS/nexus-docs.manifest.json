@@ -2,7 +2,7 @@
   "format": "nexus-documentation-manifest",
   "manifest_version": "1.0.0",
   "component": "NEXUS",
-  "component_version": "0.5.0",
+  "component_version": "0.6.0",
   "distribution": "nexus-a2a-sdk",
   "python_import": "nexus_sdk",
   "canonical_root": "NEXUS/",

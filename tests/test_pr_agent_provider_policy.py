@@ -53,19 +53,36 @@ def test_provider_policy_preserves_bounded_attempts_and_evidence():
     assert 'PR_AGENT_FREE_MAX_MODEL_TOKENS: "16000"' in workflow
     assert 'PR_AGENT_FREE_MAX_CALLS: "1"' in workflow
     assert "config.reasoning_effort: medium" in workflow
-    assert "Bounded OpenRouter Reviewer Guide" in workflow
-    assert "pr_context_review" in workflow
-    assert "free_coverage_mode: 'bounded_single_pass'" in workflow
+    assert "OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}" in workflow
+    assert "config.model: openrouter/${{ steps.preflight.outputs.selected_model }}" in workflow
+    assert "preflight_qualified: process.env.PREFLIGHT_QUALIFIED === 'true'" in workflow
+    assert "free_coverage_mode: 'pr_agent_full_diff_single_pass'" in workflow
     assert "timeout-minutes: 5" in workflow
     assert "fallback_invoked: fallbackInvoked" in workflow
     assert "active_failure_count: activeFailures.length" in workflow
     assert "provider_execution:" in workflow
     assert "selected_model: modelMatch?.[1] || null" in workflow
-    assert "final_model: observedModels.at(-1) || null" in workflow
+    assert "final_model: observedModels.at(-1) ||" in workflow
+    assert "freeReviewProduced ? process.env.SELECTED_FREE_MODEL : null" in workflow
     assert "id: preflight" in workflow
     assert "steps.preflight.outputs.available == 'true'" in workflow
-    assert "receipt.selected_model" in workflow
+    assert "steps.preflight.outputs.selected_model" in workflow
+    assert '"qualified": str(bool(receipt.get("qualified"))).lower()' in (
+        (ROOT / "scripts" / "pr_agent_preflight.py").read_text(encoding="utf-8")
+    )
     assert "preflight_receipt_sha256" in workflow
+
+
+def test_pr_agent_uses_pinned_cli_without_docker_hub():
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "PR_AGENT_SOURCE_COMMIT: 1d01f24f455bb879c1d9c557ad7de3d72dcc7975" in workflow
+    assert '"pr-agent @ git+https://github.com/The-PR-Agent/pr-agent.git@${PR_AGENT_SOURCE_COMMIT}"' in workflow
+    assert 'python -m pr_agent.cli --pr_url "$PR_URL" review' in workflow
+    assert "GITHUB__USER_TOKEN: ${{ github.token }}" in workflow
+    assert "OPENAI__KEY: ${{ secrets.OPENAI_KEY }}" in workflow
+    assert "uses: the-pr-agent/pr-agent@" not in workflow
+    assert "pragent/pr-agent" not in workflow
 
 
 def test_unrelated_pr_comments_cannot_cancel_an_active_review():
@@ -82,3 +99,14 @@ def test_manual_review_checks_out_the_pull_request_revision():
     assert "github.event.pull_request.head.sha" in workflow
     assert "format('refs/pull/{0}/head', github.event.issue.number)" in workflow
     assert "persist-credentials: false" in workflow
+
+
+def test_degraded_or_truncated_free_review_cannot_suppress_fallback():
+    import yaml
+
+    workflow = yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))
+    steps = {step.get("id"): step for step in workflow["jobs"]["review"]["steps"]}
+    assert "steps.preflight.outputs.qualified == 'true'" in steps["pr-agent-free"]["if"]
+    assert "PREFLIGHT_QUALIFIED" in steps["free-publication"]["env"]
+    assert "not included in this review" in steps["free-publication"]["with"]["script"]
+    assert "steps.free-publication.outputs.produced != 'true'" in steps["pr-agent-openai"]["if"]

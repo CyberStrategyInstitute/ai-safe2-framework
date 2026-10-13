@@ -55,7 +55,7 @@ def test_nexus_machine_manifest_points_to_existing_resources() -> None:
     )
 
     assert manifest["component"] == "NEXUS"
-    assert manifest["component_version"] == "0.5.0"
+    assert manifest["component_version"] == "0.6.0"
     assert manifest["production_assurance"] is False
     assert {entry["audience"] for entry in manifest["entry_points"]} >= {
         "all",

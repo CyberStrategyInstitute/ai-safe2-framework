@@ -14,10 +14,10 @@
 ## Gateway evidence and technology contribution
 
 Gateway action-risk routing scores are separate from organizational AISM
-maturity and the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md).
+maturity and the [Technology Contribution Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md).
 Record provider, tool, and agent-to-agent boundaries separately. A mediated
 provider request does not establish containment of direct tool or delegated paths.
-Use the [validation guide](../docs/TECHNOLOGY-VALIDATION.md) to test interception,
+Use the [validation guide](../AISM/TECHNOLOGY-VALIDATION.md) to test interception,
 authorization, actuation, outage, revocation, and legitimate utility before
 claiming runtime effectiveness.
 
@@ -31,7 +31,7 @@ This distinction is intentional:
 
 - **AI SAFE² v3.1** is the current framework.
 - **Gateway v3.0** is the current gateway component.
-- **NEXUS v0.5** is the current NEXUS component (v0.5.0, released 2026-10-04).
+- **NEXUS v0.6** is the current NEXUS component (v0.6.0).
 - Component versions should not be rewritten merely for visual consistency.
 
 ---

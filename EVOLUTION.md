@@ -11,11 +11,11 @@ Score is clarified; TCP and Evidence Assurance v1.0 are introduced as CSI method
 for use and feedback. Follow the [AISM assessment guide](AISM/ASSESSMENT-GUIDE.md)
 for the Technology Card workflow and worked example.
 
-The [AISM Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+The [AISM Technology Contribution Profile](AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 separates organizational maturity, scoped artifact contribution, and
-[claim-level assurance](docs/EVIDENCE-ASSURANCE.md). The change includes a reusable
+[claim-level assurance](AISM/EVIDENCE-ASSURANCE.md). The change includes a reusable
 card, validation/incident practices, nine source-attributed adoption candidates,
-and [repository-wide navigation and compatibility review](docs/TECHNOLOGY-PROFILE-REPO-REVIEW.md).
+and [repository-wide navigation and compatibility review](AISM/TECHNOLOGY-PROFILE-REPO-REVIEW.md).
 It is not a framework/CLI release, certification program, scoring migration,
 new control, or completed runtime integration. Existing grades, formulas,
 versions, generated control data, and frozen Challenge 001 are unchanged.

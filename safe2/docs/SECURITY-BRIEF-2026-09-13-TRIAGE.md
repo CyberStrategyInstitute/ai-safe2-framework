@@ -29,8 +29,8 @@ or product capability.
 
 ## Pinned outside the active release path
 
-The separate [Technology Contribution Profile](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
-and [Evidence Assurance v1.0](../../docs/EVIDENCE-ASSURANCE.md) now document a scoped review
+The separate [Technology Contribution Profile](../../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+and [Evidence Assurance v1.0](../../AISM/EVIDENCE-ASSURANCE.md) now document a scoped review
 method for the [nine new examples](../../research/technology-contribution-examples.md).
 They do not change current CLI E0-E5 weights or organizational scoring semantics.
 Their machine schema, integrations, and new live experiments remain outside the

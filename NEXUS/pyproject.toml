@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nexus-a2a-sdk"
-version = "0.5.0"
+version = "0.6.0"
 description = "NEXUS SDK: deterministic governance for agent, tool, and payment execution"
 readme = "sdk/python/README.md"
 license = "Apache-2.0"

@@ -12,9 +12,9 @@
 ## Profile discovery and technology review
 
 The MCP server's taxonomy/profile access does not itself establish runtime
-enforcement or product maturity. Use the [Technology Contribution Profile](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+enforcement or product maturity. Use the [Technology Contribution Profile](../../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to identify actual control effects and claim evidence at each plane.
-[Assurance v1.0](../../docs/EVIDENCE-ASSURANCE.md) is documentation guidance;
+[Assurance v1.0](../../AISM/EVIDENCE-ASSURANCE.md) is documentation guidance;
 no new MCP assessment tool or schema is exposed by this update.
 
 ## What This Is
@@ -146,6 +146,9 @@ Treat `TOKENS` as a legacy entitlement mechanism. Do not describe it as MCP-19-c
 | `ALLOWED_STDIO_MODULE_PATTERNS` | (none) | Comma-separated entrypoint patterns **added** to the built-in stdio allowlist. Defaults are never removed. |
 
 The server requires `mcp>=1.12,<2`. MCP SDK 2.x renamed `FastMCP` and changed other v1 APIs; the pin keeps a fresh `pip install` startable.
+
+See the [v1-to-v2 migration matrix](MCP-V2-MIGRATION.md) before changing this
+compatibility boundary. A dependency-only range expansion is not a migration.
 
 ## What the Server Provides
 

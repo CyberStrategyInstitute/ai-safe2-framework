@@ -137,3 +137,81 @@ def test_template_classifier_matches_release_classifier(tmp_path):
     assert outputs[0] == outputs[1]
     assert outputs[0]["route"] == "critical"
 
+
+def test_template_explainer_matches_release_and_describes_boundaries(tmp_path):
+    workflow = ROOT / "repository-template" / ".ai-safe2" / "workflow.json"
+    profile = ROOT / "repository-template" / ".ai-safe2" / "profiles" / "game.json"
+    outputs = []
+    for script in (
+        ROOT / "scripts" / "explain_workflow.py",
+        ROOT / "repository-template" / "scripts" / "explain_workflow.py",
+    ):
+        output = tmp_path / f"{script.parent.name}-workflow.md"
+        subprocess.run(
+            [
+                sys.executable,
+                str(script),
+                "--workflow",
+                str(workflow),
+                "--profile",
+                str(profile),
+                "--output",
+                str(output),
+            ],
+            check=True,
+        )
+        outputs.append(output.read_text(encoding="utf-8"))
+    assert outputs[0] == outputs[1]
+    assert "## What changed" in outputs[0]
+    assert "## Current preview boundary" in outputs[0]
+    assert "Superpowers" in outputs[0]
+    assert "Codex Security" in outputs[0]
+    assert "cannot merge, release, deploy, or" in outputs[0]
+    assert "a CLI decision-routing result, a human decision record" in outputs[0]
+
+
+def test_required_decision_tools_match_template():
+    for name in ("build_cli_decision_request.py", "build_decision_record.py", "evaluate_decision.py"):
+        assert (ROOT / "scripts" / name).read_text(encoding="utf-8").rstrip() == (
+            ROOT / "repository-template" / "scripts" / name
+        ).read_text(encoding="utf-8").rstrip()
+    assert json.loads((ROOT / "schemas" / "decision-record-v1.schema.json").read_text(encoding="utf-8")) == json.loads(
+        (ROOT / "repository-template" / ".ai-safe2" / "schemas" / "decision-record-v1.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+
+def test_setup_assistant_matches_template_and_is_goal_based():
+    release = (ROOT / "scripts" / "setup_assistant.py").read_text(encoding="utf-8")
+    template = (ROOT / "repository-template" / "scripts" / "setup_assistant.py").read_text(
+        encoding="utf-8"
+    )
+    assert release.rstrip() == template.rstrip()
+    module = load_script("setup_assistant.py")
+    plan = module.render_plan({"planning", "semantic-review", "strategic-review"})
+    assert "Required core — always install" in plan
+    assert "Superpowers" in plan
+    assert "OPENROUTER_API_KEY" in plan
+    assert "Greptile" in plan
+    assert "does not install a" in plan
+    assert "named human" in plan
+
+
+def test_tool_setup_guide_is_linked_and_preserves_integration_boundaries():
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    guide = (ROOT / "docs" / "TOOL-SETUP-GUIDE.md").read_text(encoding="utf-8")
+    assert "docs/TOOL-SETUP-GUIDE.md" in readme
+    for required in (
+        "OPENROUTER_API_KEY",
+        "PR-Agent with OpenRouter",
+        "Greptile",
+        "Superpowers",
+        "CodeQL",
+        "Semgrep",
+        "Gitleaks",
+        "manifest is not execution",
+        "exact pull-request revision",
+    ):
+        assert required in guide
+

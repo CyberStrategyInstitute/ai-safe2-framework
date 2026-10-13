@@ -19,7 +19,7 @@ provider strategy, tradeoffs, and reviewer procedure.
 | PR-Agent advisory availability | Routine semantic review focused on correctness, security, and regression risk | A substantive publication is verified after every attempt; absence fails this advisory check but it is not a required merge check |
 | Greptile review status | Confirms whether Greptile substantively reviewed the exact revision | Advisory; missing, stale, or quota-limited reviews are reported without blocking |
 | CODEOWNERS and human review | Architecture, authorization, policy, payment, cryptography, data, CI, and release judgment | Required owner approval absent |
-| AI SAFE2 decision evidence | Exact base/head risk classification, CLI 0.9.0 environment drift, required evidence, and machine/human records | Evidence generation fails; risk itself routes review rather than automatically blocking |
+| AI SAFE2 decision evidence | Exact base/head risk classification, CLI 1.0.1 environment drift, required evidence, and machine/human records | Evidence generation fails; risk itself routes review rather than automatically blocking |
 
 PR-Agent is the routine AI reviewer. Its software is open source. The provider
 chain deliberately prefers free inference, while keeping provider failure visible:
@@ -33,15 +33,21 @@ chain deliberately prefers free inference, while keeping provider failure visibl
    published expiration, while low-health routes are excluded automatically.
    Degraded status is retained as evidence but does not suppress a route that still
    clears the uptime floor; the canary provides the final availability proof.
-3. A candidate must return valid concise JSON, find both known canary defects at
-   the correct location, and avoid findings on the verified-safe control. The
-   highest score wins; response length and latency break ties.
+3. A fully qualified candidate must return valid concise JSON, find both known
+   canary defects at the correct location, and avoid findings on the verified-safe
+   control. If none fully qualifies but at least one model returns a valid scored
+   response, the highest-scoring responder may be selected as
+   `selected_degraded` for advisory execution. The receipt preserves that it did
+   not pass the canary.
 4. The same request includes up to 12,000 characters from one risk-prioritized hunk
    in the actual PR to confirm context and moderate-input compatibility. Its
    speculative findings do not increase the score because that would reward
    hallucination when the hunk is correct.
-5. `gpt-5.6-luna` through the official OpenAI API is the final, metered fallback
-   when no free candidate passes or the selected model produces no review.
+5. The selected model is passed to the pinned PR-Agent action as
+   `openrouter/<model-id>` together with PR-Agent's required `OPENROUTER__KEY`
+   setting. `gpt-5.6-luna` through the official OpenAI API remains the final,
+   metered fallback when OpenRouter produces no review; its availability depends
+   on configured OpenAI billing and is reported rather than assumed.
 
 The chain uses exact model IDs. `openrouter/free` is deliberately excluded because
 its randomly selected model prevents dependable replay and before/after comparison.
@@ -50,7 +56,7 @@ needed for routine pull-request review and would add another provider data bound
 Model selection is a dated policy snapshot, not a permanent ranking; change it only
 through retained evaluation evidence and an explicit configuration review.
 
-This policy was recalibrated on October 1, 2026. On PR #370, Laguna S 2.1 entered
+This policy was recalibrated on October 1 and corrected on October 9, 2026. On PR #370, Laguna S 2.1 entered
 generation but produced no publication before the ten-minute job limit. The current
 OpenRouter catalog placed Qwen 3.8 27B ahead of Laguna S on latency. A subsequent
 Qwen attempt received the full diff and the configured 75-second timeout but still
@@ -61,16 +67,18 @@ and invokes one OpenAI attempt for at most five minutes only when needed. A late
 Laguna run passed the small canary but stalled after PR-Agent sent the entire
 58.5K-token diff. Repeated PR-Agent trials at 16K and 32K, including a single-call
 attempt, still exhausted the three- and six-minute guards without publishing. The
-free route therefore publishes the passing canary model's bounded,
-risk-prioritized hunk review directly and labels partial coverage. PR-Agent remains
-the metered fallback with a 64K, three-call budget. Receipts retain both budgets,
-coverage mode, route outcomes, and whether metered fallback ran.
+earlier free route therefore published only the canary model's bounded hunk review,
+not a PR-Agent review. The October 9 correction wires the existing OpenRouter
+secret into PR-Agent under the setting name PR-Agent consumes and sends the
+selected model through PR-Agent for a single full-diff attempt. OpenAI remains the
+metered fallback with a 64K, three-call budget. Receipts retain qualification, both
+budgets, coverage mode, route outcomes, and whether metered fallback ran.
 
 The selector deliberately canary-tests three models rather than every free model.
 Catalog and endpoint-health calls do not invoke a model; they cheaply narrow the
 curated pool before inference quota is spent. Testing every free model before every
 PR would consume the daily allowance without improving decision quality
-proportionally. Three canary calls plus one bounded review allow roughly 12
+proportionally. Three canary calls plus one PR-Agent review allow roughly 12
 review attempts within a 50-request day. The claim is therefore "best passing
 model in the live, review-capable shortlist," never "globally best free model."
 
@@ -90,7 +98,8 @@ Both baselines located authorization-after-read and path traversal at `C2` and
 left the safe control unflagged. These results validate the canary shape; they do
 not place either model in the free OpenRouter ranking.
 
-OpenRouter uses the repository `OPENROUTER_API_KEY` secret and OpenAI uses
+OpenRouter uses the repository `OPENROUTER_API_KEY` secret, mapped only at runtime
+to PR-Agent's required `OPENROUTER__KEY` environment setting; OpenAI uses
 `OPENAI_KEY`. Same-model retries are disabled so a transient provider failure moves
 to the next bounded option instead of consuming the free request allowance. Run
 details and provider-reported cost are enabled so reviewer availability, selected
@@ -120,7 +129,7 @@ ruleset.
 Greptile is reserved for major integration points: authentication or authorization, policy and enforcement, payment or settlement, cryptography, evidence integrity, migrations, release candidates, and large cross-boundary changes. `Greptile / Advisory status` distinguishes a substantive current-head review from a quota or error response, but never blocks ordinary development.
 
 `Review Decision Evidence` applies `.ai-safe2/review-policy.json` to the exact
-base/head diff, runs the released AI SAFE2 CLI 0.9.0 against comparable baseline
+base/head diff, runs the released AI SAFE2 CLI 1.0.1 against comparable baseline
 and current checkouts, and retains JSON, Markdown, and hashes for 90 days. The
 report intentionally records unavailable historic finding attribution as unknown.
 It never converts absence of prior structured evidence into zero inherited defects.

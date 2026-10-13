@@ -19,7 +19,7 @@ identify their baseline; this update does not change scoring formulas.
 
 ## Emerging evidence and technology mapping
 
-Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to record whether a source implements, validates, evidences, or challenges each
 mapped control. The [nine-example review](../research/technology-contribution-examples.md)
 adds candidates for composed capabilities, forged process evidence, and learned-policy

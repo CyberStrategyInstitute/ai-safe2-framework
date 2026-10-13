@@ -40,6 +40,7 @@ jobs:
       PR_AGENT_FREE_MAX_MODEL_TOKENS: "16000"
       PR_AGENT_FREE_MAX_CALLS: "1"
       PR_AGENT_OPENAI_MAX_MODEL_TOKENS: "64000"
+      PR_AGENT_SOURCE_COMMIT: 1d01f24f455bb879c1d9c557ad7de3d72dcc7975
     steps:
       - name: Check out review policy and preflight
         uses: actions/checkout@v7
@@ -88,46 +89,52 @@ jobs:
           --policy .ai-safe2/pr-agent-preflight-policy.json
           --receipt pr-agent-preflight.json
 
-      - name: Publish bounded OpenRouter review
-        id: pr-agent-free
-        if: steps.route.outputs.route == 'solution' && steps.preflight.outputs.available == 'true'
-        continue-on-error: true
-        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b # v8
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+      - name: Set up Python for PR-Agent
+        if: steps.route.outputs.route == 'solution'
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
-          github-token: ${{ github.token }}
-          script: |
-            const fs = require('fs');
-            const receipt = JSON.parse(fs.readFileSync('pr-agent-preflight.json', 'utf8'));
-            const selected = receipt.tested_candidates.find(
-              item => item.model === receipt.selected_model && item.assessment?.passed
-            );
-            const review = selected?.assessment?.pr_context_review;
-            if (!review) {
-              core.setFailed('Selected model has no bounded PR-context review to publish.');
-              return;
-            }
-            const finding = review.potential_issue
-              ? `Potential issue: ${review.potential_issue}`
-              : 'No actionable issue was established in the bounded hunk.';
-            const body = [
-              '## Bounded OpenRouter Reviewer Guide',
-              '',
-              `Model: \`${receipt.selected_model}\` (canary ${selected.assessment.score}/100)`,
-              `Reviewed path: \`${review.path}\` (${receipt.pr_context.patch_characters} patch characters)`,
-              '',
-              finding,
-              '',
-              `Evidence: ${review.why}`,
-              '',
-              '> Coverage: one risk-prioritized hunk only. This is advisory, not a full-PR review or merge approval.',
-            ].join('\n');
-            await github.rest.issues.createComment({
-              ...context.repo,
-              issue_number: Number(process.env.PR_NUMBER),
-              body,
-            });
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install pinned PR-Agent source
+        if: steps.route.outputs.route == 'solution'
+        timeout-minutes: 3
+        shell: bash
+        run: >-
+          python -m pip install --disable-pip-version-check
+          "pr-agent @ git+https://github.com/The-PR-Agent/pr-agent.git@${PR_AGENT_SOURCE_COMMIT}"
+
+      - name: Review with PR-Agent through OpenRouter
+        id: pr-agent-free
+        if: steps.route.outputs.route == 'solution' && steps.preflight.outputs.available == 'true' && steps.preflight.outputs.qualified == 'true'
+        continue-on-error: true
+        timeout-minutes: 5
+        shell: bash
+        run: python -m pr_agent.cli --pr_url "$PR_URL" review
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url || format('{0}/{1}/pull/{2}', github.server_url, github.repository, github.event.issue.number) }}
+          GITHUB__USER_TOKEN: ${{ github.token }}
+          # PR-Agent expects the nested OpenRouter setting under this exact
+          # environment name. The repository secret keeps its existing name.
+          OPENROUTER__KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          config.model: openrouter/${{ steps.preflight.outputs.selected_model }}
+          config.fallback_models: '[]'
+          config.custom_model_max_tokens: "32000"
+          config.max_model_tokens: ${{ env.PR_AGENT_FREE_MAX_MODEL_TOKENS }}
+          config.ai_timeout: ${{ env.PR_AGENT_REQUEST_TIMEOUT_SECONDS }}
+          config.reasoning_effort: medium
+          pr_reviewer.enable_large_pr_chunking: "true"
+          pr_reviewer.max_number_of_calls: ${{ env.PR_AGENT_FREE_MAX_CALLS }}
+          config.duplicate_examples: "true"
+          config.num_retries: "0"
+          config.retry_same_model_on_timeout: "false"
+          config.output_run_details: "true"
+          config.output_run_cost: "true"
+          config.propagate_tool_errors: "true"
+          github_action_config.auto_review: "true"
+          github_action_config.auto_describe: "false"
+          github_action_config.auto_improve: "false"
+          github_action_config.pr_actions: '["opened", "reopened", "ready_for_review", "synchronize"]'
 
       - name: Check free-route publication
         id: free-publication
@@ -136,6 +143,7 @@ jobs:
         env:
           ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+          PREFLIGHT_QUALIFIED: ${{ steps.preflight.outputs.qualified }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -159,7 +167,7 @@ jobs:
             for (const [endpoint, parameters] of sources) {
               records.push(...await github.paginate(endpoint, {...parameters, per_page: 100}));
             }
-            const produced = records.some(record => {
+            const produced = process.env.PREFLIGHT_QUALIFIED === 'true' && records.some(record => {
               if (!allowedAuthors.has((record.user?.login || '').toLowerCase())) return false;
               const observedAt = record.updated_at || record.submitted_at;
               if (!observedAt || Date.parse(observedAt) < startedAt) return false;
@@ -167,6 +175,7 @@ jobs:
               const normalized = body.toLowerCase().replace(/\s+/g, ' ');
               return body.length >= 80 &&
                 reviewMarkers.some(marker => normalized.includes(marker)) &&
+                !normalized.includes('not included in this review') &&
                 !failureMarkers.some(marker => normalized.includes(marker));
             });
             core.setOutput('produced', String(produced));
@@ -176,10 +185,12 @@ jobs:
         if: always() && steps.route.outputs.route == 'solution' && steps.free-publication.outputs.produced != 'true'
         continue-on-error: true
         timeout-minutes: 5
-        uses: the-pr-agent/pr-agent@1d01f24f455bb879c1d9c557ad7de3d72dcc7975 # v0.46.0
+        shell: bash
+        run: python -m pr_agent.cli --pr_url "$PR_URL" review
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
+          PR_URL: ${{ github.event.pull_request.html_url || format('{0}/{1}/pull/{2}', github.server_url, github.repository, github.event.issue.number) }}
+          GITHUB__USER_TOKEN: ${{ github.token }}
+          OPENAI__KEY: ${{ secrets.OPENAI_KEY }}
           config.model: ${{ env.PR_AGENT_OPENAI_FALLBACK_MODEL }}
           config.fallback_models: '[]'
           config.custom_model_max_tokens: "256000"
@@ -211,6 +222,7 @@ jobs:
           SELECTED_FREE_MODEL: ${{ steps.preflight.outputs.selected_model }}
           FREE_MODEL_POOL: ${{ env.PR_AGENT_FREE_MODEL_POOL }}
           PREFLIGHT_OUTCOME: ${{ steps.preflight.outcome }}
+          PREFLIGHT_QUALIFIED: ${{ steps.preflight.outputs.qualified }}
           PREFLIGHT_TESTED_COUNT: ${{ steps.preflight.outputs.tested_count }}
           PREFLIGHT_ELIGIBLE_COUNT: ${{ steps.preflight.outputs.eligible_count }}
           PREFLIGHT_RECEIPT_SHA256: ${{ steps.preflight.outputs.receipt_sha256 }}
@@ -269,6 +281,7 @@ jobs:
             }
             const substantive = [];
             const failures = [];
+            const partial = [];
             for (const record of records) {
               if (!allowedAuthors.has((record.user?.login || '').toLowerCase())) continue;
               const observedAt = record.updated_at || record.submitted_at;
@@ -286,7 +299,8 @@ jobs:
                 selected_model: modelMatch?.[1] || null,
                 route_role: modelMatch?.[2] || null,
               };
-              if (failureMarkers.some(marker => normalized.includes(marker))) failures.push(evidence);
+              if (normalized.includes('not included in this review')) partial.push(evidence);
+              else if (failureMarkers.some(marker => normalized.includes(marker))) failures.push(evidence);
               else if (
                 body.length >= 80 &&
                 (reviewMarkers.some(marker => normalized.includes(marker)) ||
@@ -322,11 +336,12 @@ jobs:
                 request_timeout_seconds: Number(process.env.REQUEST_TIMEOUT_SECONDS),
                 free_max_model_tokens: Number(process.env.FREE_MAX_MODEL_TOKENS),
                 free_max_number_of_calls: Number(process.env.FREE_MAX_CALLS),
-                free_coverage_mode: 'bounded_single_pass',
+                free_coverage_mode: 'pr_agent_full_diff_single_pass',
                 openai_max_model_tokens: Number(process.env.OPENAI_MAX_MODEL_TOKENS),
               },
               provider_execution: {
                 preflight_outcome: process.env.PREFLIGHT_OUTCOME,
+                preflight_qualified: process.env.PREFLIGHT_QUALIFIED === 'true',
                 preflight_tested_count: Number(process.env.PREFLIGHT_TESTED_COUNT || 0),
                 preflight_eligible_count: Number(process.env.PREFLIGHT_ELIGIBLE_COUNT || 0),
                 preflight_receipt_sha256: process.env.PREFLIGHT_RECEIPT_SHA256 || null,
@@ -335,14 +350,17 @@ jobs:
                 fallback_invoked: fallbackInvoked,
                 fallback_action_outcome: fallbackActionOutcome,
                 selected_models: observedModels,
-                final_model: observedModels.at(-1) || null,
+                final_model: observedModels.at(-1) ||
+                  (freeReviewProduced ? process.env.SELECTED_FREE_MODEL : null),
               },
               preflight,
               publication: {
                 substantive_count: substantive.length,
+                partial_count: partial.length,
                 failure_count: failures.length,
                 active_failure_count: activeFailures.length,
                 substantive,
+                partial,
                 failures,
               },
               api_error_type: apiErrorType,
@@ -355,6 +373,7 @@ jobs:
               .addList([
                 `Status: **${receipt.status}**`,
                 `Substantive review publications: **${substantive.length}**`,
+                `Partial review publications: **${partial.length}**`,
                 `Explicit failure publications: **${failures.length}**`,
                 `Action outcome: **${actionOutcome}**`,
                 `Free-route outcome: **${freeActionOutcome}**`,
@@ -364,6 +383,7 @@ jobs:
                 `Live health shortlist: ${Array.isArray(receipt.preflight.shortlisted_candidates) && receipt.preflight.shortlisted_candidates.length ? receipt.preflight.shortlisted_candidates.map(model => `\`${model}\``).join(' → ') : '**none**'}`,
                 `Selected free model: ${receipt.provider_policy.selected_free_model ? `\`${receipt.provider_policy.selected_free_model}\`` : '**none**'}`,
                 `Preflight status: **${receipt.preflight.status}**`,
+                `Preflight qualification: **${receipt.provider_execution.preflight_qualified ? 'qualified' : 'degraded or unavailable'}**`,
                 `Fallback order: ${receipt.provider_policy.fallback_models.map(model => `\`${model}\``).join(' → ')}`,
                 `Per-route timeout: **${receipt.provider_policy.request_timeout_seconds}s**`,
                 `Free review budget: **${receipt.provider_policy.free_max_model_tokens} tokens**`,

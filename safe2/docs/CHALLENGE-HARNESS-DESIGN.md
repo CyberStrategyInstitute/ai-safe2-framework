@@ -14,12 +14,12 @@ real-agent effectiveness, process containment, or independent replication.
 
 ## Technology validation candidates
 
-The [technology validation guide](../../docs/TECHNOLOGY-VALIDATION.md) frames
+The [technology validation guide](../../AISM/TECHNOLOGY-VALIDATION.md) frames
 clean/attacked pairs, process-mimicking attacks, composed service capabilities,
 independent side-effect observation, and learned-policy integrity tests.
 These require separate owned/versioned experiment plans; they do not alter
 Challenge 001's frozen cases or the current execution boundary. Preserve
-[assurance](../../docs/EVIDENCE-ASSURANCE.md), challenge maturity, and contribution separately.
+[assurance](../../AISM/EVIDENCE-ASSURANCE.md), challenge maturity, and contribution separately.
 
 ## Implementation boundary
 

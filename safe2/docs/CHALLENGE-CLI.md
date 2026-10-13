@@ -15,12 +15,12 @@
 
 ## Technology profiles and claim separation
 
-Use the [Technology Contribution Profile](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](../../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to record what imported or executed challenge evidence supports. Bundle integrity
 and reproduced grading do not establish independent execution or production
-enforcement. The [validation candidates](../../docs/TECHNOLOGY-VALIDATION.md) are proposed
+enforcement. The [validation candidates](../../AISM/TECHNOLOGY-VALIDATION.md) are proposed
 experiments outside the current frozen pack. Their contribution and
-[assurance ratings](../../docs/EVIDENCE-ASSURANCE.md) are not calculated by this CLI.
+[assurance ratings](../../AISM/EVIDENCE-ASSURANCE.md) are not calculated by this CLI.
 
 ## What this adds
 

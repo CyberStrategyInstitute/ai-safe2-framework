@@ -18,9 +18,9 @@ identify their baseline; this update does not change scoring formulas.
 
 ## Incident and technology evidence intake
 
-Feed new research, bypasses, and incidents into the loop through the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md),
-[validation guide](../docs/TECHNOLOGY-VALIDATION.md), and
-[incident evidence workflow](../docs/INCIDENT-EVIDENCE.md).
+Feed new research, bypasses, and incidents into the loop through the [Technology Contribution Profile](TECHNOLOGY-CONTRIBUTION-PROFILE.md),
+[validation guide](TECHNOLOGY-VALIDATION.md), and
+[incident evidence workflow](INCIDENT-EVIDENCE.md).
 Preserve source attribution, notification/retention ownership, and a versioned
 regression candidate. Learned-policy changes require approval, provenance,
 poisoning/conflict review, and rollback; adaptation alone earns no maturity level.

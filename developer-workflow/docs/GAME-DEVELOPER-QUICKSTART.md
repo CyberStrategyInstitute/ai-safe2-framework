@@ -11,7 +11,40 @@ build system, Claude configuration, Codex configuration, or repository tests.
 2. Copy `profiles/game.json` to `.ai-safe2/profiles/game.json`.
 3. Replace the owner placeholders in `.ai-safe2/workflow.json`.
 4. Enter the actual build, test, lint, and packaging commands.
-5. Commit the setup through a normal pull request.
+5. Validate the package and generate the repository-specific explanation:
+
+   ```bash
+   python scripts/validate_workflow.py --root .
+   python scripts/explain_workflow.py \
+     --workflow .ai-safe2/workflow.json \
+     --profile .ai-safe2/profiles/game.json \
+     --output AI-SAFE2-DEVELOPER-WORKFLOW.md
+   ```
+
+6. Read `AI-SAFE2-DEVELOPER-WORKFLOW.md` and confirm the routes, trust
+   boundaries, owner, review options, and limitations match the game.
+7. Commit the setup through a normal pull request.
+
+The starter GitHub workflow verifies the pinned CLI, creates the deterministic
+route, runs CLI decision routing, initializes the revision-bound human decision
+record to `hold`, repeats the repository explanation, and uploads those
+artifacts. A green validation proves that these required records were produced
+and that the configuration is internally consistent. It does not prove that an
+optional AI reviewer ran or that the game is secure or ready to release.
+
+## What changes after installation
+
+| Before | After |
+|---|---|
+| The same review habit may be used for every change | Documentation, gameplay code, and critical trust-boundary changes can take different routes |
+| Claude, Codex, and scanners can produce disconnected comments | Results can be retained as attributed, revision-bound evidence |
+| A missing reviewer may be easy to overlook | Failed, unavailable, and stale evidence do not satisfy a required capability |
+| “Checks passed” can sound like release approval | The workflow stops at `ready_for_human_decision`; a named human decides |
+
+Start with the route and deterministic checks. Add planning, semantic review,
+security review, or runtime governance only where the repository's risks and
+goals justify them. See the [Adoption Guide](ADOPTION-GUIDE.md) for the module
+menu and tradeoffs.
 
 ## Game-specific review lenses
 
