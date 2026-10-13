@@ -33,6 +33,9 @@ updates:
     schedule: {interval: weekly, day: tuesday, time: "06:00"}
     open-pull-requests-limit: 5
     labels: [dependencies, github-actions]
+    groups:
+      codeql:
+        patterns: ["github/codeql-action*"]
 
   - package-ecosystem: docker
     directory: /
