@@ -122,7 +122,11 @@ def test_consolidated_documentation_local_links_resolve() -> None:
             if "://" in target or target.startswith(("#", "mailto:")):
                 continue
             path = target.split("#", 1)[0]
-            if path and not (page.parent / path).resolve().exists():
-                missing.append(f"{page.relative_to(ROOT).as_posix()} -> {target}")
+            if path:
+                destination = (page.parent / path).resolve()
+                if not destination.exists() or (
+                    destination.is_dir() and not any(destination.iterdir())
+                ):
+                    missing.append(f"{page.relative_to(ROOT).as_posix()} -> {target}")
 
     assert missing == [], "Broken consolidated documentation links: " + ", ".join(missing)
