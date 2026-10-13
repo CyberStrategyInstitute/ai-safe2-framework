@@ -4,11 +4,11 @@
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-AISM-820F1A?style=flat-square)](./README.md)
-[![Status](https://img.shields.io/badge/Status-Methods_v1.0-808080?style=flat-square)](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+[![Status](https://img.shields.io/badge/Status-Methods_v1.0-808080?style=flat-square)](TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](./README.md) | [NEXUS](../NEXUS/README.md)
 
-**Documentation updated:** 2026-10-02. This guide clarifies the existing
+**Documentation updated:** 2026-10-13. This guide clarifies the existing
 organizational score and explains two v1.0 companion methods. It does
 not change organizational scoring formulas or implement new CLI commands.
 
@@ -22,12 +22,18 @@ supported by a reusable Technology Card, validation guidance, and review example
 | Instrument | What it assesses | When to use it | Method and record |
 |---|---|---|---|
 | AISM Sovereignty Score | Organizational maturity across five pillars and six dimensions | Baseline governance, prioritize organizational improvements, and reassess progress | [Scoring methodology](./AISM-Scoring-Matrix-Methodology.md), [self-assessment](./AISM-Self-Assessment-Tool.md) |
-| AISM Technology Contribution Profile, v1.0 | What an exact product, technique, paper, or other artifact contributes to specific controls in a stated boundary | Review candidates, compare control fit, or define adoption conditions | [TCP method and contribution rubric](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md), [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) |
-| AI SAFE² Evidence Assurance Level, v1.0 | How strongly each claimed contribution has been demonstrated | Judge whether evidence supports a claim and identify the next validation step | [Evidence Assurance rubric](../docs/EVIDENCE-ASSURANCE.md), the card's claim and control register |
+| AISM Technology Contribution Profile, v1.0 | What an exact product, technique, paper, or other artifact contributes to specific controls in a stated boundary | Review candidates, compare control fit, or define adoption conditions | [TCP method and contribution rubric](TECHNOLOGY-CONTRIBUTION-PROFILE.md), [Technology Card](templates/TECHNOLOGY-CARD.md) |
+| AI SAFE² Evidence Assurance Level, v1.0 | How strongly each claimed contribution has been demonstrated | Judge whether evidence supports a claim and identify the next validation step | [Evidence Assurance rubric](EVIDENCE-ASSURANCE.md), the card's claim and control register |
 
 The Technology Card is the record used for TCP and assurance review, not a fourth
 score. It is also distinct from the executable
 [AISM Decision Card](../examples/aism-decision-card/README.md).
+
+The full methods and Technology Card are maintained in this AISM directory.
+For a product or solution review, start with the
+[technology evidence request](./TECHNOLOGY-EVIDENCE-REQUEST.md). It provides a
+copyable provider request and checklist for collecting the artifacts needed
+to evaluate contribution and claim-level assurance.
 
 ## How to use the three instruments
 
@@ -47,7 +53,7 @@ score. It is also distinct from the executable
    origin, independence, failures, and limits. A source being public does not
    establish independent validation. Leave unknown claims unrated with a reason.
 5. **Make an adoption decision.** Use the
-   [TCP adoption rule](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule)
+   [TCP adoption rule](TECHNOLOGY-CONTRIBUTION-PROFILE.md#purchasing-and-adoption-rule)
    to name an owner, complementary controls, acceptance tests, residual risk,
    and reassessment triggers. A completed card does not authorize deployment.
 6. **Reassess organizational maturity after deployment.** Evidence from an adopted
@@ -73,8 +79,8 @@ agent-to-tool path and considers a gate that checks each call against policy.
 | Acceptance work | Positive and negative cases, unauthorized side effects, bypasses, revocation, restart, and legitimate task completion | A later E3 assessment requires a defined harness, reviewable results, and a bounded claim |
 | Organizational reassessment | Local deployment, measured coverage, operators' retained authority, and complementary controls | Reassess only the cells supported by the organization's actual evidence |
 
-See the [validation guide](../docs/TECHNOLOGY-VALIDATION.md) for test planning and
-the [incident evidence guide](../docs/INCIDENT-EVIDENCE.md) for failures and
+See the [validation guide](TECHNOLOGY-VALIDATION.md) for test planning and
+the [incident evidence guide](INCIDENT-EVIDENCE.md) for failures and
 reconstruction. Neither guide claims these tests have been performed.
 
 ## Read and report the result
@@ -105,6 +111,6 @@ evidence, and review; publication alone does not validate these instruments.
 
 ---
 
-[AISM Home](./README.md) | [Technology Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Evidence Assurance](../docs/EVIDENCE-ASSURANCE.md) | [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) | [Nine review examples](../research/technology-contribution-examples.md)
+[AISM Home](./README.md) | [Technology Profile](TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Evidence Assurance](EVIDENCE-ASSURANCE.md) | [Technology Card](templates/TECHNOLOGY-CARD.md) | [Nine review examples](../research/technology-contribution-examples.md)
 
 *AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

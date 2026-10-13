@@ -6,6 +6,8 @@
 
 [Documentation map](docs/README.md) · [Developer Workflow](developer-workflow/README.md) · [CLI 1.0 workflow](safe2/docs/CLI-1.0-WORKFLOW.md) · [Security advisories](docs/advisories/README.md) · [Topic registry](repository-topics.manifest.json)
 
+**Evaluate technology:** [Technology Contribution Profile](AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md) · [Evidence Assurance Level](AISM/EVIDENCE-ASSURANCE.md) · [Collect evidence](AISM/TECHNOLOGY-EVIDENCE-REQUEST.md)
+
 ### The Universal GRC Standard for Agentic AI, Swarm Governance, and Runtime Enforcement
 
 [![Version](https://img.shields.io/badge/version-3.1.0-orange.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/releases)
@@ -194,9 +196,12 @@ See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_server_secu
 
 ## Assess Organizations, Technologies, and Evidence Separately
 
-**Documentation updated: 2026-10-02.** Start with the
+**Documentation updated: 2026-10-13.** Start with the
 [AISM assessment guide](AISM/ASSESSMENT-GUIDE.md) to use all three instruments
-with the Technology Card and a worked example.
+with the Technology Card and a worked example. Full assessment documentation
+lives under [AISM](AISM/README.md). To evaluate a product or solution, send the
+[technology evidence request](AISM/TECHNOLOGY-EVIDENCE-REQUEST.md), collect dated
+artifacts, and record contribution and assurance separately in the card.
 
 An organization earns an AISM maturity level. A technology contributes evidence
 for specific controls within a defined boundary. A paper, benchmark, released
@@ -208,8 +213,8 @@ retained authority and governance capabilities across five pillars and six dimen
 | Review instrument | Question | Starting point |
 |---|---|---|
 | AISM Sovereignty Score | How mature is the organization's governance across five pillars and six dimensions? | [Organizational methodology](AISM/AISM-Scoring-Matrix-Methodology.md) |
-| AISM Technology Contribution Profile v1.0 | Which controls does this artifact address, implement, enforce, validate, evidence, or challenge? | [Profile and adoption rule](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md), [Technology Card](docs/templates/TECHNOLOGY-CARD.md) |
-| AI SAFE² Evidence Assurance v1.0 | What evidence supports each scoped claim? | [Assurance rubric and compatibility](docs/EVIDENCE-ASSURANCE.md) |
+| AISM Technology Contribution Profile v1.0 | Which controls does this artifact address, implement, enforce, validate, evidence, or challenge? | [Profile and adoption rule](AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md), [Technology Card](AISM/templates/TECHNOLOGY-CARD.md) |
+| AI SAFE² Evidence Assurance v1.0 | What evidence supports each scoped claim? | [Assurance rubric and compatibility](AISM/EVIDENCE-ASSURANCE.md) |
 
 Select technologies by required-control fit, enforcement location, evidence,
 failure behavior, retained authority, residual risk, and integration value.
@@ -219,14 +224,14 @@ Do not rank purchases by average pillar contribution or label a product
 The [nine-example review](research/technology-contribution-examples.md) frames
 ContractWarden, DGF-Bench, ActionGuard, OpenShell/Sentry, policy learning, oversight,
 and incident/accountability inputs as adoption candidates. Follow the
-[validation guide](docs/TECHNOLOGY-VALIDATION.md) and
-[incident evidence workflow](docs/INCIDENT-EVIDENCE.md) before promoting claims.
+[validation guide](AISM/TECHNOLOGY-VALIDATION.md) and
+[incident evidence workflow](AISM/INCIDENT-EVIDENCE.md) before promoting claims.
 
 These additions are CSI v1.0 assessment methods for use and feedback. The CLI's current E0-E5
 numeric grades, Challenge Lab C0-C5 scale, organizational scoring, 161 controls,
 and generated profile data keep their existing meanings. No TCP command or
 dashboard scoring integration is implemented by this update. See the
-[repository coverage review](docs/TECHNOLOGY-PROFILE-REPO-REVIEW.md).
+[repository coverage review](AISM/TECHNOLOGY-PROFILE-REPO-REVIEW.md).
 
 ---
 
@@ -241,7 +246,7 @@ dashboard scoring integration is implemented by this update. See the
 | [Pillar 5: Evolve & Educate](05-evolve-educate/) | Adversarial evaluation and red-team artifacts |
 | [Cross-Pillar Governance](00-cross-pillar/) | CP.1 through CP.10, ACT tiers, HEAR doctrine, replication governance, CP.5 profiles |
 | [AI Sovereign Maturity (AISM) Model](AISM/) | Organizational maturity model and control mapping |
-| [Technology Contribution Profile](docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Artifact review, evidence assurance, adoption rule, and reusable card |
+| [Technology Contribution Profile](AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Artifact review, evidence assurance, adoption rule, and reusable card |
 | [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
 | [AI SAFE² Developer Workflow](developer-workflow/README.md) | Provider-neutral change routing, review evidence, game profile, and replayable human decision records |
 | [AI SAFE² Development Method](docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) | Risk-adjusted planning, implementation evidence, reviews, and completion receipts |

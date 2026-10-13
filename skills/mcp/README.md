@@ -12,9 +12,9 @@
 ## Profile discovery and technology review
 
 The MCP server's taxonomy/profile access does not itself establish runtime
-enforcement or product maturity. Use the [Technology Contribution Profile](../../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+enforcement or product maturity. Use the [Technology Contribution Profile](../../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to identify actual control effects and claim evidence at each plane.
-[Assurance v1.0](../../docs/EVIDENCE-ASSURANCE.md) is documentation guidance;
+[Assurance v1.0](../../AISM/EVIDENCE-ASSURANCE.md) is documentation guidance;
 no new MCP assessment tool or schema is exposed by this update.
 
 ## What This Is

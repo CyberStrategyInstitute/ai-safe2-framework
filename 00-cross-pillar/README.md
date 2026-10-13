@@ -14,12 +14,12 @@
 
 ## Technology contribution, evidence, and authority
 
-The [AISM Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+The [AISM Technology Contribution Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 records how an artifact addresses, implements, enforces, validates, evidences,
 or challenges specific controls. Select the actual CP.5 profile and enforcement
 plane; protocol relevance alone is not profile coverage. Record CP.10 stopping
 authority and inspect/configure/revoke/replace/export rights explicitly.
-[Incident evidence](../docs/INCIDENT-EVIDENCE.md) feeds CP.6 learning through an
+[Incident evidence](../AISM/INCIDENT-EVIDENCE.md) feeds CP.6 learning through an
 owned regression candidate. This update adds no core control or profile requirement.
 
 ## 🎯 The Problem. The Realization. The Solution.

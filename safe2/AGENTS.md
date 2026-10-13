@@ -9,5 +9,6 @@ Read the repository-root `AGENTS.md` first. For SAFE2 CLI work, parse
 - Do not convert a generated score or receipt into human approval, conformance,
   release, deployment, or risk acceptance.
 - CLI-owned guidance belongs under `safe2/`; historical release records belong
-  under `releases/`; shared assurance methods belong under `docs/`.
+  under `releases/`; AISM assessment, technology-contribution, and Evidence
+  Assurance methods belong under `AISM/`; shared governance belongs under `docs/`.
 - Update code, schemas, tests, documentation, examples, and manifests together.

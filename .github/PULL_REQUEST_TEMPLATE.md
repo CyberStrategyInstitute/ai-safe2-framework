@@ -42,7 +42,7 @@
 ## Technology Contribution and Claim Boundaries
 
 <!-- For technology, research, benchmark, or incident-driven changes, link a completed
-Technology Card at docs/templates/TECHNOLOGY-CARD.md. Record canonical controls,
+Technology Card at AISM/templates/TECHNOLOGY-CARD.md. Record canonical controls,
 effects, coverage, boundary, source/version, claim-level assurance rubric,
 independence, failure modes, retained authority, and complementary controls.
 Keep organizational maturity, contribution, assurance v1.0, existing CLI grades,

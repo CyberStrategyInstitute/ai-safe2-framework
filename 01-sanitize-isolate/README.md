@@ -13,11 +13,11 @@
 
 ## Technology contribution and enforcement boundaries
 
-Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+Use the [Technology Contribution Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to distinguish a design from tested sandbox, tool, data, and credential enforcement.
 Record interception, authorization judgment, actuation, supported OS/kernel paths,
 and uncovered dependencies separately. Test composed permitted-service capabilities
-and independent file/network side effects using the [validation guide](../docs/TECHNOLOGY-VALIDATION.md).
+and independent file/network side effects using the [validation guide](../AISM/TECHNOLOGY-VALIDATION.md).
 The [candidate backlog](../research/technology-contribution-examples.md) frames
 ContractWarden, OpenShell/Sentry, ActionGuard, and policy-learning reviews without
 endorsing their deployment or assigning organizational maturity.

@@ -14,9 +14,9 @@
 ## Technology evidence and incident reconstruction
 
 A log-producing technology `evidences` a control; it does not automatically
-`enforce` it. Apply the [Evidence Assurance rubric](../docs/EVIDENCE-ASSURANCE.md)
+`enforce` it. Apply the [Evidence Assurance rubric](../AISM/EVIDENCE-ASSURANCE.md)
 to individual claims with provenance, collection gaps, and tested boundaries.
-The [incident evidence guide](../docs/INCIDENT-EVIDENCE.md) covers reconstruction,
+The [incident evidence guide](../AISM/INCIDENT-EVIDENCE.md) covers reconstruction,
 affected-party uncertainty, custodianship, retention/hold decisions, and notification
 ownership. Preserve evidence outside the governed component's authority where
 required; hashes alone do not establish truth or independent validation.

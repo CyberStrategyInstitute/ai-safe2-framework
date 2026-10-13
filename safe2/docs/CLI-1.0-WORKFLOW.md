@@ -34,6 +34,6 @@ conformance, or replace the accountable human decision owner. The Codex and
 OpenTelemetry adapters consume explicit exports; direct harness hooks remain
 post-1.0 integration work.
 
-Use [the command guide](../README.md), [evidence boundaries](../../docs/EVIDENCE-ASSURANCE.md),
+Use [the command guide](../README.md), [evidence boundaries](../../AISM/EVIDENCE-ASSURANCE.md),
 [stranger acceptance](STRANGER-ACCEPTANCE.md), and [migration guidance](../../MIGRATION.md)
 to tailor this flow without weakening its claims.

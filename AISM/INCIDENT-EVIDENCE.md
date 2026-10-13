@@ -4,7 +4,7 @@
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Guide](https://img.shields.io/badge/Guide-Incident_Evidence-820F1A?style=flat-square)](./INCIDENT-EVIDENCE.md)
 
-[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+[Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
 ---
 

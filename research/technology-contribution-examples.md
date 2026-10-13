@@ -3,7 +3,7 @@
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Research-820F1A?style=flat-square)](./README.md)
-[![Status](https://img.shields.io/badge/Status-Proposed_candidates-808080?style=flat-square)](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
+[![Status](https://img.shields.io/badge/Status-Proposed_candidates-808080?style=flat-square)](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/README.md) | [NEXUS](../NEXUS/README.md) | [Research Index](./README.md) | [Challenge Lab](../challenges/README.md)
 
@@ -21,7 +21,7 @@ test artifacts or exact versions for every item.
 Consequently, the brief's pillar numbers, E ratings, rank order, and claims of
 "Level 5-quality" validation are **provisional input, not adopted scores**.
 Contribution assessments remain `not_assessed` until a completed
-[Technology Card](../docs/templates/TECHNOLOGY-CARD.md) binds each claim to reviewable
+[Technology Card](../AISM/templates/TECHNOLOGY-CARD.md) binds each claim to reviewable
 evidence. The source links support the attributed descriptions, not SAFE2 validation.
 
 These are nine different artifact types. Investigations and accountability events
@@ -188,6 +188,6 @@ certified, or granted production authority by this documentation change.
 
 ---
 
-[Technology Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Validation](../docs/TECHNOLOGY-VALIDATION.md) | [Incident Evidence](../docs/INCIDENT-EVIDENCE.md) | [Repository coverage review](../docs/TECHNOLOGY-PROFILE-REPO-REVIEW.md)
+[Technology Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Validation](../AISM/TECHNOLOGY-VALIDATION.md) | [Incident Evidence](../AISM/INCIDENT-EVIDENCE.md) | [Repository coverage review](../AISM/TECHNOLOGY-PROFILE-REPO-REVIEW.md)
 
 *AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

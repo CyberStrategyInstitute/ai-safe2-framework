@@ -11,13 +11,13 @@
 
 ## Reviewing technology contributions
 
-Use the [Technology Card](../docs/templates/TECHNOLOGY-CARD.md) to
+Use the [Technology Card](../AISM/templates/TECHNOLOGY-CARD.md) to
 document each example's actual implemented, enforced, validated, and evidenced
 controls. The [nine-example backlog](../research/technology-contribution-examples.md)
 illustrates source-attributed candidates; it adds no runnable integration to this
 index. Reference code, passing fixture tests, and installed examples do not
 establish an adopting organization's maturity. Apply the
-[profile method](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) before extending claims.
+[profile method](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md) before extending claims.
 
 ## Purpose
 

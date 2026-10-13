@@ -19,7 +19,7 @@ identify their baseline; this update does not change scoring formulas.
 ## Scope of maturity claims
 
 Organizations earn these five maturity levels. Technologies supply scoped
-control evidence. Use the [Technology Contribution Profile](../docs/TECHNOLOGY-CONTRIBUTION-PROFILE.md) to
+control evidence. Use the [Technology Contribution Profile](TECHNOLOGY-CONTRIBUTION-PROFILE.md) to
 describe a candidate's demonstrated capability without calling it "AISM Level 4"
 or "AISM Level 5." A continuously run benchmark alone does not demonstrate
 formal verification, retained authority, or organizational sovereignty.
