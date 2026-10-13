@@ -99,3 +99,14 @@ def test_manual_review_checks_out_the_pull_request_revision():
     assert "github.event.pull_request.head.sha" in workflow
     assert "format('refs/pull/{0}/head', github.event.issue.number)" in workflow
     assert "persist-credentials: false" in workflow
+
+
+def test_degraded_or_truncated_free_review_cannot_suppress_fallback():
+    import yaml
+
+    workflow = yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))
+    steps = {step.get("id"): step for step in workflow["jobs"]["review"]["steps"]}
+    assert "steps.preflight.outputs.qualified == 'true'" in steps["pr-agent-free"]["if"]
+    assert "PREFLIGHT_QUALIFIED" in steps["free-publication"]["env"]
+    assert "not included in this review" in steps["free-publication"]["with"]["script"]
+    assert "steps.free-publication.outputs.produced != 'true'" in steps["pr-agent-openai"]["if"]

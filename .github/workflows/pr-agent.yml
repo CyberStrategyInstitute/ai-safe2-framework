@@ -106,7 +106,7 @@ jobs:
 
       - name: Review with PR-Agent through OpenRouter
         id: pr-agent-free
-        if: steps.route.outputs.route == 'solution' && steps.preflight.outputs.available == 'true'
+        if: steps.route.outputs.route == 'solution' && steps.preflight.outputs.available == 'true' && steps.preflight.outputs.qualified == 'true'
         continue-on-error: true
         timeout-minutes: 5
         shell: bash
@@ -143,6 +143,7 @@ jobs:
         env:
           ATTEMPT_STARTED_AT: ${{ steps.attempt.outputs.started_at }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+          PREFLIGHT_QUALIFIED: ${{ steps.preflight.outputs.qualified }}
         with:
           github-token: ${{ github.token }}
           script: |
@@ -166,7 +167,7 @@ jobs:
             for (const [endpoint, parameters] of sources) {
               records.push(...await github.paginate(endpoint, {...parameters, per_page: 100}));
             }
-            const produced = records.some(record => {
+            const produced = process.env.PREFLIGHT_QUALIFIED === 'true' && records.some(record => {
               if (!allowedAuthors.has((record.user?.login || '').toLowerCase())) return false;
               const observedAt = record.updated_at || record.submitted_at;
               if (!observedAt || Date.parse(observedAt) < startedAt) return false;
@@ -174,6 +175,7 @@ jobs:
               const normalized = body.toLowerCase().replace(/\s+/g, ' ');
               return body.length >= 80 &&
                 reviewMarkers.some(marker => normalized.includes(marker)) &&
+                !normalized.includes('not included in this review') &&
                 !failureMarkers.some(marker => normalized.includes(marker));
             });
             core.setOutput('produced', String(produced));
@@ -279,6 +281,7 @@ jobs:
             }
             const substantive = [];
             const failures = [];
+            const partial = [];
             for (const record of records) {
               if (!allowedAuthors.has((record.user?.login || '').toLowerCase())) continue;
               const observedAt = record.updated_at || record.submitted_at;
@@ -296,7 +299,8 @@ jobs:
                 selected_model: modelMatch?.[1] || null,
                 route_role: modelMatch?.[2] || null,
               };
-              if (failureMarkers.some(marker => normalized.includes(marker))) failures.push(evidence);
+              if (normalized.includes('not included in this review')) partial.push(evidence);
+              else if (failureMarkers.some(marker => normalized.includes(marker))) failures.push(evidence);
               else if (
                 body.length >= 80 &&
                 (reviewMarkers.some(marker => normalized.includes(marker)) ||
@@ -352,9 +356,11 @@ jobs:
               preflight,
               publication: {
                 substantive_count: substantive.length,
+                partial_count: partial.length,
                 failure_count: failures.length,
                 active_failure_count: activeFailures.length,
                 substantive,
+                partial,
                 failures,
               },
               api_error_type: apiErrorType,
@@ -367,6 +373,7 @@ jobs:
               .addList([
                 `Status: **${receipt.status}**`,
                 `Substantive review publications: **${substantive.length}**`,
+                `Partial review publications: **${partial.length}**`,
                 `Explicit failure publications: **${failures.length}**`,
                 `Action outcome: **${actionOutcome}**`,
                 `Free-route outcome: **${freeActionOutcome}**`,
