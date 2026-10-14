@@ -22,6 +22,7 @@ This is a reference implementation scaffold. Production hardening checklist:
 
 import os
 import logging
+import json
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Any
@@ -189,10 +190,10 @@ async def evaluate_tool_call(request: Request):
     _nor_exporter.export(nor)
     attrs = nor_to_otel_attributes(nor)
 
-    log.info(
-        f"tool_call: agent={agent_did[:30]} tool={tool_name} "
-        f"decision={verdict.decision} ocsf={attrs.get('ocsf.class_uid')}"
-    )
+    log.info("tool_call: %s", json.dumps({
+        "agent": agent_did[:30], "tool": tool_name,
+        "decision": verdict.decision, "ocsf": attrs.get("ocsf.class_uid"),
+    }, ensure_ascii=True))
 
     return {
         "decision": verdict.decision,

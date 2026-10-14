@@ -57,10 +57,13 @@ jobs:
           cache-dependency-path: pyproject.toml
 
       - name: Install SAFE2 and test dependencies
-        run: python -m pip install ".[all,dev]" build
+        run: python -m pip install ".[all,dev]" build flask requests pyyaml
 
       - name: Run SAFE2 tests
         run: python -m pytest tests/ scanner/tests/ -v --tb=short
+
+      - name: Check example monitor and guide security regressions
+        run: node --test tests/test_example_security_alerts.js
 
       - name: Validate agent manifest and UAS profile
         run: python scripts/check_agent_manifest.py

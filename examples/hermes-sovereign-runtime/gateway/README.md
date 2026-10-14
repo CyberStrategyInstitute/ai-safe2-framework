@@ -5,6 +5,17 @@
 
 ## What This Does
 
+### Routing and diagnostic boundaries
+
+Only `/v1/messages` and `/v1/chat/completions` are routed. Operator-configured
+HTTP(S) base URLs can still point to local Ollama or a self-hosted provider, but
+must not contain userinfo, query strings, fragments, or control characters.
+Automatic upstream redirects are disabled; configure the final provider URL.
+Invalid routing configuration returns a 500 error rather than silently falling
+back to another provider. Upstream failures return a stable 502 response without
+exception contents. Log fields escape control characters, and filter settings
+are reported as enabled, disabled, or unknown rather than raw configuration.
+
 Every request from Hermes to any LLM provider passes through this proxy first.
 The gateway enforces AI SAFE² v3.0 controls at the semantic layer — the only layer
 where prompt injection, credential exfiltration, and oversized context attacks can be caught.

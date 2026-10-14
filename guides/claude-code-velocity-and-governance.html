@@ -940,13 +940,21 @@ inp.addEventListener('input', function() {
     x.tag.toLowerCase().includes(q)
   ).slice(0, 8);
   if (!hits.length) {
-    res.innerHTML = '<div class="s-empty">No results for "' + q + '"</div>';
+    const empty = document.createElement('div');
+    empty.className = 's-empty';
+    empty.textContent = 'No results for "' + q + '"';
+    res.appendChild(empty);
     res.classList.add('on'); return;
   }
   hits.forEach(item => {
     const a = document.createElement('a');
     a.className = 'sr'; a.href = item.href;
-    a.innerHTML = '<div class="sr-tag">'+item.tag+'</div><div class="sr-title">'+item.title+'</div><div class="sr-excerpt">'+item.excerpt+'</div>';
+    [['sr-tag', item.tag], ['sr-title', item.title], ['sr-excerpt', item.excerpt]].forEach(([className, text]) => {
+      const field = document.createElement('div');
+      field.className = className;
+      field.textContent = text;
+      a.appendChild(field);
+    });
     a.addEventListener('click', () => { res.classList.remove('on'); inp.value = ''; });
     res.appendChild(a);
   });

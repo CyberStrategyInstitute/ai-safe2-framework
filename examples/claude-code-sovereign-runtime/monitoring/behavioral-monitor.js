@@ -160,35 +160,54 @@ async function sendAlert(type, message, details = {}) {
 // ---------------------------------------------------------------------------
 // Log watchers
 // ---------------------------------------------------------------------------
+function readLogSnapshot(filepath, previous = null) {
+  // Size, identity, and bytes must come from the same open file.
+  // Supports rename/recreate rotation and observed size reduction. Same-inode
+  // copytruncate/refill before notification can lose events; use rename rotation.
+  let fd;
+  try {
+    fd = fs.openSync(filepath, fs.constants.O_RDONLY | fs.constants.O_NONBLOCK |
+      (fs.constants.O_NOFOLLOW || 0));
+    const stat = fs.fstatSync(fd);
+    if (!stat.isFile()) throw new Error('Log must be a regular file');
+    const identity = `${stat.dev}:${stat.ino}`;
+    let offset = previous && previous.identity === identity && stat.size >= previous.offset
+      ? previous.offset : 0;
+    const chunks = [];
+    const buffer = Buffer.alloc(64 * 1024);
+    while (offset < stat.size) {
+      const bytes = fs.readSync(fd, buffer, 0, Math.min(buffer.length, stat.size - offset), offset);
+      if (!bytes) break;
+      chunks.push(Buffer.from(buffer.subarray(0, bytes)));
+      offset += bytes;
+    }
+    return { identity, offset, content: Buffer.concat(chunks).toString('utf8') };
+  } catch (error) {
+    if (['ENOENT', 'ELOOP'].includes(error.code)) return null;
+    throw error;
+  } finally {
+    if (fd !== undefined) fs.closeSync(fd);
+  }
+}
+
 function watchLogFile(filename, parser, handler) {
   const filepath = path.join(CONFIG.logDir, filename);
 
   // Process existing content first
-  if (fs.existsSync(filepath)) {
-    const content = fs.readFileSync(filepath, 'utf8');
-    content.split('\n').filter(Boolean).forEach(line => {
+  let snapshot = readLogSnapshot(filepath);
+  if (snapshot) {
+    snapshot.content.split('\n').filter(Boolean).forEach(line => {
       handler(parser(line), line);
     });
   }
 
   // Watch for new lines
-  let fileSize = fs.existsSync(filepath) ? fs.statSync(filepath).size : 0;
-
   fs.watch(path.dirname(filepath), { persistent: true }, (event, changedFile) => {
     if (changedFile !== filename) return;
-    if (!fs.existsSync(filepath)) return;
-
-    const newSize = fs.statSync(filepath).size;
-    if (newSize <= fileSize) return;
-
-    // Read new content
-    const fd = fs.openSync(filepath, 'r');
-    const buffer = Buffer.alloc(newSize - fileSize);
-    fs.readSync(fd, buffer, 0, buffer.length, fileSize);
-    fs.closeSync(fd);
-    fileSize = newSize;
-
-    buffer.toString('utf8').split('\n').filter(Boolean).forEach(line => {
+    const next = readLogSnapshot(filepath, snapshot);
+    if (!next) { snapshot = null; return; }
+    snapshot = next;
+    next.content.split('\n').filter(Boolean).forEach(line => {
       handler(parser(line), line);
     });
   });

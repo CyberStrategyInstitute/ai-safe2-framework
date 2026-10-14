@@ -29,7 +29,7 @@ class Colors:
     END = '\033[0m'
 
 class OpenClawScanner:
-    def __init__(self, copenclaw_path: str):
+    def __init__(self, openclaw_path: str):
         self.path = Path(openclaw_path).expanduser()
         self.findings = {
             'critical': [],
@@ -225,7 +225,7 @@ class OpenClawScanner:
                 if redact != 'all':
                     self.findings['high'].append({
                         'check': 'Logging Security',
-                        'issue': f'Log redaction set to "{redact}" (should be "all")',
+                        'issue': 'Log redaction is not set to "all"',
                         'risk': 'API keys and secrets will leak to log files',
                         'fix': 'Set "redactSensitive": "all" in openclaw.json'
                     })

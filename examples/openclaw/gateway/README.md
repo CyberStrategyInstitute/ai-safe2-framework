@@ -2,6 +2,13 @@
 
 ## Gateway — v3.0 Enforcement Layer
 
+Health, safe-mode, provider-error, and audit-verification responses expose
+stable public diagnostics rather than exception text or internal file details.
+Status codes and validity/count fields remain available. Human-readable audit
+and HITL log fields escape control characters; canonical JSONL audit records
+retain the original values. The scanner reports an invalid redaction setting
+without echoing its configured value into console, JSON, or file reports.
+
 AI enforcement proxy implementing the full AI SAFE² v3.0 control stack for OpenClaw — risk scoring, 4-tier HITL, immutable audit, and heartbeat-gated safe mode between client and Anthropic API.
 
 The `gateway/` subfolder contains the AI SAFE² v3.0 enforcement proxy for OpenClaw.

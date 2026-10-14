@@ -8,6 +8,7 @@ Supports: Anthropic · OpenAI · Gemini · Ollama · OpenRouter · NIM · Huggin
 
 import os
 from typing import Any
+from urllib.parse import urlsplit
 
 
 PROVIDER_ENDPOINTS = {
@@ -41,6 +42,8 @@ PATH_MAP = {
 
 
 def get_upstream_url(path: str, config: dict) -> str:
+    if path not in ("/v1/messages", "/v1/chat/completions"):
+        raise ValueError("Unsupported proxy route")
     provider = config.get("provider", {}).get("active", "anthropic")
     base = PROVIDER_ENDPOINTS.get(provider, PROVIDER_ENDPOINTS["anthropic"])
 
@@ -49,7 +52,23 @@ def get_upstream_url(path: str, config: dict) -> str:
     if custom_base:
         base = custom_base.rstrip("/")
 
-    mapped_path = PATH_MAP.get(provider, {}).get(path, path)
+    if not isinstance(base, str) or any(ord(char) <= 32 or ord(char) == 127 for char in base):
+        raise ValueError("Invalid provider base URL")
+    parsed = urlsplit(base)
+    if (parsed.scheme not in ("http", "https") or not parsed.hostname
+            or parsed.username is not None or parsed.password is not None
+            or parsed.query or parsed.fragment or "?" in base or "#" in base
+            or "\\" in base):
+        raise ValueError("Invalid provider base URL")
+    # Validate the port without exposing operator configuration in errors.
+    try:
+        parsed.port
+    except ValueError:
+        raise ValueError("Invalid provider base URL") from None
+
+    mapped_path = PATH_MAP.get(provider, {
+        "/v1/messages": "/v1/messages", "/v1/chat/completions": "/v1/chat/completions",
+    })[path]
     return f"{base}{mapped_path}"
 
 
