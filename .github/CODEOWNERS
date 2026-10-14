@@ -57,3 +57,13 @@ governance/                         @CyberStrategyInstitute/nexus-maintainers @C
 
 # IETF draft: standards team
 governance/ietf-draft-nexus-l1-l2.md @CyberStrategyInstitute/nexus-founding
+
+# Declared CodeQL sanitizers and the code they vouch for (PR 415).
+# CodeQL stops reporting log injection for anything passed through these
+# files, so a change here can silence alerts. Kept last so these rules win.
+# Owner is a user account because the team handles above do not resolve yet.
+/.github/codeql/                                                @CyberStrategy1
+/.github/workflows/codeql.yml                                   @CyberStrategy1
+/examples/openclaw/gateway/safe2_log_fields.py                  @CyberStrategy1
+/examples/hermes-sovereign-runtime/gateway/safe2_log_fields.py  @CyberStrategy1
+/NEXUS/docker/gateway/safe2_log_fields.py                       @CyberStrategy1
