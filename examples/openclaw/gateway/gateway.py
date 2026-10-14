@@ -56,6 +56,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Optional
 
+from safe2_log_fields import encode_log_field
+
 try:
     from flask import Flask, Response, jsonify, request
     import requests as http_requests
@@ -85,11 +87,6 @@ except ImportError:
 GATEWAY_VERSION = "3.0.0"
 FRAMEWORK_REF   = "AI SAFE² v3.0"
 GENESIS_HASH    = hashlib.sha256(b"GENESIS:SAFE2:v3.0:OPENCLAW").hexdigest()[:16]  # 16 hex chars; regex-safe
-
-
-def _log_value(value: Any) -> str:
-    """Escape client-controlled fields while preserving canonical audit data."""
-    return json.dumps(str(value), ensure_ascii=True)
 
 # ─── Module-level state (initialized in main()) ────────────────────────────
 CONFIG: dict = {}
@@ -312,8 +309,8 @@ class ImmutableAuditLog:
                         return False, count, f"Chain break at seq={entry.get('seq', '?')}: stored={stored_hash[:12]} expected={expected[:12]}"
                     prev_hash = stored_hash
                     count += 1
-        except (json.JSONDecodeError, OSError):
-            return False, count, "Audit log could not be read or parsed"
+        except (json.JSONDecodeError, OSError) as e:
+            return False, count, f"Audit log could not be read or parsed after seq={count} ({type(e).__name__})"
 
         return True, count, "OK"
 
@@ -361,7 +358,7 @@ class ImmutableAuditLog:
             self._last_hash = entry_hash
             logger.info(
                 "AUDIT seq=%d user=%s score=%.2f tier=%s blocked=%s hash=%s",
-                self._seq, _log_value(user_id), risk_score, _log_value(hitl_tier), blocked, entry_hash[:12],
+                self._seq, encode_log_field(user_id), risk_score, encode_log_field(hitl_tier), blocked, entry_hash[:12],
             )
             return entry_hash
 
@@ -756,7 +753,7 @@ class HITLCircuitBreaker:
                 return {"status": 403, "body": {"error": "Invalid or expired HITL token", "tier": "HIGH"}}
             logger.warning(
                 "HITL HIGH approved: user=%s score=%.2f reason='%s'",
-                _log_value(user_id), risk_score, _log_value(reason[:80])
+                encode_log_field(user_id), risk_score, encode_log_field(reason[:80])
             )
             return None
 
@@ -766,7 +763,7 @@ class HITLCircuitBreaker:
             token = self._challenges.create(request_hash, user_id)
             logger.critical(
                 "CRITICAL HITL challenge issued: user=%s hash=%s token=%s",
-                _log_value(user_id), request_hash[:12], token,
+                encode_log_field(user_id), request_hash[:12], token,
             )
             # In production: dispatch token to webhook/PagerDuty/Slack here
             self._dispatch_challenge_alert(user_id, token, risk_score)
@@ -798,7 +795,7 @@ class HITLCircuitBreaker:
                 "error": "Request body changed since challenge was issued",
                 "detail": "Replay or tampering detected",
             }}
-        logger.critical("CRITICAL HITL 2FA approved: user=%s hash=%s", _log_value(user_id), request_hash[:12])
+        logger.critical("CRITICAL HITL 2FA approved: user=%s hash=%s", encode_log_field(user_id), request_hash[:12])
         return None
 
     def _dispatch_challenge_alert(self, user_id: str, token: str, score: float) -> None:
@@ -1068,7 +1065,7 @@ def proxy_messages():
 
         logger.info(
             "EVAL user=%s hash=%s score=%.2f tier=%s inject=%s a2a=%s",
-            _log_value(user_id), request_hash[:12], risk_score, tier.value,
+            encode_log_field(user_id), request_hash[:12], risk_score, tier.value,
             injection_detected, a2a_detected,
         )
 
@@ -1239,7 +1236,8 @@ def verify_audit_chain():
     """Run chain verification on demand. Operator use only."""
     valid, count, detail = _audit_log.verify_chain()
     if not valid:
-        logger.critical("On-demand chain verification FAILED")
+        # Operator log keeps the break location; the public response stays generic.
+        logger.critical("On-demand chain verification FAILED: %s", encode_log_field(detail))
     return jsonify({
         "chain_valid": valid,
         "entries_verified": count,

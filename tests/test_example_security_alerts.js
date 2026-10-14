@@ -47,12 +47,16 @@ test('monitor reads the opened file even if pathname is replaced before metadata
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   const file = path.join(dir, 'events.log');
   fs.writeFileSync(file, 'original\n');
+  const staged = path.join(dir, 'staged.log');
+  fs.writeFileSync(staged, 'replacement\n');
   let closed = false;
   const context = monitor({
     openSync(name, flags) {
+      // Simulate rename rotation landing between open() and any metadata call:
+      // the replacement is staged elsewhere and atomically renamed into place.
       const fd = fs.openSync(name, flags);
       fs.renameSync(name, path.join(dir, 'moved.log'));
-      fs.writeFileSync(name, 'replacement\n');
+      fs.renameSync(staged, name);
       return fd;
     },
     statSync() { throw new Error('Path metadata must not be used'); },
@@ -100,4 +104,46 @@ test('guide search displays hostile markup as text and preserves normal results'
   assert.ok(results.children.length > 0);
   assert.equal(results.children[0].children.length, 3);
   assert.ok(results.children[0].children[0].textContent);
+});
+
+test('monitor alerts once on a symlinked log path, keeps its offset, and recovers', t => {
+  if (!fs.constants.O_NOFOLLOW) return t.skip('O_NOFOLLOW unavailable on this platform');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'safe2-monitor-link-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const file = path.join(dir, 'events.log');
+  const context = monitor();
+  const alerts = [];
+  context.sendAlert = (type, message, details) => { alerts.push({ type, details }); return Promise.resolve(); };
+  const seen = [];
+  const handler = (_parsed, line) => seen.push(line);
+  fs.writeFileSync(file, 'first\n');
+  let state = context.pollLogFile(file, 'events.log', null, String, handler);
+  fs.renameSync(file, path.join(dir, 'real.log'));
+  fs.symlinkSync(path.join(dir, 'real.log'), file);
+  const kept = context.pollLogFile(file, 'events.log', state, String, handler);
+  context.pollLogFile(file, 'events.log', kept, String, handler);
+  assert.equal(kept, state);
+  assert.equal(alerts.length, 1);
+  assert.equal(alerts[0].type, 'log_integrity');
+  assert.equal(alerts[0].details.code, 'ELOOP');
+  fs.unlinkSync(file);
+  fs.writeFileSync(file, 'second\n');
+  state = context.pollLogFile(file, 'events.log', kept, String, handler);
+  assert.deepEqual(seen, ['first', 'second']);
+  fs.unlinkSync(file);
+  fs.symlinkSync(path.join(dir, 'real.log'), file);
+  context.pollLogFile(file, 'events.log', state, String, handler);
+  assert.equal(alerts.length, 2, 'a good read re-arms the alert');
+});
+
+test('monitor alerts instead of crashing when a log read fails', t => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'safe2-monitor-eio-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  const file = path.join(dir, 'events.log');
+  fs.writeFileSync(file, 'data\n');
+  const context = monitor({ readSync() { throw Object.assign(new Error('I/O'), { code: 'EIO' }); } });
+  const alerts = [];
+  context.sendAlert = (type, message, details) => { alerts.push(details.code); return Promise.resolve(); };
+  assert.equal(context.pollLogFile(file, 'events.log', null, String, () => {}), null);
+  assert.deepEqual(alerts, ['EIO']);
 });

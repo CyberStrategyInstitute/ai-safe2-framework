@@ -169,7 +169,9 @@ function readLogSnapshot(filepath, previous = null) {
     fd = fs.openSync(filepath, fs.constants.O_RDONLY | fs.constants.O_NONBLOCK |
       (fs.constants.O_NOFOLLOW || 0));
     const stat = fs.fstatSync(fd);
-    if (!stat.isFile()) throw new Error('Log must be a regular file');
+    if (!stat.isFile()) {
+      throw Object.assign(new Error('Log path is not a regular file'), { code: 'ENOTREGULAR' });
+    }
     const identity = `${stat.dev}:${stat.ino}`;
     let offset = previous && previous.identity === identity && stat.size >= previous.offset
       ? previous.offset : 0;
@@ -183,33 +185,51 @@ function readLogSnapshot(filepath, previous = null) {
     }
     return { identity, offset, content: Buffer.concat(chunks).toString('utf8') };
   } catch (error) {
-    if (['ENOENT', 'ELOOP'].includes(error.code)) return null;
+    // Absent is a normal state (not yet created, or mid-rotation). A symlink,
+    // FIFO, device, or unreadable file at the log path is not: callers alert on it.
+    if (error.code === 'ENOENT') return null;
     throw error;
   } finally {
     if (fd !== undefined) fs.closeSync(fd);
   }
 }
 
+// Read the log and surface integrity failures as alerts instead of crashing or
+// going quiet. On failure the previous snapshot is kept, so a later good read
+// resumes from the last verified offset rather than replaying or skipping.
+// One alert per failure condition per file; a good read re-arms it.
+const logIntegrityFailures = new Map();
+
+function pollLogFile(filepath, filename, previous, parser, handler) {
+  let next;
+  try {
+    next = readLogSnapshot(filepath, previous);
+  } catch (error) {
+    const code = error.code || 'UNKNOWN';
+    if (logIntegrityFailures.get(filename) !== code) {
+      logIntegrityFailures.set(filename, code);
+      sendAlert('log_integrity', `Cannot safely read monitored log ${filename}`, {
+        file: filename, code,
+      }).catch(() => {});
+    }
+    return previous;
+  }
+  logIntegrityFailures.delete(filename);
+  if (!next) return null;
+  next.content.split('\n').filter(Boolean).forEach(line => {
+    handler(parser(line), line);
+  });
+  return next;
+}
+
 function watchLogFile(filename, parser, handler) {
   const filepath = path.join(CONFIG.logDir, filename);
 
-  // Process existing content first
-  let snapshot = readLogSnapshot(filepath);
-  if (snapshot) {
-    snapshot.content.split('\n').filter(Boolean).forEach(line => {
-      handler(parser(line), line);
-    });
-  }
-
-  // Watch for new lines
+  // Process existing content first, then follow changes.
+  let snapshot = pollLogFile(filepath, filename, null, parser, handler);
   fs.watch(path.dirname(filepath), { persistent: true }, (event, changedFile) => {
     if (changedFile !== filename) return;
-    const next = readLogSnapshot(filepath, snapshot);
-    if (!next) { snapshot = null; return; }
-    snapshot = next;
-    next.content.split('\n').filter(Boolean).forEach(line => {
-      handler(parser(line), line);
-    });
+    snapshot = pollLogFile(filepath, filename, snapshot, parser, handler);
   });
 }
 

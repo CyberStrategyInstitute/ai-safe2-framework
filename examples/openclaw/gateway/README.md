@@ -6,8 +6,13 @@ Health, safe-mode, provider-error, and audit-verification responses expose
 stable public diagnostics rather than exception text or internal file details.
 Status codes and validity/count fields remain available. Human-readable audit
 and HITL log fields escape control characters; canonical JSONL audit records
-retain the original values. The scanner reports an invalid redaction setting
-without echoing its configured value into console, JSON, or file reports.
+retain the original values. The operator log still records where audit-chain
+verification failed; only the public response is generic. Untrusted log fields
+go through `safe2_log_fields.encode_log_field`, which ships as identical copies
+beside each gateway and is declared to CodeQL as a log-injection sanitizer in
+`.github/codeql/extensions/safe2-log-models`. Keep the copies identical; the
+regression suite fails if they drift. The scanner reports an invalid redaction
+setting without echoing its configured value into console, JSON, or file reports.
 
 AI enforcement proxy implementing the full AI SAFE² v3.0 control stack for OpenClaw — risk scoring, 4-tier HITL, immutable audit, and heartbeat-gated safe mode between client and Anthropic API.
 

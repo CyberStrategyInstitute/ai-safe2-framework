@@ -4,6 +4,7 @@ import importlib.util
 import asyncio
 import json
 import logging
+import re
 from pathlib import Path
 import sys
 from unittest.mock import AsyncMock, Mock
@@ -147,6 +148,7 @@ def test_hermes_filter_settings_do_not_reflect_arbitrary_values(hermes):
 
 def test_nexus_tool_log_is_single_line_and_receipt_preserved(monkeypatch, caplog):
     monkeypatch.syspath_prepend(str(ROOT / "NEXUS/sdk/python"))
+    monkeypatch.syspath_prepend(str(ROOT / "NEXUS/docker/gateway"))
     nexus = load_module("nexus_gateway_alert_tests", "NEXUS/docker/gateway/gateway.py")
     identity = "did:agent\r\nFORGED"
     tool = "read_file\x1b[31m\u2028FORGED"
@@ -165,7 +167,8 @@ def test_nexus_tool_log_is_single_line_and_receipt_preserved(monkeypatch, caplog
     exporter.export.assert_called_once_with(receipt)
     message = caplog.records[-1].getMessage()
     assert all(char not in message for char in ["\n", "\r", "\x1b", "\u2028"])
-    assert json.loads(message.removeprefix("tool_call: "))["tool"] == tool
+    encoded_tool = re.search(r'tool=("(?:[^"\\]|\\.)*")', message).group(1)
+    assert json.loads(encoded_tool) == tool
 
 
 def test_openclaw_provider_error_keeps_status_without_exception_detail(openclaw, monkeypatch, caplog):
@@ -192,3 +195,48 @@ def test_openclaw_hitl_logs_preserve_approval_without_control_characters(opencla
                                  "X-HITL-Reason": "Authorized test reason\nFORGED"})
     assert result is None
     assert all(char not in caplog.records[-1].getMessage() for char in ["\n", "\r", "\x1b"])
+
+
+ENCODER_COPIES = [
+    "examples/openclaw/gateway/safe2_log_fields.py",
+    "examples/hermes-sovereign-runtime/gateway/safe2_log_fields.py",
+    "NEXUS/docker/gateway/safe2_log_fields.py",
+]
+
+
+def test_log_field_encoder_copies_are_identical():
+    # The CodeQL barrier model trusts every copy, so they must stay byte-identical.
+    contents = {path: (ROOT / path).read_bytes() for path in ENCODER_COPIES}
+    assert len(set(contents.values())) == 1, sorted(contents)
+
+
+@pytest.mark.parametrize("hostile", [
+    "a\nFORGED", "a\r\nFORGED", "a\x85FORGED", "a\u2028FORGED", "a\u2029FORGED",
+    "a\x1b[31mFORGED", "a\x00FORGED", "caf\u00e9",
+])
+def test_log_field_encoder_is_single_line_ascii_and_reversible(hostile):
+    encoder = load_module("safe2_log_fields_tests", ENCODER_COPIES[0])
+    encoded = encoder.encode_log_field(hostile)
+    assert encoded.isascii() and encoded.isprintable()
+    assert json.loads(encoded) == hostile
+
+
+def test_log_field_encoder_bounds_length():
+    encoder = load_module("safe2_log_fields_bound_tests", ENCODER_COPIES[0])
+    encoded = json.loads(encoder.encode_log_field("x" * 10_000))
+    assert encoded == "x" * encoder.MAX_LOG_FIELD_CHARS + "...[truncated]"
+
+
+def test_openclaw_chain_break_location_reaches_operator_log_not_response(openclaw, monkeypatch, tmp_path, caplog):
+    audit = openclaw.ImmutableAuditLog(tmp_path / "audit.jsonl", "test-key")
+    for score in (1, 2):
+        audit.append(user_id="u", request_hash="h", risk_score=score, risk_vectors={}, hitl_tier="AUTO", blocked=False, reason=None)
+    lines = audit.log_path.read_text().splitlines()
+    tampered = json.loads(lines[1])
+    tampered["risk_score"] = 0
+    audit.log_path.write_text(lines[0] + "\n" + json.dumps(tampered) + "\n")
+    monkeypatch.setattr(openclaw, "_audit_log", audit)
+    with caplog.at_level(logging.CRITICAL):
+        body = openclaw.app.test_client().get("/audit/verify-chain").get_json()
+    assert body["chain_valid"] is False and body["detail"] == "Audit chain validation failed"
+    assert "seq=" in caplog.records[-1].getMessage()

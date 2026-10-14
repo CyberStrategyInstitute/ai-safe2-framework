@@ -75,7 +75,7 @@ done
 echo ""
 # E: Gateway stack
 echo -e "${BOLD}[E] Gateway Stack${NC}"
-for g in gateway/gateway.py gateway/scanner.py gateway/provider_adapters.py gateway/config.yaml; do
+for g in gateway/gateway.py gateway/scanner.py gateway/provider_adapters.py gateway/safe2_log_fields.py gateway/config.yaml; do
     [[ -f "${HSR_ROOT}/${g}" ]] && check "${g} present" "PASS" || check "${g} MISSING" "FAIL"
 done
 

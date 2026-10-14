@@ -22,7 +22,6 @@ This is a reference implementation scaffold. Production hardening checklist:
 
 import os
 import logging
-import json
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from typing import Any
@@ -31,6 +30,7 @@ import uvicorn
 from fastapi import FastAPI, Request, HTTPException, Depends
 from fastapi.responses import JSONResponse
 
+from safe2_log_fields import encode_log_field
 from nexus_sdk.guardian import GuardianPolicy, NEXUSGuardianClient, build_tool_call_step
 from nexus_sdk.otel import InMemoryNORExporter, build_tool_call_nor, nor_to_otel_attributes
 from nexus_sdk.agbom import AgBOMManager
@@ -190,10 +190,11 @@ async def evaluate_tool_call(request: Request):
     _nor_exporter.export(nor)
     attrs = nor_to_otel_attributes(nor)
 
-    log.info("tool_call: %s", json.dumps({
-        "agent": agent_did[:30], "tool": tool_name,
-        "decision": verdict.decision, "ocsf": attrs.get("ocsf.class_uid"),
-    }, ensure_ascii=True))
+    log.info(
+        "tool_call: agent=%s tool=%s decision=%s ocsf=%s",
+        encode_log_field(agent_did[:30]), encode_log_field(tool_name),
+        encode_log_field(verdict.decision), encode_log_field(attrs.get("ocsf.class_uid")),
+    )
 
     return {
         "decision": verdict.decision,

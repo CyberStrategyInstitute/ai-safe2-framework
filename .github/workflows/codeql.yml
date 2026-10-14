@@ -31,5 +31,11 @@ jobs:
           queries: security-extended
       - name: Analyze
         uses: github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4
+        env:
+          # Apply the repository's reviewed CodeQL model pack (declared sanitizers,
+          # see .github/codeql/extensions/safe2-log-models). Python only. If this
+          # wiring ever stops working, the affected alerts reappear rather than hide.
+          CODEQL_ACTION_EXTRA_OPTIONS: >-
+            ${{ matrix.language == 'python' && format('{{"database":{{"run-queries":["--additional-packs={0}/.github/codeql/extensions","--model-packs=cyberstrategyinstitute/safe2-log-models"]}}}}', github.workspace) || '' }}
         with:
           category: /language:${{ matrix.language }}

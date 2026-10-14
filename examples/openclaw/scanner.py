@@ -158,8 +158,9 @@ class OpenClawScanner:
             if config_path.exists():
                 content = config_path.read_text()
                 
-                # Check for hardcoded secrets
-                secret_patterns = [
+                # Check for hardcoded credentials by public, well-known prefixes.
+                # Findings report only the category label, never matched bytes.
+                prefix_signatures = [
                     ('sk-ant-', 'Anthropic API key'),
                     ('sk-', 'OpenAI API key'),
                     ('ghp_', 'GitHub token'),
@@ -167,8 +168,8 @@ class OpenClawScanner:
                     ('AKIA', 'AWS access key')
                 ]
                 
-                for pattern, desc in secret_patterns:
-                    if pattern in content:
+                for prefix, desc in prefix_signatures:
+                    if prefix in content:
                         self.findings['critical'].append({
                             'check': 'Configuration Security',
                             'issue': f'{desc} hardcoded in {config_file}',

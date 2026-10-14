@@ -27,6 +27,7 @@ RUN pip install --no-cache-dir -e "/app/sdk/python[full]"
 
 # Copy gateway application
 COPY gateway.py /app/gateway.py
+COPY safe2_log_fields.py /app/safe2_log_fields.py
 
 # OPA policies and schemas are mounted at runtime (see docker-compose.yml)
 # This allows policy updates without rebuilding the image.

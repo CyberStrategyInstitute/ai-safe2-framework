@@ -159,7 +159,7 @@ else
 fi
 
 # B4: Gateway files present
-for f in gateway/gateway.py gateway/scanner.py gateway/config.yaml gateway/provider_adapters.py; do
+for f in gateway/gateway.py gateway/scanner.py gateway/config.yaml gateway/provider_adapters.py gateway/safe2_log_fields.py; do
     if [[ -f "${HSR_ROOT}/${f}" ]]; then
         check "B4-${f}" "${f} present" "PASS"
     else

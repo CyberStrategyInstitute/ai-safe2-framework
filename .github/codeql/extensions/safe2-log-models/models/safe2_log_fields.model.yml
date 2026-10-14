@@ -1,0 +1,15 @@
+# AI SAFE² declared sanitizers for CodeQL (models-as-data).
+#
+# encode_log_field() returns a quoted, ASCII-only, length-bounded JSON string
+# literal, so its output cannot start a new log record or carry terminal
+# controls. That contract is enforced by tests/test_example_security_alerts.py
+# (escaping, bounding, and byte-identical copies beside each gateway).
+#
+# Scope is deliberately narrow: one function, one query kind. Do not add a
+# barrier here without a matching contract test.
+extensions:
+  - addsTo:
+      pack: codeql/python-all
+      extensible: barrierModel
+    data:
+      - ["safe2_log_fields", "Member[encode_log_field].ReturnValue", "log-injection"]

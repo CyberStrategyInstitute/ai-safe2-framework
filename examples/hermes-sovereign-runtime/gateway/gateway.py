@@ -42,6 +42,8 @@ import requests
 import yaml
 from flask import Flask, Response, jsonify, request, stream_with_context
 
+from safe2_log_fields import encode_log_field
+
 # ─── Configuration ───────────────────────────────────────────────────────────
 
 CONFIG_PATH = Path(__file__).parent / "config.yaml"
@@ -92,11 +94,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler(sys.stdout)],
 )
 log = logging.getLogger("hsr.gateway")
-
-
-def _log_value(value: Any) -> str:
-    """Encode untrusted log fields without terminal controls or new lines."""
-    return json.dumps(str(value), ensure_ascii=True)
 
 
 def _filter_setting(value: Any) -> str:
@@ -196,7 +193,7 @@ def activate_kill_switch(reason: str) -> None:
     Path(kill_file).write_text(
         json.dumps({"activated_at": datetime.now(timezone.utc).isoformat(), "reason": reason})
     )
-    log.critical("KILL SWITCH ACTIVATED: %s", _log_value(reason))
+    log.critical("KILL SWITCH ACTIVATED: %s", encode_log_field(reason))
     _write_audit({"event": "kill_switch_activated", "reason": reason, "severity": "CRITICAL"})
 
 
@@ -379,7 +376,7 @@ def proxy_messages():
     })
 
     log.info("[%s] %s %s -> %d (%dms) findings=%d", request_id,
-             _log_value(request.method), _log_value(request.path),
+             encode_log_field(request.method), encode_log_field(request.path),
              upstream_resp.status_code, duration_ms, len(findings))
 
     if streaming:

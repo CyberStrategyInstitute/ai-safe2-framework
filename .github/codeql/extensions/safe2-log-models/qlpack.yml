@@ -1,0 +1,8 @@
+name: cyberstrategyinstitute/safe2-log-models
+version: 0.1.0
+library: true
+warnOnImplicitThis: true
+extensionTargets:
+  codeql/python-all: "*"
+dataExtensions:
+  - models/**/*.model.yml

@@ -13,7 +13,8 @@ must not contain userinfo, query strings, fragments, or control characters.
 Automatic upstream redirects are disabled; configure the final provider URL.
 Invalid routing configuration returns a 500 error rather than silently falling
 back to another provider. Upstream failures return a stable 502 response without
-exception contents. Log fields escape control characters, and filter settings
+exception contents. Log fields are encoded by `safe2_log_fields.py` (deploy it
+beside `gateway.py`), which escapes control characters, and filter settings
 are reported as enabled, disabled, or unknown rather than raw configuration.
 
 Every request from Hermes to any LLM provider passes through this proxy first.
