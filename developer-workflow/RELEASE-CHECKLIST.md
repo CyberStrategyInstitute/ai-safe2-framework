@@ -34,6 +34,10 @@
 - [x] Explanation generation has a release/template parity contract test
 - [x] New users can generate a goal-based setup plan without enabling external
   services or adding credentials
+- [x] CI execution receipts preserve phase-specific failure attribution and
+  distinguish passing application tests from a failing wrapper
+- [x] Repository templates include the CI receipt schema and evaluator with
+  release/template parity tests
 - [x] OpenRouter/PR-Agent, Greptile, planning, security, runtime, and upstream
   setup tasks have one linked owner/maintainer/acceptance guide
 - [ ] Validate the onboarding flow in a clean external canary repository

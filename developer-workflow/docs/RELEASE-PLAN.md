@@ -14,6 +14,7 @@ alongside Claude and Codex.
 
 ## 0.2.0 reference integrations
 
+- CI execution receipts and deterministic failure attribution
 - Codex semantic review adapter
 - Claude semantic review adapter
 - Codex Security adapter

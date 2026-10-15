@@ -12,6 +12,9 @@
     "ai-safe2.decision-record.v1",
     "ai-safe2.developer-workflow.v1"
   ],
+  "candidate_contracts": [
+    "ai-safe2.ci-execution-receipt.v1"
+  ],
   "supported_coding_providers": ["codex", "claude"],
   "authority": {
     "merge": false,
@@ -22,9 +25,9 @@
     "everyday_action": false
   },
   "validation": {
-    "contract_tests": 13,
+    "contract_tests": 19,
     "schema_validation": "passed",
-    "validated_on": "2026-10-09"
+    "validated_on": "2026-10-15"
   }
 }
 

@@ -46,6 +46,41 @@ def decision_record():
     }
 
 
+def ci_observation():
+    return {
+        "schema_version": "ai-safe2.ci-execution-observation.v1",
+        "receipt_id": "ci-pr-44@abc123",
+        "subject": {
+            "identifier": "pr-44",
+            "revision": "abc123",
+            "capability": "device-privacy-tests",
+        },
+        "runner": {
+            "provider": "github-actions",
+            "image": "ubuntu-24.04",
+            "operating_system": "Linux",
+            "architecture": "x86_64",
+            "environment_facts": {"hardware_acceleration": True, "api_level": 36},
+        },
+        "required_phases": ["environment_preflight", "build", "test", "postprocess"],
+        "phases": [
+            {"name": name, "status": "passed", "exit_code": 0, "failure_class": None, "failure_reason": None}
+            for name in ("environment_preflight", "build", "test", "postprocess")
+        ],
+        "test_results": {
+            "status": "passed",
+            "minimum_required": 1,
+            "discovered": 128,
+            "executed": 128,
+            "passed": 128,
+            "failed": 0,
+            "skipped": 0,
+        },
+        "artifacts": [{"name": "device-test-report", "digest": "sha256:example"}],
+        "limitations": [],
+    }
+
+
 def test_package_contracts_validate():
     module = load_validator()
     assert module.validate_package(ROOT) == []
@@ -164,6 +199,8 @@ def test_template_explainer_matches_release_and_describes_boundaries(tmp_path):
     assert outputs[0] == outputs[1]
     assert "## What changed" in outputs[0]
     assert "## Current preview boundary" in outputs[0]
+    assert "## CI execution evidence boundary" in outputs[0]
+    assert "wrapper exit code" in outputs[0]
     assert "Superpowers" in outputs[0]
     assert "Codex Security" in outputs[0]
     assert "cannot merge, release, deploy, or" in outputs[0]
@@ -177,6 +214,97 @@ def test_required_decision_tools_match_template():
         ).read_text(encoding="utf-8").rstrip()
     assert json.loads((ROOT / "schemas" / "decision-record-v1.schema.json").read_text(encoding="utf-8")) == json.loads(
         (ROOT / "repository-template" / ".ai-safe2" / "schemas" / "decision-record-v1.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+
+def test_ci_execution_receipt_is_revision_bound_and_schema_valid():
+    module = load_script("evaluate_ci_execution.py")
+    receipt = module.evaluate(ci_observation())
+    assert receipt["subject"]["revision"] == "abc123"
+    assert receipt["outcome"] == "produced"
+    assert receipt["failure"] == {"class": None, "phase": None, "reason": None}
+    schema = json.loads((ROOT / "schemas" / "ci-execution-receipt-v1.schema.json").read_text(encoding="utf-8"))
+    Draft202012Validator(schema, format_checker=FormatChecker()).validate(receipt)
+    unsigned = {key: value for key, value in receipt.items() if key != "integrity"}
+    assert receipt["integrity"]["content_digest"] == module.canonical_digest(unsigned)
+
+
+def test_ci_environment_failure_is_not_an_application_failure():
+    module = load_script("evaluate_ci_execution.py")
+    source = ci_observation()
+    source["phases"][0] = {
+        "name": "environment_preflight",
+        "status": "failed",
+        "exit_code": 1,
+        "failure_class": "environment_preflight",
+        "failure_reason": "Required accelerator was unavailable.",
+    }
+    source["phases"][1]["status"] = "not_run"
+    source["phases"][2]["status"] = "not_run"
+    source["phases"][3]["status"] = "not_run"
+    source["test_results"] = None
+    receipt = module.evaluate(source)
+    assert receipt["outcome"] == "failed"
+    assert receipt["failure"]["class"] == "environment_preflight"
+    assert receipt["failure"]["phase"] == "environment_preflight"
+
+
+def test_ci_postprocess_failure_preserves_passing_test_result():
+    module = load_script("evaluate_ci_execution.py")
+    source = ci_observation()
+    source["phases"][3] = {
+        "name": "postprocess",
+        "status": "failed",
+        "exit_code": 2,
+        "failure_class": "postprocess",
+        "failure_reason": "The wrapper split a multiline shell conditional.",
+    }
+    receipt = module.evaluate(source)
+    assert receipt["outcome"] == "failed"
+    assert receipt["failure"]["class"] == "postprocess"
+    assert receipt["test_results"]["status"] == "passed"
+    assert receipt["test_results"]["executed"] == 128
+    assert receipt["test_results"]["failed"] == 0
+
+
+def test_ci_zero_or_inconsistent_tests_fail_closed_as_harness_failure():
+    module = load_script("evaluate_ci_execution.py")
+    source = ci_observation()
+    source["test_results"].update(
+        {"status": "passed", "discovered": 0, "executed": 0, "passed": 0}
+    )
+    receipt = module.evaluate(source)
+    assert receipt["outcome"] == "failed"
+    assert receipt["failure"]["class"] == "test_harness"
+    assert receipt["failure"]["phase"] == "test"
+
+
+def test_ci_rejects_internally_inconsistent_counts_and_non_scalar_runner_facts():
+    module = load_script("evaluate_ci_execution.py")
+    source = ci_observation()
+    source["test_results"]["executed"] = 127
+    with pytest.raises(ValueError, match="executed must equal"):
+        module.evaluate(source)
+
+    source = ci_observation()
+    source["runner"]["environment_facts"]["nested"] = {"unexpected": True}
+    with pytest.raises(ValueError, match="values must be scalar"):
+        module.evaluate(source)
+
+    source = ci_observation()
+    source["test_results"]["executed"] = True
+    with pytest.raises(ValueError, match="non-negative integers"):
+        module.evaluate(source)
+
+
+def test_ci_execution_contract_and_evaluator_match_repository_template():
+    assert (ROOT / "scripts" / "evaluate_ci_execution.py").read_text(encoding="utf-8").rstrip() == (
+        ROOT / "repository-template" / "scripts" / "evaluate_ci_execution.py"
+    ).read_text(encoding="utf-8").rstrip()
+    assert json.loads((ROOT / "schemas" / "ci-execution-receipt-v1.schema.json").read_text(encoding="utf-8")) == json.loads(
+        (ROOT / "repository-template" / ".ai-safe2" / "schemas" / "ci-execution-receipt-v1.schema.json").read_text(
             encoding="utf-8"
         )
     )
