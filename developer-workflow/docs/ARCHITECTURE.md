@@ -45,6 +45,13 @@ The first release stabilizes four contracts:
 4. **Decision record:** required evidence, observed evidence, unresolved risk,
    human authority, and replay inputs.
 
+The package also includes the additive
+`ai-safe2.ci-execution-receipt.v1` contract for deterministic CI checks. It
+keeps runner preflight, build, test, post-processing, and evidence publication
+separate, preserves test counts independently from the overall job result, and
+binds the receipt to the exact revision. It does not replace the evidence
+envelope or grant decision authority.
+
 Providers may change without changing these contracts. Additive schema fields
 are permitted within v1. Removing or changing the meaning of a required field
 requires a new major schema version.

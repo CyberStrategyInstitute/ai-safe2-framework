@@ -11,6 +11,14 @@ the repository.
   wrapper job as a completed review.
 - Record the exact revision, commands, results, limitations, and unresolved
   risks.
+- For CI failures, inspect and record environment preflight, build, transport,
+  test, post-processing, and evidence-publication phases separately. A generic
+  wrapper exit code is not a root cause.
+- Preserve discovered, executed, passed, failed, and skipped test counts. A
+  passing test phase followed by a wrapper or publication failure is failed CI
+  evidence, not an application assertion failure and not produced evidence.
+- Keep multiline CI orchestration in a repository-owned, syntax-tested script
+  unless the action's execution contract explicitly preserves one shell.
 - Do not merge, release, deploy, change policy, access unrelated secrets, or
   accept residual risk unless the human explicitly authorizes that action.
 - Claude, Codex, and other providers are interchangeable evidence producers.

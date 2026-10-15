@@ -8,7 +8,7 @@
 [![Developer Workflow](https://img.shields.io/badge/Developer_Workflow-v0.1.0-820F1A?style=flat-square)](docs/RELEASE-PLAN.md)
 [![CLI](https://img.shields.io/badge/CLI-1.0.1-808080?style=flat-square)](../safe2/README.md)
 
-[Framework Home](../README.md) | [Documentation Map](../docs/README.md) | [CLI](../safe2/README.md) | [Architecture](docs/ARCHITECTURE.md) | [Adoption Guide](docs/ADOPTION-GUIDE.md) | [Tool Setup](docs/TOOL-SETUP-GUIDE.md) | [Game Quickstart](docs/GAME-DEVELOPER-QUICKSTART.md)
+[Framework Home](../README.md) | [Documentation Map](../docs/README.md) | [CLI](../safe2/README.md) | [Architecture](docs/ARCHITECTURE.md) | [Adoption Guide](docs/ADOPTION-GUIDE.md) | [CI Evidence](docs/CI-EXECUTION-EVIDENCE.md) | [Tool Setup](docs/TOOL-SETUP-GUIDE.md) | [Game Quickstart](docs/GAME-DEVELOPER-QUICKSTART.md)
 
 **Previous:** [← AI SAFE² CLI](../safe2/README.md) | **Next:** [NEXUS →](../NEXUS/)
 
@@ -68,6 +68,8 @@ The workflow may prepare a decision. It cannot authorize one.
 ## What you receive
 
 - stable adapter, evidence-envelope, decision-record, and workflow contracts;
+- a candidate portable CI execution receipt that separates environment, build, test,
+  post-processing, and evidence-publication outcomes;
 - deterministic standard, enhanced, and critical change routes;
 - required AI SAFE2 CLI decision routing and a revision-bound human decision
   record initialized to `hold` on every pull request;
@@ -128,6 +130,11 @@ developer-workflow/
 └── docs/                             Architecture, adoption, integrations, gaps, releases
 ```
 
+The CI execution evaluator is deliberately repository-owned after adoption.
+It records explicit phase observations and test counts; it does not infer root
+cause from a generic wrapper exit code. See
+[CI execution evidence and failure attribution](docs/CI-EXECUTION-EVIDENCE.md).
+
 An adopting repository should vendor only the files it needs, record the
 upstream commit and local adaptations, and update through reviewed pull
 requests. It does not need to copy the AI SAFE2 framework content.
@@ -183,6 +190,11 @@ The workflow never converts silence into success:
 - `hold`: evidence or human judgment is still required;
 - `ready_for_human_decision`: required evidence is present, but no merge or
   release has been authorized.
+
+CI receipts additionally distinguish `environment_preflight`, `build`,
+`test_transport`, `test_harness`, `application_assertion`, `postprocess`,
+`evidence_publication`, and `unknown` failure classes. These classifications
+explain the evidence boundary; they do not authorize a decision.
 
 ## Product boundary
 

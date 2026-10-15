@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Adds a revision-bound CI execution receipt, deterministic evaluator, and
+  failure taxonomy that separates environment, build, transport, harness,
+  application assertion, post-processing, and evidence-publication outcomes.
+- Adds repository-template parity and regression cases for missing
+  prerequisites, zero-test success, and tests that pass before a wrapper fails.
+- Documents emulator preflight, canary execution, diagnostic order, and the
+  boundary between a CI receipt and a general-purpose evidence bridge.
 - Reframes the package around the developer outcome and observable before/after
   change instead of starting with internal contracts.
 - Adds an adoption guide, module-selection guidance, architecture diagram, and

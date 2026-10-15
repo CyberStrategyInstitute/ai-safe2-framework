@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.cyberstrategyinstitute.com/ai-safe2/ci-execution-receipt-v1.schema.json",
+  "title": "AI SAFE2 CI Execution Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "subject",
+    "runner",
+    "required_phases",
+    "phases",
+    "test_results",
+    "outcome",
+    "failure",
+    "artifacts",
+    "limitations",
+    "integrity"
+  ],
+  "properties": {
+    "schema_version": {"const": "ai-safe2.ci-execution-receipt.v1"},
+    "receipt_id": {"type": "string", "minLength": 1},
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identifier", "revision", "capability"],
+      "properties": {
+        "identifier": {"type": "string", "minLength": 1},
+        "revision": {"type": "string", "minLength": 1},
+        "capability": {"type": "string", "minLength": 1}
+      }
+    },
+    "runner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "image"],
+      "properties": {
+        "provider": {"type": "string", "minLength": 1},
+        "image": {"type": "string", "minLength": 1},
+        "operating_system": {"type": ["string", "null"]},
+        "architecture": {"type": ["string", "null"]},
+        "environment_facts": {
+          "type": "object",
+          "additionalProperties": {"type": ["string", "number", "boolean", "null"]}
+        }
+      }
+    },
+    "required_phases": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["environment_preflight", "build", "test", "postprocess", "evidence_publication"]}
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/phase"}
+    },
+    "test_results": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/test_results"}
+      ]
+    },
+    "outcome": {"enum": ["produced", "failed", "unavailable"]},
+    "failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["class", "phase", "reason"],
+      "properties": {
+        "class": {"$ref": "#/$defs/nullable_failure_class"},
+        "phase": {
+          "type": ["string", "null"],
+          "enum": [null, "environment_preflight", "build", "test", "postprocess", "evidence_publication"]
+        },
+        "reason": {"type": ["string", "null"]}
+      }
+    },
+    "artifacts": {"type": "array", "items": {"type": "object"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content_digest"],
+      "properties": {
+        "content_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}
+      }
+    }
+  },
+  "$defs": {
+    "failure_class": {
+      "enum": [
+        "environment_preflight",
+        "build",
+        "test_transport",
+        "test_harness",
+        "application_assertion",
+        "postprocess",
+        "evidence_publication",
+        "unknown"
+      ]
+    },
+    "nullable_failure_class": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "#/$defs/failure_class"}
+      ]
+    },
+    "phase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "status", "exit_code", "failure_class", "failure_reason"],
+      "properties": {
+        "name": {"enum": ["environment_preflight", "build", "test", "postprocess", "evidence_publication"]},
+        "status": {"enum": ["passed", "failed", "unavailable", "not_run"]},
+        "exit_code": {"type": ["integer", "null"]},
+        "failure_class": {"$ref": "#/$defs/nullable_failure_class"},
+        "failure_reason": {"type": ["string", "null"]},
+        "started_at": {"type": ["string", "null"], "format": "date-time"},
+        "completed_at": {"type": ["string", "null"], "format": "date-time"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"enum": ["failed", "unavailable"]}}, "required": ["status"]},
+          "then": {
+            "properties": {
+              "failure_class": {"$ref": "#/$defs/failure_class"},
+              "failure_reason": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"status": {"enum": ["passed", "not_run"]}}, "required": ["status"]},
+          "then": {
+            "properties": {
+              "failure_class": {"type": "null"},
+              "failure_reason": {"type": "null"}
+            }
+          }
+        }
+      ]
+    },
+    "test_results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "minimum_required", "discovered", "executed", "passed", "failed", "skipped"],
+      "properties": {
+        "status": {"enum": ["passed", "failed", "partial", "not_run"]},
+        "minimum_required": {"type": "integer", "minimum": 1},
+        "discovered": {"type": "integer", "minimum": 0},
+        "executed": {"type": "integer", "minimum": 0},
+        "passed": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"outcome": {"const": "produced"}}, "required": ["outcome"]},
+      "then": {
+        "properties": {
+          "failure": {
+            "properties": {
+              "class": {"type": "null"},
+              "phase": {"type": "null"},
+              "reason": {"type": "null"}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"outcome": {"enum": ["failed", "unavailable"]}}, "required": ["outcome"]},
+      "then": {
+        "properties": {
+          "failure": {
+            "properties": {
+              "class": {"$ref": "#/$defs/failure_class"},
+              "phase": {"type": "string"},
+              "reason": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

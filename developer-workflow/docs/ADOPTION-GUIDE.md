@@ -71,6 +71,12 @@ The general-purpose CI evidence bridge is not bundled in v0.1.0. Until it is
 implemented, evidence must be attached by repository-specific automation or a
 human and the decision remains `hold`.
 
+Use the bundled CI execution receipt to make that repository-specific
+automation truthful. Record environment preflight, build, test,
+post-processing, and evidence-publication phases separately. Preserve actual
+test counts and distinguish transport or harness failures from application
+assertions. See [CI execution evidence and failure attribution](CI-EXECUTION-EVIDENCE.md).
+
 ### Level 3: Development methods
 
 Add Superpowers or another structured method when the team needs better
@@ -127,10 +133,12 @@ the intended modular structure, not delivered files.
 2. Add a method module for planning or implementation behavior.
 3. Add an adapter for a reviewer, scanner, or runtime producer.
 4. Normalize its output into an evidence envelope.
-5. Add hostile fixtures for timeout, stale revision, empty success, malformed
+5. For CI producers, emit a CI execution receipt before creating the evidence
+   envelope; do not convert a generic wrapper exit code into a root cause.
+6. Add hostile fixtures for timeout, stale revision, empty success, malformed
    output, and provider unavailability.
-6. Pin the dependency and update it in an isolated pull request.
-7. Keep authorization with a named human.
+7. Pin the dependency and update it in an isolated pull request.
+8. Keep authorization with a named human.
 
 ## What good adoption evidence looks like
 

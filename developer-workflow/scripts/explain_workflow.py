@@ -106,6 +106,20 @@ automatically convert every repository CI result into evidence unless this
 repository adds an evidence bridge. Without complete evidence, `hold` is the
 correct result.
 
+## CI execution evidence boundary
+
+Treat a CI job as separate phases: environment preflight, build, test,
+post-processing, and evidence publication. Preserve the exact revision, runner
+facts, test counts, artifacts, limitations, and the first failing phase. A
+wrapper exit code or final shell message is not enough to classify an
+application failure. Use the candidate `ai-safe2.ci-execution-receipt.v1`
+contract and `scripts/evaluate_ci_execution.py` when adopting this boundary.
+
+Keep multiline orchestration in a repository-owned script that can be tested
+locally. The workflow file should call that script and upload its receipt even
+when a required phase fails. Missing, malformed, stale, or unavailable
+evidence leaves the decision at `hold`; it never becomes inferred success.
+
 ## Ways to extend this repository
 
 - Add deterministic test, build, scanner, and smoke-test evidence first.
@@ -130,7 +144,9 @@ existing policy, or authorizes. Bundled adapters must not authorize.
 4. Open representative documentation, code, and critical-path pull requests.
 5. Verify each route and inspect the uploaded route artifact.
 6. Confirm missing or failed evidence leaves the decision at `hold`.
-7. Record the final human decision separately.
+7. Force one environment, transport, assertion, and post-processing failure;
+   verify that each is classified without erasing valid earlier evidence.
+8. Record the final human decision separately.
 
 ## Tradeoffs
 

@@ -50,6 +50,12 @@ report in the GitHub Actions summary and retains it as an artifact.
 This closes the discoverability gap. It does not close the evidence-bridge or
 provider-execution gaps above.
 
+The bundled CI execution receipt closes a narrower attribution gap: adopting
+repositories can now distinguish environment, transport, harness, assertion,
+post-processing, and publication outcomes before mapping a deterministic check
+into an evidence envelope. It does not collect provider results automatically
+and is not the general-purpose evidence bridge.
+
 ## 0.1 exit criteria
 
 This preview is ready to share when:

@@ -21,6 +21,10 @@
 ## Evidence
 
 - Deterministic checks:
+- CI execution receipt, when applicable:
+- Runner and environment preflight, when applicable:
+- Tests discovered / executed / passed / failed / skipped:
+- Failure class and failed phase, when applicable:
 - Semantic review, if required:
 - Security review, if required:
 - Rollback or recovery:
