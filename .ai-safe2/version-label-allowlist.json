@@ -84,6 +84,10 @@
       "reason": "Guard tests use stale labels as negative fixtures."
     },
     {
+      "glob": "tests/test_component_versions.py",
+      "reason": "Component guard regressions deliberately contain stale version claims as negative fixtures."
+    },
+    {
       "glob": "tests/mcp_toolkit/test_control_citations.py",
       "reason": "Test docstring quotes the retired names it guards against."
     },

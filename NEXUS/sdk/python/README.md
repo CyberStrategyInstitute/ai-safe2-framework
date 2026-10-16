@@ -10,6 +10,11 @@ The Python SDK for [NEXUS](https://github.com/CyberStrategyInstitute/ai-safe2-fr
 
 ## Install
 
+The source SDK is 0.6.0; PyPI currently serves 0.5.0 (verified 2026-10-16).
+Install from a reviewed repository checkout using `pip install ./NEXUS` for
+the 0.6.0 source candidate. The package-index commands below install the
+published SDK. See [component versions](../../../docs/COMPONENT-VERSIONS.md).
+
 ```bash
 pip install nexus-a2a-sdk
 

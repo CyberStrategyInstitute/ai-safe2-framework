@@ -3,6 +3,15 @@ DUAL LICENSE AGREEMENT
 
 This repository is comprised of two distinct components: The Source Code and The Framework/Documentation. They are licensed as follows:
 
+SCOPE AND PRECEDENCE
+--------------------
+The rules below are repository defaults unless a subdirectory explicitly
+designates another license. NEXUS/ is designated Apache License 2.0 under
+NEXUS/LICENSE and NEXUS/NOTICE; the root MIT and CC BY-SA defaults do not
+override that designation. Developer Workflow's standalone licensing is
+designated in developer-workflow/LICENSE. This clarification does not relicense
+any existing material. Preserve applicable third-party notices.
+
 1. THE SOFTWARE (CODE)
 ----------------------
 Applies to: All files ending in .py, .json, .html, .js, .css, and script files.

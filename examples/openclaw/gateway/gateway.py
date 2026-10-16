@@ -481,7 +481,7 @@ INJECTION_PATTERNS = [
 
 # A2A detection — NEXUS-aware when adapters available, base indicators otherwise
 # NEXUS_A2A_INDICATORS (from provider_adapters) extends this list with
-# NEXUS v0.2 canonical message types and identity fields.
+# NEXUS-A2A v0.2 protocol message types and identity fields.
 A2A_INDICATORS = (
     NEXUS_A2A_INDICATORS if _ADAPTERS_AVAILABLE else [
         "orchestrat", "subagent", "delegate to", "forward to agent",

@@ -32,7 +32,7 @@ processors:
         value: "NEXUS-A2A"
         action: insert
       - key: "ocsf.product.version"
-        value: "0.3.0"
+        value: "0.6.0"
         action: insert
       - key: "ocsf.product.vendor_name"
         value: "Cyber Strategy Institute"

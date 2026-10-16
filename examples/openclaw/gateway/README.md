@@ -145,7 +145,7 @@ The gateway includes NEXUS-A2A v0.2 compatibility hooks. No NEXUS runtime is req
 **What is active now:**
 - NEXUS header detection (`x-nexus-agent-id`, `x-nexus-session-id`, `x-nexus-delegation-chain`, etc.)
 - NEXUS identity fields logged in every audit entry when present
-- A2A detection upgraded to NEXUS-aware indicator set (includes NEXUS v0.2 canonical message types: `nexus-a2a`, `spiffe://`, `nexus_swarm`, `nor_receipt`, and others)
+- A2A detection upgraded to NEXUS-aware indicator set (includes NEXUS-A2A v0.2 canonical message types: `nexus-a2a`, `spiffe://`, `nexus_swarm`, `nor_receipt`, and others)
 
 **What activates when NEXUS ships:**
 - Update `nexus.enforcement` in `config.yaml` from `passthrough` to `verify` or `enforce`

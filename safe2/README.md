@@ -4,6 +4,10 @@
 [![CLI](https://img.shields.io/badge/CLI-1.1.0-F6921E?style=flat-square)](../README.md)
 [![Framework](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-820F1A?style=flat-square)](../README.md)
 
+The CLI badge identifies source version **1.1.0**, not a PyPI publication.
+Published CLI: **1.0.1**, verified 2026-10-16. Guided start requires the source
+candidate until 1.1.0 is published. See [component versions](../docs/COMPONENT-VERSIONS.md).
+
 [Start](#start-with-the-outcome) | [Give this to your agent](#give-this-to-your-agent) | [Install](#install) | [Choose a workflow](#choose-a-workflow) | [Harness compatibility](#harness-compatibility) | [Command reference](#command-map) | [Limits](#what-it-does-not-do)
 
 ---
@@ -45,7 +49,9 @@ Paste this into Codex, Claude Code, Hermes, OpenClaw, Antigravity, or another
 agent that can run local commands and read files:
 
 ```text
-Install AI SAFE² CLI in an isolated Python environment. Do not use elevated
+Install AI SAFE² CLI in an isolated Python environment. For guided start, use
+the reviewed 1.1.0 source checkout; the published 1.0.1 package does not include
+that command. Do not use elevated
 privileges, do not expose secrets, do not enable a daemon, and do not connect to
 remote systems unless I explicitly authorize a named target. Run `safe2
 self-check --strict`, then run `safe2 start .` and show me its read-only plan.
@@ -150,6 +156,10 @@ SAFE² remains 161 core controls with CP.1 through CP.10. UAS is a separate
 27-requirement regulatory profile extension.
 
 ## Install
+
+For the latest published package, use `pip install "ai-safe2[all]==1.0.1"`.
+Use `safe2 init` and `safe2 assess` with that package. The instructions below
+install source version 1.1.0 and enable its guided-start command.
 
 From a repository clone:
 

@@ -1,5 +1,8 @@
 # Shared Repository Documentation
 
+For source versions, published package versions, compatibility minimums, and
+license boundaries, see [Component versions](COMPONENT-VERSIONS.md).
+
 This directory contains repository-wide governance, engineering, evidence-scope
 guidance, and advisories. Product- or topic-owned guidance belongs in its
 canonical topic directory. The full organizational-assessment, technology-

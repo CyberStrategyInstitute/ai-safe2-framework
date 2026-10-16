@@ -35,3 +35,6 @@ jobs:
         run: |
           gh api "repos/${GITHUB_REPOSITORY}/releases?per_page=100" > releases.json
           python -I scripts/check_pypi_release.py audit --releases-json releases.json
+
+      - name: Verify component publication inventory and install pins against PyPI
+        run: python -I scripts/check_component_versions.py --check-pypi

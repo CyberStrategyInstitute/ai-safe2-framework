@@ -1,6 +1,6 @@
 # AISM Implementation Decisions and Remediation
 
-AI SAFE² CLI 0.8.0 translates an existing AISM assessment into a traceable,
+AI SAFE² CLI translates an existing AISM assessment into a traceable,
 human-owned improvement plan. It binds the plan to the exact assessment,
 agent-system identity, and deployment-scope artifacts under review.
 
