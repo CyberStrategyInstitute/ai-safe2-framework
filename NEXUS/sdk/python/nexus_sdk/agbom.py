@@ -404,6 +404,8 @@ class AgBOMManager:
         Serialize current AgBOM state to CycloneDX v1.6 JSON BOM format.
         This is the format consumed by Grype, DependencyTrack, and standard SCA tooling.
         """
+        from . import __version__
+
         latest = self._version_history[-1] if self._version_history else None
         return {
             "bomFormat": "CycloneDX",
@@ -412,7 +414,7 @@ class AgBOMManager:
             "serialNumber": f"urn:uuid:{uuid.uuid4()}",
             "metadata": {
                 "timestamp": datetime.now(timezone.utc).isoformat(),
-                "tools": [{"vendor": "Cyber Strategy Institute", "name": "NEXUS-A2A", "version": "0.3.0"}],
+                "tools": [{"vendor": "Cyber Strategy Institute", "name": "NEXUS-A2A", "version": __version__}],
                 "component": {
                     "type": "application",
                     "name": self.agent_did.split(":")[-1],
@@ -429,13 +431,15 @@ class AgBOMManager:
 
     def to_spdx_summary(self) -> str:
         """Serialize to SPDX 2.3 tag-value summary format."""
+        from . import __version__
+
         lines = [
             "SPDXVersion: SPDX-2.3",
             "DataLicense: CC0-1.0",
             f"SPDXID: SPDXRef-DOCUMENT",
             f"DocumentName: nexus-agbom-{self.agent_did.split(':')[-1]}",
             f"DocumentNamespace: https://nexus-protocol.csi.gov/agbom/{uuid.uuid4()}",
-            f"Creator: Tool: NEXUS-A2A-0.3.0",
+            f"Creator: Tool: NEXUS-A2A-{__version__}",
             f"Created: {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')}",
             "",
         ]

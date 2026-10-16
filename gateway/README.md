@@ -25,6 +25,11 @@ claiming runtime effectiveness.
 
 The current gateway implementation is **Gateway v3.0**. AI SAFE² v3.1 did not silently rename this component.
 
+“Core Gateway” is the north-south provider proxy. “NEXUS Sovereign Gateway” is
+the separate NEXUS component's gateway scaffold and follows the NEXUS source
+version. These names and version numbers identify different components. See
+the [component version map](../docs/COMPONENT-VERSIONS.md).
+
 The gateway remains a compatible reference component for the **north-south enforcement plane** because the v3.1 release primarily changes protocol governance and the MCP agent-to-tool profile. Existing v3.0 gateway audit evidence therefore retains its v3.0 component identity until a separately tested gateway release changes that identity.
 
 This distinction is intentional:

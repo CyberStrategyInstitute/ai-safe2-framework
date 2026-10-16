@@ -13,7 +13,7 @@ NEXUS-A2A Compatibility (v0.2):
   - Envelope detection: X-NEXUS-* headers preserved and passed through
   - Identity fields: nexus_agent_id, nexus_delegation_chain extracted and logged
   - A2A detection upgraded to include NEXUS canonical indicators
-  - No NEXUS implementation here — hooks are forward-compatible with NEXUS v0.2 release
+  - No NEXUS implementation here — hooks retain NEXUS-A2A v0.2 protocol compatibility
 
 Design principle: pass-through with provider-aware adapters.
   - Client sends requests in provider's native format

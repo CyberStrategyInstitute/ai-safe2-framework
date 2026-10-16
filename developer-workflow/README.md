@@ -6,7 +6,7 @@
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
 [![Developer Workflow](https://img.shields.io/badge/Developer_Workflow-v0.1.0-820F1A?style=flat-square)](docs/RELEASE-PLAN.md)
-[![CLI](https://img.shields.io/badge/CLI-1.0.1-808080?style=flat-square)](../safe2/README.md)
+[![Minimum CLI](https://img.shields.io/badge/Minimum_CLI-1.0.1-808080?style=flat-square)](../safe2/README.md)
 
 [Framework Home](../README.md) | [Documentation Map](../docs/README.md) | [CLI](../safe2/README.md) | [Architecture](docs/ARCHITECTURE.md) | [Adoption Guide](docs/ADOPTION-GUIDE.md) | [Tool Setup](docs/TOOL-SETUP-GUIDE.md) | [Game Quickstart](docs/GAME-DEVELOPER-QUICKSTART.md)
 
@@ -19,6 +19,10 @@
 Version: 0.1.0 contract preview
 
 Minimum AI SAFE2 CLI: 1.0.1
+
+This is a compatibility floor and the current published installation pin,
+not the CLI source version. Main contains CLI 1.1.0; do not pin PyPI installs
+to that version until it is published. See [component versions](../docs/COMPONENT-VERSIONS.md).
 
 AI SAFE2 Developer Workflow gives a software repository a visible,
 provider-neutral decision process for pull requests and releases. It determines

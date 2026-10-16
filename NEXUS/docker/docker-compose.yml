@@ -47,21 +47,22 @@ services:
     build:
       context: ./gateway
       dockerfile: Dockerfile
-    image: csi/nexus-gateway:0.3.0
+    # Local source-build tag; this is not a container-registry publication claim.
+    image: csi/nexus-gateway:0.6.0
     container_name: nexus-gateway
     restart: unless-stopped
     ports:
       - "8080:8080"     # HTTP gateway (for dev; use mTLS in production)
       - "8443:8443"     # mTLS gateway endpoint
     environment:
-      NEXUS_VERSION: "0.3.0"
+      NEXUS_VERSION: "0.6.0"
       NEXUS_TRUST_DOMAIN: "${NEXUS_TRUST_DOMAIN:-nexus.local}"
       OPA_URL: "http://opa:8181"
       SPIRE_AGENT_SOCKET: "/run/spire/agent.sock"
       REDIS_URL: "redis://redis:6379/0"
       OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
       OTEL_SERVICE_NAME: "nexus-gateway"
-      OTEL_RESOURCE_ATTRIBUTES: "service.version=0.3.0,deployment.environment=${NEXUS_ENV:-development}"
+      OTEL_RESOURCE_ATTRIBUTES: "service.version=0.6.0,deployment.environment=${NEXUS_ENV:-development}"
       GUARDIAN_FAIL_MODE: "${GUARDIAN_FAIL_MODE:-FAIL_CLOSED}"
       UPSTREAM_MCP_URLS: "${UPSTREAM_MCP_URLS:-}"
       JOULEWORK_INITIAL_CREDIT: "${JOULEWORK_INITIAL_CREDIT:-10000}"
@@ -91,7 +92,7 @@ services:
       start_period: 15s
     labels:
       com.cyberstrategyinstitute.component: "nexus-gateway"
-      com.cyberstrategyinstitute.version: "0.3.0"
+      com.cyberstrategyinstitute.version: "0.6.0"
       com.cyberstrategyinstitute.safe2-tier: "P1-P5"
 
   # --------------------------------------------------------------------------

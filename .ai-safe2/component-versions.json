@@ -1,0 +1,16 @@
+{
+  "schema_version": "ai-safe2.component-versions.v1",
+  "published_versions_verified_on": "2026-10-16",
+  "published": {
+    "cli": {"package": "ai-safe2", "version": "1.0.1"},
+    "nexus": {"package": "nexus-a2a-sdk", "version": "0.5.0"}
+  },
+  "historical_paths": [
+    "releases/**", "research/**", "docs/assessments/**", "docs/advisories/**",
+    "**/CHANGELOG*.md", "MIGRATION.md", "NEXUS/RELEASE-NOTES-*.md",
+    "guides/*release-overview.md", "safe2/docs/*VALIDATION.md",
+    "safe2/docs/SKILL-SCREENING-SECOND-PASS.md", "challenges/001-*/**",
+    "safe2/data/cli-*-source.json"
+  ],
+  "history_line_pattern": "(?i)introduced in|implemented in|added in|release notes|GitHub-only|never reached|first .*PyPI|historical|retained here|legacy|compatibility|minimum|original|introduced with|control checks|canonical message"
+}

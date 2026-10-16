@@ -1,6 +1,6 @@
 # Operational Truth and Agent-Input Monitoring
 
-AI SAFE² CLI 0.7.0 connects provider-attributed harness exports and task
+AI SAFE² CLI connects provider-attributed harness exports and task
 receipts into one canonical task record. It answers four practical questions:
 what was observed, what was only declared, what evidence is missing or in
 conflict, and whether the supplied record is ready for a human decision.

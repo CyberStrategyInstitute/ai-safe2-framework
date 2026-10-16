@@ -41,7 +41,7 @@ from nexus_sdk.memory import MemoryVaccine, MemoryZone
 # ---------------------------------------------------------------------------
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
-NEXUS_VERSION = os.getenv("NEXUS_VERSION", "0.3.0")
+NEXUS_VERSION = os.getenv("NEXUS_VERSION", "0.6.0")
 NEXUS_TRUST_DOMAIN = os.getenv("NEXUS_TRUST_DOMAIN", "nexus.local")
 OPA_URL = os.getenv("OPA_URL", "http://opa:8181")
 GUARDIAN_FAIL_MODE = os.getenv("GUARDIAN_FAIL_MODE", "fail_closed")

@@ -59,15 +59,22 @@ Use it when you need to:
 
 ### The shortest safe start
 
+The source tree contains CLI **1.1.0**; the latest published PyPI package is
+**1.0.1** (verified 2026-10-16). Use this published workflow:
+
 ```bash
-python -m pip install "ai-safe2[all]==1.1.0"
+python -m pip install "ai-safe2[all]==1.0.1"
 safe2 self-check --strict
-safe2 start .
 mkdir review-project
 cd review-project
 safe2 init .
 safe2 assess . --scan-content --inspect-config
 ```
+
+For `safe2 start`, install the CLI 1.1.0 source candidate from a reviewed clone
+with `python -m pip install ".[all]"`. This does not publish a release. See the
+[component version map](docs/COMPONENT-VERSIONS.md) for source, publication,
+compatibility, and licensing boundaries.
 
 The assessment writes canonical JSON for agents and a readable Decision Card
 for people. It does not authorize a fix, deployment, exception, or compliance

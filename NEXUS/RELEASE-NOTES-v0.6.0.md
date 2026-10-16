@@ -26,6 +26,11 @@ agent's AIM v0.3, or restore the old behavior with `GuardianPolicy(treat_undecla
 
 ## Install
 
+Publication status (verified 2026-10-16): 0.6.0 is a source candidate;
+PyPI currently serves 0.5.0. Use `pip install ./NEXUS` from a reviewed root
+checkout for the candidate. The package-index command below applies only
+after 0.6.0 is published.
+
 ```console
 python -m pip install --upgrade nexus-a2a-sdk==0.6.0
 python -c "import nexus_sdk; print(nexus_sdk.__version__)"

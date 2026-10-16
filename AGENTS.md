@@ -160,6 +160,13 @@ required. It must remain understandable without access to an agent's chat log.
 
 Component versions are independent. Do not rewrite NEXUS or Gateway evidence as framework v3.1 component evidence unless that component has separately changed version.
 
+These are source identities, not publication receipts. Read
+`.ai-safe2/component-versions.json` and `docs/COMPONENT-VERSIONS.md` for the
+separate published package versions and compatibility minimums. Run
+`python scripts/check_component_versions.py` before submitting version changes;
+use `--check-pypi` to refresh live publication evidence. Do not publish a package
+or relabel historical evidence merely to eliminate a version difference.
+
 ## Normative interpretation
 
 AI SAFE² defines governance outcomes, controls, evidence expectations, and conformance requirements. NEXUS is Cyber Strategy Institute's first-party reference implementation. NEXUS is not required for framework conformance. An alternative implementation may conform if it demonstrably satisfies the applicable controls and evidence requirements.

@@ -176,7 +176,7 @@ configuration, CI, dependency verification, and release inputs.
 
 ### 3. Capture comparable evidence
 
-AI SAFE2 CLI 0.9.0 runs `safe2 doctor` against the base checkout and again
+Published AI SAFE2 CLI 1.0.1 runs `safe2 doctor` against the base checkout and again
 against the head checkout with the base as its comparison. Both inventories,
 the drift result, the CLI version, the decision JSON, the Markdown card, and
 hashes are retained.

@@ -1,5 +1,9 @@
 # NEXUS v0.6.0
 
+This is the **0.6.0 source candidate**. The latest published PyPI SDK is
+**0.5.0**, verified 2026-10-16. Source metadata and release notes do not prove
+publication. See [component versions](../docs/COMPONENT-VERSIONS.md).
+
 **Non-repudiable, Extensible, eXecutive-Unified, Sovereign Agent-to-Agent Governance**
 
 [![NEXUS](https://img.shields.io/badge/NEXUS-v0.6.0-820F1A?style=flat-square)](CHANGELOG.md)

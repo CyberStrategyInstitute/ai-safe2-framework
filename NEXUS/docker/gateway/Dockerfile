@@ -2,7 +2,7 @@ FROM python:3.14-slim
 
 LABEL org.opencontainers.image.title="NEXUS Sovereign Gateway"
 LABEL org.opencontainers.image.description="NEXUS-A2A sovereign gateway wrapping MCP/ACS endpoints"
-LABEL org.opencontainers.image.version="0.3.0"
+LABEL org.opencontainers.image.version="0.6.0"
 LABEL org.opencontainers.image.vendor="Cyber Strategy Institute"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL org.opencontainers.image.source="https://github.com/CyberStrategyInstitute/ai-safe2-framework"

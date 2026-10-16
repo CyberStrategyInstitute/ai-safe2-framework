@@ -2,6 +2,11 @@
 
 ## Upgrade to 1.1.0
 
+Publication status (verified 2026-10-16): 1.1.0 is a source candidate;
+1.0.1 is the latest PyPI release. Use a reviewed clone with
+`python -m pip install ".[all]"` to try 1.1.0 now. The package-index upgrade
+command below applies only after 1.1.0 is published.
+
 1.1.0 adds the backward-compatible `safe2 start` guided onboarding command and
 two additive contracts: `safe2.onboarding-plan.v1` and
 `safe2.onboarding-result.v1`. Existing 1.0 commands and evidence schemas remain
