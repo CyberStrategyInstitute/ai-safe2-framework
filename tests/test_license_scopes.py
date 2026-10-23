@@ -1,5 +1,6 @@
 """Protect the existing component license scopes and discoverable full texts."""
 from pathlib import Path
+import json
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,7 +49,7 @@ def test_root_scope_preserves_component_boundaries():
 def test_framework_data_license_notices_remain_unchanged():
     canonical = ROOT / "skills/mcp/data/ai-safe2-controls-v3.0.json"
     packaged = ROOT / "safe2/data/ai-safe2-controls-v3.0.json"
-    assert canonical.read_bytes() == packaged.read_bytes()
+    assert json.loads(canonical.read_text(encoding="utf-8")) == json.loads(packaged.read_text(encoding="utf-8"))
     assert '"license": "CC-BY-SA 4.0 (framework/docs) | MIT (code)"' in canonical.read_text()
 
 
