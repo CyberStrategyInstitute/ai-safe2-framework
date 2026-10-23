@@ -12,7 +12,8 @@
 
 [![Version](https://img.shields.io/badge/version-3.1.0-orange.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/releases)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC_BY--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/LICENSE)
+[![Code: MIT](https://img.shields.io/badge/Code-MIT-yellow.svg)](LICENSE-MIT)
+[![NEXUS: Apache-2.0](https://img.shields.io/badge/NEXUS-Apache--2.0-blue.svg)](NEXUS/LICENSE)
 [![Compliance](https://img.shields.io/badge/Mapped-32_Frameworks_%7C_ISO_42001_%7C_NIST_%7C_SOC2_%7C_EU_AI_Act-005696?style=flat-square&logo=auth0)](https://cyberstrategyinstitute.com/ai-safe2/)
 [![Scope](https://img.shields.io/badge/Scope-161_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm_%7C_CP.1--CP.10-red)](https://cyberstrategyinstitute.com/ai-safe2/)
 [![MCP](https://img.shields.io/badge/MCP-2026--07--28-blue.svg)](00-cross-pillar/cp5_mcp_server_security.md)
@@ -688,6 +689,10 @@ The two frameworks are complementary rather than substitutes.
 ---
 
 ## Licensing and Usage Rights
+
+See the [component licensing map](docs/LICENSING.md) and [COPYRIGHT](COPYRIGHT)
+for path-specific terms. GitHub's repository-level license label does not
+replace these component designations.
 
 **Code, MIT License:** Applies to code assets unless a subdirectory states a different license. NEXUS remains Apache 2.0 where explicitly designated.
 

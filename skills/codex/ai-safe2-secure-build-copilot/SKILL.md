@@ -1,5 +1,6 @@
 ---
 name: ai-safe2-secure-build-copilot
+license: CC-BY-SA-4.0
 description: Apply AI SAFE2 v3.1 to security architecture reviews, code reviews, compliance mapping, and governance decisions for AI agents, multi-agent systems, RAG pipelines, MCP servers, tool-calling workflows, and AI-enabled automations. Use when the task involves agent autonomy classification, HEAR or CP.9 governance, prompt injection, tool misuse, model or memory security, AI compliance evidence, or mapping controls to ISO 42001, NIST AI RMF, EU AI Act, SOC 2, HIPAA, PCI-DSS, GDPR, FedRAMP, CMMC 2.0, or DORA.
 ---
 

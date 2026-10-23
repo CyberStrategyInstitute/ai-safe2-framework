@@ -9,6 +9,7 @@ description: >
   requirements from reference implementations, and require reconstructable
   evidence for material claims.
 version: 3.1.0
+license: CC-BY-SA-4.0
 framework_version: v3.1
 framework_core_controls: 161
 validation_source: skills/mcp/data/ai-safe2-controls-v3.0.json

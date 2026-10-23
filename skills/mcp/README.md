@@ -11,6 +11,11 @@
 
 ## Profile discovery and technology review
 
+The server implementation is MIT licensed. Framework methodology and taxonomy
+content retain their framework/documentation designation, CC BY-SA 4.0 where
+designated. Package metadata does not replace the served content's notices.
+See [Licensing by component](../../docs/LICENSING.md).
+
 The MCP server's taxonomy/profile access does not itself establish runtime
 enforcement or product maturity. Use the [Technology Contribution Profile](../../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 to identify actual control effects and claim evidence at each plane.

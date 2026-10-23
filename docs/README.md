@@ -10,6 +10,7 @@ evaluation, and Evidence Assurance methods are in [AISM](../AISM/README.md).
 | Need | Canonical location |
 | --- | --- |
 | Repository presentation and navigation rules | [Repository UX Standard](REPOSITORY-UX-STANDARD.md) |
+| Component licenses and GitHub license presentation | [Licensing by component](LICENSING.md) |
 | Evidence interpretation and assurance | [Evidence Assurance](../AISM/EVIDENCE-ASSURANCE.md) |
 | Assessment scope and change attribution | [Assessment Scope](ASSESSMENT-SCOPE.md) and [Change Attribution](CHANGE-ATTRIBUTION.md) |
 | Collect technology evaluation evidence | [Evidence request](../AISM/TECHNOLOGY-EVIDENCE-REQUEST.md) and [Technology Card](../AISM/templates/TECHNOLOGY-CARD.md) |

@@ -27,6 +27,14 @@ The [validation guide](../AISM/TECHNOLOGY-VALIDATION.md) covers poisoned skills,
 forged process evidence, and probabilistic authorization. Skill trust verdicts
 and screening scores are not organizational AISM levels or assurance ratings.
 
+## License scope
+
+The MCP server implementation and executable helpers use the applicable code
+license, currently MIT unless explicitly designated otherwise. Framework
+methodology, taxonomy content, and framework-based SKILL.md guidance retain
+the CC BY-SA 4.0 documentation designation. Preserve notices for third-party
+skills and dependencies. See [Licensing by component](../docs/LICENSING.md).
+
 ## What This Folder Does
 
 The `skills/` surface packages AI SAFE² guidance for AI assistants and provides the Python MCP server used for live control lookup and governance workflows.

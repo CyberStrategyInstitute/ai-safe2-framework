@@ -1,0 +1,28 @@
+Copyright (c) 2025-2026 Cyber Strategy Institute.
+
+LICENSE SCOPE
+
+Licenses in this repository apply to designated material by path and content.
+The separate license texts do not grant a repository-wide choice of license.
+
+- NEXUS/: Apache-2.0 under NEXUS/LICENSE and NEXUS/NOTICE.
+- Source code outside a differently licensed subdirectory: MIT under the root
+  LICENSE and LICENSE-MIT. This includes the CLI, MCP server implementation,
+  and sovereign-runtime implementation examples.
+- Framework methodology, taxonomy content, and documentation: CC-BY-SA-4.0
+  under the root LICENSE and LICENSE-CC-BY-SA-4.0, except where an existing
+  file or subdirectory explicitly designates other terms.
+- Framework-based SKILL.md guidance follows the documentation designation.
+  Executable helpers retain their applicable code license.
+- developer-workflow/: its standalone MIT designation remains in
+  developer-workflow/LICENSE.
+
+Machine-readable framework data can contain framework material even when its
+container is JSON. Preserve the embedded framework/code license notices when
+redistributing that data. This notice does not resolve conflicting or absent
+third-party grants by assigning new terms.
+
+Preserve applicable file-level notices, third-party licenses, attribution,
+and NOTICE files. The root LICENSE retains the existing scope description;
+the separate standard texts improve discovery and distribution. No existing
+MIT implementation is converted to Apache-2.0 by this change.
