@@ -43,6 +43,10 @@ Organizations do not have to deploy NEXUS to claim AI SAFE² conformance. They m
 
 ---
 
+## What changed in v0.6
+
+v0.6.0 closes enforcement gaps that an adversarial battery found in v0.5.0: Guardian argument evasions, weak HEAR reasoning, undeclared ACT tiers (now treated as ACT-4, **breaking**), registry-bound ACT tiers, AgBOM hash recomputation, and always-defined OPA authz. See [RELEASE-NOTES-v0.6.0.md](RELEASE-NOTES-v0.6.0.md). Payments changes are unchanged from v0.5.
+
 ## What changed in v0.5
 
 v0.5 turns the payment integrity profile into a composed **Sovereign Payment
@@ -134,7 +138,7 @@ NEXUS wraps the user's stack. It does not replace the model, agent framework, to
 | ------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------- |
 | **East-west: agent to agent**   | Identity, delegation, authority, lineage, evidence | v0.3 implementation                                                     |
 | **Agent-to-tool: MCP/tool**     | CP.5.MCP enforcement contract and adapter path     | v3.1 adapter contract present; production implementation still required |
-| **Agent-to-payment: value**     | CP.5.APAY plus Sovereign Payment Gateway controls  | **v0.5 reference implementation; production bindings still required**   |
+| **Agent-to-payment: value**     | CP.5.APAY plus Sovereign Payment Gateway controls  | **v0.5 reference implementation (unchanged in v0.6); production bindings still required**   |
 | **North-south: model/provider** | Integrates with AI SAFE² gateway/runtime controls  | Reference integration path                                              |
 
 ### MCP status is intentionally explicit
@@ -149,7 +153,7 @@ See [NEXUS MCP adapter](adapters/mcp) and [CP.5.MCP](../00-cross-pillar/cp5_mcp_
 
 The CP.5.APAY **core** and its narrow reference adapters are implemented and tested. See the [adapter guide](payments/ADAPTER-GUIDE.md) for supported profiles, integration boundaries, and verification commands.
 
-The **rail bindings** in `nexus_sdk/payments/adapters.py` (AP2, x402, Visa TAP, Mastercard Agent Pay, KYA-OS) are fail-closed contracts. Every enforcement method raises. They are published as contracts rather than stubs because each requires conformance testing against a live counterparty before it can be claimed, and a stub returning success would let a deployment believe it has binding it does not have.
+The **rail bindings** in `nexus_sdk/payments/adapters.py` (AP2, x402, Visa TAP, Mastercard Agent Pay, KYA-OS) are fail-closed contracts. Every enforcement method raises, except the narrow x402 SafePay Exact binding (`X402V2ExactEVMUSDCBinding`), which performs structural checks in shadow mode only, with no live facilitator or chain verification. They are published as contracts rather than stubs because each requires conformance testing against a live counterparty before it can be claimed, and a stub returning success would let a deployment believe it has binding it does not have.
 
 The default credential broker is `NullCredentialBroker`, which **refuses every signing request**. An unconfigured payment path does not move money. Replacing that default with a permissive stub is the single most damaging change available in this codebase.
 
