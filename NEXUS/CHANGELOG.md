@@ -7,7 +7,9 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
 
-## [Unreleased] -- false-assurance hardening (2026-10-06)
+## [0.6.0] -- false-assurance hardening (2026-10-06)
+
+See [RELEASE-NOTES-v0.6.0.md](RELEASE-NOTES-v0.6.0.md).
 
 Found by the four-area battery in `tests/battery/`. Assessment record:
 `docs/assessments/2026-10-06-false-assurance/`.

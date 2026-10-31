@@ -53,7 +53,7 @@ Two structural observations drive every control in the profile:
 
 ### Established theft techniques, retargeted
 
-DPRK-linked operations have repeatedly demonstrated that custody infrastructure, third-party software, developers and signing workflows are viable paths to large-scale cryptocurrency theft. Reported 2025 losses attributed to North Korean actors exceeded $2 billion. Those techniques map onto agent-payment systems directly:
+DPRK-linked operations have repeatedly demonstrated that custody infrastructure, third-party software, developers and signing workflows are viable paths to large-scale cryptocurrency theft. Reported 2025 losses attributed to North Korean actors exceeded $2 billion (at least $2.02 billion per Chainalysis, ["North Korea Drives Record $2 Billion Crypto Theft Year"](https://www.chainalysis.com/blog/crypto-hacking-stolen-funds-2026/), 18 December 2025). Those techniques map onto agent-payment systems directly:
 
 | Established technique | Agent-payment equivalent |
 | --------------------- | ------------------------ |
@@ -120,7 +120,7 @@ Restated together, because a threat model that only lists wins is marketing.
 3. **Consent decay is a human-factors problem.** Legibility helps; habituation is not engineered away.
 4. **Out-of-path spend is invisible.** The gateway contains what flows through it. Any rail the agent can reach directly is outside every ceiling in this profile.
 5. **Hardware attestation availability governs R2.** Where it is unavailable, runtime binding degrades to a declared measurement, which the firewall refuses rather than accepts - meaning the honest outcome is reduced functionality, not reduced assurance.
-6. **No rail binding is implemented.** Every claim in this document about AP2, x402, TAP, Agent Pay or KYA-OS behavior is about what the binding *must* verify, not about tested integration.
+6. **No production rail binding is implemented.** The only implemented binding is the shadow-mode x402 SafePay Exact structural binding (`X402V2ExactEVMUSDCBinding`), with no live facilitator or chain verification. Every other claim in this document about AP2, x402, TAP, Agent Pay or KYA-OS behavior is about what the binding *must* verify, not about tested integration.
 7. **The Rego policy is not validated against a live OPA server in this repository's CI.** Its input contract is test-enforced against the Python builder; its evaluation semantics are not.
 
 ---
