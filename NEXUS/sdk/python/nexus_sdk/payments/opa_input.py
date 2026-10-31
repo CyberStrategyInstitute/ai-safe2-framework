@@ -55,6 +55,7 @@ OPA_INPUT_FIELDS: tuple[str, ...] = (
     "merchant_baseline",
     "known_destinations",
     "hear_satisfied_by",
+    "agency_check_evidence",
 )
 
 
@@ -71,6 +72,7 @@ def build_opa_input(
     seen_nonces: Optional[set[str]] = None,
     idempotency_digest: Optional[str] = None,
     hear_satisfied_by: Optional[str] = None,
+    agency_check_evidence: Optional[dict[str, Any]] = None,
     policy_id: str = "nexus-apay-v0.4",
     now: Optional[datetime] = None,
 ) -> dict[str, Any]:
@@ -170,4 +172,8 @@ def build_opa_input(
         "merchant_baseline": merchant_baseline,
         "known_destinations": sorted(known_destinations or set()),
         "hear_satisfied_by": hear_satisfied_by,
+        # Advisory only (nexus-apay-acr/0.1). Produced by
+        # payments.agency_check.verify_agency_check_receipt; never changes
+        # `decision` or `release_credential`.
+        "agency_check_evidence": agency_check_evidence,
     }

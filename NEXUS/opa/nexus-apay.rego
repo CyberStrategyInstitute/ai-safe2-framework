@@ -441,3 +441,156 @@ release_credential if {
 	input.revocation.available == true
 	input.runtime.runtime_measurement_id != ""
 }
+
+# ---------------------------------------------------------------------------
+# Advisory evidence: Agency Check receipt (nexus-apay-acr/0.1)
+# ---------------------------------------------------------------------------
+# Spec: payments/AGENCY-CHECK-RECEIPT-EVIDENCE.md
+#
+# SHADOW ONLY. Nothing in this section is referenced by reason_codes, decision,
+# allow or release_credential, so a payment decision is identical with and
+# without a receipt, and the Policy Parity Guard is unaffected. Query
+# /v1/data/nexus/apay/agency_check_advisory for the advisory.
+#
+# The receipt is verified OUTSIDE this policy (signature, hash, binding) by
+# nexus_sdk.payments.agency_check; OPA cannot verify raw Ed25519. This section
+# re-checks what it can independently: the bound transaction digest against
+# this transaction, freshness against input.now, and that the check ran.
+#
+# A receipt is not an authorization. A "ready" card never satisfies HEAR and
+# never removes a reason code. card_state is unsigned in Agency Check receipts,
+# so it is reported as declared, never attested.
+
+acr_profile := "nexus-apay-acr/0.1"
+
+acr_max_age_seconds := 900
+
+acr_max_future_skew_seconds := 60
+
+acr := input.agency_check_evidence
+
+acr_present if is_object(acr)
+
+acr_authentic if {
+	acr_present
+	acr.profile == acr_profile
+	acr.hash_verified == true
+	acr.signature_verified == true
+}
+
+acr_bound if {
+	acr.binding_verified == true
+	acr.transaction_digest == tx.canonical_digest
+}
+
+acr_age_ns := time.parse_rfc3339_ns(input.now) - time.parse_rfc3339_ns(acr.issued_at)
+
+acr_fresh if {
+	acr_age_ns >= (0 - acr_max_future_skew_seconds) * 1000000000
+	acr_age_ns <= acr_max_age_seconds * 1000000000
+}
+
+acr_check_ran if {
+	acr.nor_outcome == "allow"
+	acr.tool_name == "agency_check"
+}
+
+agency_check_status := "absent" if {
+	not acr_present
+} else := "invalid" if {
+	not acr_authentic
+} else := "unbound" if {
+	not acr_bound
+} else := "stale" if {
+	not acr_fresh
+} else := "check_not_run" if {
+	not acr_check_ran
+} else := state if {
+	state := acr.card_state
+	state in {"ready", "clarify", "pause"}
+} else := "card_state_unknown"
+
+agency_check_findings contains "ACR_ABSENT" if not acr_present
+
+agency_check_findings contains "ACR_PROFILE_UNSUPPORTED" if {
+	acr_present
+	acr.profile != acr_profile
+}
+
+agency_check_findings contains "ACR_HASH_UNVERIFIED" if {
+	acr_present
+	not acr.hash_verified == true
+}
+
+agency_check_findings contains "ACR_SIGNATURE_UNVERIFIED" if {
+	acr_present
+	not acr.signature_verified == true
+}
+
+agency_check_findings contains "ACR_BINDING_MISMATCH" if {
+	acr_present
+	not acr_bound
+}
+
+agency_check_findings contains "ACR_NOT_FRESH" if {
+	acr_present
+	not acr_fresh
+}
+
+agency_check_findings contains "ACR_FUTURE_DATED" if {
+	acr_present
+	acr_age_ns < (0 - acr_max_future_skew_seconds) * 1000000000
+}
+
+# The service refused to run the check. Signed: deny_reason is a NOR field.
+agency_check_findings contains "ACR_CHECK_NOT_RUN" if {
+	acr_present
+	not acr_check_ran
+}
+
+agency_check_findings contains "ACR_SERVICE_PAUSED" if {
+	acr_present
+	acr.nor_outcome == "deny"
+	acr.nor_deny_reason in {"kill_switch", "frozen"}
+}
+
+agency_check_findings contains "ACR_CARD_CLARIFY" if {
+	acr_present
+	acr.card_state == "clarify"
+}
+
+agency_check_findings contains "ACR_CARD_PAUSE" if {
+	acr_present
+	acr.card_state == "pause"
+}
+
+agency_check_findings contains "ACR_CARD_STATE_ABSENT" if {
+	acr_present
+	not acr.card_state in {"ready", "clarify", "pause"}
+}
+
+agency_check_findings contains "ACR_CARD_STATE_DECLARED" if {
+	acr_present
+	acr.card_state in {"ready", "clarify", "pause"}
+}
+
+# What a future enforce profile would do. Reported, never applied. Absence is
+# not escalated under 0.1 because no grant constraint requires a check yet.
+agency_check_shadow_effect := "none" if {
+	agency_check_status in {"absent", "ready"}
+} else := "would_escalate"
+
+acr_receipt_id := object.get(acr, "receipt_id", null) if acr_present
+
+default acr_receipt_id := null
+
+agency_check_advisory := {
+	"profile": acr_profile,
+	"mode": "shadow",
+	"enforced": false,
+	"status": agency_check_status,
+	"shadow_effect": agency_check_shadow_effect,
+	"findings": sort([f | some f in agency_check_findings]),
+	"card_state_attested": false,
+	"receipt_id": acr_receipt_id,
+}

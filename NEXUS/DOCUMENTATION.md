@@ -48,6 +48,7 @@ meaning by itself.
 - [Threat model](payments/THREAT-MODEL.md)
 - [Deployment proof and readiness](payments/DEPLOYMENT-READINESS.md)
 - [Policy parity](payments/POLICY-PARITY.md)
+- [Agency Check receipt evidence](payments/AGENCY-CHECK-RECEIPT-EVIDENCE.md)
 - [Recovery](payments/RECOVERY.md)
 - [Sandbox readiness](payments/SANDBOX-READINESS.md)
 - [Challenge Lab](payments/CHALLENGE-LAB.md)

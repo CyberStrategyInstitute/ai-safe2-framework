@@ -23,6 +23,7 @@
     "architecture": "payments/SOVEREIGN-GATEWAY.md",
     "controls": "payments/CONTROLS.md",
     "adapter_guide": "payments/ADAPTER-GUIDE.md",
+    "agency_check_receipt_evidence": "payments/AGENCY-CHECK-RECEIPT-EVIDENCE.md",
     "schemas": "schemas/",
     "policy": "opa/"
   }
