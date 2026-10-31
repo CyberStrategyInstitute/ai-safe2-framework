@@ -12,6 +12,20 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Found by the four-area battery in `tests/battery/`. Assessment record:
 `docs/assessments/2026-10-06-false-assurance/`.
 
+### Added -- Agency Check receipt evidence and MCP authorization (2026-10-30)
+
+- **Agency Check receipt as payment evidence** (`nexus-apay-acr/0.1`, draft, shadow
+  only). Spec `payments/AGENCY-CHECK-RECEIPT-EVIDENCE.md`; verifier
+  `nexus_sdk.payments.agency_check`; optional `agency_check_evidence` OPA input;
+  advisory at `data.nexus.apay.agency_check_advisory`. It never changes `decision`,
+  `reason_codes` or `release_credential`, and `card_state` is reported as declared,
+  not attested.
+- **OPA tests for `nexus-apay.rego`** (`opa/nexus_apay_test.rego`), including
+  decision-parity with and without a receipt.
+- **`MCPAdapter.authorize_tool_call`** and `adapters/mcp/authz.py`: a Python mirror of
+  `opa/nexus-authz.rego` ported back from Agency Check, with OPA parity tests. The
+  adapter remains not production-ready; see `adapters/mcp/README.md`.
+
 ### Security
 
 - **Guardian inline policy no longer substring-matches raw JSON.** String leaves and

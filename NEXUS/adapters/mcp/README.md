@@ -45,4 +45,45 @@ For MCP `2025-11-25`, `Mcp-Session-Id` is mapped to a principal-scoped state han
 
 `adapter.py` is an interface skeleton. It is not a deployable security control. Every enforcement method raises `NotImplementedError` until an implementation is connected and tested. This is intentional fail-closed behavior.
 
+### What is implemented: tool-call authorization
+
+`authorize_tool_call` (enforcement step 3, capability and authorization) is
+implemented and tested as a pure decision function in `authz.py`, with
+`MCPAdapter.authorize_tool_call` wiring it to a verified `Principal`. It is a
+Python mirror of `opa/nexus-authz.rego`, ported back from Agency Check's
+TypeScript edge adapter (`src/nexus/authz.ts`, `src/nexus/context.ts`) and
+re-aligned to the current upstream policy. Tests are in
+`sdk/python/tests/test_mcp_adapter_authz.py`; when an `opa` binary is available
+(`OPA_BIN`) the same input table is evaluated by OPA and by the port and the
+decisions must agree. Without OPA those parity tests skip and parity is
+**not assessed**.
+
+The `_meta` NEXUS context (`nexusCaelEnvelopeHash`, delegation depth, requested
+capabilities, and similar) is caller-asserted. It can only narrow a decision: the
+delegation depth used is the larger of the verified chain and the declared depth,
+the context compartment is never taken from `_meta` (the deployment supplies `context_compartment`, default `TASK_CONTEXT`, and a differing `nexusContextCompartment` is rejected; `authz.ts` passed the `_meta` value straight through, which let a caller select `CREDENTIAL_SURFACE`), and `nexusSenderDID` is never treated as identity: a caller-asserted DID is not a verified credential.
+
+### What was not ported, and why
+
+| Item in the Agency Check adapter | Status here | Reason |
+| --- | --- | --- |
+| Principal identity from OAuth props (`did`) and scope-to-capability mapping (`toolsForScopes`) in `pipeline.ts` | Not ported | Tied to Agency Check's OAuth provider. `establish_trust` stays `NotImplementedError`; the adapter takes a `Principal` the caller has already verified. A bearer token alone does not satisfy MCP-19. |
+| Revocation snapshot from a per-user Durable Object (`stub.revokedAgents()`) | Not ported | Storage is deployment-specific. The adapter takes `policy_data` and returns HALT when no revocation snapshot is supplied; missing data is never "not revoked". |
+| Mandate and approval data | Not ported | Agency Check passes an empty mandate set and no approvals, so there is nothing to port. Here they arrive through `policy_data` and are not fetched. Unlike the Rego (any truthy `mandates.active[id]` satisfies every gated tool for every caller), a mandate here must carry `agent_id` equal to the principal, `tools` containing the tool, and a future numeric `expires_at_ns` (AUTHZ-DIV-4). Agency Check's `authz.ts` has no mandate binding to compare because its mandate set is always empty. |
+| NOR receipt creation and signing (`makeNor`) | Not ported | Signing keys and the receipt store belong to the deployment. The adapter returns the decision document as `AdapterResult.evidence`; emitting a signed receipt is enforcement step 7 and remains unimplemented. |
+| First-failing-condition `deny_reason` in `authz.ts` | Superseded | The older Rego published an empty `deny_reason`, which `authz.ts` worked around. The current `opa/nexus-authz.rego` joins and sorts its reasons, and the port matches it. `allow` is identical in all versions. |
+| Cloudflare Workers runtime, `crypto.subtle`, request routing | Not applicable | Runtime-specific; this is a Python reference. |
+
+Four divergences from the Rego are deliberate and fail closed (AUTHZ-DIV-1 to
+AUTHZ-DIV-4, documented in `authz.py` and pinned by tests): non-integer
+delegation depth, a `config_change` with no `change_hash`, and absent parent
+capabilities each deny, where the Rego would allow because an undefined
+comparison removes the deny condition; and a mandate not bound to the
+principal, tool and expiry does not satisfy a mandate-gated tool, where the
+Rego accepts any active mandate ID. They should be fixed in the policy, at
+which point the pinning tests flip.
+
+This enforces one step. All other enforcement methods are unchanged and still raise
+`NotImplementedError`. The adapter as a whole remains not production-ready.
+
 Production users should deploy an implemented NEXUS adapter or another implementation that demonstrably satisfies the CP.5.MCP outcomes and evidence requirements.

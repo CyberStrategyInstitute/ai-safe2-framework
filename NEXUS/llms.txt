@@ -18,6 +18,7 @@
 - [Controls](payments/CONTROLS.md): APAY-01 through APAY-20
 - [Deployment readiness](payments/DEPLOYMENT-READINESS.md): Evidence-based activation decision
 - [Adapter guide](payments/ADAPTER-GUIDE.md): Integration and fail-closed boundaries
+- [Agency Check receipt evidence](payments/AGENCY-CHECK-RECEIPT-EVIDENCE.md): Shadow-mode receipt evidence profile
 
 ## Machine resources
 

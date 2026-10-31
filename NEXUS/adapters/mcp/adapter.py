@@ -1,11 +1,13 @@
 """
 NEXUS MCP Adapter - agent-to-tool plane enforcement.
 
-STATUS: INTERFACE SKELETON. NOT IMPLEMENTED. NOT TESTED. DO NOT DEPLOY.
+STATUS: INTERFACE SKELETON. NOT PRODUCTION-READY. DO NOT DEPLOY.
 
-Every enforcement method raises NotImplementedError by design. An incomplete
-adapter must fail closed, not pass traffic. Do not replace these with stubs that
-return success values.
+One step is implemented and tested: authorize_tool_call, the NEXUS tool-call
+authorization decision (authz.py, a mirror of opa/nexus-authz.rego ported back
+from Agency Check). Every other enforcement method raises NotImplementedError
+by design. An incomplete adapter must fail closed, not pass traffic. Do not
+replace these with stubs that return success values.
 
 Implements the CP.5.MCP profile for MCP 2026-07-28 (stateless core), with a
 legacy adapter for 2025-11-25 during the twelve-month support window.
@@ -15,8 +17,28 @@ Reference: 00-cross-pillar/cp5_mcp_server_security.md
 from __future__ import annotations
 
 import enum
+import importlib.util
+import sys
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from pathlib import Path
+from typing import Any, Mapping, Optional
+
+
+def _load_authz():
+    # This directory is not an installed package; load the sibling module either way.
+    try:
+        from . import authz  # type: ignore[import-not-found]
+        return authz
+    except ImportError:
+        spec = importlib.util.spec_from_file_location(
+            "nexus_mcp_adapter_authz", Path(__file__).with_name("authz.py"))
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[spec.name] = module  # dataclasses resolve their module by name
+        spec.loader.exec_module(module)
+        return module
+
+
+_authz = _load_authz()
 
 
 class SpecVersion(str, enum.Enum):
@@ -66,6 +88,7 @@ class AdapterResult:
     decision: Decision
     reason: str = ""
     findings: list[str] = field(default_factory=list)
+    evidence: dict = field(default_factory=dict)
 
 
 class MCPAdapter:
@@ -82,6 +105,59 @@ class MCPAdapter:
 
     def check_capability(self, principal: Principal, grant: CapabilityGrant, body: dict) -> AdapterResult:
         raise NotImplementedError("check_capability: fail closed until implemented")
+
+    def authorize_tool_call(self, principal: Principal, grant: CapabilityGrant, body: dict, *,
+                            policy_data: Optional[Mapping[str, Any]],
+                            mandate_required_tools: frozenset[str] = frozenset(),
+                            parent_capabilities: Optional[frozenset[str]] = None,
+                            context_compartment: str = "TASK_CONTEXT") -> AdapterResult:
+        """NEXUS authorization for one `tools/call`, evaluated as opa/nexus-authz.rego does.
+
+        `principal` must come from establish_trust (verified credential). `_meta`
+        NEXUS context is caller-asserted and can only narrow: the delegation depth
+        used is the larger of the verified chain and the declared depth.
+        `context_compartment` is the compartment the deployment established for
+        this call; it defaults to TASK_CONTEXT. A `_meta` compartment that differs
+        from it is rejected, so a caller cannot select CREDENTIAL_SURFACE or
+        AGENT_STATE to reach credential: tools. Mandates in `policy_data` must be
+        bound to the principal, tool and expiry (AUTHZ-DIV-4).
+        `policy_data` is the data.nexus subtree. A missing revocation snapshot is
+        a HALT, never "not revoked".
+        """
+        revocation = (policy_data or {}).get("revocation")
+        if not isinstance(revocation, Mapping) or not isinstance(revocation.get("agents"), Mapping):
+            return AdapterResult(Decision.HALT, "revocation status unavailable")
+        if not isinstance(body, Mapping) or body.get("method") != "tools/call":
+            return AdapterResult(Decision.REJECT, "not a tools/call request")
+        params = body.get("params")
+        if not isinstance(params, Mapping) or not isinstance(params.get("name"), str):
+            return AdapterResult(Decision.REJECT, "tools/call without a tool name")
+        try:
+            ctx = _authz.parse_nexus_context(params.get("_meta"))
+        except _authz.NexusContextError as exc:
+            return AdapterResult(Decision.REJECT, str(exc), findings=[f"malformed:{exc.field}"])
+
+        if ctx.context_compartment != context_compartment:
+            return AdapterResult(Decision.REJECT, "asserted context compartment differs from the established one",
+                                 findings=["malformed:nexusContextCompartment"])
+
+        granted = sorted(grant.tools)
+        decision = _authz.authorize_tool_call({
+            "agent_id": principal.id,
+            "tool_name": params["name"],
+            "vcc_capabilities": granted,
+            "vcc_mandate_required": sorted(mandate_required_tools),
+            "mandate_id": ctx.mandate_id,
+            "delegation_depth": max(len(principal.delegation_chain), ctx.delegation_depth),
+            "context_compartment": context_compartment,
+            "requested_new_capabilities": list(ctx.requested_capabilities),
+            "parent_vcc_capabilities": sorted(parent_capabilities if parent_capabilities is not None else grant.tools),
+            "performative": "tool_call",
+            "persistence_scope": "request",
+        }, policy_data)
+        if decision["allow"]:
+            return AdapterResult(Decision.ALLOW, evidence=decision)
+        return AdapterResult(Decision.REJECT, decision["deny_reason"], evidence=decision)
 
     def validate_state_handle(self, principal: Principal, handle: str) -> AdapterResult:
         raise NotImplementedError("validate_state_handle: fail closed until implemented")

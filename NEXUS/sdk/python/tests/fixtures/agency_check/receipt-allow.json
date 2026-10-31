@@ -1,0 +1,16 @@
+{
+  "receipt_id": "32a84d47-d036-4826-95e0-be2478aae0a6",
+  "agent_did": "did:web:agency-check.example:clients:3f2a9c",
+  "action_type": "tool_call",
+  "tool_name": "agency_check",
+  "tool_arguments_hash": "0e21121fa13522167199ea9b6ea60f69c9ae756b098c1d3040d33325217ab5b3",
+  "outcome": "allow",
+  "delegation_depth": 0,
+  "timestamp_utc": "2026-10-30T12:00:00.000Z",
+  "ocsf_class_uid": 6003,
+  "ocsf_severity_id": 1,
+  "guardian_policy_id": "nexus-authz-v0.3-v31",
+  "cael_envelope_hash": "46b7c8e6cecc65b73cde1cc143981ba9d9f6616d076e61aabd3e6fa76f577d4f",
+  "receipt_hash": "f0f866b3a683a547453bcdb188c7112ebb180a6e9f3a08de7f32f2a309a1d26c",
+  "signature": "tFqXbFjK2FP1mbTJtnG1yV7kEuSgyGUo33CFUffJYS4goVH-n-2LNUkip2mlY0geO1FnD7UbFaDppwhtZlMIAQ"
+}

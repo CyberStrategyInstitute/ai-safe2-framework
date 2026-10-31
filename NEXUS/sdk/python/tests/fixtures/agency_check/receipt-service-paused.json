@@ -1,0 +1,17 @@
+{
+  "receipt_id": "2947bc02-1521-4054-992f-0846212f75ce",
+  "agent_did": "did:web:agency-check.example:clients:3f2a9c",
+  "action_type": "tool_call",
+  "tool_name": "agency_check",
+  "tool_arguments_hash": "0e21121fa13522167199ea9b6ea60f69c9ae756b098c1d3040d33325217ab5b3",
+  "outcome": "deny",
+  "delegation_depth": 0,
+  "timestamp_utc": "2026-10-30T12:00:00.000Z",
+  "ocsf_class_uid": 6002,
+  "ocsf_severity_id": 4,
+  "guardian_policy_id": "agency-check:kill_switch",
+  "deny_reason": "kill_switch",
+  "cael_envelope_hash": "46b7c8e6cecc65b73cde1cc143981ba9d9f6616d076e61aabd3e6fa76f577d4f",
+  "receipt_hash": "4005dac5d49d838bd528d9701130c9a61d34af175bfbccdf1292733dcd402475",
+  "signature": "0YTDvqnMu99rVMPgAdx6cXxOjzhI_dDypgt598jq620PA9vsw1xbdpiAeRwWmDpfrqYi-UjPZHWjZH1mLlHOCg"
+}
