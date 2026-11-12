@@ -35,7 +35,9 @@ than a clean result.
 scanner. `--inspect-config` requires the same consent and emits only allowlisted
 structural facts; raw configuration values are not retained. The workflow does
 not transmit telemetry or connect to cloud accounts, remote hosts, or active
-harness sessions.
+harness sessions. The one opt-in exception is `--pro --post`, which sends a
+names-flags-digests manifest to a hosted service only when you ask for it; see
+[Project manifest for hosted assessment](ASSESS-PRO.md).
 
 ## Interpreting the disposition
 

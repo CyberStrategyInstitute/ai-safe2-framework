@@ -1,0 +1,75 @@
+{
+  "schema_version": "safe2.pro-manifest-heuristics.v1",
+  "status": "draft-unreviewed",
+  "purpose": "Rules `safe2 assess --pro` uses to turn harness configuration names into manifest flags. Heuristics, not proof: the hosted rules GR-01 to GR-08 trust these flags, so a named reviewer should sign this file before the flags are relied on.",
+  "token_matching": "Tool names are split into lowercase tokens on non-alphanumeric characters and camelCase boundaries. A category matches on an exact tool name or on any token. Only tool names are examined; arguments are never read into a category decision.",
+  "tool_categories": {
+    "spawn": {
+      "exact": ["Task", "Agent"],
+      "tokens": ["spawn", "subagent", "subagents", "delegate"]
+    },
+    "memory": {
+      "exact": [],
+      "tokens": ["memory", "memories", "mem0", "zep", "letta", "remember"]
+    },
+    "send": {
+      "exact": [],
+      "tokens": [
+        "send", "post", "publish", "reply", "notify", "dispatch", "broadcast", "tweet",
+        "webhook", "email", "mail", "gmail", "outlook", "smtp", "slack", "discord",
+        "telegram", "sms", "twilio", "whatsapp", "teams"
+      ]
+    },
+    "money": {
+      "exact": [],
+      "tokens": [
+        "pay", "payment", "payments", "payout", "transfer", "refund", "charge", "invoice",
+        "stripe", "paypal", "wire", "checkout", "purchase", "withdraw", "venmo"
+      ]
+    },
+    "write": {
+      "exact": ["Edit", "Write", "MultiEdit", "NotebookEdit"],
+      "tokens": []
+    },
+    "exec": {
+      "exact": ["Bash"],
+      "tokens": []
+    },
+    "delete": {
+      "exact": [],
+      "tokens": ["delete", "remove", "destroy", "drop", "purge"]
+    }
+  },
+  "approval_point_categories": {
+    "before_write": "write",
+    "before_exec": "exec",
+    "before_send": "send",
+    "before_payment": "money",
+    "before_delete": "delete"
+  },
+  "approval_rule": "Only a bare tool name in the permission `ask` list counts as an approval point. A rule with a specifier, such as Bash(git push:*), covers a subset of uses and is not counted.",
+  "unattended": {
+    "permission_modes": ["bypassPermissions"],
+    "scheduled_asset_types": ["scheduled_agent_operation"],
+    "ci_markers": {
+      "claude-code": ["claude -p", "claude --print", "claude-code-action", "codex exec"]
+    }
+  },
+  "memory": {
+    "state_asset_types": ["persistent_agent_state"],
+    "frontmatter_keys": ["memory"],
+    "off_values": ["", "none", "false", "off", "no"]
+  },
+  "permission_mode_order": ["plan", "default", "acceptEdits", "bypassPermissions"],
+  "cannot_detect": {
+    "mandate_configured": "No reliable configuration signal for a delegation mandate (scope, hop limit, budget). Written false for every spawning agent.",
+    "memory_provenance": "No reliable configuration signal that memory writes record a source. Written false for every agent with persistent memory.",
+    "budget_ceiling_configured": "No reliable configuration signal for a spend ceiling enforced outside the model. Written false for every agent that moves money."
+  },
+  "secret_patterns": {
+    "private_key_header": "-----BEGIN (?:RSA |EC |DSA |OPENSSH |ENCRYPTED )?PRIVATE KEY-----",
+    "assignment": "(?i)(?:secret|token|passw(?:or)?d|api[_-]?key|private[_-]?key|access[_-]?key|credential|authorization)[a-z0-9_.-]{0,64}[\"']?\\s{0,16}[=:]\\s{0,16}[\"']?(?:(?:bearer|basic)\\s{1,16})?([^\\s\"'#,}]{8,})",
+    "placeholder_prefixes": ["$", "<", "{{", "%"],
+    "placeholder_words": ["changeme", "change-me", "your-", "your_", "placeholder", "redacted", "xxxxxxxx", "todo"]
+  }
+}

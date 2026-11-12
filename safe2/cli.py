@@ -53,6 +53,7 @@ def cli():
     safe2 init .                    secure-default project configuration
     safe2 start .                   preview a guided local first assessment
     safe2 assess .                  bounded project assessment bundle
+    safe2 assess . --pro --scan-content --inspect-config   plus hosted-assessment manifest
     safe2 config show              effective configuration and source
     safe2 scan skill ./my-skill     skill package static scan, findings only
     safe2 scan mcp ./my-server      MCP server source scan, findings only
