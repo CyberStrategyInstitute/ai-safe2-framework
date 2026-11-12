@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import time
 from pathlib import Path
+from typing import Any
 
 import pytest
 from assess_manifest_support import (
@@ -21,7 +22,7 @@ from safe2.manifest.heuristics import load_heuristics
 
 def collect(project: Path, home: Path, **overrides):
     home.mkdir(parents=True, exist_ok=True)
-    options = {"project_name": "demo", "max_files": 10_000, "max_file_bytes": 5_000_000, "home": home}
+    options: dict[str, Any] = {"project_name": "demo", "max_files": 10_000, "max_file_bytes": 5_000_000, "home": home}
     options.update(overrides)
     return collect_manifest(project, **options)
 
