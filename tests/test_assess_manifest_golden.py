@@ -8,7 +8,7 @@ import stat
 from pathlib import Path
 
 import pytest
-from assess_pro_support import (
+from assess_manifest_support import (
     FAKE_PROVIDER_KEY,
     LEAK_SENTINELS,
     PINNED_HEX,
@@ -21,7 +21,7 @@ from click.testing import CliRunner
 
 from safe2.cli import cli
 
-PRO_ARGS = ["--pro", "--scan-content", "--inspect-config", "--no-wsl"]
+MANIFEST_ARGS = ["--manifest", "--scan-content", "--inspect-config", "--no-wsl"]
 
 
 @pytest.fixture
@@ -31,7 +31,7 @@ def golden(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     build_golden_project(project)
     init_project(project)
     bundle = tmp_path / "bundle"
-    result = CliRunner().invoke(cli, ["assess", str(project), *PRO_ARGS, "--output-dir", str(bundle)])
+    result = CliRunner().invoke(cli, ["assess", str(project), *MANIFEST_ARGS, "--output-dir", str(bundle)])
     assert result.exit_code == 0, result.output
     manifest = json.loads((bundle / "aisafe2-project-manifest-1.json").read_text(encoding="utf-8"))
     return {"project": project, "bundle": bundle, "manifest": manifest, "output": result.output}
@@ -128,7 +128,7 @@ def test_unknowable_keys_are_omitted_and_explained_only_in_the_local_bundle(gold
     assert "ci_gate" not in manifest
     assert "project_id" not in manifest["project"]
     assert manifest["project"] == {"name": "golden"}
-    notes = json.loads((golden["bundle"] / "pro-collection-notes.json").read_text(encoding="utf-8"))
+    notes = json.loads((golden["bundle"] / "manifest-collection-notes.json").read_text(encoding="utf-8"))
     assert {row["key"] for row in notes["omitted_keys"]} == {"ci_gate", "project.project_id"}
     reasons = {(row["subject"], row["flag"]) for row in notes["flag_reasons"]}
     assert ("agent:.claude/agents/orchestrator.md", "mandate_configured") in reasons
@@ -165,7 +165,7 @@ def test_same_tree_gives_identical_manifest_bytes_except_generated_at(
     runner = CliRunner()
     first, second = tmp_path / "one", tmp_path / "two"
     for bundle in (first, second):
-        result = runner.invoke(cli, ["assess", str(project), *PRO_ARGS, "--output-dir", str(bundle)])
+        result = runner.invoke(cli, ["assess", str(project), *MANIFEST_ARGS, "--output-dir", str(bundle)])
         assert result.exit_code == 0, result.output
 
     def normalized(bundle: Path) -> str:
@@ -173,7 +173,7 @@ def test_same_tree_gives_identical_manifest_bytes_except_generated_at(
         return re.sub(r'"generated_at": "[^"]+"', '"generated_at": "T"', text)
 
     assert normalized(first) == normalized(second)
-    notes = [json.loads((b / "pro-collection-notes.json").read_text(encoding="utf-8")) for b in (first, second)]
+    notes = [json.loads((b / "manifest-collection-notes.json").read_text(encoding="utf-8")) for b in (first, second)]
     for body in notes:
         body.pop("manifest_sha256")  # digests the bytes, which include generated_at
     assert notes[0] == notes[1]

@@ -1,4 +1,4 @@
-"""Shared helpers for the `safe2 assess --pro` tests.
+"""Shared helpers for the `safe2 assess --manifest` tests.
 
 Secret-shaped sentinels are assembled at runtime so no committed file contains a string
 a secret scanner would flag. Every sentinel is a unique marker the manifest, bundle, notes,
@@ -22,7 +22,7 @@ COMMAND_SENTINEL = "SENTINEL_COMMAND_LINE_must_not_leave_the_machine"
 ENV_VALUE_SENTINEL = "SENTINEL_ENV_VALUE_must_not_leave_the_machine"
 HEADER_SENTINEL = "SENTINEL_HEADER_VALUE_must_not_leave_the_machine"
 HOME_ONLY_SENTINEL = "SENTINEL_HOME_ONLY_must_not_be_read"
-PRO_KEY = "as2k_" + "SENTINELPROKEY" + "abcdef0123456789"
+TARVIN_KEY = "as2k_" + "SENTINELTARVINKEY" + "abcdef0123456789"
 PINNED_HEX = "ab" * 32
 
 LEAK_SENTINELS = (
@@ -34,7 +34,7 @@ LEAK_SENTINELS = (
     ENV_VALUE_SENTINEL,
     HEADER_SENTINEL,
     HOME_ONLY_SENTINEL,
-    "SENTINELPROKEY",
+    "SENTINELTARVINKEY",
 )
 
 

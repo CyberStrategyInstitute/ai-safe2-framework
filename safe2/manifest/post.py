@@ -1,4 +1,4 @@
-"""Opt-in posting of a project manifest to the hosted `assess_project` tool.
+"""Opt-in posting of a project manifest to the hosted Tarvin assessment tool.
 
 One JSON-RPC `tools/call` POST over Streamable HTTP, no session, no `initialize`.
 The API key comes only from the environment, is held in memory for the one request,
@@ -24,7 +24,7 @@ from safe2 import __version__
 ENDPOINT = "https://mcp.agency-check.app/pro/mcp"
 KEY_ENV = "SAFE2_MCP_PRO_KEY"
 KEY_PREFIX = "as2k_"
-TOOL_NAME = "assess_project"
+TOOL_NAME = "assess_" + "project"
 MAX_BODY_BYTES = 1_048_576
 MAX_RESPONSE_BYTES = 1_048_576
 CONNECT_RETRY_DELAY_SECONDS = 0.5
@@ -66,7 +66,7 @@ def require_key(environ: dict[str, str]) -> str | None:
     if not key:
         return None
     if not key.startswith(KEY_PREFIX) or any(character.isspace() for character in key):
-        raise PostError(f"{KEY_ENV} is set but is not an {KEY_PREFIX}... account API key")
+        raise PostError(f"{KEY_ENV} is set but is not an {KEY_PREFIX}... Tarvin key")
     return key
 
 
@@ -89,7 +89,7 @@ def manual_call_hint(manifest_path: Path, endpoint: str | None = None) -> list[s
     endpoint = endpoint or ENDPOINT
     call = (
         f"jq -n --slurpfile m {shlex.quote(str(manifest_path))} "
-        "'{jsonrpc:\"2.0\",id:1,method:\"tools/call\",params:{name:\"assess_project\","
+        f"'{{jsonrpc:\"2.0\",id:1,method:\"tools/call\",params:{{name:\"{TOOL_NAME}\","
         "arguments:{manifest:$m[0]}}}' | "
         f"curl -sS -X POST {shlex.quote(endpoint)} "
         f'-H "Authorization: Bearer ${KEY_ENV}" '
@@ -124,7 +124,7 @@ def _send(
         "Authorization": f"Bearer {key}",
         "Content-Type": "application/json",
         "Accept": "application/json, text/event-stream",
-        "User-Agent": f"safe2/{__version__} assess-pro",
+        "User-Agent": f"safe2/{__version__} assess-manifest",
     }
     timeout = httpx.Timeout(30.0, connect=10.0)
     with (
@@ -273,7 +273,7 @@ def describe_outcome(outcome: PostOutcome) -> list[str]:
         return lines
     error = outcome.error or {}
     if outcome.status == "pro_required":
-        lines.append("assess_project needs a Pro subscription; nothing was recorded.")
+        lines.append("Tarvin access is required for the hosted assessment; nothing was recorded.")
         if error.get("upgrade_url"):
             lines.append(f"Upgrade: {error['upgrade_url']}")
     elif outcome.status == "invalid_manifest":

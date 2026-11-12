@@ -7,16 +7,16 @@ import time
 from pathlib import Path
 
 import pytest
-from assess_pro_support import (
+from assess_manifest_support import (
     HOME_ONLY_SENTINEL,
     agent_file,
     build_golden_project,
     write,
 )
 
-from safe2.pro import collect as collect_module
-from safe2.pro.collect import ManifestCollectionError, collect_manifest, count_secret_findings
-from safe2.pro.heuristics import load_heuristics
+from safe2.manifest import collect as collect_module
+from safe2.manifest.collect import ManifestCollectionError, collect_manifest, count_secret_findings
+from safe2.manifest.heuristics import load_heuristics
 
 
 def collect(project: Path, home: Path, **overrides):

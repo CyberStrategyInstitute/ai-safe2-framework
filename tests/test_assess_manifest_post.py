@@ -7,8 +7,8 @@ import socket
 from pathlib import Path
 
 import pytest
-from assess_pro_support import (
-    PRO_KEY,
+from assess_manifest_support import (
+    TARVIN_KEY,
     SUCCESS,
     StubServer,
     build_golden_project,
@@ -19,10 +19,10 @@ from assess_pro_support import (
 from click.testing import CliRunner
 
 from safe2.cli import cli
-from safe2.pro import post as post_module
-from safe2.pro.post import PostError, build_body, post_manifest
+from safe2.manifest import post as post_module
+from safe2.manifest.post import PostError, build_body, post_manifest
 
-ARGS = ["--pro", "--scan-content", "--inspect-config", "--no-wsl", "--post"]
+ARGS = ["--manifest", "--scan-content", "--inspect-config", "--no-wsl", "--post"]
 
 
 @pytest.fixture(autouse=True)
@@ -39,7 +39,7 @@ def project(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     root = tmp_path / "project"
     build_golden_project(root)
     init_project(root)
-    monkeypatch.setenv("SAFE2_MCP_PRO_KEY", PRO_KEY)
+    monkeypatch.setenv("SAFE2_MCP_PRO_KEY", TARVIN_KEY)
     return root
 
 
@@ -52,7 +52,7 @@ def run(project: Path, tmp_path: Path, stub: StubServer, monkeypatch, *extra: st
 
 def assert_key_nowhere(result, out: Path) -> None:
     everything = result.output + bundle_text(out)
-    assert PRO_KEY not in everything and "SENTINELPROKEY" not in everything
+    assert TARVIN_KEY not in everything and "SENTINELTARVINKEY" not in everything
 
 
 def test_success_posts_one_request_with_the_documented_shape(project: Path, tmp_path: Path, monkeypatch) -> None:
@@ -63,15 +63,15 @@ def test_success_posts_one_request_with_the_documented_shape(project: Path, tmp_
     assert len(stub.requests) == 1  # one POST, no initialize, no session
     request = stub.requests[0]
     assert request["path"] == "/pro/mcp"
-    assert request["headers"]["authorization"] == f"Bearer {PRO_KEY}"
+    assert request["headers"]["authorization"] == f"Bearer {TARVIN_KEY}"
     assert request["headers"]["content-type"] == "application/json"
     assert "mcp-session-id" not in request["headers"]
     message = json.loads(request["body"])
     assert message["jsonrpc"] == "2.0" and message["method"] == "tools/call"
-    assert message["params"]["name"] == "assess_project"
+    assert message["params"]["name"] == post_module.TOOL_NAME
     manifest = json.loads((out / "aisafe2-project-manifest-1.json").read_text(encoding="utf-8"))
     assert message["params"]["arguments"] == {"manifest": manifest}
-    assert manifest["generator"]["name"] == "safe2 assess --pro"
+    assert manifest["generator"]["name"] == "safe2 assess --manifest"
     assert "ACT tier: ACT-4" in result.output
     assert "Missing controls: 2" in result.output and "MCP-4" in result.output and "CP.9" in result.output
     assert "Snapshot: snap_abc123" in result.output
@@ -100,12 +100,18 @@ def test_server_sent_events_framing_is_understood(project: Path, tmp_path: Path,
     assert "Snapshot: snap_abc123" in result.output
 
 
-def test_pro_required_prints_the_upgrade_url_exits_nonzero_and_does_not_retry(project: Path, tmp_path: Path, monkeypatch) -> None:
+def test_server_access_required_prints_the_url_exits_nonzero_and_does_not_retry(
+    project: Path, tmp_path: Path, monkeypatch
+) -> None:
     with StubServer() as stub:
-        stub.reply_error("pro_required", "assess_project needs a Pro subscription.", upgrade_url="https://mcp.agency-check.app/account")
+        stub.reply_error(
+            "pro_required",
+            "Tarvin access is required.",
+            upgrade_url="https://mcp.agency-check.app/account",
+        )
         result, out = run(project, tmp_path, stub, monkeypatch)
     assert result.exit_code == 1
-    assert "needs a Pro subscription" in result.output
+    assert "Tarvin access is required" in result.output
     assert "Upgrade: https://mcp.agency-check.app/account" in result.output
     assert len(stub.requests) == 1
     assert (out / "aisafe2-project-manifest-1.json").is_file()  # the local manifest is kept
@@ -136,7 +142,7 @@ def test_not_applied_is_reported_clearly_and_is_not_a_failure(project: Path, tmp
 def test_rejected_key_is_reported_without_echoing_it_and_without_retry(project: Path, tmp_path: Path, monkeypatch, status: int) -> None:
     with StubServer() as stub:
         stub.status = status
-        stub.body = json.dumps({"error": f"echoing {PRO_KEY}"}).encode()  # a hostile server may echo the key back
+        stub.body = json.dumps({"error": f"echoing {TARVIN_KEY}"}).encode()  # a hostile server may echo the key back
         result, out = run(project, tmp_path, stub, monkeypatch)
     assert result.exit_code == 1
     assert f"rejected the API key (HTTP {status})" in result.output
@@ -198,10 +204,10 @@ def test_connect_errors_retry_exactly_once(monkeypatch: pytest.MonkeyPatch) -> N
     sleeps: list[float] = []
     for name in ("HTTP_PROXY", "HTTPS_PROXY", "ALL_PROXY", "http_proxy", "https_proxy", "all_proxy"):
         monkeypatch.delenv(name, raising=False)
-    outcome = post_manifest({"manifest_version": "x"}, key=PRO_KEY, endpoint=f"http://127.0.0.1:{port}/pro/mcp", sleep=sleeps.append)
+    outcome = post_manifest({"manifest_version": "x"}, key=TARVIN_KEY, endpoint=f"http://127.0.0.1:{port}/pro/mcp", sleep=sleeps.append)
     assert outcome.status == "network_error" and outcome.attempts == 2
     assert sleeps == [post_module.CONNECT_RETRY_DELAY_SECONDS]
-    assert PRO_KEY not in repr(outcome)
+    assert TARVIN_KEY not in repr(outcome)
 
 
 def test_a_request_timeout_is_not_retried(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -214,7 +220,7 @@ def test_a_request_timeout_is_not_retried(monkeypatch: pytest.MonkeyPatch) -> No
         raise httpx.ReadTimeout("slow", request=request)
 
     outcome = post_manifest(
-        {"manifest_version": "x"}, key=PRO_KEY, endpoint="https://example.test/pro/mcp",
+        {"manifest_version": "x"}, key=TARVIN_KEY, endpoint="https://example.test/pro/mcp",
         transport=httpx.MockTransport(slow), sleep=lambda _: None,
     )
     assert outcome.status == "network_error" and outcome.attempts == 1 and len(calls) == 1
@@ -222,7 +228,7 @@ def test_a_request_timeout_is_not_retried(monkeypatch: pytest.MonkeyPatch) -> No
 
 def test_plain_http_to_a_non_loopback_host_is_refused_before_any_request() -> None:
     with pytest.raises(PostError, match="https"):
-        post_manifest({"manifest_version": "x"}, key=PRO_KEY, endpoint="http://example.com/pro/mcp")
+        post_manifest({"manifest_version": "x"}, key=TARVIN_KEY, endpoint="http://example.com/pro/mcp")
 
 
 def test_an_oversized_request_is_refused_locally() -> None:

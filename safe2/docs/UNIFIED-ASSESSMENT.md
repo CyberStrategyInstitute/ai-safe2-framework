@@ -8,7 +8,7 @@ the deeper evidence commands or infer evidence that was not collected.
 ## Quick start
 
 ```bash
-safe2 init . --profile local
+safe2 init . --manifestfile local
 safe2 assess . --scan-content --inspect-config
 ```
 
@@ -35,9 +35,9 @@ than a clean result.
 scanner. `--inspect-config` requires the same consent and emits only allowlisted
 structural facts; raw configuration values are not retained. The workflow does
 not transmit telemetry or connect to cloud accounts, remote hosts, or active
-harness sessions. The one opt-in exception is `--pro --post`, which sends a
+harness sessions. The one opt-in exception is `--manifest --post`, which sends a
 names-flags-digests manifest to a hosted service only when you ask for it; see
-[Project manifest for hosted assessment](ASSESS-PRO.md).
+[Project manifest for hosted assessment](ASSESS-MANIFEST.md).
 
 ## Interpreting the disposition
 

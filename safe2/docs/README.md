@@ -12,7 +12,7 @@ evidence operations, validation records, and product guidance.
 | Delegate a bounded first run to an agent | [CLI 1.0 operator workflow](CLI-1.0-WORKFLOW.md) |
 | Configure deterministic behavior | [CLI configuration](CLI-CONFIGURATION.md) |
 | Run a unified assessment | [Unified assessment](UNIFIED-ASSESSMENT.md) |
-| Write a project manifest for hosted assessment | [`assess --pro`](ASSESS-PRO.md) |
+| Write a project manifest for hosted assessment | [`assess --manifest`](ASSESS-MANIFEST.md) |
 | Produce or verify task evidence | [Task receipts](TASK-RECEIPTS.md) and [operational truth](OPERATIONAL-TRUTH.md) |
 | Run a challenge | [Challenge CLI](CHALLENGE-CLI.md) |
 | Integrate external evidence | [Adapter SDK](ADAPTER-SDK.md), [Codex JSONL](CODEX-JSONL-ADAPTER.md), and [OpenTelemetry](OPENTELEMETRY-ADAPTER.md) |

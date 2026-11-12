@@ -1,4 +1,4 @@
-"""Orchestrate manifest collection, validation, and local writing for `assess --pro`."""
+"""Orchestrate manifest collection, validation, and local writing for `assess --manifest`."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from safe2.configuration import resolve_configuration
-from safe2.pro.collect import (
+from safe2.manifest.collect import (
     collect_manifest,
     render_manifest,
     render_notes,
@@ -17,11 +17,11 @@ from safe2.pro.collect import (
 from safe2.secure_io import write_new_atomic
 
 MANIFEST_FILENAME = "aisafe2-project-manifest-1.json"
-NOTES_FILENAME = "pro-collection-notes.json"
+NOTES_FILENAME = "manifest-collection-notes.json"
 
 
 @dataclass(frozen=True)
-class ProManifest:
+class ManifestArtifact:
     manifest: dict[str, Any]
     path: Path
     sha256: str
@@ -34,7 +34,7 @@ def build_and_write(
     bundle_dir: Path,
     config_path: Path | None,
     manifest_out: Path | None,
-) -> ProManifest:
+) -> ManifestArtifact:
     """Collect, validate against the vendored schema, then write. Nothing is sent anywhere.
 
     Validation happens before any manifest byte is written. The local notes explaining
@@ -54,4 +54,4 @@ def build_and_write(
     notes_path = bundle_dir / NOTES_FILENAME
     write_new_atomic(manifest_path, body)
     write_new_atomic(notes_path, render_notes(collection.notes, digest))
-    return ProManifest(collection.manifest, manifest_path, digest, notes_path)
+    return ManifestArtifact(collection.manifest, manifest_path, digest, notes_path)

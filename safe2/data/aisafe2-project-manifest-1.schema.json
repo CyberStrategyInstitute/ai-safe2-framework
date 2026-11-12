@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://mcp.agency-check.app/pro/schemas/aisafe2-project-manifest-1.json",
   "title": "aisafe2-project-manifest/1",
-  "description": "DRAFT (UNREVIEWED). Project facts written by `safe2 assess --pro` on the customer's machine and posted to assess_project. Names, flags, counts and digests only: never file contents, prompts, secrets or secret values.",
+  "description": "DRAFT (UNREVIEWED). Project facts written by `safe2 assess --manifest` on the customer's machine and optionally posted to hosted Tarvin. Names, flags, counts and digests only: never file contents, prompts, secrets or secret values.",
   "type": "object",
   "additionalProperties": false,
   "required": [

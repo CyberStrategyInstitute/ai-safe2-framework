@@ -24,7 +24,7 @@ from safe2 import __version__
 from safe2.commands.acceptance import acceptance
 from safe2.commands.adapter import adapter
 from safe2.commands.aism import aism
-from safe2.commands.assess import assess_project
+from safe2.commands.assess import assess_command
 from safe2.commands.challenge import challenge
 from safe2.commands.configuration import config, init_project
 from safe2.commands.decision import decision
@@ -53,7 +53,7 @@ def cli():
     safe2 init .                    secure-default project configuration
     safe2 start .                   preview a guided local first assessment
     safe2 assess .                  bounded project assessment bundle
-    safe2 assess . --pro --scan-content --inspect-config   plus hosted-assessment manifest
+    safe2 assess . --manifest --scan-content --inspect-config   plus hosted-assessment manifest
     safe2 config show              effective configuration and source
     safe2 scan skill ./my-skill     skill package static scan, findings only
     safe2 scan mcp ./my-server      MCP server source scan, findings only
@@ -93,7 +93,7 @@ cli.add_command(scan)
 cli.add_command(adapter)
 cli.add_command(acceptance)
 cli.add_command(aism)
-cli.add_command(assess_project)
+cli.add_command(assess_command)
 cli.add_command(challenge)
 cli.add_command(config)
 cli.add_command(init_project)

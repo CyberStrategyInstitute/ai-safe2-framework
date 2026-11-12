@@ -1,4 +1,4 @@
-"""Reviewable flag heuristics for `safe2 assess --pro`, loaded from packaged data."""
+"""Reviewable flag heuristics for `safe2 assess --manifest`, loaded from packaged data."""
 
 from __future__ import annotations
 
@@ -10,8 +10,8 @@ from functools import lru_cache
 from importlib.resources import files
 from typing import Any
 
-HEURISTICS_FILE = "pro-manifest-heuristics-v1.json"
-HEURISTICS_SCHEMA = "safe2.pro-manifest-heuristics.v1"
+HEURISTICS_FILE = "manifest-heuristics-v1.json"
+HEURISTICS_SCHEMA = "safe2.manifest-heuristics.v1"
 CATEGORIES = ("spawn", "memory", "send", "money", "write", "exec", "delete")
 _CAMEL_BOUNDARY = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
 _NON_ALNUM = re.compile(r"[^A-Za-z0-9]+")

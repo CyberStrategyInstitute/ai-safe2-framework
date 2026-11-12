@@ -7,7 +7,7 @@ from importlib.resources import files
 
 import pytest
 
-from safe2.pro.heuristics import (
+from safe2.manifest.heuristics import (
     CATEGORIES,
     HeuristicsError,
     load_heuristics,
@@ -64,14 +64,14 @@ def test_packaged_heuristics_define_every_category_and_every_undetectable_flag()
 
 
 def test_heuristics_fail_closed_when_structurally_invalid() -> None:
-    raw = files("safe2.data").joinpath("pro-manifest-heuristics-v1.json").read_bytes()
+    raw = files("safe2.data").joinpath("manifest-heuristics-v1.json").read_bytes()
     document = json.loads(raw)
     parse_heuristics(raw)
     broken = json.loads(raw)
     del broken["tool_categories"]["money"]
     with pytest.raises(HeuristicsError):
         parse_heuristics(json.dumps(broken).encode())
-    wrong_version = dict(document, schema_version="safe2.pro-manifest-heuristics.v0")
+    wrong_version = dict(document, schema_version="safe2.manifest-heuristics.v0")
     with pytest.raises(HeuristicsError):
         parse_heuristics(json.dumps(wrong_version).encode())
     with pytest.raises(HeuristicsError):

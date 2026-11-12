@@ -1,4 +1,4 @@
-"""Collect `aisafe2-project-manifest/1` facts for `safe2 assess --pro`.
+"""Collect `aisafe2-project-manifest/1` facts for `safe2 assess --manifest`.
 
 The manifest carries names, boolean flags, counts, and digests only. File contents,
 prompts, secret values, command lines, environment values, and tool arguments are
@@ -24,14 +24,14 @@ from safe2 import __version__
 from safe2.contracts import validate_artifact
 from safe2.discovery.assets import inventory_assets
 from safe2.discovery.local import HARNESSES
-from safe2.pro.heuristics import Heuristics, load_heuristics
+from safe2.manifest.heuristics import Heuristics, load_heuristics
 from safe2.secure_io import read_regular_bounded
 from scanner.scanner import _KNOWN_SECRET
 
 MANIFEST_VERSION = "aisafe2-project-manifest/1"
 MANIFEST_SCHEMA = "aisafe2-project-manifest-1"
-GENERATOR_NAME = "safe2 assess --pro"
-NOTES_SCHEMA = "safe2.pro-collection-notes.v1"
+GENERATOR_NAME = "safe2 assess --manifest"
+NOTES_SCHEMA = "safe2.manifest-collection-notes.v1"
 
 _MAX_NAME = 200
 _MAX_TOOLS = 500
@@ -89,8 +89,8 @@ class _Settings:
     hooks: list[tuple[str, str | None]] = field(default_factory=list)
 
 
-def pro_asset_classifier(path: Path, relative: str) -> str | None:
-    """Classify the extra files `--pro` needs; the default asset classes are unchanged."""
+def manifest_asset_classifier(path: Path, relative: str) -> str | None:
+    """Classify the extra files `--manifest` needs; the default asset classes are unchanged."""
     lower = relative.lower().replace("\\", "/")
     parts = PurePosixPath(lower).parts
     name = path.name.lower()
@@ -430,7 +430,7 @@ def collect_manifest(
         max_files=max_files,
         hash_contents=False,
         max_hash_bytes=max_file_bytes,
-        extra_classifier=pro_asset_classifier,
+        extra_classifier=manifest_asset_classifier,
     )
     if inventory["truncated"]:
         raise ManifestCollectionError(
@@ -514,7 +514,7 @@ def collect_manifest(
     if incomplete:
         raise ManifestCollectionError("; ".join(incomplete))
     if len(config_files) > 500:
-        raise ManifestCollectionError("more than 500 config files; narrow the project before using --pro")
+        raise ManifestCollectionError("more than 500 config files; narrow the project before using --manifest")
 
     order = list(heur.data["permission_mode_order"])
     mode = max(settings_all.modes, key=lambda value: _mode_rank(value, order)) if settings_all.modes else None
@@ -645,7 +645,7 @@ def collect_manifest(
         }
     for entry in (manifest["agents"], manifest["mcp_servers"]):
         if len(entry) > 200:
-            raise ManifestCollectionError("more than 200 agents or MCP servers; narrow the project before using --pro")
+            raise ManifestCollectionError("more than 200 agents or MCP servers; narrow the project before using --manifest")
     return Collection(manifest=manifest, notes=notes)
 
 

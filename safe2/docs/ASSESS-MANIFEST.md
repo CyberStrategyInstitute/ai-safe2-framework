@@ -1,9 +1,9 @@
-# Project manifest for hosted assessment (`safe2 assess --pro`)
+# Project manifest for hosted assessment (`safe2 assess --manifest`)
 
-`safe2 assess --pro` runs the normal [unified assessment](UNIFIED-ASSESSMENT.md)
+`safe2 assess --manifest` runs the normal [unified assessment](UNIFIED-ASSESSMENT.md)
 and then writes one extra artifact, `aisafe2-project-manifest-1.json`
 (`aisafe2-project-manifest/1`): the facts about your agents, MCP servers, hooks,
-permissions, and config files that the hosted `assess_project` tool turns into a
+permissions, and config files that the hosted Tarvin assessment turns into a
 governance record.
 
 The manifest holds **names, boolean flags, counts, and digests only**. It never
@@ -14,7 +14,7 @@ tool arguments. Nothing is sent anywhere unless you add `--post`.
 
 ```bash
 safe2 init .
-safe2 assess . --pro --scan-content --inspect-config
+safe2 assess . --manifest --scan-content --inspect-config
 ```
 
 That writes the usual evidence bundle plus, inside it:
@@ -22,13 +22,13 @@ That writes the usual evidence bundle plus, inside it:
 | File | Purpose |
 |---|---|
 | `aisafe2-project-manifest-1.json` | The manifest. Validated against the schema before it is written. |
-| `pro-collection-notes.json` | Local only. Why each unfavourable default or omitted key was used, and which files were read or skipped. Never sent. |
+| `manifest-collection-notes.json` | Local only. Why each unfavourable default or omitted key was used, and which files were read or skipped. Never sent. |
 
 To send it, set the key in your environment and add `--post`:
 
 ```bash
-export SAFE2_MCP_PRO_KEY=as2k_...   # a Tarvin account API key
-safe2 assess . --pro --scan-content --inspect-config --post
+export SAFE2_MCP_PRO_KEY=as2k_...   # a Tarvin key
+safe2 assess . --manifest --scan-content --inspect-config --post
 ```
 
 Use `--manifest-out PATH` to write the manifest somewhere other than the bundle
@@ -37,15 +37,15 @@ overwritten).
 
 ## Consent
 
-`--pro` requires **both** `--scan-content` and `--inspect-config` on the command
+`--manifest` requires **both** `--scan-content` and `--inspect-config` on the command
 line. Without them the command stops before it reads, writes, or sends anything:
 
 ```text
-Error: --pro requires explicit --scan-content and --inspect-config consent
+Error: --manifest requires explicit --scan-content and --inspect-config consent
 ```
 
 A `collect_content = true` setting in `.safe2/config.toml` does not stand in for
-these flags for `--pro`. `--manifest-out` and `--post` are rejected without `--pro`.
+these flags for `--manifest`. `--manifest-out` and `--post` are rejected without `--manifest`.
 
 ## What is read
 
@@ -61,13 +61,13 @@ links, and goes through the shared `safe2.secure_io` reader.
 `~/.claude.json` is **not** read: it is not a location `doctor` knows. A file in these
 locations that exists but cannot be read or parsed stops the run (see below), because
 skipping it could hide a permissive setting. In particular a symlinked `~/.claude`
-(common with dotfile managers) blocks `--pro` until the symlink is not in the path.
+(common with dotfile managers) blocks `--manifest` until the symlink is not in the path.
 
 ## What the manifest contains
 
 | Field | Source |
 |---|---|
-| `generator` | Always `{"name": "safe2 assess --pro", "version": <safe2 version>}`. The server labels a manifest `cli` by this exact name. |
+| `generator` | Always `{"name": "safe2 assess --manifest", "version": <safe2 version>}`. The server labels a manifest `cli` by this exact name. |
 | `project.name` | `project.name` from `.safe2/config.toml`, else the directory name. `project_id` is omitted (see open decisions). |
 | `agents[]` | Name, harness, `definition_digest` (SHA-256 of the definition file), tool **names**, the flags below, and `approval_points`. |
 | `mcp_servers[]` | Name, transport, `auth_type`, `pinned_digest` (a SHA-256 found in the arguments, such as `image@sha256:<hex>`; a version number is not a digest), and `config_digest`. |
@@ -83,8 +83,8 @@ host). Environment values, header values, and arguments are not part of it.
 ### Flags are heuristics
 
 The rules that turn tool names and settings into flags live in
-[`safe2/data/pro-manifest-heuristics-v1.json`](../data/pro-manifest-heuristics-v1.json),
-marked `draft-unreviewed`, with a test table in `tests/test_assess_pro_heuristics.py`.
+[`safe2/data/manifest-heuristics-v1.json`](../data/manifest-heuristics-v1.json),
+marked `draft-unreviewed`, with a test table in `tests/test_assess_manifest_heuristics.py`.
 The hosted rules trust these flags, so a named reviewer should sign that file before
 the flags are relied on.
 
@@ -105,15 +105,16 @@ the flags are relied on.
 `memory_provenance`, and `budget_ceiling_configured` have no reliable configuration
 signal today, so they are written `false` wherever the schema requires them. That
 means a spawning agent always reads as lacking a mandate until a signal is defined.
-The reasons are recorded in `pro-collection-notes.json`, never in the manifest.
+The reasons are recorded in `manifest-collection-notes.json`, never in the manifest.
 
 ## Posting
 
-`--post` makes one MCP `tools/call` of `assess_project` with `{ "manifest": <manifest> }`
+`--post` makes one MCP `tools/call` of the hosted Tarvin assessment tool with
+`{ "manifest": <manifest> }`
 to `https://mcp.agency-check.app/pro/mcp` over Streamable HTTP: one POST, no
 `initialize`, no session.
 
-- **Key.** `SAFE2_MCP_PRO_KEY` (`as2k_...`) from the environment only. It is never
+- **Tarvin key.** `SAFE2_MCP_PRO_KEY` (`as2k_...`) from the environment only. It is never
   accepted as an option, never written to config, the bundle, notes, logs, or the
   manifest, and never printed, including when the server echoes it back.
 - **No key.** The manifest path and the exact one-line call are printed and the command

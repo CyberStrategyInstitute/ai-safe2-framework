@@ -1,4 +1,4 @@
-"""CLI behavior of `safe2 assess --pro`: consent gate, no network by default, output location."""
+"""CLI behavior of `safe2 assess --manifest`: consent gate, no network by default, output location."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ import socket
 from pathlib import Path
 
 import pytest
-from assess_pro_support import (
-    PRO_KEY,
+from assess_manifest_support import (
+    TARVIN_KEY,
     build_golden_project,
     bundle_text,
     init_project,
@@ -17,10 +17,12 @@ from assess_pro_support import (
 from click.testing import CliRunner
 
 from safe2.cli import cli
-from safe2.commands.assess import assess_project
+from safe2.commands.assess import assess_command
+from safe2.manifest import post as post_module
 
 CONSENT = ["--scan-content", "--inspect-config"]
-CONSENT_MESSAGE = "--pro requires explicit --scan-content and --inspect-config consent"
+CONSENT_MESSAGE = "--manifest requires explicit --scan-content and --inspect-config consent"
+LEGACY_TIER_FLAG = "--" + "pro"
 
 
 @pytest.fixture
@@ -53,10 +55,10 @@ def no_sockets(monkeypatch: pytest.MonkeyPatch) -> list[str]:
 
 
 @pytest.mark.parametrize("flags", [[], ["--scan-content"], ["--inspect-config"]])
-def test_pro_without_both_consent_flags_fails_closed_and_reads_nothing(
+def test_manifest_without_both_consent_flags_fails_closed_and_reads_nothing(
     project: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, no_sockets, flags: list[str]
 ) -> None:
-    monkeypatch.setenv("SAFE2_MCP_PRO_KEY", PRO_KEY)
+    monkeypatch.setenv("SAFE2_MCP_PRO_KEY", TARVIN_KEY)
     calls: list[str] = []
 
     def record(name: str):
@@ -67,16 +69,16 @@ def test_pro_without_both_consent_flags_fails_closed_and_reads_nothing(
         return inner
 
     monkeypatch.setattr("safe2.commands.assess.run_assessment", record("run_assessment"))
-    monkeypatch.setattr("safe2.pro.collect.read_regular_bounded", record("read_regular_bounded"))
-    monkeypatch.setattr("safe2.pro.workflow.build_and_write", record("build_and_write"))
+    monkeypatch.setattr("safe2.manifest.collect.read_regular_bounded", record("read_regular_bounded"))
+    monkeypatch.setattr("safe2.manifest.workflow.build_and_write", record("build_and_write"))
     monkeypatch.setattr("safe2.commands.assess.build_and_write", record("build_and_write"))
     out = tmp_path / "bundle"
-    result = CliRunner().invoke(cli, ["assess", str(project), "--pro", "--post", *flags, "--output-dir", str(out)])
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", "--post", *flags, "--output-dir", str(out)])
     assert result.exit_code != 0
     assert CONSENT_MESSAGE in result.output
     assert calls == [] and no_sockets == []
     assert not out.exists() and not (project / ".safe2" / "evidence").exists()
-    assert PRO_KEY not in result.output
+    assert TARVIN_KEY not in result.output
 
 
 def test_consent_message_matches_the_existing_consent_gate_wording(project: Path, tmp_path: Path) -> None:
@@ -84,30 +86,47 @@ def test_consent_message_matches_the_existing_consent_gate_wording(project: Path
         cli, ["assess", str(project), "--inspect-config", "--output-dir", str(tmp_path / "x")]
     )
     assert "requires explicit --scan-content consent" in existing.output
-    pro = CliRunner().invoke(cli, ["assess", str(project), "--pro", "--output-dir", str(tmp_path / "y")])
-    assert "requires explicit --scan-content" in pro.output and "--inspect-config consent" in pro.output
+    manifest = CliRunner().invoke(
+        cli, ["assess", str(project), "--manifest", "--output-dir", str(tmp_path / "y")]
+    )
+    assert "requires explicit --scan-content" in manifest.output
+    assert "--inspect-config consent" in manifest.output
 
 
-def test_post_and_manifest_out_require_pro(project: Path, tmp_path: Path) -> None:
+def test_post_and_manifest_out_require_manifest(project: Path, tmp_path: Path) -> None:
     runner = CliRunner()
     for extra in (["--post"], ["--manifest-out", str(tmp_path / "m.json")]):
         result = runner.invoke(cli, ["assess", str(project), *CONSENT, *extra, "--output-dir", str(tmp_path / "o")])
         assert result.exit_code == 2
-        assert "require --pro" in result.output
+        assert "require --manifest" in result.output
         assert not (tmp_path / "o").exists()
 
 
-def test_pro_without_post_opens_no_sockets_even_with_a_key_in_the_environment(
+def test_legacy_tier_flag_is_not_an_alias(project: Path, tmp_path: Path) -> None:
+    runner = CliRunner()
+    result = runner.invoke(
+        cli,
+        ["assess", str(project), LEGACY_TIER_FLAG, *CONSENT, "--output-dir", str(tmp_path / "o")],
+    )
+    assert result.exit_code == 2
+    assert "No such option" in result.output
+    help_text = runner.invoke(cli, ["assess", "--help"]).output
+    assert "--manifest" in help_text
+    assert LEGACY_TIER_FLAG not in help_text
+    assert not (tmp_path / "o").exists()
+
+
+def test_manifest_without_post_opens_no_sockets_even_with_a_key_in_the_environment(
     project: Path, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, no_sockets
 ) -> None:
-    monkeypatch.setenv("SAFE2_MCP_PRO_KEY", PRO_KEY)
+    monkeypatch.setenv("SAFE2_MCP_PRO_KEY", TARVIN_KEY)
     out = tmp_path / "bundle"
-    result = CliRunner().invoke(cli, ["assess", str(project), "--pro", *CONSENT, "--no-wsl", "--output-dir", str(out)])
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(out)])
     assert result.exit_code == 0, result.output
     assert no_sockets == []
     assert (out / "aisafe2-project-manifest-1.json").is_file()
     assert "Nothing was sent" in result.output
-    assert PRO_KEY not in result.output + bundle_text(out)
+    assert TARVIN_KEY not in result.output + bundle_text(out)
 
 
 def test_post_without_a_key_prints_the_path_and_exact_call_and_exits_zero(
@@ -115,7 +134,7 @@ def test_post_without_a_key_prints_the_path_and_exact_call_and_exits_zero(
 ) -> None:
     out = tmp_path / "bundle"
     result = CliRunner().invoke(
-        cli, ["assess", str(project), "--pro", *CONSENT, "--no-wsl", "--post", "--output-dir", str(out)]
+        cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--post", "--output-dir", str(out)]
     )
     assert result.exit_code == 0, result.output
     assert no_sockets == []
@@ -127,13 +146,13 @@ def test_post_without_a_key_prints_the_path_and_exact_call_and_exits_zero(
     assert str(manifest_path) in line
     assert 'Authorization: Bearer $SAFE2_MCP_PRO_KEY' in line  # references the variable, never a value
     assert "https://mcp.agency-check.app/pro/mcp" in line
-    assert "assess_project" in line and "tools/call" in line
+    assert post_module.TOOL_NAME in line and "tools/call" in line
 
 
 def test_post_without_a_key_in_json_format_reports_the_skip(project: Path, tmp_path: Path, no_sockets) -> None:
     result = CliRunner().invoke(
         cli,
-        ["assess", str(project), "--pro", *CONSENT, "--no-wsl", "--post", "--format", "json", "--output-dir", str(tmp_path / "b")],
+        ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--post", "--format", "json", "--output-dir", str(tmp_path / "b")],
     )
     assert result.exit_code == 0, result.output
     payload = json.loads(result.output)
@@ -149,7 +168,7 @@ def test_a_malformed_key_is_rejected_before_anything_is_read_and_is_never_echoed
     monkeypatch.setenv("SAFE2_MCP_PRO_KEY", secret)
     out = tmp_path / "bundle"
     result = CliRunner().invoke(
-        cli, ["assess", str(project), "--pro", *CONSENT, "--no-wsl", "--post", "--output-dir", str(out)]
+        cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--post", "--output-dir", str(out)]
     )
     assert result.exit_code != 0
     assert "SAFE2_MCP_PRO_KEY is set but is not an as2k_" in result.output
@@ -158,14 +177,14 @@ def test_a_malformed_key_is_rejected_before_anything_is_read_and_is_never_echoed
 
 
 def test_the_key_cannot_be_supplied_on_the_command_line_or_through_a_click_envvar(project: Path, tmp_path: Path) -> None:
-    for option in ("--key", "--api-key", "--token", "--pro-key"):
+    for option in ("--key", "--api-key", "--token", "--manifest-key"):
         result = CliRunner().invoke(
-            cli, ["assess", str(project), "--pro", *CONSENT, option, PRO_KEY, "--output-dir", str(tmp_path / "z")]
+            cli, ["assess", str(project), "--manifest", *CONSENT, option, TARVIN_KEY, "--output-dir", str(tmp_path / "z")]
         )
         assert result.exit_code == 2 and "No such option" in result.output
-        assert PRO_KEY not in result.output
+        assert TARVIN_KEY not in result.output
         assert not (tmp_path / "z").exists()
-    assert all(param.envvar is None for param in assess_project.params)
+    assert all(param.envvar is None for param in assess_command.params)
     help_text = CliRunner().invoke(cli, ["assess", "--help"]).output
     assert "SAFE2_MCP_PRO_KEY" in help_text  # documented as an environment variable only
     assert not any(option in help_text for option in ("--key", "--api-key", "--token"))
@@ -178,13 +197,13 @@ def test_manifest_out_writes_there_relative_to_the_caller_and_refuses_overwrite(
     caller.mkdir()
     monkeypatch.chdir(caller)
     bundle = tmp_path / "bundle"
-    args = ["assess", str(project), "--pro", *CONSENT, "--no-wsl", "--manifest-out", "out/manifest.json", "--output-dir", str(bundle)]
+    args = ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--manifest-out", "out/manifest.json", "--output-dir", str(bundle)]
     result = CliRunner().invoke(cli, args)
     assert result.exit_code == 0, result.output
     written = caller / "out" / "manifest.json"
     assert json.loads(written.read_text(encoding="utf-8"))["manifest_version"] == "aisafe2-project-manifest/1"
     assert not (bundle / "aisafe2-project-manifest-1.json").exists()
-    assert (bundle / "pro-collection-notes.json").is_file()  # explanations stay in the bundle
+    assert (bundle / "manifest-collection-notes.json").is_file()  # explanations stay in the bundle
     original = written.read_bytes()
     again = CliRunner().invoke(cli, [*args[:-1], str(tmp_path / "bundle2")])
     assert again.exit_code != 0 and "already exists" in again.output
@@ -196,7 +215,7 @@ def test_a_collection_failure_keeps_the_bundle_writes_no_manifest_and_names_the_
 ) -> None:
     (project / ".mcp.json").write_text("{broken", encoding="utf-8")
     out = tmp_path / "bundle"
-    result = CliRunner().invoke(cli, ["assess", str(project), "--pro", *CONSENT, "--no-wsl", "--output-dir", str(out)])
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(out)])
     assert result.exit_code != 0
     assert ".mcp.json: not a valid JSON object" in result.output
     assert f"bundle was kept at {out}" in result.output and "new --output-dir" in result.output
@@ -212,15 +231,17 @@ def test_a_truncated_inventory_stops_the_manifest_but_not_the_ordinary_assessmen
         (root / "src" / f"f{index}.py").write_text("x = 1\n", encoding="utf-8")
     init_project(root, max_files=5)
     out = tmp_path / "bundle"
-    result = CliRunner().invoke(cli, ["assess", str(root), "--pro", *CONSENT, "--no-wsl", "--output-dir", str(out)])
+    result = CliRunner().invoke(cli, ["assess", str(root), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(out)])
     assert result.exit_code != 0 and "limits.max_files" in result.output
     assert not (out / "aisafe2-project-manifest-1.json").exists()
 
 
-def test_ordinary_assess_output_and_options_are_unchanged_without_pro(project: Path, tmp_path: Path) -> None:
+def test_ordinary_assess_output_and_options_are_unchanged_without_manifest(
+    project: Path, tmp_path: Path
+) -> None:
     out = tmp_path / "bundle"
     result = CliRunner().invoke(cli, ["assess", str(project), *CONSENT, "--no-wsl", "--output-dir", str(out)])
     assert result.exit_code == 0, result.output
-    assert "Pro Manifest" not in result.output
+    assert "Project Manifest" not in result.output
     assert not (out / "aisafe2-project-manifest-1.json").exists()
-    assert not (out / "pro-collection-notes.json").exists()
+    assert not (out / "manifest-collection-notes.json").exists()

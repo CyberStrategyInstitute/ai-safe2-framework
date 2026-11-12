@@ -10,9 +10,9 @@ from typing import Any
 import click
 
 from safe2.assessment import AssessmentError, run_assessment
-from safe2.pro import post as pro_post
-from safe2.pro.collect import ManifestCollectionError, ManifestValidationError
-from safe2.pro.post import (
+from safe2.manifest import post as manifest_post
+from safe2.manifest.collect import ManifestCollectionError, ManifestValidationError
+from safe2.manifest.post import (
     UNSIGNED_NOTICE,
     PostError,
     PostOutcome,
@@ -21,7 +21,7 @@ from safe2.pro.post import (
     post_manifest,
     require_key,
 )
-from safe2.pro.workflow import ProManifest, build_and_write
+from safe2.manifest.workflow import ManifestArtifact, build_and_write
 
 
 @click.command("assess")
@@ -44,7 +44,7 @@ from safe2.pro.workflow import ProManifest, build_and_write
     "--wsl/--no-wsl", default=False, help="Inventory WSL distribution names when available."
 )
 @click.option(
-    "--pro",
+    "--manifest",
     is_flag=True,
     help=(
         "Also write aisafe2-project-manifest/1 (names, flags, counts, digests only). "
@@ -55,36 +55,36 @@ from safe2.pro.workflow import ProManifest, build_and_write
     "--manifest-out",
     type=click.Path(path_type=Path, dir_okay=False),
     default=None,
-    help="With --pro, write the manifest here instead of inside the evidence bundle.",
+    help="With --manifest, write the manifest here instead of inside the evidence bundle.",
 )
 @click.option(
     "--post",
     is_flag=True,
     help=(
-        "With --pro, send the manifest to hosted assess_project. The account API key is read "
-        "only from the SAFE2_MCP_PRO_KEY environment variable."
+        "With --manifest, send the manifest to hosted Tarvin. The Tarvin key is read only "
+        "from the SAFE2_MCP_PRO_KEY environment variable."
     ),
 )
 @click.option("--format", "fmt", type=click.Choice(["human", "json"]), default="human")
-def assess_project(
+def assess_command(
     target: Path,
     output_dir: Path | None,
     config_path: Path | None,
     scan_content: bool,
     inspect_config: bool,
     wsl: bool,
-    pro: bool,
+    manifest: bool,
     manifest_out: Path | None,
     post: bool,
     fmt: str,
 ) -> None:
     """Create one reviewable environment and project evidence bundle."""
     key: str | None = None
-    if pro:
+    if manifest:
         # Consent is checked before anything is read, written, or sent.
         if not (scan_content and inspect_config):
             raise click.ClickException(
-                "--pro requires explicit --scan-content and --inspect-config consent"
+                "--manifest requires explicit --scan-content and --inspect-config consent"
             )
         if post:
             try:
@@ -92,7 +92,7 @@ def assess_project(
             except PostError as exc:
                 raise click.ClickException(str(exc)) from exc
     elif manifest_out is not None or post:
-        raise click.UsageError("--manifest-out and --post require --pro")
+        raise click.UsageError("--manifest-out and --post require --manifest")
     try:
         result = run_assessment(
             target,
@@ -105,9 +105,9 @@ def assess_project(
     except (AssessmentError, OSError, ValueError) as exc:
         raise click.ClickException(str(exc)) from exc
 
-    produced: ProManifest | None = None
+    produced: ManifestArtifact | None = None
     outcome: PostOutcome | None = None
-    if pro:
+    if manifest:
         try:
             produced = build_and_write(
                 target.resolve(),
@@ -146,12 +146,12 @@ def assess_project(
         )
         click.echo(f"Evidence bundle: {result['output_dir']}")
         if produced is not None:
-            _echo_pro(produced, post, key, outcome)
+            _echo_manifest(produced, post, key, outcome)
     if outcome is not None and not outcome.succeeded:
         raise SystemExit(1)
 
 
-def _manifest_summary(produced: ProManifest) -> dict[str, Any]:
+def _manifest_summary(produced: ManifestArtifact) -> dict[str, Any]:
     return {
         "path": str(produced.path),
         "sha256": produced.sha256,
@@ -166,7 +166,7 @@ def _manifest_summary(produced: ProManifest) -> dict[str, Any]:
 
 
 def _post_summary(
-    produced: ProManifest, post: bool, key: str | None, outcome: PostOutcome | None
+    produced: ManifestArtifact, post: bool, key: str | None, outcome: PostOutcome | None
 ) -> dict[str, Any]:
     if not post:
         return {"requested": False, "sent": False}
@@ -181,7 +181,7 @@ def _post_summary(
     return {
         "requested": True,
         "sent": True,
-        "endpoint": pro_post.ENDPOINT,
+        "endpoint": manifest_post.ENDPOINT,
         "status": outcome.status,
         "http_status": outcome.http_status,
         "attempts": outcome.attempts,
@@ -191,10 +191,12 @@ def _post_summary(
     }
 
 
-def _echo_pro(produced: ProManifest, post: bool, key: str | None, outcome: PostOutcome | None) -> None:
+def _echo_manifest(
+    produced: ManifestArtifact, post: bool, key: str | None, outcome: PostOutcome | None
+) -> None:
     manifest = produced.manifest
     click.echo("")
-    click.echo("AI SAFE2 Pro Manifest (aisafe2-project-manifest/1)")
+    click.echo("AI SAFE2 Project Manifest (aisafe2-project-manifest/1)")
     click.echo(
         f"Agents: {len(manifest['agents'])}; MCP servers: {len(manifest['mcp_servers'])}; "
         f"config files scanned: {len(manifest.get('config_files', []))}"
@@ -202,7 +204,7 @@ def _echo_pro(produced: ProManifest, post: bool, key: str | None, outcome: PostO
     click.echo(f"Manifest: {produced.path}")
     click.echo(f"Collection notes (local only): {produced.notes_path}")
     if not post:
-        click.echo("Nothing was sent. Add --post to send it to hosted assess_project.")
+        click.echo("Nothing was sent. Add --post to send it to hosted Tarvin.")
         return
     click.echo(UNSIGNED_NOTICE)
     if outcome is None:
