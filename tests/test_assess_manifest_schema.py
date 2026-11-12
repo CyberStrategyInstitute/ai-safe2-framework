@@ -30,11 +30,11 @@ from safe2.manifest.collect import (
 
 # SHA-256 of the packaged schema. It matches the hosted schema at Tarvin main
 # 372307338aed81bd1f3ffa3349038e9093fa0e96 except for the unreleased CLI wording in the
-# top-level description; the parity test below constrains that single metadata-field delta.
+# top-level description's CLI wording; the parity test below constrains that single
+# metadata-field delta.
 VENDORED_SHA256 = "8ba842d2e9864f038e87b4e5c766eeb6a5157ba370cbf0060fd88539a1469cee"
 SERVER_SCHEMA_ENV = "SAFE2_SERVER_SCHEMA"
 SERVER_SCHEMA_DEFAULT = Path("/workspace/wt-tarvin-next/schemas/aisafe2-project-manifest-1.json")
-HOSTED_LEGACY_CLI_NAME = "safe2 assess --" + "pro"
 
 
 def _vendored_bytes() -> bytes:
@@ -70,7 +70,8 @@ def test_vendored_schema_differs_from_the_hosted_schema_only_by_cli_name() -> No
     packaged = json.loads(_vendored_bytes())
     hosted = json.loads(server.read_bytes())
     assert "safe2 assess --manifest" in packaged["description"]
-    assert HOSTED_LEGACY_CLI_NAME in hosted["description"]
+    # The hosted description may still carry the pre-rename CLI wording or already match.
+    assert "safe2 assess --" in hosted["description"]
     hosted["description"] = packaged["description"]
     assert hosted == packaged
 

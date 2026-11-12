@@ -243,7 +243,8 @@ def _hook_commands(hooks: object) -> list[tuple[str, str | None]]:
         for entry in entries:
             if not isinstance(entry, dict):
                 continue
-            inner = entry.get("hooks") if isinstance(entry.get("hooks"), list) else [entry]
+            nested_hooks = entry.get("hooks")
+            inner: list[object] = nested_hooks if isinstance(nested_hooks, list) else [entry]
             for hook in inner:
                 if isinstance(hook, dict):
                     command = hook.get("command")
@@ -308,7 +309,8 @@ def _server_entry(name: str, raw: object) -> tuple[dict[str, Any] | None, str | 
         transport = "sse" if declared == "sse" or path.endswith("/sse") else "streamable-http"
     else:
         return None, "no_command_or_url"
-    arguments = config.get("args") if isinstance(config.get("args"), list) else []
+    configured_arguments = config.get("args")
+    arguments: list[Any] = configured_arguments if isinstance(configured_arguments, list) else []
     pinned = _pinned_digest(arguments) if transport == "stdio" else None
     auth = _auth_type(config, transport)
     structure = {
@@ -501,7 +503,8 @@ def collect_manifest(
                 notes["not_collected"].append({"path": f"{source.display}#{server_name or 'invalid'}", "reason": skipped})
             else:
                 servers.append((parsed, source.display))
-                server_tools.add(_tool_name("mcp__" + re.sub(r"[^A-Za-z0-9_.:*-]", "_", server_name)) or "")
+                normalized_server_name = re.sub(r"[^A-Za-z0-9_.:*-]", "_", server_name or "")
+                server_tools.add(_tool_name("mcp__" + normalized_server_name) or "")
         if ".claude/" in f"/{source.display}" and source.path.suffix.lower() == ".json" and source.kind == "harness_configuration":
             parsed_settings = _claude_settings(data)
             settings_all.allow |= parsed_settings.allow
@@ -518,9 +521,22 @@ def collect_manifest(
 
     order = list(heur.data["permission_mode_order"])
     mode = max(settings_all.modes, key=lambda value: _mode_rank(value, order)) if settings_all.modes else None
-    bare_ask = {name for rule in settings_all.ask if (name := _bare_rule_name(rule))}
-    bare_deny = {name for rule in settings_all.deny if (name := _bare_rule_name(rule))}
-    allowed = sorted({name for rule in settings_all.allow if (name := _tool_name(rule))} - bare_deny)
+    bare_ask: set[str] = set()
+    for rule in settings_all.ask:
+        rule_name = _bare_rule_name(rule)
+        if rule_name:
+            bare_ask.add(rule_name)
+    bare_deny: set[str] = set()
+    for rule in settings_all.deny:
+        rule_name = _bare_rule_name(rule)
+        if rule_name:
+            bare_deny.add(rule_name)
+    allowed_names: set[str] = set()
+    for rule in settings_all.allow:
+        rule_name = _tool_name(rule)
+        if rule_name:
+            allowed_names.add(rule_name)
+    allowed = sorted(allowed_names - bare_deny)
     # An agent with no `tools:` line inherits the allow-list and every configured MCP server,
     # so the server-level names stand in for tools the CLI cannot enumerate.
     inherited_tools = sorted(set(allowed) | (server_tools - {""}))
@@ -540,9 +556,15 @@ def collect_manifest(
         applies = harness == "claude-code"
         declared = frontmatter.get("tools")
         inherited = not isinstance(declared, list)
+        if isinstance(declared, list):
+            candidate_tools: list[object] = declared
+        elif applies:
+            candidate_tools = list(inherited_tools)
+        else:
+            candidate_tools = []
         names = {
             n
-            for item in (declared if not inherited else inherited_tools if applies else [])
+            for item in candidate_tools
             if (n := _tool_name(item))
         }
         names -= {n for item in _rule_list(frontmatter.get("disallowedTools")) if (n := _tool_name(item))}
@@ -568,7 +590,7 @@ def collect_manifest(
         if project_memory:
             memory_signals.append("memory_state_file")
         spawns, memory, money = "spawn" in categories, bool(memory_signals), "money" in categories
-        entry: dict[str, Any] = {
+        agent_entry: dict[str, Any] = {
             "name": name,
             "harness": harness,
             "definition_digest": _sha256(raw),
@@ -583,7 +605,7 @@ def collect_manifest(
         subject = f"agent:{source.display}"
         for flag, active in (("mandate_configured", spawns), ("memory_provenance", memory), ("budget_ceiling_configured", money)):
             if active:
-                entry[flag] = False
+                agent_entry[flag] = False
                 notes["flag_reasons"].append(
                     {"subject": subject, "flag": flag, "value": False, "reason": heur.data["cannot_detect"][flag]}
                 )
@@ -595,7 +617,7 @@ def collect_manifest(
                 "memory_signals": memory_signals,
             }
         )
-        agents.append((entry, source.display))
+        agents.append((agent_entry, source.display))
     _disambiguate(agents)
     _disambiguate(servers)
 
