@@ -64,8 +64,12 @@ def parse_heuristics(raw: bytes) -> Heuristics:
     categories = data.get("tool_categories")
     if not isinstance(categories, dict) or set(categories) != set(CATEGORIES):
         raise HeuristicsError(f"tool_categories must define exactly: {', '.join(CATEGORIES)}")
-    exact = {name: _string_list(categories[name].get("exact"), f"{name}.exact") for name in CATEGORIES}
-    tokens = {name: _string_list(categories[name].get("tokens"), f"{name}.tokens") for name in CATEGORIES}
+    for name in CATEGORIES:
+        entry = categories[name]
+        if not isinstance(entry, dict) or not {"exact", "tokens"} <= set(entry):
+            raise HeuristicsError(f"tool_categories.{name} must define both exact and tokens")
+    exact = {name: _string_list(categories[name]["exact"], f"{name}.exact") for name in CATEGORIES}
+    tokens = {name: _string_list(categories[name]["tokens"], f"{name}.tokens") for name in CATEGORIES}
     approval = data.get("approval_point_categories")
     if not isinstance(approval, dict) or not all(
         isinstance(point, str) and category in CATEGORIES for point, category in approval.items()

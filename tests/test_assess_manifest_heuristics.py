@@ -80,3 +80,20 @@ def test_heuristics_fail_closed_when_structurally_invalid() -> None:
     bad_pattern["secret_patterns"]["assignment"] = "(unclosed"
     with pytest.raises(HeuristicsError):
         parse_heuristics(json.dumps(bad_pattern).encode())
+
+
+@pytest.mark.parametrize("missing", ["exact", "tokens"])
+def test_a_category_missing_exact_or_tokens_names_the_category_and_key(missing: str) -> None:
+    raw = files("safe2.data").joinpath("manifest-heuristics-v1.json").read_bytes()
+    broken = json.loads(raw)
+    del broken["tool_categories"]["send"][missing]
+    with pytest.raises(HeuristicsError, match=r"tool_categories\.send must define both exact and tokens"):
+        parse_heuristics(json.dumps(broken).encode())
+
+
+def test_a_category_that_is_not_an_object_fails_closed_without_crashing() -> None:
+    raw = files("safe2.data").joinpath("manifest-heuristics-v1.json").read_bytes()
+    broken = json.loads(raw)
+    broken["tool_categories"]["send"] = ["exact"]
+    with pytest.raises(HeuristicsError, match=r"tool_categories\.send"):
+        parse_heuristics(json.dumps(broken).encode())
