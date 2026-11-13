@@ -130,12 +130,23 @@ def test_invalid_manifest_prints_schema_paths_exits_nonzero_and_does_not_retry(p
     assert_key_nowhere(result, out)
 
 
-def test_not_applied_is_reported_clearly_and_is_not_a_failure(project: Path, tmp_path: Path, monkeypatch) -> None:
+def test_not_applied_is_reported_clearly_and_exits_nonzero(project: Path, tmp_path: Path, monkeypatch) -> None:
+    # `--post` asked for the manifest to be recorded; a reply that recorded nothing is not a success.
     with StubServer() as stub:
         stub.reply_success({**SUCCESS, "applied": False, "reason": "model_supplied_manifest_conflicts_with_cli_manifest"})
         result, _ = run(project, tmp_path, stub, monkeypatch)
-    assert result.exit_code == 0
+    assert result.exit_code == 1
     assert "NOT APPLIED" in result.output and "model_supplied_manifest_conflicts_with_cli_manifest" in result.output
+    assert "Applied: yes" not in result.output
+    assert "kept an existing CLI manifest" not in result.output  # the cause may be an unrecognized generator name
+
+
+def test_not_applied_in_json_output_reports_status_and_exits_nonzero(project: Path, tmp_path: Path, monkeypatch) -> None:
+    with StubServer() as stub:
+        stub.reply_success({**SUCCESS, "applied": False, "reason": "model_supplied_manifest_matches_cli_manifest"})
+        result, _ = run(project, tmp_path, stub, monkeypatch, "--format", "json")
+    assert result.exit_code == 1
+    assert json.loads(result.output)["post"]["status"] == "not_applied"
 
 
 @pytest.mark.parametrize("status", [401, 403])
@@ -148,6 +159,132 @@ def test_rejected_key_is_reported_without_echoing_it_and_without_retry(project: 
     assert f"rejected the API key (HTTP {status})" in result.output
     assert len(stub.requests) == 1
     assert_key_nowhere(result, out)
+
+
+def echo_everywhere(key: str) -> dict:
+    """A structured reply a hostile or buggy server fills with the caller's key."""
+    return {
+        **SUCCESS,
+        "name": f"golden {key}",
+        "reason": f"echo {key}",
+        "snapshot_id": key,
+        "act_tier": key,
+        "gaps": [{"control_id": key, "name": f"n {key}", "severity": key}],
+        "nested": {key: [key, {"deep": f"x{key}y"}]},
+    }
+
+
+@pytest.mark.parametrize("fmt", ["human", "json"])
+def test_a_key_echoed_in_a_successful_reply_is_redacted_in_every_output(project: Path, tmp_path: Path, monkeypatch, fmt: str) -> None:
+    with StubServer() as stub:
+        stub.reply_success(echo_everywhere(TARVIN_KEY))
+        result, out = run(project, tmp_path, stub, monkeypatch, "--format", fmt)
+    assert result.exit_code == 0, result.output
+    assert "[redacted]" in result.output
+    assert_key_nowhere(result, out)
+    if fmt == "json":
+        assert json.loads(result.output)["post"]["result"]["name"] == "golden [redacted]"
+
+
+@pytest.mark.parametrize("status", [400, 404, 429, 500, 503])
+@pytest.mark.parametrize("fmt", ["human", "json"])
+def test_a_key_echoed_in_an_http_error_body_is_redacted(project: Path, tmp_path: Path, monkeypatch, status: int, fmt: str) -> None:
+    with StubServer() as stub:
+        stub.status = status
+        stub.body = json.dumps({"error": {"message": f"bad request for {TARVIN_KEY}"}}).encode()
+        result, out = run(project, tmp_path, stub, monkeypatch, "--format", fmt)
+    assert result.exit_code == 1
+    assert "[redacted]" in result.output
+    assert_key_nowhere(result, out)
+
+
+@pytest.mark.parametrize("fmt", ["human", "json"])
+def test_a_key_echoed_in_a_jsonrpc_error_is_redacted(project: Path, tmp_path: Path, monkeypatch, fmt: str) -> None:
+    with StubServer() as stub:
+        stub.body = json.dumps({"jsonrpc": "2.0", "id": 1, "error": {"code": -32602, "message": f"invalid {TARVIN_KEY}"}}).encode()
+        result, out = run(project, tmp_path, stub, monkeypatch, "--format", fmt)
+    assert result.exit_code == 1
+    assert "[redacted]" in result.output
+    assert_key_nowhere(result, out)
+
+
+@pytest.mark.parametrize("fmt", ["human", "json"])
+def test_a_key_echoed_in_a_tool_error_is_redacted(project: Path, tmp_path: Path, monkeypatch, fmt: str) -> None:
+    with StubServer() as stub:
+        stub.reply_error(
+            f"code_{TARVIN_KEY}",
+            f"message {TARVIN_KEY}",
+            upgrade_url=f"https://mcp.agency-check.app/account?k={TARVIN_KEY}",
+            issues=[{"path": f"/{TARVIN_KEY}", "message": f"bad {TARVIN_KEY}"}],
+        )
+        result, out = run(project, tmp_path, stub, monkeypatch, "--format", fmt)
+    assert result.exit_code == 1
+    assert "[redacted]" in result.output
+    assert_key_nowhere(result, out)
+
+
+@pytest.mark.parametrize("status", ["pro_required", "invalid_manifest"])
+def test_the_known_error_statuses_still_work_after_redaction(project: Path, tmp_path: Path, monkeypatch, status: str) -> None:
+    with StubServer() as stub:
+        stub.reply_error(status, f"echo {TARVIN_KEY}", issues=[{"path": "/a", "message": "m"}])
+        result, out = run(project, tmp_path, stub, monkeypatch, "--format", "json")
+    assert json.loads(result.output)["post"]["status"] == status
+    assert_key_nowhere(result, out)
+
+
+def test_a_key_echoed_over_server_sent_events_is_redacted(project: Path, tmp_path: Path, monkeypatch) -> None:
+    with StubServer() as stub:
+        stub.content_type = "text/event-stream"
+        envelope = {"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": echo_everywhere(TARVIN_KEY), "isError": False}}
+        stub.body = f"event: message\ndata: {json.dumps(envelope)}\n\n".encode()
+        result, out = run(project, tmp_path, stub, monkeypatch)
+    assert result.exit_code == 0, result.output
+    assert "[redacted]" in result.output
+    assert_key_nowhere(result, out)
+
+
+def test_a_key_that_straddles_the_display_limit_is_not_printed_in_part(project: Path, tmp_path: Path, monkeypatch) -> None:
+    with StubServer() as stub:
+        stub.reply_error("tool_failed", "x" * 190 + TARVIN_KEY)
+        result, out = run(project, tmp_path, stub, monkeypatch)
+    assert "[redacted]" in result.output
+    assert TARVIN_KEY[:12] not in result.output + bundle_text(out)
+
+
+def test_any_key_shaped_token_is_redacted_not_only_the_one_in_use(project: Path, tmp_path: Path, monkeypatch) -> None:
+    other = "as2k_" + "OTHERSENTINELKEY" + "0123456789abcdef"
+    with StubServer() as stub:
+        stub.reply_error("tool_failed", f"the key {other} is not valid")
+        result, _ = run(project, tmp_path, stub, monkeypatch)
+    assert other not in result.output and "OTHERSENTINELKEY" not in result.output
+
+
+def test_a_key_hidden_behind_json_escapes_inside_the_tool_error_text_is_redacted(project: Path, tmp_path: Path, monkeypatch) -> None:
+    escaped = "".join(f"\\u{ord(character):04x}" for character in TARVIN_KEY)
+    inner = '{"error":{"code":"tool_failed","message":"echo ' + escaped + '"}}'
+    with StubServer() as stub:
+        stub.reply_result({"content": [{"type": "text", "text": inner}], "isError": True})
+        result, out = run(project, tmp_path, stub, monkeypatch)
+    assert result.exit_code == 1
+    assert "[redacted]" in result.output
+    assert_key_nowhere(result, out)
+
+
+def test_redaction_survives_a_pathologically_deep_reply(monkeypatch: pytest.MonkeyPatch) -> None:
+    import httpx
+
+    deep = "[" * 900 + f'"{TARVIN_KEY}"' + "]" * 900
+    body = '{"jsonrpc":"2.0","id":1,"result":{"isError":false,"structuredContent":{"a":' + deep + "}}}"
+
+    def reply(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, headers={"content-type": "application/json"}, content=body)
+
+    outcome = post_manifest(
+        {"manifest_version": "x"}, key=TARVIN_KEY, endpoint="https://example.test/pro/mcp",
+        transport=httpx.MockTransport(reply), sleep=lambda _: None,
+    )
+    assert outcome.status in {"ok", "bad_response"}
+    assert TARVIN_KEY not in repr(outcome) and "SENTINELTARVINKEY" not in repr(outcome)
 
 
 @pytest.mark.parametrize("status", [400, 404, 429, 500, 503])
@@ -208,6 +345,44 @@ def test_connect_errors_retry_exactly_once(monkeypatch: pytest.MonkeyPatch) -> N
     assert outcome.status == "network_error" and outcome.attempts == 2
     assert sleeps == [post_module.CONNECT_RETRY_DELAY_SECONDS]
     assert TARVIN_KEY not in repr(outcome)
+
+
+def test_a_connect_timeout_is_retried_once_then_succeeds() -> None:
+    import httpx
+
+    calls: list[int] = []
+    reply = {"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": {**SUCCESS}}}
+
+    def flaky(request: httpx.Request) -> httpx.Response:
+        calls.append(1)
+        if len(calls) == 1:
+            raise httpx.ConnectTimeout("no route yet", request=request)
+        return httpx.Response(200, json=reply)
+
+    sleeps: list[float] = []
+    outcome = post_manifest(
+        {"manifest_version": "x"}, key=TARVIN_KEY, endpoint="https://example.test/pro/mcp",
+        transport=httpx.MockTransport(flaky), sleep=sleeps.append,
+    )
+    assert outcome.status == "ok" and outcome.attempts == 2 and len(calls) == 2
+    assert sleeps == [post_module.CONNECT_RETRY_DELAY_SECONDS]
+
+
+def test_a_repeated_connect_timeout_is_a_network_error_after_exactly_two_attempts() -> None:
+    import httpx
+
+    calls: list[int] = []
+
+    def never(request: httpx.Request) -> httpx.Response:
+        calls.append(1)
+        raise httpx.ConnectTimeout("no route", request=request)
+
+    outcome = post_manifest(
+        {"manifest_version": "x"}, key=TARVIN_KEY, endpoint="https://example.test/pro/mcp",
+        transport=httpx.MockTransport(never), sleep=lambda _: None,
+    )
+    assert outcome.status == "network_error" and outcome.attempts == 2 and len(calls) == 2
+    assert outcome.error == {"code": "ConnectTimeout", "message": ""}
 
 
 def test_a_request_timeout_is_not_retried(monkeypatch: pytest.MonkeyPatch) -> None:

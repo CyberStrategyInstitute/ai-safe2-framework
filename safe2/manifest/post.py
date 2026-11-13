@@ -2,7 +2,9 @@
 
 One JSON-RPC `tools/call` POST over Streamable HTTP, no session, no `initialize`.
 The API key comes only from the environment, is held in memory for the one request,
-and is never written to disk, logged, printed, or placed in an exception message.
+and is never written to disk, logged, printed, or placed in an exception message. If the
+server echoes it back, every string in the decoded reply is redacted before anything is
+truncated, sanitized, or returned.
 """
 
 from __future__ import annotations
@@ -34,6 +36,8 @@ UNSIGNED_NOTICE = (
 )
 _LOOPBACK_HOSTS = {"127.0.0.1", "localhost", "::1"}
 _CONTROL = re.compile(r"[\x00-\x1f\x7f-\x9f]")
+REDACTED = "[redacted]"
+_KEY_SHAPED = re.compile(re.escape(KEY_PREFIX) + r"[A-Za-z0-9_\-]+")
 
 
 class PostError(ValueError):
@@ -52,12 +56,29 @@ class PostOutcome:
 
     @property
     def succeeded(self) -> bool:
-        return self.status in {"ok", "not_applied"}
+        """True only when the server recorded the manifest; `not_applied` means it did not."""
+        return self.status == "ok"
 
 
 def clean_text(value: object, limit: int = 200) -> str:
     """Neutralize untrusted server text before it reaches a terminal or a log."""
     return _CONTROL.sub("?", str(value))[:limit]
+
+
+def redact(value: Any, key: str) -> Any:
+    """Copy `value` with the key, and any other key-shaped token, removed from every string.
+
+    Dict keys and list items are covered as well as values. This runs on the decoded reply, so
+    a key hidden behind JSON escapes is caught, and before any truncation, so a key cannot be
+    cut in half and printed in part.
+    """
+    if isinstance(value, str):
+        return _KEY_SHAPED.sub(REDACTED, value.replace(key, REDACTED))
+    if isinstance(value, dict):
+        return {redact(name, key): redact(item, key) for name, item in value.items()}
+    if isinstance(value, list):
+        return [redact(item, key) for item in value]
+    return value
 
 
 def require_key(environ: dict[str, str]) -> str | None:
@@ -157,13 +178,14 @@ def _decode(content_type: str, payload: bytes) -> dict[str, Any] | None:
     return message if isinstance(message, dict) else None
 
 
-def _tool_error(result: dict[str, Any]) -> dict[str, Any]:
+def _tool_error(result: dict[str, Any], key: str) -> dict[str, Any]:
     """Pull `{error:{code,message,...}}` out of an isError result's text, sanitized."""
     error: dict[str, Any] = {"code": "tool_error", "message": ""}
     content = result.get("content")
     first = content[0] if isinstance(content, list) and content and isinstance(content[0], dict) else {}
     try:
-        parsed = json.loads(str(first.get("text", "")))
+        # The text is JSON inside a string, so a key written with escapes only decodes here.
+        parsed = redact(json.loads(str(first.get("text", ""))), key)
     except (json.JSONDecodeError, RecursionError):
         return error
     raw = parsed.get("error") if isinstance(parsed, dict) else None
@@ -182,10 +204,12 @@ def _tool_error(result: dict[str, Any]) -> dict[str, Any]:
     return error
 
 
-def _interpret(http_status: int, content_type: str, payload: bytes) -> PostOutcome:
+def _interpret(http_status: int, content_type: str, payload: bytes, key: str) -> PostOutcome:
     if http_status in {401, 403}:
         return PostOutcome("auth_failed", http_status)
     message = _decode(content_type, payload)
+    if message is not None:
+        message = redact(message, key)
     if not 200 <= http_status < 300:
         detail = None
         if message and isinstance(message.get("error"), dict):
@@ -204,7 +228,7 @@ def _interpret(http_status: int, content_type: str, payload: bytes) -> PostOutco
     if not isinstance(result, dict):
         return PostOutcome("bad_response", http_status)
     if result.get("isError") is True:
-        error = _tool_error(result)
+        error = _tool_error(result, key)
         status = error["code"] if error["code"] in {"pro_required", "invalid_manifest"} else "tool_error"
         return PostOutcome(status, http_status, error=error)
     structured = result.get("structuredContent")
@@ -221,7 +245,11 @@ def post_manifest(
     transport: httpx.BaseTransport | None = None,
     sleep: Callable[[float], None] = time.sleep,
 ) -> PostOutcome:
-    """Send one request. Retries once on a connect error only; never on any HTTP status."""
+    """Send one request. Retries once on a connect error or connect timeout only; never on any HTTP status.
+
+    Both failures happen before any request byte is sent, so the retry cannot duplicate a write.
+    A read or write timeout is not retried: the server may already have the manifest.
+    """
     target = endpoint or ENDPOINT
     _check_endpoint(target)
     body = build_body(manifest)
@@ -230,16 +258,20 @@ def post_manifest(
         attempts += 1
         try:
             http_status, content_type, payload = _send(body, key, target, transport)
-        except httpx.ConnectError:
+        except (httpx.ConnectError, httpx.ConnectTimeout) as exc:
             if attempts >= 2:
-                return PostOutcome("network_error", attempts=attempts, error={"code": "ConnectError", "message": ""})
+                return PostOutcome("network_error", attempts=attempts, error={"code": type(exc).__name__, "message": ""})
             sleep(CONNECT_RETRY_DELAY_SECONDS)
             continue
         except _ResponseTooLarge:
             return PostOutcome("bad_response", attempts=attempts, error={"code": "response_too_large", "message": ""})
         except httpx.HTTPError as exc:
             return PostOutcome("network_error", attempts=attempts, error={"code": type(exc).__name__, "message": ""})
-        outcome = _interpret(http_status, content_type, payload)
+        try:
+            outcome = _interpret(http_status, content_type, payload, key)
+        except RecursionError:
+            # A reply nested deeper than the redactor can walk is not trusted or shown.
+            return PostOutcome("bad_response", http_status, attempts=attempts)
         return PostOutcome(
             outcome.status, outcome.http_status, outcome.structured, outcome.error, attempts
         )
@@ -248,14 +280,17 @@ def post_manifest(
 def describe_outcome(outcome: PostOutcome) -> list[str]:
     """Human summary lines. Server-supplied text is sanitized; the key is never available here."""
     lines: list[str] = []
-    if outcome.succeeded and outcome.structured is not None:
+    if outcome.status in {"ok", "not_applied"} and outcome.structured is not None:
         data = outcome.structured
         lines.append(f"Project: {clean_text(data.get('name', ''))} ({clean_text(data.get('project_id', ''))})")
         lines.append(f"ACT tier: {clean_text(data.get('act_tier', 'unknown'), 32)}")
         if outcome.status == "not_applied":
             lines.append(
-                "NOT APPLIED: the server kept an existing CLI manifest for this project "
-                f"({clean_text(data.get('reason', 'unspecified'))}). Nothing was changed."
+                "NOT APPLIED: the server did not record this manifest "
+                f"({clean_text(data.get('reason', 'unspecified'))}). Nothing was changed, and the command "
+                "exits 1. The server treats a manifest it does not recognize as CLI-generated as "
+                "model-supplied and never lets it replace an existing CLI record; check that the "
+                "hosted service recognizes this generator name."
             )
         else:
             lines.append("Applied: yes")
