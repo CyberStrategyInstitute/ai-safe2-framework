@@ -52,6 +52,18 @@ def build_and_write(
     digest = hashlib.sha256(body).hexdigest()
     manifest_path = manifest_out.absolute() if manifest_out is not None else bundle_dir / MANIFEST_FILENAME
     notes_path = bundle_dir / NOTES_FILENAME
-    write_new_atomic(manifest_path, body)
+    if manifest_path.resolve() == notes_path.resolve():
+        raise ValueError(
+            f"--manifest-out must not be the collection notes file {notes_path}; "
+            "the notes and the manifest are separate files"
+        )
+    # The notes go first and the manifest is the last file published, so a failure at any point
+    # leaves no manifest behind. The notes were created by this call, so they are removed again
+    # if the manifest cannot be written.
     write_new_atomic(notes_path, render_notes(collection.notes, digest))
+    try:
+        write_new_atomic(manifest_path, body)
+    except BaseException:
+        notes_path.unlink(missing_ok=True)
+        raise
     return ManifestArtifact(collection.manifest, manifest_path, digest, notes_path)

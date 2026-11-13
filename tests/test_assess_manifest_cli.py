@@ -210,6 +210,67 @@ def test_manifest_out_writes_there_relative_to_the_caller_and_refuses_overwrite(
     assert written.read_bytes() == original
 
 
+def test_manifest_out_cannot_be_the_collection_notes_path(project: Path, tmp_path: Path) -> None:
+    bundle = tmp_path / "bundle"
+    notes = bundle / "manifest-collection-notes.json"
+    args = ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(bundle)]
+    result = CliRunner().invoke(cli, [*args, "--manifest-out", str(notes)])
+    assert result.exit_code != 0
+    assert "collection notes" in result.output and "--manifest-out" in result.output
+    assert not notes.exists()  # nothing was written to the colliding path
+    assert not (bundle / "aisafe2-project-manifest-1.json").exists()
+
+
+def fail_writing(monkeypatch, filename: str) -> None:
+    from safe2.manifest import workflow
+
+    real = workflow.write_new_atomic
+
+    def fail(path: Path, content: bytes) -> None:
+        if path.name == filename:
+            raise OSError("disk full")
+        real(path, content)
+
+    monkeypatch.setattr(workflow, "write_new_atomic", fail)
+
+
+def test_a_notes_write_failure_leaves_no_manifest_and_says_so(project: Path, tmp_path: Path, monkeypatch) -> None:
+    from safe2.manifest import workflow
+
+    fail_writing(monkeypatch, workflow.NOTES_FILENAME)
+    bundle = tmp_path / "bundle"
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(bundle)])
+    assert result.exit_code != 0
+    assert "no manifest was written" in result.output and "disk full" in result.output
+    assert not (bundle / workflow.MANIFEST_FILENAME).exists()
+    assert not (bundle / workflow.NOTES_FILENAME).exists()
+
+
+def test_a_manifest_write_failure_removes_the_notes_written_before_it(project: Path, tmp_path: Path, monkeypatch) -> None:
+    from safe2.manifest import workflow
+
+    fail_writing(monkeypatch, workflow.MANIFEST_FILENAME)
+    bundle = tmp_path / "bundle"
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(bundle)])
+    assert result.exit_code != 0
+    assert "no manifest was written" in result.output and "disk full" in result.output
+    assert not (bundle / workflow.MANIFEST_FILENAME).exists()
+    assert not (bundle / workflow.NOTES_FILENAME).exists()  # nothing from the failed run is left behind
+
+
+def test_an_existing_notes_file_is_never_removed_by_a_failed_run(project: Path, tmp_path: Path) -> None:
+    from safe2.manifest import workflow
+
+    bundle = tmp_path / "bundle"
+    args = ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(bundle)]
+    first = CliRunner().invoke(cli, args)
+    assert first.exit_code == 0
+    kept = (bundle / workflow.NOTES_FILENAME).read_bytes()
+    # A second run into the same bundle may not clobber the first run's files.
+    assert CliRunner().invoke(cli, args).exit_code != 0
+    assert (bundle / workflow.NOTES_FILENAME).read_bytes() == kept
+
+
 def test_a_collection_failure_keeps_the_bundle_writes_no_manifest_and_names_the_next_step(
     project: Path, tmp_path: Path
 ) -> None:
