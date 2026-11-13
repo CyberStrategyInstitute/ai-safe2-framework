@@ -29,8 +29,8 @@ from safe2.manifest.collect import (
 )
 
 # SHA-256 of the packaged schema. It matches the hosted schema at Tarvin main
-# 372307338aed81bd1f3ffa3349038e9093fa0e96 except for the unreleased CLI wording in the
-# top-level description's CLI wording; the parity test below constrains that single
+# 372307338aed81bd1f3ffa3349038e9093fa0e96 except for the top-level `description`, which
+# carries the unreleased CLI wording; the parity test below constrains that single
 # metadata-field delta.
 VENDORED_SHA256 = "8ba842d2e9864f038e87b4e5c766eeb6a5157ba370cbf0060fd88539a1469cee"
 SERVER_SCHEMA_ENV = "SAFE2_SERVER_SCHEMA"

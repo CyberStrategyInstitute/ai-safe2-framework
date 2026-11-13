@@ -280,6 +280,19 @@ def test_agent_without_tools_inherits_every_configured_mcp_server(tmp_path: Path
     assert agent["budget_ceiling_configured"] is False
 
 
+def test_an_explicit_empty_tools_list_inherits_nothing(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/locked.md", "---\nname: locked\ntools: []\n---\nbody\n")
+    write(project, ".claude/settings.json", json.dumps({"permissions": {"allow": ["Task"]}}))
+    write(project, ".mcp.json", json.dumps({"mcpServers": {"gmail": {"command": "x"}, "stripe": {"command": "y"}}}))
+    collection = collect(project, tmp_path / "home")
+    agent = agents_by_name(collection)["locked"]
+    assert agent["tools"] == []
+    assert not agent["sends_externally"] and not agent["moves_money"] and not agent["can_spawn_subagents"]
+    signals = {entry["subject"]: entry for entry in collection.notes["agent_signals"]}
+    assert signals["agent:.claude/agents/locked.md"]["tools_inherited"] is False
+
+
 def test_comma_inside_a_tool_specifier_never_leaks_a_fragment(tmp_path: Path) -> None:
     project = tmp_path / "p"
     write(project, ".claude/agents/a.md", agent_file("a", "Bash(a,SECRETISH_b,c), Read"))
@@ -314,6 +327,87 @@ def test_too_many_hooks_or_tools_fail_closed_rather_than_truncate(tmp_path: Path
     write(many, ".claude/agents/a.md", agent_file("a", ", ".join(f"tool{index}" for index in range(501))))
     with pytest.raises(ManifestCollectionError, match="more than 500 tools"):
         collect(many, tmp_path / "home")
+
+
+def long_frontmatter_agent(padding_lines: int, *, closed: bool = True) -> str:
+    padding = "".join(f"  continuation line {index}\n" for index in range(padding_lines))
+    closing = "---\n" if closed else ""
+    return f"---\nname: long\ndescription: |\n{padding}tools: Task\npermissionMode: bypassPermissions\n{closing}body\n"
+
+
+def test_frontmatter_past_the_line_limit_fails_closed_instead_of_dropping_fields(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/long.md", long_frontmatter_agent(250))
+    with pytest.raises(ManifestCollectionError, match=r"\.claude/agents/long\.md.*closing"):
+        collect(project, tmp_path / "home")
+
+
+def test_frontmatter_that_never_closes_fails_closed(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/open.md", long_frontmatter_agent(3, closed=False))
+    with pytest.raises(ManifestCollectionError, match=r"\.claude/agents/open\.md.*closing"):
+        collect(project, tmp_path / "home")
+
+
+def test_long_but_closed_frontmatter_within_the_limit_keeps_every_field(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/long.md", long_frontmatter_agent(150))
+    agent = agents_by_name(collect(project, tmp_path / "home"))["long"]
+    assert agent["can_spawn_subagents"] is True and agent["runs_unattended"] is True
+
+
+def test_a_markdown_agent_without_frontmatter_is_still_accepted(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/plain.md", "# Plain agent\n\nNo frontmatter here.\n")
+    assert agents_by_name(collect(project, tmp_path / "home"))["plain"]["tools"] == []
+
+
+def test_a_nested_project_deny_does_not_remove_tools_from_a_root_agent(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/root.md", agent_file("root", "Task, Read"))
+    write(project, "packages/x/.claude/settings.json", json.dumps({"permissions": {"deny": ["Task"]}}))
+    agent = agents_by_name(collect(project, tmp_path / "home"))["root"]
+    assert agent["tools"] == ["Read", "Task"] and agent["can_spawn_subagents"] is True
+
+
+def test_a_nested_project_ask_adds_no_approval_points_to_a_root_agent(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/root.md", agent_file("root", "Read"))
+    write(project, "packages/x/.claude/settings.json", json.dumps({"permissions": {"ask": ["Edit"]}}))
+    assert agents_by_name(collect(project, tmp_path / "home"))["root"]["approval_points"] == []
+
+
+def test_a_nested_agent_is_still_restricted_by_its_own_nested_settings(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/root.md", agent_file("root", "Task, Read"))
+    write(project, "packages/x/.claude/agents/child.md", agent_file("child", "Task, Read"))
+    write(
+        project,
+        "packages/x/.claude/settings.json",
+        json.dumps({"permissions": {"deny": ["Task"], "ask": ["Edit"]}}),
+    )
+    agents = agents_by_name(collect(project, tmp_path / "home"))
+    assert agents["child"]["tools"] == ["Read"] and agents["child"]["can_spawn_subagents"] is False
+    assert agents["child"]["approval_points"] == ["before_write"]
+    assert agents["root"]["can_spawn_subagents"] is True and agents["root"]["approval_points"] == []
+
+
+def test_user_level_deny_and_ask_rules_still_apply_to_every_claude_agent(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/root.md", agent_file("root", "Task, Read"))
+    write(project, "packages/x/.claude/agents/child.md", agent_file("child", "Task, Read"))
+    home = tmp_path / "home"
+    write(home, ".claude/settings.json", json.dumps({"permissions": {"deny": ["Task"], "ask": ["Edit"]}}))
+    agents = agents_by_name(collect(project, home))
+    for name in ("root", "child"):
+        assert agents[name]["tools"] == ["Read"] and agents[name]["approval_points"] == ["before_write"]
+
+
+def test_the_settings_scoping_rule_is_recorded_in_the_local_notes(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    project.mkdir()
+    limitations = " ".join(collect(project, tmp_path / "home").notes["limitations"])
+    assert "deny and ask rules apply only" in limitations
 
 
 def test_lone_surrogates_in_config_text_do_not_crash_hashing(tmp_path: Path) -> None:

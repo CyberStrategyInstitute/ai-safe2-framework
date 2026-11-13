@@ -180,16 +180,22 @@ def _bare_rule_name(value: object) -> str | None:
     return _tool_name(value)
 
 
-def _parse_frontmatter(text: str) -> dict[str, Any]:
-    """Read only the allowlisted frontmatter keys; the body and other keys are never kept."""
+def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
+    """Read only the allowlisted frontmatter keys; the body and other keys are never kept.
+
+    Frontmatter that does not close within the line limit is an error, not a partial result:
+    a `tools:` or `permissionMode:` line past the cut-off would otherwise be silently dropped.
+    """
     lines = text.splitlines()
     if not lines or lines[0].strip() != "---":
         return {}
     values: dict[str, Any] = {}
     current: str | None = None
+    closed = False
     for line in lines[1:_MAX_FRONTMATTER_LINES]:
         stripped = line.strip()
         if stripped == "---":
+            closed = True
             break
         if not stripped or stripped.startswith("#"):
             continue
@@ -209,6 +215,11 @@ def _parse_frontmatter(text: str) -> dict[str, Any]:
             values[current] = _split_top_level(inner)
         else:
             values[current] = value.strip("'\"")
+    if not closed:
+        raise ManifestCollectionError(
+            f"{display}: frontmatter has no closing --- within the first {_MAX_FRONTMATTER_LINES} lines; "
+            "the manifest would silently omit fields after the cut-off"
+        )
     return values
 
 
@@ -390,6 +401,19 @@ def _harness_of(display: str) -> str:
     return "github-copilot" if ".github/agents/" in display else "claude-code"
 
 
+def _project_dir(source: _Source) -> str:
+    """The project directory a `.claude/` file belongs to: "" for the root, else its relative path.
+
+    User-level agent files count as the root project's: a user agent is available there, and no
+    nested project's settings are assumed to reach it.
+    """
+    if source.scope == "user":
+        return ""
+    marker = f"/{source.display}"
+    index = marker.find("/.claude/")
+    return marker[1:index] if index >= 0 else ""
+
+
 def collect_manifest(
     root: Path,
     *,
@@ -425,6 +449,12 @@ def collect_manifest(
         "heuristics": {"schema_version": heur.data["schema_version"], "sha256": heur.digest},
         "limitations": [
             "Flags are heuristics over names and structure; they are not proof of runtime behavior.",
+            (
+                "Claude settings deny and ask rules apply only from user-level settings and from the project "
+                "directory that holds the agent's .claude/agents folder, so a nested project's restrictions "
+                "never lower another project's agent. Allow rules, permission mode, hooks, and MCP servers are "
+                "collected project-wide, which can only over-report capability."
+            ),
         ],
     }
     inventory = inventory_assets(
@@ -463,6 +493,8 @@ def collect_manifest(
 
     config_files: list[dict[str, Any]] = []
     settings_all = _Settings()
+    user_settings = _Settings()
+    project_settings: dict[str, _Settings] = {}
     servers: list[tuple[dict[str, Any], str]] = []
     server_tools: set[str] = set()
     definitions: list[tuple[_Source, bytes]] = []
@@ -507,9 +539,15 @@ def collect_manifest(
                 server_tools.add(_tool_name("mcp__" + normalized_server_name) or "")
         if ".claude/" in f"/{source.display}" and source.path.suffix.lower() == ".json" and source.kind == "harness_configuration":
             parsed_settings = _claude_settings(data)
-            settings_all.allow |= parsed_settings.allow
+            # Per-agent decisions use deny and ask only from the scope that wrote them; allow rules,
+            # mode, and hooks can only widen what is reported, so they stay project-wide.
+            scoped = user_settings if source.scope == "user" else project_settings.setdefault(_project_dir(source), _Settings())
+            scoped.deny |= parsed_settings.deny
+            scoped.ask |= parsed_settings.ask
+            # The manifest's rule counts and digest describe the whole project, so they keep every rule.
             settings_all.deny |= parsed_settings.deny
             settings_all.ask |= parsed_settings.ask
+            settings_all.allow |= parsed_settings.allow
             settings_all.modes += parsed_settings.modes
             settings_all.hooks += parsed_settings.hooks
         elif source.kind == "harness_configuration" and ".codex" not in source.display:
@@ -521,27 +559,27 @@ def collect_manifest(
 
     order = list(heur.data["permission_mode_order"])
     mode = max(settings_all.modes, key=lambda value: _mode_rank(value, order)) if settings_all.modes else None
-    bare_ask: set[str] = set()
-    for rule in settings_all.ask:
-        rule_name = _bare_rule_name(rule)
-        if rule_name:
-            bare_ask.add(rule_name)
-    bare_deny: set[str] = set()
-    for rule in settings_all.deny:
-        rule_name = _bare_rule_name(rule)
-        if rule_name:
-            bare_deny.add(rule_name)
-    allowed_names: set[str] = set()
-    for rule in settings_all.allow:
-        rule_name = _tool_name(rule)
-        if rule_name:
-            allowed_names.add(rule_name)
-    allowed = sorted(allowed_names - bare_deny)
+
+    def bare_names(rules: set[str]) -> set[str]:
+        return {bare for rule in rules if (bare := _bare_rule_name(rule))}
+
+    allowed_names = {tool for rule in settings_all.allow if (tool := _tool_name(rule))}
     # An agent with no `tools:` line inherits the allow-list and every configured MCP server,
     # so the server-level names stand in for tools the CLI cannot enumerate.
-    inherited_tools = sorted(set(allowed) | (server_tools - {""}))
-    ask_categories = {category for name in bare_ask for category in heur.categorize(name)}
-    approvals = sorted(point for point, category in heur.approval_categories.items() if category in ask_categories)
+    inherited_all = allowed_names | (server_tools - {""})
+    scope_rules: dict[str, tuple[set[str], list[str]]] = {}
+
+    def rules_for(project_dir: str) -> tuple[set[str], list[str]]:
+        """Bare deny names and approval points from user-level settings plus this project directory."""
+        if project_dir not in scope_rules:
+            local = project_settings.get(project_dir, _Settings())
+            denied = bare_names(user_settings.deny | local.deny)
+            ask_categories = {
+                category for name in bare_names(user_settings.ask | local.ask) for category in heur.categorize(name)
+            }
+            points = sorted(point for point, category in heur.approval_categories.items() if category in ask_categories)
+            scope_rules[project_dir] = (denied, points)
+        return scope_rules[project_dir]
 
     agents: list[tuple[dict[str, Any], str]] = []
     unattended_modes = set(heur.data["unattended"]["permission_modes"])
@@ -550,7 +588,8 @@ def collect_manifest(
     project_scheduled = bool(state_assets & set(heur.data["unattended"]["scheduled_asset_types"]))
     for source, raw in definitions:
         harness = _harness_of(source.display)
-        frontmatter = _parse_frontmatter(raw.decode("utf-8", "replace"))
+        frontmatter = _parse_frontmatter(raw.decode("utf-8", "replace"), source.display)
+        bare_deny, approvals = rules_for(_project_dir(source))
         stem = PurePosixPath(source.display).name.removesuffix(".md").removesuffix(".agent")
         name = _clean_name(frontmatter.get("name")) or stem
         applies = harness == "claude-code"
@@ -559,7 +598,7 @@ def collect_manifest(
         if isinstance(declared, list):
             candidate_tools: list[object] = declared
         elif applies:
-            candidate_tools = list(inherited_tools)
+            candidate_tools = [*sorted(inherited_all)]
         else:
             candidate_tools = []
         names = {
