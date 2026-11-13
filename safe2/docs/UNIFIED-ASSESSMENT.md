@@ -8,7 +8,7 @@ the deeper evidence commands or infer evidence that was not collected.
 ## Quick start
 
 ```bash
-safe2 init . --manifestfile local
+safe2 init . --profile local
 safe2 assess . --scan-content --inspect-config
 ```
 

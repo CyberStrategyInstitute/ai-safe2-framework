@@ -184,7 +184,7 @@ it is not implied by `--execute`. See [guided start](docs/GUIDED-START.md).
 The lower-level workflow remains available when you need separate control:
 
 ```bash
-safe2 init . --manifestfile local
+safe2 init . --profile local
 safe2 config show
 safe2 config validate .safe2/config.toml
 safe2 assess . --scan-content --inspect-config
@@ -235,7 +235,7 @@ pytest tests/ scanner/tests/
 | `safe2 evidence harness SOURCE --output FILE` | Import a provider-neutral harness evidence export and expose coverage gaps | Source-attributed inventory only; does not verify execution, completion, billing, or conformance |
 | `safe2 evidence system SOURCE --output FILE [--strict]` | Normalize model, harness, tool, skill, memory, environment, policy and evaluator identity | Declared/observed inventory only; does not verify deployed configuration or conformance |
 | `safe2 evidence diagnose SOURCE --system-identity FILE --output FILE [--card FILE] [--strict]` | Rank evidence-backed failure locations across the complete agent system | Diagnostic support only; never claims a verified root cause, probability, or conformance |
-| `safe2 evidence scope SOURCE --manifestject-root PATH --system-identity FILE --output FILE [--strict]` | Inventory the declared deployment relationship of repository paths | Metadata-only attributed scope; does not verify build inclusion, execution, or conformance |
+| `safe2 evidence scope SOURCE --project-root PATH --system-identity FILE --output FILE [--strict]` | Inventory the declared deployment relationship of repository paths | Metadata-only attributed scope; does not verify build inclusion, execution, or conformance |
 | `safe2 evidence attribute SOURCE --system-identity FILE --baseline-scope FILE --current-scope FILE --output FILE [--strict]` | Attribute normalized findings across a trusted baseline and current revision | Comparison support only; does not prove causation, deployment state, or conformance |
 | `safe2 evidence readiness SOURCE --system-identity FILE --assessment-scope FILE --change-attribution FILE --output FILE --card FILE [--strict]` | Create agent JSON and a human technical release-readiness card | Human decision support only; never authorizes release or claims conformance |
 | `safe2 evidence truth POLICY EVIDENCE... --output FILE --card FILE [--strict]` | Correlate multi-harness task evidence, receipts, usage, coverage and completion claims | Readiness for human decision only; never verifies completion, billing or conformance |
