@@ -100,6 +100,16 @@ def test_server_sent_events_framing_is_understood(project: Path, tmp_path: Path,
     assert "Snapshot: snap_abc123" in result.output
 
 
+def test_a_non_json_event_frame_before_the_reply_is_skipped(project: Path, tmp_path: Path, monkeypatch) -> None:
+    with StubServer() as stub:
+        stub.content_type = "text/event-stream"
+        envelope = {"jsonrpc": "2.0", "id": 1, "result": {"structuredContent": SUCCESS, "isError": False, "content": []}}
+        stub.body = f"data: keep-alive\n\ndata: {json.dumps(envelope)}\n\n".encode()
+        result, _ = run(project, tmp_path, stub, monkeypatch)
+    assert result.exit_code == 0, result.output
+    assert "Snapshot: snap_abc123" in result.output
+
+
 def test_server_access_required_prints_the_url_exits_nonzero_and_does_not_retry(
     project: Path, tmp_path: Path, monkeypatch
 ) -> None:

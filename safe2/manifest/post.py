@@ -168,7 +168,10 @@ def _decode(content_type: str, payload: bytes) -> dict[str, Any] | None:
         if "text/event-stream" in content_type:
             for line in text.splitlines():
                 if line.startswith("data:"):
-                    message = json.loads(line[5:].strip())
+                    try:
+                        message = json.loads(line[5:].strip())
+                    except json.JSONDecodeError:
+                        continue  # a keep-alive or comment frame is not the reply
                     if isinstance(message, dict) and ("result" in message or "error" in message):
                         return message
             return None

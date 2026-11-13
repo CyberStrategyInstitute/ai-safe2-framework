@@ -258,6 +258,21 @@ def test_a_manifest_write_failure_removes_the_notes_written_before_it(project: P
     assert not (bundle / workflow.NOTES_FILENAME).exists()  # nothing from the failed run is left behind
 
 
+def test_an_existing_manifest_out_fails_the_run_and_leaves_no_notes_behind(project: Path, tmp_path: Path) -> None:
+    from safe2.manifest import workflow
+
+    target = tmp_path / "elsewhere" / "manifest.json"
+    target.parent.mkdir()
+    target.write_bytes(b"{}")
+    bundle = tmp_path / "bundle"
+    result = CliRunner().invoke(
+        cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(bundle), "--manifest-out", str(target)]
+    )
+    assert result.exit_code != 0
+    assert target.read_bytes() == b"{}"  # the caller's file is untouched
+    assert not (bundle / workflow.NOTES_FILENAME).exists() and not (bundle / workflow.MANIFEST_FILENAME).exists()
+
+
 def test_an_existing_notes_file_is_never_removed_by_a_failed_run(project: Path, tmp_path: Path) -> None:
     from safe2.manifest import workflow
 
