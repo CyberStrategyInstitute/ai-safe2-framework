@@ -97,7 +97,9 @@ the flags are relied on.
   covers a subset of uses and is not counted.
 - `deny` and `ask` rules reach an agent only from `~/.claude/settings.json` and from the
   project directory that holds that agent's `.claude/agents` folder, so a nested project's
-  restrictions never lower another project's agent. `allow` rules, permission mode, hooks,
+  restrictions never lower another project's agent. A project directory is the parent of a
+  `.claude` folder, matched on whole path parts and ignoring case; a settings file that does not
+  sit directly in a `.claude` folder is applied to no agent. `allow` rules, permission mode, hooks,
   and MCP servers are collected project-wide, which can only over-report capability. The
   manifest's rule counts and digest still cover every settings file read.
 - `runs_unattended` is true for `permissionMode: bypassPermissions` on the agent, a

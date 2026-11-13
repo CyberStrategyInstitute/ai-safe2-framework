@@ -186,7 +186,7 @@ def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
     Frontmatter that does not close within the line limit is an error, not a partial result:
     a `tools:` or `permissionMode:` line past the cut-off would otherwise be silently dropped.
     """
-    lines = text.splitlines()
+    lines = text.removeprefix("\ufeff").splitlines()
     if not lines or lines[0].strip() != "---":
         return {}
     values: dict[str, Any] = {}
@@ -206,7 +206,7 @@ def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
                     bucket.append(stripped[2:].strip().strip("'\""))
             continue
         key, separator, value = line.partition(":")
-        current = key.strip()
+        current = key.strip().strip("'\"")
         if not separator or current not in _FRONTMATTER_KEYS:
             continue
         value = value.strip()
@@ -401,17 +401,24 @@ def _harness_of(display: str) -> str:
     return "github-copilot" if ".github/agents/" in display else "claude-code"
 
 
-def _project_dir(source: _Source) -> str:
-    """The project directory a `.claude/` file belongs to: "" for the root, else its relative path.
+def _project_dir(source: _Source, *, agent: bool) -> str | None:
+    """The project directory whose `.claude/` folder holds this file: "" for the root, else its path.
 
-    User-level agent files count as the root project's: a user agent is available there, and no
-    nested project's settings are assumed to reach it.
+    Matched on whole path parts, case-insensitively, like the asset classifier. An agent belongs to
+    the directory that owns the `.claude/agents` folder it sits in; a settings file must sit directly
+    in a `.claude` folder. A file that fits neither (for example `.claude/skills/x/settings.json`)
+    returns None and is applied to no agent, which can only over-report. User-level agent files
+    count as the root project's: a user agent is available there, and no nested project's settings
+    are assumed to reach it.
     """
     if source.scope == "user":
         return ""
-    marker = f"/{source.display}"
-    index = marker.find("/.claude/")
-    return marker[1:index] if index >= 0 else ""
+    parts = PurePosixPath(source.display.replace("\\", "/")).parts
+    lower = [part.lower() for part in parts]
+    if agent:
+        owners = [index for index in range(len(parts) - 1) if lower[index : index + 2] == [".claude", "agents"]]
+        return "/".join(parts[: owners[-1]]) if owners else None
+    return "/".join(parts[:-2]) if len(parts) >= 2 and lower[-2] == ".claude" else None
 
 
 def collect_manifest(
@@ -537,13 +544,18 @@ def collect_manifest(
                 servers.append((parsed, source.display))
                 normalized_server_name = re.sub(r"[^A-Za-z0-9_.:*-]", "_", server_name or "")
                 server_tools.add(_tool_name("mcp__" + normalized_server_name) or "")
-        if ".claude/" in f"/{source.display}" and source.path.suffix.lower() == ".json" and source.kind == "harness_configuration":
+        if ".claude/" in f"/{source.display.lower()}" and source.path.suffix.lower() == ".json" and source.kind == "harness_configuration":
             parsed_settings = _claude_settings(data)
             # Per-agent decisions use deny and ask only from the scope that wrote them; allow rules,
             # mode, and hooks can only widen what is reported, so they stay project-wide.
-            scoped = user_settings if source.scope == "user" else project_settings.setdefault(_project_dir(source), _Settings())
-            scoped.deny |= parsed_settings.deny
-            scoped.ask |= parsed_settings.ask
+            owner = _project_dir(source, agent=False)
+            if source.scope == "user":
+                scoped: _Settings | None = user_settings
+            else:
+                scoped = project_settings.setdefault(owner, _Settings()) if owner is not None else None
+            if scoped is not None:
+                scoped.deny |= parsed_settings.deny
+                scoped.ask |= parsed_settings.ask
             # The manifest's rule counts and digest describe the whole project, so they keep every rule.
             settings_all.deny |= parsed_settings.deny
             settings_all.ask |= parsed_settings.ask
@@ -589,7 +601,7 @@ def collect_manifest(
     for source, raw in definitions:
         harness = _harness_of(source.display)
         frontmatter = _parse_frontmatter(raw.decode("utf-8", "replace"), source.display)
-        bare_deny, approvals = rules_for(_project_dir(source))
+        bare_deny, approvals = rules_for(_project_dir(source, agent=True) or "")
         stem = PurePosixPath(source.display).name.removesuffix(".md").removesuffix(".agent")
         name = _clean_name(frontmatter.get("name")) or stem
         applies = harness == "claude-code"

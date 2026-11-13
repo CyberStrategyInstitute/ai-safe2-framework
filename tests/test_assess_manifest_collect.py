@@ -392,6 +392,51 @@ def test_a_nested_agent_is_still_restricted_by_its_own_nested_settings(tmp_path:
     assert agents["root"]["can_spawn_subagents"] is True and agents["root"]["approval_points"] == []
 
 
+def test_a_directory_that_only_ends_in_dot_claude_is_not_a_project_scope(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/root.md", agent_file("root", "Task, Read"))
+    write(project, "foo.claude/settings.json", json.dumps({"permissions": {"deny": ["Task"], "ask": ["Edit"]}}))
+    write(project, ".claude/skills/x/settings.json", json.dumps({"permissions": {"deny": ["Task"]}}))
+    agent = agents_by_name(collect(project, tmp_path / "home"))["root"]
+    assert agent["tools"] == ["Read", "Task"] and agent["approval_points"] == []
+
+
+def test_an_agent_takes_its_rules_from_the_dot_claude_folder_that_holds_its_agents_folder(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/settings.json", json.dumps({"permissions": {"deny": ["Bash"]}}))
+    write(project, "a/.claude/settings.json", json.dumps({"permissions": {"deny": ["Task"]}}))
+    write(project, "a/.claude/b/.claude/agents/inner.md", agent_file("inner", "Task, Bash, Read"))
+    write(project, "a/.claude/b/.claude/settings.json", json.dumps({"permissions": {"ask": ["Edit"]}}))
+    agent = agents_by_name(collect(project, tmp_path / "home"))["inner"]
+    # a/.claude/b owns the agents folder; the root and `a` rules do not reach it.
+    assert agent["tools"] == ["Bash", "Read", "Task"] and agent["approval_points"] == ["before_write"]
+
+
+def test_dot_claude_folder_names_match_case_insensitively_like_the_asset_classifier(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/root.md", agent_file("root", "Task, Read"))
+    write(project, "packages/x/.Claude/agents/child.md", agent_file("child", "Task, Read"))
+    write(project, ".claude/settings.json", json.dumps({"permissions": {"deny": ["Task"]}}))
+    agents = agents_by_name(collect(project, tmp_path / "home"))
+    assert agents["root"]["tools"] == ["Read"]
+    # The child's own folder has no settings file, so the root's deny does not reach it.
+    assert agents["child"]["tools"] == ["Read", "Task"]
+
+
+def test_a_byte_order_mark_does_not_hide_the_frontmatter(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/bom.md", "\ufeff---\nname: bom\ntools: Task\npermissionMode: bypassPermissions\n---\nbody\n")
+    agent = agents_by_name(collect(project, tmp_path / "home"))["bom"]
+    assert agent["can_spawn_subagents"] is True and agent["runs_unattended"] is True
+
+
+def test_quoted_frontmatter_keys_are_read(tmp_path: Path) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/q.md", '---\nname: q\n"permissionMode": bypassPermissions\n"tools": Task\n---\n')
+    agent = agents_by_name(collect(project, tmp_path / "home"))["q"]
+    assert agent["runs_unattended"] is True and agent["tools"] == ["Task"]
+
+
 def test_user_level_deny_and_ask_rules_still_apply_to_every_claude_agent(tmp_path: Path) -> None:
     project = tmp_path / "p"
     write(project, ".claude/agents/root.md", agent_file("root", "Task, Read"))
