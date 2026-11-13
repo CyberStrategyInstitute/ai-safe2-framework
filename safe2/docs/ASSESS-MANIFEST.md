@@ -67,7 +67,7 @@ skipping it could hide a permissive setting. In particular a symlinked `~/.claud
 
 | Field | Source |
 |---|---|
-| `generator` | Always `{"name": "safe2 assess --manifest", "version": <safe2 version>}`. The server labels a manifest `cli` by this exact name. |
+| `generator` | Always `{"name": "safe2 assess --manifest", "version": <safe2 version>}`. The hosted service labels a manifest `cli` only for a `generator.name` it recognizes; any other name is `model_supplied` and is never applied over an existing CLI record. Read-only check of the Tarvin repository (not the deployed service): commit `b80cc52` of PR #11 recognizes both `safe2 assess --manifest` and the legacy `safe2 assess --pro`, but the PR's current head `ffd88bf` lists only `safe2 assess --pro`. **Confirm the deployed service accepts `safe2 assess --manifest` before the first real `--post`.** |
 | `project.name` | `project.name` from `.safe2/config.toml`, else the directory name. `project_id` is omitted (see open decisions). |
 | `agents[]` | Name, harness, `definition_digest` (SHA-256 of the definition file), tool **names**, the flags below, and `approval_points`. |
 | `mcp_servers[]` | Name, transport, `auth_type`, `pinned_digest` (a SHA-256 found in the arguments, such as `image@sha256:<hex>`; a version number is not a digest), and `config_digest`. |
@@ -95,6 +95,11 @@ the flags are relied on.
   The local notes record that the tools were inherited.
 - Only a bare tool name in the `ask` list counts as an approval point. `Bash(git push:*)`
   covers a subset of uses and is not counted.
+- `deny` and `ask` rules reach an agent only from `~/.claude/settings.json` and from the
+  project directory that holds that agent's `.claude/agents` folder, so a nested project's
+  restrictions never lower another project's agent. `allow` rules, permission mode, hooks,
+  and MCP servers are collected project-wide, which can only over-report capability. The
+  manifest's rule counts and digest still cover every settings file read.
 - `runs_unattended` is true for `permissionMode: bypassPermissions` on the agent, a
   settings-level bypass mode (Claude Code agents only), a scheduled-operation file such
   as `HEARTBEAT.md`, or a headless-agent marker in a CI workflow.
@@ -116,17 +121,23 @@ to `https://mcp.agency-check.app/pro/mcp` over Streamable HTTP: one POST, no
 
 - **Tarvin key.** `SAFE2_MCP_PRO_KEY` (`as2k_...`) from the environment only. It is never
   accepted as an option, never written to config, the bundle, notes, logs, or the
-  manifest, and never printed, including when the server echoes it back.
+  manifest, and never printed. If the server echoes it back, the key and any other
+  `as2k_...` token are replaced with `[redacted]` in every string of the reply (values,
+  field names, and list items) before it is shortened, shown, or returned in `--format json`.
+  A reply nested too deeply to check is reported as `bad_response` and not shown.
 - **No key.** The manifest path and the exact one-line call are printed and the command
   exits 0. It does not prompt.
-- **Retries.** One retry, only on a connect error. Never on a 4xx, 5xx, or timeout.
+- **Retries.** One retry, only on a connect error or a connect timeout, both of which fail before any
+  request byte is sent. Never on a 4xx, 5xx, or a read or write timeout.
   Redirects are not followed, so the key never travels to another URL.
 - **Limits.** Requests over 1 MiB are refused locally. Responses over 1 MiB are rejected.
 - **Output.** Tier, missing controls, snapshot id, and whether the record was applied.
   The output always states that the manifest is **unsigned**.
-- **Exit codes.** `0` on success, including "not applied"; `1` on `pro_required`
-  (prints the upgrade URL), `invalid_manifest` (prints the schema paths), a rejected
-  key, an HTTP error, or a network failure. The local manifest is kept in every case.
+- **Exit codes.** `0` only when the server recorded the manifest (`applied` is true); `1` on
+  "not applied" (the server answered but recorded nothing, for example because it treated the
+  manifest as model-supplied), `pro_required` (prints the upgrade URL), `invalid_manifest`
+  (prints the schema paths), a rejected key, an HTTP error, or a network failure. The local
+  manifest is kept in every case. With no key, `--post` sends nothing and exits `0`.
 
 ## Fails closed
 
@@ -135,10 +146,17 @@ No manifest is written, and the bundle is kept, when:
 - the asset inventory reached `limits.max_files` (the manifest would silently omit agents);
 - a project or user-level config file is unparseable, unreadable, or larger than `limits.max_file_bytes`;
 - there are more than 200 agents, MCP servers, or distinct hooks, more than 500 config
-  files, or an agent has more than 500 tools; or
+  files, or an agent has more than 500 tools;
+- an agent definition's frontmatter does not close with `---` within its first 200 lines
+  (a `tools:` or `permissionMode:` line after the cut-off would be silently lost);
+- `--manifest-out` is the bundle's `manifest-collection-notes.json`; or
 - the manifest does not match the vendored schema.
 
 The error names the file and reason, never a value. Rerun with a new `--output-dir`.
+
+The collection notes are written first and the manifest last, so a failure leaves no
+manifest behind. If the manifest cannot be written after the notes were, the notes written
+by that run are removed again; files from an earlier run are never removed.
 
 ## Determinism
 
@@ -158,7 +176,7 @@ and checks that it equals the server's `schemas/aisafe2-project-manifest-1.json`
 | Threat | Control | Remaining limitation |
 |---|---|---|
 | Customer data leaves the machine without consent | Both consent flags; nothing is sent without `--post`; tests patch `socket` and assert no connection is opened | `--post` is per-run consent. `privacy.network_export` in the config is not consulted |
-| The API key leaks | Environment only; never in an option, file, log, or output; sentinel-key tests on success and every error path | A process-environment reader on the same host can see it |
+| The API key leaks | Environment only; never in an option, file, log, or output; a server echo is redacted; sentinel-key tests cover success, 401/403, other HTTP errors, JSON-RPC and tool errors, event-stream replies, and a JSON-escaped echo, in human and JSON output | A process-environment reader on the same host can see it. Only the exact key and `as2k_...`-shaped tokens are redacted; a server that re-encodes or splits the key before echoing it is not detected |
 | The key is sent to the wrong place | Fixed `https` endpoint; no redirects; plain `http` only for loopback in tests | A user who changes `HTTPS_PROXY` routes the request through that proxy |
 | File contents, prompts, secrets, arguments, or commands reach the manifest | Only names, flags, counts, digests; the schema rejects unknown keys; sentinel tests grep the manifest, bundle, notes, and output | A tool or agent **name** is sent as written, and a secret placed in a name would be sent |
 | A digest reveals a secret | The matched text is never kept | `config_files[].sha256` of a short `.env` is a SHA-256 of the whole file, so a low-entropy secret could be guessed offline |
