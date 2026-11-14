@@ -237,7 +237,13 @@ def _interpret(http_status: int, content_type: str, payload: bytes, key: str) ->
     structured = result.get("structuredContent")
     if not isinstance(structured, dict):
         return PostOutcome("bad_response", http_status)
-    return PostOutcome("not_applied" if structured.get("applied") is False else "ok", http_status, structured=structured)
+    applied = structured.get("applied")
+    if applied is True:
+        return PostOutcome("ok", http_status, structured=structured)
+    if applied is False:
+        return PostOutcome("not_applied", http_status, structured=structured)
+    # Missing, null, 0, "false", or an object is not a statement that the record was kept: fail closed.
+    return PostOutcome("bad_response", http_status, error={"code": "applied_not_boolean", "message": ""})
 
 
 def post_manifest(

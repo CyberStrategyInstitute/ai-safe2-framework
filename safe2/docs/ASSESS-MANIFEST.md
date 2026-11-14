@@ -137,7 +137,8 @@ to `https://mcp.agency-check.app/pro/mcp` over Streamable HTTP: one POST, no
   The output always states that the manifest is **unsigned**.
 - **Exit codes.** `0` only when the server recorded the manifest (`applied` is true); `1` on
   "not applied" (the server answered but recorded nothing, for example because it treated the
-  manifest as model-supplied), `pro_required` (prints the upgrade URL), `invalid_manifest`
+  manifest as model-supplied), a reply whose `applied` is missing or is anything other than a
+  boolean (reported as `bad_response`), `pro_required` (prints the upgrade URL), `invalid_manifest`
   (prints the schema paths), a rejected key, an HTTP error, or a network failure. The local
   manifest is kept in every case. With no key, `--post` sends nothing and exits `0`.
 

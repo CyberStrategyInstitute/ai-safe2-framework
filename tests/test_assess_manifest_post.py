@@ -335,6 +335,47 @@ def test_null_or_wrong_typed_response_fields_do_not_crash_the_summary(project: P
     assert "Missing controls: 0" in result.output
 
 
+_MISSING = object()
+
+
+@pytest.mark.parametrize("applied", [_MISSING, None, 0, 1, "true", "false", "", [], {"applied": True}])
+def test_an_applied_value_that_is_not_the_boolean_true_never_succeeds(
+    project: Path, tmp_path: Path, monkeypatch, applied
+) -> None:
+    # The documented contract is exit 0 only when `applied` is true; anything else fails closed.
+    structured = {key: value for key, value in SUCCESS.items() if key != "applied"}
+    if applied is not _MISSING:
+        structured["applied"] = applied
+    with StubServer() as stub:
+        stub.reply_success(structured)
+        result, out = run(project, tmp_path, stub, monkeypatch)
+    assert result.exit_code == 1, result.output
+    assert "Applied: yes" not in result.output
+    assert "bad_response" in result.output
+    assert_key_nowhere(result, out)
+
+
+@pytest.mark.parametrize("applied", [_MISSING, None, "false", 0])
+def test_a_malformed_applied_value_is_a_bad_response_in_json_output(
+    project: Path, tmp_path: Path, monkeypatch, applied
+) -> None:
+    structured = {key: value for key, value in SUCCESS.items() if key != "applied"}
+    if applied is not _MISSING:
+        structured["applied"] = applied
+    with StubServer() as stub:
+        stub.reply_success(structured)
+        result, _ = run(project, tmp_path, stub, monkeypatch, "--format", "json")
+    assert result.exit_code == 1
+    assert json.loads(result.output)["post"]["status"] == "bad_response"
+
+
+def test_only_a_literal_true_is_reported_as_applied(project: Path, tmp_path: Path, monkeypatch) -> None:
+    with StubServer() as stub:
+        stub.reply_success({**SUCCESS, "applied": True})
+        result, _ = run(project, tmp_path, stub, monkeypatch)
+    assert result.exit_code == 0 and "Applied: yes" in result.output
+
+
 def test_a_garbage_response_is_a_failure_not_a_success(project: Path, tmp_path: Path, monkeypatch) -> None:
     with StubServer() as stub:
         stub.body = b"<html>not json</html>"
