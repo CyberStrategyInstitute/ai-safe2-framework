@@ -14,10 +14,11 @@ import json
 import re
 import tomllib
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
-from typing import Any
+from typing import Any, NoReturn
 from urllib.parse import urlsplit
 
 from safe2 import __version__
@@ -143,11 +144,18 @@ def _canonical(value: object) -> bytes:
 
 
 def _split_top_level(value: str) -> list[str]:
-    """Split on commas that are not inside parentheses, so a specifier never splits."""
+    """Split on commas outside parentheses and quotes, so a specifier or quoted name never splits."""
     parts: list[str] = []
     depth, start = 0, 0
+    quote = ""
     for index, character in enumerate(value):
-        if character == "(":
+        if quote:
+            if character == quote:
+                quote = ""
+            continue
+        if character in "'\"" and (index == 0 or value[index - 1] in " \t[,"):
+            quote = character
+        elif character == "(":
             depth += 1
         elif character == ")" and depth:
             depth -= 1
@@ -155,7 +163,7 @@ def _split_top_level(value: str) -> list[str]:
             parts.append(value[start:index])
             start = index + 1
     parts.append(value[start:])
-    return [part.strip().strip("'\"") for part in parts if part.strip()]
+    return [part.strip() for part in parts if part.strip()]
 
 
 def _clean_name(value: object) -> str | None:
@@ -180,16 +188,89 @@ def _bare_rule_name(value: object) -> str | None:
     return _tool_name(value)
 
 
+def _strip_comment(text: str) -> str:
+    """Drop a YAML comment: a `#` at the start or after whitespace, outside quotes."""
+    quote = ""
+    index = 0
+    while index < len(text):
+        character = text[index]
+        if quote:
+            if character == "\\" and quote == '"':
+                index += 1
+            elif character == quote:
+                quote = ""
+        elif character in "'\"" and (index == 0 or text[index - 1] in " \t[,"):
+            quote = character
+        elif character == "#" and (index == 0 or text[index - 1] in " \t"):
+            return text[:index].rstrip()
+        index += 1
+    return text.rstrip()
+
+
+def _unquote(text: str, fail: Callable[[str], NoReturn]) -> str:
+    """Read one YAML scalar: quoted (whole text) or plain. Anything else is unsupported."""
+    text = text.strip()
+    if not text:
+        return ""
+    if text[0] in "'\"":
+        quote = text[0]
+        out: list[str] = []
+        index = 1
+        while index < len(text):
+            character = text[index]
+            if quote == '"' and character == "\\" and index + 1 < len(text):
+                out.append(text[index + 1])
+                index += 2
+                continue
+            if character == quote:
+                if quote == "'" and text[index + 1 : index + 2] == "'":
+                    out.append("'")
+                    index += 2
+                    continue
+                if index != len(text) - 1:
+                    fail("has text after a quoted value")
+                return "".join(out)
+            out.append(character)
+            index += 1
+        fail("has an unclosed quote")
+    if text[0] in "|>!&*[{":
+        fail(f"uses `{text[0]}`, which is not supported for the fields read here")
+    return text
+
+
 def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
     """Read only the allowlisted frontmatter keys; the body and other keys are never kept.
 
     Frontmatter that does not close within the line limit is an error, not a partial result:
     a `tools:` or `permissionMode:` line past the cut-off would otherwise be silently dropped.
+
+    There is no YAML dependency, so the five read keys are parsed by hand: inline comments are
+    removed, and anything that cannot be read unambiguously (multi-line values, block scalars,
+    flow maps, nested lists, tags, anchors, aliases, unclosed quotes or brackets, duplicate keys,
+    an unreadable tool name) raises instead of yielding a partial value. A dropped tool or
+    permission mode would report a favourable flag. Keys that are not read are skipped unparsed.
     """
+
+    def fail(reason: str) -> NoReturn:
+        raise ManifestCollectionError(
+            f"{display}: frontmatter {reason}; the manifest would silently omit or misread an agent field"
+        )
+
+    def item_list(value: str) -> list[str]:
+        if value.startswith("["):
+            if not value.endswith("]"):
+                fail("has a list that does not close on the same line")
+            value = value[1:-1]
+        elif value[:1] in "'\"":
+            value = _unquote(value, fail)
+            return _split_top_level(value)
+        return [_unquote(part, fail) for part in _split_top_level(value)]
+
     lines = text.removeprefix("\ufeff").splitlines()
     if not lines or lines[0].strip() != "---":
         return {}
     values: dict[str, Any] = {}
+    inline: set[str] = set()
     current: str | None = None
     closed = False
     for line in lines[1:_MAX_FRONTMATTER_LINES]:
@@ -199,27 +280,43 @@ def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
             break
         if not stripped or stripped.startswith("#"):
             continue
-        if line[0] in " \t" or stripped.startswith("- "):
-            if current in _FRONTMATTER_KEYS and stripped.startswith("- "):
-                bucket = values.setdefault(current, [])
-                if isinstance(bucket, list):
-                    bucket.append(stripped[2:].strip().strip("'\""))
+        if line[0] in " \t" or stripped.startswith("- ") or stripped == "-":
+            if current not in _FRONTMATTER_KEYS:
+                continue
+            if current in inline or not (stripped.startswith("- ") or stripped == "-"):
+                fail(f"`{current}` continues on another line")
+            if current not in {"tools", "disallowedTools"}:
+                fail(f"`{current}` is given a list")
+            item = _unquote(_strip_comment(stripped[1:]), fail)
+            if item:
+                values[current].append(item)
             continue
         key, separator, value = line.partition(":")
         current = key.strip().strip("'\"")
         if not separator or current not in _FRONTMATTER_KEYS:
             continue
-        value = value.strip()
+        if current in values:
+            fail(f"repeats `{current}`")
+        value = _strip_comment(value).strip()
         if current in {"tools", "disallowedTools"}:
-            inner = value[1:-1] if value.startswith("[") and value.endswith("]") else value
-            values[current] = _split_top_level(inner)
+            values[current] = item_list(value) if value else []
+            if value:
+                inline.add(current)
         else:
-            values[current] = value.strip("'\"")
+            values[current] = _unquote(value, fail)
+            if value:
+                inline.add(current)
     if not closed:
         raise ManifestCollectionError(
             f"{display}: frontmatter has no closing --- within the first {_MAX_FRONTMATTER_LINES} lines; "
             "the manifest would silently omit fields after the cut-off"
         )
+    for key in ("tools", "disallowedTools"):
+        # `tools:` with nothing after it is null, not an empty list: the agent inherits.
+        if key in values and not values[key] and key not in inline:
+            del values[key]
+    if any(_tool_name(item) is None for item in values.get("tools", [])):
+        fail("lists a tool name that cannot be read")
     return values
 
 
