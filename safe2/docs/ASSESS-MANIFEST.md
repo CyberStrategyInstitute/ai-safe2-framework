@@ -161,6 +161,11 @@ The collection notes are written first and the manifest last, so a failure leave
 manifest behind. If the manifest cannot be written after the notes were, the notes written
 by that run are removed again; files from an earlier run are never removed.
 
+One case is reported differently: if the manifest was published but its temporary staging
+file then could not be removed, the manifest and the notes are both kept, the command exits
+non-zero, names the manifest path and the leftover file, and does not `--post`. The manifest
+is complete in that case; delete the leftover `.aisafe2-project-manifest-1.json.*.tmp` by hand.
+
 ## Determinism
 
 The manifest is serialized with sorted keys and stable list ordering. The same tree

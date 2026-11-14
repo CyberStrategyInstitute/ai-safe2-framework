@@ -14,7 +14,7 @@ from safe2.manifest.collect import (
     render_notes,
     validate_manifest,
 )
-from safe2.secure_io import write_new_atomic
+from safe2.secure_io import PublishedCleanupError, write_new_atomic
 
 MANIFEST_FILENAME = "aisafe2-project-manifest-1.json"
 NOTES_FILENAME = "manifest-collection-notes.json"
@@ -59,10 +59,19 @@ def build_and_write(
         )
     # The notes go first and the manifest is the last file published, so a failure at any point
     # leaves no manifest behind. The notes were created by this call, so they are removed again
-    # if the manifest cannot be written.
-    write_new_atomic(notes_path, render_notes(collection.notes, digest))
+    # if the manifest cannot be written. The one exception is a manifest that was published and
+    # only its staging link could not be removed: the manifest then exists, so the notes that
+    # explain it stay with it and the error says so.
+    try:
+        write_new_atomic(notes_path, render_notes(collection.notes, digest))
+    except PublishedCleanupError as exc:
+        # Published notes with no manifest attempted yet: nothing downstream exists, so undo it.
+        notes_path.unlink(missing_ok=True)
+        raise OSError(f"could not finish writing {notes_path}: {exc.__cause__}") from exc
     try:
         write_new_atomic(manifest_path, body)
+    except PublishedCleanupError:
+        raise
     except BaseException:
         notes_path.unlink(missing_ok=True)
         raise

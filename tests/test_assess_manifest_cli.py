@@ -321,3 +321,80 @@ def test_ordinary_assess_output_and_options_are_unchanged_without_manifest(
     assert "Project Manifest" not in result.output
     assert not (out / "aisafe2-project-manifest-1.json").exists()
     assert not (out / "manifest-collection-notes.json").exists()
+
+
+def fail_removing_staging_file(monkeypatch, final_name: str) -> None:
+    """Make removing the staging hard link of `final_name` fail, after the real publish succeeded."""
+    real = Path.unlink
+
+    def unlink(self: Path, missing_ok: bool = False) -> None:
+        if self.name.startswith(f".{final_name}.") and self.name.endswith(".tmp"):
+            raise PermissionError("staging file is locked")
+        real(self, missing_ok=missing_ok)
+
+    monkeypatch.setattr(Path, "unlink", unlink)
+
+
+def test_a_staging_cleanup_failure_after_the_manifest_is_published_keeps_manifest_and_notes(
+    project: Path, tmp_path: Path, monkeypatch
+) -> None:
+    from safe2.manifest import workflow
+
+    fail_removing_staging_file(monkeypatch, workflow.MANIFEST_FILENAME)
+    bundle = tmp_path / "bundle"
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(bundle)])
+    manifest = bundle / workflow.MANIFEST_FILENAME
+    assert result.exit_code != 0
+    assert manifest.is_file() and json.loads(manifest.read_bytes())["manifest_version"]
+    assert (bundle / workflow.NOTES_FILENAME).is_file()  # the notes explaining the manifest stay with it
+    assert "no manifest was written" not in result.output
+    assert str(manifest) in result.output and "staging file" in result.output
+    assert "staging file is locked" in result.output
+
+
+def test_a_staging_cleanup_failure_on_the_notes_leaves_no_manifest_and_no_notes(
+    project: Path, tmp_path: Path, monkeypatch
+) -> None:
+    from safe2.manifest import workflow
+
+    fail_removing_staging_file(monkeypatch, workflow.NOTES_FILENAME)
+    bundle = tmp_path / "bundle"
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(bundle)])
+    assert result.exit_code != 0
+    assert "no manifest was written" in result.output and "staging file is locked" in result.output
+    assert "The manifest was written to" not in result.output
+    assert not (bundle / workflow.MANIFEST_FILENAME).exists()
+    assert not (bundle / workflow.NOTES_FILENAME).exists()
+
+
+def test_a_staging_cleanup_failure_never_sends_anything(project: Path, tmp_path: Path, monkeypatch) -> None:
+    from safe2.manifest import workflow
+
+    fail_removing_staging_file(monkeypatch, workflow.MANIFEST_FILENAME)
+    monkeypatch.setenv("SAFE2_MCP_PRO_KEY", "as2k_" + "a" * 32)
+
+    def no_network(*args, **kwargs):
+        raise AssertionError("must not post after a failed local write")
+
+    monkeypatch.setattr(post_module, "post_manifest", no_network)
+    monkeypatch.setattr("safe2.commands.assess.post_manifest", no_network, raising=False)
+    bundle = tmp_path / "bundle"
+    result = CliRunner().invoke(
+        cli, ["assess", str(project), "--manifest", "--post", *CONSENT, "--no-wsl", "--output-dir", str(bundle)]
+    )
+    assert result.exit_code != 0
+    assert "Nothing was sent" in result.output
+
+
+def test_an_existing_manifest_still_removes_the_notes_written_by_the_failed_run(
+    project: Path, tmp_path: Path
+) -> None:
+    from safe2.manifest import workflow
+
+    bundle = tmp_path / "bundle"
+    bundle.mkdir()
+    (bundle / workflow.MANIFEST_FILENAME).write_bytes(b"{}")  # somebody else's file already there
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(bundle)])
+    assert result.exit_code != 0
+    assert (bundle / workflow.MANIFEST_FILENAME).read_bytes() == b"{}"
+    assert not (bundle / workflow.NOTES_FILENAME).exists()

@@ -22,6 +22,7 @@ from safe2.manifest.post import (
     require_key,
 )
 from safe2.manifest.workflow import ManifestArtifact, build_and_write
+from safe2.secure_io import PublishedCleanupError
 
 
 @click.command("assess")
@@ -115,6 +116,12 @@ def assess_command(
                 config_path=config_path,
                 manifest_out=manifest_out,
             )
+        except PublishedCleanupError as exc:
+            raise click.ClickException(
+                f"The manifest was written to {exc.path} and is complete, but its staging file "
+                f"{exc.temporary} could not be removed ({exc.__cause__}). The collection notes were kept "
+                f"in {result['output_dir']}. Remove the leftover file by hand. Nothing was sent."
+            ) from exc
         except (ManifestCollectionError, ManifestValidationError, OSError, ValueError) as exc:
             raise click.ClickException(
                 f"{exc}. The evidence bundle was kept at {result['output_dir']} and no manifest "
