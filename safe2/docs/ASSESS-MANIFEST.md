@@ -152,6 +152,15 @@ No manifest is written, and the bundle is kept, when:
   files, or an agent has more than 500 tools;
 - an agent definition's frontmatter does not close with `---` within its first 200 lines
   (a `tools:` or `permissionMode:` line after the cut-off would be silently lost);
+- an agent definition's frontmatter uses, on one of the five keys read (`name`, `tools`,
+  `disallowedTools`, `permissionMode`, `memory`), something the collector cannot read
+  unambiguously: a value continued on the next line, a block scalar (`|`, `>`), a flow map,
+  a nested list, a tag, anchor or alias, an unclosed quote or bracket, text after a quoted
+  value, a repeated key, or a `tools` entry that is not a readable tool name. Inline `#`
+  comments (outside quotes) are removed first. Other keys are not parsed. The frontmatter
+  reader is hand-written (no YAML dependency), so it rejects rather than guesses: a dropped
+  tool or permission mode would report `can_spawn_subagents` or `runs_unattended` as false.
+  `tools:` with no value is read as not declared (the agent inherits), not as no tools;
 - `--manifest-out` is the bundle's `manifest-collection-notes.json`; or
 - the manifest does not match the vendored schema.
 
