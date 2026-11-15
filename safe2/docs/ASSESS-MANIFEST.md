@@ -158,7 +158,9 @@ No manifest is written, and the bundle is kept, when:
   `disallowedTools`, `permissionMode`, `memory`), something the collector cannot read
   unambiguously: a value continued on the next line, a block scalar (`|`, `>`), a flow map,
   a nested list, a tag, anchor or alias, an unclosed quote or bracket, an unbalanced
-  parenthesis in a tool entry, text after a quoted value, a repeated key, a `tools` entry
+  parenthesis in a tool entry (a `(` that never closes, or a `)` with no `(`, in an inline,
+  flow-list or block-list entry of `tools` or `disallowedTools`; an unmatched `)` inside a
+  quoted entry is allowed), text after a quoted value, a repeated key, a `tools` entry
   that is not a readable tool name, or a quote inside an unquoted tool entry that can be
   read two ways. For example `tools: [Bash(echo "*), Task]` read one way drops `Task`, and
   `tools: Bash(echo "), SECRET, Read(")` read the other way turns argument text into tool
