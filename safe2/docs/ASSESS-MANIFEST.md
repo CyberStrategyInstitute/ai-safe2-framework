@@ -155,9 +155,12 @@ No manifest is written, and the bundle is kept, when:
 - an agent definition's frontmatter uses, on one of the five keys read (`name`, `tools`,
   `disallowedTools`, `permissionMode`, `memory`), something the collector cannot read
   unambiguously: a value continued on the next line, a block scalar (`|`, `>`), a flow map,
-  a nested list, a tag, anchor or alias, an unclosed quote or bracket, text after a quoted
-  value, a repeated key, or a `tools` entry that is not a readable tool name. Inline `#`
-  comments (outside quotes) are removed first. Other keys are not parsed. The frontmatter
+  a nested list, a tag, anchor or alias, an unclosed quote or bracket, an unbalanced
+  parenthesis in a tool entry, text after a quoted value, a repeated key, or a `tools` entry
+  that is not a readable tool name. A quote opens a quoted value only where a list item
+  begins; inside a plain entry such as `Bash(echo "*)` it is a literal character, so it
+  never hides a later tool (`tools: [Bash(echo "*), Task]` keeps both `Bash` and `Task`).
+  Inline `#` comments (outside quotes) are removed first. Other keys are not parsed. The frontmatter
   reader is hand-written (no YAML dependency), so it rejects rather than guesses: a dropped
   tool or permission mode would report `can_spawn_subagents` or `runs_unattended` as false.
   `tools:` with no value is read as not declared (the agent inherits), not as no tools;
