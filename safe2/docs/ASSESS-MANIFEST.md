@@ -151,7 +151,9 @@ No manifest is written, and the bundle is kept, when:
 - there are more than 200 agents, MCP servers, or distinct hooks, more than 500 config
   files, or an agent has more than 500 tools;
 - an agent definition's frontmatter does not close with `---` within its first 200 lines
-  (a `tools:` or `permissionMode:` line after the cut-off would be silently lost);
+  (a `tools:` or `permissionMode:` line after the cut-off would be silently lost). Only a
+  `---` at the start of a line closes it; an indented `---` is content, so it never ends
+  the block early (an indented `---` that follows a read key is rejected as a continuation);
 - an agent definition's frontmatter uses, on one of the five keys read (`name`, `tools`,
   `disallowedTools`, `permissionMode`, `memory`), something the collector cannot read
   unambiguously: a value continued on the next line, a block scalar (`|`, `>`), a flow map,
