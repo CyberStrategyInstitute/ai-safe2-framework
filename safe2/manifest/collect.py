@@ -152,11 +152,14 @@ def _scan_flow(text: str, *, comments: bool, eager: bool) -> tuple[list[int], in
     a top-level comma or `[`). Inside a plain item such as `Bash(echo "*)` it is a literal character
     unless `eager`, which makes every quote open a string. Commas inside parentheses do not split.
     Returns the top-level comma positions, the index of a comment (a `#` at the start or after
-    whitespace, outside quotes), the quote left open, and the parenthesis depth left open.
+    whitespace, outside quotes), the quote left open, and the parenthesis depth left open, which is
+    `-1` once a `)` has appeared with no `(` to match it (depth never goes below zero, so the commas
+    after it still split the same way under both readings).
     """
     commas: list[int] = []
     quote = ""
     depth = 0
+    unmatched = False
     item_start = True
     index = 0
     while index < len(text):
@@ -172,20 +175,23 @@ def _scan_flow(text: str, *, comments: bool, eager: bool) -> tuple[list[int], in
         elif character in "'\"" and (item_start or eager):
             quote, item_start = character, False
         elif comments and character == "#" and (index == 0 or text[index - 1] in " \t"):
-            return commas, index, "", depth
+            return commas, index, "", -1 if unmatched else depth
         elif character == "," and depth == 0:
             commas.append(index)
             item_start = True
         elif character == "(":
             depth += 1
             item_start = False
-        elif character == ")" and depth:
-            depth -= 1
+        elif character == ")":
+            if depth:
+                depth -= 1
+            else:
+                unmatched = True
             item_start = False
         elif not (character in " \t" or (character == "[" and item_start)):
             item_start = False
         index += 1
-    return commas, None, quote, depth
+    return commas, None, quote, -1 if unmatched else depth
 
 
 def _scan_unambiguous(
@@ -198,9 +204,15 @@ def _scan_unambiguous(
     a split is accepted only when both readings agree; otherwise collection fails.
     """
     literal = _scan_flow(text, comments=comments, eager=False)
-    if literal != _scan_flow(text, comments=comments, eager=True):
+    eager = _scan_flow(text, comments=comments, eager=True)
+    # A `)` with no `(` counts only when both readings see it: in `Bash(echo ")")` the literal
+    # reading finds a stray `)` that the quoted reading does not, yet both give the same entries.
+    if (*literal[:3], max(literal[3], 0)) != (*eager[:3], max(eager[3], 0)):
         fail("has a quote inside an unquoted entry that can be read two ways; quote the whole entry")
-    return literal
+    return (*literal[:3], -1 if literal[3] < 0 and eager[3] < 0 else max(literal[3], 0))
+
+
+_UNBALANCED = "has an unbalanced parenthesis in a list of tools (a `(` never closed or a `)` with no `(`)"
 
 
 def _split_top_level(value: str, fail: Callable[[str], NoReturn]) -> list[str]:
@@ -214,7 +226,7 @@ def _split_top_level(value: str, fail: Callable[[str], NoReturn]) -> list[str]:
     if quote:
         fail("has an unclosed quote")
     if depth:
-        fail("has an unbalanced parenthesis in a list of tools")
+        fail(_UNBALANCED)
     bounds = [-1, *commas, len(value)]
     parts = [value[start + 1 : end] for start, end in pairwise(bounds)]
     return [part.strip() for part in parts if part.strip()]
@@ -246,12 +258,16 @@ def _strip_comment(text: str, fail: Callable[[str], NoReturn] | None = None) -> 
     """Drop a YAML comment: a `#` at the start or after whitespace, outside quotes.
 
     A list of tools passes `fail` so an interior quote that hides or reveals the comment two ways is
-    rejected. A scalar is never split, so its quotes are read only where a value begins.
+    rejected, and so is a parenthesis left open or closed without an opener: this is the only check a
+    block-list item gets, since its entries are never split. A scalar is never split, so its quotes
+    are read only where a value begins.
     """
     if fail is None:
         _, comment, _, _ = _scan_flow(text, comments=True, eager=False)
     else:
-        _, comment, _, _ = _scan_unambiguous(text, comments=True, fail=fail)
+        _, comment, _, depth = _scan_unambiguous(text, comments=True, fail=fail)
+        if depth:
+            fail(_UNBALANCED)
     return (text if comment is None else text[:comment]).rstrip()
 
 

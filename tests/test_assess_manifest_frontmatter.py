@@ -307,3 +307,55 @@ def test_a_block_list_item_with_an_ambiguous_quote_fails_collection(tmp_path: Pa
 def test_an_ambiguous_quote_in_disallowed_tools_fails_instead_of_removing_task(tmp_path: Path) -> None:
     message = rejected(tmp_path, 'tools: [Read, Task]\ndisallowedTools: Bash(echo "), Task, Read(")\n')
     assert "frontmatter" in message
+
+
+# --- a `)` with no matching `(` fails instead of being ignored (Codex L1) ---------------------
+
+_UNMATCHED_CLOSE_FORMS = [
+    "{key}: [Bash(echo)), Task]\n",  # flow list
+    "{key}: [Bash(echo)), Task] # c\n",
+    "{key}: Bash(echo)), Task\n",  # inline comma list
+    "{key}: Bash(echo)), Task # c\n",
+    "{key}: Bash), Task\n",  # bare name followed by a stray parenthesis
+    "{key}: [Read, Bash)]\n",
+    "{key}: 'Bash(echo)), Task'\n",  # whole value quoted, split after unquoting
+    "{key}:\n  - Bash(echo))\n  - Task\n",  # block list
+    "{key}:\n  - Bash(echo)) # c\n  - Task\n",
+    "{key}:\n  - Task\n  - Bash)\n",
+]
+
+
+@pytest.mark.parametrize("form", _UNMATCHED_CLOSE_FORMS)
+@pytest.mark.parametrize("key", ["tools", "disallowedTools"])
+def test_a_close_parenthesis_without_an_open_one_fails_collection(tmp_path: Path, key: str, form: str) -> None:
+    message = rejected(tmp_path, form.format(key=key))
+    assert "frontmatter" in message and "parenthesis" in message
+
+
+@pytest.mark.parametrize("form", ["{key}: [Bash(echo, Task]\n", "{key}:\n  - Bash(echo\n  - Task\n"])
+@pytest.mark.parametrize("key", ["tools", "disallowedTools"])
+def test_an_unclosed_open_parenthesis_fails_in_every_list_form(tmp_path: Path, key: str, form: str) -> None:
+    assert "parenthesis" in rejected(tmp_path, form.format(key=key))
+
+
+@pytest.mark.parametrize(
+    "tools_text",
+    [
+        '["Bash(echo))", Task]',  # a quoted entry may hold anything: quoting is the documented escape
+        "[Bash(a (b)), Task]",  # nested parentheses balance
+        "[Bash(git commit -m x), Task]",
+    ],
+)
+def test_balanced_or_quoted_parentheses_are_still_accepted(tmp_path: Path, tools_text: str) -> None:
+    result = agent(tmp_path, f"tools: {tools_text}\n")
+    assert result["tools"][-1] == "Task" and result["can_spawn_subagents"] is True
+
+
+def test_a_quoted_block_list_entry_may_hold_an_unmatched_parenthesis(tmp_path: Path) -> None:
+    result = agent(tmp_path, 'tools:\n  - "Bash(echo))"\n  - Task\n')
+    assert result["tools"] == ["Bash", "Task"]
+
+
+def test_a_parenthesis_in_a_comment_or_a_scalar_is_not_a_tool_entry_problem(tmp_path: Path) -> None:
+    assert agent(tmp_path, "tools: [Read, Task] # note)\n")["tools"] == ["Read", "Task"]
+    assert _parse_frontmatter("---\nname: reviewer)\n---\n", "x.md") == {"name": "reviewer)"}
