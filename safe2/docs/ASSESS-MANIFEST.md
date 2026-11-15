@@ -156,11 +156,15 @@ No manifest is written, and the bundle is kept, when:
   `disallowedTools`, `permissionMode`, `memory`), something the collector cannot read
   unambiguously: a value continued on the next line, a block scalar (`|`, `>`), a flow map,
   a nested list, a tag, anchor or alias, an unclosed quote or bracket, an unbalanced
-  parenthesis in a tool entry, text after a quoted value, a repeated key, or a `tools` entry
-  that is not a readable tool name. A quote opens a quoted value only where a list item
-  begins; inside a plain entry such as `Bash(echo "*)` it is a literal character, so it
-  never hides a later tool (`tools: [Bash(echo "*), Task]` keeps both `Bash` and `Task`).
-  Inline `#` comments (outside quotes) are removed first. Other keys are not parsed. The frontmatter
+  parenthesis in a tool entry, text after a quoted value, a repeated key, a `tools` entry
+  that is not a readable tool name, or a quote inside an unquoted tool entry that can be
+  read two ways. For example `tools: [Bash(echo "*), Task]` read one way drops `Task`, and
+  `tools: Bash(echo "), SECRET, Read(")` read the other way turns argument text into tool
+  names that would reach the manifest, so both fail instead of guessing; quote the whole
+  entry (`"Bash(echo \"*)"`) to keep it. A quote inside an unquoted entry is accepted only
+  when both readings give the same entries (`Bash(git commit -m "msg")` is fine). This also
+  rejects a stray apostrophe in an unquoted tool entry. Inline `#` comments (outside quotes)
+  are removed first. Other keys are not parsed. The frontmatter
   reader is hand-written (no YAML dependency), so it rejects rather than guesses: a dropped
   tool or permission mode would report `can_spawn_subagents` or `runs_unattended` as false.
   `tools:` with no value is read as not declared (the agent inherits), not as no tools;
