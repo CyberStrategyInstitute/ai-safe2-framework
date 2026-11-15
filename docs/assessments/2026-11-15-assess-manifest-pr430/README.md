@@ -64,7 +64,7 @@ manifest. Rotate the Tarvin key if it may have been exposed (`as2k_...`), throug
 **Local clean-up.** Evidence bundles are written under the chosen `--output-dir`; delete the
 bundle, and any leftover `.aisafe2-project-manifest-1.json.*.tmp`, by hand.
 
-**Verification after any rollback.** `safe2 assess . ` still runs without `--manifest`;
+**Verification after any rollback.** `safe2 assess .` still runs without `--manifest`;
 `python -m pytest tests/ scanner/tests/`; `python scripts/check_agent_manifest.py`.
 
 Decision owner for rollback: _(blank: Owner of Record)_.
