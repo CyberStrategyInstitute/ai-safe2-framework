@@ -323,7 +323,9 @@ def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
     closed = False
     for line in lines[1:_MAX_FRONTMATTER_LINES]:
         stripped = line.strip()
-        if stripped == "---":
+        # Only a `---` at column 0 closes the block; an indented one is content (for example a
+        # markdown rule inside `description: |`) and ending there would drop every later field.
+        if line.rstrip() == "---":
             closed = True
             break
         if not stripped or stripped.startswith("#"):

@@ -281,3 +281,29 @@ def test_the_closing_delimiter_on_line_200_is_accepted_and_on_line_201_is_reject
 def test_an_apostrophe_in_a_scalar_value_is_not_rejected_and_its_comment_is_removed() -> None:
     parsed = _parse_frontmatter("---\nname: it's the reviewer # SENTINELCOMMENT\n---\n", "x.md")
     assert parsed == {"name": "it's the reviewer"}
+
+
+# --- only a `---` at column 0 closes the frontmatter ------------------------------------------
+
+
+def test_an_indented_rule_inside_a_block_scalar_does_not_close_the_frontmatter() -> None:
+    text = "---\nname: a\ndescription: |\n  intro\n  ---\n  more\ntools: Task\npermissionMode: bypassPermissions\n---\nbody\n"
+    parsed = _parse_frontmatter(text, "x.md")
+    assert parsed == {"name": "a", "tools": ["Task"], "permissionMode": "bypassPermissions"}
+
+
+def test_an_indented_rule_after_a_read_key_fails_instead_of_dropping_later_fields(tmp_path: Path) -> None:
+    assert "frontmatter" in rejected(tmp_path, "tools: [Read]\n  ---\npermissionMode: bypassPermissions\n")
+
+
+def test_a_closing_delimiter_with_trailing_whitespace_still_closes() -> None:
+    assert _parse_frontmatter("---\ntools: Task\n---  \nbody\n", "x.md") == {"tools": ["Task"]}
+
+
+def test_a_block_list_item_with_an_ambiguous_quote_fails_collection(tmp_path: Path) -> None:
+    assert "frontmatter" in rejected(tmp_path, 'tools:\n  - Bash(echo "*)\n  - Task\n')
+
+
+def test_an_ambiguous_quote_in_disallowed_tools_fails_instead_of_removing_task(tmp_path: Path) -> None:
+    message = rejected(tmp_path, 'tools: [Read, Task]\ndisallowedTools: Bash(echo "), Task, Read(")\n')
+    assert "frontmatter" in message
