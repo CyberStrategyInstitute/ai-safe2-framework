@@ -45,6 +45,7 @@ _PINNED_DIGEST = re.compile(r"(?:@sha256:|(?<![A-Za-z0-9])sha256:)([0-9a-f]{64})
 _TOOL_NAME = re.compile(r"^[A-Za-z0-9_.:*\-]{1,200}$")
 _EVENT_NAME = re.compile(r"^[A-Za-z][A-Za-z0-9_.-]{0,63}$")
 _FRONTMATTER_KEYS = {"name", "tools", "disallowedTools", "permissionMode", "memory"}
+_TOOL_LIST_KEYS = {"tools", "disallowedTools"}
 _SECRET_TERMS = ("token", "secret", "password", "credential", "api_key", "apikey", "api-key")
 _READ_KINDS = {"agent_definition", "mcp_configuration", "harness_configuration", "environment_file"}
 # Doctor's known user-level locations: (home directory, file, kind). Directories are listed
@@ -144,15 +145,14 @@ def _canonical(value: object) -> bytes:
     return _text_bytes(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
 
 
-def _scan_flow(text: str, *, comments: bool) -> tuple[list[int], int | None, str, int]:
+def _scan_flow(text: str, *, comments: bool, eager: bool) -> tuple[list[int], int | None, str, int]:
     """Scan one value for top-level commas and, if asked, a comment.
 
-    A quote opens a quoted string only where a list item begins (the start of the value, or after a
-    top-level comma or `[`). Inside a plain item, such as `Bash(echo "*)`, a quote is a literal
-    character: treating it as an opening quote would hide every later comma and merge the later
-    tools into one item. Commas inside parentheses do not split. Returns the top-level comma
-    positions, the index of a comment (a `#` at the start or after whitespace, outside quotes),
-    the quote left open, and the parenthesis depth left open.
+    A quote always opens a quoted string where a list item begins (the start of the value, or after
+    a top-level comma or `[`). Inside a plain item such as `Bash(echo "*)` it is a literal character
+    unless `eager`, which makes every quote open a string. Commas inside parentheses do not split.
+    Returns the top-level comma positions, the index of a comment (a `#` at the start or after
+    whitespace, outside quotes), the quote left open, and the parenthesis depth left open.
     """
     commas: list[int] = []
     quote = ""
@@ -169,7 +169,7 @@ def _scan_flow(text: str, *, comments: bool) -> tuple[list[int], int | None, str
                     index += 1
                 else:
                     quote = ""
-        elif character in "'\"" and item_start:
+        elif character in "'\"" and (item_start or eager):
             quote, item_start = character, False
         elif comments and character == "#" and (index == 0 or text[index - 1] in " \t"):
             return commas, index, "", depth
@@ -188,13 +188,29 @@ def _scan_flow(text: str, *, comments: bool) -> tuple[list[int], int | None, str
     return commas, None, quote, depth
 
 
+def _scan_unambiguous(
+    text: str, *, comments: bool, fail: Callable[[str], NoReturn]
+) -> tuple[list[int], int | None, str, int]:
+    """Scan twice, with an interior quote read as a literal and as an opening quote.
+
+    `Bash(echo "*), Task` read one way drops `Task`; `Bash(echo "), PRIVATE_MARKER, Read(")` read
+    the other way turns argument text into tool names. Nothing in the text says which was meant, so
+    a split is accepted only when both readings agree; otherwise collection fails.
+    """
+    literal = _scan_flow(text, comments=comments, eager=False)
+    if literal != _scan_flow(text, comments=comments, eager=True):
+        fail("has a quote inside an unquoted entry that can be read two ways; quote the whole entry")
+    return literal
+
+
 def _split_top_level(value: str, fail: Callable[[str], NoReturn]) -> list[str]:
     """Split on commas outside parentheses and quoted items, so a specifier or quoted name never splits.
 
-    Quote or parenthesis state still open at the end is unresolved: the remaining items would be
-    merged into one and silently dropped, so it fails instead of guessing. `#` is not a comment here.
+    Ambiguous quotes and quote or parenthesis state still open at the end fail instead of being
+    guessed: the remaining items would be merged into one and silently dropped, or an argument
+    would be split into tool names. `#` is not a comment here.
     """
-    commas, _, quote, depth = _scan_flow(value, comments=False)
+    commas, _, quote, depth = _scan_unambiguous(value, comments=False, fail=fail)
     if quote:
         fail("has an unclosed quote")
     if depth:
@@ -226,9 +242,16 @@ def _bare_rule_name(value: object) -> str | None:
     return _tool_name(value)
 
 
-def _strip_comment(text: str) -> str:
-    """Drop a YAML comment: a `#` at the start or after whitespace, outside quotes."""
-    _, comment, _, _ = _scan_flow(text, comments=True)
+def _strip_comment(text: str, fail: Callable[[str], NoReturn] | None = None) -> str:
+    """Drop a YAML comment: a `#` at the start or after whitespace, outside quotes.
+
+    A list of tools passes `fail` so an interior quote that hides or reveals the comment two ways is
+    rejected. A scalar is never split, so its quotes are read only where a value begins.
+    """
+    if fail is None:
+        _, comment, _, _ = _scan_flow(text, comments=True, eager=False)
+    else:
+        _, comment, _, _ = _scan_unambiguous(text, comments=True, fail=fail)
     return (text if comment is None else text[:comment]).rstrip()
 
 
@@ -310,9 +333,9 @@ def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
                 continue
             if current in inline or not (stripped.startswith("- ") or stripped == "-"):
                 fail(f"`{current}` continues on another line")
-            if current not in {"tools", "disallowedTools"}:
+            if current not in _TOOL_LIST_KEYS:
                 fail(f"`{current}` is given a list")
-            item = _unquote(_strip_comment(stripped[1:]), fail)
+            item = _unquote(_strip_comment(stripped[1:], fail if current in _TOOL_LIST_KEYS else None), fail)
             if item:
                 values[current].append(item)
             continue
@@ -322,8 +345,8 @@ def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
             continue
         if current in values:
             fail(f"repeats `{current}`")
-        value = _strip_comment(value).strip()
-        if current in {"tools", "disallowedTools"}:
+        value = _strip_comment(value, fail if current in _TOOL_LIST_KEYS else None).strip()
+        if current in _TOOL_LIST_KEYS:
             values[current] = item_list(value) if value else []
             if value:
                 inline.add(current)

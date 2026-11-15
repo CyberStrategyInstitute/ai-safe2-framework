@@ -160,42 +160,58 @@ def test_explicit_empty_tools_list_still_means_no_tools(tmp_path: Path) -> None:
     assert result["tools"] == [] and result["can_spawn_subagents"] is False
 
 
-# --- a quote inside a plain specifier never swallows later tools (Codex M1 / Greptile P1) -------
+# --- a quote inside a plain specifier is read one way or the collection fails ----------------
+#
+# Inside a plain entry such as `Bash(echo "*)` a quote is ambiguous: as a literal it ends the
+# entry at the first `)`, as an opening quote it swallows every later comma. One reading drops a
+# later tool (`Task`), the other turns argument text into tool names. A split is accepted only
+# when both readings agree (Codex M1 / Greptile P1 at 53b1b03 and 985501d).
 
 
 @pytest.mark.parametrize(
     "tools_text",
     [
-        'tools: [Bash(echo "*), Task]\n',  # the reviewed input: a quote inside a plain specifier
-        'tools: [Bash(echo "*), Task] # c\n',
-        'tools: Bash(echo "*), Task\n',
-        'tools: Bash(echo "*), Task # c\n',
-        "tools: [Bash(echo '*), Task]\n",
-        'tools: [Bash(echo "a, b), Task]\n',  # a comma inside the parentheses still does not split
+        'tools: [Read, Bash(git commit -m "msg"), Task]\n',  # balanced quotes: both readings agree
+        'tools: Read, Bash(git commit -m "msg"), Task\n',
         'tools: [Bash(echo ")"), Task]\n',
+        'tools: [Bash(echo \'x\'), Task] # c\n',
         'tools: ["Bash(echo \\"*)", Task]\n',  # a really quoted item with an escaped quote
-        "tools: 'Bash(echo # x), Task'\n",  # a quoted list: the splitter must not read `#` as a comment
-        'tools:\n  - Bash(echo "*)\n  - Task\n',
+        "tools: 'Bash(echo # x), Task'\n",  # a quoted list: `#` is not a comment inside it
+        'tools: ["Bash(a, b)", Task]\n',
+        'tools:\n  - Bash(echo "x")\n  - Task\n',  # block list items are separate lines
     ],
 )
-def test_a_quote_inside_a_plain_tool_specifier_keeps_the_later_tools(tmp_path: Path, tools_text: str) -> None:
+def test_a_quote_inside_a_plain_tool_specifier_is_kept_only_when_it_reads_one_way(
+    tmp_path: Path, tools_text: str
+) -> None:
     result = agent(tmp_path, tools_text)
-    assert result["tools"] == ["Bash", "Task"]
+    assert result["tools"][-1] == "Task" and "Bash" in result["tools"]
     assert result["can_spawn_subagents"] is True
 
 
 @pytest.mark.parametrize(
     "construct",
     [
+        'tools: [Bash(echo "*), Task]\n',  # Codex M1 / Greptile P1: Task would be swallowed
+        'tools: [Bash(echo "*), Task] # c\n',
+        'tools: Bash(echo "*), Task\n',
+        'tools: Bash(echo "*), Task # c\n',
+        "tools: [Bash(echo '*), Task]\n",
+        'tools: [Bash(echo "a, b), Task]\n',
+        'tools: Bash(echo "), PRIVATE_MARKER, Read(")\n',  # Greptile P1 @ 985501d: argument text as tools
+        'tools: [Bash(echo "), PRIVATE_MARKER, Read(")]\n',
+        'tools: Bash("), PRIVATE_MARKER, Read(")\n',  # quote right after the parenthesis
+        'tools: Bash(echo x"), PRIVATE_MARKER, Read("y)\n',  # quote right after a letter
         "tools: [Bash(echo, Task]\n",  # parenthesis never closes: Task would merge into Bash
         "tools: Bash(echo, Task\n",
-        'tools: [Bash(a "(", Task]\n',  # a quoted parenthesis is ambiguous inside a plain specifier
+        'tools: [Bash(a "(", Task]\n',
         "tools: ['Bash(echo, Task]\n",  # quote that opens an item and never closes
         'tools: [Read, "Bash(echo, Task]\n',
         "tools: 'Bash(echo, Task'\n",
+        "tools: [Bash(echo it's), Task]\n",  # a stray apostrophe is rejected too (documented limit)
     ],
 )
-def test_an_unresolved_quote_or_parenthesis_in_tools_fails_collection(tmp_path: Path, construct: str) -> None:
+def test_an_ambiguous_quote_or_parenthesis_in_tools_fails_collection(tmp_path: Path, construct: str) -> None:
     assert "frontmatter" in rejected(tmp_path, construct)
 
 
@@ -212,6 +228,8 @@ _HEADS = [
     'Bash(a, "b")',
     'Bash(a "b", c)',
     "Bash(a # b)",
+    'Bash(echo "k")',
+    'Bash("k")',
 ]
 _WRAPS = ["[{}, Task]", "{}, Task", "[{}, Task] # c", "[ {} , Task ]", "{}, Task # c"]
 
@@ -227,6 +245,28 @@ def test_a_trailing_task_is_never_dropped_silently(head: str, wrap: str) -> None
     assert "Task" in parsed["tools"], parsed["tools"]
 
 
+_ARGUMENT_HEADS = [
+    'Bash(echo "), PRIVATE_MARKER, Read(")',
+    'Bash("), PRIVATE_MARKER, Read(")',
+    'Bash(echo x"), PRIVATE_MARKER, Read("y)',
+    "Bash(echo '), PRIVATE_MARKER, Read(')",
+    'Bash(a "b), PRIVATE_MARKER, Read(c")',
+    "Bash(a, PRIVATE_MARKER)",
+    'Bash(a "), PRIVATE_MARKER, "z")',
+]
+
+
+@pytest.mark.parametrize("wrap", ["[{}, Task]", "{}, Task", "[{}]", "{}", "{} # c"])
+@pytest.mark.parametrize("head", _ARGUMENT_HEADS)
+def test_text_inside_a_specifier_never_becomes_a_tool_name(head: str, wrap: str) -> None:
+    text = f"---\ntools: {wrap.format(head)}\n---\n"
+    try:
+        parsed = _parse_frontmatter(text, "x.md")
+    except ManifestCollectionError:
+        return
+    assert "PRIVATE_MARKER" not in parsed["tools"], parsed["tools"]
+
+
 def test_the_closing_delimiter_on_line_200_is_accepted_and_on_line_201_is_rejected() -> None:
     def document(closing_line: int) -> str:
         filler = "".join(f"# filler {index}\n" for index in range(closing_line - 3))
@@ -236,3 +276,8 @@ def test_the_closing_delimiter_on_line_200_is_accepted_and_on_line_201_is_reject
     assert _parse_frontmatter(document(200) + "tools: Task\n", "x.md") == {"name": "a"}
     with pytest.raises(ManifestCollectionError, match="closing"):
         _parse_frontmatter(document(201), "x.md")
+
+
+def test_an_apostrophe_in_a_scalar_value_is_not_rejected_and_its_comment_is_removed() -> None:
+    parsed = _parse_frontmatter("---\nname: it's the reviewer # SENTINELCOMMENT\n---\n", "x.md")
+    assert parsed == {"name": "it's the reviewer"}
