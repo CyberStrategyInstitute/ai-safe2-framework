@@ -10,7 +10,7 @@
 | Item | State |
 |---|---|
 | Subject | PR #430, branch `csi/safe2-assess-pro`, 26 files changed against `main` (CLI `safe2 assess --manifest`, collector, post client, schema, docs, tests) |
-| Delivery shape / risk | `bounded` delivery shape, **critical** route (it can send project facts to a hosted service) |
+| Delivery shape / risk | Delivery shape: not determined here (no shape is declared in the PR body; `safe2 dev plan` was not run). Risk: treated as **critical** because the Codex I1 finding used that route; it can send project facts to a hosted service |
 | Human design approval | **Not recorded.** Pending. |
 | Final revision-bound `safe2 dev receipt` | **Not produced.** See [Receipt status](#receipt-status). |
 | Owner of Record decision | _(blank: for Vincent to fill in)_ |
@@ -18,8 +18,15 @@
 
 ## 1. Security review of the PR diff (self-assessment)
 
-Scope: `git diff origin/main..<assessed revision>`. Method: read of the changed modules and their
-tests; no dynamic or adversarial testing beyond the repository's own test suite. Plane:
+Scope: `git diff origin/main..<assessed revision>`. Method, stated exactly: I read
+`safe2/manifest/collect.py` (frontmatter and tool-list parsing, in full detail), `safe2/manifest/post.py`
+(signatures, endpoint, redirect, timeout, redaction and retry code), the `safe2/secure_io.py` diff, the
+top-level `safe2/docs/ASSESS-MANIFEST.md`, and the tests touched by this update. I did **not** review line
+by line: `safe2/commands/assess.py` (167 lines added, 11 removed), `safe2/contracts.py`,
+`safe2/manifest/heuristics.py`, `safe2/manifest/workflow.py`, the vendored schema, the heuristics data
+file, or most of the other tests. The table below therefore repeats the PR's own documented claims and
+the test names that exercise them, except where it says otherwise. No dynamic or adversarial testing
+beyond the repository's own test suite. Plane:
 `agent-to-tool` / local file collection, plus one outbound `--post` request to a hosted
 endpoint. Evidence from one plane does not validate another.
 
@@ -47,11 +54,15 @@ The feature is additive and opt-in. Nothing runs unless a user passes `--manifes
 **Before merge (PR still draft).** Do nothing to `main`. Stop by leaving the PR draft or closing it.
 Reverting is deleting the branch; no deployed artifact exists.
 
-**After merge, before a release.** Revert the merge commit with a normal `git revert -m 1 <merge-sha>`
-through a new PR. The change touches `safe2/commands/assess.py`, `safe2/cli.py`,
+**After merge, before a release.** Revert the merge (or squash) commit through a new PR
+(`git revert -m 1 <sha>` for a merge commit, plain `git revert <sha>` for a squash commit). The change touches `safe2/commands/assess.py`, `safe2/cli.py`,
 `safe2/contracts.py`, `safe2/discovery/assets.py`, `safe2/secure_io.py`, and adds
-`safe2/manifest/`, one schema, one heuristics file, docs, and tests. The only edits to existing
-behaviour are the new options and a `PublishedCleanupError` subclass of `OSError`.
+`safe2/manifest/`, one schema, one heuristics file, docs, and tests. Edits to existing modules, checked
+against `git diff origin/main`: the `assess` command (registration renamed from `assess_project` to
+`assess_command`, plus the new options; its body diff was not reviewed line by line), an optional
+`extra_classifier` parameter in `safe2/discovery/assets.py` (default off, so existing inventories are unchanged),
+one schema-registry entry in `safe2/contracts.py`, a `PublishedCleanupError` subclass of `OSError` in
+`safe2/secure_io.py`, and doc paragraphs. Anything else changed in `assess.py` is not confirmed here.
 
 **After a CLI release.** Publish a fixed or reverted version through the normal release owner; do
 not delete or overwrite a published package version. Users can stop using the feature without a
@@ -74,7 +85,7 @@ Decision owner for rollback: _(blank: Owner of Record)_.
 Bound to the code revision below. Later commits that only add this evidence file do not change
 code; verify with `git diff <code revision>..HEAD --name-only`.
 
-Code revision assessed: `341cc45` (`341cc45`, docs commit on top of code commit `43963bb`). Environment: local
+Code revision assessed: `341cc45` (a docs commit on top of code commit `43963bb`). Environment: local
 Linux, Python 3.13 venv; hosted CI results are separate and recorded in the PR body, not here.
 
 | Check | Command | Outcome |
@@ -82,7 +93,7 @@ Linux, Python 3.13 venv; hosted CI results are separate and recorded in the PR b
 | Full suite | `python -m pytest tests/ scanner/tests/ -q` | 1626 passed, 8 skipped, exit 0 (the skips are outside the manifest tests, not investigated individually) |
 | Manifest tests | `python -m pytest tests/test_assess_manifest_*.py -q -rs` | 480 passed, 0 skipped |
 | Frontmatter tests | `python -m pytest tests/test_assess_manifest_frontmatter.py -q` | 203 passed (174 at `6aa07ef` + 29 new parametrized cases) |
-| Red at `6aa07ef` | same file with the new tests | 22 of the 29 new cases failed before the fix (unmatched `)` accepted in 20 cases; unclosed `(` in a block-list item accepted in 2). One further failure was my own mistaken positive case, removed before the fix. The other 7 new cases are must-accept guards and passed |
+| Red at `6aa07ef` | same file with the new tests | 22 of the 29 new cases failed before the fix (unmatched `)` accepted in 20 cases; unclosed `(` in a block-list item accepted in 2). One further failure was my own mistaken positive case, removed before the fix. The other 7 passed before the fix: 5 are must-accept guards, and 2 are flow-list `[Bash(echo, Task]` negatives that already failed closed |
 | Finding 1 mutation | neutralise `if not closed:`, run 3 closing-delimiter tests, restore | 3 failed, then 3 passed after `git checkout` |
 | CI lint mirror | `ruff check --select E9,F63,F7,F82 safe2/ tests/ scripts/` | passed |
 | Manifest checks | `scripts/check_agent_manifest.py`, `check_component_versions.py`, `check_repo_ux.py` | passed |
@@ -97,7 +108,7 @@ the hosted service accepts the manifest, nor that the heuristics are correct.
 | Finding | Source | Result |
 |---|---|---|
 | `_parse_frontmatter` returns partial results when the closing `---` is past the 200-line limit | Greptile P1, `collect.py:330` | **Already fixed before this update**, in `672d4c9` (comment was raised on `31680d2`). Verified at `6aa07ef` by neutralising the `if not closed:` raise: three tests fail (`test_frontmatter_past_the_line_limit_fails_closed_instead_of_dropping_fields`, `test_frontmatter_that_never_closes_fails_closed`, `test_the_closing_delimiter_on_line_200_is_accepted_and_on_line_201_is_rejected`); restored, all pass. No code change and no new test needed; the existing tests cover a long `description` pushing `tools:`/`permissionMode:` past the limit and a missing delimiter. |
-| `_scan_flow` ignores an unmatched `)` | Codex L1, `collect.py:182-188` | **Fixed** in `43963bb`, docs in `341cc45`. 29 new tests, written red first (22 failed at `6aa07ef`; the other 7 are must-accept guards), green after. |
+| `_scan_flow` ignores an unmatched `)` | Codex L1, `collect.py:182-188` | **Fixed** in `43963bb`, docs in `341cc45`. 29 new tests, written red first (22 failed at `6aa07ef`; of the other 7, 5 are must-accept guards and 2 were already rejected), green after. |
 | Missing human design-approval record and revision-bound receipt | Codex I1 | **Drafted here**, labelled BOT-DRAFTED. Owner decision left blank. Receipt pending. |
 
 Design calls for finding 2:
