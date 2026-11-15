@@ -17,6 +17,7 @@ from collections import Counter
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from itertools import pairwise
 from pathlib import Path, PurePosixPath
 from typing import Any, NoReturn
 from urllib.parse import urlsplit
@@ -143,26 +144,63 @@ def _canonical(value: object) -> bytes:
     return _text_bytes(json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False))
 
 
-def _split_top_level(value: str) -> list[str]:
-    """Split on commas outside parentheses and quotes, so a specifier or quoted name never splits."""
-    parts: list[str] = []
-    depth, start = 0, 0
+def _scan_flow(text: str, *, comments: bool) -> tuple[list[int], int | None, str, int]:
+    """Scan one value for top-level commas and, if asked, a comment.
+
+    A quote opens a quoted string only where a list item begins (the start of the value, or after a
+    top-level comma or `[`). Inside a plain item, such as `Bash(echo "*)`, a quote is a literal
+    character: treating it as an opening quote would hide every later comma and merge the later
+    tools into one item. Commas inside parentheses do not split. Returns the top-level comma
+    positions, the index of a comment (a `#` at the start or after whitespace, outside quotes),
+    the quote left open, and the parenthesis depth left open.
+    """
+    commas: list[int] = []
     quote = ""
-    for index, character in enumerate(value):
+    depth = 0
+    item_start = True
+    index = 0
+    while index < len(text):
+        character = text[index]
         if quote:
-            if character == quote:
-                quote = ""
-            continue
-        if character in "'\"" and (index == 0 or value[index - 1] in " \t[,"):
-            quote = character
+            if character == "\\" and quote == '"':
+                index += 1
+            elif character == quote:
+                if quote == "'" and text[index + 1 : index + 2] == "'":
+                    index += 1
+                else:
+                    quote = ""
+        elif character in "'\"" and item_start:
+            quote, item_start = character, False
+        elif comments and character == "#" and (index == 0 or text[index - 1] in " \t"):
+            return commas, index, "", depth
+        elif character == "," and depth == 0:
+            commas.append(index)
+            item_start = True
         elif character == "(":
             depth += 1
+            item_start = False
         elif character == ")" and depth:
             depth -= 1
-        elif character == "," and depth == 0:
-            parts.append(value[start:index])
-            start = index + 1
-    parts.append(value[start:])
+            item_start = False
+        elif not (character in " \t" or (character == "[" and item_start)):
+            item_start = False
+        index += 1
+    return commas, None, quote, depth
+
+
+def _split_top_level(value: str, fail: Callable[[str], NoReturn]) -> list[str]:
+    """Split on commas outside parentheses and quoted items, so a specifier or quoted name never splits.
+
+    Quote or parenthesis state still open at the end is unresolved: the remaining items would be
+    merged into one and silently dropped, so it fails instead of guessing. `#` is not a comment here.
+    """
+    commas, _, quote, depth = _scan_flow(value, comments=False)
+    if quote:
+        fail("has an unclosed quote")
+    if depth:
+        fail("has an unbalanced parenthesis in a list of tools")
+    bounds = [-1, *commas, len(value)]
+    parts = [value[start + 1 : end] for start, end in pairwise(bounds)]
     return [part.strip() for part in parts if part.strip()]
 
 
@@ -190,21 +228,8 @@ def _bare_rule_name(value: object) -> str | None:
 
 def _strip_comment(text: str) -> str:
     """Drop a YAML comment: a `#` at the start or after whitespace, outside quotes."""
-    quote = ""
-    index = 0
-    while index < len(text):
-        character = text[index]
-        if quote:
-            if character == "\\" and quote == '"':
-                index += 1
-            elif character == quote:
-                quote = ""
-        elif character in "'\"" and (index == 0 or text[index - 1] in " \t[,"):
-            quote = character
-        elif character == "#" and (index == 0 or text[index - 1] in " \t"):
-            return text[:index].rstrip()
-        index += 1
-    return text.rstrip()
+    _, comment, _, _ = _scan_flow(text, comments=True)
+    return (text if comment is None else text[:comment]).rstrip()
 
 
 def _unquote(text: str, fail: Callable[[str], NoReturn]) -> str:
@@ -263,8 +288,8 @@ def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
             value = value[1:-1]
         elif value[:1] in "'\"":
             value = _unquote(value, fail)
-            return _split_top_level(value)
-        return [_unquote(part, fail) for part in _split_top_level(value)]
+            return _split_top_level(value, fail)
+        return [_unquote(part, fail) for part in _split_top_level(value, fail)]
 
     lines = text.removeprefix("\ufeff").splitlines()
     if not lines or lines[0].strip() != "---":
