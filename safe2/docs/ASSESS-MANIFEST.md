@@ -209,7 +209,7 @@ and checks that it equals the server's `schemas/aisafe2-project-manifest-1.json`
 | The key is sent to the wrong place | Fixed `https` endpoint; no redirects; plain `http` only for loopback in tests | A user who changes `HTTPS_PROXY` routes the request through that proxy |
 | File contents, prompts, secrets, arguments, or commands reach the manifest | Only names, flags, counts, digests; the schema rejects unknown keys; sentinel tests grep the manifest, bundle, notes, and output | A tool or agent **name** is sent as written, and a secret placed in a name would be sent |
 | A digest reveals a secret | The matched text is never kept | `config_files[].sha256` of a short `.env` is a SHA-256 of the whole file, so a low-entropy secret could be guessed offline |
-| A hostile server writes to the terminal | Server text is stripped of control characters and truncated | None known |
+| A hostile server writes to the terminal | Server text is stripped of C0/C1 control characters and truncated | Bidirectional-override and zero-width characters are not stripped |
 | The manifest is forged | None | The manifest is **unsigned**. The server trusts `generator.name`, so any client can claim to be the CLI |
 | A heuristic hides a gap | Unknown values are written unfavourably; incomplete collection fails closed | Heuristics can be wrong in either direction; they have not been reviewed |
 | Reading outside the project | Reads limited to the project and `doctor`'s user locations through the bounded reader; a test spies on every collector read | The existing assessment steps keep their own reads |
