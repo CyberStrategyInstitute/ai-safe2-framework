@@ -160,7 +160,8 @@ No manifest is written, and the bundle is kept, when:
   a nested list, a tag, anchor or alias, an unclosed quote or bracket, an unbalanced
   parenthesis in a tool entry (a `(` that never closes, or a `)` with no `(`, in an inline,
   flow-list or block-list entry of `tools` or `disallowedTools`; a `)` inside quotes is not
-  counted, so a quoted entry may hold one), text after a quoted value, a repeated key, a `tools` entry
+  counted, so a quoted entry may hold one), text after a quoted value, a repeated key, a read key
+  written without a `:` (`tools` alone on a line, even before a list), a `tools` entry
   that is not a readable tool name, or a quote inside an unquoted tool entry that can be
   read two ways. For example `tools: [Bash(echo "*), Task]` read one way drops `Task`, and
   `tools: Bash(echo "), SECRET, Read(")` read the other way turns argument text into tool
