@@ -46,13 +46,31 @@ def read_regular_bounded(path: Path, *, limit: int) -> bytes:
         os.close(descriptor)
 
 
+class PublishedCleanupError(OSError):
+    """The file was published at `path`, but its staging hard link could not be removed.
+
+    Callers must treat the output as written: the content is in place and complete. Only the
+    leftover `temporary` name remains to be cleaned up.
+    """
+
+    def __init__(self, path: Path, temporary: Path, cause: OSError) -> None:
+        super().__init__(f"{path} was written, but the staging file {temporary} could not be removed: {cause}")
+        self.path = path
+        self.temporary = temporary
+
+
 def write_new_atomic(path: Path, body: bytes, *, mode: int = 0o600) -> None:
-    """Durably stage bytes and publish them at a new path without overwriting."""
+    """Durably stage bytes and publish them at a new path without overwriting.
+
+    Raises PublishedCleanupError (an OSError) when publication succeeded and only removing the
+    staging link failed, so a caller can tell that apart from a write that never happened.
+    """
     reject_symlink_ancestry(path.parent)
     path.parent.mkdir(parents=True, exist_ok=True)
     reject_symlink_ancestry(path.parent)
     temporary = path.with_name(f".{path.name}.{secrets.token_hex(16)}.tmp")
     descriptor: int | None = None
+    published = False
     try:
         descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, mode)
         with os.fdopen(descriptor, "wb", closefd=False) as handle:
@@ -65,6 +83,7 @@ def write_new_atomic(path: Path, body: bytes, *, mode: int = 0o600) -> None:
             os.link(temporary, path)
         except FileExistsError as exc:
             raise FileExistsError(f"output already exists: {path}") from exc
+        published = True
     finally:
         if descriptor is not None:
             os.close(descriptor)
@@ -72,3 +91,7 @@ def write_new_atomic(path: Path, body: bytes, *, mode: int = 0o600) -> None:
             temporary.unlink()
         except FileNotFoundError:
             pass
+        except OSError as exc:
+            if published:
+                raise PublishedCleanupError(path, temporary, exc) from exc
+            raise

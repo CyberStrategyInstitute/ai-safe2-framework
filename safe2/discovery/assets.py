@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -98,8 +99,13 @@ def inventory_assets(
     max_files: int = 50_000,
     hash_contents: bool = False,
     max_hash_bytes: int = 10_000_000,
+    extra_classifier: Callable[[Path, str], str | None] | None = None,
 ) -> dict[str, Any]:
-    """Inventory relevant filenames without reading file contents or following symlinks."""
+    """Inventory relevant filenames without reading file contents or following symlinks.
+
+    `extra_classifier` is consulted only for files the built-in classes do not recognize,
+    so a caller can add asset classes without changing any existing inventory.
+    """
     root = root.resolve()
     assets: list[dict[str, Any]] = []
     visited = 0
@@ -117,6 +123,8 @@ def inventory_assets(
                 continue
             relative = str(path.relative_to(root))
             asset_type = _classify(path, relative)
+            if not asset_type and extra_classifier is not None:
+                asset_type = extra_classifier(path, relative)
             if not asset_type:
                 continue
             try:

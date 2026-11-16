@@ -1,0 +1,69 @@
+{
+  "schema_version": "safe2.development-plan-source.v1",
+  "task_id": "pr430.assess-manifest",
+  "title": "safe2 assess --manifest: local project manifest and opt-in hosted post",
+  "outcome": "A user can write a validated names/flags/counts/digests manifest locally and, only on explicit request, post it to the hosted assessment service.",
+  "delivery_shape": "architectural",
+  "risk_tier": "critical",
+  "change_kind": "code",
+  "work_product": "reusable",
+  "acceptance_conditions": [
+    "--manifest stops before any read, write or send unless --scan-content and --inspect-config are given.",
+    "Collection opens no network connection; --post is the only outbound request and takes its key from the environment only.",
+    "Collection that cannot read a file or construct unambiguously fails closed and writes no manifest.",
+    "The manifest validates against the vendored schema before it is written and carries no file contents, prompts, secret values, command lines or tool arguments.",
+    "Rollback is deleting the branch before merge, or reverting the merge commit after it."
+  ],
+  "scope": {
+    "include": [
+      "safe2/commands/assess.py",
+      "safe2/cli.py",
+      "safe2/contracts.py",
+      "safe2/secure_io.py",
+      "safe2/discovery/assets.py",
+      "safe2/manifest/**",
+      "safe2/data/aisafe2-project-manifest-1.schema.json",
+      "safe2/data/manifest-heuristics-v1.json",
+      "safe2/docs/ASSESS-MANIFEST.md",
+      "tests/test_assess_manifest_*.py",
+      "tests/assess_manifest_support.py",
+      "tests/test_secure_io_publish.py",
+      "docs/assessments/2026-11-15-assess-manifest-pr430/**"
+    ],
+    "exclude": [
+      "hosted service deployment",
+      "manifest signing and key custody",
+      "package publication and release",
+      "heuristics human review",
+      ".github/workflows/**"
+    ]
+  },
+  "trust_boundaries": [
+    "customer project and user-level agent configuration files to the CLI (local reads)",
+    "CLI to hosted assessment endpoint over HTTPS (agent-to-tool plane, one opt-in POST)",
+    "SAFE2_MCP_PRO_KEY from the process environment to the one request"
+  ],
+  "assumptions": [
+    "This plan was produced retroactively, after the implementation, by the authoring agent (a bot); it is not a pre-implementation design record.",
+    "The only written design and threat model is safe2/docs/ASSESS-MANIFEST.md, drafted by the same agent."
+  ],
+  "unknowns": [
+    "Whether the deployed hosted service accepts the generator name 'safe2 assess --manifest'.",
+    "Manifest signing and key-custody owner.",
+    "Named human reviewer for manifest-heuristics-v1.json (status draft-unreviewed).",
+    "Whether an agent with no tools: line should be reported as inheriting built-in tools (see the PR 430 security-diff review, finding F2)."
+  ],
+  "design": {
+    "summary": "A separate safe2/manifest package collects facts through the bounded reader and writes notes first and the manifest last; a post client makes one fixed-endpoint POST with no redirects.",
+    "artifact": "safe2/docs/ASSESS-MANIFEST.md",
+    "approved": false
+  },
+  "threat_model_reference": "safe2/docs/ASSESS-MANIFEST.md",
+  "isolation": {
+    "strategy": "worktree",
+    "reference": "csi/safe2-assess-pro"
+  },
+  "testing": {
+    "mode": "tdd"
+  }
+}

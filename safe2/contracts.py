@@ -70,6 +70,9 @@ SCHEMAS = {
     "development-receipt-source-v1": "development-receipt-source-v1.schema.json",
     "development-receipt-v1": "development-receipt-v1.schema.json",
     "review-policy-v1": "review-policy-v1.schema.json",
+    # Hosted schema contract with a local CLI description update; the test pins and compares
+    # that single allowed metadata-field delta.
+    "aisafe2-project-manifest-1": "aisafe2-project-manifest-1.schema.json",
 }
 
 

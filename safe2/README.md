@@ -73,7 +73,7 @@ That workflow deliberately separates machine evidence from human authority.
 |---|---|---|
 | First useful local assessment | Preview, approve, then execute `safe2 start` | [Guided start](docs/GUIDED-START.md) |
 | First installation or upgrade | Self-check and offline acceptance | [Installation](docs/INSTALLATION-CHECK.md) · [Acceptance](docs/STRANGER-ACCEPTANCE.md) |
-| New repository or unfamiliar agent environment | Initialize, discover, then assess | [Operator workflow](docs/CLI-1.0-WORKFLOW.md) · [Unified assessment](docs/UNIFIED-ASSESSMENT.md) |
+| New repository or unfamiliar agent environment | Initialize, discover, then assess | [Operator workflow](docs/CLI-1.0-WORKFLOW.md) · [Unified assessment](docs/UNIFIED-ASSESSMENT.md) · [Hosted manifest (`--manifest`)](docs/ASSESS-MANIFEST.md) |
 | New skill, plugin, or copied agent instruction | Quarantine, native gate, optional SkillSpector evidence, human decision | [Skill-screening demo](docs/SKILL-SCREENING-DEMO.md) · [Lessons learned](docs/SKILL-SCREENING-SECOND-PASS.md) |
 | Agent says work is complete | Capture or import receipts, then audit explicit claims | [Task receipts](docs/TASK-RECEIPTS.md) · [Claim audit](docs/CLAIM-AUDIT.md) |
 | Several harnesses contributed to one task | Normalize attributed exports and evaluate operational truth | [Operational truth](docs/OPERATIONAL-TRUTH.md) · [Adapter SDK](docs/ADAPTER-SDK.md) |

@@ -1,0 +1,362 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mcp.agency-check.app/pro/schemas/aisafe2-project-manifest-1.json",
+  "title": "aisafe2-project-manifest/1",
+  "description": "DRAFT (UNREVIEWED). Project facts written by `safe2 assess --manifest` on the customer's machine and optionally posted to hosted Tarvin. Names, flags, counts and digests only: never file contents, prompts, secrets or secret values.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_version",
+    "generated_at",
+    "project",
+    "agents",
+    "mcp_servers"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^(sha256:)?[0-9a-f]{64}$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "harness",
+        "tools",
+        "can_spawn_subagents",
+        "persistent_memory",
+        "runs_unattended",
+        "sends_externally",
+        "moves_money",
+        "approval_points"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "harness": {
+          "description": "Agent runtime, e.g. claude-code, cursor, openai-agents-sdk, langgraph, crewai, autogen, n8n, custom.",
+          "type": "string",
+          "maxLength": 64
+        },
+        "definition_digest": {
+          "$ref": "#/$defs/sha256",
+          "description": "SHA-256 of the agent or sub-agent definition file."
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/name"
+          },
+          "maxItems": 500,
+          "description": "Tool names only."
+        },
+        "can_spawn_subagents": {
+          "type": "boolean"
+        },
+        "persistent_memory": {
+          "type": "boolean"
+        },
+        "runs_unattended": {
+          "type": "boolean"
+        },
+        "sends_externally": {
+          "type": "boolean"
+        },
+        "moves_money": {
+          "type": "boolean"
+        },
+        "approval_points": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "all_outputs",
+              "before_write",
+              "before_exec",
+              "before_send",
+              "before_payment",
+              "before_delete",
+              "before_apply",
+              "before_critical"
+            ]
+          },
+          "description": "Where a human approves. Empty means no human checkpoint."
+        },
+        "mandate_configured": {
+          "type": "boolean",
+          "description": "A delegation mandate (allowed scope, delegation hop limit and budget) is configured for the sub-agents this agent spawns. Required when can_spawn_subagents is true. False with spawning marks CP.9 missing."
+        },
+        "memory_provenance": {
+          "type": "boolean",
+          "description": "Every write to persistent memory records its source (provenance), so poisoned entries can be traced and removed. Required when persistent_memory is true. False with memory marks S1.5 missing."
+        },
+        "budget_ceiling_configured": {
+          "type": "boolean",
+          "description": "A spend or consumption ceiling is enforced outside the model for this agent. Required when moves_money is true. False with money movement marks MCP-8 missing."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "can_spawn_subagents": {
+                "const": true
+              }
+            },
+            "required": [
+              "can_spawn_subagents"
+            ]
+          },
+          "then": {
+            "required": [
+              "mandate_configured"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "persistent_memory": {
+                "const": true
+              }
+            },
+            "required": [
+              "persistent_memory"
+            ]
+          },
+          "then": {
+            "required": [
+              "memory_provenance"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "moves_money": {
+                "const": true
+              }
+            },
+            "required": [
+              "moves_money"
+            ]
+          },
+          "then": {
+            "required": [
+              "budget_ceiling_configured"
+            ]
+          }
+        }
+      ]
+    },
+    "mcp_server": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "transport",
+        "pinned_digest",
+        "auth_type"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "transport": {
+          "type": "string",
+          "enum": [
+            "stdio",
+            "streamable-http",
+            "sse"
+          ]
+        },
+        "pinned_digest": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Pinned package/binary digest, or null when unpinned (MCP-4)."
+        },
+        "auth_type": {
+          "type": "string",
+          "enum": [
+            "none",
+            "oauth",
+            "bearer",
+            "api_key",
+            "mtls"
+          ]
+        },
+        "config_digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  },
+  "properties": {
+    "manifest_version": {
+      "const": "aisafe2-project-manifest/1"
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "project_id": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "name": {
+          "$ref": "#/$defs/name"
+        }
+      }
+    },
+    "agents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/agent"
+      },
+      "maxItems": 200
+    },
+    "mcp_servers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/mcp_server"
+      },
+      "maxItems": 200
+    },
+    "hooks": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event"
+        ],
+        "properties": {
+          "event": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "command_digest": {
+            "$ref": "#/$defs/sha256"
+          }
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "type": "string",
+          "maxLength": 64,
+          "description": "e.g. default, acceptEdits, plan, bypassPermissions."
+        },
+        "allow_rules": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "deny_rules": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "digest": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "config_files": {
+      "description": "Config files the CLI scanned (MCP configs, agent definitions, settings, .env files), each with its SHA-256 and a count of secret-pattern matches. The secret itself is never sent.",
+      "type": "array",
+      "maxItems": 500,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "secret_findings"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "maxLength": 512,
+            "description": "Path relative to the project root."
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "secret_findings": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of secret-pattern matches in the file (API keys, tokens, private keys). A count only, never the value. Greater than 0 marks P1.T2.9 missing."
+          }
+        }
+      }
+    },
+    "ci_gate": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "last_result"
+          ],
+          "properties": {
+            "last_result": {
+              "type": "string",
+              "enum": [
+                "pass",
+                "fail",
+                "none"
+              ]
+            },
+            "run_id": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "collected_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
