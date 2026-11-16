@@ -12,7 +12,7 @@
 |---|---|
 | Subject | PR #430, branch `csi/safe2-assess-pro` |
 | Base | `origin/main` = `3dd7ecc8bc0f19a0c737f01a91b9bde68d0a20d3` (fetched 2026-11-15; the branch is linear on it, so it is also the merge base) |
-| Diff reviewed | `git diff origin/main...5ee98fe` (27 files; 16 under `safe2/**`, 10 tests, 1 evidence note), plus the three fixes made in this review (`1812025`, `879b022`, `0d87a0d`) |
+| Diff reviewed | `git diff origin/main...5ee98fe` (27 files; 16 under `safe2/**`, 10 tests, 1 evidence note), plus the commits made in this review (code fixes `1812025` and `879b022`; docs `0d87a0d` and `69e9768`) |
 | Plane | `agent-to-tool` (local file collection) plus one opt-in outbound request to a hosted endpoint. Evidence from one plane does not validate another. |
 
 How each file was reviewed. "Read" means read in full or, for existing files, every changed hunk
@@ -39,7 +39,7 @@ deserialization, **SP** subprocess/exec, **SC** secret handling, **FM** failure 
 
 | ID | Severity | Finding | Disposition |
 |---|---|---|---|
-| F1 | Low | `_parse_frontmatter` raised an uncaught `KeyError` (traceback, exit 1) for an agent file with a bare `tools` / `disallowedTools` line before a list item. No manifest was written (fail closed by accident), but the failure was not reported or handled. | **Fixed** `1812025`. Red first: 5 of 7 new unit cases and the 1 CLI case failed at `5ee98fe` (3 `KeyError`, 2 no failure); 2 must-accept guards passed. Now a named collection failure. |
+| F1 | Low | `_parse_frontmatter` raised an uncaught `KeyError` (traceback, exit 1) for an agent file with a bare `tools` / `disallowedTools` line before a list item. No manifest was written (fail closed by accident), but the failure was not reported or handled. | **Fixed** `1812025`. Red first: 5 of 7 new unit cases and the 1 CLI case failed at `5ee98fe` (re-run against the old module: 5 failed, 2 passed; the 2 that passed are must-accept guards). Now a named collection failure. |
 | F2 | Medium | An unrecognized `permissions.defaultMode` (for example `dontAsk`) ties with `bypassPermissions` in the mode ranking, and `max()` kept the first of the tie. With `settings.json` = `dontAsk` and `settings.local.json` = `bypassPermissions` the manifest reported mode `other` and `runs_unattended: false`: a favourable under-report that depended on file-name order. | **Fixed** `879b022`: a known mode wins the tie. Red first: 1 of 2 orderings failed at `5ee98fe` (the other is a guard). |
 | F3 | Medium | An agent with no `tools:` line reports `tools: []` and every capability flag false when no settings `allow` rules or MCP servers exist (reproduced). In Claude Code an omitted `tools:` inherits the main thread's tools, so such an agent can include `Task`, `Bash`, `Write`, or web tools. This conflicts with "when the CLI cannot tell, it writes the unfavourable value". Only the local notes record `tools_inherited: true`. | **Not changed. Owner decision.** Fixing it changes flag semantics, the heuristics file (`draft-unreviewed`) and the golden outputs, which is beyond a minimal review fix, and the correct inherited set should be confirmed against Claude Code. Needs the named heuristics reviewer (open decision 3). |
 | F4 | Low | `clean_text` strips only C0/C1 control characters. Bidirectional-override and zero-width characters in server text pass through to the terminal. The earlier note and `ASSESS-MANIFEST.md` said "None known". | **Not changed.** The server is the one the user authenticated to; residual only. The claim is corrected in `ASSESS-MANIFEST.md`. |
