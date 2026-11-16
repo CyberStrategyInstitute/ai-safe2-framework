@@ -740,7 +740,13 @@ def collect_manifest(
         raise ManifestCollectionError("more than 500 config files; narrow the project before using --manifest")
 
     order = list(heur.data["permission_mode_order"])
-    mode = max(settings_all.modes, key=lambda value: _mode_rank(value, order)) if settings_all.modes else None
+    # An unrecognized mode ranks as the most permissive known one; on that tie a known mode wins, so
+    # a `bypassPermissions` in one file is never hidden by an unrecognized mode in an earlier file.
+    mode = (
+        max(settings_all.modes, key=lambda value: (_mode_rank(value, order), value in order))
+        if settings_all.modes
+        else None
+    )
 
     def bare_names(rules: set[str]) -> set[str]:
         return {bare for rule in rules if (bare := _bare_rule_name(rule))}

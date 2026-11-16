@@ -79,6 +79,19 @@ def test_most_permissive_mode_across_settings_files_is_reported(tmp_path: Path) 
     assert collection.manifest["permissions"]["mode"] == "acceptEdits"
 
 
+@pytest.mark.parametrize("unknown_file, bypass_file", [("settings.json", "settings.local.json"), ("settings.local.json", "settings.json")])
+def test_an_unrecognized_mode_never_hides_a_bypass_mode_in_another_settings_file(
+    tmp_path: Path, unknown_file: str, bypass_file: str
+) -> None:
+    project = tmp_path / "p"
+    write(project, ".claude/agents/a.md", agent_file("a", "Read"))
+    write(project, f".claude/{unknown_file}", json.dumps({"permissions": {"defaultMode": "dontAsk"}}))
+    write(project, f".claude/{bypass_file}", json.dumps({"permissions": {"defaultMode": "bypassPermissions"}}))
+    collection = collect(project, tmp_path / "home")
+    assert agents_by_name(collection)["a"]["runs_unattended"] is True
+    assert collection.manifest["permissions"]["mode"] == "bypassPermissions"
+
+
 def test_state_files_and_headless_ci_markers_are_signals_not_silent_assumptions(tmp_path: Path) -> None:
     project = tmp_path / "p"
     write(project, ".claude/agents/a.md", agent_file("a", "Read"))
