@@ -359,3 +359,30 @@ def test_a_quoted_block_list_entry_may_hold_an_unmatched_parenthesis(tmp_path: P
 def test_a_parenthesis_in_a_comment_or_a_scalar_is_not_a_tool_entry_problem(tmp_path: Path) -> None:
     assert agent(tmp_path, "tools: [Read, Task] # note)\n")["tools"] == ["Read", "Task"]
     assert _parse_frontmatter("---\nname: reviewer)\n---\n", "x.md") == {"name": "reviewer)"}
+
+
+# --- a read key written without a colon (PR 430 security-diff review) -------------------------
+
+
+@pytest.mark.parametrize(
+    "construct",
+    [
+        "tools\n  - Bash\n",  # a bare key followed by an indented list item
+        "tools\n- Bash\n",  # and by a column-0 list item
+        "disallowedTools\n  - Task\n",
+        "tools\n",  # no list follows: still not a reading of `tools`
+        "'tools'\n- Bash\n",
+    ],
+)
+def test_a_read_key_written_without_a_colon_fails_collection_instead_of_crashing(
+    tmp_path: Path, construct: str
+) -> None:
+    assert "without a `:`" in rejected(tmp_path, construct)
+
+
+@pytest.mark.parametrize("line", ["notes", "tools_extra"])
+def test_a_line_without_a_colon_that_is_not_a_read_key_is_skipped_with_its_list(
+    tmp_path: Path, line: str
+) -> None:
+    result = agent(tmp_path, f"tools: [Read]\n{line}\n  - Task\n- Task\n")
+    assert result["tools"] == ["Read"]

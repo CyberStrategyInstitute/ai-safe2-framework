@@ -358,8 +358,15 @@ def _parse_frontmatter(text: str, display: str) -> dict[str, Any]:
                 values[current].append(item)
             continue
         key, separator, value = line.partition(":")
+        if not separator:
+            # Not a mapping entry. A read key written bare (`tools` then `- Bash`) is not a reading of
+            # that key, and carrying it as `current` would append to a list that was never started.
+            if key.strip().strip("'\"") in _FRONTMATTER_KEYS:
+                fail(f"has `{key.strip()}` without a `:`")
+            current = None
+            continue
         current = key.strip().strip("'\"")
-        if not separator or current not in _FRONTMATTER_KEYS:
+        if current not in _FRONTMATTER_KEYS:
             continue
         if current in values:
             fail(f"repeats `{current}`")

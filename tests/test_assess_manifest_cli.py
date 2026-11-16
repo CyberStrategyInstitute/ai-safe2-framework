@@ -299,6 +299,23 @@ def test_a_collection_failure_keeps_the_bundle_writes_no_manifest_and_names_the_
     assert not (out / "aisafe2-project-manifest-1.json").exists()
 
 
+def test_agent_frontmatter_that_names_a_read_key_without_a_colon_fails_cleanly_not_with_a_traceback(
+    project: Path, tmp_path: Path
+) -> None:
+    agents = project / ".claude" / "agents"
+    agents.mkdir(parents=True, exist_ok=True)
+    (agents / "broken.md").write_text("---\ntools\n  - Bash\n---\nbody\n", encoding="utf-8")
+    out = tmp_path / "bundle"
+    result = CliRunner().invoke(cli, ["assess", str(project), "--manifest", *CONSENT, "--no-wsl", "--output-dir", str(out)])
+    assert result.exit_code == 1
+    assert isinstance(result.exception, SystemExit), repr(result.exception)
+    assert ".claude/agents/broken.md" in result.output and "without a `:`" in result.output
+    assert f"bundle was kept at {out}" in result.output
+    assert (out / "assessment.json").is_file()
+    assert not (out / "aisafe2-project-manifest-1.json").exists()
+    assert not (out / "manifest-collection-notes.json").exists()
+
+
 def test_a_truncated_inventory_stops_the_manifest_but_not_the_ordinary_assessment(tmp_path: Path, monkeypatch) -> None:
     isolate_home(monkeypatch, tmp_path / "home")
     root = tmp_path / "project"
