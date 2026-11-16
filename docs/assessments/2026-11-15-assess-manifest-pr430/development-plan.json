@@ -1,0 +1,237 @@
+{
+  "schema_version": "safe2.development-plan.v1",
+  "plan_id": "pr430.assess-manifest",
+  "policy": {
+    "id": "ai-safe2-development-method-v1",
+    "sha256": "7d3aa324e6490a5fc55952cbed201c077a2c1abf2d4d6d788f4126daee79b6f3",
+    "risk_policy_id": "ai-safe2-framework-review-v1",
+    "risk_policy_sha256": "d1fb8515513dc0a555e5bcdf0b5030061bc247a2b4da3c4e8fec20e262996b40"
+  },
+  "source_sha256": "c4633a393fc310b5bf3d0fdd44fd53038370f435b8e251cff781f9ddf7c1082f",
+  "task": {
+    "title": "safe2 assess --manifest: local project manifest and opt-in hosted post",
+    "outcome": "A user can write a validated names/flags/counts/digests manifest locally and, only on explicit request, post it to the hosted assessment service.",
+    "delivery_shape": "architectural",
+    "declared_risk_tier": "critical",
+    "risk_tier": "critical",
+    "change_kind": "code",
+    "work_product": "reusable",
+    "acceptance_conditions": [
+      "--manifest stops before any read, write or send unless --scan-content and --inspect-config are given.",
+      "Collection opens no network connection; --post is the only outbound request and takes its key from the environment only.",
+      "Collection that cannot read a file or construct unambiguously fails closed and writes no manifest.",
+      "The manifest validates against the vendored schema before it is written and carries no file contents, prompts, secret values, command lines or tool arguments.",
+      "Rollback is deleting the branch before merge, or reverting the merge commit after it."
+    ],
+    "scope": {
+      "include": [
+        "safe2/commands/assess.py",
+        "safe2/cli.py",
+        "safe2/contracts.py",
+        "safe2/secure_io.py",
+        "safe2/discovery/assets.py",
+        "safe2/manifest/**",
+        "safe2/data/aisafe2-project-manifest-1.schema.json",
+        "safe2/data/manifest-heuristics-v1.json",
+        "safe2/docs/ASSESS-MANIFEST.md",
+        "tests/test_assess_manifest_*.py",
+        "tests/assess_manifest_support.py",
+        "tests/test_secure_io_publish.py",
+        "docs/assessments/2026-11-15-assess-manifest-pr430/**"
+      ],
+      "exclude": [
+        "hosted service deployment",
+        "manifest signing and key custody",
+        "package publication and release",
+        "heuristics human review",
+        ".github/workflows/**"
+      ]
+    },
+    "trust_boundaries": [
+      "customer project and user-level agent configuration files to the CLI (local reads)",
+      "CLI to hosted assessment endpoint over HTTPS (agent-to-tool plane, one opt-in POST)",
+      "SAFE2_MCP_PRO_KEY from the process environment to the one request"
+    ],
+    "assumptions": [
+      "This plan was produced retroactively, after the implementation, by the authoring agent (a bot); it is not a pre-implementation design record.",
+      "The only written design and threat model is safe2/docs/ASSESS-MANIFEST.md, drafted by the same agent."
+    ],
+    "unknowns": [
+      "Whether the deployed hosted service accepts the generator name 'safe2 assess --manifest'.",
+      "Manifest signing and key-custody owner.",
+      "Named human reviewer for manifest-heuristics-v1.json (status draft-unreviewed).",
+      "Whether an agent with no tools: line should be reported as inheriting built-in tools (see the PR 430 security-diff review, finding F2)."
+    ]
+  },
+  "risk_classification": {
+    "declared_tier": "critical",
+    "policy_floor": "critical",
+    "effective_tier": "critical",
+    "matched_rules": [
+      {
+        "id": "release-and-supply-chain",
+        "tier": "critical",
+        "reason": "Changes can alter shipped CLI behavior, package identity, provenance, or release authorization evidence.",
+        "matched_paths": [
+          "safe2/cli.py",
+          "safe2/commands/assess.py",
+          "safe2/contracts.py",
+          "safe2/data/aisafe2-project-manifest-1.schema.json",
+          "safe2/data/manifest-heuristics-v1.json",
+          "safe2/discovery/assets.py",
+          "safe2/docs/ASSESS-MANIFEST.md",
+          "safe2/manifest/**",
+          "safe2/secure_io.py"
+        ],
+        "required_evidence": [
+          "full-tests",
+          "installed-wheel",
+          "release-invariants",
+          "dependency-audit",
+          "human-release-decision"
+        ],
+        "review_lenses": [
+          "supply-chain",
+          "evidence-integrity",
+          "rollback"
+        ]
+      },
+      {
+        "id": "agent-and-evidence-contracts",
+        "tier": "high",
+        "reason": "Changes affect agent instructions, evidence contracts, evaluators, or falsification behavior.",
+        "matched_paths": [
+          "safe2/data/aisafe2-project-manifest-1.schema.json",
+          "safe2/data/manifest-heuristics-v1.json"
+        ],
+        "required_evidence": [
+          "contract-tests",
+          "adversarial-tests",
+          "manifest-consistency",
+          "human-review"
+        ],
+        "review_lenses": [
+          "prompt-injection",
+          "evidence-integrity",
+          "evaluator-independence",
+          "unknown-state"
+        ]
+      },
+      {
+        "id": "tests-and-documentation",
+        "tier": "medium",
+        "reason": "Changes affect proof, examples, or the claims a reviewer and user will rely on.",
+        "matched_paths": [
+          "docs/assessments/2026-11-15-assess-manifest-pr430/**",
+          "tests/assess_manifest_support.py",
+          "tests/test_assess_manifest_*.py",
+          "tests/test_secure_io_publish.py"
+        ],
+        "required_evidence": [
+          "relevant-tests",
+          "documentation-validation"
+        ],
+        "review_lenses": [
+          "claim-evidence-alignment",
+          "regression-coverage"
+        ]
+      }
+    ],
+    "risk_raised": false
+  },
+  "requirements": {
+    "design_artifact": "written-spec-and-plan",
+    "human_design_approval": true,
+    "threat_model": true,
+    "reusable_output_allowed": true,
+    "isolation_required": true,
+    "allowed_test_modes": [
+      "tdd",
+      "characterization-first",
+      "contract-first",
+      "approved-spike"
+    ],
+    "review_cadence": "task-and-specialist",
+    "before_after": true,
+    "independent_review": true,
+    "specialist_review": true,
+    "rollback": true,
+    "greptile_recommended": true,
+    "verification_before_completion": true,
+    "required_evidence": [
+      "adversarial-tests",
+      "contract-tests",
+      "dependency-audit",
+      "design-specification",
+      "documentation-validation",
+      "full-tests",
+      "green-state",
+      "human-release-decision",
+      "human-review",
+      "implementation-plan",
+      "installed-wheel",
+      "manifest-consistency",
+      "negative-validation",
+      "red-state",
+      "release-invariants",
+      "relevant-tests",
+      "security-review",
+      "security-validation",
+      "targeted-validation",
+      "threat-model"
+    ],
+    "review_lenses": [
+      "claim-evidence-alignment",
+      "evaluator-independence",
+      "evidence-integrity",
+      "prompt-injection",
+      "regression-coverage",
+      "rollback",
+      "supply-chain",
+      "unknown-state"
+    ]
+  },
+  "observations": {
+    "design_summary_present": true,
+    "design_artifact": "safe2/docs/ASSESS-MANIFEST.md",
+    "design_approved": false,
+    "approval_reference": null,
+    "threat_model_reference": "safe2/docs/ASSESS-MANIFEST.md",
+    "isolation_strategy": "worktree",
+    "isolation_reference": "csi/safe2-assess-pro",
+    "test_mode": "tdd",
+    "test_rationale": null
+  },
+  "gaps": [
+    {
+      "code": "design_approval_missing",
+      "severity": "review",
+      "detail": "This delivery shape or risk tier requires explicit human design approval."
+    },
+    {
+      "code": "design_approval_reference_missing",
+      "severity": "review",
+      "detail": "Required human approval needs a durable reference."
+    }
+  ],
+  "disposition": "review_required",
+  "authorization": {
+    "merge": false,
+    "release": false,
+    "deploy": false,
+    "exception": false,
+    "policy_change": false
+  },
+  "limitations": [
+    "The plan is derived from operator-supplied declarations and repository policy.",
+    "Ready means planning prerequisites are represented; it does not prove implementation quality.",
+    "Provider reviews are attributed evidence and cannot grant authority."
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "canonicalization": "json-sort-keys-compact-utf8-v1",
+    "digest": "752969df0e24eb795953887ce4c184d17f0cc8c7fcd6a39673927763f1f4540c",
+    "verification_scope": "all top-level content except integrity",
+    "authenticity": "unsigned"
+  }
+}
