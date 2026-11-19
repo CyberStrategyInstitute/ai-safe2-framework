@@ -45,8 +45,8 @@ services:
   # --------------------------------------------------------------------------
   nexus-gateway:
     build:
-      context: ./gateway
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/gateway/Dockerfile
     # Local source-build tag; this is not a container-registry publication claim.
     image: csi/nexus-gateway:0.6.0
     container_name: nexus-gateway

@@ -12,6 +12,7 @@ evaluation, and Evidence Assurance methods are in [AISM](../AISM/README.md).
 
 | Need | Canonical location |
 | --- | --- |
+| Full framework update and open issue resolution | [Issue plan and PR dependencies](FRAMEWORK-UPDATE-ISSUES.md) |
 | Repository presentation and navigation rules | [Repository UX Standard](REPOSITORY-UX-STANDARD.md) |
 | Component licenses and GitHub license presentation | [Licensing by component](LICENSING.md) |
 | Evidence interpretation and assurance | [Evidence Assurance](../AISM/EVIDENCE-ASSURANCE.md) |
