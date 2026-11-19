@@ -17,7 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.12"
       - name: Check repository navigation and branding
@@ -36,7 +36,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.12"
       - name: Validate machine-readable repository entry point
@@ -49,7 +49,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.12"
       - name: Install scanner test dependency
@@ -64,7 +64,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.12"
       - name: Install test dependency
@@ -81,7 +81,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.12"
       - name: Validate profile JSON and dashboard parity
