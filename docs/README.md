@@ -12,6 +12,7 @@ evaluation, and Evidence Assurance methods are in [AISM](../AISM/README.md).
 
 | Need | Canonical location |
 | --- | --- |
+| Evidence expansion, research and Rosetta Stone mapping review | [Expansion and adversarial review](FRAMEWORK-EVIDENCE-EXPANSION.md) |
 | Full framework update and open issue resolution | [Issue plan and PR dependencies](FRAMEWORK-UPDATE-ISSUES.md) |
 | Repository presentation and navigation rules | [Repository UX Standard](REPOSITORY-UX-STANDARD.md) |
 | Component licenses and GitHub license presentation | [Licensing by component](LICENSING.md) |

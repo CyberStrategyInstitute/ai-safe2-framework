@@ -1,0 +1,34 @@
+﻿framework_id,recorded_tags,recorded_cells,historical_claim,disposition,verified_coverage
+NIST_AI_RMF,66,129,100%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+ISO_42001,36,129,100%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+OWASP_AIVSS_v0.8,0,0,100% (NEW),"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+OWASP_LLM_Top10,10,36,100%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+OWASP_Agentic_Top10,17,0,100% (NEW),"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+MITRE_ATLAS,16,26,100%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+MIT_AI_Risk_v4,3,0,100%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+Google_SAIF,6,0,97%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+CSA_Agentic_CP,19,0,85%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+CSA_Zero_Trust_LLMs,1,0,90%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+MAESTRO,18,0,95%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+Arcanum_PI,6,0,95%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+AIDEFEND,8,0,90%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+AIID,3,0,90%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+EU_AI_Act,23,128,Aligned,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+Intl_AI_Safety_2026,7,0,Aligned,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+CSETv1,1,0,92%,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+HIPAA,14,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+PCI_DSS_v4,6,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+SOC2_Type2,59,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+ISO_27001,11,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+NIST_CSF_2,14,129,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+NIST_SP800_53,40,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+FedRAMP,18,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+CMMC_2,8,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+CIS_v8,22,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+GDPR,11,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+CCPA_CPRA,2,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+SEC_Disclosure,8,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+DORA,21,0,Aligned+,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+CVE_CVSS,3,0,Integrated,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+Zero_Trust,18,0,Native,"Validate source edition, mapping units and role; retain historical claim as attributed history",unassessed
+CSA_AICM,0,129,missing from supplied framework register,Reconcile orphan crosswalk family; register controls and audit guidance by edition separately,unassessed
