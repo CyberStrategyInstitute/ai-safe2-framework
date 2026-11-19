@@ -90,7 +90,7 @@ jobs:
           name: nexus-dist
           path: dist/
       - name: Publish verified NEXUS package
-        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
 
@@ -111,7 +111,7 @@ jobs:
           name: nexus-dist
           path: dist/
       - name: Publish verified NEXUS package
-        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
 
   verify-pypi:
     name: Verify PyPI serves the NEXUS release
