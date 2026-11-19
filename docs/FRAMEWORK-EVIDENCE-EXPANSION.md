@@ -4,13 +4,13 @@ Review date November 19, 2026. This addendum supersedes the earlier plan whereve
 
 ## Revised recommendation
 
-Carry 52 individually reviewable decisions into the full framework update. The original 32 decisions remain, with the 20 additions below expanding or sharpening their objectives. Twelve standalone controls are now proposed in total, comprising the original six candidates and six additional candidates C33–C38. This would yield 173 core controls if all twelve are adopted without consolidation or retirement. That arithmetic describes the proposal. Canonical numbering and the final count follow the actual approved requirements. There is no target ceiling on controls, sub-controls, profiles or research notes.
+Carry 52 individually reviewable decisions into the full framework update. The original 32 decisions remain, with the 20 additions below expanding or sharpening their objectives. Twelve standalone controls are now proposed in total, comprising the original six candidates and six additional candidates C33-C38. This would yield 173 core controls if all twelve are adopted without consolidation or retirement. That arithmetic describes the proposal. Canonical numbering and the final count follow the actual approved requirements. There is no target ceiling on controls, sub-controls, profiles or research notes.
 
-The 20 additions contain 83 explicit draft child requirements. These clauses describe what must be written and tested. Some make an earlier broad objective precise. They are not 83 new core controls, and the total number of required child clauses across the full update remains open. Six profile workstreams remain, with C40 expanding browser/personal-agent coverage to separate computer-use and browser treatments. The accompanying research register adds 20 individually scoped note proposals to the research work already required for C01–C32. New note versus substantive revision follows source ownership and the research question, with no numerical cap.
+The 20 additions contain 83 explicit draft child requirements. These clauses describe what must be written and tested. Some make an earlier broad objective precise. They are not 83 new core controls, and the total number of required child clauses across the full update remains open. Six profile workstreams remain, with C40 expanding browser/personal-agent coverage to separate computer-use and browser treatments. The accompanying research register adds 20 individually scoped note proposals to the research work already required for C01-C32. New note versus substantive revision follows source ownership and the research question, with no numerical cap.
 
 Keep the Rosetta Stone purpose visible. An organization should translate a regulatory or assurance question into applicable AI SAFE2 requirements, implementation checks, failure evidence and a repair path, then trace the result back to the original source. An agent should be able to perform the same translation with canonical IDs and explicit scope. Comparable evidence can be reused where the individual obligations permit it. Distinct or partially met obligations remain visible.
 
-## Pass 1 — Recovery audit and missed opportunities
+## Pass 1 - Recovery audit and missed opportunities
 
 All four supplied recovery files were read in full and their CSV records enumerated. The supplied framework register has 32 entries. The control-link file has 496 unique recorded tag/control pairs covering all 161 core controls. Of these, 495 use external-framework labels and one uses the internal reference E5.1_linked, explicitly marked in the recovery file as an unregistered value rather than an external framework. Remove that internal link from external-framework coverage arithmetic and preserve it as a control dependency. The clause-crosswalk file has 706 recorded cells covering 129 AI SAFE2 subtopics and seven framework IDs. Counts in the 32-row register reconcile to those two files for each listed framework. These counts describe recovered records, with no assertion of verified external-clause coverage.
 
@@ -478,14 +478,14 @@ Review IDs below are temporary planning identities. Each child requirement also 
 **Validation and contrary-evidence test** Run a synthetic agent workflow that queries a requirement, applies a bounded fix and rechecks the failing test. Test stale editions, ambiguous aliases and a missing enforcement implementation.
 
 
-## Pass 2 — Adversarial challenge to the expanded plan
+## Pass 2 - Adversarial challenge to the expanded plan
 
 | Challenge | Finding and resulting correction |
 | --- | --- |
 | Is runtime enforcement dominating the design? | Yes in the earlier priority framing. C33 and C37 add explicit design and success contracts. A valid execution can still follow an invalid specification. |
 | Are we counting documentation as deployed protection? | Require separate specification, implementation, enforcement and validation status per claim. C36 and C38 expose missing observations and failures. |
 | Does the plan favor CSI implementation availability? | The source JEV methodology weighted shipping CSI code heavily. Comparative conformance must allow alternative implementations that satisfy the same requirement. Record implementation availability separately from requirement quality. |
-| Does absorbing proposals hide their substance? | C33–C38 become standalone candidates. C39–C52 enumerate child requirements and paired research. Every retained absorption needs a parent rewrite and a test demonstrating its fit. |
+| Does absorbing proposals hide their substance? | C33-C38 become standalone candidates. C39-C52 enumerate child requirements and paired research. Every retained absorption needs a parent rewrite and a test demonstrating its fit. |
 | Does evidence independence establish truth? | No general truth guarantee is established. C36 verifies a defined effect. C48 adds competence, conflict and contaminated-grader checks. |
 | Does approval establish meaningful human authority? | C24 and C41/C46 require comprehension, justified reliance, accessibility and participation evidence. Numerical human-state proxies need validation before use as gates. |
 | Can a compliant or secure system still cause harm? | C41 and C42 address validity, fairness, suitability and alternatives. Sector profiles preserve clinical, financial and physical consequence requirements. |
@@ -495,7 +495,7 @@ Review IDs below are temporary planning identities. Each child requirement also 
 | Can a new adversarial benchmark unfairly favor AI SAFE2? | Freeze the common scenario and denominators before comparing systems, publish failure cases and scope, permit alternative enforcement, and have an independent runner reproduce results. |
 | Can mitigation degrade defensive utility? | Record legitimate completion, false blocks, outage handling, time to diagnose and recovery. Safe degraded operation needs explicit effect limits and authority. |
 
-## Pass 3 — Reconsideration of deferred and unpromoted material
+## Pass 3 - Reconsideration of deferred and unpromoted material
 
 | Material revisited | Revised disposition, reason and reopening evidence |
 | --- | --- |
@@ -562,7 +562,7 @@ The 19 existing profile IDs remain the baseline for the mapping decision. The fo
 
 ## Research register and completion evidence
 
-Each C33–C52 section above specifies a separate research-note question, its source lineage, competing interpretation, and a validation target. The register below makes the 20 new note proposals discoverable. The 32 earlier decision records retain their own note or revision obligations. Where a new question shares a prior note, add an independently named section and record why consolidation preserves the question. Never count an unchanged backlink as completed research.
+Each C33-C52 section above specifies a separate research-note question, its source lineage, competing interpretation, and a validation target. The register below makes the 20 new note proposals discoverable. The 32 earlier decision records retain their own note or revision obligations. Where a new question shares a prior note, add an independently named section and record why consolidation preserves the question. Never count an unchanged backlink as completed research.
 
 
 | Research review ID | Question | Decision owners |
