@@ -242,5 +242,5 @@ h1,h2{{margin:0 0 8px}}h2 span{{color:var(--muted);font-size:.8em}}table{{width:
 <section class="wide recommend"><h2>Recommended path</h2><p>{escape(str(recommendation.get("summary", "No recommendation supplied.")))}</p><h3>Basis</h3><ul>{recommendation_basis or "<li>No basis supplied.</li>"}</ul><h3>Action</h3><ul>{recommendation_actions or "<li>No action ownership supplied.</li>"}</ul></section>
 <section class="wide"><h2>History</h2><table><thead><tr><th>Date</th><th>Score</th><th>Decision</th><th>Material event</th></tr></thead><tbody>{history or '<tr><td colspan="4">First recorded assessment.</td></tr>'}</tbody></table></section>
 <section class="wide"><h2>Limitations</h2><ul>{limitations or "<li>None recorded.</li>"}</ul></section></div>
-<footer>AI SAFE2 v3.1 | AISM decision support | Raw score is normative; evidence-adjusted score is supplemental. Human authority retained.</footer>
+<footer>AI SAFE2 v3.5 | AISM decision support | Raw score is normative; evidence-adjusted score is supplemental. Human authority retained.</footer>
 </main></body></html>"""

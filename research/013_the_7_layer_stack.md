@@ -1,11 +1,11 @@
 <!-- AI-SAFE2-UX:START -->
-[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface: Research](https://img.shields.io/badge/Surface-Research-820F1A?style=flat-square)](./README.md)
 [![Context: v3.1 Current](https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square)](../docs/REPOSITORY-UX-STANDARD.md)
 
 [Framework Home](../README.md) | [Research Index](./README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.1. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.1 normative control and profile documents for implementation or conformance decisions.
+> **Current framework context:** AI SAFE² v3.5. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.5 normative control and profile documents for implementation or conformance decisions.
 <!-- AI-SAFE2-UX:END -->
 
 # Research Note: The 7-Layer Reference Architecture
@@ -51,11 +51,11 @@ Playbook: https://zenodo.org/records/18390725
 AI SAFE² is the engineering toolkit designed to enforce governance at machine speed. It addresses the **"Latency Gap"** where policy cycles are weekly but execution cycles are millisecond-based.
 
 **The 5 Pillars of Enforcement:**
-1.  **[Sanitize & Isolate](../taxonomy/01_sanitize_isolate.md) (The Shield):** Input validation and cryptographic sandboxing.
-2.  **[Audit & Inventory](../taxonomy/02_audit_inventory.md) (The Ledger):** Immutable logging and SHA-256 state verification.
-3.  **[Fail-Safe & Recovery](../taxonomy/03_failsafe_recovery.md) (The Brakes):** Kill switches and circuit breakers.
-4.  **[Engage & Monitor](../taxonomy/04_engage_monitor.md) (The Control Room):** HITL workflows and behavioral anomaly detection.
-5.  **[Evolve & Educate](../taxonomy/05_evolve_educate.md) (The Feedback Loop):** Red teaming and threat intelligence.
+1.  **Sanitize & Isolate (`../taxonomy/01_sanitize_isolate.md`, reference unavailable in this checkout) (The Shield):** Input validation and cryptographic sandboxing.
+2.  **Audit & Inventory (`../taxonomy/02_audit_inventory.md`, reference unavailable in this checkout) (The Ledger):** Immutable logging and SHA-256 state verification.
+3.  **Fail-Safe & Recovery (`../taxonomy/03_failsafe_recovery.md`, reference unavailable in this checkout) (The Brakes):** Kill switches and circuit breakers.
+4.  **Engage & Monitor (`../taxonomy/04_engage_monitor.md`, reference unavailable in this checkout) (The Control Room):** HITL workflows and behavioral anomaly detection.
+5.  **Evolve & Educate (`../taxonomy/05_evolve_educate.md`, reference unavailable in this checkout) (The Feedback Loop):** Red teaming and threat intelligence.
 
 <div align="center">
   <img src="../assets/AI_SAFE²_Universal_GRC_OS_v2.png" alt="AI SAFE² - Universal GRC OS for AI" width="100%" />

@@ -24,7 +24,7 @@ unreviewed cells remain unscored rather than inheriting a product contribution.
 **Version:** 1.0  
 **Date:** March 2026  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE2 v3.1 — AISM Scoring Methodology
+**Framework:** AI SAFE2 v3.5 — AISM Scoring Methodology
 **Purpose:** Self-assessment for organizations to determine their AISM maturity level
 
 ---
@@ -534,7 +534,7 @@ unreviewed cells remain unscored rather than inheriting a product contribution.
 
 ---
 
-## AI SAFE² v3.1 Protocol Governance Overlay
+## AI SAFE² v3.5 Protocol Governance Overlay
 
 Complete this overlay for any deployment that exposes MCP or equivalent
 agent-to-tool interfaces. It is a deployment-readiness check and does not add a

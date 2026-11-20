@@ -40,7 +40,7 @@ def test_health_endpoint_returns_200():
     assert resp.status_code == 200
     data = resp.json()
     assert data["status"] == "healthy"
-    assert data["controls_loaded"] == 161
+    assert data["controls_loaded"] == 173
 
 @skip_if_no_server
 def test_health_uses_https():

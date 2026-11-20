@@ -1,8 +1,20 @@
 <div align="center">
+
+[![Area: Assessment](https://img.shields.io/badge/Area-Assessment-005696?style=flat-square)](README.md)
   <img src="../assets/Full AISM Ecosystem - Agentic AI Operating System Framework v2.png" alt="Full AISM Ecosystem" width="100%" />
 </div>
 
 # AI Sovereign Maturity (AISM) Model
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-aism-and-uas-with-v35) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 ### The maturity and operating model for deterministic governance of probabilistic AI
 
 **Documentation updated:** 2026-10-13. AISM now houses the full Sovereignty Score,
@@ -13,7 +25,7 @@ Technology Card workflow, and worked example. Original methodology dates below
 identify their baseline; this update does not change scoring formulas.
 
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-AISM-820F1A?style=flat-square)](./README.md)
 [![Status](https://img.shields.io/badge/Status-Current-808080?style=flat-square)](../EVOLUTION.md)
 
@@ -24,10 +36,24 @@ identify their baseline; this update does not change scoring formulas.
 **Tagline:** *"The Operating System for Safe Autonomous AI"*  
 **Core Principle:** *Probabilistic intelligence requires deterministic control.*  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE² v3.1  
+**Framework:** AI SAFE² v3.5
 **Framework release context:** August 2026; assessment-method documentation updated October 2026
 
 ---
+
+<!-- V35-ADOPTION:START -->
+![Follow a claim to its evidence](../assets/evidence-linkages-v35.svg)
+
+A recorded mapping is a reviewable relationship. It does not establish compliance.
+
+## Use AISM and UAS with v3.5
+
+**Source status: implemented-bounded.** AISM v1 arithmetic is retained; scoped readiness and UAS v2 acceptance interpretation remain separate.
+
+**Next:** Reassess v2 human/fairness evidence in context. Validate real intervention capability and applicability; declare unknowns and preserve owner authorization.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Choose your assessment
 
@@ -80,7 +106,7 @@ The **AI Sovereign Maturity (AISM) Model** exists because agentic AI systems req
 
 AISM provides exactly that.
 
-### Relationship to AI SAFE² v3.1
+### Relationship to AI SAFE² v3.5
 
 **Naming:** AISM expands to **AI Sovereign Maturity**; Model follows the acronym.
 Use **AISM** or **AISM Model** after the first mention. Sovereign refers to the
@@ -295,7 +321,7 @@ AISM v3.1 uses the same repository-wide distinctions as the framework:
 - [Run the AISM Self-Assessment](./AISM-Self-Assessment-Tool.md)
 - [Understand the Scoring Methodology](./AISM-Scoring-Matrix-Methodology.md)
 - [Review the Compliance Crosswalk](./AISM-Compliance-Crosswalk.md)
-- [Review the AI SAFE² v3.1 Framework](../README.md)
+- [Review the AI SAFE² v3.5 Framework](../README.md)
 
 ---
 
@@ -309,4 +335,8 @@ AISM v3.1 uses the same repository-wide distinctions as the framework:
 
 ---
 
-*AI SAFE² v3.1 · © 2026 [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · © 2026 [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## v3.5 scoped deployment evidence
+
+Use [deployment readiness and threat profiles](DEPLOYMENT-READINESS-V35.md) for the separate readiness result, five distinct assessment outputs and three deeper threat profiles. Organizational scoring formulas retain their baseline meanings. External tiers are informative comparisons. A maturity-derived CVSS multiplier is a CSI heuristic pending scoped calibration.

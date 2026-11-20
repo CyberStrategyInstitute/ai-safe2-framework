@@ -17,17 +17,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies first (layer cache)
-COPY ../../sdk/python/requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Install the NEXUS SDK
-COPY ../../sdk/python /app/sdk/python
-RUN pip install --no-cache-dir -e "/app/sdk/python[full]"
+# Install the SDK from its packaging root and the gateway HTTP runtime.
+COPY pyproject.toml LICENSE NOTICE /app/nexus/
+COPY sdk/python /app/nexus/sdk/python
+RUN pip install --no-cache-dir "/app/nexus[full]" fastapi uvicorn
 
 # Copy gateway application
-COPY gateway.py /app/gateway.py
-COPY safe2_log_fields.py /app/safe2_log_fields.py
+COPY docker/gateway/gateway.py /app/gateway.py
+COPY docker/gateway/safe2_log_fields.py /app/safe2_log_fields.py
 
 # OPA policies and schemas are mounted at runtime (see docker-compose.yml)
 # This allows policy updates without rebuilding the image.

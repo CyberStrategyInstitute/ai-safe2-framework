@@ -10,7 +10,7 @@ This open-source project does not promise service-level response or resolution t
 
 ## Compatibility and maintenance
 
-- The current supported framework line is AI SAFE² v3.1.x.
+- The current supported framework line is AI SAFE² v3.5.x.
 - The `ai-safe2` CLI has an independent 0.x beta version. Until 1.0, minor releases may include interface changes; release notes and migration guidance will identify them.
 - Machine-readable schemas carry their own versioned identifiers. Consumers should validate `schema_version` and fail visibly on unsupported versions.
 - NEXUS, Gateway, profiles, and scanners retain independent component versions. Installing one does not establish framework conformance.

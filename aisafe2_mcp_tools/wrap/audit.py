@@ -16,7 +16,7 @@ Record schema:
   families:      list of injection pattern families detected
   severities:    list of severities detected
 
-AI SAFE2 v3.1 CP.5.MCP-5 compliance:
+AI SAFE2 v3.5 CP.5.MCP-5 compliance:
   Every tool invocation generates an audit record.
   Every injection detection generates an audit record.
   Records are appended to a JSONL file (append-only = immutable).

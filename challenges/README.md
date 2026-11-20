@@ -1,13 +1,33 @@
 # AI SAFE² Challenge Lab
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-challenge-lab-with-v35) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 ### Falsification before claims
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Challenge_Lab-820F1A?style=flat-square)](./README.md)
 [![Method](https://img.shields.io/badge/Method-Falsification--First-808080?style=flat-square)](./README.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use Challenge Lab with v3.5
+
+**Source status: prospective.** Challenge 002 is prospective; Challenge 001 retains its frozen baseline and evidence identity.
+
+**Next:** Freeze the complete design before confirmatory runs, then report safety, utility, opportunity counts and unknown outcomes separately. Independent L2 execution is pending.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Technology profiles and new validation candidates
 
@@ -75,7 +95,7 @@ Challenge maturity is separate from framework/profile conformance. A well-design
 
 ## v3.1 Enforcement-Plane Scoping
 
-AI SAFE² v3.1 distinguishes:
+AI SAFE² v3.5 distinguishes:
 
 - **north-south** agent-to-model/provider enforcement;
 - **east-west** agent-to-agent enforcement;
@@ -146,4 +166,8 @@ The most important contribution is evidence that changes what the framework can 
 
 AI SAFE² principle: **If governance is not enforced at runtime, it is not governance.**
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## v3.5 commit-boundary study
+
+[Challenge 002 prospective preregistration](002-v35-commit-boundary/README.md) defines episode-level exposure and separate safety/utility outcomes. Engineering fixtures do not establish confirmatory study results.

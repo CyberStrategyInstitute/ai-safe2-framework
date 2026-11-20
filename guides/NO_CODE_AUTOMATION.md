@@ -92,6 +92,6 @@ Don't rely on n8n execution history (it gets deleted). Create a permanent audit 
 
 ## 📥 Downloads & Next Steps
 
-*   **Need the Blueprint?** [Download the n8n Secure Node JSON](../templates/n8n_secure_node.json) *(Coming Soon)*
+*   **Need the Blueprint?** Download the n8n Secure Node JSON (`../templates/n8n_secure_node.json`, reference unavailable in this checkout) *(Coming Soon)*
 *   **Need Client Policies?** If you are building this for a client, you need to hand them an **Acceptable Use Policy** and **Risk Assessment**. These are included in the [AI SAFE² Implementation Toolkit](https://cyberstrategyinstitute.com/AI-Safe2/).
 *   **Stuck?** Check the [Troubleshooting Guide](TROUBLESHOOTING.md).

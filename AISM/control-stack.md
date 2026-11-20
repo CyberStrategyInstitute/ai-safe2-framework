@@ -11,7 +11,7 @@ See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
 Technology Card workflow, and worked example. Original methodology dates below
 identify their baseline; this update does not change scoring formulas.
 
-**Framework:** AI SAFE2 v3.1
+**Framework:** AI SAFE2 v3.5
 **Organization:** Cyber Strategy Institute
 **Version:** March 2026
 

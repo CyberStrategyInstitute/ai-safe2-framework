@@ -14,7 +14,7 @@ covers 17 pages and 4 phrasings, so drift elsewhere was invisible:
 | MCP control printed is not the control emitted | 9 failing citation tests (7 finding classes, 2 fix templates, the dep checker emitter, 5 remote-check remediations) | 51/51 pass |
 | Retired v3.0 MCP names (for example "MCP-12 Swarm C2 Detection") | 20 | 0 |
 | NEXUS presented as v0.3 (current is 0.5.0) | 9 current-state claims | 0 |
-| CLI version claims | SECURITY.md `0.1.x`, manifest `0.9.9`, AGENTS.md "release candidate", README install fails on PyPI | Truthful; enforced by `check_agent_manifest.py` |
+| CLI version claims | SECURITY.md `0.1.x`, manifest `0.9.9`, AGENTS.md "release notes", README install fails on PyPI | Truthful; enforced by `check_agent_manifest.py` |
 | Duplicate stale toolkit under `examples/` | 34 files, linked from the root README | Redirect README only |
 
 ## Evidence

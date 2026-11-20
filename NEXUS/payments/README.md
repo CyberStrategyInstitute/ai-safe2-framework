@@ -1,5 +1,10 @@
 # CP.5.APAY - Agentic Payments Integrity Profile
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 **Continuous Transaction Integrity and Authority Assurance for autonomous systems**
 
 [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM) | [NEXUS](../README.md) | [Adapter Guide](ADAPTER-GUIDE.md) | [Sovereign Payment Gateway](SOVEREIGN-GATEWAY.md) | [Threat Model](THREAT-MODEL.md) | [Controls](CONTROLS.md) | [Challenge Lab](CHALLENGE-LAB.md)
@@ -401,4 +406,4 @@ NEXUS/sdk/python/tests/test_apay_opa_contract.py  policy/builder drift guard
 
 ---
 
-*AI SAFE² v3.1 · CP.5.APAY/0.4 draft profile · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.5 · CP.5.APAY/0.4 draft profile · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*

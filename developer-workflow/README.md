@@ -1,10 +1,21 @@
 <div align="center">
 
+[![Area: Developer Workflow](https://img.shields.io/badge/Area-Developer_Workflow-0F766E?style=flat-square)](README.md)
+
 # AI SAFE² Developer Workflow
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-developer-workflow-with-v35) · [Install](#what-changes-after-installation)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
 
 ### Replayable evidence and human-owned decisions for software delivery
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Developer Workflow](https://img.shields.io/badge/Developer_Workflow-v0.1.0-820F1A?style=flat-square)](docs/RELEASE-PLAN.md)
 [![Minimum CLI](https://img.shields.io/badge/Minimum_CLI-1.0.1-808080?style=flat-square)](../safe2/README.md)
 
@@ -33,6 +44,20 @@ merge or release.
 It does not replace Claude, Codex, Superpowers, tests, scanners, or human
 review. It gives those tools a common evidence contract and prevents silence,
 provider failure, or a green wrapper from becoming approval.
+
+<!-- V35-ADOPTION:START -->
+![Build with criteria and evidence](../assets/delivery-evidence-v35.svg)
+
+Plans, reviews and receipts support decisions. They do not authorize deployment.
+
+## Use Developer Workflow with v3.5
+
+**Source status: contract-preview.** Change routing and evidence receipts retain human merge/release decisions; v3.5 adoption guidance is explicit.
+
+**Next:** Bind consequential plans to exact revision, target, delegated scope, success criteria and rollback. A plan or review cannot authorize a runtime effect.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## What changes after installation
 

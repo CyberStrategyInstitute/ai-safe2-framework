@@ -25,7 +25,7 @@ CLI evidence-grade calculation, or previously issued maturity results.
 **Version:** 1.0  
 **Date:** March 2026  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE2 v3.1; AI Sovereign Maturity (AISM) Model
+**Framework:** AI SAFE2 v3.5; AI Sovereign Maturity (AISM) Model
 **Status:** CSI assessment methodology v1.0
 
 ---
@@ -134,11 +134,11 @@ Five candidate scoring approaches were evaluated against criteria critical to th
 
 ### 3.1 The AISM Composite Scoring Framework
 
-The recommended methodology — the **AISM Sovereignty Score** — combines the strongest elements from all five approaches into a unified system purpose-built for AI SAFE2 v3.1.
+The recommended methodology — the **AISM Sovereignty Score** — combines the strongest elements from all five approaches into a unified system purpose-built for AI SAFE2 v3.5.
 
 ### 3.2 Maturity Levels (5-Level Scale)
 
-| Level | Name | Description | NIST Tier Equivalent |
+| Level | Name | Description | NIST Tier (informative comparison) |
 |---|---|---|---|
 | **1** | **Chaos** (alias: Reactive) | Ad hoc, no formal AI governance; controls are incident-driven | Partial |
 | **2** | **Visibility** (alias: Aware) | AI risks recognized; basic policies exist but inconsistently applied | Risk Informed |
@@ -252,7 +252,7 @@ Default pillar weights (equal by default, adjustable):
 
 ### 3.6 Combined Risk Score Integration
 
-For organizations also tracking technical vulnerabilities, AISM integrates with CVSS and the AI SAFE2 v3.1 combined-risk method:
+For organizations also tracking technical vulnerabilities, AISM integrates with CVSS and the AI SAFE2 v3.5 combined-risk method:
 
 ```
 Combined Risk = CVSS Base Score × ((100 - Pillar Score as %) / 10)
@@ -338,3 +338,7 @@ Every score must be substantiated with verifiable evidence. The AISM requires th
 ---
 
 *© 2026 Cyber Strategy Institute. Licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).*
+
+## v3.5 scoped deployment evidence
+
+Use [deployment readiness and threat profiles](DEPLOYMENT-READINESS-V35.md) for the separate readiness result, five distinct assessment outputs and three deeper threat profiles. Organizational scoring formulas retain their baseline meanings. External tiers are informative comparisons. A maturity-derived CVSS multiplier is a CSI heuristic pending scoped calibration.

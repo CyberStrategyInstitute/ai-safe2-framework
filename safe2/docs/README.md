@@ -1,5 +1,10 @@
 # SAFE2 CLI Documentation
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 This is the canonical home for SAFE2 CLI configuration, workflows, adapters,
 evidence operations, validation records, and product guidance.
 
@@ -22,3 +27,7 @@ evidence operations, validation records, and product guidance.
 
 Historical release records live in the repository [release archive](../../releases/README.md).
 Shared framework assurance and review methods remain in [shared documentation](../../docs/README.md).
+
+## v3.5 control and evidence operations
+
+[Control contracts](../../docs/CONTROLS-V3.5.md) | [Rosetta Stone query and audit](../../docs/ROSETTA-STONE-V35.md) | [Readiness evidence](../../AISM/DEPLOYMENT-READINESS-V35.md) | [Authority example](../../examples/v35-authority/README.md)

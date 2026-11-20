@@ -1,13 +1,38 @@
-# AI SAFE² v3.1 MCP Server
+# AI SAFE² v3.5 MCP Server
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-mcp-knowledge-server-with-v35) · [Start](#quick-start) · [Evidence](#testing-expectations) · [Next](#navigation)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+[![Area: MCP Knowledge Server](https://img.shields.io/badge/Area-MCP_Knowledge_Server-6842A6?style=flat-square)](README.md)
 ### Live framework and CP.5.MCP profile access at the agent-to-tool boundary
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface](https://img.shields.io/badge/Surface-MCP_Server-820F1A?style=flat-square)](./README.md)
-[![Profile](https://img.shields.io/badge/CP.5.MCP-19_controls-808080?style=flat-square)](../../00-cross-pillar/cp5_mcp_server_security.md)
+[![Profile](https://img.shields.io/badge/CP.5.MCP-19_controls-808080?style=flat-square)](../../00-cross-pillar/cp5_mcp_v35.md)
 
 [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Skills](../README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+![Follow a claim to its evidence](../../assets/evidence-linkages-v35.svg)
+
+A recorded mapping is a reviewable relationship. It does not establish compliance.
+
+## Use MCP knowledge server with v3.5
+
+**Source status: implemented-bounded.** Serves 173 core controls and the 19-control MCP profile with twelve child requirements from packaged source data.
+
+**Next:** Keep knowledge lookup separate from execution authorization. Qualify authentication, audience/resource binding and tool actuation in the deployment; refresh cached/copy-installed data.
+
+[Review the adoption requirements](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../../docs/CONTROLS-V3.5.md) | [Research rationale](../../research/README.md) | [Source and published versions](../../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Profile discovery and technology review
 
@@ -26,16 +51,16 @@ no new MCP assessment tool or schema is exposed by this update.
 
 The AI SAFE² MCP server exposes the framework taxonomy and MCP security profile to MCP-compatible clients such as Claude Code, Codex, Cursor, and other agent runtimes.
 
-AI SAFE² v3.1 separates two counts deliberately:
+AI SAFE² v3.5 separates two counts deliberately:
 
-- **161 framework controls:** the five pillars plus the core Cross-Pillar Governance Layer.
-- **19 CP.5.MCP profile controls:** MCP-specific requirements under CP.5. These are profile controls and are not added to the 161 framework total.
+- **173 framework controls:** the five pillars plus the core Cross-Pillar Governance Layer.
+- **19 CP.5.MCP profile controls:** MCP-specific requirements under CP.5. These are profile controls and are not added to the 173 framework total.
 
-The server loads the stable 161-control core taxonomy and overlays the v3.1 MCP profile so MCP-1 through MCP-19 are directly queryable.
+The server loads the stable 173-control core taxonomy and overlays the v3.1 MCP profile so MCP-1 through MCP-19 are directly queryable.
 
-## v3.1 Security Model
+## Security model
 
-AI SAFE² v3.1 is aligned to MCP `2026-07-28` and does not use protocol-owned session state as the governance identity or authorization boundary.
+AI SAFE² v3.5 is aligned to MCP `2026-07-28` and does not use protocol-owned session state as the governance identity or authorization boundary.
 
 Governance instead binds to:
 
@@ -77,9 +102,9 @@ The current MCP profile contains 19 controls:
 | MCP-18 | Catalog-cache integrity and provenance revalidation |
 | MCP-19 | Authorization-chain integrity, intended resource/audience validation, and SSRF boundaries |
 
-Canonical profile: [`../../00-cross-pillar/cp5_mcp_server_security.md`](../../00-cross-pillar/cp5_mcp_server_security.md)
+Canonical profile: [`../../00-cross-pillar/cp5_mcp_v35.md`](../../00-cross-pillar/cp5_mcp_v35.md)
 
-Machine-readable profile: [`data/mcp-profile-v3.1.json`](data/mcp-profile-v3.1.json)
+Machine-readable profile: [`data/mcp-profile-v3.5.json`](data/mcp-profile-v3.5.json)
 
 ## MCP-19 and Authentication
 
@@ -188,8 +213,8 @@ MCP `2025-11-25` is retained as a legacy compatibility binding for twelve months
 The MCP server intentionally uses a layered data model:
 
 ```text
-data/ai-safe2-controls-v3.0.json  -> stable 161-control core taxonomy
-data/mcp-profile-v3.1.json       -> CP.5.MCP 19-control protocol profile
+data/ai-safe2-controls-v3.5.json  -> stable 173-control core taxonomy
+data/mcp-profile-v3.5.json       -> CP.5.MCP 19-control protocol profile
 ```
 
 The release version is v3.1 even though the unchanged core taxonomy source remains v3.0. This prevents duplicated control databases and makes profile-level expansion explicit.
@@ -201,7 +226,7 @@ Before a v3.1 release or MCP security change is considered complete, verify at m
 - the server starts and completes an MCP handshake over stdio and authenticated streamable HTTP (`tests/test_transport_e2e.py`);
 - the server loads the core taxonomy and v3.1 MCP profile;
 - `MCP-14` through `MCP-19` resolve through the controls database;
-- the framework total remains 161;
+- the framework total remains 173;
 - the profile total is 19;
 - optional `server/discover` is not required;
 - incomplete enforcement remains fail-closed;
@@ -216,4 +241,4 @@ Before a v3.1 release or MCP security change is considered complete, verify at m
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

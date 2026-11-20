@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.1 Scanner - Cross-Pillar Governance Rules (CP.1-CP.10).
+AI SAFE2 v3.5 Scanner - Cross-Pillar Governance Rules (CP.1-CP.10).
 Structural analysis for ACT tier estimation, HEAR presence, replication
 governance, catastrophic-risk thresholds, and control-plane awareness.
 """

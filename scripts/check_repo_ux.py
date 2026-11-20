@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repository UX and AI SAFE² v3.1 documentation consistency checks."""
+"""Repository UX and AI SAFE² v3.5 documentation consistency checks."""
 from __future__ import annotations
 
 import re
@@ -41,7 +41,7 @@ BOTTOM_END = "<!-- AI-SAFE2-UX-FOOTER:END -->"
 
 # Current framework-facing statements may not advertise v3.0 as current.
 # Component pages can retain an older component version when they also identify
-# AI SAFE² v3.1 as the current framework, for example Gateway v3.0.
+# AI SAFE² v3.5 as the current framework, for example Gateway v3.0.
 STALE_CURRENT_PATTERNS = (
     re.compile(r"^#\s+AI SAFE²? Framework v3\.0\s*$", re.MULTILINE | re.IGNORECASE),
     re.compile(r"\bPart of the AI SAFE²? v3\.0 Ecosystem\b", re.IGNORECASE),
@@ -115,7 +115,7 @@ def check_surface_shell(path: Path, *, index_label: str) -> list[str]:
         "Framework Home",
         "00-cross-pillar",
         index_label,
-        "AI SAFE² v3.1",
+        "AI SAFE² v3.5",
     )
     for token in required:
         if token not in text:

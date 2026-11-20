@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.1 Scanner — Pillar 5: Evolve & Educate Rules
+AI SAFE2 v3.5 Scanner — Pillar 5: Evolve & Educate Rules
 Covers: P5.T9.x (Evolve), P5.T10.x (Educate), E5.x (v3.0 new controls)
 """
 

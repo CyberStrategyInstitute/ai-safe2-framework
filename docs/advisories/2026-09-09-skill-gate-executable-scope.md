@@ -60,15 +60,15 @@ Do not omit packaged files just to obtain an APPROVE result.
 
 ## Evidence limits and residual risk
 
-See the [hardening validation record](../SKILL-GATE-HARDENING-VALIDATION.md)
+See the [hardening validation record](../../safe2/docs/SKILL-GATE-HARDENING-VALIDATION.md)
 for reproduced results and release-gate status.
 
 The supplied report's SkillSpector 2.11.1 score, 11 findings, clean 64-component
 comparison, and historical test counts have not been independently reproduced here.
 They are not release validation claims. Contract tests mock the provider. A separate
-[live acceptance run](../SKILLSPECTOR-LIVE-VALIDATION.md) verified two new static
+[live acceptance run](../../safe2/docs/SKILLSPECTOR-LIVE-VALIDATION.md) verified two new static
 fixtures with the real provider; it does not reproduce that earlier comparison.
-See [runtime and provider setup](../PYTHON-COMPATIBILITY.md).
+See [runtime and provider setup](../../safe2/docs/PYTHON-COMPATIBILITY.md).
 
 Regex scanning cannot establish safety, detect every obfuscation, or distinguish
 all educational examples from operational instructions. Binary inspection remains

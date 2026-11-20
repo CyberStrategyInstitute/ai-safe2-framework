@@ -1,13 +1,38 @@
 # AI SAFE² Implementation Examples
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-sovereign-runtime-examples-with-v35) · [Next](#navigation)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+[![Area: Runtime Examples](https://img.shields.io/badge/Area-Runtime_Examples-0F766E?style=flat-square)](README.md)
 ### Governed runtime patterns across agent stacks
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Examples-820F1A?style=flat-square)](./README.md)
 [![Status](https://img.shields.io/badge/Status-Reference_Implementations-808080?style=flat-square)](../docs/REPOSITORY-UX-STANDARD.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+![Current authority at the action boundary](../assets/runtime-boundary-v35.svg)
+
+Reference pattern. Component versions and deployment qualification remain separate.
+
+## Use Sovereign runtime examples with v3.5
+
+**Source status: mixed-reference.** The v3.5 authority example demonstrates synthetic local transactions. Existing runtime examples retain individual limits.
+
+**Next:** For each runtime, test exact action binding, direct-path bypass, stale state, child budgets, stop propagation, duplicate effects and independent outcomes before extending claims.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Reviewing technology contributions
 
@@ -55,16 +80,17 @@ Examples demonstrate implementation patterns. They do not create framework confo
 | [`mcp-security-toolkit/`](./mcp-security-toolkit/) | MCP (protocol security) | Moved. Use safe2 scan mcp, safe2 score mcp, safe2 gate mcp and safe2 mcp wrap-stdio / wrap-proxy (CP.5.MCP v3.1). |
 | [`openclaw/`](./openclaw/) | OpenClaw | Full two-layer governance stack, internal identity and memory files plus external scanner and gateway. |
 | [`slowmist-overlay/`](./slowmist-overlay/) | SlowMist / OpenClaw | Threat-intelligence overlay mapping SlowMist OpenClaw security practices to AI SAFE² controls. |
+| [`v35-authority/`](./v35-authority/) | Python SQLite local authority fixture | Synthetic transactional effects with exact approvals, current conditions, ancestor budgets, idempotency and descendant revocation. |
 | [`xai-grok-sovereign-runtime/`](./xai-grok-sovereign-runtime/) | xAI Grok | Sovereign runtime defense package for Grok-based agents. |
 
 <!-- EXAMPLES:END -->
 
 ---
 
-## v3.1 Notes
+## Protocol compatibility notes
 
 - The overall framework remains **161 core controls**.
-- MCP implementations should use the [CP.5.MCP v3.1 profile](../00-cross-pillar/cp5_mcp_server_security.md).
+- MCP implementations should use the [CP.5.MCP v3.1 profile](../00-cross-pillar/cp5_mcp_v35.md).
 - UAS is a 27-requirement regulatory profile extension; it does not create CP.11 as a core control.
 - NEXUS examples are reference implementations, not mandatory AI SAFE² dependencies.
 - Legacy session-oriented state terminology may appear in older examples during the migration window; new governance-bearing examples should use `request`, `handle_scoped`, and `durable` semantics where applicable.
@@ -90,4 +116,8 @@ The generator validates those tags and updates the table above. The Lovable exam
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## v3.5 synthetic authority fixture
+
+[Local authority, budget, retry and stop example](v35-authority/README.md) is a bounded executable fixture with explicit production binding limits.

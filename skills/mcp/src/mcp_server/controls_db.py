@@ -1,8 +1,8 @@
 """
 AI SAFE2 MCP Server: controls database.
 
-Loads the 161-control core taxonomy and the AI SAFE2 v3.1 CP.5.MCP profile.
-The MCP profile contains sub-controls and does not change the 161-control
+Loads the 173-control core taxonomy and the AI SAFE2 v3.5 CP.5.MCP profile.
+The MCP profile contains sub-controls and does not change the 173-control
 framework total.
 """
 from __future__ import annotations
@@ -20,7 +20,7 @@ from mcp_server.config import (
 
 
 class ControlsDB:
-    """In-memory index of AI SAFE2 v3.1 framework and platform-profile controls."""
+    """In-memory index of AI SAFE2 v3.5 framework and platform-profile controls."""
 
     def __init__(
         self,

@@ -21,7 +21,7 @@ Test references are to `NEXUS/sdk/python/tests/test_apay.py` unless noted.
 
 ## Reuse, not duplication
 
-AI SAFE² v3.1 already supplies most of the governance primitives this profile needs. The payment controls extend existing pillars; they do not restate them.
+AI SAFE² v3.5 already supplies most of the governance primitives this profile needs. The payment controls extend existing pillars; they do not restate them.
 
 | Payment requirement | AI SAFE² foundation | Extension APAY adds |
 | ------------------- | ------------------- | ------------------- |
@@ -357,4 +357,4 @@ A deployment states its level and publishes its metrics. A level claimed without
 
 ---
 
-*CP.5.APAY/0.4 draft · NEXUS v0.6.0 · AI SAFE² v3.1*
+*CP.5.APAY/0.4 draft · NEXUS v0.6.0 · AI SAFE² v3.5*

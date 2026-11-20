@@ -1,7 +1,7 @@
 # AI SAFE² Integrations
 ### One governance model across design-time, CI, runtime, agent-to-agent, and agent-to-tool surfaces
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](README.md)
 [![Surface](https://img.shields.io/badge/Surface-Integrations-820F1A?style=flat-square)](INTEGRATIONS.md)
 [![Model](https://img.shields.io/badge/Model-3_Enforcement_Planes-808080?style=flat-square)](00-cross-pillar/README.md)
 
@@ -13,7 +13,7 @@
 
 AI SAFE² should fit around the tools an organization already uses. The framework defines the governance outcomes and evidence. Repository components provide reference paths for enforcing those requirements at different points in the lifecycle.
 
-The current v3.1 architecture separates five operational surfaces:
+The current v3.5 architecture separates five operational surfaces:
 
 | Surface | Repository component | Role |
 |---|---|---|
@@ -23,14 +23,14 @@ The current v3.1 architecture separates five operational surfaces:
 | **East-west runtime** | NEXUS v0.6 | Agent identity, delegation, lineage, policy, revocation, receipts |
 | **Agent-to-tool runtime** | CP.5.MCP + NEXUS MCP adapter/toolkit | MCP/tool authorization, provenance, returned-content trust, state and resource binding |
 
-Component versions are independent from the framework version. AI SAFE² is currently v3.1; the Gateway remains v3.0 until it has its own tested release, and NEXUS is v0.6.0.
+Component versions are independent from the framework version. AI SAFE² source framework is v3.5; the Gateway remains v3.0 until it has its own tested release, and NEXUS is v0.6.0.
 
 ---
 
-## v3.1 Architecture
+## v3.5 architecture
 
 ```text
-                          AI SAFE2 v3.1
+                          AI SAFE2 v3.5
                     governance + evidence model
                               |
           +-------------------+-------------------+
@@ -55,7 +55,7 @@ Agent-to-agent interactions require identity, delegated authority, lineage, revo
 
 ### Agent-to-tool
 
-MCP/tool interactions use the [CP.5.MCP v3.1 profile](00-cross-pillar/cp5_mcp_server_security.md). The profile contains MCP-1 through MCP-19 and is aligned to MCP `2026-07-28`.
+MCP/tool interactions use the [CP.5.MCP v3.5 profile](00-cross-pillar/cp5_mcp_v35.md). The profile contains MCP-1 through MCP-19 and is aligned to MCP `2026-07-28`.
 
 The new NEXUS MCP adapter is an enforcement contract/scaffold and must not be described as production-ready until its required methods are implemented and tested.
 
@@ -64,15 +64,15 @@ The new NEXUS MCP adapter is an enforcement contract/scaffold and must not be de
 ## Core Data Model
 
 ```text
-skills/mcp/data/ai-safe2-controls-v3.0.json  stable 161-control core taxonomy
-skills/mcp/data/mcp-profile-v3.1.json       CP.5.MCP v3.1 profile overlay
+skills/mcp/data/ai-safe2-controls-v3.5.json  current 173-control core taxonomy
+skills/mcp/data/mcp-profile-v3.5.json       CP.5.MCP v3.5 profile overlay
 ```
 
-The v3.0 filename on the core taxonomy is historical provenance. AI SAFE² v3.1 did not add new core controls.
+The v3.0 filename on the core taxonomy is historical provenance. AI SAFE² v3.5 did not add new core controls.
 
 Current counts:
 
-- **161 core framework controls**;
+- **173 core framework controls**;
 - **CP.1 through CP.10 core Cross-Pillar Governance controls**;
 - **MCP-1 through MCP-19 profile controls**;
 - **UAS as a 27-requirement regulatory profile extension**, not CP.11 or new core controls.
@@ -89,7 +89,7 @@ Current entry points:
 - [Canonical skill](skills/ai-safe2-secure-build-copilot/SKILL.md)
 - [MCP server](skills/mcp/README.md)
 
-The MCP server can query the 161-control core taxonomy and the separate 19-control MCP profile overlay without double-counting profile controls as core controls.
+The MCP server can query the 173-control core taxonomy and the separate 19-control MCP profile overlay without double-counting profile controls as core controls.
 
 ---
 
@@ -97,7 +97,7 @@ The MCP server can query the 161-control core taxonomy and the separate 19-contr
 
 The [AI SAFE² Scanner](scanner/README.md) provides pre-commit/CI analysis.
 
-AI SAFE² v3.1 adds 12 grouped MCP static-analysis rules to the existing scanner, bringing the expected rule registry to **52 rules**.
+AI SAFE² v3.5 adds 12 grouped MCP static-analysis rules to the existing scanner, bringing the expected rule registry to **52 rules**.
 
 Important boundaries:
 
@@ -135,7 +135,7 @@ Older NEXUS `SESSION`, `CROSS_SESSION`, and `PERMANENT` values remain compatibil
 
 ## MCP `2026-07-28`
 
-AI SAFE² v3.1 updates the MCP security model for the current profile binding.
+AI SAFE² v3.5 updates the MCP security model for the current profile binding.
 
 Key additions include:
 
@@ -159,7 +159,7 @@ MCP `2025-11-25` remains a legacy compatibility binding during the migration win
 | Catch code/config governance gaps in CI | [scanner/README.md](scanner/README.md) |
 | Enforce the model/provider boundary | [gateway/README.md](gateway/README.md) |
 | Govern agent-to-agent authority | [NEXUS/README.md](NEXUS/README.md) |
-| Govern MCP/tool use | [CP.5.MCP](00-cross-pillar/cp5_mcp_server_security.md) |
+| Govern MCP/tool use | [CP.5.MCP](00-cross-pillar/cp5_mcp_v35.md) |
 | Explore controls visually | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) |
 | Test claims adversarially | [Challenge Lab](challenges/README.md) |
 
@@ -188,4 +188,4 @@ For any integration, record:
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

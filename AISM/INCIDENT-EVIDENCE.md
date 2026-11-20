@@ -1,7 +1,7 @@
 # Incident evidence and accountability review
 ### Reconstruct activity, preserve evidence, and assign follow-up authority
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Guide](https://img.shields.io/badge/Guide-Incident_Evidence-820F1A?style=flat-square)](./INCIDENT-EVIDENCE.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
@@ -51,4 +51,4 @@ preserves source limitations and pending verification for the supplied events.
 
 [Evidence Assurance](./EVIDENCE-ASSURANCE.md) | [Validation](./TECHNOLOGY-VALIDATION.md) | [Security Policy](../SECURITY.md)
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

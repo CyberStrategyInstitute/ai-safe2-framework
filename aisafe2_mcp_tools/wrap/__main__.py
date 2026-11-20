@@ -9,7 +9,7 @@ import click
 @click.group()
 def cli() -> None:
     """
-    mcp-safe-wrap — AI SAFE2 v3.1 Consumer-Side MCP Protection
+    mcp-safe-wrap — AI SAFE2 v3.5 Consumer-Side MCP Protection
 
     \b
     STDIO mode:  mcp-safe-wrap stdio -- python -m mcp_server.app

@@ -25,17 +25,17 @@ class TestControlsDB:
     def setup_method(self):
         self.db = ControlsDB()
 
-    def test_loads_161_controls(self):
+    def test_loads_173_controls(self):
         counts = self.db.count()
-        assert counts["total"] == 161, f"Expected 161, got {counts['total']}"
+        assert counts["total"] == 173, f"Expected 173, got {counts['total']}"
 
-    def test_loads_151_pillar_controls(self):
+    def test_loads_158_pillar_controls(self):
         counts = self.db.count()
-        assert counts["pillar_controls"] == 151
+        assert counts["pillar_controls"] == 158
 
-    def test_loads_10_cross_pillar_controls(self):
+    def test_loads_15_cross_pillar_controls(self):
         counts = self.db.count()
-        assert counts["cross_pillar_controls"] == 10
+        assert counts["cross_pillar_controls"] == 15
 
     def test_loads_32_frameworks(self):
         counts = self.db.count()
@@ -46,7 +46,7 @@ class TestControlsDB:
         assert ctrl is not None
         assert ctrl["name"] == "HEAR Doctrine (Human Ethical Agent of Record)"
         assert ctrl["priority"] == "CRITICAL"
-        assert ctrl["first_in_field"] is True
+        assert ctrl["comparison_status"] == "requires-independent-comparison"
 
     def test_get_by_id_s1_5(self):
         ctrl = self.db.get_by_id("S1.5")
@@ -84,7 +84,7 @@ class TestControlsDB:
     def test_cross_pillar_cp9_replication(self):
         ctrl = self.db.get_by_id("CP.9")
         assert ctrl is not None
-        assert ctrl["first_in_field"] is True
+        assert ctrl["comparison_status"] == "requires-independent-comparison"
         assert "500" in str(ctrl.get("implementation_details", {}))
 
 

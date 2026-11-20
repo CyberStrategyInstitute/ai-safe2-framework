@@ -1,7 +1,7 @@
 # AI SAFE² CLI: Post-1.0 Capability Priorities
 ### What 1.0 includes, what it deliberately leaves out, and what should be built next
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![CLI](https://img.shields.io/badge/CLI-Post--1.0_Priorities-820F1A?style=flat-square)](../README.md)
 
 [Framework Home](../../README.md) | [CLI Guide](../README.md) | [Operator Workflow](./CLI-1.0-WORKFLOW.md) | [Stability Policy](./CLI-STABILITY.md) | [Examples](../../examples/README.md)

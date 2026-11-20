@@ -1,11 +1,11 @@
 <!-- AI-SAFE2-UX:START -->
-[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface: Example](https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square)](../README.md)
 [![Context: v3.1 Current](https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square)](../../docs/REPOSITORY-UX-STANDARD.md)
 
 [Framework Home](../../README.md) | [Examples Index](../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.1. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
+> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.5 framework and applicable profile requirements.
 <!-- AI-SAFE2-UX:END -->
 
 <!-- stack: LangChain -->
@@ -14,9 +14,15 @@
 <div align="center">
 
 # LangChain Sovereign Runtime
-### AI SAFE² v3.1 Defense Package for LangChain
 
-[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE²-v3.0-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+### AI SAFE² v3.5 Defense Package for LangChain
+
+[![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE²-v3.5-cc6600?style=for-the-badge&labelColor=black)](https://github.com/CyberStrategyInstitute/ai-safe2-framework)
 [![Tests](https://img.shields.io/badge/Tests-15%2F15_passing-brightgreen?style=flat-square)](./smoke_test.py)
 [![ACT Tiers](https://img.shields.io/badge/CP.3-ACT_1--4_enforced-orange?style=flat-square)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/00-cross-pillar)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
@@ -26,6 +32,14 @@
 </div>
 
 ---
+
+<!-- V35-RUNTIME-ADOPTION:START -->
+## Apply v3.5 to this example
+
+[Review the integration requirements](../../docs/V35-ECOSYSTEM-ADOPTION.md) before extending this runtime's claims. Identify every tool, provider, browser and direct API path that can commit an effect. Test current authority and environment binding, shared descendant limits, stop propagation, duplicate effects and independently observed outcomes. Keep this example's existing version and evidence limits until those tests pass.
+
+[Try the bounded local authority fixture](../v35-authority/README.md) | [Read the child requirements](../../docs/CONTROLS-V3.5.md) | [Return to examples](../README.md)
+<!-- V35-RUNTIME-ADOPTION:END -->
 
 ## Why This Exists
 
@@ -40,7 +54,7 @@ That means:
 | Memory writes are ungoverned | Long-horizon memory poisoning — corrupts future sessions |
 | No credential scan on final output | API keys, private keys, PII leak from chain output to logs |
 
-**This package enforces AI SAFE² v3.1 controls at the enforcement points that matter, without requiring any changes to your chains.**
+**This package enforces AI SAFE² v3.5 controls at the enforcement points that matter, without requiring any changes to your chains.**
 
 ---
 
@@ -253,7 +267,7 @@ langchain-sovereign-runtime/
 
 ---
 
-*AI SAFE² v3.1 | Cyber Strategy Institute | [cyberstrategyinstitute.com](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.5 | Cyber Strategy Institute | [cyberstrategyinstitute.com](https://cyberstrategyinstitute.com)*
 
 <!-- AI-SAFE2-UX-FOOTER:START -->
 ---
@@ -262,5 +276,5 @@ langchain-sovereign-runtime/
 
 [Examples Index](../README.md) | [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [NEXUS](../../NEXUS/) | [Scanner](../../scanner/README.md) | [MCP Profile](../../00-cross-pillar/cp5_mcp_server_security.md)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+*AI SAFE² v3.5 | Cyber Strategy Institute*
 <!-- AI-SAFE2-UX-FOOTER:END -->

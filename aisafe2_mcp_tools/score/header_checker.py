@@ -26,7 +26,7 @@ _REMEDIATION = (
     "Strict-Transport-Security: max-age=31536000, "
     "X-Frame-Options: DENY, X-Content-Type-Options: nosniff, "
     "Referrer-Policy: strict-origin. Remove Server header. "
-    "See AI SAFE2 v3.1 CP.5.MCP-4."
+    "See AI SAFE2 v3.5 CP.5.MCP-4."
 )
 
 

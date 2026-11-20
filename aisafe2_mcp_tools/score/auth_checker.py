@@ -21,7 +21,7 @@ log = structlog.get_logger()
 
 _REMEDIATION = (
     "Implement OAuth 2.1 with PKCE (RFC 9700). "
-    "See AI SAFE2 v3.1 CP.5.MCP-7. "
+    "See AI SAFE2 v3.5 CP.5.MCP-7. "
     "OX Advisory April 2026: unauthenticated servers allow any network "
     "actor to invoke all tools with full permissions."
 )

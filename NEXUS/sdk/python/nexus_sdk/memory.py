@@ -2,7 +2,7 @@
 nexus_sdk/memory.py
 NEXUS L4 Memory Governance: Memory Vaccine and persistence-scope management.
 
-AI SAFE2 v3.1 uses protocol-independent persistence scopes:
+AI SAFE2 v3.5 uses protocol-independent persistence scopes:
   request       effect ends with the current request/interaction
   handle_scoped effect persists through an explicitly governed state handle
   durable       effect survives request/handle lifecycle
@@ -11,7 +11,7 @@ AI SAFE2 v3.1 uses protocol-independent persistence scopes:
 Legacy NEXUS v0.3 zone names and serialized values remain accepted for the
 v3.1 migration window, but new evidence emits the canonical vocabulary.
 
-Reference: AI SAFE2 v3.1 S1.5, S1.6, M4.4, A2.5, A2.6, CP.5.MCP.
+Reference: AI SAFE2 v3.5 S1.5, S1.6, M4.4, A2.5, A2.6, CP.5.MCP.
 """
 from __future__ import annotations
 

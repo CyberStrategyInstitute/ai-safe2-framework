@@ -1,7 +1,7 @@
 {
   "schema": "ai-safe2/version-label-allowlist/v1",
   "purpose": "Every place a 'v3.0' framework label or a non-canonical 'MCP-N (Name)' citation is allowed to remain, with the reason. Anything not listed here fails scripts/check_framework_version_labels.py.",
-  "current_framework_version": "v3.1",
+  "current_framework_version": "v3.5",
   "paths": [
     {
       "glob": "research/**",

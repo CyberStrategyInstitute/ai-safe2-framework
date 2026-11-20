@@ -50,7 +50,7 @@ def gate():
 @click.option("--controls-json", default=None)
 @click.option("--quiet", is_flag=True)
 def gate_project(path, tier, fail_under, controls_json, quiet):
-    """Gate a codebase on its 161-control score."""
+    """Gate a codebase on its 173-control score."""
     result = project_engine.run_scan(path, controls_json=controls_json)
     if not quiet:
         print_project_findings(result)

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="310" viewBox="0 0 1200 310" role="img" aria-labelledby="title desc">
+<title id="title">AI SAFE2 v3.5 adoption map</title>
+<desc id="desc">Define requirements, build the applicable control boundary, then verify effects and retain human authority. Source requirements and tools do not establish deployed conformance.</desc>
+<rect width="1200" height="310" rx="20" fill="#10131c"/>
+<rect x="28" y="28" width="350" height="230" rx="12" fill="#1c2230" stroke="#f6921e" stroke-width="2"/>
+<text x="52" y="69" fill="#f6921e" font-family="Arial,sans-serif" font-size="22" font-weight="700">DEFINE</text>
+<text x="52" y="112" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">173 core controls</text>
+<text x="52" y="154" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">157 child clauses</text>
+<text x="52" y="196" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">19 MCP controls + 12 child clauses</text>
+<path d="M387 143h26m-9-9 9 9-9 9" fill="none" stroke="#a0aec0" stroke-width="3"/>
+<rect x="425" y="28" width="350" height="230" rx="12" fill="#1c2230" stroke="#63b3ed" stroke-width="2"/>
+<text x="449" y="69" fill="#63b3ed" font-family="Arial,sans-serif" font-size="22" font-weight="700">BUILD</text>
+<text x="449" y="112" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">CLI and Developer Workflow</text>
+<text x="449" y="154" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">Gateways, NEXUS and examples</text>
+<text x="449" y="196" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">Skills and MCP knowledge access</text>
+<path d="M784 143h26m-9-9 9 9-9 9" fill="none" stroke="#a0aec0" stroke-width="3"/>
+<rect x="822" y="28" width="350" height="230" rx="12" fill="#1c2230" stroke="#68d391" stroke-width="2"/>
+<text x="846" y="69" fill="#68d391" font-family="Arial,sans-serif" font-size="22" font-weight="700">VERIFY</text>
+<text x="846" y="112" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">Independent effect evidence</text>
+<text x="846" y="154" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">Safety, utility and unknowns</text>
+<text x="846" y="196" fill="#f7fafc" font-family="Arial,sans-serif" font-size="18">Named human decision</text>
+<text x="32" y="289" fill="#b7c1d1" font-family="Arial,sans-serif" font-size="16">AI SAFE2 v3.5. Implementation, effectiveness, assurance and authorization remain separate.</text></svg>

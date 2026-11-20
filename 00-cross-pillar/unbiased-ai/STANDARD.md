@@ -1,3 +1,5 @@
+> **v1 baseline reference.** The v3.5 uses [UAS v2](STANDARD-V2.md) through the framework manifest. Retain the original profile identity when interpreting the methods below.
+
 # Unbiased AI Standard Regulatory Profile: Normative Text
 
 **AI SAFE² Cross-Pillar Governance OS | UAS v1.0 | July 2026 | Cyber Strategy Institute**

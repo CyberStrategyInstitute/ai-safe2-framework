@@ -1,0 +1,41 @@
+name: NEXUS container
+
+on:
+  pull_request:
+    paths:
+      - "NEXUS/**"
+      - ".github/workflows/nexus-container.yml"
+  push:
+    branches: [main]
+    paths:
+      - "NEXUS/**"
+      - ".github/workflows/nexus-container.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  gateway:
+    name: Gateway build and health
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - name: Build documented Compose image
+        run: docker compose -f NEXUS/docker/docker-compose.yml build nexus-gateway
+      - name: Verify image startup and health
+        run: |
+          docker run -d --name nexus-health -e GUARDIAN_FAIL_MODE=FAIL_CLOSED csi/nexus-gateway:0.6.0
+          for attempt in $(seq 1 30); do
+            if docker exec nexus-health curl --fail --silent http://localhost:8080/health; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+      - name: Show container logs
+        if: always()
+        run: docker logs nexus-health || true
+      - name: Remove health fixture
+        if: always()
+        run: docker rm -f nexus-health || true

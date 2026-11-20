@@ -1,0 +1,284 @@
+[
+  {
+    "path": "docs/CHANGE-ATTRIBUTION.md",
+    "target": "./SYSTEM-IDENTITY.md",
+    "new_target": "../safe2/docs/SYSTEM-IDENTITY.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "docs/advisories/2026-09-09-skill-gate-executable-scope.md",
+    "target": "../SKILL-GATE-HARDENING-VALIDATION.md",
+    "new_target": "../../safe2/docs/SKILL-GATE-HARDENING-VALIDATION.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "docs/advisories/2026-09-09-skill-gate-executable-scope.md",
+    "target": "../SKILLSPECTOR-LIVE-VALIDATION.md",
+    "new_target": "../../safe2/docs/SKILLSPECTOR-LIVE-VALIDATION.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "docs/advisories/2026-09-09-skill-gate-executable-scope.md",
+    "target": "../PYTHON-COMPATIBILITY.md",
+    "new_target": "../../safe2/docs/PYTHON-COMPATIBILITY.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "examples/codex-sovereign-runtime/README.md",
+    "target": "./IDENTITY.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/codex-sovereign-runtime/README.md",
+    "target": "./SOUL.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/codex-sovereign-runtime/README.md",
+    "target": "./USER.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/codex-sovereign-runtime/README.md",
+    "target": "./TOOLS.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/codex-sovereign-runtime/README.md",
+    "target": "./SUBAGENT-POLICY.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/ishi/README.md",
+    "target": "../../guides/ishi-hardening.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/ishi/README.md",
+    "target": "./troubleshooting-ishi.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/ishi/README.md",
+    "target": "./examples/ishi/ishi-openclaw-integration.md",
+    "new_target": "ishi-openclaw-integration.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "examples/ishi/README.md",
+    "target": "./examples/ishi/USE_CASE_IMPLEMENTATION_GUIDE.md",
+    "new_target": "USE_CASE_IMPLEMENTATION_GUIDE.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "examples/ishi/README.md",
+    "target": "./ishi-scanner.py",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/ishi/README.md",
+    "target": "./troubleshooting-ishi.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/ishi/README.md",
+    "target": "./troubleshooting-ishi.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/ishi/README.md",
+    "target": "../../guides/ishi-hardening.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/love_equation/RELEASES/2026-02-12–Love_Equation_v2.md",
+    "target": "./README.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/love_equation/RELEASES/2026-02-12–Love_Equation_v2.md",
+    "target": "./example_integration.py",
+    "new_target": "../example_integration.py",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "examples/love_equation/RELEASES/2026-02-12–Love_Equation_v2.md",
+    "target": "./drift_tests/",
+    "new_target": "../drift_tests",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "examples/love_equation/RELEASES/2026-02-12–Love_Equation_v2.md",
+    "target": "./manifests/",
+    "new_target": "../manifests",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "examples/love_equation/RELEASES/2026-02-12–Love_Equation_v2.md",
+    "target": "./README.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/love_equation/RELEASES/2026-02-12–Love_Equation_v2.md",
+    "target": "./CHANGELOG.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/openclaw/core/README.md",
+    "target": "../openclaw_memory.md",
+    "new_target": "openclaw_memory.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "examples/openclaw/gateway/README.md",
+    "target": "./gateway/README.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/openclaw/gateway/README.md",
+    "target": "../../troubleshooting.md",
+    "new_target": "../troubleshooting.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "examples/slowmist-overlay/README.md",
+    "target": "./red-team-schedule.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/xai-grok-sovereign-runtime/QUICKSTART.md",
+    "target": "./QUICKSTART-WINDOWS.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "examples/xai-grok-sovereign-runtime/README.md",
+    "target": "./field-reports/2026-07-08-grok-usb-memory-sync.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "guides/NO_CODE_AUTOMATION.md",
+    "target": "../templates/n8n_secure_node.json",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "guides/ishi_hardening.md",
+    "target": "./ishi-openclaw-integration.md",
+    "new_target": "../examples/ishi/ishi-openclaw-integration.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "guides/ishi_hardening.md",
+    "target": "./ishi-agenticflow-bridge.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "guides/ishi_hardening.md",
+    "target": "./troubleshooting-ishi.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "guides/ishi_hardening.md",
+    "target": "./troubleshooting-ishi.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "guides/openclaw-hardening.md",
+    "target": "./openclaw-enterprise.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "guides/openclaw-hardening.md",
+    "target": "../examples/openclaw/openclaw_memory.md",
+    "new_target": "../examples/openclaw/core/openclaw_memory.md",
+    "disposition": "relinked-existing-source"
+  },
+  {
+    "path": "guides/v3.1-release-overview.md",
+    "target": "../ANNOUNCEMENT-v3.1.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/011_the_kill_switch.md",
+    "target": "../taxonomy/03_failsafe_recovery.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/011_the_kill_switch.md",
+    "target": "../taxonomy/01_sanitize_isolate.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/011_the_kill_switch.md",
+    "target": "../taxonomy/03_failsafe_recovery.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/011_the_kill_switch.md",
+    "target": "../taxonomy/03_failsafe_recovery.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/011_the_kill_switch.md",
+    "target": "../taxonomy/04_engage_monitor.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/013_the_7_layer_stack.md",
+    "target": "../taxonomy/01_sanitize_isolate.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/013_the_7_layer_stack.md",
+    "target": "../taxonomy/02_audit_inventory.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/013_the_7_layer_stack.md",
+    "target": "../taxonomy/03_failsafe_recovery.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/013_the_7_layer_stack.md",
+    "target": "../taxonomy/04_engage_monitor.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  },
+  {
+    "path": "research/013_the_7_layer_stack.md",
+    "target": "../taxonomy/05_evolve_educate.md",
+    "new_target": null,
+    "disposition": "unavailable-reference-preserved"
+  }
+]

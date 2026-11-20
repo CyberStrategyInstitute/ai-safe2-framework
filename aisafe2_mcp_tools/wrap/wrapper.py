@@ -72,32 +72,44 @@ class StdioWrapper:
             await proc.wait()
             raise RuntimeError("MCP subprocess did not expose all requested pipes")
         try:
-            await asyncio.gather(
+            outcomes = await asyncio.gather(
                 self._client_to_server(proc),
                 self._server_to_client(proc),
                 self._relay_stderr(proc),
                 return_exceptions=True,
             )
+            for outcome in outcomes:
+                if isinstance(outcome, Exception):
+                    raise outcome
         finally:
-            try:
-                proc.terminate()
-            except ProcessLookupError:
-                pass
+            if proc.returncode is None:
+                try:
+                    proc.terminate()
+                except ProcessLookupError:
+                    pass
+            await proc.wait()
 
     async def _client_to_server(self, proc: asyncio.subprocess.Process) -> None:
         stdin = proc.stdin
         if stdin is None:
             raise RuntimeError("MCP subprocess stdin pipe is unavailable")
         loop = asyncio.get_running_loop()  # BUG-1 fix
-        reader = asyncio.StreamReader(limit=2 ** 20)
-        protocol = asyncio.StreamReaderProtocol(reader)
-        await loop.connect_read_pipe(lambda: protocol, sys.stdin.buffer)
+        reader = None
+        if sys.platform != "win32":
+            reader = asyncio.StreamReader(limit=2 ** 20)
+            protocol = asyncio.StreamReaderProtocol(reader)
+            await loop.connect_read_pipe(lambda: protocol, sys.stdin.buffer)
 
         while True:
             try:
-                line = await reader.readline()
+                # Windows ProactorEventLoop cannot attach ordinary stdin pipes.
+                # A bounded blocking read in a worker preserves EOF propagation.
+                line = (await asyncio.to_thread(sys.stdin.buffer.readline, 2 ** 20 + 1)
+                        if reader is None else await reader.readline())
                 if not line:
                     break
+                if len(line) > 2 ** 20:
+                    raise ValueError("MCP input line exceeds the configured limit")
                 if self._bucket and not self._bucket.consume():
                     log.warning("wrap.stdio.rate_limited")
                     continue
@@ -133,6 +145,11 @@ class StdioWrapper:
                 else:
                     stdin.write(line)  # BUG-2 fix: unchanged bytes
                 await stdin.drain()
+            except ValueError:
+                stdin.close()
+                if proc.returncode is None:
+                    proc.terminate()
+                raise
             except (asyncio.CancelledError, BrokenPipeError, ConnectionResetError):
                 break
         # Client closed its side: propagate EOF so the server can exit. Without

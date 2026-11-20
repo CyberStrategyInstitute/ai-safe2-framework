@@ -1,6 +1,6 @@
 # AI SAFE² Challenge provider-feedback decision record
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 
 [Framework Home](../../README.md) | [CLI](../README.md) | [Challenge guide](CHALLENGE-CLI.md) | [Challenge 001](../../challenges/001-anthropic-multi-agent-turf-war/README.md)
 

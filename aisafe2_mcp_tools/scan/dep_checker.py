@@ -203,7 +203,7 @@ class DependencyChecker:
                     description=(
                         f"{pkg_name} is a sensitive MCP-ecosystem package with no pinned version. "
                         "Unpinned dependencies can silently upgrade to vulnerable versions. "
-                        "AI SAFE2 v3.1 CP.5.MCP-4 requires server and binary integrity verification."
+                        "AI SAFE2 v3.5 CP.5.MCP-4 requires server and binary integrity verification."
                     ),
                     file=rel_path,
                     line=self._find_line(content, pkg_name),

@@ -28,3 +28,7 @@ the repository.
   the before/after process, active routes, optional modules, limitations, and
   next choices. Do not imply that a listed provider is connected or ran.
 
+
+## v3.5 adoption context
+
+Resolve the current root framework manifest, child-clause catalog and `docs/data/v35-ecosystem-adoption.json` in the reviewed framework checkout. If this template is installed elsewhere, record the pinned source revision and missing context. Component versions and publication are separate from framework status. For consequential changes, identify the exact target/environment, delegated scope, consumption limits, side-effect ledger, success criteria, independent observer and recovery owner. Do not turn a plan, receipt, model review or source fixture into execution authority or production conformance.

@@ -1,12 +1,23 @@
 # AI SAFE² CLI
-### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-safe2-cli-with-v35) · [Start](#start-with-the-outcome) · [Limits](#what-it-does-not-do) · [Install](#install) · [Evidence](#evidence-and-trust-rules) · [Next](#continue-from-your-result)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+[![Area: CLI](https://img.shields.io/badge/Area-CLI-005696?style=flat-square)](README.md)
+### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.5
 
 [![CLI](https://img.shields.io/badge/CLI-1.1.0-F6921E?style=flat-square)](../README.md)
-[![Framework](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-820F1A?style=flat-square)](../README.md)
+[![Framework](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-820F1A?style=flat-square)](../README.md)
 
 The CLI badge identifies source version **1.1.0**, not a PyPI publication.
 Published CLI: **1.0.1**, verified 2026-10-16. Guided start requires the source
-candidate until 1.1.0 is published. See [component versions](../docs/COMPONENT-VERSIONS.md).
+version until 1.1.0 is published. See [component versions](../docs/COMPONENT-VERSIONS.md).
 
 [Start](#start-with-the-outcome) | [Give this to your agent](#give-this-to-your-agent) | [Install](#install) | [Choose a workflow](#choose-a-workflow) | [Harness compatibility](#harness-compatibility) | [Command reference](#command-map) | [Limits](#what-it-does-not-do)
 
@@ -22,6 +33,20 @@ The CLI helps a person or an agent answer four practical questions:
 It produces bounded JSON evidence for machines and readable Decision Cards for
 people. It does not silently connect to an agent account, approve deployment,
 or turn a self-assessment into a compliance claim.
+
+<!-- V35-ADOPTION:START -->
+![Build with criteria and evidence](../assets/delivery-evidence-v35.svg)
+
+Plans, reviews and receipts support decisions. They do not authorize deployment.
+
+## Use SAFE2 CLI with v3.5
+
+**Source status: implemented-bounded.** Source CLI exposes current catalogs, exact lookup, mapping audit and declared-evidence readiness checks.
+
+**Next:** Integrating deployments must authenticate observers, decide applicability and attach independent boundary evidence. Preserve existing score semantics.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Start with the outcome
 
@@ -152,7 +177,7 @@ Static, MCP, skill, and gateway scores retain their native meanings.
 | [`examples/aism-decision-card/`](../examples/aism-decision-card/) | Runnable reference assessment and human acceptance example |
 
 This is a repository and packaging boundary, not a new framework pillar. AI
-SAFE² remains 161 core controls with CP.1 through CP.10. UAS is a separate
+SAFE² remains 161 core controls with CP.1 through CP.15. UAS is a separate
 27-requirement regulatory profile extension.
 
 ## Install
@@ -222,7 +247,7 @@ pytest tests/ scanner/tests/
 | `safe2 config validate FILE` | Validate bounded `safe2.config.v1` TOML | Rejects unknown keys, unsafe paths, symlinks, and malformed values |
 | `safe2 assess PATH [--scan-content] [--inspect-config]` | Produce one sealed environment and project assessment bundle | Missing or unrequested evidence remains explicit; no deployment authorization or conformance claim |
 | `safe2 adapter validate/conformance ...` | Validate attributed external evidence adapters and specimens | Contract evidence only; never executes or endorses a provider |
-| `safe2 scan project PATH` | Informational 161-control project scan | Reports findings; does not gate |
+| `safe2 scan project PATH` | Informational 173-control project scan | Reports findings; does not gate |
 | `safe2 score project PATH` | Compact project score | Reports score only |
 | `safe2 gate project PATH` | CI/CD project decision | Enforces tier or `--fail-under` threshold |
 | `safe2 gate skill PATH --strict` | Skill trust decision | Approve, reject, or hold for review |
@@ -661,4 +686,8 @@ by the CLI.
 
 ---
 
-*AI SAFE² v3.1 · Cyber Strategy Institute*
+*AI SAFE² v3.5 · Cyber Strategy Institute*
+
+## v3.5 framework contracts
+
+Use `safe2 framework query --control CP.12`, `safe2 framework query --source NIST_AI_RMF`, `safe2 framework audit`, and `safe2 framework readiness evidence.json`. The [current contracts](../docs/CONTROLS-V3.5.md) define 173 controls and their child clauses. The commands expose recorded scope and evidence limits.

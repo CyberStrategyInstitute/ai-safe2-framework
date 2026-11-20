@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.1 Scanner — Pillar 3: Fail-Safe & Recovery Rules
+AI SAFE2 v3.5 Scanner — Pillar 3: Fail-Safe & Recovery Rules
 Covers: P3.T5.x (Fail-Safe), P3.T6.x (Recovery), F3.2-F3.5 (v3.0 new controls)
 """
 

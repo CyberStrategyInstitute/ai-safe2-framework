@@ -133,9 +133,9 @@ def _compute_source_hash() -> str:
         combined.update(f.name.encode("utf-8"))
         combined.update(f.read_bytes())
 
-    controls_json = data_dir / "ai-safe2-controls-v3.0.json"
+    controls_json = data_dir / "ai-safe2-controls-v3.5.json"
     if controls_json.exists():
-        combined.update(b"ai-safe2-controls-v3.0.json")
+        combined.update(b"ai-safe2-controls-v3.5.json")
         combined.update(controls_json.read_bytes())
 
     return combined.hexdigest()

@@ -157,7 +157,7 @@ def main(argv: list[str] | None = None) -> int:
         for e in errors:
             print(e)
     print(f"framework version labels: {len(errors)} finding(s)" if errors
-          else "framework version labels: clean (v3.1)")
+          else "framework version labels: clean (v3.5)")
     return 1 if errors else 0
 
 

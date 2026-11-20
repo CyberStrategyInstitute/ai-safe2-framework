@@ -4,7 +4,7 @@
 
 CLI 0.9.9 consolidates the pre-1.0 core into one installable, provider-neutral
 evidence layer for projects, harnesses, agents, and accountable human reviewers.
-It is a release candidate for final validation, not the 1.0 stability promise.
+It is a release notes for final validation, not the 1.0 stability promise.
 
 ## Capability sequence
 

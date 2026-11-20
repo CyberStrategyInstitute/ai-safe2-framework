@@ -1,0 +1,2321 @@
+{
+  "framework_version": "3.5.0",
+  "baseline_version": "3.1.0",
+  "status": "current",
+  "decisions": [
+    {
+      "review_id": "C01",
+      "control_id": "CP.11",
+      "title": "Add cross-pillar trust lifecycle",
+      "rationale": "Discovery, installation, change, use and revocation span CP.4 and CP.5. A shared objective prevents each profile inventing its own state model. It adds ownership and migration cost.",
+      "source": "Evidence waves 01-06; C01 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Establish separate trust decisions at discovery, installation, initial approval, material change, task admission, action commitment and revocation.",
+        "Bind each decision to the component version, owner, purpose, permitted effects and expiry; invalidate affected grants after a material change.",
+        "Record the evidence and outcome of each gate and verify that retirement, offboarding and restore cannot reactivate stale authority."
+      ],
+      "validation": "Trust between discovery and retirement. Compare install, update, dormant schedules and restoration. Show which decision expires at each transition.",
+      "research_path": "research/025_v35_c01.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.11.R01",
+          "requirement": "Establish separate trust decisions at discovery, installation, initial approval, material change, task admission, action commitment and revocation.",
+          "disposition": "normative",
+          "review_id": "C01",
+          "research": "research/025_v35_c01.md"
+        },
+        {
+          "id": "CP.11.R02",
+          "requirement": "Bind each decision to the component version, owner, purpose, permitted effects and expiry; invalidate affected grants after a material change.",
+          "disposition": "normative",
+          "review_id": "C01",
+          "research": "research/025_v35_c01.md"
+        },
+        {
+          "id": "CP.11.R03",
+          "requirement": "Record the evidence and outcome of each gate and verify that retirement, offboarding and restore cannot reactivate stale authority.",
+          "disposition": "normative",
+          "review_id": "C01",
+          "research": "research/025_v35_c01.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-05",
+        "OBS-2026-MAY-04",
+        "OBS-2026-JUL-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C02",
+      "control_id": "S1.8",
+      "title": "Add P1 pre-trust initialization",
+      "rationale": "The boundary precedes normal task authorization. A generic sandbox control can miss startup behavior. A distinct control introduces a separate platform verification burden.",
+      "source": "Evidence waves 01-06; C02 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Before trust is established, prevent project or externally supplied hooks, helpers, plugins, package scripts, credential reads and network callbacks from executing.",
+        "Separate preview and discovery from execution and credential access; inventory all enabled startup paths.",
+        "Exercise hostile synthetic projects and preserve process, file and network observations together with a valid trusted-project control."
+      ],
+      "validation": "Pre-trust execution in harnesses. Verify synthetic untrusted project opening has zero prohibited effects and trusted opening still works.",
+      "research_path": "research/026_v35_c02.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "S1.8.R01",
+          "requirement": "Before trust is established, prevent project or externally supplied hooks, helpers, plugins, package scripts, credential reads and network callbacks from executing.",
+          "disposition": "normative",
+          "review_id": "C02",
+          "research": "research/026_v35_c02.md"
+        },
+        {
+          "id": "S1.8.R02",
+          "requirement": "Separate preview and discovery from execution and credential access; inventory all enabled startup paths.",
+          "disposition": "normative",
+          "review_id": "C02",
+          "research": "research/026_v35_c02.md"
+        },
+        {
+          "id": "S1.8.R03",
+          "requirement": "Exercise hostile synthetic projects and preserve process, file and network observations together with a valid trusted-project control.",
+          "disposition": "normative",
+          "review_id": "C02",
+          "research": "research/026_v35_c02.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-03",
+        "OBS-2026-JUN-05"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C03",
+      "control_id": "CP.12",
+      "title": "Add cross-pillar final-effect authorization",
+      "rationale": "The action can become inadmissible after approval even with correct identity and tool permissions. CP.4 remains the supporting control plane. A standalone requirement costs adapter and commit-boundary work.",
+      "source": "Evidence waves 01-06; C03 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Immediately before committing a consequential effect, an enforcement point outside the acting model shall validate principal, delegation, action, resource, environment, recipient, purpose, time, limits and required approval.",
+        "Bind approval to canonical action parameters and current policy/state versions; a changed material condition requires a new decision.",
+        "Refuse missing, expired, conflicting or unverified mandatory conditions and protect the gate and credentials from the governed agent.",
+        "Define atomic check/commit or destination-enforced version checks, replay resistance and the behavior for an unavailable authority service."
+      ],
+      "validation": "Authority at commitment. Compare EFA, FlowSignal and AI SAFE2 using changed state, changed target, and an independently observed effect.",
+      "research_path": "research/027_v35_c03.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.12.R01",
+          "requirement": "Immediately before committing a consequential effect, an enforcement point outside the acting model shall validate principal, delegation, action, resource, environment, recipient, purpose, time, limits and required approval.",
+          "disposition": "normative",
+          "review_id": "C03",
+          "research": "research/027_v35_c03.md"
+        },
+        {
+          "id": "CP.12.R02",
+          "requirement": "Bind approval to canonical action parameters and current policy/state versions; a changed material condition requires a new decision.",
+          "disposition": "normative",
+          "review_id": "C03",
+          "research": "research/027_v35_c03.md"
+        },
+        {
+          "id": "CP.12.R03",
+          "requirement": "Refuse missing, expired, conflicting or unverified mandatory conditions and protect the gate and credentials from the governed agent.",
+          "disposition": "normative",
+          "review_id": "C03",
+          "research": "research/027_v35_c03.md"
+        },
+        {
+          "id": "CP.12.R04",
+          "requirement": "Define atomic check/commit or destination-enforced version checks, replay resistance and the behavior for an unavailable authority service.",
+          "disposition": "normative",
+          "review_id": "C03",
+          "research": "research/027_v35_c03.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-01",
+        "OBS-2026-MAY-02",
+        "OBS-2026-SEP-03"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C04",
+      "control_id": "CP.13",
+      "title": "Add cross-pillar evidence independence",
+      "rationale": "Logging, receipt generation, grader custody and effect verification have different trust dependencies. Shared rules reduce false assurance. Independence costs integration and may constrain legacy deployments.",
+      "source": "Evidence waves 01-06; C04 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Maintain authorization, observed action and external effect evidence through a collection boundary the acting agent cannot rewrite.",
+        "Record evidence provenance, collector scope, independence, freshness, uncertainty and unavailable observations without claiming hidden reasoning access.",
+        "Protect the evidence store and evaluator configuration; allow external incident and affected-party observations to challenge the recorded outcome."
+      ],
+      "validation": "Independent evidence and false assurance. Demonstrate disagreement among a receipt, reported completion and observed resource state.",
+      "research_path": "research/028_v35_c04.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.13.R01",
+          "requirement": "Maintain authorization, observed action and external effect evidence through a collection boundary the acting agent cannot rewrite.",
+          "disposition": "normative",
+          "review_id": "C04",
+          "research": "research/028_v35_c04.md"
+        },
+        {
+          "id": "CP.13.R02",
+          "requirement": "Record evidence provenance, collector scope, independence, freshness, uncertainty and unavailable observations without claiming hidden reasoning access.",
+          "disposition": "normative",
+          "review_id": "C04",
+          "research": "research/028_v35_c04.md"
+        },
+        {
+          "id": "CP.13.R03",
+          "requirement": "Protect the evidence store and evaluator configuration; allow external incident and affected-party observations to challenge the recorded outcome.",
+          "disposition": "normative",
+          "review_id": "C04",
+          "research": "research/028_v35_c04.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-03",
+        "OBS-2026-AUG-01",
+        "OBS-2026-SEP-02"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C05",
+      "control_id": "F3.6",
+      "title": "Add P3 consumable-authority ceiling candidate",
+      "rationale": "F3.2 controls depth, F3.5 contains cascades, MCP-8 is profile-scoped and APAY handles payments. Shared reservations across parallel descendants are separately testable. Strong consistency can affect availability.",
+      "source": "Evidence waves 01-06; C05 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Reserve shared task and descendant resource budgets before admitting concurrent work; account for outstanding and settled consumption.",
+        "Declare units, accountable owner, concurrency, retries, expiry and treatment of delayed or unknown consumption.",
+        "Reject admission beyond the aggregate envelope, reconcile cancellation and settlement idempotently, and define safe handling of partially committed effects."
+      ],
+      "validation": "Aggregate authority and settlement. Compare concurrency, tokens, commitments, retry and delayed usage. Allocate F3.6 only after catalog overlap review.",
+      "research_path": "research/029_v35_c05.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "F3.6.R01",
+          "requirement": "Reserve shared task and descendant resource budgets before admitting concurrent work; account for outstanding and settled consumption.",
+          "disposition": "normative",
+          "review_id": "C05",
+          "research": "research/029_v35_c05.md"
+        },
+        {
+          "id": "F3.6.R02",
+          "requirement": "Declare units, accountable owner, concurrency, retries, expiry and treatment of delayed or unknown consumption.",
+          "disposition": "normative",
+          "review_id": "C05",
+          "research": "research/029_v35_c05.md"
+        },
+        {
+          "id": "F3.6.R03",
+          "requirement": "Reject admission beyond the aggregate envelope, reconcile cancellation and settlement idempotently, and define safe handling of partially committed effects.",
+          "disposition": "normative",
+          "review_id": "C05",
+          "research": "research/029_v35_c05.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-01",
+        "OBS-2026-AUG-02"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C06",
+      "control_id": "CP.14",
+      "title": "Add cross-pillar organizational AIMS candidate",
+      "rationale": "CP.4 owns the agent control plane. Leadership, management review, independent audit and corrective action have an organizational owner. Risks duplicating management-system standards if scope is loose.",
+      "source": "Evidence waves 01-06; C06 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Define organizational AI scope, leadership responsibility, resources, applicable obligations and statement of applicability.",
+        "Maintain independently reviewable risk, impact, exception, audit and corrective-action records with named owners.",
+        "Conduct management review, address findings and preserve the reason, evidence and approval for material deployment decisions."
+      ],
+      "validation": "Organizational AIMS and accountability. Pin applicable external clauses and prove a reviewer can reconstruct scope, decisions, exceptions and corrective actions.",
+      "research_path": "research/030_v35_c06.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.14.R01",
+          "requirement": "Define organizational AI scope, leadership responsibility, resources, applicable obligations and statement of applicability.",
+          "disposition": "normative",
+          "review_id": "C06",
+          "research": "research/030_v35_c06.md"
+        },
+        {
+          "id": "CP.14.R02",
+          "requirement": "Maintain independently reviewable risk, impact, exception, audit and corrective-action records with named owners.",
+          "disposition": "normative",
+          "review_id": "C06",
+          "research": "research/030_v35_c06.md"
+        },
+        {
+          "id": "CP.14.R03",
+          "requirement": "Conduct management review, address findings and preserve the reason, evidence and approval for material deployment decisions.",
+          "disposition": "normative",
+          "review_id": "C06",
+          "research": "research/030_v35_c06.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-AUG-06",
+        "OBS-2026-JUN-04"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C07",
+      "control_id": "CP.3",
+      "title": "Extend CP.3 for purpose, applicability and affected-party impact",
+      "rationale": "ACT tiers already determine capability. Add an independent consequence classification so low-autonomy systems with high impact get appropriate review. A separate core control becomes warranted if rights governance needs its own owner and lifecycle.",
+      "source": "Evidence waves 01-06; C07 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Classify consequence, reversibility, data sensitivity, affected populations and applicability separately from autonomy.",
+        "Require proportionate review for high-impact decisions even at low ACT tiers."
+      ],
+      "validation": "Capability versus consequence. Compare high-impact low-autonomy and low-impact high-autonomy cases, including vulnerable and nonparticipating people.",
+      "research_path": "research/031_v35_c07.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.3.R01",
+          "requirement": "Classify consequence, reversibility, data sensitivity, affected populations and applicability separately from autonomy.",
+          "disposition": "normative",
+          "review_id": "C07",
+          "research": "research/031_v35_c07.md"
+        },
+        {
+          "id": "CP.3.R02",
+          "requirement": "Require proportionate review for high-impact decisions even at low ACT tiers.",
+          "disposition": "normative",
+          "review_id": "C07",
+          "research": "research/031_v35_c07.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-MAY-06",
+        "OBS-2026-JUN-04"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C08",
+      "control_id": "CP.4",
+      "title": "Extend CP.4 and P1 for information–authority separation",
+      "rationale": "Trusting content and granting authority are separate decisions within existing policy and isolation boundaries. One parent avoids divergent grants across surfaces.",
+      "source": "Evidence waves 01-06; C08 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Separate information content from policy and action authority; untrusted content shall not add, widen or remove grants.",
+        "Treat source signatures as provenance and independently decide suitability, authorization and corroboration."
+      ],
+      "validation": "Information, provenance and authority. Verify that untrusted data can inform reasoning without changing grants and that shared-source claims cannot establish independence.",
+      "research_path": "research/032_v35_c08.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.4.R01",
+          "requirement": "Separate information content from policy and action authority; untrusted content shall not add, widen or remove grants.",
+          "disposition": "normative",
+          "review_id": "C08",
+          "research": "research/032_v35_c08.md"
+        },
+        {
+          "id": "CP.4.R02",
+          "requirement": "Treat source signatures as provenance and independently decide suitability, authorization and corroboration.",
+          "disposition": "normative",
+          "review_id": "C08",
+          "research": "research/032_v35_c08.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-01",
+        "OBS-2026-SEP-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C09",
+      "control_id": "CP.9",
+      "title": "Extend CP.9 for delegated identity and attenuation",
+      "rationale": "CP.9 already owns descendant lineage. Add resource-side enforcement of bound purpose, scope, expiry and root task. Independent core IDs would duplicate the lifecycle.",
+      "source": "Evidence waves 01-06; C09 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Bind each descendant to the root task, verified principal, purpose, permitted resources, expiry and equal or narrower authority.",
+        "Verify the delegation at the final resource; deny fallback from missing identity to shared operator authority."
+      ],
+      "validation": "End-to-end delegated identity. Verify that a valid child identity cannot widen scope or survive expiry and revocation.",
+      "research_path": "research/033_v35_c09.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.9.R01",
+          "requirement": "Bind each descendant to the root task, verified principal, purpose, permitted resources, expiry and equal or narrower authority.",
+          "disposition": "normative",
+          "review_id": "C09",
+          "research": "research/033_v35_c09.md"
+        },
+        {
+          "id": "CP.9.R02",
+          "requirement": "Verify the delegation at the final resource; deny fallback from missing identity to shared operator authority.",
+          "disposition": "normative",
+          "review_id": "C09",
+          "research": "research/033_v35_c09.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-05",
+        "OBS-2026-SEP-05"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C10",
+      "control_id": "CP.10",
+      "title": "Extend CP.9, CP.10 and P3 for verified stopping",
+      "rationale": "Retain HEAR authority and existing recovery ownership. Require descendant and queued-work observations plus recovery of committed effects. A combined implementation can carry a coordination cost.",
+      "source": "Evidence waves 01-06; C10 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Provide an authenticated stop and revocation path outside the acting agent and independent of swarm voting.",
+        "Enumerate descendants, queued jobs, sessions and in-flight effects; verify cessation or isolate unresolved work and record residual effects."
+      ],
+      "validation": "Stop, revocation convergence and residual effects. Compare delay, partitions, restarts and externally committed work.",
+      "research_path": "research/034_v35_c10.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.10.R01",
+          "requirement": "Provide an authenticated stop and revocation path outside the acting agent and independent of swarm voting.",
+          "disposition": "normative",
+          "review_id": "C10",
+          "research": "research/034_v35_c10.md"
+        },
+        {
+          "id": "CP.10.R02",
+          "requirement": "Enumerate descendants, queued jobs, sessions and in-flight effects; verify cessation or isolate unresolved work and record residual effects.",
+          "disposition": "normative",
+          "review_id": "C10",
+          "research": "research/034_v35_c10.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-AUG-02",
+        "OBS-2026-JUL-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C11",
+      "control_id": "CP.12",
+      "title": "Add CP.4 child requirement for public-facing effects",
+      "rationale": "A separate boundary is useful for publication, communication, account creation and external commitments. It reuses final-effect authorization. A public-world control family would duplicate authority requirements.",
+      "source": "Evidence waves 01-06; C11 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Require explicit scoped authority for account creation, publication, external communication, submission and financial or other commitments.",
+        "Record affected parties, intervention, takedown and recovery paths for public-facing effects."
+      ],
+      "validation": "Agents acting beyond the operator boundary. Differentiate affected-party exposure, capability grants, containment and remedy.",
+      "research_path": "research/035_v35_c11.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.12.R05",
+          "requirement": "Require explicit scoped authority for account creation, publication, external communication, submission and financial or other commitments.",
+          "disposition": "normative",
+          "review_id": "C11",
+          "research": "research/035_v35_c11.md"
+        },
+        {
+          "id": "CP.12.R06",
+          "requirement": "Record affected parties, intervention, takedown and recovery paths for public-facing effects.",
+          "disposition": "normative",
+          "review_id": "C11",
+          "research": "research/035_v35_c11.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-AUG-02",
+        "OBS-2026-SEP-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C12",
+      "control_id": "S1.3",
+      "title": "Extend P1/P2 for inter-agent artifacts",
+      "rationale": "Message, shared artifact and tool result provenance use common trust rules. A new top-level family could obscure cross-agent differences in custody and authority.",
+      "source": "Evidence waves 01-06; C12 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Preserve provenance, authority scope, expiry and trust classification across agent messages, plans, files, approvals and logs.",
+        "Prevent agent-to-agent handoffs and shared-source agreement from silently establishing authorization or independent corroboration."
+      ],
+      "validation": "Inter-agent artifact governance and synthetic consensus. Compare direct messages, shared state and multiple derivatives of one source.",
+      "research_path": "research/036_v35_c12.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "S1.3.R01",
+          "requirement": "Preserve provenance, authority scope, expiry and trust classification across agent messages, plans, files, approvals and logs.",
+          "disposition": "normative",
+          "review_id": "C12",
+          "research": "research/036_v35_c12.md"
+        },
+        {
+          "id": "S1.3.R02",
+          "requirement": "Prevent agent-to-agent handoffs and shared-source agreement from silently establishing authorization or independent corroboration.",
+          "disposition": "normative",
+          "review_id": "C12",
+          "research": "research/036_v35_c12.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-02",
+        "OBS-2026-SEP-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C13",
+      "control_id": "S1.5",
+      "title": "Extend P1–P3 for memory admission and recovery",
+      "rationale": "Existing memory governance needs provenance, permitted use, tenancy, expiry, derivative tracking and clean restores. Separate controls for every memory representation fragment the policy.",
+      "source": "Evidence waves 01-06; C13 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Assign memory provenance, permitted uses, tenant/purpose scope, owner and expiry at admission.",
+        "Quarantine instruction-bearing untrusted entries and propagate invalidation to derived state, replicas, exports and restores."
+      ],
+      "validation": "Persistent-state transformations. Verify scope and invalidation after summarization, export, cache and restoration.",
+      "research_path": "research/037_v35_c13.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "S1.5.R01",
+          "requirement": "Assign memory provenance, permitted uses, tenant/purpose scope, owner and expiry at admission.",
+          "disposition": "normative",
+          "review_id": "C13",
+          "research": "research/037_v35_c13.md"
+        },
+        {
+          "id": "S1.5.R02",
+          "requirement": "Quarantine instruction-bearing untrusted entries and propagate invalidation to derived state, replicas, exports and restores.",
+          "disposition": "normative",
+          "review_id": "C13",
+          "research": "research/037_v35_c13.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-02",
+        "OBS-2026-JUL-02"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C14",
+      "control_id": "CP.15",
+      "title": "Extend CP.4 for composition-aware authorization",
+      "rationale": "Several individually allowed operations can produce a prohibited root effect. Existing task policy owns combined intent. Tracking composition adds state and can limit legitimate workflows.",
+      "source": "Evidence waves 01-06; C14 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Evaluate root-task consequences and accumulated authority across the composed workflow.",
+        "Deny a prohibited effect when decomposed into individually permitted calls or skills."
+      ],
+      "validation": "Task-level consequences. Compare isolated permissions with authorization over a complete synthetic workflow.",
+      "research_path": "research/038_v35_c14.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.15.R01",
+          "requirement": "Evaluate root-task consequences and accumulated authority across the composed workflow.",
+          "disposition": "normative",
+          "review_id": "C14",
+          "research": "research/038_v35_c14.md"
+        },
+        {
+          "id": "CP.15.R02",
+          "requirement": "Deny a prohibited effect when decomposed into individually permitted calls or skills.",
+          "disposition": "normative",
+          "review_id": "C14",
+          "research": "research/038_v35_c14.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-01",
+        "OBS-2026-MAY-04"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C15",
+      "control_id": "S1.4",
+      "title": "Extend P1 for multimodal inputs and generated outputs",
+      "rationale": "The existing ingestion and destination boundaries apply. Add modality-specific handling and destination validation. A profile is useful only where the deployment requires different rules.",
+      "source": "Evidence waves 01-06; C15 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Cover every enabled modality, including OCR, images, metadata, audio, markup and encoded content.",
+        "Validate generated commands, SQL, URLs, paths and tool arguments against the destination boundary before execution."
+      ],
+      "validation": "Multimodal ingestion and generated-output consumption. Record supported formats and verify safe handling of each enabled path.",
+      "research_path": "research/039_v35_c15.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "S1.4.R01",
+          "requirement": "Cover every enabled modality, including OCR, images, metadata, audio, markup and encoded content.",
+          "disposition": "normative",
+          "review_id": "C15",
+          "research": "research/039_v35_c15.md"
+        },
+        {
+          "id": "S1.4.R02",
+          "requirement": "Validate generated commands, SQL, URLs, paths and tool arguments against the destination boundary before execution.",
+          "disposition": "normative",
+          "review_id": "C15",
+          "research": "research/039_v35_c15.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-SEP-01",
+        "OBS-2026-SEP-04"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C16",
+      "control_id": "E5.1",
+      "title": "Extend P4 and P5 for monitor and evaluator independence",
+      "rationale": "C04 owns the assurance rule. P4 and P5 own live observation and validation. Parallel core controls would blur independent evidence and model-justification signals.",
+      "source": "Evidence waves 01-06; C16 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Protect evaluation inputs, test selection, graders and live monitors from agent modification.",
+        "Evaluate actions and effects independently of model justification; record shared-source and evaluation-awareness limitations."
+      ],
+      "validation": "Evaluation integrity and protected monitoring. Separate grader custody, test recognition, contaminated results and false completion.",
+      "research_path": "research/040_v35_c16.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "E5.1.R01",
+          "requirement": "Protect evaluation inputs, test selection, graders and live monitors from agent modification.",
+          "disposition": "normative",
+          "review_id": "C16",
+          "research": "research/040_v35_c16.md"
+        },
+        {
+          "id": "E5.1.R02",
+          "requirement": "Evaluate actions and effects independently of model justification; record shared-source and evaluation-awareness limitations.",
+          "disposition": "normative",
+          "review_id": "C16",
+          "research": "research/040_v35_c16.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-03",
+        "OBS-2026-AUG-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C17",
+      "control_id": "F3.4",
+      "title": "Extend P3 for provider continuity and safe fallback",
+      "rationale": "Recovery owns fallback and reconstruction. Pin actual routing, preserve policy, and declare degraded capabilities. Wider fallback improves resilience but enlarges the trusted estate.",
+      "source": "Evidence waves 01-06; C17 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Record actual model/provider/route identities and verify that fallback preserves applicable policy and authority.",
+        "Reassess material substitutions and exercise approved degraded operation without uncontrolled endpoint replacement."
+      ],
+      "validation": "Model retirement, routing drift and degraded operation. Verify outage handling and version-change requalification.",
+      "research_path": "research/041_v35_c17.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "F3.4.R01",
+          "requirement": "Record actual model/provider/route identities and verify that fallback preserves applicable policy and authority.",
+          "disposition": "normative",
+          "review_id": "C17",
+          "research": "research/041_v35_c17.md"
+        },
+        {
+          "id": "F3.4.R02",
+          "requirement": "Reassess material substitutions and exercise approved degraded operation without uncontrolled endpoint replacement.",
+          "disposition": "normative",
+          "review_id": "C17",
+          "research": "research/041_v35_c17.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-AUG-03",
+        "OBS-2026-MAY-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C18",
+      "control_id": "A2.7",
+      "title": "Extend P3 for transaction semantics and shared-state concurrency",
+      "rationale": "Idempotency, conflict resolution, compensation and unknown outcomes reuse recovery obligations. APAY retains settlement-specific details.",
+      "source": "Evidence waves 01-06; C18 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Define transaction boundaries, shared-state ownership, locks, conflict handling, retries and compensation.",
+        "Preserve unknown outcomes until an authoritative state observation or accountable reconciliation resolves them."
+      ],
+      "validation": "Retries, partial effects and concurrent state. Measure duplicates, conflicts and observed recovery with a synthetic destination.",
+      "research_path": "research/042_v35_c18.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "A2.7.R01",
+          "requirement": "Define transaction boundaries, shared-state ownership, locks, conflict handling, retries and compensation.",
+          "disposition": "normative",
+          "review_id": "C18",
+          "research": "research/042_v35_c18.md"
+        },
+        {
+          "id": "A2.7.R02",
+          "requirement": "Preserve unknown outcomes until an authoritative state observation or accountable reconciliation resolves them.",
+          "disposition": "normative",
+          "review_id": "C18",
+          "research": "research/042_v35_c18.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-MAY-04",
+        "OBS-2026-SEP-03"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C19",
+      "control_id": "P4.T7.10",
+      "title": "Extend P4 for behavior disclosure, contestability and remedy",
+      "rationale": "Transparency and affected-party intervention belong together, with explicit distinction between operator stop and affected-person redress. A new disclosure standard would need a different audience or authority.",
+      "source": "Evidence waves 01-06; C19 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Provide proportionate notice, accessible contestation, accountable review and correction or remedy for consequential effects.",
+        "Record the observed remedy separately from the operator stop and from a tool-reported success."
+      ],
+      "validation": "Disclosure and remedy. Test accessible notice, accountable review, correction and actual remedy without relying on the original automated decision.",
+      "research_path": "research/043_v35_c19.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "P4.T7.10.R01",
+          "requirement": "Provide proportionate notice, accessible contestation, accountable review and correction or remedy for consequential effects.",
+          "disposition": "normative",
+          "review_id": "C19",
+          "research": "research/043_v35_c19.md"
+        },
+        {
+          "id": "P4.T7.10.R02",
+          "requirement": "Record the observed remedy separately from the operator stop and from a tool-reported success.",
+          "disposition": "normative",
+          "review_id": "C19",
+          "research": "research/043_v35_c19.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-AUG-02",
+        "OBS-2026-JUN-04"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C20",
+      "control_id": "CP.6",
+      "title": "Extend CP.6 and P5 for obligation routing and incident regressions",
+      "rationale": "Retain feedback-loop ownership. Add applicable clock, role, evidence hold and disposition, with source-pinned obligation profiles. Centralizing legal conclusions in core would reduce portability.",
+      "source": "Evidence waves 01-06; C20 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Route incident reporting, evidence holds, applicable clocks and recipients using a source-pinned obligation record.",
+        "Convert material incidents into owned regression cases or record a justified disposition and revisit trigger."
+      ],
+      "validation": "From incident to owned regression. Compare discovery and disclosure dates, overlapping duties, closure evidence and reasons for exclusions.",
+      "research_path": "research/044_v35_c20.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.6.R01",
+          "requirement": "Route incident reporting, evidence holds, applicable clocks and recipients using a source-pinned obligation record.",
+          "disposition": "normative",
+          "review_id": "C20",
+          "research": "research/044_v35_c20.md"
+        },
+        {
+          "id": "CP.6.R02",
+          "requirement": "Convert material incidents into owned regression cases or record a justified disposition and revisit trigger.",
+          "disposition": "normative",
+          "review_id": "C20",
+          "research": "research/044_v35_c20.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-01",
+        "OBS-2026-AUG-01",
+        "OBS-2026-SEP-08"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C21",
+      "control_id": "A2.5",
+      "title": "Extend P2 for evidence minimization, component inventory and provenance versus suitability",
+      "rationale": "Existing evidence ownership avoids a parallel ledger. Add access, retention, dependency coverage, and explicit suitability assessment. Privacy and completeness can conflict.",
+      "source": "Evidence waves 01-06; C21 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Inventory models, data, routes, skills, policy bundles, tools, evaluators and their deployment dependencies.",
+        "Minimize evidence content, bound access and retention, and preserve sufficient scope for reconstruction."
+      ],
+      "validation": "Evidence custody and reproducibility. Verify reconstruction using minimized records and distinguish signed origin from suitability.",
+      "research_path": "research/045_v35_c21.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "A2.5.R01",
+          "requirement": "Inventory models, data, routes, skills, policy bundles, tools, evaluators and their deployment dependencies.",
+          "disposition": "normative",
+          "review_id": "C21",
+          "research": "research/045_v35_c21.md"
+        },
+        {
+          "id": "A2.5.R02",
+          "requirement": "Minimize evidence content, bound access and retention, and preserve sufficient scope for reconstruction.",
+          "disposition": "normative",
+          "review_id": "C21",
+          "research": "research/045_v35_c21.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-06",
+        "OBS-2026-JUN-07"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C22",
+      "control_id": "E5.2",
+      "title": "Extend P1/P5 for training-data rights, model integrity and material change",
+      "rationale": "Use existing privacy, provenance and evaluation objectives. Profile the extra duties when training or fine-tuning applies. Broad requirements burden deployments that never train.",
+      "source": "Evidence waves 01-06; C22 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Record authorization and provenance for training, fine-tuning and derived copies, with applicable privacy and extraction evaluations.",
+        "Reassess changes in model, prompt, data, memory policy, tools and effective capability before consequential use."
+      ],
+      "validation": "Model and data lifecycle. Document authorized purpose, derived copies, risk evaluations and change triggers.",
+      "research_path": "research/046_v35_c22.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "E5.2.R01",
+          "requirement": "Record authorization and provenance for training, fine-tuning and derived copies, with applicable privacy and extraction evaluations.",
+          "disposition": "normative",
+          "review_id": "C22",
+          "research": "research/046_v35_c22.md"
+        },
+        {
+          "id": "E5.2.R02",
+          "requirement": "Reassess changes in model, prompt, data, memory policy, tools and effective capability before consequential use.",
+          "disposition": "normative",
+          "review_id": "C22",
+          "research": "research/046_v35_c22.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-03",
+        "OBS-2026-AUG-03"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C23",
+      "control_id": "F3.3",
+      "title": "Extend F3.3 for quorum independence",
+      "rationale": "Existing abort governance already owns voting. Add correlated evidence and membership tests, while keeping emergency stop independently exercisable. Quorum can harm availability if misapplied.",
+      "source": "Evidence waves 01-06; C23 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Define membership and independence for quorum decisions, including source overlap and common-model failure.",
+        "Prevent an agent from manufacturing approval through spawned votes; retain an independent emergency stop."
+      ],
+      "validation": "Correlated judgment and shared sources. Measure independence and behavior under partial participation.",
+      "research_path": "research/047_v35_c23.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "F3.3.R01",
+          "requirement": "Define membership and independence for quorum decisions, including source overlap and common-model failure.",
+          "disposition": "normative",
+          "review_id": "C23",
+          "research": "research/047_v35_c23.md"
+        },
+        {
+          "id": "F3.3.R02",
+          "requirement": "Prevent an agent from manufacturing approval through spawned votes; retain an independent emergency stop.",
+          "disposition": "normative",
+          "review_id": "C23",
+          "research": "research/047_v35_c23.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-02",
+        "OBS-2026-SEP-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C24",
+      "control_id": "CP.10",
+      "title": "Extend CP.10/P4 and UAS for effective human authority",
+      "rationale": "Keep the machine/human division and add comprehension, time, scope and practical intervention. A new CP.11 would duplicate existing ownership.",
+      "source": "Evidence waves 01-06; C24 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Test whether the reviewer receives material evidence, understands the proposed scope and can intervene under realistic time and accessibility constraints.",
+        "Measure justified acceptance and rejection and retained capability separately from threat severity and override frequency."
+      ],
+      "validation": "Paired CSF and AI SAFE2 evaluation. Compare formal approval with justified reliance, evidence received and retained unaided capability.",
+      "research_path": "research/048_v35_c24.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.10.R03",
+          "requirement": "Test whether the reviewer receives material evidence, understands the proposed scope and can intervene under realistic time and accessibility constraints.",
+          "disposition": "normative",
+          "review_id": "C24",
+          "research": "research/048_v35_c24.md"
+        },
+        {
+          "id": "CP.10.R04",
+          "requirement": "Measure justified acceptance and rejection and retained capability separately from threat severity and override frequency.",
+          "disposition": "normative",
+          "review_id": "C24",
+          "research": "research/048_v35_c24.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-04",
+        "OBS-2026-AUG-02"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C25",
+      "control_id": "CP.5",
+      "title": "Profile CP.5.HARNESS",
+      "rationale": "C02 owns the universal pre-trust rule. Coding and IDE profiles need startup, workspace, skill and permission-change checks. A profile improves specificity at the cost of version tracking.",
+      "source": "Evidence waves 01-06; C25 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "For coding harnesses, enumerate and gate project startup, hooks, skills, helpers, credentials and configured subprocesses.",
+        "Bind changed workspace, skill and endpoint permissions to a reviewed trust decision."
+      ],
+      "validation": "Harness startup and skill composition. Document which launch and update paths are actually covered.",
+      "research_path": "research/049_v35_c25.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.5.R01",
+          "requirement": "For coding harnesses, enumerate and gate project startup, hooks, skills, helpers, credentials and configured subprocesses.",
+          "disposition": "normative",
+          "review_id": "C25",
+          "research": "research/049_v35_c25.md"
+        },
+        {
+          "id": "CP.5.R02",
+          "requirement": "Bind changed workspace, skill and endpoint permissions to a reviewed trust decision.",
+          "disposition": "normative",
+          "review_id": "C25",
+          "research": "research/049_v35_c25.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-03",
+        "OBS-2026-JUN-05",
+        "OBS-2026-AUG-04"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C26",
+      "control_id": "CP.5",
+      "title": "Profile CP.5.GATEWAY",
+      "rationale": "Gateways need policy/admin separation, upstream attribution, verified fallback and egress boundaries. Reuse C01, C03, C16 and C17. A separate core would duplicate policy authority.",
+      "source": "Evidence waves 01-06; C26 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "For inference gateways, separate administrative policy, upstream credentials and execution authority from model responses.",
+        "Record actual routing and prevent unapproved endpoint or model substitution and permissive fallback."
+      ],
+      "validation": "Inference routing and gateway trust. Measure actual provider attribution and enforcement across approved routes.",
+      "research_path": "research/050_v35_c26.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.5.R03",
+          "requirement": "For inference gateways, separate administrative policy, upstream credentials and execution authority from model responses.",
+          "disposition": "normative",
+          "review_id": "C26",
+          "research": "research/050_v35_c26.md"
+        },
+        {
+          "id": "CP.5.R04",
+          "requirement": "Record actual routing and prevent unapproved endpoint or model substitution and permissive fallback.",
+          "disposition": "normative",
+          "review_id": "C26",
+          "research": "research/050_v35_c26.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-MAY-04",
+        "OBS-2026-SEP-05"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C27",
+      "control_id": "CP.5",
+      "title": "Profile CP.5.EVAL",
+      "rationale": "Evaluation and training environments need dedicated isolation, scope, stopping and evidence custody. Reuse C04 and C16. Profile-specific rules prevent transferring assumptions to ordinary deployments.",
+      "source": "Evidence waves 01-06; C27 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "For evaluation environments, isolate runs, shared package services, secrets, graders and external destinations.",
+        "Enforce the authorized scope and verified containment independently of tested-agent behavior."
+      ],
+      "validation": "Evaluation infrastructure as an operating boundary. Verify scope and independent results on synthetic infrastructure.",
+      "research_path": "research/051_v35_c27.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.5.R05",
+          "requirement": "For evaluation environments, isolate runs, shared package services, secrets, graders and external destinations.",
+          "disposition": "normative",
+          "review_id": "C27",
+          "research": "research/051_v35_c27.md"
+        },
+        {
+          "id": "CP.5.R06",
+          "requirement": "Enforce the authorized scope and verified containment independently of tested-agent behavior.",
+          "disposition": "normative",
+          "review_id": "C27",
+          "research": "research/051_v35_c27.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-01",
+        "OBS-2026-JUL-03",
+        "OBS-2026-AUG-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C28",
+      "control_id": "CP.5",
+      "title": "Profile CP.5.BROWSER / personal agent",
+      "rationale": "Separate enterprise and personal purpose, account, bystander consent, browser state and offboarding. Core consent and isolation still apply.",
+      "source": "Evidence waves 01-06; C28 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "For personal agents, separate personal and enterprise accounts, state, purposes, consent and offboarding.",
+        "Keep bystander data and derived-state reuse within explicitly recorded scope."
+      ],
+      "validation": "Personal-agent authority and continuity. Verify account separation and derived-data revocation across session changes.",
+      "research_path": "research/052_v35_c28.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.5.R07",
+          "requirement": "For personal agents, separate personal and enterprise accounts, state, purposes, consent and offboarding.",
+          "disposition": "normative",
+          "review_id": "C28",
+          "research": "research/052_v35_c28.md"
+        },
+        {
+          "id": "CP.5.R08",
+          "requirement": "Keep bystander data and derived-state reuse within explicitly recorded scope.",
+          "disposition": "normative",
+          "review_id": "C28",
+          "research": "research/052_v35_c28.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-06",
+        "OBS-2026-SEP-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C29",
+      "control_id": "CP.5",
+      "title": "Profile finance and commerce through APAY first",
+      "rationale": "Preserve transaction intent, merchant conflicts, cumulative limits and settlement truth. Add a distinct finance profile only for verified institutional duties beyond APAY. Quorum should depend on consequence and applicable policy.",
+      "source": "Evidence waves 01-06; C29 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "For commerce, bind buyer, merchant, amount, terms, destination, recurring commitments and settlement authority.",
+        "Disclose configured incentives and verify settlement and refund outcomes through independent evidence."
+      ],
+      "validation": "Agent commerce, conflicts and obligations. Compare purchase, recurring commitment, refund and settlement cases.",
+      "research_path": "research/053_v35_c29.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.5.R09",
+          "requirement": "For commerce, bind buyer, merchant, amount, terms, destination, recurring commitments and settlement authority.",
+          "disposition": "normative",
+          "review_id": "C29",
+          "research": "research/053_v35_c29.md"
+        },
+        {
+          "id": "CP.5.R10",
+          "requirement": "Disclose configured incentives and verify settlement and refund outcomes through independent evidence.",
+          "disposition": "normative",
+          "review_id": "C29",
+          "research": "research/053_v35_c29.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C30",
+      "control_id": "CP.5",
+      "title": "Extend CP.5.MCP",
+      "rationale": "Existing MCP-19, MCP-18 and related controls offer a home for discovery, audience, identity, catalog changes and fallback. New IDs require an uncovered objective after exact mapping.",
+      "source": "Evidence waves 01-06; C30 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Apply the v3.5 MCP child requirements and preserve protocol-independent governance units.",
+        "Validate capability, resource, principal, destination and current-state bindings through the actual deployment paths."
+      ],
+      "validation": "MCP actor/origin, surface and enforcement. Compare repeated incidents across dates and produce version-bounded conformance evidence.",
+      "research_path": "research/054_v35_c30.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.5.R11",
+          "requirement": "Apply the v3.5 MCP child requirements and preserve protocol-independent governance units.",
+          "disposition": "normative",
+          "review_id": "C30",
+          "research": "research/054_v35_c30.md"
+        },
+        {
+          "id": "CP.5.R12",
+          "requirement": "Validate capability, resource, principal, destination and current-state bindings through the actual deployment paths.",
+          "disposition": "normative",
+          "review_id": "C30",
+          "research": "research/054_v35_c30.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-04",
+        "OBS-2026-MAY-05",
+        "OBS-2026-SEP-04",
+        "OBS-2026-SEP-05"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C31",
+      "control_id": "CP.5",
+      "title": "Profile physical effects when a domain is named",
+      "rationale": "A local controller, safety envelope and safe degraded state differ materially from ordinary digital tools. Generalize final-effect authorization while keeping physical assurance domain-specific.",
+      "source": "Evidence waves 01-06; C31 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "For physical effects, enforce a domain-specific safety envelope and a locally available safe degraded state.",
+        "Exercise connectivity loss, cloud outage and agent termination without introducing unsafe controller behavior."
+      ],
+      "validation": "Physical action and degraded operation. Use synthetic device states and measure recovery and human intervention.",
+      "research_path": "research/055_v35_c31.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.5.R13",
+          "requirement": "For physical effects, enforce a domain-specific safety envelope and a locally available safe degraded state.",
+          "disposition": "normative",
+          "review_id": "C31",
+          "research": "research/055_v35_c31.md"
+        },
+        {
+          "id": "CP.5.R14",
+          "requirement": "Exercise connectivity loss, cloud outage and agent termination without introducing unsafe controller behavior.",
+          "disposition": "normative",
+          "review_id": "C31",
+          "research": "research/055_v35_c31.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C32",
+      "control_id": "E5.1",
+      "title": "Research cognitive thresholds, evaluators and speculative adoption claims",
+      "rationale": "Preserve the hypotheses and contrary evidence. Keep cognitive scoring out of normative enforcement until validity, privacy and practical benefit are demonstrated.",
+      "source": "Evidence waves 01-06; C32 disposition in docs/FRAMEWORK-EVIDENCE-EXPANSION.md and docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "requirements": [
+        "Document the validity, limitations, affected population and privacy of candidate cognitive and evaluator measurements before using them as gates.",
+        "Preserve contrary evidence and speculative status; threshold adoption requires a scoped validation decision."
+      ],
+      "validation": "Research notes on capability reserve, evaluation-aware behavior, and comparative validation. Define disconfirming outcomes and repeatability before proposing new requirements.",
+      "research_path": "research/056_v35_c32.md",
+      "status": "research",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "E5.1.R03",
+          "requirement": "Document the validity, limitations, affected population and privacy of candidate cognitive and evaluator measurements before using them as gates.",
+          "disposition": "research",
+          "review_id": "C32",
+          "research": "research/056_v35_c32.md"
+        },
+        {
+          "id": "E5.1.R04",
+          "requirement": "Preserve contrary evidence and speculative status; threshold adoption requires a scoped validation decision.",
+          "disposition": "research",
+          "review_id": "C32",
+          "research": "research/056_v35_c32.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-03",
+        "OBS-2026-AUG-03"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C33",
+      "control_id": "CP.15",
+      "title": "Design-time coordination contract",
+      "rationale": "C14 handles combined authorization and C23 handles voting. Neither requires roles, ownership or termination to be defined before a workflow starts. Independent design acceptance has its own lifecycle. Extra specification effort can slow prototyping; permit declared exploratory scope with bounded effects.",
+      "source": "Wave 04 Holds, Proposed for v3.2; Wave 02 shared-resource and swarm requirements",
+      "requirements": [
+        "Declare role responsibilities, allowed interactions, authoritative shared resources and accountable owner before consequential deployment.",
+        "Define completion, cancellation, termination and conflict-resolution conditions for the task graph.",
+        "Validate handoffs, cyclic dependencies, abandoned locks and competing writers before promotion.",
+        "Bind the approved coordination version to execution and revalidate changes in membership or role authority."
+      ],
+      "validation": "Show that an allowed but contradictory set of roles is rejected before deployment; a valid graph can complete. Retain synthetic fixtures and source-specific study limitations. The supplied 79% figure needs its own primary-study denominator and applicability review.",
+      "research_path": "research/057_v35_c33.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.15.R03",
+          "requirement": "Declare role responsibilities, allowed interactions, authoritative shared resources and accountable owner before consequential deployment.",
+          "disposition": "normative",
+          "review_id": "C33",
+          "research": "research/057_v35_c33.md"
+        },
+        {
+          "id": "CP.15.R04",
+          "requirement": "Define completion, cancellation, termination and conflict-resolution conditions for the task graph.",
+          "disposition": "normative",
+          "review_id": "C33",
+          "research": "research/057_v35_c33.md"
+        },
+        {
+          "id": "CP.15.R05",
+          "requirement": "Validate handoffs, cyclic dependencies, abandoned locks and competing writers before promotion.",
+          "disposition": "normative",
+          "review_id": "C33",
+          "research": "research/057_v35_c33.md"
+        },
+        {
+          "id": "CP.15.R06",
+          "requirement": "Bind the approved coordination version to execution and revalidate changes in membership or role authority.",
+          "disposition": "normative",
+          "review_id": "C33",
+          "research": "research/057_v35_c33.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-01",
+        "OBS-2026-JUN-03",
+        "OBS-2026-JUL-02"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C34",
+      "control_id": "F3.7",
+      "title": "Environment-bound authority",
+      "rationale": "Isolation alone does not establish which environment an authorized action targets. A distinct effect gate makes production/development assertions independently testable. Environment identity management and emergency procedures add operational cost.",
+      "source": "Wave 04 Holds, Environment Binding and Assertion; Wave 02 purpose separation",
+      "requirements": [
+        "Bind action authority to a verified environment, tenant and resource identity.",
+        "Require an independently issued environment assertion for destructive or material operations.",
+        "Refuse a mismatched, expired or unknown environment assertion and prevent agent self-issuance.",
+        "Revalidate after a route, account, region, resource alias or environment change."
+      ],
+      "validation": "Run synthetic development/production twins and verify that changed endpoint or account cannot redirect an approval. Validate the cited incidents individually before attributing their causes.",
+      "research_path": "research/058_v35_c34.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "F3.7.R01",
+          "requirement": "Bind action authority to a verified environment, tenant and resource identity.",
+          "disposition": "normative",
+          "review_id": "C34",
+          "research": "research/058_v35_c34.md"
+        },
+        {
+          "id": "F3.7.R02",
+          "requirement": "Require an independently issued environment assertion for destructive or material operations.",
+          "disposition": "normative",
+          "review_id": "C34",
+          "research": "research/058_v35_c34.md"
+        },
+        {
+          "id": "F3.7.R03",
+          "requirement": "Refuse a mismatched, expired or unknown environment assertion and prevent agent self-issuance.",
+          "disposition": "normative",
+          "review_id": "C34",
+          "research": "research/058_v35_c34.md"
+        },
+        {
+          "id": "F3.7.R04",
+          "requirement": "Revalidate after a route, account, region, resource alias or environment change.",
+          "disposition": "normative",
+          "review_id": "C34",
+          "research": "research/058_v35_c34.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-03",
+        "OBS-2026-JUN-05"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C35",
+      "control_id": "A2.7",
+      "title": "Idempotency and side-effect ledger",
+      "rationale": "C18 compressed ledger semantics into general transaction safety. Reservation, commitment and unknown outcomes warrant an explicit reusable requirement. P2 records evidence; the P3 mechanism prevents duplicate effects. Central state adds collision and availability risks.",
+      "source": "Wave 04 Holds, Idempotency and Side-Effect Ledger; Wave 02 ASG-13 and transactions",
+      "requirements": [
+        "Bind each idempotency key to task, operation, destination and canonical action parameters.",
+        "Reserve and commit the operation atomically where supported; reject key reuse for a different action.",
+        "Reconcile ambiguous results against destination state before retrying an irreversible effect.",
+        "Define retention, collision handling, timeout, partial completion and compensation semantics.",
+        "Return the recorded result for a completed identical request without executing it again."
+      ],
+      "validation": "Exercise concurrent duplicate requests, key collision, timeout after commit and ledger outage. Document external services where exact duplicate suppression cannot be established.",
+      "research_path": "research/059_v35_c35.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "A2.7.R03",
+          "requirement": "Bind each idempotency key to task, operation, destination and canonical action parameters.",
+          "disposition": "normative",
+          "review_id": "C35",
+          "research": "research/059_v35_c35.md"
+        },
+        {
+          "id": "A2.7.R04",
+          "requirement": "Reserve and commit the operation atomically where supported; reject key reuse for a different action.",
+          "disposition": "normative",
+          "review_id": "C35",
+          "research": "research/059_v35_c35.md"
+        },
+        {
+          "id": "A2.7.R05",
+          "requirement": "Reconcile ambiguous results against destination state before retrying an irreversible effect.",
+          "disposition": "normative",
+          "review_id": "C35",
+          "research": "research/059_v35_c35.md"
+        },
+        {
+          "id": "A2.7.R06",
+          "requirement": "Define retention, collision handling, timeout, partial completion and compensation semantics.",
+          "disposition": "normative",
+          "review_id": "C35",
+          "research": "research/059_v35_c35.md"
+        },
+        {
+          "id": "A2.7.R07",
+          "requirement": "Return the recorded result for a completed identical request without executing it again.",
+          "disposition": "normative",
+          "review_id": "C35",
+          "research": "research/059_v35_c35.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-MAY-04"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C36",
+      "control_id": "A2.8",
+      "title": "Verified outcome contract",
+      "rationale": "C04 concerns evidence independence across claims. This objective defines completion itself. Existing receipt tooling does not make an external business outcome verified. Additional observations can add latency and expose sensitive state.",
+      "source": "Wave 04 Holds, Post-Condition Verification; Wave 02 P2-01; merged CI receipt boundary",
+      "requirements": [
+        "Declare the external postcondition and its authoritative observation method.",
+        "Distinguish attempted, accepted, committed, independently verified, failed and unknown outcomes.",
+        "Bind the observation to the action, target, revision and observation time.",
+        "Prevent a tool success response or agent completion message from alone satisfying the postcondition.",
+        "Scope verification frequency and retention to consequence and preserve unknown coverage."
+      ],
+      "validation": "Return HTTP success without the intended state change, then mutate the wrong target. Both remain incomplete or failed. Include legitimate success and an unavailable observer.",
+      "research_path": "research/060_v35_c36.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "A2.8.R01",
+          "requirement": "Declare the external postcondition and its authoritative observation method.",
+          "disposition": "normative",
+          "review_id": "C36",
+          "research": "research/060_v35_c36.md"
+        },
+        {
+          "id": "A2.8.R02",
+          "requirement": "Distinguish attempted, accepted, committed, independently verified, failed and unknown outcomes.",
+          "disposition": "normative",
+          "review_id": "C36",
+          "research": "research/060_v35_c36.md"
+        },
+        {
+          "id": "A2.8.R03",
+          "requirement": "Bind the observation to the action, target, revision and observation time.",
+          "disposition": "normative",
+          "review_id": "C36",
+          "research": "research/060_v35_c36.md"
+        },
+        {
+          "id": "A2.8.R04",
+          "requirement": "Prevent a tool success response or agent completion message from alone satisfying the postcondition.",
+          "disposition": "normative",
+          "review_id": "C36",
+          "research": "research/060_v35_c36.md"
+        },
+        {
+          "id": "A2.8.R05",
+          "requirement": "Scope verification frequency and retention to consequence and preserve unknown coverage.",
+          "disposition": "normative",
+          "review_id": "C36",
+          "research": "research/060_v35_c36.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-03",
+        "OBS-2026-AUG-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C37",
+      "control_id": "E5.5",
+      "title": "Declared success and acceptance criteria",
+      "rationale": "Evaluation cadence cannot compensate for a missing task objective. This gate applies at design and acceptance time, while C36 applies after execution. Exploratory and qualitative work need explicit human review criteria instead of fabricated machine precision.",
+      "source": "Wave 04 Holds, Declared Success Criteria Gate; Wave 02 G-01 and P5 requirements",
+      "requirements": [
+        "Declare intended benefit, observable success, prohibited effects and accepted uncertainty before consequential operation.",
+        "Use executable assertions where feasible and identify the responsible human rubric when judgment remains necessary.",
+        "Bind criteria to the workflow version and prevent the acting agent from relaxing them after observing its result.",
+        "Keep task completion, safety, utility and cost as separate outcomes."
+      ],
+      "validation": "Demonstrate that a workflow with no criteria cannot claim validated completion. Test correct assistance, safe refusal, false blocking and an approved exploratory task. Recheck the source of the supplied 41% figure.",
+      "research_path": "research/061_v35_c37.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "E5.5.R01",
+          "requirement": "Declare intended benefit, observable success, prohibited effects and accepted uncertainty before consequential operation.",
+          "disposition": "normative",
+          "review_id": "C37",
+          "research": "research/061_v35_c37.md"
+        },
+        {
+          "id": "E5.5.R02",
+          "requirement": "Use executable assertions where feasible and identify the responsible human rubric when judgment remains necessary.",
+          "disposition": "normative",
+          "review_id": "C37",
+          "research": "research/061_v35_c37.md"
+        },
+        {
+          "id": "E5.5.R03",
+          "requirement": "Bind criteria to the workflow version and prevent the acting agent from relaxing them after observing its result.",
+          "disposition": "normative",
+          "review_id": "C37",
+          "research": "research/061_v35_c37.md"
+        },
+        {
+          "id": "E5.5.R04",
+          "requirement": "Keep task completion, safety, utility and cost as separate outcomes.",
+          "disposition": "normative",
+          "review_id": "C37",
+          "research": "research/061_v35_c37.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-01",
+        "OBS-2026-MAY-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C38",
+      "control_id": "A2.9",
+      "title": "Evidence-based failure attribution",
+      "rationale": "Observed failure location and causal root cause are different claims. Existing CI phase classification provides a bounded implementation to generalize. A distinct requirement makes repair guidance testable. Evidence collection can be incomplete and causality may remain unresolved.",
+      "source": "Wave 04 Holds, Failure Location; Developer Workflow CI execution receipt; Wave 02 outcome evidence",
+      "requirements": [
+        "Record failures by environment, build, transport, harness, application, postprocessing, publication and applicable runtime boundary.",
+        "Attach observations, competing explanations and unavailable evidence to each proposed failure location.",
+        "Keep ranked hypotheses distinct from verified causes and explicit unknown states.",
+        "Link each accepted diagnosis to a repair and a repeat of the relevant failing case."
+      ],
+      "validation": "A passing application test followed by a broken wrapper must retain both observations. Compare diagnoses with an independently labeled synthetic fault set before claiming superiority over published work.",
+      "research_path": "research/062_v35_c38.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "A2.9.R01",
+          "requirement": "Record failures by environment, build, transport, harness, application, postprocessing, publication and applicable runtime boundary.",
+          "disposition": "normative",
+          "review_id": "C38",
+          "research": "research/062_v35_c38.md"
+        },
+        {
+          "id": "A2.9.R02",
+          "requirement": "Attach observations, competing explanations and unavailable evidence to each proposed failure location.",
+          "disposition": "normative",
+          "review_id": "C38",
+          "research": "research/062_v35_c38.md"
+        },
+        {
+          "id": "A2.9.R03",
+          "requirement": "Keep ranked hypotheses distinct from verified causes and explicit unknown states.",
+          "disposition": "normative",
+          "review_id": "C38",
+          "research": "research/062_v35_c38.md"
+        },
+        {
+          "id": "A2.9.R04",
+          "requirement": "Link each accepted diagnosis to a repair and a repeat of the relevant failing case.",
+          "disposition": "normative",
+          "review_id": "C38",
+          "research": "research/062_v35_c38.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-03",
+        "OBS-2026-AUG-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C39",
+      "control_id": "S1.5",
+      "title": "Outcome-aware memory and correction precedence",
+      "rationale": "Expiry and provenance describe origin and lifetime. They do not establish whether an entry is failed or superseded. Reuse the memory lifecycle while making validity independently queryable. Incorrect corrections can suppress useful knowledge.",
+      "source": "Wave 04 Holds, Memory Outcome Annotation; Wave 02 derived-state laundering",
+      "requirements": [
+        "Attach verified, failed, disputed, superseded or unknown outcome status to reusable artifacts and durable entries.",
+        "Preserve correction links, original evidence and reason for status changes.",
+        "Retrieval must surface an applicable correction with the original claim and block superseded instructions from silently regaining authority.",
+        "Carry correction state through summarization, export, replica restore and derivative generation."
+      ],
+      "validation": "Poison a synthetic entry, correct it, then retrieve its summary and restore its backup. Test erroneous correction reversal with accountable review.",
+      "research_path": "research/063_v35_c39.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "S1.5.R03",
+          "requirement": "Attach verified, failed, disputed, superseded or unknown outcome status to reusable artifacts and durable entries.",
+          "disposition": "normative",
+          "review_id": "C39",
+          "research": "research/063_v35_c39.md"
+        },
+        {
+          "id": "S1.5.R04",
+          "requirement": "Preserve correction links, original evidence and reason for status changes.",
+          "disposition": "normative",
+          "review_id": "C39",
+          "research": "research/063_v35_c39.md"
+        },
+        {
+          "id": "S1.5.R05",
+          "requirement": "Retrieval must surface an applicable correction with the original claim and block superseded instructions from silently regaining authority.",
+          "disposition": "normative",
+          "review_id": "C39",
+          "research": "research/063_v35_c39.md"
+        },
+        {
+          "id": "S1.5.R06",
+          "requirement": "Carry correction state through summarization, export, replica restore and derivative generation.",
+          "disposition": "normative",
+          "review_id": "C39",
+          "research": "research/063_v35_c39.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-02",
+        "OBS-2026-JUL-02"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C40",
+      "control_id": "CP.5",
+      "title": "Computer-use state and verification",
+      "rationale": "Browser interfaces and native apps have distinct observation and action semantics. A browser-only profile loses native computer-use evidence. Shared final-effect controls remain inherited. Image and accessibility observations can be incomplete.",
+      "source": "Wave 04 Holds, CP.5.CUA; Wave 01 Google Home specificity",
+      "requirements": [
+        "Record target application, account, document or page identity and relevant state before a material action.",
+        "Require an observation fresh enough to identify the intended control and handle asynchronous state changes.",
+        "Recheck the target after focus, navigation, layout, modal or account changes.",
+        "Verify the resulting application or business state independently of the click or screenshot.",
+        "Declare unsupported surfaces and evidence limitations; keep native-app and browser fixtures distinct."
+      ],
+      "validation": "Exercise stale screenshots, delayed page state, changed window focus, modal interception and a click that leaves the postcondition unmet. Preserve the source DOM-settle proposal as browser-specific treatment.",
+      "research_path": "research/064_v35_c40.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.5.R15",
+          "requirement": "Record target application, account, document or page identity and relevant state before a material action.",
+          "disposition": "normative",
+          "review_id": "C40",
+          "research": "research/064_v35_c40.md"
+        },
+        {
+          "id": "CP.5.R16",
+          "requirement": "Require an observation fresh enough to identify the intended control and handle asynchronous state changes.",
+          "disposition": "normative",
+          "review_id": "C40",
+          "research": "research/064_v35_c40.md"
+        },
+        {
+          "id": "CP.5.R17",
+          "requirement": "Recheck the target after focus, navigation, layout, modal or account changes.",
+          "disposition": "normative",
+          "review_id": "C40",
+          "research": "research/064_v35_c40.md"
+        },
+        {
+          "id": "CP.5.R18",
+          "requirement": "Verify the resulting application or business state independently of the click or screenshot.",
+          "disposition": "normative",
+          "review_id": "C40",
+          "research": "research/064_v35_c40.md"
+        },
+        {
+          "id": "CP.5.R19",
+          "requirement": "Declare unsupported surfaces and evidence limitations; keep native-app and browser fixtures distinct.",
+          "disposition": "normative",
+          "review_id": "C40",
+          "research": "research/064_v35_c40.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-SEP-01",
+        "OBS-2026-SEP-07"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C41",
+      "control_id": "CP.3",
+      "title": "Fairness, decision validity and accessibility",
+      "rationale": "Security and valid authority can coexist with invalid or unfair decisions. Existing impact and oversight homes need explicit statistical and accessibility requirements. Context-specific metrics and conflicting objectives require recorded choices.",
+      "source": "Wave 02 governance/fairness; Wave 06 rubric C13 and source crosswalk",
+      "requirements": [
+        "Declare decision validity, affected populations, accessibility needs and task-specific fairness objectives.",
+        "Record sample size, power rationale where applicable, effect sizes, uncertainty and subgroup limitations.",
+        "Distinguish nonsignificant results from established absence of harmful disparities.",
+        "Define mitigation that can change the decision, use restrictions or deployment and monitor its outcome."
+      ],
+      "validation": "Evaluate authorized decisions that are systematically wrong or inaccessible. A mitigation must change relevant outcomes. Keep legal applicability and CSI-defined numerical thresholds attributed separately.",
+      "research_path": "research/065_v35_c41.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.3.R03",
+          "requirement": "Declare decision validity, affected populations, accessibility needs and task-specific fairness objectives.",
+          "disposition": "normative",
+          "review_id": "C41",
+          "research": "research/065_v35_c41.md"
+        },
+        {
+          "id": "CP.3.R04",
+          "requirement": "Record sample size, power rationale where applicable, effect sizes, uncertainty and subgroup limitations.",
+          "disposition": "normative",
+          "review_id": "C41",
+          "research": "research/065_v35_c41.md"
+        },
+        {
+          "id": "CP.3.R05",
+          "requirement": "Distinguish nonsignificant results from established absence of harmful disparities.",
+          "disposition": "normative",
+          "review_id": "C41",
+          "research": "research/065_v35_c41.md"
+        },
+        {
+          "id": "CP.3.R06",
+          "requirement": "Define mitigation that can change the decision, use restrictions or deployment and monitor its outcome.",
+          "disposition": "normative",
+          "review_id": "C41",
+          "research": "research/065_v35_c41.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-04"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C42",
+      "control_id": "CP.14",
+      "title": "No-AI alternative and deployment necessity",
+      "rationale": "Purpose classification does not compare alternatives. A documented suitability decision keeps the framework useful for ordinary organizations. Assessment effort should be proportional to consequence.",
+      "source": "Wave 02 divergent governance ideas; expanded external inventory",
+      "requirements": [
+        "Compare AI use with a simpler deterministic or human process where consequences warrant the decision.",
+        "Record expected benefit, material uncertainty, residual harms and conditions for withdrawing AI.",
+        "Declare the deployment owner and criteria for reassessment when benefits fail to materialize."
+      ],
+      "validation": "Compare two equally successful workflows with different exposure and maintenance costs. Preserve the rationale for selecting or rejecting automation.",
+      "research_path": "research/066_v35_c42.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.14.R04",
+          "requirement": "Compare AI use with a simpler deterministic or human process where consequences warrant the decision.",
+          "disposition": "normative",
+          "review_id": "C42",
+          "research": "research/066_v35_c42.md"
+        },
+        {
+          "id": "CP.14.R05",
+          "requirement": "Record expected benefit, material uncertainty, residual harms and conditions for withdrawing AI.",
+          "disposition": "normative",
+          "review_id": "C42",
+          "research": "research/066_v35_c42.md"
+        },
+        {
+          "id": "CP.14.R06",
+          "requirement": "Declare the deployment owner and criteria for reassessment when benefits fail to materialize.",
+          "disposition": "normative",
+          "review_id": "C42",
+          "research": "research/066_v35_c42.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-MAY-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C43",
+      "control_id": "CP.8",
+      "title": "Portfolio concentration and correlated failures",
+      "rationale": "Per-deployment fallback and independent agent identities miss shared providers, models, policies and evaluators. A portfolio assessment extends existing continuity and threshold ownership. Independence can cost money and introduce operational complexity.",
+      "source": "Wave 02 divergent governance ideas; swarm common-mode evidence",
+      "requirements": [
+        "Inventory shared model, provider, route, identity, policy, dataset and evaluator dependencies across deployments.",
+        "Assess correlated loss or defect scenarios and bound cumulative exposure.",
+        "Exercise an approved alternative and document dependencies shared with the primary path.",
+        "Review concentration after material acquisitions, migrations and new deployments."
+      ],
+      "validation": "Disable a shared policy or provider in a synthetic multi-deployment estate and measure which fallback paths are actually independent.",
+      "research_path": "research/067_v35_c43.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.8.R01",
+          "requirement": "Inventory shared model, provider, route, identity, policy, dataset and evaluator dependencies across deployments.",
+          "disposition": "normative",
+          "review_id": "C43",
+          "research": "research/067_v35_c43.md"
+        },
+        {
+          "id": "CP.8.R02",
+          "requirement": "Assess correlated loss or defect scenarios and bound cumulative exposure.",
+          "disposition": "normative",
+          "review_id": "C43",
+          "research": "research/067_v35_c43.md"
+        },
+        {
+          "id": "CP.8.R03",
+          "requirement": "Exercise an approved alternative and document dependencies shared with the primary path.",
+          "disposition": "normative",
+          "review_id": "C43",
+          "research": "research/067_v35_c43.md"
+        },
+        {
+          "id": "CP.8.R04",
+          "requirement": "Review concentration after material acquisitions, migrations and new deployments.",
+          "disposition": "normative",
+          "review_id": "C43",
+          "research": "research/067_v35_c43.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-03",
+        "OBS-2026-AUG-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C44",
+      "control_id": "CP.4",
+      "title": "Emergency exceptions and governance-agent limits",
+      "rationale": "An exception can permanently defeat all otherwise correct controls. Existing ownership is appropriate if authority, expiry and monitoring become mandatory. Tight emergency rules can impede urgent recovery.",
+      "source": "Wave 02 emergency powers, governance-agent authority and policy integrity",
+      "requirements": [
+        "Bind exceptions to a named authority, scope, reason, expiry and compensating measures.",
+        "Prevent an acting or governance agent from approving its own exceptions or extending their lifetime.",
+        "Log use, require post-event review and verify restoration of normal policy.",
+        "Define a tested emergency path for unavailable approvers with limited consequences."
+      ],
+      "validation": "Exercise expired exceptions, approver outage and an agent requesting wider rights. Verify revocation and restoration after the emergency.",
+      "research_path": "research/068_v35_c44.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.4.R03",
+          "requirement": "Bind exceptions to a named authority, scope, reason, expiry and compensating measures.",
+          "disposition": "normative",
+          "review_id": "C44",
+          "research": "research/068_v35_c44.md"
+        },
+        {
+          "id": "CP.4.R04",
+          "requirement": "Prevent an acting or governance agent from approving its own exceptions or extending their lifetime.",
+          "disposition": "normative",
+          "review_id": "C44",
+          "research": "research/068_v35_c44.md"
+        },
+        {
+          "id": "CP.4.R05",
+          "requirement": "Log use, require post-event review and verify restoration of normal policy.",
+          "disposition": "normative",
+          "review_id": "C44",
+          "research": "research/068_v35_c44.md"
+        },
+        {
+          "id": "CP.4.R06",
+          "requirement": "Define a tested emergency path for unavailable approvers with limited consequences.",
+          "disposition": "normative",
+          "review_id": "C44",
+          "research": "research/068_v35_c44.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-AUG-02"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C45",
+      "control_id": "A2.5",
+      "title": "Rights, retention and obligation conflicts",
+      "rationale": "A source declaration does not resolve training rights, downstream reuse or a conflict between deletion and evidence retention. Add lifecycle-specific decisions and accountable conflict routing. This needs specialist applicability review.",
+      "source": "Wave 02 IP/data rights and conflicting obligations; Wave 05 #390 and C11 redress",
+      "requirements": [
+        "Distinguish rights and policy decisions for training, retrieval, generation, publication and downstream reuse.",
+        "Record declaration freshness, conflicting evidence and uncertainty without inferring permission from UNKNOWN.",
+        "Route deletion, retention, security evidence and transparency conflicts to an accountable decision maker.",
+        "Propagate approved correction/deletion decisions to applicable derived stores and record justified retention exceptions."
+      ],
+      "validation": "Test contradictory declarations, a deletion request with a legitimate hold, and expired reuse permission. Report applicable scope and unresolved legal questions.",
+      "research_path": "research/069_v35_c45.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "A2.5.R03",
+          "requirement": "Distinguish rights and policy decisions for training, retrieval, generation, publication and downstream reuse.",
+          "disposition": "normative",
+          "review_id": "C45",
+          "research": "research/069_v35_c45.md"
+        },
+        {
+          "id": "A2.5.R04",
+          "requirement": "Record declaration freshness, conflicting evidence and uncertainty without inferring permission from UNKNOWN.",
+          "disposition": "normative",
+          "review_id": "C45",
+          "research": "research/069_v35_c45.md"
+        },
+        {
+          "id": "A2.5.R05",
+          "requirement": "Route deletion, retention, security evidence and transparency conflicts to an accountable decision maker.",
+          "disposition": "normative",
+          "review_id": "C45",
+          "research": "research/069_v35_c45.md"
+        },
+        {
+          "id": "A2.5.R06",
+          "requirement": "Propagate approved correction/deletion decisions to applicable derived stores and record justified retention exceptions.",
+          "disposition": "normative",
+          "review_id": "C45",
+          "research": "research/069_v35_c45.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C46",
+      "control_id": "P4.T7.10",
+      "title": "Affected-party and worker participation",
+      "rationale": "Operator approval leaves bystanders, workers and affected populations unrepresented. Expand existing impact and remedy requirements with an explicit route for their evidence. Participation can raise privacy and representativeness problems.",
+      "source": "Wave 02 worker/public participation; Wave 06 rubric contestability",
+      "requirements": [
+        "Identify affected people absent from the operator approval chain.",
+        "Collect proportionate input on impacts and accessibility and disclose its limitations.",
+        "Provide an accessible route to challenge, correct or escalate material effects.",
+        "Record whether input changed design, deployment, restrictions or remedy."
+      ],
+      "validation": "Trace a complaint from a non-user through accountable review to an observed correction, retaining disagreement and safety constraints.",
+      "research_path": "research/070_v35_c46.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "P4.T7.10.R03",
+          "requirement": "Identify affected people absent from the operator approval chain.",
+          "disposition": "normative",
+          "review_id": "C46",
+          "research": "research/070_v35_c46.md"
+        },
+        {
+          "id": "P4.T7.10.R04",
+          "requirement": "Collect proportionate input on impacts and accessibility and disclose its limitations.",
+          "disposition": "normative",
+          "review_id": "C46",
+          "research": "research/070_v35_c46.md"
+        },
+        {
+          "id": "P4.T7.10.R05",
+          "requirement": "Provide an accessible route to challenge, correct or escalate material effects.",
+          "disposition": "normative",
+          "review_id": "C46",
+          "research": "research/070_v35_c46.md"
+        },
+        {
+          "id": "P4.T7.10.R06",
+          "requirement": "Record whether input changed design, deployment, restrictions or remedy.",
+          "disposition": "normative",
+          "review_id": "C46",
+          "research": "research/070_v35_c46.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-04",
+        "OBS-2026-SEP-07"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C47",
+      "control_id": "F3.6",
+      "title": "Environmental and infrastructure resource impact",
+      "rationale": "Spend alone omits material compute, energy, water and infrastructure constraints. Add applicability-based measurement and limits. Precise measurement may be unavailable for hosted services.",
+      "source": "Wave 02 environmental/resource impacts; Wave 04 generalized consumable authority",
+      "requirements": [
+        "Identify material infrastructure and environmental constraints for the deployment.",
+        "Record measured, provider-reported, estimated and unknown resource use separately.",
+        "Apply justified limits or procurement restrictions and recheck after scaling or model changes."
+      ],
+      "validation": "Compare measured use and estimates under a synthetic scaling scenario. Avoid turning uncertain estimates into exact environmental benefits.",
+      "research_path": "research/071_v35_c47.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "F3.6.R04",
+          "requirement": "Identify material infrastructure and environmental constraints for the deployment.",
+          "disposition": "normative",
+          "review_id": "C47",
+          "research": "research/071_v35_c47.md"
+        },
+        {
+          "id": "F3.6.R05",
+          "requirement": "Record measured, provider-reported, estimated and unknown resource use separately.",
+          "disposition": "normative",
+          "review_id": "C47",
+          "research": "research/071_v35_c47.md"
+        },
+        {
+          "id": "F3.6.R06",
+          "requirement": "Apply justified limits or procurement restrictions and recheck after scaling or model changes.",
+          "disposition": "normative",
+          "review_id": "C47",
+          "research": "research/071_v35_c47.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-MAY-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C48",
+      "control_id": "CP.13",
+      "title": "Assurer competence and conflict management",
+      "rationale": "Independent custody alone cannot establish evaluator competence or representative tests. The evidence contract needs reviewer capability, conflicts and dispute handling. Independent review adds cost and may remain unavailable.",
+      "source": "Wave 02 assurer independence; Wave 06 rubric disagreement process",
+      "requirements": [
+        "Record reviewer competence, tool scope, financial or organizational conflicts and access limits.",
+        "Protect test selection, grader configuration and evidence custody from the evaluated agent.",
+        "Preserve reviewer disagreement and its adjudication with traceable reasons.",
+        "Retest after material changes to a benchmark, evaluator or assurance provider."
+      ],
+      "validation": "Use a flawed grader, conflicted reviewer and contaminated test set. Verify that their verdict cannot silently become independent assurance.",
+      "research_path": "research/072_v35_c48.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.13.R04",
+          "requirement": "Record reviewer competence, tool scope, financial or organizational conflicts and access limits.",
+          "disposition": "normative",
+          "review_id": "C48",
+          "research": "research/072_v35_c48.md"
+        },
+        {
+          "id": "CP.13.R05",
+          "requirement": "Protect test selection, grader configuration and evidence custody from the evaluated agent.",
+          "disposition": "normative",
+          "review_id": "C48",
+          "research": "research/072_v35_c48.md"
+        },
+        {
+          "id": "CP.13.R06",
+          "requirement": "Preserve reviewer disagreement and its adjudication with traceable reasons.",
+          "disposition": "normative",
+          "review_id": "C48",
+          "research": "research/072_v35_c48.md"
+        },
+        {
+          "id": "CP.13.R07",
+          "requirement": "Retest after material changes to a benchmark, evaluator or assurance provider.",
+          "disposition": "normative",
+          "review_id": "C48",
+          "research": "research/072_v35_c48.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-03",
+        "OBS-2026-AUG-01"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C49",
+      "control_id": "CP.6",
+      "title": "Threat intelligence linked to observed actor behavior",
+      "rationale": "The plan emphasized mechanisms but did not require an operational intelligence product. Incident learning needs actor behavior, prerequisites and detection opportunities. Public attribution and prevalence can remain uncertain.",
+      "source": "Wave 01 actors and operational developments; Wave 03 timelines and indicators",
+      "requirements": [
+        "Record observed actions, entry points, prerequisites, effects and sources independently from actor attribution.",
+        "Distinguish advisory, laboratory demonstration, observed exploitation and sustained operational activity.",
+        "Link relevant techniques to detection, prevention, containment and regression cases with exact deployment scope.",
+        "Preserve event, discovery, disclosure and fix dates, revisions, contradictions and confidence.",
+        "Use evidence-driven update triggers and publish changes in source confidence without manufacturing population incident rates."
+      ],
+      "validation": "Turn one source-backed incident into a linked control/detection/test record and retain both the original disclosure and later correction. Forecasts carry falsifiers and remain distinct from recorded events.",
+      "research_path": "research/073_v35_c49.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.6.R03",
+          "requirement": "Record observed actions, entry points, prerequisites, effects and sources independently from actor attribution.",
+          "disposition": "normative",
+          "review_id": "C49",
+          "research": "research/073_v35_c49.md"
+        },
+        {
+          "id": "CP.6.R04",
+          "requirement": "Distinguish advisory, laboratory demonstration, observed exploitation and sustained operational activity.",
+          "disposition": "normative",
+          "review_id": "C49",
+          "research": "research/073_v35_c49.md"
+        },
+        {
+          "id": "CP.6.R05",
+          "requirement": "Link relevant techniques to detection, prevention, containment and regression cases with exact deployment scope.",
+          "disposition": "normative",
+          "review_id": "C49",
+          "research": "research/073_v35_c49.md"
+        },
+        {
+          "id": "CP.6.R06",
+          "requirement": "Preserve event, discovery, disclosure and fix dates, revisions, contradictions and confidence.",
+          "disposition": "normative",
+          "review_id": "C49",
+          "research": "research/073_v35_c49.md"
+        },
+        {
+          "id": "CP.6.R07",
+          "requirement": "Use evidence-driven update triggers and publish changes in source confidence without manufacturing population incident rates.",
+          "disposition": "normative",
+          "review_id": "C49",
+          "research": "research/073_v35_c49.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUL-01",
+        "OBS-2026-AUG-02",
+        "OBS-2026-SEP-08"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C50",
+      "control_id": "P5.T10.1",
+      "title": "Proportional implementation and repair guidance",
+      "rationale": "A control can be technically correct and routinely bypassed because it is unusable. Extend adoption and education with tested implementation paths. Simpler paths must retain consequence-based minimums.",
+      "source": "Wave 04 Holds second-order effects and quickstart critique; Wave 02 small-organization profile",
+      "requirements": [
+        "Publish role-specific build, fix, defend and assess paths with applicable prerequisites.",
+        "Provide a low-consequence local fixture before recommending customer-facing or production automation.",
+        "Measure false blocks, completion, time to diagnose and recovery alongside safety outcomes.",
+        "Offer accessible escalation and recovery instructions and declare unsupported environments."
+      ],
+      "validation": "Have a new adopter complete a synthetic build/fix/defend exercise. Capture errors and burden, and verify that simplification does not remove applicable critical safeguards.",
+      "research_path": "research/074_v35_c50.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "P5.T10.1.R01",
+          "requirement": "Publish role-specific build, fix, defend and assess paths with applicable prerequisites.",
+          "disposition": "normative",
+          "review_id": "C50",
+          "research": "research/074_v35_c50.md"
+        },
+        {
+          "id": "P5.T10.1.R02",
+          "requirement": "Provide a low-consequence local fixture before recommending customer-facing or production automation.",
+          "disposition": "normative",
+          "review_id": "C50",
+          "research": "research/074_v35_c50.md"
+        },
+        {
+          "id": "P5.T10.1.R03",
+          "requirement": "Measure false blocks, completion, time to diagnose and recovery alongside safety outcomes.",
+          "disposition": "normative",
+          "review_id": "C50",
+          "research": "research/074_v35_c50.md"
+        },
+        {
+          "id": "P5.T10.1.R04",
+          "requirement": "Offer accessible escalation and recovery instructions and declare unsupported environments.",
+          "disposition": "normative",
+          "review_id": "C50",
+          "research": "research/074_v35_c50.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-MAY-06"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C51",
+      "control_id": "CP.14",
+      "title": "Rosetta Stone source and relationship governance",
+      "rationale": "The recovered 32 labels, 496 tags and 706 cells describe different levels of evidence. Preserve their lineage and deepen relationships. Mapping all controls to every framework creates false equivalence and maintenance cost.",
+      "source": "All four mapping-recovery files; Wave 02 mapping schemas and retrieval contracts",
+      "requirements": [
+        "Register publisher, edition, status, mapping units, role, jurisdiction, source locator and licensing constraints.",
+        "Give each relationship a stable ID, direction, type, rationale, exclusions, reviewer and review date.",
+        "Record unmapped, partially addressed, out-of-scope, disputed and unassessed dispositions explicitly.",
+        "Derive reciprocal human and machine views from the same records and invalidate stale relationships after source or control changes.",
+        "Keep historical coverage assertions attributed to their original baseline and require denominators and reviewed relationships for current coverage."
+      ],
+      "validation": "Resolve one external requirement to exact AI SAFE2 clauses, engineering checks and evidence, then reverse the query. A missing or ambiguous external ID must produce an explicit unresolved result.",
+      "research_path": "research/075_v35_c51.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "CP.14.R07",
+          "requirement": "Register publisher, edition, status, mapping units, role, jurisdiction, source locator and licensing constraints.",
+          "disposition": "normative",
+          "review_id": "C51",
+          "research": "research/075_v35_c51.md"
+        },
+        {
+          "id": "CP.14.R08",
+          "requirement": "Give each relationship a stable ID, direction, type, rationale, exclusions, reviewer and review date.",
+          "disposition": "normative",
+          "review_id": "C51",
+          "research": "research/075_v35_c51.md"
+        },
+        {
+          "id": "CP.14.R09",
+          "requirement": "Record unmapped, partially addressed, out-of-scope, disputed and unassessed dispositions explicitly.",
+          "disposition": "normative",
+          "review_id": "C51",
+          "research": "research/075_v35_c51.md"
+        },
+        {
+          "id": "CP.14.R10",
+          "requirement": "Derive reciprocal human and machine views from the same records and invalidate stale relationships after source or control changes.",
+          "disposition": "normative",
+          "review_id": "C51",
+          "research": "research/075_v35_c51.md"
+        },
+        {
+          "id": "CP.14.R11",
+          "requirement": "Keep historical coverage assertions attributed to their original baseline and require denominators and reviewed relationships for current coverage.",
+          "disposition": "normative",
+          "review_id": "C51",
+          "research": "research/075_v35_c51.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-JUN-04",
+        "OBS-2026-JUL-05"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C52",
+      "control_id": "A2.5",
+      "title": "Agent-consumable requirement and repair contracts",
+      "rationale": "Discoverability without precise contracts leaves agents guessing which version and evidence apply. Extend existing CLI/manifest ownership. A new interface must preserve schema compatibility and avoid granting decision authority.",
+      "source": "Wave 02 retrieval interfaces; Wave 04 diagnosis; recovery files",
+      "requirements": [
+        "Return canonical IDs, source revision, applicability, parent inheritance and evidence status in machine queries.",
+        "Link each requirement to a test or declared verification gap and a supported repair or recovery path.",
+        "Prevent ambiguous aliases and inferred crosswalk chains from producing authoritative compliance answers.",
+        "Bind output to the assessed system and retain explicit unknown, partial, stale and unsupported states."
+      ],
+      "validation": "Run a synthetic agent workflow that queries a requirement, applies a bounded fix and rechecks the failing test. Test stale editions, ambiguous aliases and a missing enforcement implementation.",
+      "research_path": "research/076_v35_c52.md",
+      "status": "normative",
+      "version_added": "3.5.0",
+      "clauses": [
+        {
+          "id": "A2.5.R07",
+          "requirement": "Return canonical IDs, source revision, applicability, parent inheritance and evidence status in machine queries.",
+          "disposition": "normative",
+          "review_id": "C52",
+          "research": "research/076_v35_c52.md"
+        },
+        {
+          "id": "A2.5.R08",
+          "requirement": "Link each requirement to a test or declared verification gap and a supported repair or recovery path.",
+          "disposition": "normative",
+          "review_id": "C52",
+          "research": "research/076_v35_c52.md"
+        },
+        {
+          "id": "A2.5.R09",
+          "requirement": "Prevent ambiguous aliases and inferred crosswalk chains from producing authoritative compliance answers.",
+          "disposition": "normative",
+          "review_id": "C52",
+          "research": "research/076_v35_c52.md"
+        },
+        {
+          "id": "A2.5.R10",
+          "requirement": "Bind output to the assessed system and retain explicit unknown, partial, stale and unsupported states.",
+          "disposition": "normative",
+          "review_id": "C52",
+          "research": "research/076_v35_c52.md"
+        }
+      ],
+      "supporting_observations": [
+        "OBS-2026-APR-01",
+        "OBS-2026-SEP-02"
+      ],
+      "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C53",
+      "control_id": "P2.T4.4",
+      "title": "Source-rights observations and downstream policy separation",
+      "rationale": "Data Source Mapping already owns external-source identity and inventory. Add purpose, declaration, freshness and correction detail here, with CP.14 policy ownership. A new top-level rights control would duplicate source inventory and could imply legal authority. This placement accepts provider-neutral observations while preserving the separate permission decision. More metadata increases collection burden; minimize it and record unknowns.",
+      "source": "Repository issue #390, provider-neutral source-rights observation proposal. The named AcqPath service is attributed context, not a required provider or independently verified integration.",
+      "requirements": [
+        "Record the externally sourced resource identifier, intended use, declaration state, observation time and freshness, provenance and integrity evidence before downstream policy evaluation.",
+        "Keep the observation provider-neutral and distinguish observed declarations from licences, ownership, actual use and permission. UNKNOWN, stale or contradictory declarations cannot become permission by default.",
+        "Bind reuse to the purpose and policy decision; record review/correction paths, minimization and unresolved rights or provenance conflicts without bypassing source access controls."
+      ],
+      "validation": "Test missing purpose, UNKNOWN, stale and conflicting declarations; preserve them as unresolved inputs and refuse a policy decision that treats them as permission. Verify the observation does not grant a licence, establish ownership, prove use or bypass access controls. Test a corrected declaration and a permitted purpose with separately recorded policy authority.",
+      "research_path": "research/077_v35_c53.md",
+      "status": "normative",
+      "version_added": "v3.5",
+      "clauses": [
+        {
+          "id": "P2.T4.4.R1",
+          "requirement": "Record the externally sourced resource identifier, intended use, declaration state, observation time and freshness, provenance and integrity evidence before downstream policy evaluation.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        },
+        {
+          "id": "P2.T4.4.R2",
+          "requirement": "Keep the observation provider-neutral and distinguish observed declarations from licences, ownership, actual use and permission. UNKNOWN, stale or contradictory declarations cannot become permission by default.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        },
+        {
+          "id": "P2.T4.4.R3",
+          "requirement": "Bind reuse to the purpose and policy decision; record review/correction paths, minimization and unresolved rights or provenance conflicts without bypassing source access controls.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        }
+      ],
+      "supporting_observations": [],
+      "source_link_interpretation": "Issue #390 supplies a framework proposal. No named service execution, signature verification, legal applicability or production result is inferred."
+    }
+  ]
+}

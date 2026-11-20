@@ -1,9 +1,20 @@
 # Cross-Pillar Governance Layer
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+[![Area: Governance](https://img.shields.io/badge/Area-Governance-F6921E?style=flat-square)](README.md)
 ### ⚙️ The Governance OS
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-Cross--Pillar-820F1A?style=flat-square)](./README.md)
-[![Core](https://img.shields.io/badge/Core-CP.1--CP.10-808080?style=flat-square)](#cross-pillar-controls)
+[![Core](https://img.shields.io/badge/Core-CP.1--CP.15-808080?style=flat-square)](#cross-pillar-controls)
 [![MCP](https://img.shields.io/badge/MCP-2026--07--28-820F1A?style=flat-square)](./cp5_mcp_server_security.md)
 
 [Framework Home](../README.md) | [Pillars](../01-sanitize-isolate/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
@@ -28,7 +39,7 @@ owned regression candidate. This update adds no core control or profile requirem
 
 **Realization:** Agentic governance needs a layer that defines authority, accountability, risk, evidence, emergency control, delegation, replication, and protocol-specific security across the entire system.
 
-**Solution:** The Cross-Pillar Governance Layer is the governance operating system for AI SAFE². **CP.1 through CP.10 are the core cross-pillar controls introduced in v3.0 and retained in v3.1.** Version 3.1 strengthens CP.5 by formalizing protocol-independent security profiles and the three enforcement planes: north-south, east-west, and agent-to-tool.
+**Solution:** The Cross-Pillar Governance Layer is the governance operating system for AI SAFE². **CP.1 through CP.10 are retained from the v3.1 baseline; CP.11 through CP.15 are new in the v3.5.** Version 3.1 strengthens CP.5 by formalizing protocol-independent security profiles and the three enforcement planes: north-south, east-west, and agent-to-tool.
 
 > **What you get:** A common governance contract across the five operational pillars, named human authority for autonomous deployments, bounded delegation and replication, protocol-aware security profiles, and evidence that can be independently reconstructed.
 
@@ -242,7 +253,7 @@ If required authorization infrastructure is unavailable, the action fails closed
 
 The UAS module defines an auditable compliance surface for Unbiased AI obligations in procurement and due diligence. It includes bias taxonomy, tests, evidence expectations, attestation, and cross-framework mappings.
 
-Its 27 profile requirements must not be added to the 161 AI SAFE² core-control total, and the profile does not create CP.11.
+Its 27 profile requirements must not be added to the 173 AI SAFE² core-control total. CP.11 now owns Trust Lifecycle Governance, with UAS retained as a separate profile.
 
 Full module: [00-cross-pillar/unbiased-ai/](./unbiased-ai/README.md)
 
@@ -292,4 +303,22 @@ Current implementation resources: [AI SAFE² Toolkit](https://cyberstrategyinsti
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## v3.5 normative detail
+
+The [control contracts](../docs/CONTROLS-V3.5.md) define the current core IDs and child requirements, with [research decisions](../research/README.md), enforcement/evidence expectations, failure responses and acceptance cases. Implementation and deployment evidence must be scoped to the actual path.
+
+### New cross-pillar controls
+
+| ID | Objective |
+| --- | --- |
+| CP.11 | Trust lifecycle governance |
+| CP.12 | Final-effect authorization |
+| CP.13 | Control evidence independence |
+| CP.14 | Organizational AI management |
+| CP.15 | Design-time coordination |
+
+### Deployment profiles
+
+[Current MCP](cp5_mcp_v35.md) | [Harness](cp5_harness_v35.md) | [Gateway](cp5_gateway_v35.md) | [Evaluation](cp5_eval_v35.md) | [Computer use and browser](cp5_cua_v35.md) | [Finance](cp5_fin_v35.md) | [Physical](cp5_physical_v35.md)

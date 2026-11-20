@@ -1,5 +1,10 @@
 # AI SAFE² Control Gateway
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../../README.md)
+[Framework home](../../../README.md) | [Topic map](../../../docs/README.md) | [Mapping validation](../../../docs/ROSETTA-STONE-V35.md) | [Component status](../../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 ## Gateway — v3.0 Enforcement Layer
 
 Health, safe-mode, provider-error, and audit-verification responses expose
@@ -75,7 +80,7 @@ python3 gateway.py --init-heartbeat
 bash start.sh
 ```
 
-See [`gateway/README.md`](./gateway/README.md) for full configuration reference, HITL flow, audit log format, and governance notes.
+See `gateway/README.md` (`./gateway/README.md`, reference unavailable in this checkout) for full configuration reference, HITL flow, audit log format, and governance notes.
 
 ## How It Works
 ```mermaid
@@ -191,7 +196,7 @@ If you are carrying a v2.1 `config.yaml` forward, add the `hitl_thresholds` bloc
 
 ## Troubleshooting
 
-See [../../troubleshooting.md](../../troubleshooting.md)
+See [../../troubleshooting.md](../troubleshooting.md)
 
 ## allow_high_risk_tools
 

@@ -126,7 +126,7 @@ output, writes a privacy-minimized JSON execution receipt, and reports
 advisory availability check is intentionally excluded from the required-status
 ruleset.
 
-Greptile is reserved for major integration points: authentication or authorization, policy and enforcement, payment or settlement, cryptography, evidence integrity, migrations, release candidates, and large cross-boundary changes. `Greptile / Advisory status` distinguishes a substantive current-head review from a quota or error response, but never blocks ordinary development.
+Greptile is reserved for major integration points: authentication or authorization, policy and enforcement, payment or settlement, cryptography, evidence integrity, migrations, release notess, and large cross-boundary changes. `Greptile / Advisory status` distinguishes a substantive current-head review from a quota or error response, but never blocks ordinary development.
 
 `Review Decision Evidence` applies `.ai-safe2/review-policy.json` to the exact
 base/head diff, runs the released AI SAFE2 CLI 1.0.1 against comparable baseline

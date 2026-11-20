@@ -1,7 +1,7 @@
 # Technology profile repository coverage review
 ### Delivery record and implementation boundaries
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Review](https://img.shields.io/badge/Docs-Repository_Review-820F1A?style=flat-square)](./TECHNOLOGY-PROFILE-REPO-REVIEW.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](README.md) | [NEXUS](../NEXUS/README.md) | [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
@@ -131,4 +131,4 @@ baseline or environment limitations at the tested revision.
 
 [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Evidence Assurance](./EVIDENCE-ASSURANCE.md) | [Examples](../research/technology-contribution-examples.md)
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

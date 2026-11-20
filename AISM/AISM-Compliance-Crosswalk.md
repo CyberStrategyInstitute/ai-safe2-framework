@@ -30,7 +30,7 @@ and existing CLI numeric grades.
 
 ## 1. Overview
 
-This crosswalk maps every AI SAFE2 v3.1 pillar, topic, and maturity level to:
+This crosswalk maps every AI SAFE2 v3.5 pillar, topic, and maturity level to:
 - **NIST AI RMF 1.0** (Govern, Map, Measure, Manage)
 - **ISO/IEC 42001:2022** (AI Management System clauses)
 - **EU AI Act** (Articles for high-risk AI systems)
@@ -291,7 +291,7 @@ This crosswalk maps every AI SAFE2 v3.1 pillar, topic, and maturity level to:
 
 ---
 
-## 7. AI SAFE² v3.1 Protocol Governance Profile
+## 7. AI SAFE² v3.5 Protocol Governance Profile
 
 For MCP and equivalent agent-to-tool deployments, AISM evidence must cover the
 CP.5.MCP profile without treating profile sub-controls as additions to the
@@ -335,7 +335,7 @@ Because the clause is a draft, this mapping tracks the June 17, 2026 published t
 
 ## 9. Framework Coverage Summary
 
-| Framework | AI SAFE2 v3.1 Coverage | Mapped Subcategories/Clauses |
+| Framework | AI SAFE2 v3.5 Coverage | Mapped Subcategories/Clauses |
 |---|---|---|
 | **NIST AI RMF 1.0** | 100% | All GOVERN, MAP, MEASURE, MANAGE subcategories |
 | **ISO/IEC 42001:2022** | 100% | Clauses 5.x, 6.x, 7.x, 8.x, 9.x, 10.x |

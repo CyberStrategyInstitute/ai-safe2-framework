@@ -12,6 +12,12 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Found by the four-area battery in `tests/battery/`. Assessment record:
 `docs/assessments/2026-10-06-false-assurance/`.
 
+### Fixed
+
+- Repairs the Compose gateway build context and SDK packaging-root installation,
+  declares the FastAPI runtime, and adds image-build and health smoke coverage
+  in CI for issue #416.
+
 ### Security
 
 - **Guardian inline policy no longer substring-matches raw JSON.** String leaves and

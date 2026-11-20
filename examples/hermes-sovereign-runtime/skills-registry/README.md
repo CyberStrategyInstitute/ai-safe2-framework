@@ -1,5 +1,11 @@
 # Sovereign Skills Registry
-### Hermes Sovereign Runtime · AI SAFE² v3.1 · P2.A-C01 + P5.E-C05
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../../README.md)
+[Framework home](../../../README.md) | [Topic map](../../../docs/README.md) | [Mapping validation](../../../docs/ROSETTA-STONE-V35.md) | [Component status](../../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+### Hermes Sovereign Runtime · AI SAFE² v3.5 · P2.A-C01 + P5.E-C05
 
 ---
 
@@ -94,4 +100,4 @@ Populate the `hermes-skills` volume with approved skills before first run.
 
 ---
 
-*Sovereign Skills Registry · Cyber Strategy Institute · AI SAFE² v3.1*
+*Sovereign Skills Registry · Cyber Strategy Institute · AI SAFE² v3.5*

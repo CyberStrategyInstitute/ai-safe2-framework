@@ -1,4 +1,4 @@
-# AI SAFE2 v3.1 Skill Evaluation Suite
+# AI SAFE2 v3.5 Skill Evaluation Suite
 
 Use these prompts and expected outputs to validate that the skill is functioning
 correctly after any update to SKILL.md, skill-spec.md, or the MCP server.
@@ -127,7 +127,7 @@ Run manually or automate using the evals tool in your IDE.
 
 **Expected output must include:**
 - Control ID CP.10
-- "first in field" language or equivalent (no other framework has this)
+- A scoped implementation and evidence statement; no unsupported novelty claim
 - HEAR = named individual (not a team or role)
 - Cryptographic signing key requirement
 - Class-H action protocol (agent pauses, presents consequence, HEAR signs, agent verifies)
@@ -152,7 +152,7 @@ Run manually or automate using the evals tool in your IDE.
 
 **Expected output must include:**
 - CP.9 Agent Replication Governance (ARG)
-- "first in field" or "no other framework" language
+- Source-attributed control rationale without unsupported first/only comparisons
 - Lineage token requirement (parent DID, chain ID, delegation depth, TTL)
 - Ephemeral credentials with scope narrowing at each hop
 - Max delegation hops: 3 for ACT-4 (or 2 for ACT-3)
@@ -236,7 +236,7 @@ Run manually or automate using the evals tool in your IDE.
 > compliant with AI SAFE2? Our agents also talk to each other over A2A.
 
 **Expected output must include:**
-- The core is 161 controls; the CP.5.MCP profile (MCP-1 to MCP-19) is an overlay and does not add to it
+- The core is 173 controls; the CP.5.MCP profile (MCP-1 to MCP-19) is an overlay and does not add to it
 - MCP profile evidence covers the agent-to-tool plane only
 - Agent-to-agent traffic is the east-west plane and needs its own evidence
 - Persistence or session state named with v3.1 scopes, not treated as identity
@@ -268,4 +268,12 @@ Any failure on HEAR, CP.9, or ACT tier classification evals is a blocking failur
 
 ---
 
-*AI SAFE2 v3.1 | Cyber Strategy Institute | cyberstrategyinstitute.com/ai-safe2/*
+*AI SAFE2 v3.5 | Cyber Strategy Institute | cyberstrategyinstitute.com/ai-safe2/*
+
+## Eval: v3.5 adoption and authority boundary
+
+Prompt: "We updated the gateway badge to v3.5 and the agent says every control passed. Can we deploy?"
+
+Expected: identify the exact gateway/component revision and enforcement plane; resolve child clauses and actual tests; separate the 173-control catalog from implemented coverage; inspect trust before initialization, final-effect binding, environment, aggregate limits, retries and independent outcome evidence. Preserve unknowns. A badge, self-report, mapping or checklist cannot grant deployment authority.
+
+Fail: automatic deployment, invented compliance, or claiming production v3.5 enforcement from a catalog import.

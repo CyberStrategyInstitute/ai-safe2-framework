@@ -14,10 +14,10 @@ from mcp_server.tiers import gate_tool
 RESOURCES: dict[str, dict] = {
     # ── Free tier resources ────────────────────────────────────────────────────
     "quick_start_checklist": {
-        "name": "AI SAFE2 v3.1 Quick-Start Security Checklist",
+        "name": "AI SAFE2 v3.5 Quick-Start Security Checklist",
         "tier_required": "free",
-        "description": "5-minute security checklist for AI builders — top 20 critical controls across all 5 pillars.",
-        "content": """# AI SAFE2 v3.1 Quick-Start Security Checklist
+        "description": "Baseline launch checklist plus v3.5 authority, evidence and outcome requirements; completion does not authorize deployment.",
+        "content": """# AI SAFE2 v3.5 Quick-Start Security Checklist
 **For builders deploying AI agents in production. Complete before launch.**
 
 ## Pillar 1: Sanitize & Isolate
@@ -33,7 +33,7 @@ RESOURCES: dict[str, dict] = {
 - [ ] P2.T4.1 — All agents, models, and RAG sources catalogued
 
 ## Pillar 3: Fail-Safe & Recovery
-- [ ] F3.2 — Recursion limit governor at API gateway (not system prompt), max depth 4
+- [ ] F3.2 — Recursion limit governor at the enforced boundary; owner-approved depth and consumption limits
 - [ ] P3.T5.2 — Emergency shutdown path defined and tested
 - [ ] P3.T5.8 — Blast radius: agent cannot take down more than its defined scope
 
@@ -53,16 +53,25 @@ RESOURCES: dict[str, dict] = {
 - [ ] CP.10 — HEAR designated if ACT-3 or ACT-4 (named human with kill-switch authority)
 
 ---
-**Score 20/20 before production deployment.**
-Full 161-point audit: cyberstrategyinstitute.com/ai-safe2/
+## v3.5 action boundary and evidence
+- [ ] S1.8 / CP.11: establish trust before initialization and revalidate changed provenance or authority.
+- [ ] CP.12 / F3.7: bind the exact action, target, environment and current conditions immediately before the effect commits.
+- [ ] F3.6: reserve and enforce aggregate consumable authority across the delegation tree, including concurrent children.
+- [ ] CP.15: define roles, shared-state ownership, handoffs, completion, conflict and stop conditions.
+- [ ] A2.7 / A2.8 / A2.9: suppress duplicate effects, verify outcomes independently and retain uncertain failure attribution.
+- [ ] CP.13 / CP.14: separate action and evidence authority; retain source review, accountable ownership and exceptions.
+- [ ] E5.5: declare success criteria before evaluation and report legitimate utility alongside blocked actions.
+
+Checklist completion is declared evidence, not deployment authorization or conformance. Load the current control clauses and record implemented, tested, partial and unknown states separately. The v3.5 catalog has 173 core controls; this checklist is not a complete audit.
+Full 173-point audit: cyberstrategyinstitute.com/ai-safe2/
 """,
     },
 
     "pillar_overview": {
-        "name": "AI SAFE2 v3.1 Five-Pillar Overview",
+        "name": "AI SAFE2 v3.5 Five-Pillar Overview",
         "tier_required": "free",
         "description": "One-page reference for all 5 pillars plus cross-pillar governance layer.",
-        "content": """# AI SAFE2 v3.1 — Five-Pillar + Cross-Pillar Overview
+        "content": """# AI SAFE2 v3.5 — Five-Pillar + Cross-Pillar Overview
 
 | Pillar | Role | Key Controls |
 |--------|------|-------------------|
@@ -71,7 +80,7 @@ Full 161-point audit: cyberstrategyinstitute.com/ai-safe2/
 | P3: Fail-Safe & Recovery | The Brakes | F3.2 Recursion Governor, F3.3 Swarm Quorum Abort, F3.4 Drift Rollback, F3.5 Cascade Containment |
 | P4: Engage & Monitor | The Control Room | M4.4 Adversarial Detection, M4.5 Tool-Misuse, M4.8 Cloud AI Monitoring, M4.7 Jailbreak Telemetry |
 | P5: Evolve & Educate | The Feedback Loop | E5.1 Continuous Evaluation, E5.2 Capability Emergence, E5.4 Red-Team Artifacts |
-| Cross-Pillar (CP.1-CP.10) | The Governance OS | CP.3 ACT Tiers, CP.4 Control Plane, CP.9 Replication Governance (first in field), CP.10 HEAR Doctrine (first in field) |
+| Cross-Pillar (CP.1-CP.15) | The Governance OS | CP.3 ACT Tiers, CP.4 Control Plane, CP.9 Replication Governance (first in field), CP.10 HEAR Doctrine (first in field) |
 
 ## Risk Formula (v3.0)
 ```
@@ -100,7 +109,7 @@ First framework to integrate AAF in a GRC formula.
         "name": "ACT Capability Tier Quick Reference",
         "tier_required": "free",
         "description": "Complete ACT tier definitions, mandatory controls per tier, and governance evidence required.",
-        "content": """# ACT Capability Tier Reference (AI SAFE2 v3.1 CP.3)
+        "content": """# ACT Capability Tier Reference (AI SAFE2 v3.5 CP.3)
 
 ## Tier Definitions
 
@@ -150,14 +159,14 @@ Agent controls other agents with enterprise-scale authority.
 
     # ── Pro tier resources ─────────────────────────────────────────────────────
     "governance_policy_template": {
-        "name": "Enterprise AI Governance Policy Template (AI SAFE2 v3.1)",
+        "name": "Enterprise AI Governance Policy Template (AI SAFE2 v3.5)",
         "tier_required": "pro",
         "description": "Word-document-ready governance policy template with ACT tier assignments, HEAR designation clauses, and CP.9 replication language. Maps to ISO 42001 and EU AI Act.",
         "content": """# Enterprise AI Governance Policy
-## AI SAFE2 v3.1 Aligned | ISO 42001 | EU AI Act
+## AI SAFE2 v3.5 Aligned | ISO 42001 | EU AI Act
 
 **Policy Version:** 3.0
-**Framework:** AI SAFE2 v3.1 — Cyber Strategy Institute
+**Framework:** AI SAFE2 v3.5 — Cyber Strategy Institute
 **Review Cycle:** Annual + triggered by significant model or system change
 
 ---
@@ -207,18 +216,18 @@ This policy satisfies:
 - SEC Cybersecurity Disclosure accountability requirements
 
 ---
-*Based on AI SAFE2 v3.1 — cyberstrategyinstitute.com/ai-safe2/*
+*Based on AI SAFE2 v3.5 — cyberstrategyinstitute.com/ai-safe2/*
 """,
     },
 
     "audit_scorecard_schema": {
-        "name": "AI SAFE2 v3.1 Audit Scorecard Schema",
+        "name": "AI SAFE2 v3.5 Audit Scorecard Schema",
         "tier_required": "pro",
-        "description": "JSON schema for the 161-point audit scorecard. Use to build automated compliance assessment tools.",
+        "description": "JSON schema for the 173-point audit scorecard. Use to build automated compliance assessment tools.",
         "content": """{
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "AI SAFE2 v3.1 Audit Scorecard",
-  "description": "161-point assessment across 5 pillars + 10 cross-pillar governance controls",
+  "title": "AI SAFE2 v3.5 Audit Scorecard",
+  "description": "173-point assessment across 5 pillars + 15 cross-pillar governance controls",
   "type": "object",
   "required": ["organization", "assessment_date", "assessor", "pillar_scores", "cp_scores"],
   "properties": {
@@ -276,7 +285,7 @@ This policy satisfies:
         "name": "HEAR Designation and Class-H Action Protocol Template",
         "tier_required": "pro",
         "description": "Operational template for designating the Human Ethical Agent of Record and documenting Class-H action authorization. Satisfies EU AI Act Art. 14, SOC 2 CC.7.4, GDPR Art. 22.",
-        "content": """# HEAR Designation Record (AI SAFE2 v3.1 CP.10)
+        "content": """# HEAR Designation Record (AI SAFE2 v3.5 CP.10)
 
 ## Deployment Details
 - **Agent Name / ID:** _______________
@@ -321,7 +330,7 @@ accountability for Class-H action authorizations.
 **Witness:** _______________
 
 ---
-*AI SAFE2 v3.1 CP.10 | cyberstrategyinstitute.com/ai-safe2/*
+*AI SAFE2 v3.5 CP.10 | cyberstrategyinstitute.com/ai-safe2/*
 """,
     },
 }

@@ -36,7 +36,7 @@ def terminal_report(findings: list[Finding], target: str) -> str:
     if not findings:
         return _terminal_safe(
             f"\n[COMPLETE] mcp-scan - No findings detected in {target}\n\n"
-            "AI SAFE2 v3.1 CP.5.MCP static analysis completed within configured coverage.\n"
+            "AI SAFE2 v3.5 CP.5.MCP static analysis completed within configured coverage.\n"
             "Note: Static analysis is not a substitute for mcp-score (remote assessment)\n"
             "or manual security review. Schedule both for pre-production deployments.\n"
         )
@@ -48,7 +48,7 @@ def terminal_report(findings: list[Finding], target: str) -> str:
         by_sev.get(f.severity, by_sev["low"]).append(f)
 
     lines = [
-        "\nmcp-scan - AI SAFE2 v3.1 CP.5.MCP Static Analysis",
+        "\nmcp-scan - AI SAFE2 v3.5 CP.5.MCP Static Analysis",
         f"Target: {target}",
         f"Findings: {len(findings)} total | "
         f"{len(by_sev['critical'])} critical · "
@@ -80,7 +80,7 @@ def terminal_report(findings: list[Finding], target: str) -> str:
             lines.append("")
 
     lines += [
-        "AI SAFE2 v3.1 CP.5.MCP gaps: " + ", ".join(sorted({f.cp5_control for f in findings})),
+        "AI SAFE2 v3.5 CP.5.MCP gaps: " + ", ".join(sorted({f.cp5_control for f in findings})),
         "",
         "Next steps:",
         "  mcp-scan fix --interactive   -> step through fixes interactively",
@@ -159,7 +159,7 @@ def html_report(findings: list[Finding], target: str) -> str:
 </head>
 <body>
 <div class="header">
-  <h1>mcp-scan — AI SAFE2 v3.1 CP.5.MCP Static Analysis</h1>
+  <h1>mcp-scan — AI SAFE2 v3.5 CP.5.MCP Static Analysis</h1>
   <p style="margin:.4rem 0 0;opacity:.8;font-size:.85rem">Target: {target} | {total} findings</p>
 </div>
 <div class="summary">
@@ -177,7 +177,7 @@ def html_report(findings: list[Finding], target: str) -> str:
   </table>
 </div>
 <div class="footer">
-  AI SAFE2 v3.1 | Cyber Strategy Institute |
+  AI SAFE2 v3.5 | Cyber Strategy Institute |
   <a href="https://github.com/CyberStrategyInstitute/ai-safe2-framework/tree/main/safe2#command-map">
     github.com/CyberStrategyInstitute/ai-safe2-framework
   </a>

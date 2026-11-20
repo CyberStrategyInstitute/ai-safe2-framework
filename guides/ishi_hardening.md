@@ -348,7 +348,7 @@ Ishi will:
 - Report status
 ```
 
-**See:** [ishi-openclaw-integration.md](./ishi-openclaw-integration.md)
+**See:** [ishi-openclaw-integration.md](../examples/ishi/ishi-openclaw-integration.md)
 
 **2. Configure AgenticFlow bridge** (15 minutes)
 
@@ -362,7 +362,7 @@ Ishi will:
 - Test connection
 ```
 
-**See:** [ishi-agenticflow-bridge.md](./ishi-agenticflow-bridge.md)
+**See:** ishi-agenticflow-bridge.md (`./ishi-agenticflow-bridge.md`, reference unavailable in this checkout)
 
 **3. Schedule weekly scans**
 
@@ -547,7 +547,7 @@ Set:
 Save and test again
 ```
 
-**More help:** See [troubleshooting-ishi.md](./troubleshooting-ishi.md)
+**More help:** See troubleshooting-ishi.md (`./troubleshooting-ishi.md`, reference unavailable in this checkout)
 
 ---
 
@@ -637,7 +637,7 @@ Next reset: Tomorrow at 12:00 AM PST
 **Tools:**
 - [Memory Protocol](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/examples/ishi/ishi_memory.md)
 - [Security Scanner](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/examples/ishi/ishi-scanner.py)
-- [Troubleshooting Guide](./troubleshooting-ishi.md)
+- Troubleshooting Guide (`./troubleshooting-ishi.md`, reference unavailable in this checkout)
 
 **Community:**
 - [GitHub Discussions](https://github.com/CyberStrategyInstitute/ai-safe2-framework/discussions)

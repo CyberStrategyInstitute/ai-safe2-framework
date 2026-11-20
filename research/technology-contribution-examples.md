@@ -1,7 +1,7 @@
 # Technology contribution examples and adoption backlog
 ### Nine supplied examples, with claims separated from validation
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Research-820F1A?style=flat-square)](./README.md)
 [![Status](https://img.shields.io/badge/Status-Proposed_candidates-808080?style=flat-square)](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 

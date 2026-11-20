@@ -11,7 +11,7 @@ See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
 Technology Card workflow, and worked example. Original methodology dates below
 identify their baseline; this update does not change scoring formulas.
 
-**Framework:** AI SAFE² v3.1
+**Framework:** AI SAFE² v3.5
 **Organization:** Cyber Strategy Institute
 **Version:** April 2026
 
@@ -427,3 +427,7 @@ This matrix is designed for security engineers, red teams, and governance practi
 ---
 
 *© 2026 Cyber Strategy Institute. Licensed under CC BY 4.0.*
+
+## v3.5 scoped deployment evidence
+
+Use [deployment readiness and threat profiles](DEPLOYMENT-READINESS-V35.md) for the separate readiness result, five distinct assessment outputs and three deeper threat profiles. Organizational scoring formulas retain their baseline meanings. External tiers are informative comparisons. A maturity-derived CVSS multiplier is a CSI heuristic pending scoped calibration.

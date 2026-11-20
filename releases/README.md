@@ -10,3 +10,7 @@ records. Current operating guidance remains in each component's own directory.
 
 Use the repository [release template](../.github/RELEASE_TEMPLATE.md) for new
 release announcements and verify links in GitHub preview before publication.
+
+## Current framework update
+
+[AI SAFE2 v3.5.0](AI-SAFE2-v3.5.0.md) records the v3.5 framework update in PR #433. Component publications are tracked separately.

@@ -197,7 +197,7 @@ async def run_proxy(
 
     audit.write_proxy_start(target_url, local_port)
     print(
-        f"\nmcp-safe-wrap HTTP Proxy — AI SAFE2 v3.1 CP.5.MCP\n"
+        f"\nmcp-safe-wrap HTTP Proxy — AI SAFE2 v3.5 CP.5.MCP\n"
         f"  Target:       {target_url}\n"
         f"  Local:        http://127.0.0.1:{local_port}/proxy\n"
         f"  Scan inputs:  {scan_inputs}\n"

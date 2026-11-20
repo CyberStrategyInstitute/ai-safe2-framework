@@ -1,6 +1,6 @@
 # AI SAFE² CLI 1.0 Release Qualification Record
 
-## Release candidate
+## Release notes
 
 - Package: `ai-safe2`
 - Candidate version: `1.0.0`

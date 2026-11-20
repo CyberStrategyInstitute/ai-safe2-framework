@@ -1,4 +1,4 @@
-# AI SAFE² v3.1 Agent Entry Point
+# AI SAFE² v3.5 Agent Entry Point
 
 This file is the deterministic starting point for software agents, coding assistants, retrieval systems, compliance bots, and other automated consumers of this repository.
 
@@ -143,14 +143,14 @@ required. It must remain understandable without access to an agent's chat log.
 1. Parse `ai-safe2.manifest.json` first.
 2. Parse `repository-topics.manifest.json` before placing or relocating documentation.
 3. Treat `README.md` and the framework control documents it links to as the human-readable framework entry point.
-4. Treat `skills/mcp/data/ai-safe2-controls-v3.0.json` as the stable machine-readable dataset for the unchanged 161-control core taxonomy.
-5. Treat `skills/mcp/data/mcp-profile-v3.1.json` as the machine-readable CP.5.MCP v3.1 overlay containing MCP-1 through MCP-19.
-6. Do not add the 19 MCP profile controls to the 161-control framework total.
-7. Treat `00-cross-pillar/unbiased-ai/uas-profile-v1.json` as the UAS regulatory profile extension. Its 27 profile requirements do not add to the 161-control framework total and do not create CP.11 as a core Cross-Pillar control.
+4. Treat `skills/mcp/data/ai-safe2-controls-v3.0.json` as the stable machine-readable dataset for the unchanged 173-control core taxonomy.
+5. Treat `skills/mcp/data/mcp-profile-v3.5.json` as the machine-readable CP.5.MCP v3.5 overlay containing MCP-1 through MCP-19.
+6. Do not add the 19 MCP profile controls to the 173-control framework total.
+7. Treat `00-cross-pillar/unbiased-ai/uas-profile-v1.json` as the UAS regulatory profile extension. Its 27 profile requirements do not add to the 173-control framework total and do not create CP.11 as a core Cross-Pillar control.
 
 ## Version model
 
-- AI SAFE² Framework: v3.1.0
+- AI SAFE² Framework: v3.5.0
 - AI SAFE² CLI: v1.1.0 (1.0.0 was a GitHub-only release and never reached PyPI; verify with `safe2 --version`)
 - NEXUS: v0.6.0
 - Gateway: v3.0
@@ -216,7 +216,7 @@ A state handle or legacy `Mcp-Session-Id` is not identity and is not, by itself,
 For automated assessment or implementation guidance:
 
 1. Load `ai-safe2.manifest.json`.
-2. Load the 161-control core dataset.
+2. Load the 173-control core dataset.
 3. Determine the applicable enforcement plane and ACT context.
 4. If MCP applies, load the 19-control CP.5.MCP profile overlay.
 5. Resolve human-readable control detail through the paths identified in the manifest.
@@ -259,4 +259,8 @@ For automated assessment or implementation guidance:
 - Repository UX contract: `docs/REPOSITORY-UX-STANDARD.md`
 - Reusable GitHub release-note template: `.github/RELEASE_TEMPLATE.md`
 
-When a machine-readable field and prose appear to conflict, do not silently guess. Preserve the conflict in the output and prefer the current v3.1 normative document identified by the manifest for interpretation.
+When a machine-readable field and prose appear to conflict, do not silently guess. Preserve the conflict in the output and prefer the current v3.5 normative document identified by the manifest for interpretation.
+
+## v3.5 machine contracts
+
+The manifest selects the 173-control catalog. Use `safe2 framework query`, `safe2 framework audit`, and `safe2 framework readiness` for versioned requirements, attributed mapping records and scoped evidence review. Read docs/CONTROLS-V3.5.md for applicable child requirements. Prior versioned catalogs remain compatibility artifacts. Research status, implementation and independent verification remain distinct.

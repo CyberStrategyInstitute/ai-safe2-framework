@@ -1,3 +1,5 @@
+> **UAS v1 baseline.** The v3.5 uses the versioned v2 catalog and STANDARD-V2.md in the UAS profile root. The quantitative methods below retain their original scope and require reassessment before reuse.
+
 # UAS Human-Side Controls (8) | CSF Sourced
 | ID | Control | CSF domain | Test method |
 |---|---|---|---|

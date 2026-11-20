@@ -1,7 +1,17 @@
 # AI SAFE² Scanner
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-scanner-and-mcp-toolkit-with-v35) · [Start](#quick-start) · [Next](#navigation)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 ### Pre-commit and CI analysis for agentic AI codebases
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Scanner-820F1A?style=flat-square)](./README.md)
 [![Rules](https://img.shields.io/badge/Rules-64-808080?style=flat-square)](./rules/)
 
@@ -10,6 +20,20 @@
 **Previous:** [← NEXUS](../NEXUS/) | **Next:** [Gateway / Runtime Enforcement →](../gateway/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+![Follow a claim to its evidence](../assets/evidence-linkages-v35.svg)
+
+A recorded mapping is a reviewable relationship. It does not establish compliance.
+
+## Use Scanner and MCP toolkit with v3.5
+
+**Source status: implemented-bounded.** The current catalog is available; static detection coverage remains the implemented rule set.
+
+**Next:** Map each rule to its actual clause and test. Report unassessed runtime requirements instead of treating absent static findings as a v3.5 pass.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Static findings and evidence assurance
 
@@ -21,7 +45,7 @@ records static evidence as `evidences` or `addresses` where justified, with
 Independent validation requires an identified evaluator and material results;
 a clean scan or translated report supplies neither automatically.
 
-## Role in the v3.1 Stack
+## Role in the v3.5 stack
 
 | Surface | Tool | When |
 |---|---|---|
@@ -33,9 +57,9 @@ The scanner evaluates code and configuration against AI SAFE² patterns. It is a
 
 ---
 
-## v3.1 Rule Model
+## Current catalog and retained rule model
 
-AI SAFE² v3.1 keeps the **161-control core framework taxonomy** and adds a machine-readable **CP.5.MCP profile with MCP-1 through MCP-19**.
+AI SAFE² v3.5 loads the **173-control core framework taxonomy** and adds a machine-readable **CP.5.MCP profile with MCP-1 through MCP-19**.
 
 The scanner currently exposes **64 detection rules**:
 
@@ -44,7 +68,7 @@ The scanner currently exposes **64 detection rules**:
 
 Profile rules are grouped because several MCP controls require runtime evidence and cannot be proven by a one-pattern-per-control static check. The v3.1 release preserves existing detections rather than deleting rules merely to satisfy an outdated expected count.
 
-### Important v3.1 guarantees
+### Retained protocol rules
 
 - `server/discover` is optional under MCP `2026-07-28`; the scanner does **not** require it.
 - Legacy `Mcp-Session-Id` must not be treated as identity or the authorization boundary.
@@ -148,7 +172,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r scanner/requirements.txt
-      - name: AI SAFE2 v3.1 scan
+      - name: AI SAFE2 v3.5 scan
         run: |
           python -m scanner.cli scan . \
             --tier Tier2 \
@@ -206,4 +230,4 @@ scanner/
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

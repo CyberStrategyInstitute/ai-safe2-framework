@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.1 Scanner — Pillar 1: Sanitize & Isolate Rules
+AI SAFE2 v3.5 Scanner — Pillar 1: Sanitize & Isolate Rules
 Covers: P1.T1.x (Sanitize), P1.T2.x (Isolate), S1.3-S1.7 (v3.0 new controls)
 """
 

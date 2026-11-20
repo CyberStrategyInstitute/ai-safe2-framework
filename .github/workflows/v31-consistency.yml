@@ -1,4 +1,4 @@
-name: AI SAFE2 v3.1 Consistency
+name: AI SAFE2 Framework Consistency
 
 on:
   pull_request:
@@ -103,3 +103,23 @@ jobs:
           assert {c["id"] for c in a["controls"]} == {f"MCP-{i}" for i in range(1, 20)}
           print("v3.1 profile data integrity passed")
           PY
+
+  v35-contracts:
+    name: v3.5 contracts and generated freshness
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: python -m pip install ".[dev]"
+      - run: python scripts/check_v35_contracts.py
+      - run: python scripts/check_release_identity_v35.py
+      - run: python scripts/generate_v35_documents.py --check
+      - run: python -m pytest tests/test_framework_v35.py -q
+      - run: python scripts/generate_page_map.py --check
+      - run: python scripts/check_local_links.py
+      - run: python scripts/check_navigation.py
+      - run: python scripts/generate_entry_routes.py --check
+      - run: python scripts/generate_rosetta_explorer.py --check
+      - run: python scripts/review_repository_surfaces.py --check

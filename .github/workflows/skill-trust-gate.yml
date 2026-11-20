@@ -36,7 +36,7 @@ concurrency:
 
 env:
   SCANNER_VERSION: "1.1.0"
-  FRAMEWORK_VERSION: "v3.1"
+  FRAMEWORK_VERSION: "v3.5"
 
 jobs:
   discover-skills:
@@ -233,4 +233,4 @@ jobs:
             echo "One or more skills failed or lacked complete trust evidence."
             exit 1
           fi
-          echo "All changed skills passed the v3.1 trust gate."
+          echo "All changed skills passed the v3.5 trust gate."

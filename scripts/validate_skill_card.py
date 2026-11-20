@@ -32,12 +32,13 @@ def main() -> int:
     for field in REQUIRED_FIELDS:
         present[field] = bool(re.search(rf"^\s*[-*]?\s*\*\*{re.escape(field)}:\*\*\s*\S+", text, re.MULTILINE))
 
-    valid = all(present.values()) and "v3.1" in text
+    version_present = bool(re.search(r"^\s*[-*]?\s*\*\*Framework Version:\*\*\s*(?:AI SAFE[²2]?\s*)?v3\.(?:1|5)(?:\.0)?\b", text, re.MULTILINE))
+    valid = all(present.values()) and version_present
     completeness = round(100 * sum(present.values()) / len(REQUIRED_FIELDS))
     result = {
         "valid": valid,
         "completeness_score": completeness,
-        "framework_version_present": "v3.1" in text,
+        "framework_version_present": version_present,
         "fields": present,
     }
     if args.json:

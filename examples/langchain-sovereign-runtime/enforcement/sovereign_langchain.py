@@ -1,5 +1,5 @@
 """
-AI SAFE² v3.1 — LangChain Sovereign Enforcement Layer
+AI SAFE² v3.5 — LangChain Sovereign Enforcement Layer
 ======================================================
 Drop-in enforcement for any LangChain chain, agent, or tool.
 
@@ -57,7 +57,7 @@ from enforcement.ai_safe2_engine import (
 
 class SovereignCallbackHandler(BaseCallbackHandler):
     """
-    Drop-in BaseCallbackHandler that enforces AI SAFE² v3.1 controls
+    Drop-in BaseCallbackHandler that enforces AI SAFE² v3.5 controls
     at every LangChain execution event.
 
     Usage:

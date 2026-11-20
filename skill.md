@@ -1,6 +1,6 @@
-# AI SAFE² Secure Build Copilot: v3.1 Redirect
+# AI SAFE² Secure Build Copilot: v3.5 Redirect
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](README.md)
 [![Surface](https://img.shields.io/badge/Surface-Skill_Redirect-820F1A?style=flat-square)](skills/ai-safe2-secure-build-copilot/SKILL.md)
 
 [Framework Home](README.md) | [Cross-Pillar Governance](00-cross-pillar/README.md) | [AISM](AISM/) | [NEXUS](NEXUS/) | [Skills](skills/README.md)
@@ -9,15 +9,15 @@
 
 ## Canonical Skill
 
-This root file is a compatibility redirect. The canonical AI SAFE² v3.1 skill is:
+This root file is a compatibility redirect. The canonical AI SAFE² v3.5 skill is:
 
 **[skills/ai-safe2-secure-build-copilot/SKILL.md](skills/ai-safe2-secure-build-copilot/SKILL.md)**
 
 Use that file for current framework guidance.
 
-AI SAFE² v3.1 retains **161 core controls** and adds the current CP.5.MCP profile overlay with **MCP-1 through MCP-19**, aligned to MCP `2026-07-28`.
+AI SAFE² v3.5 contains **173 core controls** and adds the current CP.5.MCP profile overlay with **MCP-1 through MCP-19**, aligned to MCP `2026-07-28`.
 
-The core control dataset remains `skills/mcp/data/ai-safe2-controls-v3.0.json` because the v3.1 release did not change the core 161-control taxonomy. The v3.1 MCP overlay is `skills/mcp/data/mcp-profile-v3.1.json`.
+The current datasets are `skills/mcp/data/ai-safe2-controls-v3.5.json` and `skills/mcp/data/mcp-profile-v3.5.json`. Historical v3.0/v3.1 data remain available by their versioned paths. [Component adoption requirements](docs/V35-ECOSYSTEM-ADOPTION.md) distinguish guidance from implemented enforcement.
 
 ---
 
@@ -46,4 +46,4 @@ Historical v3.0 additions such as CP.1 through CP.10, HEAR, Agent Replication Go
 
 [Framework Home](README.md) | [Canonical Skill](skills/ai-safe2-secure-build-copilot/SKILL.md) | [MCP Server](skills/mcp/README.md) | [Scanner](scanner/README.md) | [Dashboard](dashboard/README.md)
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

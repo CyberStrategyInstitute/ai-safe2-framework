@@ -6,16 +6,16 @@ versions were verified on 2026-10-16 and are a dated observation.
 
 | Component | Source version | Published package / availability | Authority |
 | --- | --- | --- | --- |
-| AI SAFE² framework | 3.1.0 | Repository normative documents | `ai-safe2.manifest.json` |
-| AI SAFE² CLI | 1.1.0 | Published CLI 1.0.1 on PyPI; 1.1.0 is a source candidate | Root `pyproject.toml`, `safe2/__init__.py` |
-| NEXUS SDK and Sovereign Gateway scaffold | 0.6.0 | Published SDK 0.5.0 on PyPI; 0.6.0 is a source candidate | `NEXUS/pyproject.toml`, SDK `__version__` |
+| AI SAFE² framework | 3.5.0 | Repository normative documents | `ai-safe2.manifest.json` |
+| AI SAFE² CLI | 1.1.0 | Published CLI 1.0.1 on PyPI; 1.1.0 is a source version | Root `pyproject.toml`, `safe2/__init__.py` |
+| NEXUS SDK and Sovereign Gateway scaffold | 0.6.0 | Published SDK 0.5.0 on PyPI; 0.6.0 is a source version | `NEXUS/pyproject.toml`, SDK `__version__` |
 | Core Gateway, north-south provider proxy | 3.0.0 | Repository reference component; no package publication asserted | `gateway/main.py` |
 | MCP knowledge server | 3.1.0 | Repository package metadata; publication not asserted | `skills/mcp/pyproject.toml` |
 | Developer Workflow | 0.1.0 | Contract preview; minimum CLI 1.0.1 | `developer-workflow/VERSION`, manifest |
 
 The Developer Workflow's CLI minimum and published 1.0.1 installation pin are
 intentional. They must not be rewritten to an unavailable PyPI version merely
-to match the CLI source badge. Guided start requires the 1.1.0 source candidate.
+to match the CLI source badge. Guided start requires the 1.1.0 source version.
 Local Docker image tags and source release notes do not establish container or
 package publication.
 
@@ -40,7 +40,7 @@ release, verify PyPI, then update the inventory, published install commands,
 status text, and this map together. Do not infer publication from a source bump.
 
 Keep `ai-safe2-controls-v3.0.json` and its packaged mirror byte-identical. The
-161-control taxonomy is intentionally unchanged. Core Gateway v3.0 is not a
+v3.5 taxonomy has 173 controls; the v3.1 catalog remains a compatibility artifact. Core Gateway v3.0 is not a
 stale framework label, and `CP.5.APAY/0.4`, `nexus-agbom/0.3`, schema filenames,
 and NEXUS-A2A compatibility bindings retain their independent contract versions.
 

@@ -1,5 +1,11 @@
 # Core Governance Files
-### Hermes Sovereign Runtime · AI SAFE² v3.1
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../../README.md)
+[Framework home](../../../README.md) | [Topic map](../../../docs/README.md) | [Mapping validation](../../../docs/ROSETTA-STONE-V35.md) | [Component status](../../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+### Hermes Sovereign Runtime · AI SAFE² v3.5
 
 These files are the semantic layer of the sovereign runtime.
 They load into Hermes' memory system and establish governance directives
@@ -87,4 +93,4 @@ If you need to customize:
 
 ---
 
-*Core Governance Files · Cyber Strategy Institute · AI SAFE² v3.1*
+*Core Governance Files · Cyber Strategy Institute · AI SAFE² v3.5*

@@ -1,0 +1,221 @@
+{
+  "framework_version": "3.5.0",
+  "aliases": [
+    {
+      "historical_id": "P1.T1.2-ADV",
+      "historical_name": "Supply Chain Artifact Validation",
+      "candidate_control_ids": [
+        "P1.T1.9"
+      ],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P1.T1.4-ADV",
+      "historical_name": "NHI Secret Hygiene",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P1.T1.5-ADV",
+      "historical_name": "State Fingerprinting",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P1.T2.1-ADV",
+      "historical_name": "Boundary Enforcement",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P1.T2.2-ADV",
+      "historical_name": "NHI Access Control",
+      "candidate_control_ids": [
+        "P1.T2.2_ADV"
+      ],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P2.T1.1-ADV",
+      "historical_name": "NHI Audit Trail",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P2.T1.2-ADV",
+      "historical_name": "State Verification",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P2.T1.4-ADV",
+      "historical_name": "Poisoning Detection",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P2.T2.1-ADV",
+      "historical_name": "NHI Registry",
+      "candidate_control_ids": [
+        "P2.T2.1_ADV"
+      ],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P2.T2.2-ADV",
+      "historical_name": "Swarm Topology Inventory",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P2.T2.3-ADV",
+      "historical_name": "Artifact Registry",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P3.T1.1-ADV",
+      "historical_name": "Distributed Fail-Safe",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P3.T1.2-ADV",
+      "historical_name": "NHI Revocation",
+      "candidate_control_ids": [
+        "P3.T1.2_ADV"
+      ],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P3.T1.3-ADV",
+      "historical_name": "Memory IR",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P3.T2.1-ADV",
+      "historical_name": "Memory Snapshots",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P3.T2.2-ADV",
+      "historical_name": "NHI Credential Recovery",
+      "candidate_control_ids": [
+        "P3.T2.2_ADV"
+      ],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P4.T1.1-ADV",
+      "historical_name": "Multi-Agent HITL",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P4.T1.2-ADV",
+      "historical_name": "NHI Privilege Review",
+      "candidate_control_ids": [
+        "P4.T1.2_ADV"
+      ],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P4.T2.1-ADV",
+      "historical_name": "Swarm Health Monitoring",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P4.T2.2-ADV",
+      "historical_name": "NHI Behavior Alerts",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P4.T2.3-ADV",
+      "historical_name": "Memory Drift Monitoring",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P5.T1.1-ADV",
+      "historical_name": "Capability Testing",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P5.T1.2-ADV",
+      "historical_name": "OMS Spec Tracking",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P5.T1.3-ADV",
+      "historical_name": "NHI Lifecycle Evolution",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P5.T1.4-ADV",
+      "historical_name": "Memory Defenses",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P5.T2.1-ADV",
+      "historical_name": "Swarm Certification",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P5.T2.2-ADV",
+      "historical_name": "Machine ID Awareness",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P5.T2.3-ADV",
+      "historical_name": "Model Signing Culture",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    },
+    {
+      "historical_id": "P5.T2.4-ADV",
+      "historical_name": "Poisoning Awareness",
+      "candidate_control_ids": [],
+      "status": "requires-owner-review",
+      "source": "dashboard/public/data/legacy-controls-v3.1.json"
+    }
+  ],
+  "interpretation": "Historical draft identities are not authoritative aliases. Resolve with source/version and owner review."
+}

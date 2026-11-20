@@ -1,7 +1,7 @@
 # AI SAFE² Evidence Assurance Level
 ### Attribute evidence strength to a specific claim
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Method](https://img.shields.io/badge/Method-Evidence_Assurance-820F1A?style=flat-square)](./EVIDENCE-ASSURANCE.md)
 [![Status](https://img.shields.io/badge/Status-Method_v1.0-808080?style=flat-square)](./TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
@@ -85,4 +85,4 @@ its own criteria. Neither C5 nor E4 establishes an organization's AISM Level 5.
 
 [Technology Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Validation](./TECHNOLOGY-VALIDATION.md) | [Examples](../research/technology-contribution-examples.md)
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

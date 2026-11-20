@@ -8,7 +8,7 @@
 - **Credential Access:** None required; secrets must stay outside model context and follow applicable AI SAFE² controls.
 - **Execution Capability:** Advisory instructions and reference files only (`SKILL.md`, `references/`, `agents/openai.yaml`); no scripts. `agents/openai.yaml` sets `allow_implicit_invocation: true`, so Codex may load the skill without an explicit mention. Runtime actions depend on separately authorized client capabilities.
 - **Data Persistence:** None created by the skill documents; deployments govern persistence with v3.1 `request`, `handle_scoped`, `durable`, and `swarm_shared` semantics.
-- **Review Status:** Maintainer reviewed for AI SAFE² v3.1 consistency (2026-10, PR #393); static trust gate APPROVE under `--strict`.
+- **Review Status:** Maintainer reviewed for AI SAFE² v3.5 consistency (2026-10, PR #393); static trust gate APPROVE under `--strict`.
 
 ## Trust boundaries
 

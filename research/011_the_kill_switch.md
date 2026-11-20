@@ -1,11 +1,11 @@
 <!-- AI-SAFE2-UX:START -->
-[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface: Research](https://img.shields.io/badge/Surface-Research-820F1A?style=flat-square)](./README.md)
 [![Context: v3.1 Current](https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square)](../docs/REPOSITORY-UX-STANDARD.md)
 
 [Framework Home](../README.md) | [Research Index](./README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.1. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.1 normative control and profile documents for implementation or conformance decisions.
+> **Current framework context:** AI SAFE² v3.5. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.5 normative control and profile documents for implementation or conformance decisions.
 <!-- AI-SAFE2-UX:END -->
 
 # Research Note: The Kill Switch – From Policy to "The Red Button"
@@ -32,22 +32,22 @@ The **Kill Switch [P3.T5.7]** is the framework's most visceral example of **Engi
 ---
 
 ## 1. The Architecture of the "Red Button"
-In AI SAFE², a "Kill Switch" is not a document; it is a set of redundant controls designed to sever an agent's ability to act in milliseconds. It is operationalized through **[Pillar 3: Fail-Safe & Recovery](../taxonomy/03_failsafe_recovery.md)**.
+In AI SAFE², a "Kill Switch" is not a document; it is a set of redundant controls designed to sever an agent's ability to act in milliseconds. It is operationalized through **Pillar 3: Fail-Safe & Recovery (`../taxonomy/03_failsafe_recovery.md`, reference unavailable in this checkout)**.
 
 To achieve Engineered Certainty, we mandate three specific technical components:
 
 ### 🔌 A. Network-Level Severance (The Hard Stop)
-Unlike "soft-stops" (asking the LLM to stop), AI SAFE² prescribes **Network Egress Filtering [P1.T2.2](../taxonomy/01_sanitize_isolate.md)**.
+Unlike "soft-stops" (asking the LLM to stop), AI SAFE² prescribes **Network Egress Filtering P1.T2.2 (`../taxonomy/01_sanitize_isolate.md`, reference unavailable in this checkout)**.
 *   **Mechanism:** The Kill Switch triggers a firewall rule update that drops all outgoing packets from the Agent's container.
 *   **Result:** The agent is placed in a digital Faraday cage instantly. It can "think," but it cannot "act."
 
 ### 🆔 B. Automated Credential Revocation (The Identity Kill)
-For **Non-Human Identities (NHIs)**, the Kill Switch triggers **[P3.T1.2](../taxonomy/03_failsafe_recovery.md)**.
+For **Non-Human Identities (NHIs)**, the Kill Switch triggers **P3.T1.2 (`../taxonomy/03_failsafe_recovery.md`, reference unavailable in this checkout)**.
 *   **Mechanism:** A bot-driven workflow instantly rotates or revokes the API keys (AWS, Stripe, OpenAI) the agent uses.
 *   **Result:** If the agent tries to bypass the network block, its "hands" (credentials) no longer work.
 
 ### ⚡ C. Circuit Breakers (The Automated Brake)
-Before a human even hits the red button, **Circuit Breakers [P3.T5.1](../taxonomy/03_failsafe_recovery.md)** act as automated tripwires.
+Before a human even hits the red button, **Circuit Breakers P3.T5.1 (`../taxonomy/03_failsafe_recovery.md`, reference unavailable in this checkout)** act as automated tripwires.
 *   **Trigger:** If API calls spike by 500% or token spend exceeds the per-minute budget.
 *   **Result:** The workflow pauses automatically without human intervention.
 
@@ -77,7 +77,7 @@ For a CISO or CEO, the fear of "Runaway AI" is the fear of **Unlimited Liability
 
 The Kill Switch delivers **Certainty** because:
 
-1.  **It is Testable:** You can run **Red Team Drills [P4.T7.7](../taxonomy/04_engage_monitor.md)** where you press the button and measure the "Time to Silence." If it takes >60 seconds, you fail the audit.
+1.  **It is Testable:** You can run **Red Team Drills P4.T7.7 (`../taxonomy/04_engage_monitor.md`, reference unavailable in this checkout)** where you press the button and measure the "Time to Silence." If it takes >60 seconds, you fail the audit.
 2.  **It is Binary:** Unlike "monitoring," which is qualitative, a Kill Switch is binary. The agent is either **Online** or it is **Dead**.
 3.  **It Solves the NHI Crisis:** Manual intervention is impossible at scale. The Kill Switch provides the **Emergency Disable [P3.T1.2]** capability required to manage thousands of autonomous identities.
 

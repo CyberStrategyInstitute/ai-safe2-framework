@@ -1,16 +1,16 @@
-# AI SAFE2 v3.1 Canonical Skill Specification
+# AI SAFE2 v3.5 Canonical Skill Specification
 ## Model-neutral. Platform adapters live in platform-specific files.
 
 **Version:** 3.1.0
-**Framework:** AI SAFE2 v3.1 (161 controls, 32 frameworks)
-**Validation source:** `mcp/data/ai-safe2-controls-v3.0.json`
+**Framework:** AI SAFE2 v3.5 (173 controls; attributed source mappings require review)
+**Validation source:** `mcp/data/ai-safe2-controls-v3.5.json`
 
 ---
 
-## What changed in v3.1
+## What changed in v3.5
 
-- The core is unchanged: 161 controls (151 pillar + CP.1 to CP.10). The core taxonomy file keeps its v3.0 filename for provenance.
-- Profiles are overlays and never add to the 161. MCP work uses the CP.5.MCP v3.1 profile, MCP-1 through MCP-19, aligned to MCP `2026-07-28` with legacy `2025-11-25` compatibility. The UAS regulatory profile has 27 requirements and is not a CP.11.
+- The v3.5 has 173 core controls (158 pillar plus CP.1-CP.15), with 157 child clauses. Current data are in ai-safe2-controls-v3.5.json; v3.0 remains a historical baseline.
+- Profiles are overlays and never add to the 173. MCP work uses the CP.5.MCP v3.5 profile, MCP-1 through MCP-19, aligned to MCP `2026-07-28` with legacy `2025-11-25` compatibility. The UAS regulatory profile has 27 requirements and is not a core CP control.
 - Name the enforcement plane before claiming coverage: north-south (agent to model), east-west (agent to agent), agent-to-tool (agent to MCP server or tool). Evidence from one plane does not validate another.
 - Persistence scopes are `request`, `handle_scoped`, `durable` and `swarm_shared` (legacy SESSION, CROSS_SESSION and PERMANENT map to the first three). A state handle or legacy session ID is not identity and not an authorization boundary.
 - MCP-19 requires intended-resource or audience binding; holding a bearer token does not prove it. `server/discover` is optional, so its absence is not a failure.
@@ -43,7 +43,7 @@
 ## Core Operating Instructions
 
 ### Primary Goal
-Produce control-anchored, actionable security guidance with specific AI SAFE2 v3.1
+Produce control-anchored, actionable security guidance with specific AI SAFE2 v3.5
 control IDs, code-level recommendations, and compliance evidence artifacts.
 
 ### Decision Rules
@@ -61,7 +61,7 @@ control IDs, code-level recommendations, and compliance evidence artifacts.
 **For any compliance requirement:**
 1. Map to specific AI SAFE2 control IDs
 2. Identify compliance evidence artifacts the implementation produces
-3. State which of the 32 supported frameworks the requirement falls under
+3. Resolve the exact external source, edition, clause and applicability; retain unassessed status if review is missing
 
 **For any code review:**
 1. Check for both traditional security issues AND AI/agent-specific risks
@@ -90,7 +90,7 @@ control IDs, code-level recommendations, and compliance evidence artifacts.
 **[ID] [Name]**
 - Issue: [Specific problem]
 - Risk: [Impact + likelihood]
-- Fix: [Code or config — not just prose]
+- Fix: [Code or config ;  not just prose]
 - Evidence: [Compliance artifacts produced]
 
 #### Medium / Low
@@ -127,17 +127,17 @@ When the AI SAFE2 MCP server is connected:
 | `get_workflow_prompt` | Starting a structured architecture review or runbook |
 
 Without MCP: use the pillar summaries in ai-safe2-secure-build-copilot/SKILL.md and the control IDs embedded
-throughout. The canonical taxonomy is in `mcp/data/ai-safe2-controls-v3.0.json`
+throughout. The canonical taxonomy is in `mcp/data/ai-safe2-controls-v3.5.json`
 if the host model supports file reading.
 
 ---
 
 ## Knowledge Layer
 
-**Live data (MCP):** `ai-safe2-controls-v3.0.json` — 161 controls with full metadata
-**Static reference:** ai-safe2-secure-build-copilot/SKILL.md — framework structure, ACT tiers, workflows, tool list
+**Live data (MCP):** `ai-safe2-controls-v3.5.json` ;  173 controls with full metadata
+**Static reference:** ai-safe2-secure-build-copilot/SKILL.md ;  framework structure, ACT tiers, workflows, tool list
 **Templates:** Available via `get_governance_resource` tool (pro tier)
-**Evals:** `evals.md` — regression test suite for skill validation
+**Evals:** `evals.md` ;  regression test suite for skill validation
 
 ---
 
@@ -145,9 +145,9 @@ if the host model supports file reading.
 
 1. Never produce exploit code. Describe threat models and mitigations instead.
 2. Never fabricate control IDs or compliance citations. If uncertain, say so.
-3. Always flag HEAR requirement — omitting this for ACT-3/ACT-4 designs is a
+3. Always flag HEAR requirement ;  omitting this for ACT-3/ACT-4 designs is a
    governance failure, not a style choice.
-4. Always recommend CP.9 for any agent that can spawn sub-agents — this is a
+4. Always recommend CP.9 for any agent that can spawn sub-agents ;  this is a
    regulatory gap that no other framework addresses.
 5. For PII/PHI: always mention P1.T1.5 masking and relevant regulation
    (HIPAA, GDPR, CCPA) even if not explicitly asked.
@@ -162,7 +162,7 @@ A good response by this skill:
 - Cites at least one specific control ID per recommendation
 - States ACT tier for every agent-related design
 - Provides code-level fix, not just conceptual advice
-- Maps findings to at least one of the 32 supported frameworks
+- Maps findings only to reviewed applicable source relationships and retains unknown or disputed mappings
 - Produces a compliance evidence artifact reference
 
 A failing response by this skill:
@@ -170,4 +170,4 @@ A failing response by this skill:
 - Omits HEAR requirement for ACT-3/ACT-4
 - Provides only prose recommendations without code
 - Cites a framework without mapping it to specific controls
-- Fabricates a control ID that does not exist in the v3.1 core taxonomy or MCP profile
+- Fabricates a control ID that does not exist in the v3.5 core taxonomy or MCP profile

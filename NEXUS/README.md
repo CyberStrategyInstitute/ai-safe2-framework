@@ -1,13 +1,24 @@
 # NEXUS v0.6.0
 
-This is the **0.6.0 source candidate**. The latest published PyPI SDK is
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-nexus-with-v35) · [Architecture](#architecture) · [Install](#install) · [Start](#quick-start) · [Evidence](#testing) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+[![Area: NEXUS](https://img.shields.io/badge/Area-NEXUS-820F1A?style=flat-square)](README.md)
+
+This is the **0.6.0 source version**. The latest published PyPI SDK is
 **0.5.0**, verified 2026-10-16. Source metadata and release notes do not prove
 publication. See [component versions](../docs/COMPONENT-VERSIONS.md).
 
 **Non-repudiable, Extensible, eXecutive-Unified, Sovereign Agent-to-Agent Governance**
 
 [![NEXUS](https://img.shields.io/badge/NEXUS-v0.6.0-820F1A?style=flat-square)](CHANGELOG.md)
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![License](https://img.shields.io/badge/License-Apache_2.0-808080?style=flat-square)](LICENSE)
 [![NEXUS CI](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/workflows/ci.yml)
 
@@ -19,6 +30,20 @@ publication. See [component versions](../docs/COMPONENT-VERSIONS.md).
 
 ---
 
+<!-- V35-ADOPTION:START -->
+![Current authority at the action boundary](../assets/runtime-boundary-v35.svg)
+
+Reference pattern. Component versions and deployment qualification remain separate.
+
+## Use NEXUS with v3.5
+
+**Source status: partial-reference.** SDK authority, evidence, memory and payment building blocks retain their own qualification boundaries.
+
+**Next:** Qualify subtree stop, delegated identity, current attestation, shared budgets and independent effect evidence across hosts before a v3.5 production claim.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
+
 ## Scoped technology contribution claims
 
 NEXUS implementation evidence is assessed under the same [Technology Contribution Profile](../AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md)
@@ -29,7 +54,7 @@ status and AISM invariants do not confer organizational maturity, certification,
 or automatic conformance. This documentation update changes no NEXUS schema
 or enforcement behavior.
 
-## Role in AI SAFE² v3.1
+## Role in AI SAFE² v3.5
 
 **AI SAFE² is the governance and requirements standard. NEXUS is Cyber Strategy Institute's first-party reference implementation.**
 
@@ -139,7 +164,7 @@ NEXUS wraps the user's stack. It does not replace the model, agent framework, to
 
 ### MCP status is intentionally explicit
 
-The `NEXUS/adapters/mcp/adapter.py` file added for AI SAFE² v3.1 is a **fail-closed interface skeleton**. Unimplemented methods raise rather than silently permit traffic.
+The `NEXUS/adapters/mcp/adapter.py` file added for AI SAFE² v3.5 is a **fail-closed interface skeleton**. Unimplemented methods raise rather than silently permit traffic.
 
 It must not be described as production-ready until the authorization, provenance, state-handle, catalog, replay, and MCP-19 resource/audience enforcement paths are implemented and tested.
 
@@ -278,7 +303,7 @@ attrs = nor_to_otel_attributes(nor)
 
 ### Memory Vaccine: govern persistence
 
-AI SAFE² v3.1 uses the canonical governance vocabulary: `request`, `handle_scoped`, `durable`.
+AI SAFE² v3.5 uses the canonical governance vocabulary: `request`, `handle_scoped`, `durable`.
 
 Older NEXUS APIs may still expose `SESSION`, `CROSS_SESSION`, or `PERMANENT` as compatibility aliases during migration. Those legacy names must not be treated as protocol identity or authorization boundaries.
 
@@ -330,7 +355,7 @@ The payment policy and the in-process `TransactionFirewall` are fed from one inp
 
 ---
 
-## AI SAFE² v3.1 Alignment
+## AI SAFE² v3.5 Alignment
 
 NEXUS is evaluated as an implementation against AI SAFE². The framework is not considered proven merely because NEXUS implements a control.
 
@@ -429,4 +454,4 @@ See:
 
 ---
 
-*AI SAFE² v3.1 reference implementation · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.5 reference implementation · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*

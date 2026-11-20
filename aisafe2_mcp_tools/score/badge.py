@@ -141,7 +141,7 @@ def generate_well_known_template(
     """
     data = {
         "mcp_security_version": "1.0",
-        "framework": "AI SAFE2 v3.1 CP.5.MCP",
+        "framework": "AI SAFE2 v3.5 CP.5.MCP",
         "server_name": server_name,
         "aisafe2_score": score,
         "last_assessed": assessment_timestamp,
