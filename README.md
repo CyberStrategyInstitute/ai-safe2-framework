@@ -14,7 +14,11 @@
 
 **[Start with your project](#use-ai-safe-with-an-agent)** · **[Explore the controls](docs/CONTROLS-V3.5.md)** · **[Review v3.5](#what-v35-changes)** · **[Agent entry point](AGENTS.md)**
 
-[Framework docs: CC BY-SA 4.0](LICENSE) · [Code: MIT](LICENSE-MIT) · [NEXUS: Apache 2.0](NEXUS/LICENSE) · [Licensing by path](docs/LICENSING.md)
+[![Framework docs: CC BY-SA 4.0](https://img.shields.io/badge/Docs-CC_BY--SA_4.0-808080?style=flat-square)](LICENSE-CC-BY-SA-4.0)
+[![Code: MIT](https://img.shields.io/badge/Code-MIT-15803D?style=flat-square)](LICENSE-MIT)
+[![NEXUS: Apache-2.0](https://img.shields.io/badge/NEXUS-Apache--2.0-005696?style=flat-square)](NEXUS/LICENSE)
+
+[Licensing by path](docs/LICENSING.md)
 
 </div>
 
