@@ -44,6 +44,8 @@ def main() -> int:
     embedded_controls=json.JSONDecoder().raw_decode((ROOT/'dashboard/index.html').read_text(encoding='utf-8')[embedded.end():])[0] if embedded else []
     expected={c['id']:c for c in controls}
     if {c['id'] for c in embedded_controls}!=ids:errors.append('dashboard_embedded_identity_mismatch')
+    for c in embedded_controls:
+        if c.get('act')!=expected[c['id']]['act_minimum']:errors.append('dashboard_tier_metadata_mismatch')
     for projected in [dashboard,embedded_controls]:
         for c in projected:
             owner=expected.get(c['id'],{})
