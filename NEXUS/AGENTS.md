@@ -33,3 +33,7 @@ For NEXUS changes, update code, tests, human documentation, the manifest, and
 navigation together. Run the affected test suite plus documentation-location,
 manifest, and link checks. Do not claim release, deployment, conformance, or
 risk acceptance without the authority and evidence required by root policy.
+
+## v3.5 adoption context
+
+Resolve the current root framework manifest, child-clause catalog and `docs/data/v35-ecosystem-adoption.json` in the reviewed framework checkout. If this template is installed elsewhere, record the pinned source revision and missing context. Component versions and publication are separate from framework status. For consequential changes, identify the exact target/environment, delegated scope, consumption limits, side-effect ledger, success criteria, independent observer and recovery owner. Do not turn a plan, receipt, model review or source fixture into execution authority or production conformance.

@@ -1,0 +1,215 @@
+{
+  "schema_version": "ai-safe2.ecosystem-adoption.v1",
+  "framework_version": "3.5.0",
+  "release_status": "candidate",
+  "interpretation": "Status describes the source surface, not deployed conformance. Requirements are not authorization.",
+  "surfaces": [
+    {
+      "id": "core-gateway",
+      "name": "Core Gateway",
+      "readme": "gateway/README.md",
+      "source": "gateway/main.py",
+      "status": "compatible-reference",
+      "current": "Provider proxy; existing v3.0 component evidence remains scoped to its observed boundary.",
+      "required_work": "Bind the final provider request to current principal, task, policy and environment; reserve aggregate consumption atomically; verify bypass and outage behavior.",
+      "controls": [
+        "CP.11",
+        "CP.12",
+        "CP.13",
+        "F3.6",
+        "F3.7"
+      ],
+      "version_boundary": "gateway v3.0",
+      "verification_path": "gateway/test_gateway.py"
+    },
+    {
+      "id": "nexus",
+      "name": "NEXUS",
+      "readme": "NEXUS/README.md",
+      "source": "NEXUS/sdk/python/nexus_sdk/guardian.py",
+      "status": "partial-reference",
+      "current": "SDK authority, evidence, memory and payment building blocks retain their own qualification boundaries.",
+      "required_work": "Qualify subtree stop, delegated identity, current attestation, shared budgets and independent effect evidence across hosts before a v3.5 production claim.",
+      "controls": [
+        "CP.11",
+        "CP.12",
+        "CP.13",
+        "CP.15",
+        "F3.6",
+        "A2.8"
+      ],
+      "version_boundary": "NEXUS 0.6.0 source candidate",
+      "verification_path": "NEXUS/sdk/python/tests"
+    },
+    {
+      "id": "nexus-mcp",
+      "name": "NEXUS MCP adapter",
+      "readme": "NEXUS/adapters/mcp/README.md",
+      "source": "NEXUS/adapters/mcp/adapter.py",
+      "status": "scaffolding",
+      "current": "Interface methods fail closed until implemented; this adapter is not a deployable security control.",
+      "required_work": "Implement and qualify the twelve MCP child requirements, including pre-trust initialization, current audience/resource binding, authority attenuation, state provenance and final-effect verification.",
+      "controls": [
+        "S1.8",
+        "CP.12",
+        "CP.13",
+        "F3.6"
+      ],
+      "version_boundary": "NEXUS 0.6.0 source candidate",
+      "verification_path": "NEXUS/sdk/python/tests"
+    },
+    {
+      "id": "cli",
+      "name": "SAFE2 CLI",
+      "readme": "safe2/README.md",
+      "source": "safe2/framework.py",
+      "status": "implemented-bounded",
+      "current": "Source CLI exposes current catalogs, exact lookup, mapping audit and declared-evidence readiness checks.",
+      "required_work": "Integrating deployments must authenticate observers, decide applicability and attach independent boundary evidence. Preserve existing score semantics.",
+      "controls": [
+        "CP.13",
+        "CP.14",
+        "A2.8",
+        "A2.9"
+      ],
+      "version_boundary": "CLI 1.1.0 source",
+      "verification_path": "tests/test_framework_v35.py"
+    },
+    {
+      "id": "workflow",
+      "name": "Developer Workflow",
+      "readme": "developer-workflow/README.md",
+      "source": "developer-workflow/docs/ARCHITECTURE.md",
+      "status": "contract-preview",
+      "current": "Change routing and evidence receipts retain human merge/release decisions; v3.5 adoption guidance is explicit.",
+      "required_work": "Bind consequential plans to exact revision, target, delegated scope, success criteria and rollback. A plan or review cannot authorize a runtime effect.",
+      "controls": [
+        "CP.12",
+        "CP.13",
+        "CP.15",
+        "F3.7",
+        "E5.5"
+      ],
+      "version_boundary": "Developer Workflow 0.1.0 preview",
+      "verification_path": "developer-workflow/tests"
+    },
+    {
+      "id": "skills",
+      "name": "Skills and provider guidance",
+      "readme": "skills/README.md",
+      "source": "skills/ai-safe2-secure-build-copilot/SKILL.md",
+      "status": "guidance",
+      "current": "Current source guidance must load v3.5 clauses, cite exact IDs and preserve unverified evidence states.",
+      "required_work": "Reinstall or refresh copied skill packages. Run skill trust checks and evaluate tool-call behavior; reading guidance does not enforce the runtime boundary.",
+      "controls": [
+        "CP.11",
+        "CP.12",
+        "CP.13",
+        "CP.15",
+        "E5.5"
+      ],
+      "version_boundary": "Skill package version is separate from framework version",
+      "verification_path": "scripts/validate_skill_card.py"
+    },
+    {
+      "id": "mcp",
+      "name": "MCP knowledge server",
+      "readme": "skills/mcp/README.md",
+      "source": "skills/mcp/src/mcp_server/controls_db.py",
+      "status": "implemented-bounded",
+      "current": "Serves 173 core controls and the 19-control MCP profile with twelve child requirements from packaged source data.",
+      "required_work": "Keep knowledge lookup separate from execution authorization. Qualify authentication, audience/resource binding and tool actuation in the deployment; refresh cached/copy-installed data.",
+      "controls": [
+        "CP.5",
+        "CP.12",
+        "CP.13",
+        "S1.8"
+      ],
+      "version_boundary": "MCP server 3.1.0 source; framework 3.5 candidate",
+      "verification_path": "skills/mcp/tests"
+    },
+    {
+      "id": "examples",
+      "name": "Sovereign runtime examples",
+      "readme": "examples/README.md",
+      "source": "examples/v35-authority/demo.py",
+      "status": "mixed-reference",
+      "current": "The v3.5 authority example demonstrates synthetic local transactions. Existing runtime examples retain individual limits.",
+      "required_work": "For each runtime, test exact action binding, direct-path bypass, stale state, child budgets, stop propagation, duplicate effects and independent outcomes before extending claims.",
+      "controls": [
+        "CP.12",
+        "CP.13",
+        "F3.6",
+        "F3.7",
+        "A2.7",
+        "A2.8"
+      ],
+      "version_boundary": "Example-specific; no blanket certification",
+      "verification_path": "tests/test_framework_v35.py"
+    },
+    {
+      "id": "scanner",
+      "name": "Scanner and MCP toolkit",
+      "readme": "scanner/README.md",
+      "source": "scanner/scanner.py",
+      "status": "implemented-bounded",
+      "current": "The current catalog is available; static detection coverage remains the implemented rule set.",
+      "required_work": "Map each rule to its actual clause and test. Report unassessed runtime requirements instead of treating absent static findings as a v3.5 pass.",
+      "controls": [
+        "CP.13",
+        "A2.9",
+        "E5.5"
+      ],
+      "version_boundary": "Scanner package/component version remains separate",
+      "verification_path": "scanner/tests"
+    },
+    {
+      "id": "aism",
+      "name": "AISM and UAS",
+      "readme": "AISM/README.md",
+      "source": "safe2/data/deployment-readiness-v1.schema.json",
+      "status": "implemented-bounded",
+      "current": "AISM v1 arithmetic is retained; scoped readiness and UAS v2 acceptance interpretation remain separate.",
+      "required_work": "Reassess v2 human/fairness evidence in context. Validate real intervention capability and applicability; declare unknowns and preserve owner authorization.",
+      "controls": [
+        "CP.10",
+        "CP.13",
+        "CP.14",
+        "A2.8"
+      ],
+      "version_boundary": "AISM v1; UAS v2 candidate",
+      "verification_path": "tests/test_aism.py"
+    },
+    {
+      "id": "challenge",
+      "name": "Challenge Lab",
+      "readme": "challenges/README.md",
+      "source": "challenges/002-v35-commit-boundary/preregistration.json",
+      "status": "prospective",
+      "current": "Challenge 002 is prospective; Challenge 001 retains its frozen baseline and evidence identity.",
+      "required_work": "Freeze the complete design before confirmatory runs, then report safety, utility, opportunity counts and unknown outcomes separately. Independent L2 execution is pending.",
+      "controls": [
+        "CP.13",
+        "E5.5",
+        "A2.8"
+      ],
+      "version_boundary": "Study/protocol versions are independent",
+      "verification_path": "tests/test_framework_v35.py"
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "readme": "dashboard/README.md",
+      "source": "dashboard/public/data/controls.json",
+      "status": "implemented-bounded",
+      "current": "The branch dashboard projects 173 controls and canonical requirements; deployed Pages may reflect another revision.",
+      "required_work": "Check the deployed revision before presenting a live dashboard as v3.5. Mapping labels and maturity views must retain their evidence limits.",
+      "controls": [
+        "CP.13",
+        "CP.14"
+      ],
+      "version_boundary": "Branch candidate; deployment not implied",
+      "verification_path": "scripts/check_v35_contracts.py"
+    }
+  ]
+}

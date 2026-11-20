@@ -16,7 +16,7 @@ RESOURCES: dict[str, dict] = {
     "quick_start_checklist": {
         "name": "AI SAFE2 v3.5 Quick-Start Security Checklist",
         "tier_required": "free",
-        "description": "5-minute security checklist for AI builders — top 20 critical controls across all 5 pillars.",
+        "description": "Baseline launch checklist plus v3.5 authority, evidence and outcome requirements; completion does not authorize deployment.",
         "content": """# AI SAFE2 v3.5 Quick-Start Security Checklist
 **For builders deploying AI agents in production. Complete before launch.**
 
@@ -33,7 +33,7 @@ RESOURCES: dict[str, dict] = {
 - [ ] P2.T4.1 — All agents, models, and RAG sources catalogued
 
 ## Pillar 3: Fail-Safe & Recovery
-- [ ] F3.2 — Recursion limit governor at API gateway (not system prompt), max depth 4
+- [ ] F3.2 — Recursion limit governor at the enforced boundary; owner-approved depth and consumption limits
 - [ ] P3.T5.2 — Emergency shutdown path defined and tested
 - [ ] P3.T5.8 — Blast radius: agent cannot take down more than its defined scope
 
@@ -53,7 +53,16 @@ RESOURCES: dict[str, dict] = {
 - [ ] CP.10 — HEAR designated if ACT-3 or ACT-4 (named human with kill-switch authority)
 
 ---
-**Score 20/20 before production deployment.**
+## v3.5 action boundary and evidence
+- [ ] S1.8 / CP.11: establish trust before initialization and revalidate changed provenance or authority.
+- [ ] CP.12 / F3.7: bind the exact action, target, environment and current conditions immediately before the effect commits.
+- [ ] F3.6: reserve and enforce aggregate consumable authority across the delegation tree, including concurrent children.
+- [ ] CP.15: define roles, shared-state ownership, handoffs, completion, conflict and stop conditions.
+- [ ] A2.7 / A2.8 / A2.9: suppress duplicate effects, verify outcomes independently and retain uncertain failure attribution.
+- [ ] CP.13 / CP.14: separate action and evidence authority; retain source review, accountable ownership and exceptions.
+- [ ] E5.5: declare success criteria before evaluation and report legitimate utility alongside blocked actions.
+
+Checklist completion is declared evidence, not deployment authorization or conformance. Load the current control clauses and record implemented, tested, partial and unknown states separately. The v3.5 catalog has 173 core controls; this checklist is not a complete audit.
 Full 173-point audit: cyberstrategyinstitute.com/ai-safe2/
 """,
     },

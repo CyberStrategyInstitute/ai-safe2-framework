@@ -1,4 +1,9 @@
 # AI SAFE² Challenge Lab
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-challenge-lab-with-v35) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
 ### Falsification before claims
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
@@ -8,6 +13,16 @@
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use Challenge Lab with v3.5
+
+**Source status: prospective.** Challenge 002 is prospective; Challenge 001 retains its frozen baseline and evidence identity.
+
+**Next:** Freeze the complete design before confirmatory runs, then report safety, utility, opportunity counts and unknown outcomes separately. Independent L2 execution is pending.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Technology profiles and new validation candidates
 

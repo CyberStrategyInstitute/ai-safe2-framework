@@ -1,4 +1,10 @@
 # Pillar 4: Engage & Monitor (P4)
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: Engage and Monitor](https://img.shields.io/badge/Area-Engage_and_Monitor-15803D?style=flat-square)](README.md)
 ### 📡 The Control Room
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)

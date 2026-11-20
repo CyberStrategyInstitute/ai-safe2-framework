@@ -1,5 +1,11 @@
 # NEXUS v0.6.0
 
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-nexus-with-v35) · [Architecture](#architecture) · [Install](#install) · [Start](#quick-start) · [Evidence](#testing) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: NEXUS](https://img.shields.io/badge/Area-NEXUS-820F1A?style=flat-square)](README.md)
+
 This is the **0.6.0 source candidate**. The latest published PyPI SDK is
 **0.5.0**, verified 2026-10-16. Source metadata and release notes do not prove
 publication. See [component versions](../docs/COMPONENT-VERSIONS.md).
@@ -18,6 +24,16 @@ publication. See [component versions](../docs/COMPONENT-VERSIONS.md).
 **Previous:** [← AISM](../AISM) | **Next:** [Gateway / Runtime Enforcement →](../gateway)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use NEXUS with v3.5
+
+**Source status: partial-reference.** SDK authority, evidence, memory and payment building blocks retain their own qualification boundaries.
+
+**Next:** Qualify subtree stop, delegated identity, current attestation, shared budgets and independent effect evidence across hosts before a v3.5 production claim.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Scoped technology contribution claims
 

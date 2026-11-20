@@ -43,3 +43,12 @@ installed by `pip install ai-safe2`. Findings and checks cite the
 
 *AI SAFE² v3.5 | Cyber Strategy Institute*
 <!-- AI-SAFE2-UX-FOOTER:END -->
+
+<!-- V35-RUNTIME-ADOPTION:START -->
+## Apply v3.5 to this example
+
+[Review the integration requirements](../../docs/V35-ECOSYSTEM-ADOPTION.md) before extending this runtime's claims. Identify every tool, provider, browser and direct API path that can commit an effect. Test current authority and environment binding, shared descendant limits, stop propagation, duplicate effects and independently observed outcomes. Keep this example's existing version and evidence limits until those tests pass.
+
+[Try the bounded local authority fixture](../v35-authority/README.md) | [Read the child requirements](../../docs/CONTROLS-V3.5.md) | [Return to examples](../README.md)
+<!-- V35-RUNTIME-ADOPTION:END -->
+

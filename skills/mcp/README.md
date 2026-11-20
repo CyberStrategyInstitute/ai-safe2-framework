@@ -1,13 +1,29 @@
 # AI SAFE² v3.5 MCP Server
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-mcp-knowledge-server-with-v35) · [Start](#quick-start) · [Evidence](#testing-expectations) · [Next](#navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: MCP Knowledge Server](https://img.shields.io/badge/Area-MCP_Knowledge_Server-6842A6?style=flat-square)](README.md)
 ### Live framework and CP.5.MCP profile access at the agent-to-tool boundary
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface](https://img.shields.io/badge/Surface-MCP_Server-820F1A?style=flat-square)](./README.md)
-[![Profile](https://img.shields.io/badge/CP.5.MCP-19_controls-808080?style=flat-square)](../../00-cross-pillar/cp5_mcp_server_security.md)
+[![Profile](https://img.shields.io/badge/CP.5.MCP-19_controls-808080?style=flat-square)](../../00-cross-pillar/cp5_mcp_v35.md)
 
 [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Skills](../README.md) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use MCP knowledge server with v3.5
+
+**Source status: implemented-bounded.** Serves 173 core controls and the 19-control MCP profile with twelve child requirements from packaged source data.
+
+**Next:** Keep knowledge lookup separate from execution authorization. Qualify authentication, audience/resource binding and tool actuation in the deployment; refresh cached/copy-installed data.
+
+[Review the adoption requirements](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../../docs/CONTROLS-V3.5.md) | [Research rationale](../../research/README.md) | [Source and published versions](../../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Profile discovery and technology review
 
@@ -33,7 +49,7 @@ AI SAFE² v3.5 separates two counts deliberately:
 
 The server loads the stable 173-control core taxonomy and overlays the v3.1 MCP profile so MCP-1 through MCP-19 are directly queryable.
 
-## v3.1 Security Model
+## Security model
 
 AI SAFE² v3.5 is aligned to MCP `2026-07-28` and does not use protocol-owned session state as the governance identity or authorization boundary.
 
@@ -77,7 +93,7 @@ The current MCP profile contains 19 controls:
 | MCP-18 | Catalog-cache integrity and provenance revalidation |
 | MCP-19 | Authorization-chain integrity, intended resource/audience validation, and SSRF boundaries |
 
-Canonical profile: [`../../00-cross-pillar/cp5_mcp_server_security.md`](../../00-cross-pillar/cp5_mcp_server_security.md)
+Canonical profile: [`../../00-cross-pillar/cp5_mcp_v35.md`](../../00-cross-pillar/cp5_mcp_v35.md)
 
 Machine-readable profile: [`data/mcp-profile-v3.5.json`](data/mcp-profile-v3.5.json)
 

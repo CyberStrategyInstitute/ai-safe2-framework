@@ -1,8 +1,15 @@
 <div align="center">
+
+[![Area: Assessment](https://img.shields.io/badge/Area-Assessment-005696?style=flat-square)](README.md)
   <img src="../assets/Full AISM Ecosystem - Agentic AI Operating System Framework v2.png" alt="Full AISM Ecosystem" width="100%" />
 </div>
 
 # AI Sovereign Maturity (AISM) Model
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-aism-and-uas-with-v35) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
 ### The maturity and operating model for deterministic governance of probabilistic AI
 
 **Documentation updated:** 2026-10-13. AISM now houses the full Sovereignty Score,
@@ -28,6 +35,16 @@ identify their baseline; this update does not change scoring formulas.
 **Framework release context:** August 2026; assessment-method documentation updated October 2026
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use AISM and UAS with v3.5
+
+**Source status: implemented-bounded.** AISM v1 arithmetic is retained; scoped readiness and UAS v2 acceptance interpretation remain separate.
+
+**Next:** Reassess v2 human/fairness evidence in context. Validate real intervention capability and applicability; declare unknowns and preserve owner authorization.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Choose your assessment
 

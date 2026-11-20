@@ -1,4 +1,9 @@
 # AI SAFE² Scanner
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-scanner-and-mcp-toolkit-with-v35) · [Start](#quick-start) · [Next](#navigation)
+<!-- ENTRY-ROUTES:END -->
+
 ### Pre-commit and CI analysis for agentic AI codebases
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
@@ -10,6 +15,16 @@
 **Previous:** [← NEXUS](../NEXUS/) | **Next:** [Gateway / Runtime Enforcement →](../gateway/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use Scanner and MCP toolkit with v3.5
+
+**Source status: implemented-bounded.** The current catalog is available; static detection coverage remains the implemented rule set.
+
+**Next:** Map each rule to its actual clause and test. Report unassessed runtime requirements instead of treating absent static findings as a v3.5 pass.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Static findings and evidence assurance
 

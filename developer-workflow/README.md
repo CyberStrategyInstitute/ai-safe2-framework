@@ -1,6 +1,12 @@
 <div align="center">
 
+[![Area: Developer Workflow](https://img.shields.io/badge/Area-Developer_Workflow-0F766E?style=flat-square)](README.md)
+
 # AI SAFE² Developer Workflow
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-developer-workflow-with-v35) · [Install](#what-changes-after-installation)
+<!-- ENTRY-ROUTES:END -->
 
 ### Replayable evidence and human-owned decisions for software delivery
 
@@ -33,6 +39,16 @@ merge or release.
 It does not replace Claude, Codex, Superpowers, tests, scanners, or human
 review. It gives those tools a common evidence contract and prevents silence,
 provider failure, or a green wrapper from becoming approval.
+
+<!-- V35-ADOPTION:START -->
+## Use Developer Workflow with v3.5
+
+**Source status: contract-preview.** Change routing and evidence receipts retain human merge/release decisions; v3.5 adoption guidance is explicit.
+
+**Next:** Bind consequential plans to exact revision, target, delegated scope, success criteria and rollback. A plan or review cannot authorize a runtime effect.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## What changes after installation
 

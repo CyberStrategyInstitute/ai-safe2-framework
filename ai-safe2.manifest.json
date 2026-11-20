@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "framework": {
     "name": "AI SAFE2",
-    "display_name": "AI SAFEÂ²",
+    "display_name": "AI SAFE²",
     "version": "3.5.0",
     "publisher": "Cyber Strategy Institute",
     "core_control_count": 173,
@@ -47,7 +47,9 @@
     "scanner_rules": "scanner/rules/",
     "framework_requirements": "safe2/data/framework-requirements-v3.5.json",
     "rosetta_registry": "safe2/data/rosetta-v3.5.json",
-    "deployment_readiness_schema": "safe2/data/deployment-readiness-v1.schema.json"
+    "deployment_readiness_schema": "safe2/data/deployment-readiness-v1.schema.json",
+    "ecosystem_adoption": "docs/data/v35-ecosystem-adoption.json",
+    "page_map": "docs/PAGE_MAP.json"
   },
   "profiles": {
     "cp5_mcp": {
@@ -205,5 +207,6 @@
       "aism_remediation_workflow": "safe2 aism plan SOURCE ASSESSMENT --system-identity FILE --assessment-scope FILE --output FILE --card FILE",
       "development_workflow": "safe2 dev plan SOURCE --output PLAN then safe2 dev receipt PLAN SOURCE --artifact-root DIR --output RECEIPT"
     }
-  }
+  },
+  "agent_route_index": "llms.txt"
 }

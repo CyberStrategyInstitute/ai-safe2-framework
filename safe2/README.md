@@ -1,4 +1,10 @@
 # AI SAFE² CLI
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-safe2-cli-with-v35) · [Start](#start-with-the-outcome) · [Limits](#what-it-does-not-do) · [Install](#install) · [Evidence](#evidence-and-trust-rules) · [Next](#continue-from-your-result)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: CLI](https://img.shields.io/badge/Area-CLI-005696?style=flat-square)](README.md)
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.5
 
 [![CLI](https://img.shields.io/badge/CLI-1.1.0-F6921E?style=flat-square)](../README.md)
@@ -22,6 +28,16 @@ The CLI helps a person or an agent answer four practical questions:
 It produces bounded JSON evidence for machines and readable Decision Cards for
 people. It does not silently connect to an agent account, approve deployment,
 or turn a self-assessment into a compliance claim.
+
+<!-- V35-ADOPTION:START -->
+## Use SAFE2 CLI with v3.5
+
+**Source status: implemented-bounded.** Source CLI exposes current catalogs, exact lookup, mapping audit and declared-evidence readiness checks.
+
+**Next:** Integrating deployments must authenticate observers, decide applicability and attach independent boundary evidence. Preserve existing score semantics.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Start with the outcome
 

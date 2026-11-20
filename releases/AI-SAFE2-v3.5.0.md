@@ -12,6 +12,10 @@ PR #433 contains the source candidate. This document records planned source beha
 - AISM v1 scoring retains its formula. A separate scoped readiness schema and CLI evaluator preserve hold and human review boundaries. Three threat profiles deepen the existing eleven families.
 - UAS v2 retains 27 IDs and changes human/fairness acceptance interpretation, with reciprocal CSF references. v1 remains available by its versioned path.
 
+## Human and agent navigation
+
+The root README uses task routes, linked badges, an adoption visual and an architecture diagram. Primary module pages provide local navigation and explicit adoption status. The [ecosystem adoption register](../docs/V35-ECOSYSTEM-ADOPTION.md), [machine records](../docs/data/v35-ecosystem-adoption.json) and [compact agent routes](../llms.txt) identify current source capabilities and remaining integration work. Copied skills and the MCP launch checklist now include the v3.5 action/evidence contract. These changes do not retrofit every gateway or runtime with new enforcement.
+
 ## Tools and evidence
 
 `safe2 framework query`, `audit` and `readiness` expose the current data. The local SQLite authority fixture exercises exact approvals, current conditions, aggregate budgets, duplicate suppression and descendant revocation for synthetic effects. The HMAC helper requires an integrating human-authentication boundary. NEXUS production integrations keep their existing qualification limits.

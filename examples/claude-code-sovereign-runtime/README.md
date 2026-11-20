@@ -27,6 +27,14 @@
 
 ---
 
+<!-- V35-RUNTIME-ADOPTION:START -->
+## Apply v3.5 to this example
+
+[Review the integration requirements](../../docs/V35-ECOSYSTEM-ADOPTION.md) before extending this runtime's claims. Identify every tool, provider, browser and direct API path that can commit an effect. Test current authority and environment binding, shared descendant limits, stop propagation, duplicate effects and independently observed outcomes. Keep this example's existing version and evidence limits until those tests pass.
+
+[Try the bounded local authority fixture](../v35-authority/README.md) | [Read the child requirements](../../docs/CONTROLS-V3.5.md) | [Return to examples](../README.md)
+<!-- V35-RUNTIME-ADOPTION:END -->
+
 ## Why This Exists
 
 On March 31, 2026, the entire TypeScript source of Anthropic's Claude Code CLI was exposed via an accidentally shipped `.js.map` artifact in npm package `@anthropic-ai/claude-code` v2.1.88. Over 512,000 lines of proprietary code -- including every permission gate, bypass mechanism, WebSocket auth structure, and JWT handler -- became publicly reconstructable within hours.

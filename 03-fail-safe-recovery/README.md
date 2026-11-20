@@ -1,4 +1,10 @@
 # Pillar 3: Fail-Safe & Recovery (P3)
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: Fail Safe and Recovery](https://img.shields.io/badge/Area-Fail_Safe_and_Recovery-B91C1C?style=flat-square)](README.md)
 ### 🛑 The Emergency Brakes
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)

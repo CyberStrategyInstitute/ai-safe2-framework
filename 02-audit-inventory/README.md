@@ -1,4 +1,10 @@
 # Pillar 2: Audit & Inventory (P2)
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: Audit and Inventory](https://img.shields.io/badge/Area-Audit_and_Inventory-7C3AED?style=flat-square)](README.md)
 ### 👁️ The Ledger of Truth
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)

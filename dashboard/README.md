@@ -1,4 +1,9 @@
 # AI SAFE² Framework Dashboard
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-dashboard-with-v35) · [Start](#quick-start) · [Architecture](#module-architecture) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
 ### Interactive explorer for the core framework and profile overlays
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
@@ -10,6 +15,16 @@
 **Launch:** [AI SAFE² Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use Dashboard with v3.5
+
+**Source status: implemented-bounded.** The branch dashboard projects 173 controls and canonical requirements; deployed Pages may reflect another revision.
+
+**Next:** Check the deployed revision before presenting a live dashboard as v3.5. Mapping labels and maturity views must retain their evidence limits.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Technology contribution presentation boundary
 

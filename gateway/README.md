@@ -1,4 +1,10 @@
 # AI SAFE² Core Gateway v3.0
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-core-gateway-with-v35) · [Evidence](#version-and-conformance-boundary) · [Architecture](#architecture) · [Start](#quick-start) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: Core Gateway](https://img.shields.io/badge/Area-Core_Gateway-B45309?style=flat-square)](README.md)
 ### North-south runtime enforcement for the AI SAFE² v3.5 framework
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
@@ -7,9 +13,19 @@
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-**Previous:** [← Scanner](../scanner/README.md) | **Related:** [NEXUS](../NEXUS/) | [MCP Agent-to-Tool Profile](../00-cross-pillar/cp5_mcp_server_security.md)
+**Previous:** [← Scanner](../scanner/README.md) | **Related:** [NEXUS](../NEXUS/) | [MCP Agent-to-Tool Profile](../00-cross-pillar/cp5_mcp_v35.md)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use Core Gateway with v3.5
+
+**Source status: compatible-reference.** Provider proxy; existing v3.0 component evidence remains scoped to its observed boundary.
+
+**Next:** Bind the final provider request to current principal, task, policy and environment; reserve aggregate consumption atomically; verify bypass and outage behavior.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Gateway evidence and technology contribution
 
@@ -30,7 +46,7 @@ the separate NEXUS component's gateway scaffold and follows the NEXUS source
 version. These names and version numbers identify different components. See
 the [component version map](../docs/COMPONENT-VERSIONS.md).
 
-The gateway remains a compatible reference component for the **north-south enforcement plane** because the v3.1 release primarily changes protocol governance and the MCP agent-to-tool profile. Existing v3.0 gateway audit evidence therefore retains its v3.0 component identity until a separately tested gateway release changes that identity.
+The gateway remains a compatible reference component for the **north-south enforcement plane** with its existing scoped evidence; v3.5 introduces additional requirements that need separate implementation and qualification. Existing v3.0 gateway audit evidence therefore retains its v3.0 component identity until a separately tested gateway release changes that identity.
 
 This distinction is intentional:
 
@@ -82,7 +98,7 @@ Client Response
 
 ---
 
-## v3.1 Enforcement-Plane Model
+## Enforcement-plane model
 
 | Plane | Primary component/path | Gateway role |
 |---|---|---|
@@ -181,7 +197,7 @@ The safety path remains outside ordinary model authority.
 - [AISM](../AISM/)
 - [NEXUS](../NEXUS/)
 - [Scanner](../scanner/README.md)
-- [MCP v3.1 Profile](../00-cross-pillar/cp5_mcp_server_security.md)
+- [MCP v3.1 Profile](../00-cross-pillar/cp5_mcp_v35.md)
 
 ---
 

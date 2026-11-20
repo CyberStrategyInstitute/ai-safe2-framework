@@ -8,6 +8,8 @@ guidance, and advisories. Product- or topic-owned guidance belongs in its
 canonical topic directory. The full organizational-assessment, technology-
 evaluation, and Evidence Assurance methods are in [AISM](../AISM/README.md).
 
+[Framework Home](../README.md) | [v3.5 adoption across components](V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt) | [Complete page map](../PAGE_MAP.md)
+
 ## Find documentation by purpose
 
 | Need | Canonical location |

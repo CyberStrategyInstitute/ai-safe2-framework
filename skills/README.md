@@ -1,4 +1,10 @@
 # AI SAFE² Skills Ecosystem
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-skills-and-provider-guidance-with-v35) · [Start](#quick-start-by-use-case) · [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: Skills](https://img.shields.io/badge/Area-Skills-6842A6?style=flat-square)](README.md)
 ### Model-facing framework guidance and live MCP control access
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
@@ -17,6 +23,16 @@
 > corpus to the model. The skill trust gate correctly rejected it.
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use Skills and provider guidance with v3.5
+
+**Source status: guidance.** Current source guidance must load v3.5 clauses, cite exact IDs and preserve unverified evidence states.
+
+**Next:** Reinstall or refresh copied skill packages. Run skill trust checks and evaluate tool-call behavior; reading guidance does not enforce the runtime boundary.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Technology review and evidence boundaries
 
@@ -109,7 +125,7 @@ See [skills/mcp/README.md](./mcp/README.md) for current transport, authenticatio
 
 ---
 
-## v3.1 Version Model
+## Framework and component version model
 
 | Item | v3.1 state |
 |---|---|

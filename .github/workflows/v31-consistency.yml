@@ -1,4 +1,4 @@
-name: AI SAFE2 v3.1 Consistency
+name: AI SAFE2 Framework Consistency
 
 on:
   pull_request:
@@ -118,3 +118,5 @@ jobs:
       - run: python -m pytest tests/test_framework_v35.py -q
       - run: python scripts/generate_page_map.py --check
       - run: python scripts/check_local_links.py
+      - run: python scripts/check_navigation.py
+      - run: python scripts/generate_entry_routes.py --check

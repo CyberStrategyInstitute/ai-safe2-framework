@@ -1,4 +1,10 @@
 # AI SAFE² Implementation Examples
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Adopt](#use-sovereign-runtime-examples-with-v35) · [Next](#navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: Runtime Examples](https://img.shields.io/badge/Area-Runtime_Examples-0F766E?style=flat-square)](README.md)
 ### Governed runtime patterns across agent stacks
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
@@ -8,6 +14,16 @@
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
 ---
+
+<!-- V35-ADOPTION:START -->
+## Use Sovereign runtime examples with v3.5
+
+**Source status: mixed-reference.** The v3.5 authority example demonstrates synthetic local transactions. Existing runtime examples retain individual limits.
+
+**Next:** For each runtime, test exact action binding, direct-path bypass, stale state, child budgets, stop propagation, duplicate effects and independent outcomes before extending claims.
+
+[Review the adoption requirements](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Current control contracts](../docs/CONTROLS-V3.5.md) | [Research rationale](../research/README.md) | [Source and published versions](../docs/COMPONENT-VERSIONS.md)
+<!-- V35-ADOPTION:END -->
 
 ## Reviewing technology contributions
 
@@ -62,10 +78,10 @@ Examples demonstrate implementation patterns. They do not create framework confo
 
 ---
 
-## v3.1 Notes
+## Protocol compatibility notes
 
 - The overall framework remains **161 core controls**.
-- MCP implementations should use the [CP.5.MCP v3.1 profile](../00-cross-pillar/cp5_mcp_server_security.md).
+- MCP implementations should use the [CP.5.MCP v3.1 profile](../00-cross-pillar/cp5_mcp_v35.md).
 - UAS is a 27-requirement regulatory profile extension; it does not create CP.11 as a core control.
 - NEXUS examples are reference implementations, not mandatory AI SAFE² dependencies.
 - Legacy session-oriented state terminology may appear in older examples during the migration window; new governance-bearing examples should use `request`, `handle_scoped`, and `durable` semantics where applicable.

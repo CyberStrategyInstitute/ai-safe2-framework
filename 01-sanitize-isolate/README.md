@@ -1,4 +1,10 @@
 # Pillar 1: Sanitize & Isolate (P1)
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: Sanitize and Isolate](https://img.shields.io/badge/Area-Sanitize_and_Isolate-0891B2?style=flat-square)](README.md)
 ### 🛡️ The First Line of Defense
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)

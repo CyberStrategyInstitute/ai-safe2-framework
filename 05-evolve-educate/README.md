@@ -1,4 +1,10 @@
 # Pillar 5: Evolve & Educate (P5)
+
+<!-- ENTRY-ROUTES:START -->
+**On this page:** [Next](#-navigation)
+<!-- ENTRY-ROUTES:END -->
+
+[![Area: Evolve and Educate](https://img.shields.io/badge/Area-Evolve_and_Educate-9333EA?style=flat-square)](README.md)
 ### 🧬 The Feedback Loop
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)

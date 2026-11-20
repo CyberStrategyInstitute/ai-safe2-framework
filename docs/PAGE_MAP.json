@@ -758,6 +758,10 @@
       "kind": "document"
     },
     {
+      "path": "docs/V35-ECOSYSTEM-ADOPTION.md",
+      "kind": "document"
+    },
+    {
       "path": "docs/advisories/2026-09-09-skill-gate-executable-scope.md",
       "kind": "document"
     },
@@ -1075,6 +1079,10 @@
     },
     {
       "path": "docs/data/local-reference-dispositions-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/data/v35-ecosystem-adoption.json",
       "kind": "machine-data"
     },
     {

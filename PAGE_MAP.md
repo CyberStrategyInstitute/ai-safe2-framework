@@ -193,6 +193,7 @@ AI SAFE2 v3.5 candidate. Source paths provide discovery; repository content rema
 | [docs/README.md](docs/README.md) | document |
 | [docs/REPOSITORY-UX-STANDARD.md](docs/REPOSITORY-UX-STANDARD.md) | document |
 | [docs/ROSETTA-STONE-V35.md](docs/ROSETTA-STONE-V35.md) | document |
+| [docs/V35-ECOSYSTEM-ADOPTION.md](docs/V35-ECOSYSTEM-ADOPTION.md) | document |
 | [docs/advisories/2026-09-09-skill-gate-executable-scope.md](docs/advisories/2026-09-09-skill-gate-executable-scope.md) | document |
 | [docs/advisories/README.md](docs/advisories/README.md) | document |
 | [docs/assessments/2026-10-06-false-assurance/LEDGER.md](docs/assessments/2026-10-06-false-assurance/LEDGER.md) | document |
@@ -273,6 +274,7 @@ AI SAFE2 v3.5 candidate. Source paths provide discovery; repository content rema
 | [docs/assessments/2026-10-07-version-consistency/README.md](docs/assessments/2026-10-07-version-consistency/README.md) | document |
 | [docs/assessments/2026-11-19-v35-update/README.md](docs/assessments/2026-11-19-v35-update/README.md) | document |
 | [docs/data/local-reference-dispositions-v3.5.json](docs/data/local-reference-dispositions-v3.5.json) | machine-data |
+| [docs/data/v35-ecosystem-adoption.json](docs/data/v35-ecosystem-adoption.json) | machine-data |
 | [docs/engineering/ADR-DECISION-FIREWALL-ARCHITECTURE.md](docs/engineering/ADR-DECISION-FIREWALL-ARCHITECTURE.md) | document |
 | [docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md](docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md) | document |
 | [docs/engineering/PR-DECISION-EVIDENCE-WORKFLOW.md](docs/engineering/PR-DECISION-EVIDENCE-WORKFLOW.md) | document |

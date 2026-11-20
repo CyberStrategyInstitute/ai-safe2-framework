@@ -60,7 +60,7 @@ Once connected, Claude Code has access to:
 |------|-------------|------|
 | `lookup_control` | Search 173 AI SAFE2 controls | Free (30 results) / Pro (all) |
 | `risk_score` | Calculate Combined Risk Score with AAF | Free (basic) / Pro (full AAF) |
-| `compliance_map` | Map requirements to controls across 32 frameworks | Free (5 FW) / Pro (all 32) |
+| `compliance_map` | Retrieve attributed requirement/control tags; source review remains required | Free / Pro access limits; neither grants verified coverage |
 | `code_review` | Review code against SAFE2 controls | Pro only |
 | `agent_classify` | Classify agent ACT tier + governance requirements | Pro full |
 | `get_governance_resource` | Policy templates, checklists, schemas | Free (3) / Pro (all) |
