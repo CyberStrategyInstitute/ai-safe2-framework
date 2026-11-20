@@ -5768,7 +5768,7 @@
     }
   },
   "risk_formula": {
-    "name": "AI SAFE2 v3.0 Combined Risk Score",
+    "name": "Combined Risk Score (retained v3.0 formula)",
     "formula": "CVSS_Base + ((100 - Pillar_Score) / 10) + (AAF / 10)",
     "components": {
       "CVSS_Base": "Standard CVSS base score (0-10)",
