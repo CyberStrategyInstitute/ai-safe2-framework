@@ -39,7 +39,7 @@ Review IDs below are temporary planning identities. Each child requirement also 
 
 ### C33 Design-time coordination contract
 
-**Recommendation** Add standalone cross-pillar candidate.
+**Recommendation** Add standalone cross-pillar control.
 
 **Source** Wave 04 Holds, Proposed for v3.2; Wave 02 shared-resource and swarm requirements.
 
@@ -61,7 +61,7 @@ Review IDs below are temporary planning identities. Each child requirement also 
 
 ### C34 Environment-bound authority
 
-**Recommendation** Add standalone P3 candidate.
+**Recommendation** Add standalone P3 control.
 
 **Source** Wave 04 Holds, Environment Binding and Assertion; Wave 02 purpose separation.
 
@@ -83,7 +83,7 @@ Review IDs below are temporary planning identities. Each child requirement also 
 
 ### C35 Idempotency and side-effect ledger
 
-**Recommendation** Add standalone P3 candidate with P2 evidence.
+**Recommendation** Add standalone P3 control with P2 evidence.
 
 **Source** Wave 04 Holds, Idempotency and Side-Effect Ledger; Wave 02 ASG-13 and transactions.
 
@@ -106,7 +106,7 @@ Review IDs below are temporary planning identities. Each child requirement also 
 
 ### C36 Verified outcome contract
 
-**Recommendation** Add standalone P2 candidate.
+**Recommendation** Add standalone P2 control.
 
 **Source** Wave 04 Holds, Post-Condition Verification; Wave 02 P2-01; merged CI receipt boundary.
 
@@ -129,7 +129,7 @@ Review IDs below are temporary planning identities. Each child requirement also 
 
 ### C37 Declared success and acceptance criteria
 
-**Recommendation** Add standalone P5 candidate.
+**Recommendation** Add standalone P5 control.
 
 **Source** Wave 04 Holds, Declared Success Criteria Gate; Wave 02 G-01 and P5 requirements.
 
@@ -151,7 +151,7 @@ Review IDs below are temporary planning identities. Each child requirement also 
 
 ### C38 Evidence-based failure attribution
 
-**Recommendation** Add standalone P2 candidate.
+**Recommendation** Add standalone P2 control.
 
 **Source** Wave 04 Holds, Failure Location; Developer Workflow CI execution receipt; Wave 02 outcome evidence.
 
@@ -545,7 +545,7 @@ Implement the following check classes against individual records. These are 16 p
 
 The 19 existing profile IDs remain the baseline for the mapping decision. The following twelve review clauses must be compared against their owning text. Where already normative, preserve the wording and add the missing test. Where coverage is incomplete, add or strengthen the child requirement. New profile IDs follow an objective-gap decision.
 
-| Review clause | Candidate existing owner | Required nuance and negative case |
+| Review clause | Existing control owner | Required nuance and negative case |
 | --- | --- | --- |
 | MCP-R01 | MCP-7, MCP-19 | Discovery and fallback cannot reduce identity or resource checks. Test missing discovery and unauthorized fallback. |
 | MCP-R02 | MCP-19 | Bind inbound principal, intended resource and delegated purpose. Reject a valid token for the wrong resource. |
@@ -588,7 +588,7 @@ Each C33-C52 section above specifies a separate research-note question, its sour
 | RN-C51 | Rosetta Stone semantics and mapping evidence | C51; linked control/profile owner and validation reviewer |
 | RN-C52 | Machine-readable governance for building and repair | C52; linked control/profile owner and validation reviewer |
 
-Every note needs a dated source/claim register, events versus disclosures, laboratory versus operational evidence, limits and contrary findings, exact old/new requirement comparison, why standalone or absorbed, applicable actors/surfaces, proposed enforcement, regression cases, recovery, and supported claims. Primary-source status verification remains necessary for external legal duties and historical incident causes. This review supplies a comprehensive candidate expansion and its reasoning. Executed validation determines implementation and effectiveness claims.
+Every note needs a dated source/claim register, events versus disclosures, laboratory versus operational evidence, limits and contrary findings, exact old/new requirement comparison, why standalone or absorbed, applicable actors/surfaces, proposed enforcement, regression cases, recovery, and supported claims. Primary-source status verification remains necessary for external legal duties and historical incident causes. This review supplies a comprehensive framework expansion and its reasoning. Executed validation determines implementation and effectiveness claims.
 
 The [33-family recovery audit](data/framework-mapping-recovery-review-2026-11-19.csv) preserves the recorded counts and historical assertions with an explicit unassessed coverage status.
 
