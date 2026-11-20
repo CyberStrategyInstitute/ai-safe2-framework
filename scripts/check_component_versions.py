@@ -183,6 +183,8 @@ def scan(root: Path, *, check_pypi: bool = False) -> list[str]:
             rel.startswith(("tests/", "scripts/"))
             or "/tests/" in rel
             or rel == INVENTORY
+            # Generated path inventories cite historical filenames, not current versions.
+            or rel in {"PAGE_MAP.md", "docs/PAGE_MAP.json"}
             or any(fnmatch.fnmatch(rel, pattern) for pattern in inventory["historical_paths"])
         ):
             continue

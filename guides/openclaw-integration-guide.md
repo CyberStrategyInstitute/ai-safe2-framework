@@ -831,7 +831,7 @@ python3 compliance-report.py --framework soc2 \
 
 ## Troubleshooting
 
-**See [troubleshooting.md](./troubleshooting.md) for complete guide.**
+**See [OpenClaw troubleshooting](../examples/openclaw/troubleshooting.md) for complete guide.**
 
 **Quick fixes:**
 

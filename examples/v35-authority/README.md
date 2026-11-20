@@ -1,3 +1,6 @@
+<!-- stack: Python SQLite local authority fixture -->
+<!-- description: Synthetic transactional effects with exact approvals, current conditions, ancestor budgets, idempotency and descendant revocation. -->
+
 <!-- AI-SAFE2-UX:START -->
 [![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE2-v3.5-F6921E)](../../README.md)
 [![Reference](https://img.shields.io/badge/Reference-820F1A)](../../docs/CONTROLS-V3.5.md)
