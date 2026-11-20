@@ -16,6 +16,8 @@ Canonical mirrors, generated documents, source maps, navigation, current README 
 
 Review considered exact-action binding, replay, current conditions, inherited authority, concurrent ancestor budgets, idempotency, postconditions and evidence independence in the bounded SQLite fixture. CLI readiness remains a declared-evidence check and cannot authorize deployment. Rosetta source review and applicability are not manufactured from tags. The review found a link bug for `_ADV` control IDs; the explorer now consumes canonical generated anchors, and a regression checks every control anchor.
 
+Hosted CodeQL flagged dynamic DOM element construction in the explorer. The helper now creates only explicitly permitted literal element names, rejects unsupported names and keeps source text in textContent. The generated page and regression test are synchronized. Two issue-reference Markdown formatting errors were also corrected.
+
 The formal Codex Security diff service could not attach to this Windows Git worktree and returned: `Review changes requires a non-bare Git worktree with a resolvable HEAD.` The local HEAD resolves. No completed formal diff scan is claimed. Hosted CodeQL, repository guardrails, secret and dependency checks are recorded separately in the PR for the final revision.
 
 ## Loop 3: package and operator qualification
@@ -23,7 +25,7 @@ The formal Codex Security diff service could not attach to this Windows Git work
 - Full local suite: 1,170 passed, eight skipped.
 - MCP suite: 150 passed, eleven skipped, two deprecation warnings.
 - NEXUS SDK suite: 628 passed, 22 deprecation warnings.
-- Follow-up framework/explorer regression: 29 passed after the advanced-ID anchor correction.
+- Follow-up framework/explorer regression: 30 passed after the advanced-ID anchor and DOM-construction corrections.
 - CLI/MCP wheels build. Cold package-local imports resolve all 173 controls, 53 decisions, 157 child clauses, 19 MCP controls and current framework status.
 - Live PyPI metadata validation confirms documented published component pins. No package publication was performed.
 - Exact-head hosted matrix and container build/health results are recorded in PR #433. Passing evidence is bounded by the checks actually executed.
