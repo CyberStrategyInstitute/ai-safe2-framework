@@ -4,7 +4,7 @@ Status: source version in PR #433. No release, deployment, independent conforman
 
 ## Change boundaries
 
-The candidate adds 12 core controls to the 161-control baseline, yielding 173 controls: 158 pillar controls and CP.1-CP.15. Its 53 disposition records own 157 child clauses, including two research-disposition clauses. Fifty-three research notes retain source attribution, placement decisions, limits and acceptance cases. The MCP profile retains 19 IDs and adds 12 distinct child requirements. Six deployment profiles and three threat profiles extend applicability without creating additional top-level controls or threat families.
+The v3.5 update adds 12 core controls to the 161-control baseline, yielding 173 controls: 158 pillar controls and CP.1-CP.15. Its 53 disposition records own 157 child clauses, including two research-disposition clauses. Fifty-three research notes retain source attribution, placement decisions, limits and acceptance cases. The MCP profile retains 19 IDs and adds 12 distinct child requirements. Six deployment profiles and three threat profiles extend applicability without creating additional top-level controls or threat families.
 
 The Rosetta Stone contains 1,202 recovered relationships across 33 external source families. No recovered relationship has been promoted to approved external coverage. Sixteen audit-rule classes expose review gaps. Review dates and source revisions must be current before an approved record passes its applicable checks. Human review must validate source meaning and deployment applicability.
 

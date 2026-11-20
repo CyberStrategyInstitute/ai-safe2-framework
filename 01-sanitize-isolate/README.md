@@ -149,4 +149,4 @@ endorsing their deployment or assigning organizational maturity.
 
 ## v3.5 normative detail
 
-The [control contracts](../docs/CONTROLS-V3.5.md) define the current candidate core IDs and child requirements, with [research decisions](../research/README.md), enforcement/evidence expectations, failure responses and acceptance cases. Implementation and deployment evidence must be scoped to the actual path.
+The [control contracts](../docs/CONTROLS-V3.5.md) define the current core IDs and child requirements, with [research decisions](../research/README.md), enforcement/evidence expectations, failure responses and acceptance cases. Implementation and deployment evidence must be scoped to the actual path.

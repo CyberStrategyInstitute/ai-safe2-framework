@@ -66,12 +66,12 @@ Use shared evidence identifiers to connect the machine boundary to Cognitive Sov
 | SAFE2 CLI | [safe2/framework.py](../safe2/framework.py) | [tests/test_framework_v35.py](../tests/test_framework_v35.py) | CLI 1.1.0 source |
 | Developer Workflow | [developer-workflow/docs/ARCHITECTURE.md](../developer-workflow/docs/ARCHITECTURE.md) | [developer-workflow/tests](../developer-workflow/tests) | Developer Workflow 0.1.0 preview |
 | Skills and provider guidance | [skills/ai-safe2-secure-build-copilot/SKILL.md](../skills/ai-safe2-secure-build-copilot/SKILL.md) | [scripts/validate_skill_card.py](../scripts/validate_skill_card.py) | Skill package version is separate from framework version |
-| MCP knowledge server | [skills/mcp/src/mcp_server/controls_db.py](../skills/mcp/src/mcp_server/controls_db.py) | [skills/mcp/tests](../skills/mcp/tests) | MCP server 3.1.0 source; framework 3.5 candidate |
+| MCP knowledge server | [skills/mcp/src/mcp_server/controls_db.py](../skills/mcp/src/mcp_server/controls_db.py) | [skills/mcp/tests](../skills/mcp/tests) | MCP server 3.1.0 source; framework 3.5 |
 | Sovereign runtime examples | [examples/v35-authority/demo.py](../examples/v35-authority/demo.py) | [tests/test_framework_v35.py](../tests/test_framework_v35.py) | Example-specific; no blanket certification |
 | Scanner and MCP toolkit | [scanner/scanner.py](../scanner/scanner.py) | [scanner/tests](../scanner/tests) | Scanner package/component version remains separate |
-| AISM and UAS | [safe2/data/deployment-readiness-v1.schema.json](../safe2/data/deployment-readiness-v1.schema.json) | [tests/test_aism.py](../tests/test_aism.py) | AISM v1; UAS v2 candidate |
+| AISM and UAS | [safe2/data/deployment-readiness-v1.schema.json](../safe2/data/deployment-readiness-v1.schema.json) | [tests/test_aism.py](../tests/test_aism.py) | AISM v1; UAS v2 |
 | Challenge Lab | [challenges/002-v35-commit-boundary/preregistration.json](../challenges/002-v35-commit-boundary/preregistration.json) | [tests/test_framework_v35.py](../tests/test_framework_v35.py) | Study/protocol versions are independent |
-| Dashboard | [dashboard/public/data/controls.json](../dashboard/public/data/controls.json) | [scripts/check_v35_contracts.py](../scripts/check_v35_contracts.py) | Branch candidate; deployment not implied |
+| Dashboard | [dashboard/public/data/controls.json](../dashboard/public/data/controls.json) | [scripts/check_v35_contracts.py](../scripts/check_v35_contracts.py) | Current source; deployment not implied |
 
 ## What this update does and leaves open
 

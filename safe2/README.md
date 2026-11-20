@@ -17,7 +17,7 @@
 
 The CLI badge identifies source version **1.1.0**, not a PyPI publication.
 Published CLI: **1.0.1**, verified 2026-10-16. Guided start requires the source
-candidate until 1.1.0 is published. See [component versions](../docs/COMPONENT-VERSIONS.md).
+version until 1.1.0 is published. See [component versions](../docs/COMPONENT-VERSIONS.md).
 
 [Start](#start-with-the-outcome) | [Give this to your agent](#give-this-to-your-agent) | [Install](#install) | [Choose a workflow](#choose-a-workflow) | [Harness compatibility](#harness-compatibility) | [Command reference](#command-map) | [Limits](#what-it-does-not-do)
 

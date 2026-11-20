@@ -263,4 +263,4 @@ When a machine-readable field and prose appear to conflict, do not silently gues
 
 ## v3.5 machine contracts
 
-The manifest selects the 173-control candidate catalog. Use `safe2 framework query`, `safe2 framework audit`, and `safe2 framework readiness` for versioned requirements, attributed mapping records and scoped evidence review. Read docs/CONTROLS-V3.5.md for applicable child requirements. Prior versioned catalogs remain compatibility artifacts. Research status, implementation and independent verification remain distinct.
+The manifest selects the 173-control catalog. Use `safe2 framework query`, `safe2 framework audit`, and `safe2 framework readiness` for versioned requirements, attributed mapping records and scoped evidence review. Read docs/CONTROLS-V3.5.md for applicable child requirements. Prior versioned catalogs remain compatibility artifacts. Research status, implementation and independent verification remain distinct.

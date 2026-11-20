@@ -1,4 +1,4 @@
-> **v3.1 compatibility profile.** The manifest selects [the v3.5 profile](cp5_mcp_v35.md) for current candidate assessment.
+> **v3.1 compatibility profile.** The manifest selects [the v3.5 profile](cp5_mcp_v35.md) for current assessment.
 
 # CP.5.MCP: MCP Server Security Profile
 
