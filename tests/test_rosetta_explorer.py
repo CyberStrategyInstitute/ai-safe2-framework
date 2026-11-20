@@ -42,3 +42,10 @@ def test_every_readme_html_and_root_path_has_a_disposition():
     assert actual==expected
     assert next(r for r in records if r['path']=='examples/openclaw/gateway-release-v3.0.html')['disposition']=='historical-or-frozen'
     assert next(r for r in records if r['path']=='tests/fixtures/hostile/README.md')['disposition']=='test-fixture'
+
+
+def test_explorer_uses_only_literal_element_names():
+    template=(ROOT/'dashboard/rosetta-template.html').read_text(encoding='utf-8')
+    assert 'document.createElement(tag)' not in template
+    assert "default:throw new Error('Unsupported element')" in template
+    assert 'e.textContent=text' in template

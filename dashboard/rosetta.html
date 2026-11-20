@@ -16,7 +16,8 @@ const data=JSON.parse(document.getElementById('mapping-data').textContent);
 const byId=Object.fromEntries(data.controls.map(c=>[c.id,c]));
 const sources=Object.fromEntries(data.registry.sources.map(s=>[s.id,s]));
 const $=id=>document.getElementById(id);
-function node(tag,text,parent){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(parent)parent.append(e);return e;}
+function element(tag){switch(tag){case 'a':return document.createElement('a');case 'option':return document.createElement('option');case 'dt':return document.createElement('dt');case 'dd':return document.createElement('dd');case 'h2':return document.createElement('h2');case 'dl':return document.createElement('dl');case 'p':return document.createElement('p');case 'ul':return document.createElement('ul');case 'li':return document.createElement('li');case 'article':return document.createElement('article');case 'div':return document.createElement('div');case 'details':return document.createElement('details');case 'summary':return document.createElement('summary');default:throw new Error('Unsupported element');}}
+function node(tag,text,parent){const e=element(tag);if(text!==undefined)e.textContent=text;if(parent)parent.append(e);return e;}
 function link(text,url,parent){const e=node('a',text,parent);e.href=url;return e;}
 function safeURL(value){try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:null;}catch{return null;}}
 function controlLink(id,parent){return link(id+' '+(byId[id]?.name||'unresolved control'),'../docs/CONTROLS-V3.5.md#'+data.control_anchors[id],parent);}

@@ -63,4 +63,4 @@ PR #433 closes #416 and #390 on merge. The container repair has build/startup ev
 
 The optional hosted demonstration in #287 is declined in favor of maintained local routes. The mandatory psychological telemetry and consensus mechanism in #249 is declined as a validated runtime gate; the oversight concern continues in #442. These two proposals receive explicit not-planned dispositions.
 
-#234, #235, #245, #250, #251, #273 and #308 remain open for their actual acceptance work. Framework requirements do not substitute for implementation, authenticated integration, interoperability or preregistered results. Dedicated component work is tracked in [the post-v3.5 update register](POST-V35-COMPONENT-UPDATES.md), issues #434 through #442.
+Issues #234, #235, #245, #250, #251, #273 and #308 remain open for their actual acceptance work. Framework requirements do not substitute for implementation, authenticated integration, interoperability or preregistered results. Dedicated component work is tracked in [the post-v3.5 update register](POST-V35-COMPONENT-UPDATES.md), issues #434 through #442.

@@ -15,7 +15,7 @@ Framework v3.5 is the requirement baseline. Component releases retain their own 
 
 ## Existing requests retained
 
-#235 owns authenticated approval/webhook integration. #250 and #273 own their requested runtime-state and MECHA integration work. #251 owns source-verified SEF interoperability. #308 owns the pre-confirmatory denominator/preregistration correction. #234 retains the promised model-specific observable trace example. #245 retains protocol/interoperability work. These are linked into the component issues rather than duplicated or declared complete.
+Issue #235 owns authenticated approval/webhook integration. #250 and #273 own their requested runtime-state and MECHA integration work. #251 owns source-verified SEF interoperability. #308 owns the pre-confirmatory denominator/preregistration correction. #234 retains the promised model-specific observable trace example. #245 retains protocol/interoperability work. These are linked into the component issues rather than duplicated or declared complete.
 
 ## Sovereign runtime series
 
