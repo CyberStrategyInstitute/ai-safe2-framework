@@ -1,4 +1,4 @@
-# CP.5.GATEWAY | v3.5 candidate profile
+# CP.5.GATEWAY | v3.5 profile
 
 This profile applies when the deployment includes this operating boundary. It inherits the linked core objectives and requires a recorded applicability decision. Profile requirements are excluded from the core control count. Implementations must identify which concrete paths enforce each obligation and retain explicit unsupported and untested routes.
 

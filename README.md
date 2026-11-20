@@ -8,7 +8,7 @@
 
 ### Build agents you can govern. Keep authority over what they do.
 
-[![Framework: v3.5 candidate](https://img.shields.io/badge/version-3.5.0--candidate-F6921E?style=for-the-badge)](releases/AI-SAFE2-v3.5.0.md)
+[![Framework: v3.5](https://img.shields.io/badge/version-3.5.0-F6921E?style=for-the-badge)](releases/AI-SAFE2-v3.5.0.md)
 [![Core: 173 controls](https://img.shields.io/badge/Core-173_controls-005696?style=for-the-badge)](docs/CONTROLS-V3.5.md)
 [![MCP: 19 controls and 12 child clauses](https://img.shields.io/badge/MCP-19_controls_%2B_12_clauses-6842A6?style=for-the-badge)](00-cross-pillar/cp5_mcp_v35.md)
 
@@ -24,7 +24,7 @@
 
 AI SAFE² connects AI risks to control requirements, implementation boundaries and evidence. Use it to design an agent, investigate a failure, review a vendor, or decide whether a system is ready for human approval.
 
-**This branch contains the AI SAFE² v3.5 source candidate.** It adds 12 controls to the 161-control baseline. Component versions, published packages and deployed systems have their own status. [Review the migration](MIGRATION.md) and [verification record](docs/assessments/2026-11-19-v35-update/README.md).
+**This branch contains the AI SAFE² v3.5.** It adds 12 controls to the 161-control baseline. Component versions, published packages and deployed systems have their own status. [Review the migration](MIGRATION.md) and [verification record](docs/assessments/2026-11-19-v35-update/README.md).
 
 [Start](#use-ai-safe-with-an-agent) · [Architecture](#the-core-architecture) · [Rosetta Stone](#the-universal-rosetta-stone) · [Implementations](#choose-your-implementation-path) · [Evidence](#test-the-result) · [Resources](#resource-library) · [Contribute](#help-improve-the-framework)
 
@@ -79,9 +79,9 @@ Define the applicable requirements, build them at the real action boundary, and 
 | A2.7-A2.9 | Retries, false completion and uncertain failure attribution need explicit evidence | [Side effects and verified outcomes](02-audit-inventory/README.md) |
 | E5.5 | Success must be declared before the result is graded | [Success criteria](05-evolve-educate/README.md) |
 
-The candidate contains **173 core controls, 154 child clauses and 52 new research notes**. Two child clauses retain research disposition. MCP retains **19 control IDs** and adds **12 child requirements**. Six deployment profiles and three threat profiles add context without inflating the core count.
+Version 3.5 contains **173 core controls, 157 child clauses and 53 new research notes**. Two child clauses retain research disposition. MCP retains **19 control IDs** and adds **12 child requirements**. Six deployment profiles and three threat profiles add context without inflating the core count.
 
-**[Read the candidate release note](releases/AI-SAFE2-v3.5.0.md)** · [Research and placement rationale](research/README.md) · [All 52 dispositions](safe2/data/framework-requirements-v3.5.json) · [Migration](MIGRATION.md)
+**[Read the release note](releases/AI-SAFE2-v3.5.0.md)** · [Research and placement rationale](research/README.md) · [All 53 dispositions](safe2/data/framework-requirements-v3.5.json) · [Migration](MIGRATION.md)
 
 ## The core architecture
 
@@ -136,7 +136,7 @@ v3.5 changes what an implementation must demonstrate. Updating a badge or import
 | Surface | Use it for | Current boundary | Next step |
 | --- | --- | --- | --- |
 | [Core Gateway](gateway/README.md) | Agent-to-model provider traffic | Gateway v3.0 reference component | Qualify current-state binding, aggregate limits and bypass resistance |
-| [NEXUS](NEXUS/README.md) | Agent identity, delegated authority, evidence and memory | 0.6.0 source candidate; capabilities have individual limits | Qualify delegation-tree containment and independent effects |
+| [NEXUS](NEXUS/README.md) | Agent identity, delegated authority, evidence and memory | 0.6.0 source version; capabilities have individual limits | Qualify delegation-tree containment and independent effects |
 | [NEXUS MCP adapter](NEXUS/adapters/mcp/README.md) | Agent-to-tool enforcement design | Fail-closed scaffolding | Implement and test before protected dispatch |
 | [Sovereign runtime examples](examples/README.md) | Stack-specific integration patterns | Example-specific reference evidence | Test each actual tool and side-effect path |
 | [SAFE2 CLI](safe2/README.md) | Inventory, assessment, evidence, framework lookup and readiness | Bounded source behavior | Attach deployment evidence and retain human decisions |
@@ -175,10 +175,10 @@ The [synthetic local fixture](examples/v35-authority/README.md) demonstrates exa
 | [Developer adoption guide](developer-workflow/docs/ADOPTION-GUIDE.md) | Installation, tool selection and evidence routing |
 | [Dashboard source](dashboard/README.md) | Searchable control explorer and branch/deployment distinction |
 | [Security advisories](docs/advisories/README.md) | Known limitations and response guidance |
-| [Migration](MIGRATION.md) and [evolution](EVOLUTION.md) | Candidate changes and preserved version history |
+| [Migration](MIGRATION.md) and [evolution](EVOLUTION.md) | Version changes and preserved version history |
 | [Documentation map](docs/README.md) and [page map](PAGE_MAP.md) | Task routes and every indexed document |
 
-The [hosted dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) may reflect a different revision from this candidate branch. Check its version before using it as assessment evidence.
+The [hosted dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) may reflect a different revision from this checkout. Check its version before using it as assessment evidence.
 
 ### Repository structure
 
@@ -197,7 +197,7 @@ developer-workflow/                            Change routing and human-owned re
 research/ / challenges/                       Attributed research and falsification protocols
 dashboard/                                    Control dashboard and Rosetta mapping explorer
 docs/ / guides/ / resources/                   Shared methods, task guides and reference routes
-releases/                                     Historical and candidate release records
+releases/                                     Historical and current release records
 assets/                                       Diagrams and visual maps
 FORGE-Act/                                    Separate public-policy material
 .github/ / tests/                             CI checks and regression evidence
@@ -236,7 +236,7 @@ Read [contribution guidance](CONTRIBUTING.md), [security](SECURITY.md), [support
 
 ## Citation and licensing
 
-Use [CITATION.cff](CITATION.cff) for citation metadata. Cite the exact revision and candidate status when using v3.5 before publication. Framework documentation is CC BY-SA 4.0 where designated; code is generally MIT, and NEXUS is Apache 2.0 where designated. [COPYRIGHT](COPYRIGHT) and [the licensing map](docs/LICENSING.md) govern individual paths.
+Use [CITATION.cff](CITATION.cff) for citation metadata. Cite the exact framework version and revision. Framework documentation is CC BY-SA 4.0 where designated; code is generally MIT, and NEXUS is Apache 2.0 where designated. [COPYRIGHT](COPYRIGHT) and [the licensing map](docs/LICENSING.md) govern individual paths.
 
 [Back to start](#use-ai-safe-with-an-agent) · [All documentation](PAGE_MAP.md) · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/)
 

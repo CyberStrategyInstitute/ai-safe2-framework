@@ -543,7 +543,29 @@
       "GDPR"
     ],
     "framework_version": "3.5.0",
-    "requirements": [],
+    "requirements": [
+      {
+        "id": "P2.T4.4.R1",
+        "requirement": "Record the externally sourced resource identifier, intended use, declaration state, observation time and freshness, provenance and integrity evidence before downstream policy evaluation.",
+        "disposition": "normative",
+        "review_id": "C53",
+        "research": "research/077_v35_c53.md"
+      },
+      {
+        "id": "P2.T4.4.R2",
+        "requirement": "Keep the observation provider-neutral and distinguish observed declarations from licences, ownership, actual use and permission. UNKNOWN, stale or contradictory declarations cannot become permission by default.",
+        "disposition": "normative",
+        "review_id": "C53",
+        "research": "research/077_v35_c53.md"
+      },
+      {
+        "id": "P2.T4.4.R3",
+        "requirement": "Bind reuse to the purpose and policy decision; record review/correction paths, minimization and unresolved rights or provenance conflicts without bypassing source access controls.",
+        "disposition": "normative",
+        "review_id": "C53",
+        "research": "research/077_v35_c53.md"
+      }
+    ],
     "implementation_status": "requires-deployment-evidence"
   },
   {

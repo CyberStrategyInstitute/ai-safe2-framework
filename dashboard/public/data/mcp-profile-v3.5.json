@@ -9,7 +9,7 @@
     "framework_controls_total": 173,
     "governance_unit": "verified_principal",
     "baseline_profile_version": "3.1.0",
-    "release_status": "candidate"
+    "release_status": "current"
   },
   "controls": [
     {

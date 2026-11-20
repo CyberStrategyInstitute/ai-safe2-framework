@@ -9,7 +9,7 @@
 
 ## What changed in v3.5
 
-- The v3.5 source candidate has 173 core controls (158 pillar plus CP.1-CP.15), with 154 child clauses. Current data are in ai-safe2-controls-v3.5.json; v3.0 remains a historical baseline.
+- The v3.5 has 173 core controls (158 pillar plus CP.1-CP.15), with 157 child clauses. Current data are in ai-safe2-controls-v3.5.json; v3.0 remains a historical baseline.
 - Profiles are overlays and never add to the 173. MCP work uses the CP.5.MCP v3.5 profile, MCP-1 through MCP-19, aligned to MCP `2026-07-28` with legacy `2025-11-25` compatibility. The UAS regulatory profile has 27 requirements and is not a core CP control.
 - Name the enforcement plane before claiming coverage: north-south (agent to model), east-west (agent to agent), agent-to-tool (agent to MCP server or tool). Evidence from one plane does not validate another.
 - Persistence scopes are `request`, `handle_scoped`, `durable` and `swarm_shared` (legacy SESSION, CROSS_SESSION and PERMANENT map to the first three). A state handle or legacy session ID is not identity and not an authorization boundary.

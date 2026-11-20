@@ -1,4 +1,4 @@
-# UAS v2.0 candidate profile
+# UAS v2.0 profile
 
 This v3.5 companion retains 27 UAS requirement IDs and the three-layer structure. It changes the human and fairness acceptance interpretation, so adopters must explicitly migrate from v1.0. The v1 profile and its protocol remain baseline artifacts. The profile is CSI-authored and requires review of the actual applicable procurement instrument before a contractual claim.
 

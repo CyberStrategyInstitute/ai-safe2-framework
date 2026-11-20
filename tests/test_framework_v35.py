@@ -30,7 +30,7 @@ def test_catalog_and_legacy_baseline():
     assert len(current['CP.12']['requirements']) == 6
     legacy = data('ai-safe2-controls-v3.0.json')
     assert len(legacy['pillar_controls']) + len(legacy['cross_pillar_controls']) == 161
-    assert len(data('framework-requirements-v3.5.json')['decisions']) == 52
+    assert len(data('framework-requirements-v3.5.json')['decisions']) == 53
 
 
 @pytest.mark.parametrize('field,value', [('result', 'unknown'), ('result', 'fail'), ('independence', 'self-reported'),

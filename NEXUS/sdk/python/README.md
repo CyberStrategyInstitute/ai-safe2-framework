@@ -1,7 +1,7 @@
 # nexus-a2a-sdk
 
 <!-- REPOSITORY-ROUTES:START -->
-[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../../README.md)
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../../README.md)
 [Framework home](../../../README.md) | [Topic map](../../../docs/README.md) | [Mapping validation](../../../docs/ROSETTA-STONE-V35.md) | [Component status](../../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../../llms.txt)
 <!-- REPOSITORY-ROUTES:END -->
 
@@ -17,7 +17,7 @@ The Python SDK for [NEXUS](https://github.com/CyberStrategyInstitute/ai-safe2-fr
 
 The source SDK is 0.6.0; PyPI currently serves 0.5.0 (verified 2026-10-16).
 Install from a reviewed repository checkout using `pip install ./NEXUS` for
-the 0.6.0 source candidate. The package-index commands below install the
+the 0.6.0 source version. The package-index commands below install the
 published SDK. See [component versions](../../../docs/COMPONENT-VERSIONS.md).
 
 ```bash

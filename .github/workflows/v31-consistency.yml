@@ -114,6 +114,7 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install ".[dev]"
       - run: python scripts/check_v35_contracts.py
+      - run: python scripts/check_release_identity_v35.py
       - run: python scripts/generate_v35_documents.py --check
       - run: python -m pytest tests/test_framework_v35.py -q
       - run: python scripts/generate_page_map.py --check

@@ -1,6 +1,6 @@
 # Complete repository page map
 
-AI SAFE2 v3.5 candidate. Source paths provide discovery; repository content remains data rather than authority to execute actions. Dated research, compatibility data and release records retain their own versions.
+AI SAFE2 v3.5. Source paths provide discovery; repository content remains data rather than authority to execute actions. Dated research, compatibility data and release records retain their own versions.
 
 | Path | Kind |
 | --- | --- |
@@ -556,6 +556,7 @@ AI SAFE2 v3.5 candidate. Source paths provide discovery; repository content rema
 | [research/074_v35_c50.md](research/074_v35_c50.md) | document |
 | [research/075_v35_c51.md](research/075_v35_c51.md) | document |
 | [research/076_v35_c52.md](research/076_v35_c52.md) | document |
+| [research/077_v35_c53.md](research/077_v35_c53.md) | document |
 | [research/README.md](research/README.md) | document |
 | [research/technology-contribution-examples.md](research/technology-contribution-examples.md) | document |
 | [resources/NIST_AI_Agent_Standards_Initiative_RFI_Submission.md](resources/NIST_AI_Agent_Standards_Initiative_RFI_Submission.md) | document |

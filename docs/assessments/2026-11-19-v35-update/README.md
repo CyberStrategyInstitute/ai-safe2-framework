@@ -1,10 +1,10 @@
-# AI SAFE2 v3.5 source-candidate verification
+# AI SAFE2 v3.5 source-version verification
 
-Status: source candidate in PR #433. No release, deployment, independent conformance result or compliance certification is established here.
+Status: source version in PR #433. No release, deployment, independent conformance result or compliance certification is established here.
 
 ## Change boundaries
 
-The candidate adds 12 core controls to the 161-control baseline, yielding 173 controls: 158 pillar controls and CP.1-CP.15. Its 52 disposition records own 154 child clauses, including two research-disposition clauses. Fifty-two research notes retain source attribution, placement decisions, limits and acceptance cases. The MCP profile retains 19 IDs and adds 12 distinct child requirements. Six deployment profiles and three threat profiles extend applicability without creating additional top-level controls or threat families.
+The candidate adds 12 core controls to the 161-control baseline, yielding 173 controls: 158 pillar controls and CP.1-CP.15. Its 53 disposition records own 157 child clauses, including two research-disposition clauses. Fifty-three research notes retain source attribution, placement decisions, limits and acceptance cases. The MCP profile retains 19 IDs and adds 12 distinct child requirements. Six deployment profiles and three threat profiles extend applicability without creating additional top-level controls or threat families.
 
 The Rosetta Stone contains 1,202 recovered relationships across 33 external source families. No recovered relationship has been promoted to approved external coverage. Sixteen audit-rule classes expose review gaps. Review dates and source revisions must be current before an approved record passes its applicable checks. Human review must validate source meaning and deployment applicability.
 
@@ -30,7 +30,7 @@ Static scanner detection coverage remains bounded by its implemented rules. New 
 
 ## Issue acceptance record
 
-| Issue | Source-candidate disposition | Remaining closure evidence or decision |
+| Issue | Source-version disposition | Remaining closure evidence or decision |
 | --- | --- | --- |
 | #416 | Container context, installation and startup-smoke correction | Passing current-head hosted image build/startup |
 | #308 | Prospective episode-based successor protocol and denominator distinctions | Freeze complete preregistration; execute confirmatory study |
@@ -46,4 +46,4 @@ Static scanner detection coverage remains bounded by its implemented rules. New 
 
 No issue is automatically closed by this record. Each original proposal retains its acceptance boundary.
 
-[Framework home](../../../README.md) | [Issue plan](../../FRAMEWORK-UPDATE-ISSUES.md) | [Release candidate](../../../releases/AI-SAFE2-v3.5.0.md)
+[Framework home](../../../README.md) | [Issue plan](../../FRAMEWORK-UPDATE-ISSUES.md) | [Release notes](../../../releases/AI-SAFE2-v3.5.0.md)

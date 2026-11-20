@@ -5,7 +5,7 @@
     "name": "Unbiased AI Standard Regulatory Profile",
     "type": "regulatory_profile_extension",
     "framework": "AI SAFE2 v3.5",
-    "status": "candidate",
+    "status": "current",
     "requirement_count": 27,
     "adds_to_core_control_count": false,
     "adds_cross_pillar_control": false,

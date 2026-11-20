@@ -190,7 +190,7 @@ Release gate:
   and provider divergence cases remain visible.
 - Evaluator, adapter, source, and policy versions are bound to every result.
 
-## CLI 0.9.1–0.9.9: stable-core release candidate
+## CLI 0.9.1–0.9.9: stable-core release notes
 
 **Status:** Implemented in the ordered release-candidate stack; exact combined
 revision validation and independent acceptance remain release gates.

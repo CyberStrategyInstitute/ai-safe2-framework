@@ -1,7 +1,7 @@
 {
   "framework_version": "3.5.0",
   "baseline_version": "3.1.0",
-  "status": "candidate",
+  "status": "current",
   "decisions": [
     {
       "review_id": "C01",
@@ -2275,6 +2275,47 @@
         "OBS-2026-SEP-02"
       ],
       "source_link_interpretation": "Supporting context for the failure mechanism; this does not establish that the source validates this proposed control or its applicability to every deployment."
+    },
+    {
+      "review_id": "C53",
+      "control_id": "P2.T4.4",
+      "title": "Source-rights observations and downstream policy separation",
+      "rationale": "Data Source Mapping already owns external-source identity and inventory. Add purpose, declaration, freshness and correction detail here, with CP.14 policy ownership. A new top-level rights control would duplicate source inventory and could imply legal authority. This placement accepts provider-neutral observations while preserving the separate permission decision. More metadata increases collection burden; minimize it and record unknowns.",
+      "source": "Repository issue #390, provider-neutral source-rights observation proposal. The named AcqPath service is attributed context, not a required provider or independently verified integration.",
+      "requirements": [
+        "Record the externally sourced resource identifier, intended use, declaration state, observation time and freshness, provenance and integrity evidence before downstream policy evaluation.",
+        "Keep the observation provider-neutral and distinguish observed declarations from licences, ownership, actual use and permission. UNKNOWN, stale or contradictory declarations cannot become permission by default.",
+        "Bind reuse to the purpose and policy decision; record review/correction paths, minimization and unresolved rights or provenance conflicts without bypassing source access controls."
+      ],
+      "validation": "Test missing purpose, UNKNOWN, stale and conflicting declarations; preserve them as unresolved inputs and refuse a policy decision that treats them as permission. Verify the observation does not grant a licence, establish ownership, prove use or bypass access controls. Test a corrected declaration and a permitted purpose with separately recorded policy authority.",
+      "research_path": "research/077_v35_c53.md",
+      "status": "normative",
+      "version_added": "v3.5",
+      "clauses": [
+        {
+          "id": "P2.T4.4.R1",
+          "requirement": "Record the externally sourced resource identifier, intended use, declaration state, observation time and freshness, provenance and integrity evidence before downstream policy evaluation.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        },
+        {
+          "id": "P2.T4.4.R2",
+          "requirement": "Keep the observation provider-neutral and distinguish observed declarations from licences, ownership, actual use and permission. UNKNOWN, stale or contradictory declarations cannot become permission by default.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        },
+        {
+          "id": "P2.T4.4.R3",
+          "requirement": "Bind reuse to the purpose and policy decision; record review/correction paths, minimization and unresolved rights or provenance conflicts without bypassing source access controls.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        }
+      ],
+      "supporting_observations": [],
+      "source_link_interpretation": "Issue #390 supplies a framework proposal. No named service execution, signature verification, legal applicability or production result is inferred."
     }
   ]
 }

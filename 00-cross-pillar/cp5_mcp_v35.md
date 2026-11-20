@@ -1,6 +1,6 @@
 # CP.5.MCP v3.5 | current-condition and outcome requirements
 
-Candidate profile. The nineteen v3.1 IDs and protocol bindings are retained. Twelve distinct child clauses deepen the requirements; shared clauses can support more than one profile control. Apply core CP.11-CP.15, F3.6-F3.7 and A2.7-A2.9 wherever applicable.
+Profile requirements. The nineteen v3.1 IDs and protocol bindings are retained. Twelve distinct child clauses deepen the requirements; shared clauses can support more than one profile control. Apply core CP.11-CP.15, F3.6-F3.7 and A2.7-A2.9 wherever applicable.
 
 ## MCP-1 Command Construction Safety
 

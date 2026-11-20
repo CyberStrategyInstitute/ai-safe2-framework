@@ -73,7 +73,7 @@ passing test. K = knowledge server; N = NEXUS; G = Gateway; T = MCP Toolkit.
 - [Official v1-to-v2 guide](https://py.sdk.modelcontextprotocol.io/migration/).
 - [SDK v2.3.0 release and exact source tag](https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.3.0).
 - [Failing dependency candidate #408](https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/408).
-- [NEXUS 0.6 release candidate #399](https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/399).
+- [NEXUS 0.6 release notes #399](https://github.com/CyberStrategyInstitute/ai-safe2-framework/pull/399).
 
 Upstream descriptions identify changes; local static inspection identifies
 applicability. Neither proves v2 runtime behavior. This matrix covers identified

@@ -1,7 +1,7 @@
 # AI SAFE² Research Index
 
 <!-- REPOSITORY-ROUTES:START -->
-[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
 [Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
 <!-- REPOSITORY-ROUTES:END -->
 ### Evidence, threat analysis, and framework foundations
@@ -128,3 +128,5 @@ Each new note retains its reviewed rationale, explicit clauses and adversarial a
 - [C50 | Proportional implementation and repair guidance](./074_v35_c50.md)
 - [C51 | Rosetta Stone source and relationship governance](./075_v35_c51.md)
 - [C52 | Agent-consumable requirement and repair contracts](./076_v35_c52.md)
+
+- [077: Source-rights observations and policy separation](./077_v35_c53.md) (NEW in v3.5; issue #390).

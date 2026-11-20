@@ -23,7 +23,7 @@ The current v3.5 architecture separates five operational surfaces:
 | **East-west runtime** | NEXUS v0.6 | Agent identity, delegation, lineage, policy, revocation, receipts |
 | **Agent-to-tool runtime** | CP.5.MCP + NEXUS MCP adapter/toolkit | MCP/tool authorization, provenance, returned-content trust, state and resource binding |
 
-Component versions are independent from the framework version. AI SAFE² source framework is v3.5 candidate; the Gateway remains v3.0 until it has its own tested release, and NEXUS is v0.6.0.
+Component versions are independent from the framework version. AI SAFE² source framework is v3.5; the Gateway remains v3.0 until it has its own tested release, and NEXUS is v0.6.0.
 
 ---
 

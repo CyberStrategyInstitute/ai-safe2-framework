@@ -25,7 +25,7 @@ def main() -> int:
     if current['metadata']['total_controls']!=len(ids):errors.append('core_count_metadata_mismatch')
     decisions=load('safe2/data/framework-requirements-v3.5.json')['decisions']
     clauses=[cl for d in decisions for cl in d['clauses']]
-    if len(decisions)!=52 or len(clauses)!=154 or len({c['id'] for c in clauses})!=154:
+    if len(decisions)!=53 or len(clauses)!=157 or len({c['id'] for c in clauses})!=157:
         errors.append('decision_or_clause_identity_mismatch')
     for d in decisions:
         if d['control_id'] not in ids or not (ROOT/d['research_path']).is_file():

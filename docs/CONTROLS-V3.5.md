@@ -1,6 +1,6 @@
 # AI SAFE2 v3.5 control contracts
 
-Candidate normative requirements for review in PR #433. Baseline v3.1 contains 161 controls. This revision retains those IDs and adds twelve controls, yielding 173. Existing component implementations retain their separately evidenced status. A requirement is an obligation on applicable deployments; source availability alone establishes no enforcement result.
+AI SAFE2 v3.5 normative requirements. Baseline v3.1 contains 161 controls. This revision retains those IDs and adds twelve controls, yielding 173. Existing component implementations retain their separately evidenced status. A requirement is an obligation on applicable deployments; source availability alone establishes no enforcement result.
 
 Applicability must be recorded for the deployment, effect, actor and consequence. Each applicable child clause requires an identified enforcement or governance owner, test evidence, failure response and recovery procedure. Research-only clauses document unsettled measurements and do not impose a runtime threshold.
 
@@ -48,7 +48,7 @@ Applicability must be recorded for the deployment, effect, actor and consequence
 | [P2.T4.1](#p2-t4-1) | AI System Registry | RETAINED |
 | [P2.T4.2](#p2-t4-2) | Model Catalog | RETAINED |
 | [P2.T4.3](#p2-t4-3) | Agent Capability Documentation | RETAINED |
-| [P2.T4.4](#p2-t4-4) | Data Source Mapping | RETAINED |
+| [P2.T4.4](#p2-t4-4) | Data Source Mapping | UPDATED |
 | [P2.T4.5](#p2-t4-5) | API Inventory | RETAINED |
 | [P2.T4.6](#p2-t4-6) | Tool Registry | RETAINED |
 | [P2.T4.7](#p2-t4-7) | Dependency Tracking | RETAINED |
@@ -499,6 +499,22 @@ Document agent autonomy levels, tools, and decision authority.
 ## P2.T4.4 Data Source Mapping
 
 Map data lineage; track refresh rates; identify RAG dependencies.
+
+### C53 inherited requirement detail
+
+Data Source Mapping already owns external-source identity and inventory. Add purpose, declaration, freshness and correction detail here, with CP.14 policy ownership. A new top-level rights control would duplicate source inventory and could imply legal authority. This placement accepts provider-neutral observations while preserving the separate permission decision. More metadata increases collection burden; minimize it and record unknowns.
+
+**Source and research** Repository issue #390, provider-neutral source-rights observation proposal. The named AcqPath service is attributed context, not a required provider or independently verified integration.
+
+[Research decision](../research/077_v35_c53.md)
+
+- **P2.T4.4.R1** (Requirement) Record the externally sourced resource identifier, intended use, declaration state, observation time and freshness, provenance and integrity evidence before downstream policy evaluation.
+- **P2.T4.4.R2** (Requirement) Keep the observation provider-neutral and distinguish observed declarations from licences, ownership, actual use and permission. UNKNOWN, stale or contradictory declarations cannot become permission by default.
+- **P2.T4.4.R3** (Requirement) Bind reuse to the purpose and policy decision; record review/correction paths, minimization and unresolved rights or provenance conflicts without bypassing source access controls.
+
+**Acceptance and failure analysis** Test missing purpose, UNKNOWN, stale and conflicting declarations; preserve them as unresolved inputs and refuse a policy decision that treats them as permission. Verify the observation does not grant a licence, establish ownership, prove use or bypass access controls. Test a corrected declaration and a permitted purpose with separately recorded policy authority.
+
+On a failed applicable acceptance condition, record failed or unknown coverage, narrow the deployment authority to the demonstrated boundary, and assign corrective action and recovery to the named owner. An assessor must retain contrary results and unresolved effects.
 
 <a id="p2-t4-5"></a>
 

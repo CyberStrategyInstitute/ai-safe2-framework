@@ -31,7 +31,7 @@ def query(control_id: str | None = None, source_id: str | None = None) -> dict:
     selected = {control_id} if control_id else {c for r in relationships for c in r['control_ids']}
     if not control_id and not source_id:
         selected = set(catalog)
-    return {'framework_version': '3.5.0', 'release_status': 'candidate',
+    return {'framework_version': '3.5.0', 'release_status': 'current',
             'controls': [catalog[c] for c in sorted(selected) if c in catalog],
             'relationships': relationships,
             'interpretation': 'Recorded relationships remain attributed and unreviewed until their exact source and applicability are validated.'}

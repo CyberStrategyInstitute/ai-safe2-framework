@@ -1,6 +1,6 @@
 {
   "framework_version": "3.5.0",
-  "status": "candidate",
+  "status": "current",
   "sources": [
     {
       "id": "NIST_AI_RMF",

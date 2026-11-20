@@ -8,7 +8,7 @@
 
 ## Scope and Included Changes
 
-<!-- State what is included, excluded, and whether this is a release candidate. -->
+<!-- State what is included, excluded, and whether this is a release notes. -->
 
 ## Type of Change
 

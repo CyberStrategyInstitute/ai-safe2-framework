@@ -1,9 +1,9 @@
-> **v1 baseline reference.** The v3.5 candidate uses [UAS v2](STANDARD-V2.md) through the framework manifest. Retain the original profile identity when interpreting the methods below.
+> **v1 baseline reference.** The v3.5 uses [UAS v2](STANDARD-V2.md) through the framework manifest. Retain the original profile identity when interpreting the methods below.
 
 # Unbiased AI Standard (UAS) Regulatory Profile
 
 <!-- REPOSITORY-ROUTES:START -->
-[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../README.md)
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../../README.md)
 [Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
 <!-- REPOSITORY-ROUTES:END -->
 
@@ -183,6 +183,6 @@ AI SAFE² governs the system and its authority. CSF addresses the human operator
 
 *AI SAFE² v3.1 · UAS 1.0 regulatory profile extension · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
 
-## Current v3.5 candidate
+## Current v3.5
 
 [UAS v2 requirements and acceptance](STANDARD-V2.md) | [v2 machine catalog](uas-profile-v2.json) | [CSF companion](../../CSF-COMPANION.md)

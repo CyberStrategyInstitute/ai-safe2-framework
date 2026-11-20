@@ -13,4 +13,4 @@ release announcements and verify links in GitHub preview before publication.
 
 ## Candidate under review
 
-[AI SAFE2 v3.5.0 candidate](AI-SAFE2-v3.5.0.md) records source changes under PR #433. A merged release, tag and package publication require their own confirmation.
+[AI SAFE2 v3.5.0](AI-SAFE2-v3.5.0.md) records source changes under PR #433. A merged release, tag and package publication require their own confirmation.

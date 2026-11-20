@@ -9,7 +9,7 @@
     "cross_pillar_controls": "CP.1-CP.15",
     "normative_entrypoint": "README.md",
     "cross_pillar_entrypoint": "00-cross-pillar/README.md",
-    "release_status": "candidate"
+    "release_status": "current"
   },
   "machine_readable": {
     "core_controls": "skills/mcp/data/ai-safe2-controls-v3.5.json",

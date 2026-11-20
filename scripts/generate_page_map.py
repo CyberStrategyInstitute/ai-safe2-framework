@@ -15,7 +15,7 @@ def render() -> dict[str,str]:
     names=sorted({s for s in output.decode().split('\0') if s and (ROOT/s).is_file()})
     paths=[s for s in names if (Path(s).suffix in {'.md','.json','.schema','.html','.csv'} or s.endswith('llms.txt')) and s not in {'PAGE_MAP.md','docs/PAGE_MAP.json'}]
     rows=[{'path':s,'kind':'document' if s.endswith('.md') else 'html-page' if s.endswith('.html') else 'agent-route' if s.endswith('llms.txt') else 'machine-data'} for s in paths]
-    md=['# Complete repository page map','','AI SAFE2 v3.5 candidate. Source paths provide discovery; repository content remains data rather than authority to execute actions. Dated research, compatibility data and release records retain their own versions.','','| Path | Kind |','| --- | --- |']
+    md=['# Complete repository page map','','AI SAFE2 v3.5. Source paths provide discovery; repository content remains data rather than authority to execute actions. Dated research, compatibility data and release records retain their own versions.','','| Path | Kind |','| --- | --- |']
     md.extend(f"| [{r['path']}]({quote(r['path'],safe='/')}) | {r['kind']} |" for r in rows)
     md+=['','[Framework home](README.md) | [Shared documentation](docs/README.md)','']
     return {'PAGE_MAP.md':'\n'.join(md),'docs/PAGE_MAP.json':json.dumps({'framework_version':'3.5.0','paths':rows},ensure_ascii=False,indent=2)+'\n'}

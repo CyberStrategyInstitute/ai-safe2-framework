@@ -14,7 +14,7 @@
 
 ## Keep versions separate
 
-Framework v3.5 is a source candidate. Core Gateway remains component v3.0 with its original runtime evidence identity; importing a v3.5 catalog does not add all runtime requirements. NEXUS, scanner, CLI, SDKs, profiles and copied skills retain their own component/schema and publication boundaries. [Component versions](../docs/COMPONENT-VERSIONS.md) records those distinctions.
+Framework v3.5 is a source version. Core Gateway remains component v3.0 with its original runtime evidence identity; importing a v3.5 catalog does not add all runtime requirements. NEXUS, scanner, CLI, SDKs, profiles and copied skills retain their own component/schema and publication boundaries. [Component versions](../docs/COMPONENT-VERSIONS.md) records those distinctions.
 
 ## Validate your path
 

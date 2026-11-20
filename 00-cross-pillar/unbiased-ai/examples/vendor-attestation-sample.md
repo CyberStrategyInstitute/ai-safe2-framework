@@ -1,4 +1,4 @@
-> **UAS v1 baseline.** The v3.5 candidate uses the versioned v2 catalog and STANDARD-V2.md in the UAS profile root. The quantitative methods below retain their original scope and require reassessment before reuse.
+> **UAS v1 baseline.** The v3.5 uses the versioned v2 catalog and STANDARD-V2.md in the UAS profile root. The quantitative methods below retain their original scope and require reassessment before reuse.
 
 # Sample Completed Attestation (Reference Only)
 **UAS-ATTEST-001 example | For training and reference. Not legal advice, not a compliance guarantee.**

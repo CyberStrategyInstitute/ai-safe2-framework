@@ -5,13 +5,13 @@
 <!-- ENTRY-ROUTES:END -->
 
 <!-- REPOSITORY-ROUTES:START -->
-[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
 [Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
 <!-- REPOSITORY-ROUTES:END -->
 
 [![Area: NEXUS](https://img.shields.io/badge/Area-NEXUS-820F1A?style=flat-square)](README.md)
 
-This is the **0.6.0 source candidate**. The latest published PyPI SDK is
+This is the **0.6.0 source version**. The latest published PyPI SDK is
 **0.5.0**, verified 2026-10-16. Source metadata and release notes do not prove
 publication. See [component versions](../docs/COMPONENT-VERSIONS.md).
 

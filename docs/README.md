@@ -1,7 +1,7 @@
 # Shared Repository Documentation
 
 <!-- REPOSITORY-ROUTES:START -->
-[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
 [Framework home](../README.md) | [Topic map](README.md) | [Mapping validation](ROSETTA-STONE-V35.md) | [Component status](V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
 <!-- REPOSITORY-ROUTES:END -->
 
@@ -39,7 +39,7 @@ evaluation, and Evidence Assurance methods are in [AISM](../AISM/README.md).
 The canonical ownership registry is
 [`repository-topics.manifest.json`](../repository-topics.manifest.json).
 
-## v3.5 candidate framework
+## v3.5 framework
 
 [173 control contracts](CONTROLS-V3.5.md) | [Rosetta Stone](ROSETTA-STONE-V35.md) | [Deployment readiness](../AISM/DEPLOYMENT-READINESS-V35.md) | [Research](../research/README.md)
 

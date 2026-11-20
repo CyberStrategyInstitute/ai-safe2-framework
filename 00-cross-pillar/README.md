@@ -5,7 +5,7 @@
 <!-- ENTRY-ROUTES:END -->
 
 <!-- REPOSITORY-ROUTES:START -->
-[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[![Framework context: v3.5](https://img.shields.io/badge/Framework_Context-v3.5-F6921E?style=flat-square)](../README.md)
 [Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
 <!-- REPOSITORY-ROUTES:END -->
 
@@ -39,7 +39,7 @@ owned regression candidate. This update adds no core control or profile requirem
 
 **Realization:** Agentic governance needs a layer that defines authority, accountability, risk, evidence, emergency control, delegation, replication, and protocol-specific security across the entire system.
 
-**Solution:** The Cross-Pillar Governance Layer is the governance operating system for AI SAFE². **CP.1 through CP.10 are retained from the v3.1 baseline; CP.11 through CP.15 are new in the v3.5 candidate.** Version 3.1 strengthens CP.5 by formalizing protocol-independent security profiles and the three enforcement planes: north-south, east-west, and agent-to-tool.
+**Solution:** The Cross-Pillar Governance Layer is the governance operating system for AI SAFE². **CP.1 through CP.10 are retained from the v3.1 baseline; CP.11 through CP.15 are new in the v3.5.** Version 3.1 strengthens CP.5 by formalizing protocol-independent security profiles and the three enforcement planes: north-south, east-west, and agent-to-tool.
 
 > **What you get:** A common governance contract across the five operational pillars, named human authority for autonomous deployments, bounded delegation and replication, protocol-aware security profiles, and evidence that can be independently reconstructed.
 

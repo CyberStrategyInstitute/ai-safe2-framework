@@ -1,4 +1,4 @@
-> **UAS v1 baseline.** The v3.5 candidate uses the versioned v2 catalog and STANDARD-V2.md in the UAS profile root. The quantitative methods below retain their original scope and require reassessment before reuse.
+> **UAS v1 baseline.** The v3.5 uses the versioned v2 catalog and STANDARD-V2.md in the UAS profile root. The quantitative methods below retain their original scope and require reassessment before reuse.
 
 # UAS Regulatory Profile Bias Test Protocol v1.0
 All tests reference AI SAFE² pillar artifacts and CP controls as primary evidence sources. Integrate with existing P4 monitoring pipelines and CP.8 lineage artifacts wherever possible.

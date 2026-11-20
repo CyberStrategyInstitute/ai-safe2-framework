@@ -61,8 +61,8 @@ Use shared evidence identifiers to connect the machine boundary to Cognitive Sov
 | Surface | Owning source | Verification route | Version boundary |
 | --- | --- | --- | --- |
 | Core Gateway | [gateway/main.py](../gateway/main.py) | [gateway/test_gateway.py](../gateway/test_gateway.py) | gateway v3.0 |
-| NEXUS | [NEXUS/sdk/python/nexus_sdk/guardian.py](../NEXUS/sdk/python/nexus_sdk/guardian.py) | [NEXUS/sdk/python/tests](../NEXUS/sdk/python/tests) | NEXUS 0.6.0 source candidate |
-| NEXUS MCP adapter | [NEXUS/adapters/mcp/adapter.py](../NEXUS/adapters/mcp/adapter.py) | [NEXUS/sdk/python/tests](../NEXUS/sdk/python/tests) | NEXUS 0.6.0 source candidate |
+| NEXUS | [NEXUS/sdk/python/nexus_sdk/guardian.py](../NEXUS/sdk/python/nexus_sdk/guardian.py) | [NEXUS/sdk/python/tests](../NEXUS/sdk/python/tests) | NEXUS 0.6.0 source version |
+| NEXUS MCP adapter | [NEXUS/adapters/mcp/adapter.py](../NEXUS/adapters/mcp/adapter.py) | [NEXUS/sdk/python/tests](../NEXUS/sdk/python/tests) | NEXUS 0.6.0 source version |
 | SAFE2 CLI | [safe2/framework.py](../safe2/framework.py) | [tests/test_framework_v35.py](../tests/test_framework_v35.py) | CLI 1.1.0 source |
 | Developer Workflow | [developer-workflow/docs/ARCHITECTURE.md](../developer-workflow/docs/ARCHITECTURE.md) | [developer-workflow/tests](../developer-workflow/tests) | Developer Workflow 0.1.0 preview |
 | Skills and provider guidance | [skills/ai-safe2-secure-build-copilot/SKILL.md](../skills/ai-safe2-secure-build-copilot/SKILL.md) | [scripts/validate_skill_card.py](../scripts/validate_skill_card.py) | Skill package version is separate from framework version |

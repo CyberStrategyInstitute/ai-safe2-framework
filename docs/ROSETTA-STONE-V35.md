@@ -20,7 +20,7 @@ GitHub shows the explorer's HTML source. To use its interactive view, serve a re
 python -m http.server 8765 --bind 127.0.0.1
 ```
 
-Open `http://127.0.0.1:8765/dashboard/rosetta.html`. Filter by a source family, choose a control, then expand **Inspect validation evidence and missing review fields**. The URL fragment preserves the filters. Download matching JSON for review. This page uses embedded canonical records and makes no remote requests. A Pages deployment is separate from this source candidate.
+Open `http://127.0.0.1:8765/dashboard/rosetta.html`. Filter by a source family, choose a control, then expand **Inspect validation evidence and missing review fields**. The URL fragment preserves the filters. Download matching JSON for review. This page uses embedded canonical records and makes no remote requests. A Pages deployment is separate from this source version.
 
 ## Follow one relationship end to end
 

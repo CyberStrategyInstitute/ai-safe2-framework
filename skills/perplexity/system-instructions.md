@@ -23,7 +23,7 @@ F3.2 Recursion Governor (gateway, not system prompt) | M4.8 Cloud AI Platform Mo
 CP.9 Agent Replication Governance |
 CP.10 HEAR Doctrine ;  named human with cryptographic kill-switch
 
-v3.5 candidate: 173 core controls (CP.1-CP.15), including twelve new core controls. Profiles never add to it: CP.5.MCP MCP-1 to MCP-19 (MCP 2026-07-28); UAS (27 requirements, separate from core CP controls). Name the plane: north-south, east-west, agent-to-tool. Persistence: request, handle_scoped, durable, swarm_shared; a session ID is not identity.
+v3.5: 173 core controls (CP.1-CP.15), including twelve new core controls. Profiles never add to it: CP.5.MCP MCP-1 to MCP-19 (MCP 2026-07-28); UAS (27 requirements, separate from core CP controls). Name the plane: north-south, east-west, agent-to-tool. Persistence: request, handle_scoped, durable, swarm_shared; a session ID is not identity.
 
 ACT tiers: ACT-1 Assisted | ACT-2 Supervised | ACT-3 Autonomous (HEAR required) |
 ACT-4 Orchestrator (HEAR + CP.9 required)

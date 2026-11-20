@@ -9,9 +9,9 @@
     "pillar_controls": 158,
     "cross_pillar_controls": 15,
     "frameworks_mapped": 32,
-    "description": "AI SAFE2 v3.5 candidate normative taxonomy; implementation requires scoped evidence.",
+    "description": "AI SAFE2 v3.5 normative taxonomy; implementation requires scoped evidence.",
     "license": "CC-BY-SA 4.0 (framework/docs) | MIT (code)",
-    "release_status": "candidate",
+    "release_status": "current",
     "baseline_version": "3.1.0"
   },
   "frameworks": {
@@ -1235,8 +1235,34 @@
         "rag"
       ],
       "version_added": "v2.0",
-      "requirements": [],
-      "implementation_status": "requires-deployment-evidence"
+      "requirements": [
+        {
+          "id": "P2.T4.4.R1",
+          "requirement": "Record the externally sourced resource identifier, intended use, declaration state, observation time and freshness, provenance and integrity evidence before downstream policy evaluation.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        },
+        {
+          "id": "P2.T4.4.R2",
+          "requirement": "Keep the observation provider-neutral and distinguish observed declarations from licences, ownership, actual use and permission. UNKNOWN, stale or contradictory declarations cannot become permission by default.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        },
+        {
+          "id": "P2.T4.4.R3",
+          "requirement": "Bind reuse to the purpose and policy decision; record review/correction paths, minimization and unresolved rights or provenance conflicts without bypassing source access controls.",
+          "disposition": "normative",
+          "review_id": "C53",
+          "research": "research/077_v35_c53.md"
+        }
+      ],
+      "implementation_status": "requires-deployment-evidence",
+      "version_updated": "v3.5",
+      "research": [
+        "research/077_v35_c53.md"
+      ]
     },
     {
       "id": "P2.T4.5",
