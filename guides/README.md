@@ -1,5 +1,12 @@
 # Implementation Guides
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
+**[Open current v3.5 adoption and validation](V35-ADOPTION-AND-VALIDATION.md)**
+
 Focused implementation and hardening guides live here. These documents support
 the framework but do not replace the normative controls or a product's own
 canonical documentation.

@@ -180,6 +180,31 @@ The [synthetic local fixture](examples/v35-authority/README.md) demonstrates exa
 
 The [hosted dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) may reflect a different revision from this candidate branch. Check its version before using it as assessment evidence.
 
+### Repository structure
+
+```text
+README.md / AGENTS.md / ai-safe2.manifest.json   Human start / agent rules / canonical contracts
+00-cross-pillar/                               CP.1-CP.15 and MCP/UAS profiles
+01-sanitize-isolate/ ... 05-evolve-educate/      Five operational pillars
+AISM/                                         Assessment, contribution, assurance and readiness
+safe2/                                        CLI, JSON contracts and packaged data
+NEXUS/                                        SDK, identity, delegation, evidence and gateway references
+gateway/                                      Core provider gateway (component v3.0)
+scanner/                                      Implemented static detection rules
+skills/                                       Canonical skill packages and MCP knowledge server
+examples/                                     Runtime patterns and bounded demonstrations
+developer-workflow/                            Change routing and human-owned release decisions
+research/ / challenges/                       Attributed research and falsification protocols
+dashboard/                                    Control dashboard and Rosetta mapping explorer
+docs/ / guides/ / resources/                   Shared methods, task guides and reference routes
+releases/                                     Historical and candidate release records
+assets/                                       Diagrams and visual maps
+FORGE-Act/                                    Separate public-policy material
+.github/ / tests/                             CI checks and regression evidence
+```
+
+Source ownership: `repository-topics.manifest.json`. Complete paths: `PAGE_MAP.md` and `docs/PAGE_MAP.json`. Use the root manifest to resolve current versions; directory presence does not establish implementation or conformance.
+
 ### For agents, bots and retrieval systems
 
 Read [AGENTS.md](AGENTS.md), then [ai-safe2.manifest.json](ai-safe2.manifest.json). Use [llms.txt](llms.txt) for a compact route list, [topic ownership](repository-topics.manifest.json) for canonical homes, [the machine page map](docs/PAGE_MAP.json) for discovery, and [ecosystem adoption data](docs/data/v35-ecosystem-adoption.json) for implementation status.
@@ -214,3 +239,5 @@ Read [contribution guidance](CONTRIBUTING.md), [security](SECURITY.md), [support
 Use [CITATION.cff](CITATION.cff) for citation metadata. Cite the exact revision and candidate status when using v3.5 before publication. Framework documentation is CC BY-SA 4.0 where designated; code is generally MIT, and NEXUS is Apache 2.0 where designated. [COPYRIGHT](COPYRIGHT) and [the licensing map](docs/LICENSING.md) govern individual paths.
 
 [Back to start](#use-ai-safe-with-an-agent) · [All documentation](PAGE_MAP.md) · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/)
+
+[Mapping validation by source family](docs/ROSETTA-SOURCE-INDEX.md) | [Rosetta explorer source](dashboard/rosetta.html)

@@ -49,7 +49,9 @@
     "rosetta_registry": "safe2/data/rosetta-v3.5.json",
     "deployment_readiness_schema": "safe2/data/deployment-readiness-v1.schema.json",
     "ecosystem_adoption": "docs/data/v35-ecosystem-adoption.json",
-    "page_map": "docs/PAGE_MAP.json"
+    "page_map": "docs/PAGE_MAP.json",
+    "rosetta_source_index": "docs/ROSETTA-SOURCE-INDEX.md",
+    "repository_surface_review": "docs/data/repository-surface-review-v35.csv"
   },
   "profiles": {
     "cp5_mcp": {

@@ -8,6 +8,31 @@
 - [Topic ownership](repository-topics.manifest.json): canonical document homes.
 - [Component versions](docs/COMPONENT-VERSIONS.md): source versus publication and compatibility.
 
+## Repository structure
+
+```text
+README.md / AGENTS.md / ai-safe2.manifest.json   Human start / agent rules / canonical contracts
+00-cross-pillar/                               CP.1-CP.15 and MCP/UAS profiles
+01-sanitize-isolate/ ... 05-evolve-educate/      Five operational pillars
+AISM/                                         Assessment, contribution, assurance and readiness
+safe2/                                        CLI, JSON contracts and packaged data
+NEXUS/                                        SDK, identity, delegation, evidence and gateway references
+gateway/                                      Core provider gateway (component v3.0)
+scanner/                                      Implemented static detection rules
+skills/                                       Canonical skill packages and MCP knowledge server
+examples/                                     Runtime patterns and bounded demonstrations
+developer-workflow/                            Change routing and human-owned release decisions
+research/ / challenges/                       Attributed research and falsification protocols
+dashboard/                                    Control dashboard and Rosetta mapping explorer
+docs/ / guides/ / resources/                   Shared methods, task guides and reference routes
+releases/                                     Historical and candidate release records
+assets/                                       Diagrams and visual maps
+FORGE-Act/                                    Separate public-policy material
+.github/ / tests/                             CI checks and regression evidence
+```
+
+Source ownership: `repository-topics.manifest.json`. Complete paths: `PAGE_MAP.md` and `docs/PAGE_MAP.json`. Use the root manifest to resolve current versions; directory presence does not establish implementation or conformance.
+
 ## Resolve requirements and evidence
 - [Core catalog](skills/mcp/data/ai-safe2-controls-v3.5.json): 173 stable core IDs.
 - [Requirements](safe2/data/framework-requirements-v3.5.json): 52 decisions and 154 child clauses; research disposition remains explicit.
@@ -29,3 +54,5 @@
 
 ## Interpretation
 Preserve unknown, partial, blocked, not tested, stale and unavailable states. Bind evidence to exact system, revision, scope and observer. Check status before claiming release or deployment. A source candidate, mapping, receipt, model agreement or passing fixture cannot authorize an effect or establish organizational maturity.
+
+[Mapping validation by source family](docs/ROSETTA-SOURCE-INDEX.md) | [Rosetta explorer source](dashboard/rosetta.html)

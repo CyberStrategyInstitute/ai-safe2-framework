@@ -228,11 +228,11 @@ Incorrect:
 
 ## Control-count language
 
-AI SAFE² v3.5 retains the **161-control core framework taxonomy**.
+AI SAFE² v3.5 contains **173 core controls**, comprising the retained 161-control baseline and twelve new controls.
 
-CP.5.MCP contains **19 profile controls, MCP-1 through MCP-19**. Those profile controls do not increase the core framework total to 180.
+CP.5.MCP contains **19 profile controls, MCP-1 through MCP-19**. Those profile controls remain separate from the 173-control core total.
 
-UAS is a 27-requirement regulatory profile extension composed from mapped controls across AI SAFE², NEXUS, and CSF. It does not create CP.11, and its requirements must not be added to the core framework total.
+UAS is a 27-requirement regulatory profile extension composed from mapped controls across AI SAFE², NEXUS, and CSF. It does not create a core CP control, and its requirements must not be added to the core framework total.
 
 ## Protocol and implementation language
 
@@ -245,8 +245,8 @@ NEXUS is Cyber Strategy Institute's first-party reference implementation for rel
 Do not link to renamed or nonexistent paths. In particular:
 
 - Cross-Pillar Governance is `00-cross-pillar/`, not `cross-pillar/`.
-- The canonical MCP profile is `00-cross-pillar/cp5_mcp_server_security.md`.
-- The machine-readable MCP profile is `skills/mcp/data/mcp-profile-v3.1.json`.
+- The current MCP profile is `00-cross-pillar/cp5_mcp_v35.md`.
+- The current machine-readable MCP profile is `skills/mcp/data/mcp-profile-v3.5.json`.
 
 ## Footer
 

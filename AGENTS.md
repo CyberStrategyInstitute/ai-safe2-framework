@@ -144,7 +144,7 @@ required. It must remain understandable without access to an agent's chat log.
 2. Parse `repository-topics.manifest.json` before placing or relocating documentation.
 3. Treat `README.md` and the framework control documents it links to as the human-readable framework entry point.
 4. Treat `skills/mcp/data/ai-safe2-controls-v3.0.json` as the stable machine-readable dataset for the unchanged 173-control core taxonomy.
-5. Treat `skills/mcp/data/mcp-profile-v3.5.json` as the machine-readable CP.5.MCP v3.1 overlay containing MCP-1 through MCP-19.
+5. Treat `skills/mcp/data/mcp-profile-v3.5.json` as the machine-readable CP.5.MCP v3.5 overlay containing MCP-1 through MCP-19.
 6. Do not add the 19 MCP profile controls to the 173-control framework total.
 7. Treat `00-cross-pillar/unbiased-ai/uas-profile-v1.json` as the UAS regulatory profile extension. Its 27 profile requirements do not add to the 173-control framework total and do not create CP.11 as a core Cross-Pillar control.
 
@@ -259,7 +259,7 @@ For automated assessment or implementation guidance:
 - Repository UX contract: `docs/REPOSITORY-UX-STANDARD.md`
 - Reusable GitHub release-note template: `.github/RELEASE_TEMPLATE.md`
 
-When a machine-readable field and prose appear to conflict, do not silently guess. Preserve the conflict in the output and prefer the current v3.1 normative document identified by the manifest for interpretation.
+When a machine-readable field and prose appear to conflict, do not silently guess. Preserve the conflict in the output and prefer the current v3.5 normative document identified by the manifest for interpretation.
 
 ## v3.5 machine contracts
 

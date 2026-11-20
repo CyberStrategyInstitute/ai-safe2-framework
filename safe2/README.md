@@ -4,6 +4,11 @@
 **On this page:** [Adopt](#use-safe2-cli-with-v35) · [Start](#start-with-the-outcome) · [Limits](#what-it-does-not-do) · [Install](#install) · [Evidence](#evidence-and-trust-rules) · [Next](#continue-from-your-result)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 [![Area: CLI](https://img.shields.io/badge/Area-CLI-005696?style=flat-square)](README.md)
 ### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.5
 
@@ -30,6 +35,10 @@ people. It does not silently connect to an agent account, approve deployment,
 or turn a self-assessment into a compliance claim.
 
 <!-- V35-ADOPTION:START -->
+![Build with criteria and evidence](../assets/delivery-evidence-v35.svg)
+
+Plans, reviews and receipts support decisions. They do not authorize deployment.
+
 ## Use SAFE2 CLI with v3.5
 
 **Source status: implemented-bounded.** Source CLI exposes current catalogs, exact lookup, mapping audit and declared-evidence readiness checks.

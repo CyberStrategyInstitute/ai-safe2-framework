@@ -5,13 +5,18 @@
 
 [Framework Home](../../README.md) | [Examples Index](../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
+> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.5 framework and applicable profile requirements.
 <!-- AI-SAFE2-UX:END -->
 
 <!-- stack: SlowMist / OpenClaw -->
 <!-- description: Threat-intelligence overlay mapping SlowMist OpenClaw security practices to AI SAFE² controls. -->
 
 # AI SAFE² × SlowMist OpenClaw Security Practice Guide
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
 
 <!-- V35-RUNTIME-ADOPTION:START -->
 ## Apply v3.5 to this example

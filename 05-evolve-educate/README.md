@@ -4,6 +4,11 @@
 **On this page:** [Next](#-navigation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 [![Area: Evolve and Educate](https://img.shields.io/badge/Area-Evolve_and_Educate-9333EA?style=flat-square)](README.md)
 ### 🧬 The Feedback Loop
 

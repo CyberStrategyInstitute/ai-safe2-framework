@@ -4,6 +4,11 @@
 **On this page:** [Adopt](#use-dashboard-with-v35) · [Start](#quick-start) · [Architecture](#module-architecture) · [Next](#-navigation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 ### Interactive explorer for the core framework and profile overlays
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
@@ -160,3 +165,5 @@ Profile overlays should remain separately identifiable in both source and UI so 
 ---
 
 *AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+[Mapping validation by source family](../docs/ROSETTA-SOURCE-INDEX.md) | [Rosetta explorer source](rosetta.html)

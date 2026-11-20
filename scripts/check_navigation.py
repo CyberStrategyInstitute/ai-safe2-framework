@@ -3,12 +3,15 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from markdown_it import MarkdownIt
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT / 'scripts'))
+from review_repository_surfaces import classification, names
 PARSER = MarkdownIt('commonmark', {'html': True})
 
 
@@ -49,6 +52,7 @@ def main() -> int:
         if '<!-- V35-ADOPTION:START -->' not in (ROOT / s['readme']).read_text(encoding='utf-8'):
             errors.append(s['id'] + ': missing adoption route')
     paths.update(p.relative_to(ROOT).as_posix() for p in ROOT.glob('0*/README.md'))
+    paths.update(n for n in names() if Path(n).name.lower()=='readme.md' and classification(n)[0] in {'current-topic-surface','current-entrypoint','separate-policy-material'})
     cache: dict[Path, set[str]] = {}
     for name in sorted(paths):
         p = ROOT / name

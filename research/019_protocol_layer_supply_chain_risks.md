@@ -5,7 +5,7 @@
 
 [Framework Home](../README.md) | [Research Index](./README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.5. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.1 normative control and profile documents for implementation or conformance decisions.
+> **Current framework context:** AI SAFE² v3.5. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.5 normative control and profile documents for implementation or conformance decisions.
 <!-- AI-SAFE2-UX:END -->
 
 # Research Note 4: Protocol-Layer Supply Chain Risks in Agentic AI

@@ -4,6 +4,11 @@
 **On this page:** [Adopt](#use-sovereign-runtime-examples-with-v35) · [Next](#navigation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 [![Area: Runtime Examples](https://img.shields.io/badge/Area-Runtime_Examples-0F766E?style=flat-square)](README.md)
 ### Governed runtime patterns across agent stacks
 
@@ -16,6 +21,10 @@
 ---
 
 <!-- V35-ADOPTION:START -->
+![Current authority at the action boundary](../assets/runtime-boundary-v35.svg)
+
+Reference pattern. Component versions and deployment qualification remain separate.
+
 ## Use Sovereign runtime examples with v3.5
 
 **Source status: mixed-reference.** The v3.5 authority example demonstrates synthetic local transactions. Existing runtime examples retain individual limits.

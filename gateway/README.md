@@ -4,6 +4,11 @@
 **On this page:** [Adopt](#use-core-gateway-with-v35) · [Evidence](#version-and-conformance-boundary) · [Architecture](#architecture) · [Start](#quick-start) · [Next](#-navigation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 [![Area: Core Gateway](https://img.shields.io/badge/Area-Core_Gateway-B45309?style=flat-square)](README.md)
 ### North-south runtime enforcement for the AI SAFE² v3.5 framework
 
@@ -18,6 +23,10 @@
 ---
 
 <!-- V35-ADOPTION:START -->
+![Current authority at the action boundary](../assets/runtime-boundary-v35.svg)
+
+Reference pattern. Component versions and deployment qualification remain separate.
+
 ## Use Core Gateway with v3.5
 
 **Source status: compatible-reference.** Provider proxy; existing v3.0 component evidence remains scoped to its observed boundary.

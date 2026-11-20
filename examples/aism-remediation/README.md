@@ -13,6 +13,11 @@
 
 # AISM Remediation Example
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 This example proves the CLI 0.8 planning contract from end to end. It creates a
 bounded system identity and deployment scope, scores a complete illustrative
 AISM assessment, binds a remediation source to the exact artifact bytes, and

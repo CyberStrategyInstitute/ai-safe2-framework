@@ -23,3 +23,7 @@ The root README uses task routes, linked badges, an adoption visual and an archi
 The current data are selected explicitly. Historical catalog and MCP versions remain available, along with the prior dashboard data and 29 alias-review records. Static scanner rule coverage does not expand merely because controls were added. Component versions and package publication remain separate.
 
 [Migration](../MIGRATION.md) | [Framework home](../README.md) | [Control contracts](../docs/CONTROLS-V3.5.md)
+
+## Repository-wide follow-through
+
+The [surface review](../docs/REPOSITORY-SURFACE-REVIEW-V35.md) inventories every README, HTML page and root file with explicit current, historical, fixture or owning-source dispositions. Current topic READMEs gain shared routes; key modules gain runtime/evidence/delivery diagrams. The [Rosetta source index](../docs/ROSETTA-SOURCE-INDEX.md), [offline explorer](../dashboard/rosetta.html), and [adoption/validation guide](../guides/V35-ADOPTION-AND-VALIDATION.md) connect source families, controls, child clauses, research and validation gaps. Root and NEXUS LLM indexes include source trees. Core Gateway component v3.0 and static scanner rule coverage retain their evidence boundaries.

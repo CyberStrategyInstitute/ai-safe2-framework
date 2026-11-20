@@ -10,6 +10,11 @@
 **On this page:** [Adopt](#use-aism-and-uas-with-v35) · [Next](#-navigation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 ### The maturity and operating model for deterministic governance of probabilistic AI
 
 **Documentation updated:** 2026-10-13. AISM now houses the full Sovereignty Score,
@@ -37,6 +42,10 @@ identify their baseline; this update does not change scoring formulas.
 ---
 
 <!-- V35-ADOPTION:START -->
+![Follow a claim to its evidence](../assets/evidence-linkages-v35.svg)
+
+A recorded mapping is a reviewable relationship. It does not establish compliance.
+
 ## Use AISM and UAS with v3.5
 
 **Source status: implemented-bounded.** AISM v1 arithmetic is retained; scoped readiness and UAS v2 acceptance interpretation remain separate.

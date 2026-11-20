@@ -25,3 +25,17 @@
 - [OPA policy](opa/): Deterministic policy artifacts
 - [Examples](examples/): Integration examples
 - [Changelog](CHANGELOG.md): Release history
+
+## Source structure and framework adoption
+
+```text
+sdk/python/nexus_sdk/   Python SDK implementation
+schemas/               Versioned exchange contracts
+opa/                   Policy definitions
+adapters/mcp/          Fail-closed MCP adapter scaffolding
+payments/              Payment profile, threats and readiness requirements
+docker/                Gateway reference container
+integrations/          Integration and legacy-reference documentation
+```
+
+Read `../docs/V35-ECOSYSTEM-ADOPTION.md` and `../docs/data/v35-ecosystem-adoption.json` for framework v3.5 gaps. Preserve component v0.6.0 source identity and pinned schema versions. Use `../llms.txt` for the full repository map.

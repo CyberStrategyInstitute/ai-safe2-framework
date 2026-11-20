@@ -1,0 +1,135 @@
+path,kind,disposition,reason
+.gitattributes,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+.gitignore,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+.gitleaks-baseline.json,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+.gitleaksignore,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+.markdownlint-cli2.yaml,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+.markdownlint.yaml,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+.pr_agent.toml,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+00-cross-pillar/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+00-cross-pillar/unbiased-ai/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+01-sanitize-isolate/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+02-audit-inventory/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+03-fail-safe-recovery/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+04-engage-monitor/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+05-evolve-educate/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+ADVANCED_AGENT_THREATS.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+AGENTS.md,root-file,current-entrypoint,"Current framework routes, status and contracts."
+AISM/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+CITATION.cff,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+CODEOWNERS,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+CODE_OF_CONDUCT.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+CONTRIBUTING.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+COPYRIGHT,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+CSF-COMPANION.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+Dockerfile,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+EVOLUTION.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+FORGE-Act/FORGE-Act_Build-It-Yourself.html.html,html,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+FORGE-Act/FORGE-Act_Campaign-Toolkit.html.html,html,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+FORGE-Act/FORGE-Act_District-Action-Plan.html.html,html,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+FORGE-Act/FORGE-Act_Marshall-Plan-For-AI.html.html,html,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+FORGE-Act/FORGE-Act_Overview.html.html,html,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+FORGE-Act/FORGE-Act_Real-Purpose-Zero-Grift.html.html,html,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+FORGE-Act/FORGE-Act_Sovereignty-Is-The-Flex.html.html,html,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+FORGE-Act/FORGE-Act_What-They-Inherit.html.html,html,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+FORGE-Act/README.md,readme,separate-policy-material,Retain policy content and status; shared navigation adds no legislative validation.
+INTEGRATIONS.md,root-file,current-entrypoint,"Current framework routes, status and contracts."
+LICENSE,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+LICENSE-APACHE-2.0,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+LICENSE-CC-BY-SA-4.0,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+LICENSE-MIT,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+MAINTAINERS.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+MIGRATION.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+NEXUS/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+NEXUS/adapters/mcp/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+NEXUS/integrations/legacy-sovereign-runtimes/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+NEXUS/payments/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+NEXUS/sdk/python/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+PAGE_MAP.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+QUICKSTART_5_MIN.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+README.md,readme,current-entrypoint,"Current framework routes, status and contracts."
+SECURITY.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+SUPPORT.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+VANGUARD_PROGRAM.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+ai-safe2.manifest.json,root-file,current-entrypoint,"Current framework routes, status and contracts."
+challenges/001-anthropic-multi-agent-turf-war/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/analysis/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/controls/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/controls/ai-safe2/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/controls/conventional/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/controls/nexus/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/fixtures/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/fixtures/known-fail/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/fixtures/known-pass/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/graders/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/harness/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/manifests/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/preregistration/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/replication/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/results/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/001-anthropic-multi-agent-turf-war/scenarios/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+challenges/002-v35-commit-boundary/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+challenges/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+dashboard/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+dashboard/index.html,html,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+dashboard/rosetta-template.html,html,generator-template,Internal HTML template; generated explorer is the user entry point.
+dashboard/rosetta.html,html,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+developer-workflow/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+docker-compose.yml,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+docs/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+docs/advisories/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+docs/assessments/2026-10-07-version-consistency/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+docs/assessments/2026-11-19-v35-update/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+examples/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/aism-decision-card/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/aism-remediation/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/anti-gravity-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/autogen-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/challenge-controlled-executor/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/claude-code-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/codex-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/crewai-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/cursor-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/environment-decision-card/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/core/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/docs/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/gateway/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/monitoring/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/scripts/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/skills-registry/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/supervisor/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/hermes-sovereign-runtime/validation/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/ishi/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/langchain-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/langflow-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/langgraph-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/lovable-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/love_equation/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/make-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/mcp-security-toolkit/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/openclaw/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/openclaw/core/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/openclaw/gateway-release-v3.0.html,html,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+examples/openclaw/gateway/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/slowmist-overlay/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/v35-authority/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+examples/xai-grok-sovereign-runtime/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+gateway/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+guides/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+guides/claude-code-velocity-and-governance.html,html,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+llms.txt,root-file,current-entrypoint,"Current framework routes, status and contracts."
+pyproject.toml,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+releases/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+repository-topics.manifest.json,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+research/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+resources/readme.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+safe2/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+safe2/challenge/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+safe2/docs/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+scanner/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+skill.md,root-file,root-owning-source,"Retain owning license, contract, component or configuration semantics; update only when affected."
+skills/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+skills/mcp/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
+tests/fixtures/hostile/README.md,readme,test-fixture,Preserve test meaning; never add operating instructions.
+tests/fixtures/skillspector-live/README.md,readme,test-fixture,Preserve test meaning; never add operating instructions.

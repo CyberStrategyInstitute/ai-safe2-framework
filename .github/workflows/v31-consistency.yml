@@ -120,3 +120,5 @@ jobs:
       - run: python scripts/check_local_links.py
       - run: python scripts/check_navigation.py
       - run: python scripts/generate_entry_routes.py --check
+      - run: python scripts/generate_rosetta_explorer.py --check
+      - run: python scripts/review_repository_surfaces.py --check

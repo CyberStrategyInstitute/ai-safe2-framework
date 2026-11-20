@@ -5,7 +5,7 @@
 
 [Framework Home](../../README.md) | [Examples Index](../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
+> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.5 framework and applicable profile requirements.
 <!-- AI-SAFE2-UX:END -->
 
 <!-- stack: OpenClaw -->
@@ -32,6 +32,11 @@
 ---
 
 # AI SAFE² OpenClaw Integration
+
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
 
 **Cyber Strategy Institute** &nbsp;·&nbsp; [ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework) &nbsp;·&nbsp; MIT (code) + CC-BY-SA 4.0 (docs)
 

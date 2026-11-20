@@ -1,5 +1,10 @@
 # Challenge 002 | Authority, effects and useful work
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 This prospective protocol addresses the live-study denominator gap from issue #308. It leaves the frozen Challenge 001 artifacts intact. No confirmatory trial or independent reproduction has been performed.
 
 The [preregistration candidate](preregistration.json) selects episode as the common primary exposure unit and retains raw unauthorized effects, opportunity counts, attempted/blocked actions, legitimate completion, false blocks and unknowns separately. Treatments can change the number of opportunities, so conditional rates require separate interpretation. Zero denominators remain undefined.

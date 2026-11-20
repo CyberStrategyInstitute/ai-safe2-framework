@@ -4,6 +4,11 @@
 **On this page:** [Adopt](#use-skills-and-provider-guidance-with-v35) · [Start](#quick-start-by-use-case) · [Next](#-navigation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 [![Area: Skills](https://img.shields.io/badge/Area-Skills-6842A6?style=flat-square)](README.md)
 ### Model-facing framework guidance and live MCP control access
 
@@ -55,7 +60,7 @@ skills and dependencies. See [Licensing by component](../docs/LICENSING.md).
 
 The `skills/` surface packages AI SAFE² guidance for AI assistants and provides the Python MCP server used for live control lookup and governance workflows.
 
-The current v3.1 data model separates the stable core taxonomy from the protocol profile overlay:
+The current v3.5 data model separates the stable core taxonomy from the protocol profile overlay:
 
 ```text
 skills/mcp/data/ai-safe2-controls-v3.5.json  173-control core taxonomy

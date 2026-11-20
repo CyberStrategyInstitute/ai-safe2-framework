@@ -8,6 +8,11 @@
 **On this page:** [Adopt](#use-developer-workflow-with-v35) · [Install](#what-changes-after-installation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 ### Replayable evidence and human-owned decisions for software delivery
 
 [![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
@@ -41,6 +46,10 @@ review. It gives those tools a common evidence contract and prevents silence,
 provider failure, or a green wrapper from becoming approval.
 
 <!-- V35-ADOPTION:START -->
+![Build with criteria and evidence](../assets/delivery-evidence-v35.svg)
+
+Plans, reviews and receipts support decisions. They do not authorize deployment.
+
 ## Use Developer Workflow with v3.5
 
 **Source status: contract-preview.** Change routing and evidence receipts retain human merge/release decisions; v3.5 adoption guidance is explicit.

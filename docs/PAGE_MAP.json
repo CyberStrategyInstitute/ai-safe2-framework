@@ -274,6 +274,38 @@
       "kind": "document"
     },
     {
+      "path": "FORGE-Act/FORGE-Act_Build-It-Yourself.html.html",
+      "kind": "html-page"
+    },
+    {
+      "path": "FORGE-Act/FORGE-Act_Campaign-Toolkit.html.html",
+      "kind": "html-page"
+    },
+    {
+      "path": "FORGE-Act/FORGE-Act_District-Action-Plan.html.html",
+      "kind": "html-page"
+    },
+    {
+      "path": "FORGE-Act/FORGE-Act_Marshall-Plan-For-AI.html.html",
+      "kind": "html-page"
+    },
+    {
+      "path": "FORGE-Act/FORGE-Act_Overview.html.html",
+      "kind": "html-page"
+    },
+    {
+      "path": "FORGE-Act/FORGE-Act_Real-Purpose-Zero-Grift.html.html",
+      "kind": "html-page"
+    },
+    {
+      "path": "FORGE-Act/FORGE-Act_Sovereignty-Is-The-Flex.html.html",
+      "kind": "html-page"
+    },
+    {
+      "path": "FORGE-Act/FORGE-Act_What-They-Inherit.html.html",
+      "kind": "html-page"
+    },
+    {
       "path": "FORGE-Act/README.md",
       "kind": "document"
     },
@@ -364,6 +396,10 @@
     {
       "path": "NEXUS/integrations/legacy-sovereign-runtimes/xai-grok-love-equation.md",
       "kind": "document"
+    },
+    {
+      "path": "NEXUS/llms.txt",
+      "kind": "agent-route"
     },
     {
       "path": "NEXUS/nexus-docs.manifest.json",
@@ -578,6 +614,10 @@
       "kind": "document"
     },
     {
+      "path": "dashboard/index.html",
+      "kind": "html-page"
+    },
+    {
       "path": "dashboard/public/data/controls.json",
       "kind": "machine-data"
     },
@@ -592,6 +632,14 @@
     {
       "path": "dashboard/public/data/mcp-profile-v3.5.json",
       "kind": "machine-data"
+    },
+    {
+      "path": "dashboard/rosetta-template.html",
+      "kind": "html-page"
+    },
+    {
+      "path": "dashboard/rosetta.html",
+      "kind": "html-page"
     },
     {
       "path": "developer-workflow/CHANGELOG.md",
@@ -750,7 +798,15 @@
       "kind": "document"
     },
     {
+      "path": "docs/REPOSITORY-SURFACE-REVIEW-V35.md",
+      "kind": "document"
+    },
+    {
       "path": "docs/REPOSITORY-UX-STANDARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/ROSETTA-SOURCE-INDEX.md",
       "kind": "document"
     },
     {
@@ -1078,7 +1134,15 @@
       "kind": "document"
     },
     {
+      "path": "docs/data/framework-mapping-recovery-review-2026-11-19.csv",
+      "kind": "machine-data"
+    },
+    {
       "path": "docs/data/local-reference-dispositions-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/data/repository-surface-review-v35.csv",
       "kind": "machine-data"
     },
     {
@@ -1670,6 +1734,10 @@
       "kind": "document"
     },
     {
+      "path": "examples/openclaw/gateway-release-v3.0.html",
+      "kind": "html-page"
+    },
+    {
       "path": "examples/openclaw/gateway/README.md",
       "kind": "document"
     },
@@ -1762,6 +1830,14 @@
       "kind": "document"
     },
     {
+      "path": "guides/V35-ADOPTION-AND-VALIDATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/claude-code-velocity-and-governance.html",
+      "kind": "html-page"
+    },
+    {
       "path": "guides/ishi_hardening.md",
       "kind": "document"
     },
@@ -1780,6 +1856,10 @@
     {
       "path": "guides/v3.1-release-overview.md",
       "kind": "document"
+    },
+    {
+      "path": "llms.txt",
+      "kind": "agent-route"
     },
     {
       "path": "releases/AI-SAFE2-v3.1.0.md",

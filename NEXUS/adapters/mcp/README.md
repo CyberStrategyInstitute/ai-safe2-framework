@@ -4,6 +4,11 @@
 **On this page:** [Adopt](#use-nexus-mcp-adapter-with-v35)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../../README.md)
+[Framework home](../../../README.md) | [Topic map](../../../docs/README.md) | [Mapping validation](../../../docs/ROSETTA-STONE-V35.md) | [Component status](../../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 **Plane:** agent-to-tool
 **Protocol:** Model Context Protocol
 **Spec versions:** `2026-07-28` primary, `2025-11-25` legacy for 12 months
@@ -11,6 +16,10 @@
 **Status:** specification complete; implementation scaffolding only
 
 <!-- V35-ADOPTION:START -->
+![Current authority at the action boundary](../../../assets/runtime-boundary-v35.svg)
+
+Reference pattern. Component versions and deployment qualification remain separate.
+
 ## Use NEXUS MCP adapter with v3.5
 
 **Source status: scaffolding.** Interface methods fail closed until implemented; this adapter is not a deployable security control.

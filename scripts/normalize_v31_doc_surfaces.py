@@ -92,7 +92,7 @@ def example_top() -> str:
 
 [Framework Home](../../README.md) | [Examples Index](../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
+> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.5 framework and applicable profile requirements.
 {TOP_END}"""
 
 
@@ -116,7 +116,7 @@ def research_top() -> str:
 
 [Framework Home](../README.md) | [Research Index](./README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.5. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.1 normative control and profile documents for implementation or conformance decisions.
+> **Current framework context:** AI SAFE² v3.5. This research note preserves its original publication date, evidence, and historical framework references. Use current v3.5 normative control and profile documents for implementation or conformance decisions.
 {TOP_END}"""
 
 
@@ -174,7 +174,7 @@ def build_research_index(notes: list[Path]) -> str:
     rows = []
     for path in notes:
         number = path.name.split("_", 1)[0]
-        rows.append(f"| {number} | [{extract_title(path)}](./{path.name}) | Original publication context preserved; interpret current implementation guidance through v3.1 |")
+        rows.append(f"| {number} | [{extract_title(path)}](./{path.name}) | Original publication context preserved; interpret current implementation guidance through v3.5 |")
     table = "\n".join(rows)
     return f"""# AI SAFE² Research Index
 ### Evidence, threat analysis, and framework foundations

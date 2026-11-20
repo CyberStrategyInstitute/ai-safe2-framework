@@ -1,5 +1,10 @@
 # AI SAFE² Control Gateway
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../../README.md)
+[Framework home](../../../README.md) | [Topic map](../../../docs/README.md) | [Mapping validation](../../../docs/ROSETTA-STONE-V35.md) | [Component status](../../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 ## Gateway — v3.0 Enforcement Layer
 
 Health, safe-mode, provider-error, and audit-verification responses expose

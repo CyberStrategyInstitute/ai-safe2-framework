@@ -4,6 +4,11 @@
 **On this page:** [Adopt](#use-nexus-with-v35) · [Architecture](#architecture) · [Install](#install) · [Start](#quick-start) · [Evidence](#testing) · [Next](#-navigation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../README.md)
+[Framework home](../README.md) | [Topic map](../docs/README.md) | [Mapping validation](../docs/ROSETTA-STONE-V35.md) | [Component status](../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 [![Area: NEXUS](https://img.shields.io/badge/Area-NEXUS-820F1A?style=flat-square)](README.md)
 
 This is the **0.6.0 source candidate**. The latest published PyPI SDK is
@@ -26,6 +31,10 @@ publication. See [component versions](../docs/COMPONENT-VERSIONS.md).
 ---
 
 <!-- V35-ADOPTION:START -->
+![Current authority at the action boundary](../assets/runtime-boundary-v35.svg)
+
+Reference pattern. Component versions and deployment qualification remain separate.
+
 ## Use NEXUS with v3.5
 
 **Source status: partial-reference.** SDK authority, evidence, memory and payment building blocks retain their own qualification boundaries.

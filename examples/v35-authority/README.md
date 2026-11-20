@@ -10,6 +10,11 @@
 
 # v3.5 local authority and effect fixture
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 Run `python examples/v35-authority/demo.py` from an installed source checkout. The fixture grants a child narrower authority, binds a synthetic operator approval to the exact action, commits a local resource effect and budget together, returns the first receipt for a duplicate request, and prevents subsequent execution after root revocation.
 
 The HMAC approval helper is reusable protocol logic. It authenticates the approval message. The integrating application must authenticate and authorize its human approver, protect the key and database, and deliver the approval over its reviewed channel. The helper supplies no user identity proof or second authentication factor. There is no automatic email, webhook or network request.

@@ -4,6 +4,11 @@
 **On this page:** [Adopt](#use-mcp-knowledge-server-with-v35) · [Start](#quick-start) · [Evidence](#testing-expectations) · [Next](#navigation)
 <!-- ENTRY-ROUTES:END -->
 
+<!-- REPOSITORY-ROUTES:START -->
+[![Framework context: v3.5 candidate](https://img.shields.io/badge/Framework_Context-v3.5_candidate-F6921E?style=flat-square)](../../README.md)
+[Framework home](../../README.md) | [Topic map](../../docs/README.md) | [Mapping validation](../../docs/ROSETTA-STONE-V35.md) | [Component status](../../docs/V35-ECOSYSTEM-ADOPTION.md) | [Agent routes](../../llms.txt)
+<!-- REPOSITORY-ROUTES:END -->
+
 [![Area: MCP Knowledge Server](https://img.shields.io/badge/Area-MCP_Knowledge_Server-6842A6?style=flat-square)](README.md)
 ### Live framework and CP.5.MCP profile access at the agent-to-tool boundary
 
@@ -16,6 +21,10 @@
 ---
 
 <!-- V35-ADOPTION:START -->
+![Follow a claim to its evidence](../../assets/evidence-linkages-v35.svg)
+
+A recorded mapping is a reviewable relationship. It does not establish compliance.
+
 ## Use MCP knowledge server with v3.5
 
 **Source status: implemented-bounded.** Serves 173 core controls and the 19-control MCP profile with twelve child requirements from packaged source data.
