@@ -83,7 +83,7 @@ This `core/` folder works alongside, not instead of the other AI SAFE² OpenClaw
 
 | Tool | What It Does | Relationship to Core Files |
 |---|---|---|
-| [`openclaw_memory.md`](../openclaw_memory.md) | Original v1 memory vaccine (security block list) | `core/openclaw_memory.md` is the v2.0 upgrade superset, no breaking changes |
+| [`openclaw_memory.md`](openclaw_memory.md) | Original v1 memory vaccine (security block list) | `core/openclaw_memory.md` is the v2.0 upgrade superset, no breaking changes |
 | [`scanner.py`](../scanner.py) | Local vulnerability scanner, 0–100 risk score | Called during `HEARTBEAT.md` weekly security check |
 | [`gateway/`](../gateway/) | Reverse proxy enforcing JSON schema, injection blocking, audit log | Referenced in `TOOLS.md` as mandatory; `MODEL-ROUTER.md` explains routing through it |
 

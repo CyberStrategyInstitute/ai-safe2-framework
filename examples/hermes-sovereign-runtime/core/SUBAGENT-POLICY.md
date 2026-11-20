@@ -1,6 +1,6 @@
 # SUBAGENT-POLICY.md — Hermes Sovereign Runtime
 
-**Framework:** AI SAFE² v3.1 · Cyber Strategy Institute
+**Framework:** AI SAFE² v3.5 · Cyber Strategy Institute
 **Deploy path:** `~/.hermes/memories/003_SUBAGENT-POLICY.md`
 
 ---
@@ -62,4 +62,4 @@ Log all terminations as security events.
 
 ---
 
-*HSR SUBAGENT-POLICY.md · Cyber Strategy Institute · AI SAFE² v3.1*
+*HSR SUBAGENT-POLICY.md · Cyber Strategy Institute · AI SAFE² v3.5*

@@ -2,7 +2,7 @@
 
 ### Choose the right instrument and use its results together
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-AISM-820F1A?style=flat-square)](./README.md)
 [![Status](https://img.shields.io/badge/Status-Methods_v1.0-808080?style=flat-square)](TECHNOLOGY-CONTRIBUTION-PROFILE.md)
 
@@ -113,4 +113,8 @@ evidence, and review; publication alone does not validate these instruments.
 
 [AISM Home](./README.md) | [Technology Profile](TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Evidence Assurance](EVIDENCE-ASSURANCE.md) | [Technology Card](templates/TECHNOLOGY-CARD.md) | [Nine review examples](../research/technology-contribution-examples.md)
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## v3.5 scoped deployment evidence
+
+Use [deployment readiness and threat profiles](DEPLOYMENT-READINESS-V35.md) for the separate readiness result, five distinct assessment outputs and three deeper threat profiles. Organizational scoring formulas retain their baseline meanings. External tiers are informative comparisons. A maturity-derived CVSS multiplier is a CSI heuristic pending scoped calibration.

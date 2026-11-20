@@ -1,3 +1,5 @@
+> **v3.5 candidate on this branch.** Twelve new controls and 154 explicit child clauses deepen the 161-control baseline. Review [the normative contracts](docs/CONTROLS-V3.5.md), [Rosetta Stone](docs/ROSETTA-STONE-V35.md), [research](research/README.md), [deployment readiness](AISM/DEPLOYMENT-READINESS-V35.md), and [migration](MIGRATION.md). Source availability and passing fixtures carry their stated scope; publication and deployment require their own evidence.
+
 [![AI SAFE2 Framework Visual Map](https://github.com/CyberStrategyInstitute/ai-safe2-framework/raw/main/assets/AI%20SAFE2%20Architecture.png)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/blob/main/assets/AI%20SAFE2%20Architecture.png)
 
 <div align="center">
@@ -10,13 +12,13 @@
 
 ### The Universal GRC Standard for Agentic AI, Swarm Governance, and Runtime Enforcement
 
-[![Version](https://img.shields.io/badge/version-3.1.0-orange.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/releases)
+[![Version](https://img.shields.io/badge/version-3.5.0-orange.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/releases)
 [![License: CC BY-SA 4.0](https://img.shields.io/badge/License-CC_BY--SA_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by-sa/4.0/)
 [![Code: MIT](https://img.shields.io/badge/Code-MIT-yellow.svg)](LICENSE-MIT)
 [![NEXUS: Apache-2.0](https://img.shields.io/badge/NEXUS-Apache--2.0-blue.svg)](NEXUS/LICENSE)
-[![Compliance](https://img.shields.io/badge/Mapped-32_Frameworks_%7C_ISO_42001_%7C_NIST_%7C_SOC2_%7C_EU_AI_Act-005696?style=flat-square&logo=auth0)](https://cyberstrategyinstitute.com/ai-safe2/)
-[![Scope](https://img.shields.io/badge/Scope-161_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm_%7C_CP.1--CP.10-red)](https://cyberstrategyinstitute.com/ai-safe2/)
-[![MCP](https://img.shields.io/badge/MCP-2026--07--28-blue.svg)](00-cross-pillar/cp5_mcp_server_security.md)
+[![Source registry](https://img.shields.io/badge/Source_Registry-33_Families_%7C_Review_Status_Explicit-005696?style=flat-square)](docs/ROSETTA-STONE-V35.md)
+[![Scope](https://img.shields.io/badge/Scope-173_Controls_%7C_Agentic_%7C_NHI_%7C_Swarm_%7C_CP.1--CP.15-red)](https://cyberstrategyinstitute.com/ai-safe2/)
+[![MCP](https://img.shields.io/badge/MCP-2026--07--28-blue.svg)](00-cross-pillar/cp5_mcp_v35.md)
 
 **[Use the CLI](#use-ai-safe-with-an-agent)** · **[Why AI SAFE²](#what-ai-safe-is-for)** · **[Architecture](#the-core-architecture)** · **[MCP Security](#mcp-security-in-v31)** · **[Challenge Lab](#challenge-lab-falsification-before-claims)** · **[Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)**
 
@@ -104,7 +106,7 @@ the CLI; it does not imply that every named product has a native adapter.
 
 AI SAFE² is an engineering and governance contract for agentic AI. It defines what must be governed, what must be enforced, and what evidence must exist when autonomous systems act.
 
-The framework contains **161 controls**, organized across five operational pillars plus a Cross-Pillar Governance Layer. AI SAFE² v3.1 keeps the overall framework control total at 161 while materially updating the MCP security profile for the Model Context Protocol `2026-07-28` specification.
+The v3.5 candidate contains **173 controls**, organized across five operational pillars plus a Cross-Pillar Governance Layer. Twelve additions deepen the v3.1 baseline. The MCP profile retains nineteen IDs and the `2026-07-28` specification binding, with twelve explicit child clauses and separately recorded compatibility.
 
 Version 3.1 also formalizes three enforcement planes:
 
@@ -140,11 +142,11 @@ AI SAFE² defines the operating envelope around those systems. It combines gover
 
 ## What Changed in v3.1
 
-AI SAFE² v3.1 is primarily a **protocol-governance and enforcement-plane release**.
+AI SAFE² v3.5 is primarily a **protocol-governance and enforcement-plane release**.
 
 ### MCP `2026-07-28` realignment
 
-The MCP core became substantially more stateless. AI SAFE² v3.1 therefore removes governance dependencies on protocol-owned session concepts and instead binds governance to framework-owned constructs such as:
+The MCP core became substantially more stateless. AI SAFE² v3.5 therefore removes governance dependencies on protocol-owned session concepts and instead binds governance to framework-owned constructs such as:
 
 - verified principal identity;
 - capability grants;
@@ -172,7 +174,7 @@ The six v3.1 additions are:
 | **MCP-18** | Catalog-cache integrity and provenance revalidation |
 | **MCP-19** | Authorization-chain integrity, intended resource/audience validation, and SSRF boundaries |
 
-The **overall AI SAFE² framework remains 161 controls**. MCP-14 through MCP-19 are profile-level sub-controls within CP.5, not six additional top-level framework controls.
+The **v3.1 baseline remained 161 core controls**. MCP-14 through MCP-19 were profile sub-controls. The v3.5 core reaches 173 through the twelve separately identified core additions.
 
 ### Compatibility
 
@@ -199,7 +201,7 @@ The framework is organized around **5 Operational Pillars** plus the **Cross-Pil
 
 CP.5 provides platform and protocol-specific security profiles without allowing the profiled protocol to define the governance boundary. The v3.1 MCP profile is the primary example of this principle.
 
-See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_server_security.md)
+See: [CP.5.MCP, MCP Server Security Profile](00-cross-pillar/cp5_mcp_v35.md)
 
 ---
 
@@ -237,8 +239,7 @@ and incident/accountability inputs as adoption candidates. Follow the
 [incident evidence workflow](AISM/INCIDENT-EVIDENCE.md) before promoting claims.
 
 These additions are CSI v1.0 assessment methods for use and feedback. The CLI's current E0-E5
-numeric grades, Challenge Lab C0-C5 scale, organizational scoring, 161 controls,
-and generated profile data keep their existing meanings. No TCP command or
+numeric grades, Challenge Lab C0-C5 scale and organizational scoring keep their existing meanings. The v3.5 control additions and current profile data are identified separately. No TCP command or
 dashboard scoring integration is implemented by this update. See the
 [repository coverage review](AISM/TECHNOLOGY-PROFILE-REPO-REVIEW.md).
 
@@ -253,7 +254,7 @@ dashboard scoring integration is implemented by this update. See the
 | [Pillar 3: Fail-Safe & Recovery](03-fail-safe-recovery/) | Circuit breakers, recursion limits, rollback |
 | [Pillar 4: Engage & Monitor](04-engage-monitor/) | Detection pipelines, HITL, platform monitoring |
 | [Pillar 5: Evolve & Educate](05-evolve-educate/) | Adversarial evaluation and red-team artifacts |
-| [Cross-Pillar Governance](00-cross-pillar/) | CP.1 through CP.10, ACT tiers, HEAR doctrine, replication governance, CP.5 profiles |
+| [Cross-Pillar Governance](00-cross-pillar/) | CP.1 through CP.15, ACT tiers, HEAR doctrine, replication governance, CP.5 profiles |
 | [AI Sovereign Maturity (AISM) Model](AISM/) | Organizational maturity model and control mapping |
 | [Technology Contribution Profile](AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md) | Artifact review, evidence assurance, adoption rule, and reusable card |
 | [AI SAFE² CLI](safe2/README.md) | Agent-facing scanning, evidence, AISM decisions, reports, and gates |
@@ -268,7 +269,7 @@ dashboard scoring integration is implemented by this update. See the
 
 ## MCP Security in v3.1
 
-AI SAFE² v3.1 treats MCP as an **agent-to-tool security plane**, not merely a transport feature.
+AI SAFE² v3.5 treats MCP as an **agent-to-tool security plane**, not merely a transport feature.
 
 The profile covers:
 
@@ -498,7 +499,7 @@ or independent replication. The synthetic TENIR example remains illustrative onl
 
 ## 5-Layer Architectural Coverage
 
-AI SAFE² v3.1 models the broader operational stack, from model infrastructure through agent identity and protocol-mediated tool use.
+AI SAFE² v3.5 models the broader operational stack, from model infrastructure through agent identity and protocol-mediated tool use.
 
 | Layer | Scope | Representative controls |
 |---|---|---|
@@ -519,7 +520,7 @@ AI SAFE² v3.1 models the broader operational stack, from model infrastructure t
 | **P3: Fail-Safe & Recovery** | Kill switch | Revocation | Rollback | Inherited | Cascade block | ISO A.17 |
 | **P4: Engage & Monitor** | Adversarial monitoring | Behavior monitoring | Integrity monitoring | Inherited | Inherited | NIST MEASURE |
 | **P5: Evolve & Educate** | Red teaming | Credential rotation | Model updates | Specification updates | Inherited | Continuous improvement |
-| **Cross-Pillar** | Swarm governance | HEAR doctrine | Cognitive tags | Protocol and MCP security | Agent replication governance | CP.1 through CP.10 |
+| **Cross-Pillar** | Swarm governance | HEAR doctrine | Cognitive tags | Protocol and MCP security | Agent replication governance | CP.1 through CP.15 |
 
 ---
 
@@ -533,9 +534,9 @@ The dashboard provides control search, pillar filtering, risk-level views, execu
 
 ---
 
-## The Universal Rosetta Stone: 32 Frameworks
+## The Universal Rosetta Stone
 
-AI SAFE² maps its controls across 32 AI, cybersecurity, privacy, resilience, and enterprise governance frameworks so organizations can reuse evidence rather than run independent governance programs for every external standard.
+AI SAFE² preserves the recovered source families and maps requirements to controls, evidence and repair paths. Historical tags and crosswalk cells retain explicit review status. Use the [Rosetta Stone registry and audit](docs/ROSETTA-STONE-V35.md) to identify applicable evidence reuse and unresolved relationships.
 
 Representative mappings include:
 
@@ -573,7 +574,7 @@ The exact mapping remains control-specific. AI SAFE² alignment does not replace
 
 ## Why AI SAFE² Is Different
 
-| Capability | AI SAFE² v3.1 | Traditional GRC | AI point tools |
+| Capability | AI SAFE² v3.5 | Traditional GRC | AI point tools |
 |---|---|---|---|
 | **Unified mapping** | 32-framework crosswalk | Usually framework-specific | Usually limited |
 | **Agentic awareness** | Native agents, swarms, loops, tools, delegation | Often software or human-process centric | Often model I/O centric |
@@ -627,7 +628,7 @@ See [EVOLUTION.md](EVOLUTION.md) for the full history.
 ```text
 /
 ├── .github/                   # CI/CD workflows and contribution automation
-├── 00-cross-pillar/           # CP.1 through CP.10, including CP.5 profiles
+├── 00-cross-pillar/           # CP.1 through CP.15, including CP.5 profiles
 ├── 01-sanitize-isolate/       # Pillar 1
 ├── 02-audit-inventory/        # Pillar 2
 ├── 03-fail-safe-recovery/     # Pillar 3
@@ -689,7 +690,7 @@ The two frameworks are complementary rather than substitutes.
   year = {2026},
   publisher = {Cyber Strategy Institute},
   url = {https://github.com/CyberStrategyInstitute/ai-safe2-framework},
-  note = {Version 3.1. 161 framework controls, CP.5.MCP profile aligned to MCP 2026-07-28, and mappings across 32 frameworks.}
+  note = {Version 3.5 candidate. 173 framework controls, CP.5.MCP profile aligned to MCP 2026-07-28, and attributed source mappings with explicit review status.}
 }
 ```
 
@@ -711,3 +712,13 @@ Managed by [Cyber Strategy Institute](https://cyberstrategyinstitute.com).
 Copyright © 2025-2026. All Rights Reserved.
 
 </div>
+
+## What v3.5 adds
+
+Five new cross-pillar controls cover trust lifecycle, final-effect authorization, evidence independence, organizational AI management and design-time coordination. Seven new pillar controls cover pre-trust initialization, aggregate resource ceilings, environment binding, idempotency, verified outcomes, failure attribution and declared success criteria. The MCP profile retains nineteen IDs and adds twelve distinct review clauses. Six deployment profiles inherit applicable core obligations. Fifty-two source-derived research notes document the reviewed mechanisms and placement decisions.
+
+### Rosetta Stone for people and agents
+
+Use `safe2 framework query --control CP.12` to resolve a control and its exact child requirements. Use `safe2 framework query --source NIST_AI_RMF` to inspect attributed relationships, and `safe2 framework audit` to expose missing mapping review. Historical tags and clause cells retain their source and unreviewed status. `safe2 framework readiness evidence.json` checks scoped evidence completeness and freshness for human review.
+
+[Complete repository page map](PAGE_MAP.md) | [Machine page map](docs/PAGE_MAP.json)

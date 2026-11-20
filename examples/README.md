@@ -1,7 +1,7 @@
 # AI SAFE² Implementation Examples
 ### Governed runtime patterns across agent stacks
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Examples-820F1A?style=flat-square)](./README.md)
 [![Status](https://img.shields.io/badge/Status-Reference_Implementations-808080?style=flat-square)](../docs/REPOSITORY-UX-STANDARD.md)
 
@@ -90,4 +90,8 @@ The generator validates those tags and updates the table above. The Lovable exam
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## v3.5 synthetic authority fixture
+
+[Local authority, budget, retry and stop example](v35-authority/README.md) is a bounded executable fixture with explicit production binding limits.

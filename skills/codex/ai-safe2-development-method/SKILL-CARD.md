@@ -1,7 +1,7 @@
 # AI SAFE² Skill Trust Card
 
 - **Skill Name:** AI SAFE2 Development Method
-- **Framework Version:** AI SAFE² v3.1
+- **Framework Version:** AI SAFE² v3.5
 - **Owner:** Cyber Strategy Institute maintainers
 - **Purpose:** Classify, plan, verify, and receipt material repository changes with risk-adjusted evidence.
 - **Network Access:** None required by the skill; external review remains a separate, explicitly authorized workflow.

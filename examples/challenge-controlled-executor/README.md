@@ -1,11 +1,11 @@
 <!-- AI-SAFE2-UX:START -->
-[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface: Example](https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square)](../README.md)
 [![Context: CLI 0.9](https://img.shields.io/badge/CLI-0.9-808080?style=flat-square)](../../safe2/docs/CHALLENGE-CLI.md)
 
 [Framework Home](../../README.md) | [Cross-Pillar Controls](../../00-cross-pillar/) | [Examples Index](../README.md) | [Challenge Lab](../../challenges/) | [CLI](../../safe2/README.md)
 
-> **Current framework context:** AI SAFE² v3.1. This example proves the controlled process evidence seam, not evaluator independence, OS containment, or framework conformance.
+> **Current framework context:** AI SAFE² v3.5. This example proves the controlled process evidence seam, not evaluator independence, OS containment, or framework conformance.
 <!-- AI-SAFE2-UX:END -->
 
 <!-- stack: Challenge 001 Controlled Executor -->
@@ -47,5 +47,5 @@ untrusted implementations only inside a separately managed OS/container boundary
 
 [Examples Index](../README.md) | [Cross-Pillar Controls](../../00-cross-pillar/) | [Challenge CLI](../../safe2/docs/CHALLENGE-CLI.md) | [Framework Home](../../README.md)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+*AI SAFE² v3.5 | Cyber Strategy Institute*
 <!-- AI-SAFE2-UX-FOOTER:END -->

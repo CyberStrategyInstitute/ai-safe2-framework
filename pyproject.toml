@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "ai-safe2"
 version = "1.1.0"
-description = "Agent-facing governance, evidence, and assessment CLI for AI SAFE2 v3.1"
+description = "Agent-facing governance, evidence, and assessment CLI for AI SAFE2 v3.5"
 readme = "safe2/README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }

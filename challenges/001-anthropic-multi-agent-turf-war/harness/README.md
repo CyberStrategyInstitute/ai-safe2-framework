@@ -1,7 +1,7 @@
 # Challenge 001 Harness
 ### Executable offline fixtures and the path to an isolated live study
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../../README.md)
 [![Challenge Lab](https://img.shields.io/badge/Module-Challenge_Lab-820F1A?style=flat-square)](../../README.md)
 [![Scope](https://img.shields.io/badge/Scope-Offline_fixture_pilot-808080?style=flat-square)](../../../safe2/docs/CHALLENGE-CLI.md)
 
@@ -58,4 +58,4 @@ complexity are valuable findings.
 
 [Challenge 001](../README.md) | [CLI Guide](../../../safe2/docs/CHALLENGE-CLI.md) | [Framework Home](../../../README.md)
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

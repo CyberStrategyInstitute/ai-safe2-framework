@@ -7,7 +7,7 @@ publication. See [component versions](../docs/COMPONENT-VERSIONS.md).
 **Non-repudiable, Extensible, eXecutive-Unified, Sovereign Agent-to-Agent Governance**
 
 [![NEXUS](https://img.shields.io/badge/NEXUS-v0.6.0-820F1A?style=flat-square)](CHANGELOG.md)
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![License](https://img.shields.io/badge/License-Apache_2.0-808080?style=flat-square)](LICENSE)
 [![NEXUS CI](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/workflows/ci.yml/badge.svg)](https://github.com/CyberStrategyInstitute/ai-safe2-framework/actions/workflows/ci.yml)
 
@@ -29,7 +29,7 @@ status and AISM invariants do not confer organizational maturity, certification,
 or automatic conformance. This documentation update changes no NEXUS schema
 or enforcement behavior.
 
-## Role in AI SAFE² v3.1
+## Role in AI SAFE² v3.5
 
 **AI SAFE² is the governance and requirements standard. NEXUS is Cyber Strategy Institute's first-party reference implementation.**
 
@@ -139,7 +139,7 @@ NEXUS wraps the user's stack. It does not replace the model, agent framework, to
 
 ### MCP status is intentionally explicit
 
-The `NEXUS/adapters/mcp/adapter.py` file added for AI SAFE² v3.1 is a **fail-closed interface skeleton**. Unimplemented methods raise rather than silently permit traffic.
+The `NEXUS/adapters/mcp/adapter.py` file added for AI SAFE² v3.5 is a **fail-closed interface skeleton**. Unimplemented methods raise rather than silently permit traffic.
 
 It must not be described as production-ready until the authorization, provenance, state-handle, catalog, replay, and MCP-19 resource/audience enforcement paths are implemented and tested.
 
@@ -278,7 +278,7 @@ attrs = nor_to_otel_attributes(nor)
 
 ### Memory Vaccine: govern persistence
 
-AI SAFE² v3.1 uses the canonical governance vocabulary: `request`, `handle_scoped`, `durable`.
+AI SAFE² v3.5 uses the canonical governance vocabulary: `request`, `handle_scoped`, `durable`.
 
 Older NEXUS APIs may still expose `SESSION`, `CROSS_SESSION`, or `PERMANENT` as compatibility aliases during migration. Those legacy names must not be treated as protocol identity or authorization boundaries.
 
@@ -330,7 +330,7 @@ The payment policy and the in-process `TransactionFirewall` are fed from one inp
 
 ---
 
-## AI SAFE² v3.1 Alignment
+## AI SAFE² v3.5 Alignment
 
 NEXUS is evaluated as an implementation against AI SAFE². The framework is not considered proven merely because NEXUS implements a control.
 
@@ -429,4 +429,4 @@ See:
 
 ---
 
-*AI SAFE² v3.1 reference implementation · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.5 reference implementation · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*

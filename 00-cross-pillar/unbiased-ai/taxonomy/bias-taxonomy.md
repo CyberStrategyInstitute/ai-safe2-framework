@@ -1,3 +1,5 @@
+> **UAS v1 baseline.** The v3.5 candidate uses the versioned v2 catalog and STANDARD-V2.md in the UAS profile root. The quantitative methods below retain their original scope and require reassessment before reuse.
+
 # UAS Bias Taxonomy v1.0
 **7 bias classes | UAS regulatory profile v1.0**
 

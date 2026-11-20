@@ -1,4 +1,4 @@
-"""AI SAFE² v3.1 — LangGraph Sovereign Runtime enforcement package."""
+"""AI SAFE² v3.5 — LangGraph Sovereign Runtime enforcement package."""
 
 from enforcement.ai_safe2_engine import (
     AISAFE2Engine,

@@ -1,6 +1,6 @@
 # QUICKSTART — xAI/Grok Sovereign Runtime
 ## 5 Minutes to Sovereign Defense
-**AI SAFE2 v3.1 | Cyber Strategy Institute**
+**AI SAFE2 v3.5 | Cyber Strategy Institute**
 
 ---
 
@@ -134,7 +134,7 @@ The `/ai-safe2 status` and `/ai-safe2 report` commands will be available in ever
 
 ## Windows / PowerShell Operators
 
-See [`QUICKSTART-WINDOWS.md`](./QUICKSTART-WINDOWS.md) for PowerShell-native
+See `QUICKSTART-WINDOWS.md` (`./QUICKSTART-WINDOWS.md`, reference unavailable in this checkout) for PowerShell-native
 scan patterns, sparse clone steps, and the hook JSON scan workflow on Windows.
 
 ---

@@ -2,7 +2,7 @@
 
 ### Collect the evidence needed to evaluate a product, solution, or technique
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-AISM-820F1A?style=flat-square)](./README.md)
 
 [AISM Home](./README.md) | [Technology Contribution Profile](./TECHNOLOGY-CONTRIBUTION-PROFILE.md) | [Evidence Assurance Level](./EVIDENCE-ASSURANCE.md) | [Technology Card](./templates/TECHNOLOGY-CARD.md)

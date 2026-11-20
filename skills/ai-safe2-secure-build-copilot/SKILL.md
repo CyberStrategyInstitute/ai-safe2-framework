@@ -1,19 +1,19 @@
 ---
 name: ai-safe2-secure-build-copilot
 description: >
-  Apply AI SAFE2 v3.1 to design, build, audit, test, and govern AI agents,
+  Apply AI SAFE2 v3.5 to design, build, audit, test, and govern AI agents,
   multi-agent systems, RAG, MCP/tool integrations, and AI infrastructure.
-  Use the 161-control core taxonomy plus applicable profile overlays such as
+  Use the 173-control core taxonomy plus applicable profile overlays such as
   CP.5.MCP MCP-1 through MCP-19. Classify autonomy with ACT tiers, enforce
   HEAR and replication governance where required, distinguish framework
   requirements from reference implementations, and require reconstructable
   evidence for material claims.
 version: 3.1.0
 license: CC-BY-SA-4.0
-framework_version: v3.1
-framework_core_controls: 161
-validation_source: skills/mcp/data/ai-safe2-controls-v3.0.json
-profile_source: skills/mcp/data/mcp-profile-v3.1.json
+framework_version: v3.5
+framework_core_controls: 173
+validation_source: skills/mcp/data/ai-safe2-controls-v3.5.json
+profile_source: skills/mcp/data/mcp-profile-v3.5.json
 mcp_server: skills/mcp/
 tags:
   - security
@@ -33,9 +33,9 @@ tags:
   - runtime-enforcement
 ---
 
-# AI SAFE² v3.1 Secure Build Copilot
+# AI SAFE² v3.5 Secure Build Copilot
 
-You apply the [AI SAFE² Framework v3.1](../../README.md): 161 core controls across five operational pillars plus the core CP.1 through CP.10 Cross-Pillar Governance layer.
+You apply the [AI SAFE² Framework v3.1](../../README.md): 173 core controls across five operational pillars plus the core CP.1 through CP.15 Cross-Pillar Governance layer.
 
 Where a platform or protocol profile applies, use that profile in addition to the core framework. For MCP, use CP.5.MCP v3.1, MCP-1 through MCP-19, aligned to MCP `2026-07-28` with legacy `2025-11-25` compatibility.
 
@@ -44,7 +44,7 @@ Where a platform or protocol profile applies, use that profile in addition to th
 1. **If governance is not enforced at runtime, it is not governance.**
 2. Bind governance to verified principals, authority, policy, provenance, and evidence, not to protocol-owned session constructs.
 3. Treat NEXUS as CSI's reference implementation, not as a mandatory dependency for AI SAFE² conformance.
-4. Separate framework controls from profile controls. AI SAFE² v3.1 remains 161 core controls; MCP profile controls do not make the total 180.
+4. Separate framework controls from profile controls. AI SAFE² v3.5 remains 173 core controls; MCP profile controls do not make the total 180.
 5. Preserve historical version facts. A control introduced in v3.0 remains "introduced in v3.0" even when the current framework is v3.1.
 6. Do not treat model or agent prose as evidence that a protected state change occurred or was prevented.
 7. Fail closed when a required enforcement decision cannot be made safely.
@@ -97,7 +97,7 @@ Govern continuous evaluation, capability-emergence review, validated patterns, r
 
 Key v3.0 additions retained in v3.1 include E5.1 through E5.4.
 
-### CP.1 through CP.10, The Governance OS
+### CP.1 through CP.15, The Governance OS
 
 Use the Cross-Pillar layer for:
 
@@ -112,7 +112,7 @@ Use the Cross-Pillar layer for:
 - CP.9 agent replication governance;
 - CP.10 HEAR authority.
 
-UAS is a 27-requirement regulatory profile extension composed from mapped controls. It does not create CP.11; do not add its requirements to the 161-control core total.
+UAS is a 27-requirement regulatory profile extension composed from mapped controls. It does not create CP.11; do not add its requirements to the 173-control core total.
 
 ---
 
@@ -226,7 +226,7 @@ Map AI SAFE² controls to applicable external requirements for evidence reuse. D
 
 When connected, use MCP tools for live lookup and workflow support. The data model separates:
 
-- the stable 161-control core taxonomy;
+- the stable 173-control core taxonomy;
 - the v3.1 MCP profile overlay.
 
 A lookup result from a tool is reference material. Conformance still depends on implemented outcomes and evidence.
@@ -264,7 +264,7 @@ For substantive architecture, code-review, or governance work, prefer:
 
 Before finalizing:
 
-- [ ] Recommendations map to specific AI SAFE² v3.1 controls or profile controls.
+- [ ] Recommendations map to specific AI SAFE² v3.5 controls or profile controls.
 - [ ] Historical v3.0 references are preserved when describing introduction history.
 - [ ] ACT tier is assessed for agentic designs.
 - [ ] Enforcement plane is identified where relevant.
@@ -290,4 +290,4 @@ Before finalizing:
 - MCP server: `skills/mcp/README.md`
 - Challenge Lab: `challenges/README.md`
 
-*AI SAFE² v3.1 · Cyber Strategy Institute*
+*AI SAFE² v3.5 · Cyber Strategy Institute*

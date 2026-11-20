@@ -1,4 +1,3 @@
-
 [
   {
     "id": "P1.T1.1",
@@ -6,11 +5,16 @@
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Validate all inputs against predefined schemas; reject malformed or unexpected formats.",
+    "description": "Validate inputs against schemas; reject malformed formats; enforce type checking and content-length restrictions.",
     "risk_level": "High",
     "decision_maker_impact": "Prevents entry-level injection and ensures data integrity for downstream models.",
     "implementation_guidance": "Implement Zod/Pydantic validation at all ingress points.",
-    "related_frameworks": ["OWASP LLM01"]
+    "related_frameworks": [
+      "OWASP LLM01"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T1.2",
@@ -18,35 +22,50 @@
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Detect and block prompt injection attempts (including adversarial detection).",
+    "description": "Detect and block prompt injection (OWASP LLM01); implement adversarial detection; monitor for jailbreaks.",
     "risk_level": "Critical",
     "decision_maker_impact": "Prevents unauthorized instruction overrides and jailbreaks.",
     "implementation_guidance": "Use LLM Guard or NVIDIA NeMo for real-time prompt scanning.",
-    "related_frameworks": ["MITRE AML.T0051"]
+    "related_frameworks": [
+      "MITRE AML.T0051"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T1.3",
-    "name": "Data Quality & Anomaly Detection",
+    "name": "Data Quality Checks",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Detect statistical anomalies and outliers in model input data.",
+    "description": "Validate data integrity; detect statistical anomalies and outliers; flag corrupted data.",
     "risk_level": "Medium",
     "decision_maker_impact": "Identifies potentially poisoned or corrupt data early in the pipeline.",
     "implementation_guidance": "Implement data profiling with outlier detection.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T1.4",
-    "name": "Toxic Content Filtering",
+    "name": "Toxic Content Detection",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Screen and filter toxic, discriminatory, or harmful content.",
+    "description": "Screen for harmful content; implement toxicity scoring; filter based on policy.",
     "risk_level": "High",
     "decision_maker_impact": "Protects brand safety and ensures compliance with ethical policies.",
     "implementation_guidance": "Use Azure Content Safety or Detoxify libraries.",
-    "related_frameworks": ["MIT AI Risk"]
+    "related_frameworks": [
+      "MIT AI Risk"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T1.5",
@@ -54,108 +73,87 @@
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Detect and mask PII and PHI data before processing.",
+    "description": "Auto-detect and mask PII; redact PHI (HIPAA); implement DLP controls; tokenize sensitive fields.",
     "risk_level": "Critical",
     "decision_maker_impact": "Mandatory for GDPR/HIPAA compliance in AI systems.",
     "implementation_guidance": "Deploy Microsoft Presidio for automated redaction.",
-    "related_frameworks": ["ISO 27701"]
+    "related_frameworks": [
+      "ISO 27701"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T1.6",
-    "name": "Baseline Encoding Validation",
+    "name": "Format Normalization",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Standardize text and binary inputs; validate character encodings (UTF-8).",
+    "description": "Standardize input formats; validate character encodings (UTF-8); prevent encoding attacks.",
     "risk_level": "Low",
     "framework_note": "Foundational control for basic interoperability and character safety.",
     "decision_maker_impact": "Reduces technical debt and simple parsing discrepancies.",
     "implementation_guidance": "Normalize encodings at the API gateway level.",
-    "related_frameworks": ["NIST CSF"]
+    "related_frameworks": [
+      "NIST CSF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T1.7",
-    "name": "Dependency & SBOM Verification",
+    "name": "Dependency Verification",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Validate AI dependencies against known CVE databases.",
+    "description": "Validate software dependencies; maintain SBOMs; cross-reference CVE databases.",
     "risk_level": "High",
     "decision_maker_impact": "Mitigates supply chain poisoning via vulnerable libraries.",
     "implementation_guidance": "Scan libraries with Grype or Snyk in CI/CD.",
-    "related_frameworks": ["OWASP LLM05"]
+    "related_frameworks": [
+      "OWASP LLM05"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T1.8",
-    "name": "Adversarial Normalization (NFKC)",
+    "name": "Encoding Validation",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Standardize inputs; enforce NFKC; prevent encoding-based bypasses.",
+    "description": "Enforce normalization forms (NFKC); prevent homoglyph and encoding-based attacks.",
     "risk_level": "High",
     "cross_reference": "P1.T1.6",
     "framework_note": "Advanced evolution targeting homoglyph attacks and invisible character injections.",
     "decision_maker_impact": "Prevents sophisticated bypasses of text filters using visual similarity.",
     "implementation_guidance": "Use ftfy or specialized Unicode normalization libraries.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "related_frameworks": [
+      "MITRE ATLAS"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T1.9",
-    "name": "Artifact Integrity Verification",
+    "name": "Supply Chain Artifact Validation",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Sanitize (Input Validation)",
     "is_gap_filler": false,
-    "description": "Cryptographically verify artifacts; enforce signatures for all objects.",
+    "description": "Cryptographically verify model and dataset authenticity; validate checksums (SHA-256); enforce signature verification.",
     "risk_level": "Critical",
     "decision_maker_impact": "Ensures models and weights haven't been tampered with in transit.",
     "implementation_guidance": "Verify SHA-256 hashes and GPG signatures before load.",
-    "related_frameworks": ["NIST 800-53"]
-  },
-  {
-    "id": "P1.T1.2-ADV",
-    "name": "Supply Chain Artifact Validation",
-    "pillar": "Sanitize & Isolate",
-    "sub_topic": "Sanitize (Supply Chain - v2.1)",
-    "is_gap_filler": true,
-    "description": "A complex control object for deep verification of AI model provenance and dependency mapping.",
-    "risk_level": "Critical",
-    "components": [
-      {
-        "title": "Authenticity Verification (OMS)",
-        "desc": "Cryptographically verify model authenticity using OpenSSF Model Signing (OMS) signatures."
-      },
-      {
-        "title": "Inventory Validation (SBOM)",
-        "desc": "Validate SBOM accuracy and completeness against actual dependencies at runtime."
-      }
+    "related_frameworks": [
+      "NIST 800-53"
     ],
-    "decision_maker_impact": "Ensures total transparency of the AI supply chain, from weights to third-party code.",
-    "implementation_guidance": "Use Cosign for OMS and Syft for SBOM generation/validation.",
-    "related_frameworks": ["ISO 42001 § 8.2.4"]
-  },
-  {
-    "id": "P1.T1.4-ADV",
-    "name": "NHI Secret Hygiene",
-    "pillar": "Sanitize & Isolate",
-    "sub_topic": "Sanitize (NHI Hygiene - v2.1)",
-    "is_gap_filler": true,
-    "description": "Scan AI outputs for embedded credentials, keys, and tokens in real-time.",
-    "risk_level": "Critical",
-    "decision_maker_impact": "Prevents the model from leaking operational secrets to unauthorized users.",
-    "implementation_guidance": "Deploy GitGuardian or TruffleHog scanners as output filters.",
-    "related_frameworks": ["CISA NHI"]
-  },
-  {
-    "id": "P1.T1.5-ADV",
-    "name": "State Fingerprinting",
-    "pillar": "Sanitize & Isolate",
-    "sub_topic": "Sanitize (Memory Security - v2.1)",
-    "is_gap_filler": true,
-    "description": "Implement cryptographic memory fingerprinting (SHA-256) of agent state for integrity.",
-    "risk_level": "High",
-    "decision_maker_impact": "Detects state tampering in long-running agentic sessions.",
-    "implementation_guidance": "Hash and sign agent state before/after retrieval.",
-    "related_frameworks": ["MITRE AML.T0000.001"]
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.1",
@@ -163,11 +161,16 @@
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Deploy agents in isolated execution environments with strict resource limits.",
+    "description": "Deploy agents in isolated environments; implement resource limits (CPU/RAM); use containerization.",
     "risk_level": "Critical",
     "decision_maker_impact": "Limits the blast radius of a compromised agent.",
     "implementation_guidance": "Use gVisor or Firecracker for MicroVM isolation.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.2",
@@ -175,119 +178,135 @@
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Isolate AI workloads in dedicated network segments with strict firewalls.",
+    "description": "Isolate AI workloads in dedicated VLANs; use firewalls and ACLs to restrict traffic.",
     "risk_level": "High",
     "decision_maker_impact": "Prevents lateral movement from AI systems into core databases.",
     "implementation_guidance": "Define VLAN/Subnet boundaries and restrict egress.",
-    "related_frameworks": ["NIST 800-53"]
+    "related_frameworks": [
+      "NIST 800-53"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.3",
-    "name": "API Gateway Enforcement",
+    "name": "API Gateway Restrictions",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Deploy API gateways with authentication, authorization, and rate limiting.",
+    "description": "Deploy gateways with auth; implement rate limiting; restrict access by IP/Role.",
     "risk_level": "High",
     "decision_maker_impact": "Governs access and prevents DoS on internal AI endpoints.",
     "implementation_guidance": "Use Kong or AWS API Gateway for mTLS and auth.",
-    "related_frameworks": ["OWASP API01"]
+    "related_frameworks": [
+      "OWASP API01"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.4",
-    "name": "Model Version Isolation",
+    "name": "Model Versioning & Isolation",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Maintain separate environments for model versions (Dev vs. Prod).",
+    "description": "Maintain separate environments for model versions; isolate production from development; prevent unintended rollbacks.",
     "risk_level": "Medium",
     "decision_maker_impact": "Prevents unvetted models from impacting production stability.",
     "implementation_guidance": "Isolate environments using K8s namespaces.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.5",
-    "name": "Tool Whitelisting",
+    "name": "Function Access Control",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Restrict agent access to tools/functions using Least Privilege.",
+    "description": "Restrict agent access to tools; implement whitelisting; use least privilege.",
     "risk_level": "Critical",
     "decision_maker_impact": "Mitigates 'Excessive Agency' risks.",
     "implementation_guidance": "Use explicit function definition whitelists.",
-    "related_frameworks": ["OWASP LLM08"]
+    "related_frameworks": [
+      "OWASP LLM08"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.6",
-    "name": "Data Access Boundaries",
+    "name": "Data Isolation",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Separate sensitive data from general-purpose data via access controls.",
+    "description": "Separate sensitive data; implement access controls; encrypt at rest and in transit.",
     "risk_level": "High",
     "decision_maker_impact": "Prevents model-based data leakage between tenants.",
     "implementation_guidance": "Implement RBAC/ABAC for data lake access.",
-    "related_frameworks": ["SOC2"]
+    "related_frameworks": [
+      "SOC2"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.7",
-    "name": "Runtime Container Isolation",
+    "name": "Container Security",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Harden container images and implement runtime monitoring.",
+    "description": "Harden container images (minimal base); scan for vulnerabilities; implement runtime monitoring.",
     "risk_level": "High",
     "decision_maker_impact": "Strengthens defense against container breakout exploits.",
     "implementation_guidance": "Use Sysdig or Falco for runtime detection.",
-    "related_frameworks": ["NIST 800-190"]
+    "related_frameworks": [
+      "NIST 800-190"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.8",
-    "name": "Perimeter NGFW Controls",
+    "name": "Firewall Controls",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Deploy NGFW and IDS/IPS to monitor network traffic.",
+    "description": "Deploy NGFWs; implement IDS/IPS; enforce egress filtering.",
     "risk_level": "Medium",
     "decision_maker_impact": "Traditional defense layer for AI infrastructure.",
     "implementation_guidance": "Configure IDS for unusual AI egress patterns.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P1.T2.9",
-    "name": "Credential Vaulting",
+    "name": "Credential Compartmentalization",
     "pillar": "Sanitize & Isolate",
     "sub_topic": "Isolate (Containment)",
     "is_gap_filler": false,
-    "description": "Store API keys and credentials in secure vaults with rotation.",
+    "description": "Store API keys in secure vaults (HashiCorp/AWS); rotate regularly; never in code or prompts.",
     "risk_level": "Critical",
     "decision_maker_impact": "Protects model API keys from exposure.",
     "implementation_guidance": "Use HashiCorp Vault or AWS Secrets Manager.",
-    "related_frameworks": ["ISO 27001"]
-  },
-  {
-    "id": "P1.T2.1-ADV",
-    "name": "Boundary Enforcement",
-    "pillar": "Sanitize & Isolate",
-    "sub_topic": "Isolate (Multi-Agent - v2.1)",
-    "is_gap_filler": true,
-    "description": "Isolate agent-to-agent (A2A) communications in dedicated network zones.",
-    "risk_level": "High",
-    "decision_maker_impact": "Prevents unauthorized cascading actions across an agent swarm.",
-    "implementation_guidance": "Use Service Mesh mTLS for inter-agent traffic.",
-    "related_frameworks": ["MIT Research"]
-  },
-  {
-    "id": "P1.T2.2-ADV",
-    "name": "NHI Access Control",
-    "pillar": "Sanitize & Isolate",
-    "sub_topic": "Isolate (NHI Access - v2.1)",
-    "is_gap_filler": true,
-    "description": "Discover and catalog all NHI and enforce RBAC strictly.",
-    "risk_level": "High",
-    "decision_maker_impact": "Brings non-human identities into the core GRC lifecycle.",
-    "implementation_guidance": "Integrate NHIs into existing IAM governance.",
-    "related_frameworks": ["ISO 42001 § 8.3.3"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.1",
@@ -295,35 +314,50 @@
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Log all AI system activities with tamper-proof timestamps.",
+    "description": "Log all activities with timestamps; capture prompts and API calls; ensure tamper-proof storage.",
     "risk_level": "High",
     "decision_maker_impact": "Foundation for forensics and compliance reporting.",
     "implementation_guidance": "Ship logs to immutable S3 buckets.",
-    "related_frameworks": ["SOC2 CC.7.2"]
+    "related_frameworks": [
+      "SOC2 CC.7.2"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.2",
-    "name": "Drift Monitoring",
+    "name": "Model Performance Monitoring",
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Monitor model performance and detect concept drift.",
+    "description": "Monitor accuracy and precision; detect data and concept drift.",
     "risk_level": "Medium",
     "decision_maker_impact": "Ensures model outputs remain accurate over time.",
     "implementation_guidance": "Use Evidently AI for drift metrics.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.3",
-    "name": "Behavioral Anomaly Detection",
+    "name": "Behavior Verification",
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Establish behavioral baselines and detect anomalies in agent behavior.",
+    "description": "Establish baselines; detect deviations and anomalies; flag unusual patterns.",
     "risk_level": "High",
     "decision_maker_impact": "Identifies hijacked agents or models.",
     "implementation_guidance": "Use ML-based log analysis.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "related_frameworks": [
+      "MITRE ATLAS"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.4",
@@ -331,11 +365,16 @@
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Log reasoning paths and explanations for agent decisions.",
+    "description": "Log decisions (SHAP/LIME); track reasoning paths; enable post-hoc analysis.",
     "risk_level": "Medium",
     "decision_maker_impact": "Provides transparency for high-stakes AI decisions.",
     "implementation_guidance": "Store SHAP/LIME values with every transaction.",
-    "related_frameworks": ["EU AI Act"]
+    "related_frameworks": [
+      "EU AI Act"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.5",
@@ -343,167 +382,186 @@
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Track bias and fairness metrics across demographic groups.",
+    "description": "Measure bias across demographics; track fairness metrics; detect discrimination.",
     "risk_level": "High",
     "decision_maker_impact": "Reduces liability and improves social alignment.",
     "implementation_guidance": "Implement fairness auditing toolkits.",
-    "related_frameworks": ["CSETv1"]
+    "related_frameworks": [
+      "CSETv1"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.6",
-    "name": "Framework Mapping",
+    "name": "Compliance Validation",
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Map controls to SOC2, ISO 27001, and NIST regularly.",
+    "description": "Map controls to SOC2/ISO/NIST; track implementation; conduct periodic audits.",
     "risk_level": "High",
     "decision_maker_impact": "Streamlines multi-framework audits.",
     "implementation_guidance": "Use GRC platforms like Vanta/Drata.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.7",
-    "name": "Traceability & Provenance",
+    "name": "Decision Traceability",
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Maintain chain of custody for all AI decisions.",
+    "description": "Track provenance from input to output; document data sources; maintain chain of custody.",
     "risk_level": "Medium",
     "decision_maker_impact": "Enables legal and ethical accountability.",
     "implementation_guidance": "Log decision lineage metadata.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.8",
-    "name": "User Interaction Audit",
+    "name": "User Interaction Logging",
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Log all user interactions for behavior analysis.",
+    "description": "Log prompts and feedback; track satisfaction metrics; analyze behavior.",
     "risk_level": "Medium",
     "decision_maker_impact": "Aids in detecting internal threats.",
     "implementation_guidance": "Centralize prompt logs.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.9",
-    "name": "AI Change Tracking",
+    "name": "Change Tracking",
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Log changes to configurations, code, and hyperparameters.",
+    "description": "Log configuration changes; track model updates and retraining; version control artifacts.",
     "risk_level": "High",
     "decision_maker_impact": "Prevents unauthorized 'Shadow AI' changes.",
     "implementation_guidance": "Mandate GitOps for AI deployments.",
-    "related_frameworks": ["SOC2"]
+    "related_frameworks": [
+      "SOC2"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T3.10",
-    "name": "Vulnerability Assessment",
+    "name": "Vulnerability Scanning",
     "pillar": "Audit & Inventory",
     "sub_topic": "Audit (Verification)",
     "is_gap_filler": false,
-    "description": "Conduct regular vulnerability scans for AI infrastructure.",
+    "description": "Conduct regular scans; assess threats (MITRE ATLAS); correlate with CVEs.",
     "risk_level": "Critical",
     "decision_maker_impact": "Identifies exposed attack surfaces.",
     "implementation_guidance": "Perform weekly Trivy/Snyk scans.",
-    "related_frameworks": ["MITRE ATLAS"]
-  },
-  {
-    "id": "P2.T1.1-ADV",
-    "name": "NHI Audit Trail",
-    "pillar": "Audit & Inventory",
-    "sub_topic": "Audit (NHI - v2.1)",
-    "is_gap_filler": true,
-    "description": "Log all actions performed by Service Accounts and Agents.",
-    "risk_level": "Critical",
-    "decision_maker_impact": "Ensures bot accountability.",
-    "implementation_guidance": "Tag all logs with bot-unique IDs.",
-    "related_frameworks": ["SOC2"]
-  },
-  {
-    "id": "P2.T1.2-ADV",
-    "name": "State Verification",
-    "pillar": "Audit & Inventory",
-    "sub_topic": "Audit (Agent Verification - v2.1)",
-    "is_gap_filler": true,
-    "description": "Trace decisions back to inputs and verify consensus.",
-    "risk_level": "High",
-    "decision_maker_impact": "Audits the 'thought process' of autonomous swarms.",
-    "implementation_guidance": "Implement tracing with OpenTelemetry.",
-    "related_frameworks": ["NIST AI RMF"]
-  },
-  {
-    "id": "P2.T1.4-ADV",
-    "name": "Poisoning Detection",
-    "pillar": "Audit & Inventory",
-    "sub_topic": "Audit (Memory Security - v2.1)",
-    "is_gap_filler": true,
-    "description": "Audit RAG knowledge bases for poisoned content/trigger phrases.",
-    "risk_level": "Critical",
-    "decision_maker_impact": "Protects the RAG knowledge source.",
-    "implementation_guidance": "Perform periodic semantic integrity audits.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "related_frameworks": [
+      "MITRE ATLAS"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.1",
-    "name": "System Inventory",
+    "name": "AI System Registry",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Catalog all deployed AI systems in a centralized registry.",
+    "description": "Catalog all LLMs, RAGs, and Agents; document owners and criticality.",
     "risk_level": "High",
     "decision_maker_impact": "Visibility into the organizational AI surface area.",
     "implementation_guidance": "Use Cortex or Backstage for cataloging.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.2",
-    "name": "Model Registry",
+    "name": "Model Catalog",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Maintain an inventory of all models with versioning.",
+    "description": "Inventory base and fine-tuned models; track versions and training sets.",
     "risk_level": "Medium",
     "decision_maker_impact": "Stable rollbacks and traceability.",
     "implementation_guidance": "Use MLflow Model Registry.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.3",
-    "name": "Capability Mapping",
+    "name": "Agent Capability Documentation",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Document agent capabilities and autonomy levels.",
+    "description": "Document agent autonomy levels, tools, and decision authority.",
     "risk_level": "High",
     "decision_maker_impact": "Risk-based control allocation based on autonomy.",
     "implementation_guidance": "Define autonomy tiers (1-5).",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.4",
-    "name": "Data Lineage Map",
+    "name": "Data Source Mapping",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Map all data sources feeding AI systems.",
+    "description": "Map data lineage; track refresh rates; identify RAG dependencies.",
     "risk_level": "High",
     "decision_maker_impact": "Compliance with data privacy and retention.",
     "implementation_guidance": "Use data lineage tools.",
-    "related_frameworks": ["GDPR"]
+    "related_frameworks": [
+      "GDPR"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.5",
-    "name": "Endpoint Registry",
+    "name": "API Inventory",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Catalog all APIs and MCP endpoints used by AI.",
+    "description": "Catalog all APIs and MCP endpoints; document auth methods and rate limits.",
     "risk_level": "High",
     "decision_maker_impact": "Reduces shadow API usage.",
     "implementation_guidance": "Maintain an API inventory.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.6",
@@ -511,107 +569,101 @@
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Registry of all tools/plugins accessible to agents.",
+    "description": "Maintain registry of tools and plugins; track permissions and usage.",
     "risk_level": "High",
     "decision_maker_impact": "Governs the 'action' potential of agents.",
     "implementation_guidance": "Inventory plugin permissions.",
-    "related_frameworks": ["OWASP LLM07"]
+    "related_frameworks": [
+      "OWASP LLM07"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.7",
-    "name": "Dependency Inventory",
+    "name": "Dependency Tracking",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Track all software dependencies and transitive risks.",
+    "description": "Track libraries and frameworks; identify transitive dependencies; cross-reference CVEs.",
     "risk_level": "Critical",
     "decision_maker_impact": "Vital for vulnerability patching.",
     "implementation_guidance": "Generate SBOM for all AI services.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.8",
-    "name": "Architecture Mapping",
+    "name": "Architecture Documentation",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Document AI system architectures and flow diagrams.",
+    "description": "Document RAG and MCP architectures and data flows.",
     "risk_level": "Medium",
     "decision_maker_impact": "Essential for threat modeling.",
     "implementation_guidance": "Keep Mermaid diagrams in repos.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.9",
-    "name": "Risk Registry",
+    "name": "Risk Registers",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Maintain a centralized Threat & Risk Register.",
+    "description": "Centralized threat register; link risks to components; track mitigation.",
     "risk_level": "High",
     "decision_maker_impact": "Board-level risk visibility.",
     "implementation_guidance": "Review registry quarterly.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.10",
-    "name": "Baseline Tracking",
+    "name": "Configuration Baselines",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Track configuration baselines and detect drift.",
+    "description": "Establish baselines; track deviations; drift detection.",
     "risk_level": "Medium",
     "decision_maker_impact": "Prevents accidental security degradation.",
     "implementation_guidance": "Use Terraform drift detection.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P2.T4.11",
-    "name": "SBOM Management",
+    "name": "SBOM Generation",
     "pillar": "Audit & Inventory",
     "sub_topic": "Inventory (Asset Mapping)",
     "is_gap_filler": false,
-    "description": "Maintain SBOM for all models and applications.",
+    "description": "Generate SBOMs for all models and applications; correlate with CVEs.",
     "risk_level": "High",
     "decision_maker_impact": "Supply chain transparency.",
     "implementation_guidance": "Automate SBOM updates in CI.",
-    "related_frameworks": ["ISO 42001"]
-  },
-  {
-    "id": "P2.T2.1-ADV",
-    "name": "NHI Registry",
-    "pillar": "Audit & Inventory",
-    "sub_topic": "Inventory (NHI - v2.1)",
-    "is_gap_filler": true,
-    "description": "Registry of NHI with lifecycle tracking.",
-    "risk_level": "High",
-    "decision_maker_impact": "Governs bot/agent identity proliferation.",
-    "implementation_guidance": "Inventory Service Accounts/Bot IDs.",
-    "related_frameworks": ["ISO 42001"]
-  },
-  {
-    "id": "P2.T2.2-ADV",
-    "name": "Swarm Topology Inventory",
-    "pillar": "Audit & Inventory",
-    "sub_topic": "Inventory (Agent Architecture - v2.1)",
-    "is_gap_filler": true,
-    "description": "Document swarm topologies and platform versions.",
-    "risk_level": "Medium",
-    "decision_maker_impact": "Visibility into multi-agent workflows.",
-    "implementation_guidance": "Map swarm communication graphs.",
-    "related_frameworks": ["MIT Research"]
-  },
-  {
-    "id": "P2.T2.3-ADV",
-    "name": "Artifact Registry",
-    "pillar": "Audit & Inventory",
-    "sub_topic": "Inventory (Supply Chain - v2.1)",
-    "is_gap_filler": true,
-    "description": "Registry of artifacts with fingerprints/signing certs.",
-    "risk_level": "High",
-    "decision_maker_impact": "Ensures artifact authenticity.",
-    "implementation_guidance": "Store hashes and cert IDs.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.1",
@@ -619,11 +671,16 @@
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Implement circuit breakers to prevent cascading failures.",
+    "description": "Implement circuit breakers to prevent cascading failures; design graceful degradation.",
     "risk_level": "Critical",
     "decision_maker_impact": "Protects system availability during outages.",
     "implementation_guidance": "Wrap LLM calls in breaker logic.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.2",
@@ -631,155 +688,169 @@
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Define and implement emergency shutdown protocols (Kill Switches).",
+    "description": "Define protocols for runaway agents; implement operator kill switches.",
     "risk_level": "Critical",
     "decision_maker_impact": "Final fallback for rogue agentic AI.",
     "implementation_guidance": "Deploy authenticated kill-switches.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "related_frameworks": [
+      "MITRE ATLAS"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.3",
-    "name": "Failover Strategy",
+    "name": "Fallback Mechanisms",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Design failover strategies for high availability.",
+    "description": "Design failover strategies; implement redundant systems.",
     "risk_level": "High",
     "decision_maker_impact": "Reduces downtime.",
     "implementation_guidance": "Implement multi-region failover.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.4",
-    "name": "Exception Management",
+    "name": "Error Handling",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Implement robust error handling and logging.",
+    "description": "Robust error handling in pipelines; fail-closed vs fail-open policies.",
     "risk_level": "Medium",
     "decision_maker_impact": "Improves operational MTTR.",
     "implementation_guidance": "Log errors with tracing IDs.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.5",
-    "name": "Resource Throttling",
+    "name": "Rate Limiting",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Implement rate limiting and resource throttling.",
+    "description": "Prevent resource exhaustion; throttle API calls and agent actions.",
     "risk_level": "High",
     "decision_maker_impact": "Protects against accidental cost spikes or DoS.",
     "implementation_guidance": "Throtte API calls by tenant.",
-    "related_frameworks": ["OWASP LLM04"]
+    "related_frameworks": [
+      "OWASP LLM04"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.6",
-    "name": "Rollback Procedure",
+    "name": "Rollback Procedures",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Maintain rollback procedures for model updates.",
+    "description": "Version control for artifacts; define rollback criteria.",
     "risk_level": "High",
     "decision_maker_impact": "Stable updates.",
     "implementation_guidance": "Version control all model artifacts.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.7",
-    "name": "Runaway Agent Kill Switches",
+    "name": "Kill Switches for Runaway Agents",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Redundant kill switches for IMMEDIATE agent termination.",
+    "description": "Implement kill switches with tiered authorization to halt agent execution.",
     "risk_level": "Critical",
     "decision_maker_impact": "Governance over autonomous systems.",
     "implementation_guidance": "Validated via quarterly drills.",
-    "related_frameworks": ["ISO 42001 § 8.1"]
+    "related_frameworks": [
+      "ISO 42001 § 8.1"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.8",
-    "name": "Compartmentalization",
+    "name": "Blast Radius Containment",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Compartmentalize AI systems to limit blast radius.",
+    "description": "Compartmentalize systems; define containment zones.",
     "risk_level": "High",
     "decision_maker_impact": "Failure isolation.",
     "implementation_guidance": "Use microservices/isolated containers.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.9",
-    "name": "Defensive Programming",
+    "name": "Safe Defaults",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Design systems with safe default behaviors.",
+    "description": "Design safe behaviors; validate assumptions; fail securely.",
     "risk_level": "Medium",
     "decision_maker_impact": "Security-by-design for AI code.",
     "implementation_guidance": "Perform secure code reviews.",
-    "related_frameworks": ["OWASP"]
+    "related_frameworks": [
+      "OWASP"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T5.10",
-    "name": "IR Playbooks",
+    "name": "Incident Response",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Fail-Safe (Resilience)",
     "is_gap_filler": false,
-    "description": "Develop and test Incident Response Playbooks.",
+    "description": "Develop AI-specific playbooks; define escalation paths.",
     "risk_level": "Critical",
     "decision_maker_impact": "Team preparedness for AI attacks.",
     "implementation_guidance": "Conduct tabletop exercises.",
-    "related_frameworks": ["NIST CSF"]
-  },
-  {
-    "id": "P3.T1.1-ADV",
-    "name": "Distributed Fail-Safe",
-    "pillar": "Fail-Safe & Recovery",
-    "sub_topic": "Fail-Safe (Distributed - v2.1)",
-    "is_gap_filler": true,
-    "description": "Centralized kill switch and quarantine for multi-agent swarms.",
-    "risk_level": "Critical",
-    "decision_maker_impact": "Safety for distributed systems.",
-    "implementation_guidance": "Deploy swarm-wide kill-switch.",
-    "related_frameworks": ["MIT Research"]
-  },
-  {
-    "id": "P3.T1.2-ADV",
-    "name": "NHI Revocation",
-    "pillar": "Fail-Safe & Recovery",
-    "sub_topic": "Fail-Safe (NHI - v2.1)",
-    "is_gap_filler": true,
-    "description": "Automated NHI credential rotation and emergency disable.",
-    "risk_level": "High",
-    "decision_maker_impact": "Rapid bot containment.",
-    "implementation_guidance": "Automate rotation cycles.",
-    "related_frameworks": ["ISO 27001"]
-  },
-  {
-    "id": "P3.T1.3-ADV",
-    "name": "Memory IR",
-    "pillar": "Fail-Safe & Recovery",
-    "sub_topic": "Fail-Safe (Memory - v2.1)",
-    "is_gap_filler": true,
-    "description": "Automated alerts for memory poisoning incidents.",
-    "risk_level": "High",
-    "decision_maker_impact": "Respond to data-level attacks.",
-    "implementation_guidance": "Rollback memory on alert.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "related_frameworks": [
+      "NIST CSF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.1",
-    "name": "State Backups",
+    "name": "Model Backups",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Implement regular backups of models and agent states.",
+    "description": "Regular backups of models and states; geo-diverse storage.",
     "risk_level": "High",
     "decision_maker_impact": "Data preservation.",
     "implementation_guidance": "Schedule model weight backups.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.2",
@@ -787,11 +858,16 @@
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Establish point-in-time recovery for AI datasets.",
+    "description": "Procedures for AI datasets; point-in-time recovery.",
     "risk_level": "High",
     "decision_maker_impact": "Rapid data restoration.",
     "implementation_guidance": "Verify PITR for Vector DBs.",
-    "related_frameworks": ["SOC2"]
+    "related_frameworks": [
+      "SOC2"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.3",
@@ -799,23 +875,33 @@
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Automate backup processes and monitor success/failure.",
+    "description": "Automate backup processes; monitor success and failure.",
     "risk_level": "Medium",
     "decision_maker_impact": "Reliability of backups.",
     "implementation_guidance": "Automate with AWS Backup.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.4",
-    "name": "DR Planning",
+    "name": "Disaster Recovery",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Develop and drill Disaster Recovery plans annually.",
+    "description": "Develop plans; define priorities; conduct drills.",
     "risk_level": "High",
     "decision_maker_impact": "Disaster resilience.",
     "implementation_guidance": "Drill DR scenarios.",
-    "related_frameworks": ["ISO 22301"]
+    "related_frameworks": [
+      "ISO 22301"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.5",
@@ -823,11 +909,16 @@
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Integrate AI continuity into organizational BCP.",
+    "description": "Integrate AI into BCP; define minimum viable services.",
     "risk_level": "Medium",
     "decision_maker_impact": "Corporate-level alignment.",
     "implementation_guidance": "Include AI in corporate BCP docs.",
-    "related_frameworks": ["ISO 22301"]
+    "related_frameworks": [
+      "ISO 22301"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.6",
@@ -835,23 +926,33 @@
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Define and monitor RTO/RPO metrics for AI systems.",
+    "description": "Define objectives; monitor achievement.",
     "risk_level": "Medium",
     "decision_maker_impact": "Defined recovery SLAs.",
     "implementation_guidance": "Document SLAs per AI application.",
-    "related_frameworks": ["SOC2"]
+    "related_frameworks": [
+      "SOC2"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.7",
-    "name": "Recovery Validation",
+    "name": "Testing & Validation",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Conduct regular testing and validation of recovery processes.",
+    "description": "Regular recovery tests; validate backup integrity.",
     "risk_level": "High",
     "decision_maker_impact": "Confidence in recovery plans.",
     "implementation_guidance": "Restore tests once a quarter.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.8",
@@ -859,107 +960,118 @@
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Store backups in geographically separated, encrypted locations.",
+    "description": "Encrypted off-site backups.",
     "risk_level": "High",
     "decision_maker_impact": "Protection against regional disaster.",
     "implementation_guidance": "Use cross-region S3 replication.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.9",
-    "name": "Config Restoration",
+    "name": "Configuration Restoration",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Backup AI configs (IaC) with version control.",
+    "description": "Backup IaC; version control configs.",
     "risk_level": "Medium",
     "decision_maker_impact": "Rapid re-deployment of environments.",
     "implementation_guidance": "Version control Terraform/Helm.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P3.T6.10",
-    "name": "Post-Mortems",
+    "name": "Incident Forensics",
     "pillar": "Fail-Safe & Recovery",
     "sub_topic": "Recovery (Restoration)",
     "is_gap_filler": false,
-    "description": "Conduct forensic analysis and blameless post-mortems.",
+    "description": "Forensic analysis; root cause; blameless post-mortems.",
     "risk_level": "High",
     "decision_maker_impact": "Continuous operational improvement.",
     "implementation_guidance": "Document all AI-related outages.",
-    "related_frameworks": ["NIST CSF"]
-  },
-  {
-    "id": "P3.T2.1-ADV",
-    "name": "Memory Snapshots",
-    "pillar": "Fail-Safe & Recovery",
-    "sub_topic": "Recovery (Agent State - v2.1)",
-    "is_gap_filler": true,
-    "description": "Create point-in-time snapshots of agent memory and RAG bases.",
-    "risk_level": "High",
-    "decision_maker_impact": "Prevents total state loss for bots.",
-    "implementation_guidance": "Snapshot vector DBs daily.",
-    "related_frameworks": ["ISO 42001"]
-  },
-  {
-    "id": "P3.T2.2-ADV",
-    "name": "NHI Credential Recovery",
-    "pillar": "Fail-Safe & Recovery",
-    "sub_topic": "Recovery (NHI - v2.1)",
-    "is_gap_filler": true,
-    "description": "Securely backup NHI credentials with escrow.",
-    "risk_level": "Critical",
-    "decision_maker_impact": "Recovery of machine identities.",
-    "implementation_guidance": "Use key escrow in HSMs.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "NIST CSF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.1",
-    "name": "Human Approval",
+    "name": "Human Approval Workflows",
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Implement HITL workflows for high-risk decisions.",
+    "description": "HITL for high-risk decisions; define approval authorities.",
     "risk_level": "Critical",
     "decision_maker_impact": "The ultimate safeguard for AI actions.",
     "implementation_guidance": "Mandate approval for API POSTs.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.2",
-    "name": "Reasoning Transparency",
+    "name": "Explainability",
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Provide Reasoning chains for AI decisions to operators.",
+    "description": "Provide reasoning chains; implement interpretability techniques.",
     "risk_level": "Medium",
     "decision_maker_impact": "Better operator decision making.",
     "implementation_guidance": "Display 'thoughts' in UI.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.3",
-    "name": "Feedback Loops",
+    "name": "Interactive Feedback",
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Implement RLHF loops to improve model performance.",
+    "description": "RLHF loops; track feedback metrics.",
     "risk_level": "Low",
     "decision_maker_impact": "Iterative accuracy improvement.",
     "implementation_guidance": "Deploy thumbs up/down UI.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.4",
-    "name": "Alert Routing",
+    "name": "Escalation Procedures",
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Define escalation procedures and route alerts by severity.",
+    "description": "Route alerts based on severity; integrate with incident management.",
     "risk_level": "High",
     "decision_maker_impact": "Rapid security response.",
     "implementation_guidance": "Integrate with PagerDuty.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.5",
@@ -967,35 +1079,50 @@
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Enable real-time human intervention and override capabilities.",
+    "description": "Enable override controls; provide visibility dashboards.",
     "risk_level": "Critical",
     "decision_maker_impact": "Control over runaway automation.",
     "implementation_guidance": "Deploy 'Stop' buttons in Ops UI.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.6",
-    "name": "Abuse Monitoring",
+    "name": "User Interaction Oversight",
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Monitor user interactions for abusive or malicious behavior.",
+    "description": "Monitor for abuse and malice; track trust metrics.",
     "risk_level": "High",
     "decision_maker_impact": "Prevents malicious exploit probing.",
     "implementation_guidance": "Scan logs for jailbreak patterns.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.7",
-    "name": "Adversarial Testing",
+    "name": "Red Teaming",
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Conduct regular Red Team exercises and testing.",
+    "description": "Regular adversarial testing; validate security controls.",
     "risk_level": "High",
     "decision_maker_impact": "Security posture validation.",
     "implementation_guidance": "Hire external AI red teams.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "related_frameworks": [
+      "MITRE ATLAS"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.8",
@@ -1003,11 +1130,16 @@
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Establish procedures for high-risk executive approvals.",
+    "description": "Establish acceptance procedures; document compensating controls.",
     "risk_level": "High",
     "decision_maker_impact": "Board-level accountability.",
     "implementation_guidance": "Document in GRC platform.",
-    "related_frameworks": ["ISO 31000"]
+    "related_frameworks": [
+      "ISO 31000"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.9",
@@ -1015,47 +1147,76 @@
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Implement tools for cross-functional governance communication.",
+    "description": "Shared dashboards for Governance, Security, and Engineering.",
     "risk_level": "Low",
     "decision_maker_impact": "Governance team alignment.",
     "implementation_guidance": "Create GRC-specific Slack channels.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T7.10",
-    "name": "Stakeholder Transparency",
+    "name": "Transparency Reporting",
     "pillar": "Engage & Monitor",
     "sub_topic": "Engage (Oversight)",
     "is_gap_filler": false,
-    "description": "Provide transparency reports regarding AI risks.",
+    "description": "Report incidents and risks to stakeholders.",
     "risk_level": "Medium",
     "decision_maker_impact": "Builds customer trust.",
     "implementation_guidance": "Publish annual AI Trust Report.",
-    "related_frameworks": ["ISO 42001"]
-  },
-  {
-    "id": "P4.T1.1-ADV",
-    "name": "Multi-Agent HITL",
-    "pillar": "Engage & Monitor",
-    "sub_topic": "Engage (Multi-Agent - v2.1)",
-    "is_gap_filler": true,
-    "description": "Require human approval for high-impact swarm actions.",
-    "risk_level": "Critical",
-    "decision_maker_impact": "Prevents unmanaged swarm chaos.",
-    "implementation_guidance": "Escalate to human on low consensus score.",
-    "related_frameworks": ["OWASP LLM09"]
-  },
-  {
-    "id": "P4.T1.2-ADV",
-    "name": "NHI Privilege Review",
-    "pillar": "Engage & Monitor",
-    "sub_topic": "Engage (NHI - v2.1)",
-    "is_gap_filler": true,
-    "description": "Require human review for NHI privilege elevation.",
-    "risk_level": "High",
-    "decision_maker_impact": "Prevents unauthorized bot access.",
-    "implementation_guidance": "Mandate approval for bot IAM changes.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "P4.T7.10.R01",
+        "requirement": "Provide proportionate notice, accessible contestation, accountable review and correction or remedy for consequential effects.",
+        "disposition": "normative",
+        "review_id": "C19",
+        "research": "research/043_v35_c19.md"
+      },
+      {
+        "id": "P4.T7.10.R02",
+        "requirement": "Record the observed remedy separately from the operator stop and from a tool-reported success.",
+        "disposition": "normative",
+        "review_id": "C19",
+        "research": "research/043_v35_c19.md"
+      },
+      {
+        "id": "P4.T7.10.R03",
+        "requirement": "Identify affected people absent from the operator approval chain.",
+        "disposition": "normative",
+        "review_id": "C46",
+        "research": "research/070_v35_c46.md"
+      },
+      {
+        "id": "P4.T7.10.R04",
+        "requirement": "Collect proportionate input on impacts and accessibility and disclose its limitations.",
+        "disposition": "normative",
+        "review_id": "C46",
+        "research": "research/070_v35_c46.md"
+      },
+      {
+        "id": "P4.T7.10.R05",
+        "requirement": "Provide an accessible route to challenge, correct or escalate material effects.",
+        "disposition": "normative",
+        "review_id": "C46",
+        "research": "research/070_v35_c46.md"
+      },
+      {
+        "id": "P4.T7.10.R06",
+        "requirement": "Record whether input changed design, deployment, restrictions or remedy.",
+        "disposition": "normative",
+        "review_id": "C46",
+        "research": "research/070_v35_c46.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.1",
@@ -1063,71 +1224,101 @@
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Deploy real-time dashboards for AI KPIs.",
+    "description": "Real-time monitoring; visualize KPIs and trends.",
     "risk_level": "Medium",
     "decision_maker_impact": "Operational visibility.",
     "implementation_guidance": "Visualize with Grafana.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.2",
-    "name": "Anomaly Alerting",
+    "name": "Anomaly Detection",
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Implement ML-based anomaly detection for unusual patterns.",
+    "description": "ML-based detection of unusual patterns; tune thresholds.",
     "risk_level": "High",
     "decision_maker_impact": "Early warning system.",
     "implementation_guidance": "Set thresholds in Prometheus.",
-    "related_frameworks": ["NIST CSF"]
+    "related_frameworks": [
+      "NIST CSF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.3",
-    "name": "SIEM Integration",
+    "name": "Security Logging",
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Log security events and forward to enterprise SIEM.",
+    "description": "Log security events; forward to SIEM; correlate events.",
     "risk_level": "Critical",
     "decision_maker_impact": "Centralized threat detection.",
     "implementation_guidance": "Ship logs to Splunk/Datadog.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.4",
-    "name": "Accuracy Monitoring",
+    "name": "Accuracy & Drift Monitoring",
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Monitor accuracy and alert on degradation.",
+    "description": "Monitor model performance; detect concept drift.",
     "risk_level": "High",
     "decision_maker_impact": "Detects 'Silent' model failures.",
     "implementation_guidance": "Daily accuracy score checks.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.5",
-    "name": "Token Tracking",
+    "name": "Cost Tracking",
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Track token consumption and costs per user/system.",
+    "description": "Monitor token consumption and budget quotas.",
     "risk_level": "Low",
     "decision_maker_impact": "FinOps oversight.",
     "implementation_guidance": "Log tokens in inference database.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.6",
-    "name": "Performance Metrics",
+    "name": "Latency Metrics",
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Monitor system latency and throughput.",
+    "description": "Track response times and throughput.",
     "risk_level": "Low",
     "decision_maker_impact": "Ensures UX SLAs are met.",
     "implementation_guidance": "Track p99 latencies.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.7",
@@ -1135,11 +1326,16 @@
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Track error rates and failure modes.",
+    "description": "Categorize failure modes; automate remediation.",
     "risk_level": "Medium",
     "decision_maker_impact": "Rapid failure resolution.",
     "implementation_guidance": "Alert on elevated 5xx errors.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.8",
@@ -1147,23 +1343,33 @@
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Monitor API usage volumes and enforce quotas.",
+    "description": "Monitor call volumes; alert on exhaustion and abuse.",
     "risk_level": "Medium",
     "decision_maker_impact": "Prevents quota-based system downtime.",
     "implementation_guidance": "Set CloudWatch API alarms.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.9",
-    "name": "Data Quality Metrics",
+    "name": "Data Quality Monitoring",
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Monitor data input quality and detect degradation.",
+    "description": "Monitor input quality; detect degradation.",
     "risk_level": "Medium",
     "decision_maker_impact": "Governs the fuel of the AI system.",
     "implementation_guidance": "Daily data validity scans.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P4.T8.10",
@@ -1171,71 +1377,50 @@
     "pillar": "Engage & Monitor",
     "sub_topic": "Monitor (Detection)",
     "is_gap_filler": false,
-    "description": "Maintain audit logs specifically for compliance frameworks.",
+    "description": "Maintain specific logs for regulatory audits.",
     "risk_level": "High",
     "decision_maker_impact": "Audit-readiness.",
     "implementation_guidance": "Separate compliance log index.",
-    "related_frameworks": ["SOC2"]
-  },
-  {
-    "id": "P4.T2.1-ADV",
-    "name": "Swarm Health Monitoring",
-    "pillar": "Engage & Monitor",
-    "sub_topic": "Monitor (Distributed - v2.1)",
-    "is_gap_filler": true,
-    "description": "Monitor consensus performance of agents in swarms.",
-    "risk_level": "Medium",
-    "decision_maker_impact": "Detects 'deadlock' in agent coordination.",
-    "implementation_guidance": "Track consensus completion speed.",
-    "related_frameworks": ["MIT Research"]
-  },
-  {
-    "id": "P4.T2.2-ADV",
-    "name": "NHI Behavior Alerts",
-    "pillar": "Engage & Monitor",
-    "sub_topic": "Monitor (NHI - v2.1)",
-    "is_gap_filler": true,
-    "description": "Real-time alert on NHI behavioral anomalies.",
-    "risk_level": "High",
-    "decision_maker_impact": "Detection of bot-specific threats.",
-    "implementation_guidance": "Set baselines for bot API calls.",
-    "related_frameworks": ["ISO 42001"]
-  },
-  {
-    "id": "P4.T2.3-ADV",
-    "name": "Memory Drift Monitoring",
-    "pillar": "Engage & Monitor",
-    "sub_topic": "Monitor (Memory - v2.1)",
-    "is_gap_filler": true,
-    "description": "Monitor RAG source integrity and detect embedding space drift.",
-    "risk_level": "High",
-    "decision_maker_impact": "Detects subtle adversarial memory poisoning.",
-    "implementation_guidance": "Track embedding similarity scores.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "related_frameworks": [
+      "SOC2"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.1",
-    "name": "Threat Intel Ingestion",
+    "name": "Threat Intel Integration",
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Integrate external feeds (CVE, MITRE).",
+    "description": "Integrate CVE and MITRE feeds; update threat models.",
     "risk_level": "High",
     "decision_maker_impact": "Proactive threat intelligence.",
     "implementation_guidance": "Automate STIX/TAXII ingest.",
-    "related_frameworks": ["MITRE ATT&CK"]
+    "related_frameworks": [
+      "MITRE ATT&CK"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.2",
-    "name": "Control Updates",
+    "name": "Playbook Updates",
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Update playbooks based on lessons learned.",
+    "description": "Update response plans based on lessons learned.",
     "risk_level": "High",
     "decision_maker_impact": "Continuous defense evolution.",
     "implementation_guidance": "Quarterly playbook review.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.3",
@@ -1243,11 +1428,16 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Retrain models to mitigate drift.",
+    "description": "Retrain to mitigate drift; incorporate human feedback.",
     "risk_level": "Medium",
     "decision_maker_impact": "Maintains decision quality.",
     "implementation_guidance": "Scheduled retraining jobs.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.4",
@@ -1255,11 +1445,16 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Apply security patches for AI libraries.",
+    "description": "Monitor and apply patches for AI frameworks and libraries.",
     "risk_level": "Critical",
     "decision_maker_impact": "Prevents exploit of known vulnerabilities.",
     "implementation_guidance": "Apply patches within 7 days.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.5",
@@ -1267,11 +1462,16 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Update dependencies to address CVEs.",
+    "description": "Update dependencies; prioritize based on risk.",
     "risk_level": "Critical",
     "decision_maker_impact": "Supply chain security.",
     "implementation_guidance": "Automated Dependabot updates.",
-    "related_frameworks": ["SOC2"]
+    "related_frameworks": [
+      "SOC2"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.6",
@@ -1279,107 +1479,84 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Review and update AI policies annually.",
+    "description": "Annual review of governance policies; align with regulations.",
     "risk_level": "Medium",
     "decision_maker_impact": "Regulatory compliance.",
     "implementation_guidance": "Annual policy audit.",
-    "related_frameworks": ["EU AI Act"]
+    "related_frameworks": [
+      "EU AI Act"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.7",
-    "name": "Zero-Day Response",
+    "name": "Emerging Threats",
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Rapid response for emerging zero-day threats.",
+    "description": "Procedures for zero-day threats; threat hunting.",
     "risk_level": "High",
     "decision_maker_impact": "Agile incident response.",
     "implementation_guidance": "Establish a tiger team.",
-    "related_frameworks": ["NIST CSF"]
+    "related_frameworks": [
+      "NIST CSF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.8",
-    "name": "Gaps Assessment",
+    "name": "Capability Enhancements",
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Identify gaps and invest in new capabilities.",
+    "description": "Invest in new tools; pilot security technology.",
     "risk_level": "Medium",
     "decision_maker_impact": "Strategic security roadmap.",
     "implementation_guidance": "Annual capability audit.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.9",
-    "name": "Performance Opt",
+    "name": "Performance Optimization",
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Optimize for latency and cost based on monitoring.",
+    "description": "Optimize latency and cost; implement caching.",
     "risk_level": "Low",
     "decision_maker_impact": "Cost/Performance balance.",
     "implementation_guidance": "Quantize models to reduce latency.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T9.10",
-    "name": "Incident Lessons",
+    "name": "Lessons Learned",
     "pillar": "Evolve & Educate",
     "sub_topic": "Evolve (Adaptation)",
     "is_gap_filler": false,
-    "description": "Conduct post-incident reviews.",
+    "description": "Conduct post-incident reviews; share findings.",
     "risk_level": "High",
     "decision_maker_impact": "Institutional learning.",
     "implementation_guidance": "Document IR outcomes.",
-    "related_frameworks": ["NIST CSF"]
-  },
-  {
-    "id": "P5.T1.1-ADV",
-    "name": "Capability Testing",
-    "pillar": "Evolve & Educate",
-    "sub_topic": "Evolve (Agent - v2.1)",
-    "is_gap_filler": true,
-    "description": "Test new agent capabilities in isolation.",
-    "risk_level": "High",
-    "decision_maker_impact": "Safe rollout of new automation.",
-    "implementation_guidance": "Mandatory sandbox testing.",
-    "related_frameworks": ["ISO 42001"]
-  },
-  {
-    "id": "P5.T1.2-ADV",
-    "name": "OMS Spec Tracking",
-    "pillar": "Evolve & Educate",
-    "sub_topic": "Evolve (Supply Chain - v2.1)",
-    "is_gap_filler": true,
-    "description": "Track OMS and SBOM spec updates.",
-    "risk_level": "Medium",
-    "decision_maker_impact": "Modern supply chain standards.",
-    "implementation_guidance": "Adopt new SBOM formats.",
-    "related_frameworks": ["ISO 42001"]
-  },
-  {
-    "id": "P5.T1.3-ADV",
-    "name": "NHI Lifecycle Evolution",
-    "pillar": "Evolve & Educate",
-    "sub_topic": "Evolve (NHI - v2.1)",
-    "is_gap_filler": true,
-    "description": "Improve NHI secret rotation and lifecycle.",
-    "risk_level": "High",
-    "decision_maker_impact": "Scalable bot security.",
-    "implementation_guidance": "Adopt automated rotation.",
-    "related_frameworks": ["ISO 27001"]
-  },
-  {
-    "id": "P5.T1.4-ADV",
-    "name": "Memory Defenses",
-    "pillar": "Evolve & Educate",
-    "sub_topic": "Evolve (Memory - v2.1)",
-    "is_gap_filler": true,
-    "description": "Update AgentPoison detection algorithms.",
-    "risk_level": "High",
-    "decision_maker_impact": "Response to memory-level R&D.",
-    "implementation_guidance": "Retrain poisoning detection ML.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "related_frameworks": [
+      "NIST CSF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.1",
@@ -1387,35 +1564,79 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Develop programs for AI operators.",
+    "description": "Technical skills; security practices; incident response.",
     "risk_level": "High",
     "decision_maker_impact": "Reduced administrative error.",
     "implementation_guidance": "AI Safety certification.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "P5.T10.1.R01",
+        "requirement": "Publish role-specific build, fix, defend and assess paths with applicable prerequisites.",
+        "disposition": "normative",
+        "review_id": "C50",
+        "research": "research/074_v35_c50.md"
+      },
+      {
+        "id": "P5.T10.1.R02",
+        "requirement": "Provide a low-consequence local fixture before recommending customer-facing or production automation.",
+        "disposition": "normative",
+        "review_id": "C50",
+        "research": "research/074_v35_c50.md"
+      },
+      {
+        "id": "P5.T10.1.R03",
+        "requirement": "Measure false blocks, completion, time to diagnose and recovery alongside safety outcomes.",
+        "disposition": "normative",
+        "review_id": "C50",
+        "research": "research/074_v35_c50.md"
+      },
+      {
+        "id": "P5.T10.1.R04",
+        "requirement": "Offer accessible escalation and recovery instructions and declare unsupported environments.",
+        "disposition": "normative",
+        "review_id": "C50",
+        "research": "research/074_v35_c50.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.2",
-    "name": "AI Awareness",
+    "name": "Security Awareness",
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Conduct security awareness for all users.",
+    "description": "Training for all users on prompt injection and privacy risks.",
     "risk_level": "Critical",
     "decision_maker_impact": "Enterprise-wide risk reduction.",
     "implementation_guidance": "Prompt injection phishing sims.",
-    "related_frameworks": ["HIPAA"]
+    "related_frameworks": [
+      "HIPAA"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.3",
-    "name": "Prompt Engineering Edu",
+    "name": "Safe Prompting",
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Train users on Safe Prompt Engineering.",
+    "description": "Educate on safe engineering practices and jailbreak prevention.",
     "risk_level": "High",
     "decision_maker_impact": "Secure-by-design interactions.",
     "implementation_guidance": "Best practices wikis.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.4",
@@ -1423,23 +1644,33 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Conduct regular IR drills for AI scenarios.",
+    "description": "Conduct regular simulations and tabletops.",
     "risk_level": "High",
     "decision_maker_impact": "Faster incident containment.",
     "implementation_guidance": "Quarterly drills.",
-    "related_frameworks": ["NIST 800-84"]
+    "related_frameworks": [
+      "NIST 800-84"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.5",
-    "name": "Policy Comm",
+    "name": "Policy Communication",
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Communicate AI policies effectively.",
+    "description": "Communicate policies effectively to stakeholders.",
     "risk_level": "Medium",
     "decision_maker_impact": "Compliance clarity.",
     "implementation_guidance": "Policy portal acknowledgments.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.6",
@@ -1447,23 +1678,33 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Participate in industry forums.",
+    "description": "Participate in forums; share best practices.",
     "risk_level": "Low",
     "decision_maker_impact": "Strategic leadership status.",
     "implementation_guidance": "Attend ISAC meetings.",
-    "related_frameworks": ["NIST AI RMF"]
+    "related_frameworks": [
+      "NIST AI RMF"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.7",
-    "name": "Internal Wikis",
+    "name": "Internal Documentation",
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Maintain internal documentation for troubleshooting.",
+    "description": "Maintain Wikis, FAQs, and Runbooks.",
     "risk_level": "Medium",
     "decision_maker_impact": "Institutional knowledge.",
     "implementation_guidance": "Keep Notion repos updated.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.8",
@@ -1471,11 +1712,16 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Require security training for AI vendors.",
+    "description": "Require security training for third-party vendors.",
     "risk_level": "High",
     "decision_maker_impact": "Reduces third-party risk.",
     "implementation_guidance": "Audit vendor training certs.",
-    "related_frameworks": ["SOC2"]
+    "related_frameworks": [
+      "SOC2"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.9",
@@ -1483,70 +1729,1955 @@
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Provide training tailored for devs, ops, and GRC.",
+    "description": "Tailored content for Developers, Operations, and Compliance.",
     "risk_level": "High",
     "decision_maker_impact": "Skill-aligned security.",
     "implementation_guidance": "Dev-specific AI security labs.",
-    "related_frameworks": ["ISO 27001"]
+    "related_frameworks": [
+      "ISO 27001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
     "id": "P5.T10.10",
-    "name": "Accountability Culture",
+    "name": "Culture",
     "pillar": "Evolve & Educate",
     "sub_topic": "Educate (Culture)",
     "is_gap_filler": false,
-    "description": "Foster a culture of AI safety.",
+    "description": "Foster responsibility; reward secure practices.",
     "risk_level": "High",
     "decision_maker_impact": "Cultural resilience.",
     "implementation_guidance": "Incentivize safe AI practices.",
-    "related_frameworks": ["ISO 42001"]
+    "related_frameworks": [
+      "ISO 42001"
+    ],
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
-    "id": "P5.T2.1-ADV",
-    "name": "Swarm Certification",
-    "pillar": "Evolve & Educate",
-    "sub_topic": "Educate (Agent - v2.1)",
-    "is_gap_filler": true,
-    "description": "Certify agent operators and swarm managers.",
-    "risk_level": "Medium",
-    "decision_maker_impact": "Skilled agentic oversight.",
-    "implementation_guidance": "Red team simulations for ops.",
-    "related_frameworks": ["ISO 42001"]
-  },
-  {
-    "id": "P5.T2.2-ADV",
-    "name": "Machine ID Awareness",
-    "pillar": "Evolve & Educate",
-    "sub_topic": "Educate (NHI - v2.1)",
-    "is_gap_filler": true,
-    "description": "Train teams on NHI-specific threats.",
+    "id": "P1.T1.2_ADV",
+    "name": "Supply Chain Artifact Validation (OpenSSF OMS)",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Sanitize",
     "risk_level": "Critical",
-    "decision_maker_impact": "Prevents secret exposure by bots.",
-    "implementation_guidance": "Lab-based secret hygiene sims.",
-    "related_frameworks": ["CISA NHI"]
+    "is_gap_filler": false,
+    "description": "Cryptographic model verification using Sigstore/Cosign; SBOM validation; provenance chain; SHA-256 model fingerprinting.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
-    "id": "P5.T2.3-ADV",
-    "name": "Model Signing Culture",
-    "pillar": "Evolve & Educate",
-    "sub_topic": "Educate (Supply Chain - v2.1)",
-    "is_gap_filler": true,
-    "description": "Train teams on OMS and SBOM generation.",
-    "risk_level": "High",
-    "decision_maker_impact": "Supply chain integrity focus.",
-    "implementation_guidance": "Integrate OMS in workshops.",
-    "related_frameworks": ["ISO 42001"]
+    "id": "P1.T1.4_ADV",
+    "name": "NHI Secret Validation",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Sanitize",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Detect embedded credentials/tokens in AI outputs; GitGuardian integration for real-time secret detection.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
   },
   {
-    "id": "P5.T2.4-ADV",
-    "name": "Poisoning Awareness",
-    "pillar": "Evolve & Educate",
-    "sub_topic": "Educate (Memory - v2.1)",
-    "is_gap_filler": true,
-    "description": "Educate teams on RAG memory poisoning.",
+    "id": "P1.T1.5_ADV",
+    "name": "Memory-Specific Attack Mitigation",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Sanitize",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Cryptographic memory fingerprinting; thread injection prevention; semantic similarity analysis for gradual RAG poison.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P1.T2.1_ADV",
+    "name": "Multi-Agent Boundary Enforcement",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Isolate",
     "risk_level": "High",
-    "decision_maker_impact": "Data integrity mindfulness.",
-    "implementation_guidance": "Showcase AgentPoison TTPs.",
-    "related_frameworks": ["MITRE ATLAS"]
+    "is_gap_filler": false,
+    "description": "Isolate Agent-to-Agent communications; auto-quarantine anomalous agents; P2P trust scoring.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P1.T2.2_ADV",
+    "name": "NHI Access Control",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Isolate",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Catalog all service accounts and agents; assign minimum permissions to NHI entities; automated decommissioning.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P1.T1.10",
+    "name": "Indirect Injection Surface Coverage",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Sanitize",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Enumerate every non-prompt input channel the agent processes and apply the same sanitization rigor as direct user input.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "S1.3",
+    "name": "Semantic Isolation Boundary Enforcement",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Isolate",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Architecturally separate trusted system instruction context from untrusted content processing at the inference layer.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "S1.3.R01",
+        "requirement": "Preserve provenance, authority scope, expiry and trust classification across agent messages, plans, files, approvals and logs.",
+        "disposition": "normative",
+        "review_id": "C12",
+        "research": "research/036_v35_c12.md"
+      },
+      {
+        "id": "S1.3.R02",
+        "requirement": "Prevent agent-to-agent handoffs and shared-source agreement from silently establishing authorization or independent corroboration.",
+        "disposition": "normative",
+        "review_id": "C12",
+        "research": "research/036_v35_c12.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "S1.4",
+    "name": "Adversarial Input Fuzzing Pipeline",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Sanitize",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Integrate automated adversarial testing into CI/CD — systematic attack probe battery before every model update and deployment.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "S1.4.R01",
+        "requirement": "Cover every enabled modality, including OCR, images, metadata, audio, markup and encoded content.",
+        "disposition": "normative",
+        "review_id": "C15",
+        "research": "research/039_v35_c15.md"
+      },
+      {
+        "id": "S1.4.R02",
+        "requirement": "Validate generated commands, SQL, URLs, paths and tool arguments against the destination boundary before execution.",
+        "disposition": "normative",
+        "review_id": "C15",
+        "research": "research/039_v35_c15.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "S1.5",
+    "name": "Memory Governance Boundary Controls",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Sanitize",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Every write to persistent agent memory requires authorization, sanitization with input-equivalent rigor, and an append-only audit log entry.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "S1.5.R01",
+        "requirement": "Assign memory provenance, permitted uses, tenant/purpose scope, owner and expiry at admission.",
+        "disposition": "normative",
+        "review_id": "C13",
+        "research": "research/037_v35_c13.md"
+      },
+      {
+        "id": "S1.5.R02",
+        "requirement": "Quarantine instruction-bearing untrusted entries and propagate invalidation to derived state, replicas, exports and restores.",
+        "disposition": "normative",
+        "review_id": "C13",
+        "research": "research/037_v35_c13.md"
+      },
+      {
+        "id": "S1.5.R03",
+        "requirement": "Attach verified, failed, disputed, superseded or unknown outcome status to reusable artifacts and durable entries.",
+        "disposition": "normative",
+        "review_id": "C39",
+        "research": "research/063_v35_c39.md"
+      },
+      {
+        "id": "S1.5.R04",
+        "requirement": "Preserve correction links, original evidence and reason for status changes.",
+        "disposition": "normative",
+        "review_id": "C39",
+        "research": "research/063_v35_c39.md"
+      },
+      {
+        "id": "S1.5.R05",
+        "requirement": "Retrieval must surface an applicable correction with the original claim and block superseded instructions from silently regaining authority.",
+        "disposition": "normative",
+        "review_id": "C39",
+        "research": "research/063_v35_c39.md"
+      },
+      {
+        "id": "S1.5.R06",
+        "requirement": "Carry correction state through summarization, export, replica restore and derivative generation.",
+        "disposition": "normative",
+        "review_id": "C39",
+        "research": "research/063_v35_c39.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "S1.6",
+    "name": "Cognitive Injection Sanitization",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Sanitize",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Semantic intent analysis layer that detects multi-turn behavioral conditioning, role confusion, and few-shot pattern implanting beyond pattern-matching filters.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "S1.7",
+    "name": "No-Code / Low-Code Platform Security",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Sanitize",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "First dedicated governance standard for no-code AI workflow platforms: sandbox isolation, credential scoping, template supply chain, CVE patching as P1.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P2.T1.1_ADV",
+    "name": "NHI Activity Logging",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Audit",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Log all actions by service accounts and agents; track credential usage; SIEM integration.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P2.T1.2_ADV",
+    "name": "Agent Behavior Verification",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Audit",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Verify multi-agent voting mechanisms; track memory state across interactions; SHA-256 state hashing.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P2.T1.3_ADV",
+    "name": "Supply Chain Audit",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Audit",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Verify OpenSSF OMS signatures; validate SBOM completeness against actual dependencies.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P2.T1.4_ADV",
+    "name": "Memory Poisoning Detection",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Audit",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Audit knowledge bases for poisoned content; detect adversarial trigger phrases.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P2.T2.1_ADV",
+    "name": "NHI Registry",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Inventory",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Automated discovery of NHI; lifecycle tracking from creation to decommissioning; fingerprinting.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P2.T2.2_ADV",
+    "name": "Agent Architecture Inventory",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Inventory",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Document multi-agent communication patterns; track orchestration frameworks.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "A2.3",
+    "name": "Model Lineage Provenance Ledger",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Audit",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Cryptographic chain of custody from base model through every fine-tuning stage to production; extends OpenSSF OMS.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "A2.4",
+    "name": "Dynamic Agent State Inventory",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Inventory",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Real-time registry of every deployed agent with owner_of_record, ACT tier, tool authorizations, hear_agent_of_record, and control_plane_id.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "A2.5",
+    "name": "Semantic Execution Trace Logging",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Audit",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Captures full agent execution trace: reasoning chain, every tool call with parameters, every memory operation — written to an append-only store the agent cannot modify.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "A2.5.R01",
+        "requirement": "Inventory models, data, routes, skills, policy bundles, tools, evaluators and their deployment dependencies.",
+        "disposition": "normative",
+        "review_id": "C21",
+        "research": "research/045_v35_c21.md"
+      },
+      {
+        "id": "A2.5.R02",
+        "requirement": "Minimize evidence content, bound access and retention, and preserve sufficient scope for reconstruction.",
+        "disposition": "normative",
+        "review_id": "C21",
+        "research": "research/045_v35_c21.md"
+      },
+      {
+        "id": "A2.5.R03",
+        "requirement": "Distinguish rights and policy decisions for training, retrieval, generation, publication and downstream reuse.",
+        "disposition": "normative",
+        "review_id": "C45",
+        "research": "research/069_v35_c45.md"
+      },
+      {
+        "id": "A2.5.R04",
+        "requirement": "Record declaration freshness, conflicting evidence and uncertainty without inferring permission from UNKNOWN.",
+        "disposition": "normative",
+        "review_id": "C45",
+        "research": "research/069_v35_c45.md"
+      },
+      {
+        "id": "A2.5.R05",
+        "requirement": "Route deletion, retention, security evidence and transparency conflicts to an accountable decision maker.",
+        "disposition": "normative",
+        "review_id": "C45",
+        "research": "research/069_v35_c45.md"
+      },
+      {
+        "id": "A2.5.R06",
+        "requirement": "Propagate approved correction/deletion decisions to applicable derived stores and record justified retention exceptions.",
+        "disposition": "normative",
+        "review_id": "C45",
+        "research": "research/069_v35_c45.md"
+      },
+      {
+        "id": "A2.5.R07",
+        "requirement": "Return canonical IDs, source revision, applicability, parent inheritance and evidence status in machine queries.",
+        "disposition": "normative",
+        "review_id": "C52",
+        "research": "research/076_v35_c52.md"
+      },
+      {
+        "id": "A2.5.R08",
+        "requirement": "Link each requirement to a test or declared verification gap and a supported repair or recovery path.",
+        "disposition": "normative",
+        "review_id": "C52",
+        "research": "research/076_v35_c52.md"
+      },
+      {
+        "id": "A2.5.R09",
+        "requirement": "Prevent ambiguous aliases and inferred crosswalk chains from producing authoritative compliance answers.",
+        "disposition": "normative",
+        "review_id": "C52",
+        "research": "research/076_v35_c52.md"
+      },
+      {
+        "id": "A2.5.R10",
+        "requirement": "Bind output to the assessed system and retain explicit unknown, partial, stale and unsupported states.",
+        "disposition": "normative",
+        "review_id": "C52",
+        "research": "research/076_v35_c52.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "A2.6",
+    "name": "RAG Corpus Diff Tracking",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Audit",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Hash-verified change log for the retrieval layer; correlates behavioral changes to corpus changes automatically.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P3.T1.1_ADV",
+    "name": "Distributed Agent Fail-Safe",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Fail-Safe",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Centralized kill switch for multi-agent systems; auto-quarantine of malicious agents; cascading failure prevention.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P3.T1.2_ADV",
+    "name": "NHI Revocation",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Fail-Safe",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Automated credential rotation; immediate emergency disabling of service accounts.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P3.T1.3_ADV",
+    "name": "Memory Poisoning Response",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Fail-Safe",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Real-time alerts on RAG contamination; agent quarantine; compromised source isolation.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P3.T2.1_ADV",
+    "name": "Agent State Recovery",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Recovery",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Point-in-time snapshots of agent memory; version control for vector DBs.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P3.T2.2_ADV",
+    "name": "NHI Credential Recovery",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Recovery",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Secure escrow mechanisms for credentials; HSM integration for key protection.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "F3.2",
+    "name": "Agent Recursion Limit Governor",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Fail-Safe",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Hard cap on tool-calling depth enforced at the API gateway layer — not the system prompt. Default maximum 4. Fail-closed.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "F3.3",
+    "name": "Swarm Quorum Abort Mechanism",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Fail-Safe",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Decentralized threshold-based abort: when a configurable quorum of swarm agents agree the task should stop, coordinated shutdown proceeds without a centralized kill signal.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "F3.3.R01",
+        "requirement": "Define membership and independence for quorum decisions, including source overlap and common-model failure.",
+        "disposition": "normative",
+        "review_id": "C23",
+        "research": "research/047_v35_c23.md"
+      },
+      {
+        "id": "F3.3.R02",
+        "requirement": "Prevent an agent from manufacturing approval through spawned votes; retain an independent emergency stop.",
+        "disposition": "normative",
+        "review_id": "C23",
+        "research": "research/047_v35_c23.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "F3.4",
+    "name": "Behavioral Drift Baseline & Rollback",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Fail-Safe",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Establish measurable behavioral baselines with defined probe sets; automated rollback when drift exceeds configurable thresholds.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "F3.4.R01",
+        "requirement": "Record actual model/provider/route identities and verify that fallback preserves applicable policy and authority.",
+        "disposition": "normative",
+        "review_id": "C17",
+        "research": "research/041_v35_c17.md"
+      },
+      {
+        "id": "F3.4.R02",
+        "requirement": "Reassess material substitutions and exercise approved degraded operation without uncontrolled endpoint replacement.",
+        "disposition": "normative",
+        "review_id": "C17",
+        "research": "research/041_v35_c17.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "F3.5",
+    "name": "Multi-Agent Cascade Containment",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Fail-Safe",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Limits the blast radius of agent failures in pipeline and orchestrator architectures; failed agents isolated so downstream agents receive clean error signals.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P4.T1.1_ADV",
+    "name": "Multi-Agent Approval",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Engage",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Human review when agents disagree; human gate for financial and system-level actions.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P4.T1.2_ADV",
+    "name": "NHI Privilege Review",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Engage",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "JIT access for temporary privilege elevation; baseline validation for requests.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P4.T2.1_ADV",
+    "name": "Distributed Agent Monitoring",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Monitor",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Monitor availability and responsiveness of agents; track swarm topology and agreement rates.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P4.T2.2_ADV",
+    "name": "NHI Monitoring",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Monitor",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Real-time NHI activity dashboard; detect unusual API call patterns and geo-location anomalies.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P4.T2.3_ADV",
+    "name": "Memory Poisoning Monitor",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Monitor",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Monitor RAG source integrity; detect embedding drift toward adversarial regions.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "M4.4",
+    "name": "Adversarial Behavior Detection Pipeline",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Monitor",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Continuously probes deployed agents with adversarial inputs and monitors behavioral responses; attack patterns from red-team repository feed detection rules automatically.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "M4.5",
+    "name": "Tool-Misuse Detection Controls",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Monitor",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Establishes tool invocation baselines; detects tool squatting, unexpected tool calls, anomalous parameters, and invocation frequency spikes.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "M4.6",
+    "name": "Emergent Behavior Anomaly Detection",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Monitor",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Classifies behavioral novelty — new task types, unexpected tool sequences, systematic decision bias — as security-relevant signals requiring governance review.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "M4.7",
+    "name": "Jailbreak & Injection Telemetry Layer",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Monitor",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Unified logging and classification for all jailbreak attempts by technique: direct injection, indirect injection, cognitive injection, encoding bypass. Feeds E5.4 artifact repository.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "M4.8",
+    "name": "Cloud AI Platform-Specific Monitoring",
+    "pillar": "Engage & Monitor",
+    "sub_topic": "Monitor",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Monitors Bedrock UpdateGuardrail and UpdateDataSource APIs; Azure AI Foundry configuration changes; platform attack paths that standard CloudTrail monitoring misses.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P5.T1.1_ADV",
+    "name": "Swarm Evolution",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Evolve",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Test new agent capabilities in isolation; improve consensus logic based on data.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P5.T1.2_ADV",
+    "name": "Supply Chain Evolution",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Evolve",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Track OpenSSF Model Signing specification updates; align with ISO/NIST supply chain rules.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P5.T1.3_ADV",
+    "name": "NHI Posture",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Evolve",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Optimize provisioning and rotation; integrate NHI-specific threat feeds.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P5.T1.4_ADV",
+    "name": "Memory Defense Evolution",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Evolve",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Update poison detection algorithms based on new research; architecture reviews for memory attacks.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P5.T2.1_ADV",
+    "name": "Swarm Training",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Educate",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Swarm Manager certifications; red team simulations targeting multi-agent systems.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P5.T2.2_ADV",
+    "name": "NHI Awareness",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Educate",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Credential theft and privilege escalation training; secret hygiene education.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P5.T2.3_ADV",
+    "name": "Supply Chain Culture",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Educate",
+    "risk_level": "Medium",
+    "is_gap_filler": false,
+    "description": "Model signing training; SBOM generation and validation education.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "P5.T2.4_ADV",
+    "name": "Memory Awareness",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Educate",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "RAG security best practices; poisoning awareness and detection training.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "E5.1",
+    "name": "Continuous Adversarial Evaluation Cadence",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Evolve",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Mandatory evaluation gates triggered by model updates, prompt changes, tool additions, and quarterly cadence — tests the current system, not the system as deployed months ago.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "E5.1.R01",
+        "requirement": "Protect evaluation inputs, test selection, graders and live monitors from agent modification.",
+        "disposition": "normative",
+        "review_id": "C16",
+        "research": "research/040_v35_c16.md"
+      },
+      {
+        "id": "E5.1.R02",
+        "requirement": "Evaluate actions and effects independently of model justification; record shared-source and evaluation-awareness limitations.",
+        "disposition": "normative",
+        "review_id": "C16",
+        "research": "research/040_v35_c16.md"
+      },
+      {
+        "id": "E5.1.R03",
+        "requirement": "Document the validity, limitations, affected population and privacy of candidate cognitive and evaluator measurements before using them as gates.",
+        "disposition": "research",
+        "review_id": "C32",
+        "research": "research/056_v35_c32.md"
+      },
+      {
+        "id": "E5.1.R04",
+        "requirement": "Preserve contrary evidence and speculative status; threshold adoption requires a scoped validation decision.",
+        "disposition": "research",
+        "review_id": "C32",
+        "research": "research/056_v35_c32.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "E5.2",
+    "name": "Capability Emergence Review Process",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Evolve",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Structured governance for emergent agent capabilities: Tier 1 document, Tier 2 security review, Tier 3 board approval, Tier 4 suspend pending investigation.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "E5.2.R01",
+        "requirement": "Record authorization and provenance for training, fine-tuning and derived copies, with applicable privacy and extraction evaluations.",
+        "disposition": "normative",
+        "review_id": "C22",
+        "research": "research/046_v35_c22.md"
+      },
+      {
+        "id": "E5.2.R02",
+        "requirement": "Reassess changes in model, prompt, data, memory policy, tools and effective capability before consequential use.",
+        "disposition": "normative",
+        "review_id": "C22",
+        "research": "research/046_v35_c22.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "E5.3",
+    "name": "Evaluation-Safe Pattern Library",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Educate",
+    "risk_level": "Medium",
+    "is_gap_filler": false,
+    "description": "Validated reference implementations for all AI SAFE2 controls with platform-specific variants for Bedrock, Azure AI, LangGraph, AutoGen, n8n, and CrewAI.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "E5.4",
+    "name": "Red-Team Artifact Repository",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Evolve",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Structured schema for all red-team findings; required deliverable from every exercise; integrated into E5.1 evaluation cadence for continuous reuse.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "S1.8",
+    "name": "Pre-Trust Initialization Boundary",
+    "pillar": "Sanitize & Isolate",
+    "sub_topic": "Pre-Trust Initialization Boundary",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Before trust is established, prevent project or externally supplied hooks, helpers, plugins, package scripts, credential reads and network callbacks from executing.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "S1.8.R01",
+        "requirement": "Before trust is established, prevent project or externally supplied hooks, helpers, plugins, package scripts, credential reads and network callbacks from executing.",
+        "disposition": "normative",
+        "review_id": "C02",
+        "research": "research/026_v35_c02.md"
+      },
+      {
+        "id": "S1.8.R02",
+        "requirement": "Separate preview and discovery from execution and credential access; inventory all enabled startup paths.",
+        "disposition": "normative",
+        "review_id": "C02",
+        "research": "research/026_v35_c02.md"
+      },
+      {
+        "id": "S1.8.R03",
+        "requirement": "Exercise hostile synthetic projects and preserve process, file and network observations together with a valid trusted-project control.",
+        "disposition": "normative",
+        "review_id": "C02",
+        "research": "research/026_v35_c02.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "F3.6",
+    "name": "Aggregate Consumable-Authority Ceiling",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Aggregate Consumable-Authority Ceiling",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Reserve shared task and descendant resource budgets before admitting concurrent work; account for outstanding and settled consumption.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "F3.6.R01",
+        "requirement": "Reserve shared task and descendant resource budgets before admitting concurrent work; account for outstanding and settled consumption.",
+        "disposition": "normative",
+        "review_id": "C05",
+        "research": "research/029_v35_c05.md"
+      },
+      {
+        "id": "F3.6.R02",
+        "requirement": "Declare units, accountable owner, concurrency, retries, expiry and treatment of delayed or unknown consumption.",
+        "disposition": "normative",
+        "review_id": "C05",
+        "research": "research/029_v35_c05.md"
+      },
+      {
+        "id": "F3.6.R03",
+        "requirement": "Reject admission beyond the aggregate envelope, reconcile cancellation and settlement idempotently, and define safe handling of partially committed effects.",
+        "disposition": "normative",
+        "review_id": "C05",
+        "research": "research/029_v35_c05.md"
+      },
+      {
+        "id": "F3.6.R04",
+        "requirement": "Identify material infrastructure and environmental constraints for the deployment.",
+        "disposition": "normative",
+        "review_id": "C47",
+        "research": "research/071_v35_c47.md"
+      },
+      {
+        "id": "F3.6.R05",
+        "requirement": "Record measured, provider-reported, estimated and unknown resource use separately.",
+        "disposition": "normative",
+        "review_id": "C47",
+        "research": "research/071_v35_c47.md"
+      },
+      {
+        "id": "F3.6.R06",
+        "requirement": "Apply justified limits or procurement restrictions and recheck after scaling or model changes.",
+        "disposition": "normative",
+        "review_id": "C47",
+        "research": "research/071_v35_c47.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "F3.7",
+    "name": "Environment Binding and Assertion",
+    "pillar": "Fail-Safe & Recovery",
+    "sub_topic": "Environment Binding and Assertion",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Bind action authority to a verified environment, tenant and resource identity.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "F3.7.R01",
+        "requirement": "Bind action authority to a verified environment, tenant and resource identity.",
+        "disposition": "normative",
+        "review_id": "C34",
+        "research": "research/058_v35_c34.md"
+      },
+      {
+        "id": "F3.7.R02",
+        "requirement": "Require an independently issued environment assertion for destructive or material operations.",
+        "disposition": "normative",
+        "review_id": "C34",
+        "research": "research/058_v35_c34.md"
+      },
+      {
+        "id": "F3.7.R03",
+        "requirement": "Refuse a mismatched, expired or unknown environment assertion and prevent agent self-issuance.",
+        "disposition": "normative",
+        "review_id": "C34",
+        "research": "research/058_v35_c34.md"
+      },
+      {
+        "id": "F3.7.R04",
+        "requirement": "Revalidate after a route, account, region, resource alias or environment change.",
+        "disposition": "normative",
+        "review_id": "C34",
+        "research": "research/058_v35_c34.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "A2.7",
+    "name": "Idempotency and Side-Effect Ledger",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Idempotency and Side-Effect Ledger",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Bind each idempotency key to task, operation, destination and canonical action parameters.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "A2.7.R01",
+        "requirement": "Define transaction boundaries, shared-state ownership, locks, conflict handling, retries and compensation.",
+        "disposition": "normative",
+        "review_id": "C18",
+        "research": "research/042_v35_c18.md"
+      },
+      {
+        "id": "A2.7.R02",
+        "requirement": "Preserve unknown outcomes until an authoritative state observation or accountable reconciliation resolves them.",
+        "disposition": "normative",
+        "review_id": "C18",
+        "research": "research/042_v35_c18.md"
+      },
+      {
+        "id": "A2.7.R03",
+        "requirement": "Bind each idempotency key to task, operation, destination and canonical action parameters.",
+        "disposition": "normative",
+        "review_id": "C35",
+        "research": "research/059_v35_c35.md"
+      },
+      {
+        "id": "A2.7.R04",
+        "requirement": "Reserve and commit the operation atomically where supported; reject key reuse for a different action.",
+        "disposition": "normative",
+        "review_id": "C35",
+        "research": "research/059_v35_c35.md"
+      },
+      {
+        "id": "A2.7.R05",
+        "requirement": "Reconcile ambiguous results against destination state before retrying an irreversible effect.",
+        "disposition": "normative",
+        "review_id": "C35",
+        "research": "research/059_v35_c35.md"
+      },
+      {
+        "id": "A2.7.R06",
+        "requirement": "Define retention, collision handling, timeout, partial completion and compensation semantics.",
+        "disposition": "normative",
+        "review_id": "C35",
+        "research": "research/059_v35_c35.md"
+      },
+      {
+        "id": "A2.7.R07",
+        "requirement": "Return the recorded result for a completed identical request without executing it again.",
+        "disposition": "normative",
+        "review_id": "C35",
+        "research": "research/059_v35_c35.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "A2.8",
+    "name": "Verified Outcome Contract",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Verified Outcome Contract",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Declare the external postcondition and its authoritative observation method.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "A2.8.R01",
+        "requirement": "Declare the external postcondition and its authoritative observation method.",
+        "disposition": "normative",
+        "review_id": "C36",
+        "research": "research/060_v35_c36.md"
+      },
+      {
+        "id": "A2.8.R02",
+        "requirement": "Distinguish attempted, accepted, committed, independently verified, failed and unknown outcomes.",
+        "disposition": "normative",
+        "review_id": "C36",
+        "research": "research/060_v35_c36.md"
+      },
+      {
+        "id": "A2.8.R03",
+        "requirement": "Bind the observation to the action, target, revision and observation time.",
+        "disposition": "normative",
+        "review_id": "C36",
+        "research": "research/060_v35_c36.md"
+      },
+      {
+        "id": "A2.8.R04",
+        "requirement": "Prevent a tool success response or agent completion message from alone satisfying the postcondition.",
+        "disposition": "normative",
+        "review_id": "C36",
+        "research": "research/060_v35_c36.md"
+      },
+      {
+        "id": "A2.8.R05",
+        "requirement": "Scope verification frequency and retention to consequence and preserve unknown coverage.",
+        "disposition": "normative",
+        "review_id": "C36",
+        "research": "research/060_v35_c36.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "E5.5",
+    "name": "Declared Success Criteria Gate",
+    "pillar": "Evolve & Educate",
+    "sub_topic": "Declared Success Criteria Gate",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Declare intended benefit, observable success, prohibited effects and accepted uncertainty before consequential operation.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "E5.5.R01",
+        "requirement": "Declare intended benefit, observable success, prohibited effects and accepted uncertainty before consequential operation.",
+        "disposition": "normative",
+        "review_id": "C37",
+        "research": "research/061_v35_c37.md"
+      },
+      {
+        "id": "E5.5.R02",
+        "requirement": "Use executable assertions where feasible and identify the responsible human rubric when judgment remains necessary.",
+        "disposition": "normative",
+        "review_id": "C37",
+        "research": "research/061_v35_c37.md"
+      },
+      {
+        "id": "E5.5.R03",
+        "requirement": "Bind criteria to the workflow version and prevent the acting agent from relaxing them after observing its result.",
+        "disposition": "normative",
+        "review_id": "C37",
+        "research": "research/061_v35_c37.md"
+      },
+      {
+        "id": "E5.5.R04",
+        "requirement": "Keep task completion, safety, utility and cost as separate outcomes.",
+        "disposition": "normative",
+        "review_id": "C37",
+        "research": "research/061_v35_c37.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "A2.9",
+    "name": "Evidence-Based Failure Attribution",
+    "pillar": "Audit & Inventory",
+    "sub_topic": "Evidence-Based Failure Attribution",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Record failures by environment, build, transport, harness, application, postprocessing, publication and applicable runtime boundary.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "A2.9.R01",
+        "requirement": "Record failures by environment, build, transport, harness, application, postprocessing, publication and applicable runtime boundary.",
+        "disposition": "normative",
+        "review_id": "C38",
+        "research": "research/062_v35_c38.md"
+      },
+      {
+        "id": "A2.9.R02",
+        "requirement": "Attach observations, competing explanations and unavailable evidence to each proposed failure location.",
+        "disposition": "normative",
+        "review_id": "C38",
+        "research": "research/062_v35_c38.md"
+      },
+      {
+        "id": "A2.9.R03",
+        "requirement": "Keep ranked hypotheses distinct from verified causes and explicit unknown states.",
+        "disposition": "normative",
+        "review_id": "C38",
+        "research": "research/062_v35_c38.md"
+      },
+      {
+        "id": "A2.9.R04",
+        "requirement": "Link each accepted diagnosis to a repair and a repeat of the relevant failing case.",
+        "disposition": "normative",
+        "review_id": "C38",
+        "research": "research/062_v35_c38.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.1",
+    "name": "Agent Failure Mode Taxonomy",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Classification",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Classify observed agent failures by actor/origin, input surface, authority, effect, enforcement point and recovery. Use request, handle_scoped, durable and swarm_shared persistence with explicit uncertainty.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.2",
+    "name": "Adversarial ML Threat Model Integration",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Threat Modeling",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Mandatory governance artifact for ACT-2+ deployments mapping every threat with temporal_profile=(immediate|delayed_days|delayed_weeks|chronic) to capture time-shifted attacks.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.3",
+    "name": "ACT Capability Tiers 1-4",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Classification",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Four-tier agent classification system (Assisted/Supervised/Autonomous/Orchestrator) with mandatory control requirements that scale with autonomy level. ACT-3/ACT-4 require HEAR designation.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.3.R01",
+        "requirement": "Classify consequence, reversibility, data sensitivity, affected populations and applicability separately from autonomy.",
+        "disposition": "normative",
+        "review_id": "C07",
+        "research": "research/031_v35_c07.md"
+      },
+      {
+        "id": "CP.3.R02",
+        "requirement": "Require proportionate review for high-impact decisions even at low ACT tiers.",
+        "disposition": "normative",
+        "review_id": "C07",
+        "research": "research/031_v35_c07.md"
+      },
+      {
+        "id": "CP.3.R03",
+        "requirement": "Declare decision validity, affected populations, accessibility needs and task-specific fairness objectives.",
+        "disposition": "normative",
+        "review_id": "C41",
+        "research": "research/065_v35_c41.md"
+      },
+      {
+        "id": "CP.3.R04",
+        "requirement": "Record sample size, power rationale where applicable, effect sizes, uncertainty and subgroup limitations.",
+        "disposition": "normative",
+        "review_id": "C41",
+        "research": "research/065_v35_c41.md"
+      },
+      {
+        "id": "CP.3.R05",
+        "requirement": "Distinguish nonsignificant results from established absence of harmful disparities.",
+        "disposition": "normative",
+        "review_id": "C41",
+        "research": "research/065_v35_c41.md"
+      },
+      {
+        "id": "CP.3.R06",
+        "requirement": "Define mitigation that can change the decision, use restrictions or deployment and monitor its outcome.",
+        "disposition": "normative",
+        "review_id": "C41",
+        "research": "research/065_v35_c41.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.4",
+    "name": "Agentic Control Plane Governance",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Control Plane",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Defines the Agentic Control Plane — agent identity, dynamic permission enforcement, orchestration boundaries, runtime behavioral trust — as a board-visible governance concept. Protocol-layer meshes (A2A, MCP, ACP) must be evaluated against CP.3-CP.7.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.4.R01",
+        "requirement": "Separate information content from policy and action authority; untrusted content shall not add, widen or remove grants.",
+        "disposition": "normative",
+        "review_id": "C08",
+        "research": "research/032_v35_c08.md"
+      },
+      {
+        "id": "CP.4.R02",
+        "requirement": "Treat source signatures as provenance and independently decide suitability, authorization and corroboration.",
+        "disposition": "normative",
+        "review_id": "C08",
+        "research": "research/032_v35_c08.md"
+      },
+      {
+        "id": "CP.4.R03",
+        "requirement": "Bind exceptions to a named authority, scope, reason, expiry and compensating measures.",
+        "disposition": "normative",
+        "review_id": "C44",
+        "research": "research/068_v35_c44.md"
+      },
+      {
+        "id": "CP.4.R04",
+        "requirement": "Prevent an acting or governance agent from approving its own exceptions or extending their lifetime.",
+        "disposition": "normative",
+        "review_id": "C44",
+        "research": "research/068_v35_c44.md"
+      },
+      {
+        "id": "CP.4.R05",
+        "requirement": "Log use, require post-event review and verify restoration of normal policy.",
+        "disposition": "normative",
+        "review_id": "C44",
+        "research": "research/068_v35_c44.md"
+      },
+      {
+        "id": "CP.4.R06",
+        "requirement": "Define a tested emergency path for unavailable approvers with limited consequences.",
+        "disposition": "normative",
+        "review_id": "C44",
+        "research": "research/068_v35_c44.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.5",
+    "name": "Platform-Specific Agent Security Profiles",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Platform Security",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Per-platform companion documents (Bedrock, Azure AI Foundry, n8n, LangGraph, AutoGen, CrewAI) mapping SAFE2 controls to platform CVEs, implementation guidance, and monitoring telemetry. Protocol-layer meshes assessed as supply chain components.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.5.R01",
+        "requirement": "For coding harnesses, enumerate and gate project startup, hooks, skills, helpers, credentials and configured subprocesses.",
+        "disposition": "normative",
+        "review_id": "C25",
+        "research": "research/049_v35_c25.md"
+      },
+      {
+        "id": "CP.5.R02",
+        "requirement": "Bind changed workspace, skill and endpoint permissions to a reviewed trust decision.",
+        "disposition": "normative",
+        "review_id": "C25",
+        "research": "research/049_v35_c25.md"
+      },
+      {
+        "id": "CP.5.R03",
+        "requirement": "For inference gateways, separate administrative policy, upstream credentials and execution authority from model responses.",
+        "disposition": "normative",
+        "review_id": "C26",
+        "research": "research/050_v35_c26.md"
+      },
+      {
+        "id": "CP.5.R04",
+        "requirement": "Record actual routing and prevent unapproved endpoint or model substitution and permissive fallback.",
+        "disposition": "normative",
+        "review_id": "C26",
+        "research": "research/050_v35_c26.md"
+      },
+      {
+        "id": "CP.5.R05",
+        "requirement": "For evaluation environments, isolate runs, shared package services, secrets, graders and external destinations.",
+        "disposition": "normative",
+        "review_id": "C27",
+        "research": "research/051_v35_c27.md"
+      },
+      {
+        "id": "CP.5.R06",
+        "requirement": "Enforce the authorized scope and verified containment independently of tested-agent behavior.",
+        "disposition": "normative",
+        "review_id": "C27",
+        "research": "research/051_v35_c27.md"
+      },
+      {
+        "id": "CP.5.R07",
+        "requirement": "For personal agents, separate personal and enterprise accounts, state, purposes, consent and offboarding.",
+        "disposition": "normative",
+        "review_id": "C28",
+        "research": "research/052_v35_c28.md"
+      },
+      {
+        "id": "CP.5.R08",
+        "requirement": "Keep bystander data and derived-state reuse within explicitly recorded scope.",
+        "disposition": "normative",
+        "review_id": "C28",
+        "research": "research/052_v35_c28.md"
+      },
+      {
+        "id": "CP.5.R09",
+        "requirement": "For commerce, bind buyer, merchant, amount, terms, destination, recurring commitments and settlement authority.",
+        "disposition": "normative",
+        "review_id": "C29",
+        "research": "research/053_v35_c29.md"
+      },
+      {
+        "id": "CP.5.R10",
+        "requirement": "Disclose configured incentives and verify settlement and refund outcomes through independent evidence.",
+        "disposition": "normative",
+        "review_id": "C29",
+        "research": "research/053_v35_c29.md"
+      },
+      {
+        "id": "CP.5.R11",
+        "requirement": "Apply the v3.5 MCP child requirements and preserve protocol-independent governance units.",
+        "disposition": "normative",
+        "review_id": "C30",
+        "research": "research/054_v35_c30.md"
+      },
+      {
+        "id": "CP.5.R12",
+        "requirement": "Validate capability, resource, principal, destination and current-state bindings through the actual deployment paths.",
+        "disposition": "normative",
+        "review_id": "C30",
+        "research": "research/054_v35_c30.md"
+      },
+      {
+        "id": "CP.5.R13",
+        "requirement": "For physical effects, enforce a domain-specific safety envelope and a locally available safe degraded state.",
+        "disposition": "normative",
+        "review_id": "C31",
+        "research": "research/055_v35_c31.md"
+      },
+      {
+        "id": "CP.5.R14",
+        "requirement": "Exercise connectivity loss, cloud outage and agent termination without introducing unsafe controller behavior.",
+        "disposition": "normative",
+        "review_id": "C31",
+        "research": "research/055_v35_c31.md"
+      },
+      {
+        "id": "CP.5.R15",
+        "requirement": "Record target application, account, document or page identity and relevant state before a material action.",
+        "disposition": "normative",
+        "review_id": "C40",
+        "research": "research/064_v35_c40.md"
+      },
+      {
+        "id": "CP.5.R16",
+        "requirement": "Require an observation fresh enough to identify the intended control and handle asynchronous state changes.",
+        "disposition": "normative",
+        "review_id": "C40",
+        "research": "research/064_v35_c40.md"
+      },
+      {
+        "id": "CP.5.R17",
+        "requirement": "Recheck the target after focus, navigation, layout, modal or account changes.",
+        "disposition": "normative",
+        "review_id": "C40",
+        "research": "research/064_v35_c40.md"
+      },
+      {
+        "id": "CP.5.R18",
+        "requirement": "Verify the resulting application or business state independently of the click or screenshot.",
+        "disposition": "normative",
+        "review_id": "C40",
+        "research": "research/064_v35_c40.md"
+      },
+      {
+        "id": "CP.5.R19",
+        "requirement": "Declare unsupported surfaces and evidence limitations; keep native-app and browser fixtures distinct.",
+        "disposition": "normative",
+        "review_id": "C40",
+        "research": "research/064_v35_c40.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.6",
+    "name": "AI Incident Feedback Loop Integration",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Incident Intelligence",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "Quarterly AIID agentic incident reviews plus 30-day Incident-Informed Control Review (IICR) triggered by new relevant AIID incidents. Internal Agentic Incident Registry required.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.6.R01",
+        "requirement": "Route incident reporting, evidence holds, applicable clocks and recipients using a source-pinned obligation record.",
+        "disposition": "normative",
+        "review_id": "C20",
+        "research": "research/044_v35_c20.md"
+      },
+      {
+        "id": "CP.6.R02",
+        "requirement": "Convert material incidents into owned regression cases or record a justified disposition and revisit trigger.",
+        "disposition": "normative",
+        "review_id": "C20",
+        "research": "research/044_v35_c20.md"
+      },
+      {
+        "id": "CP.6.R03",
+        "requirement": "Record observed actions, entry points, prerequisites, effects and sources independently from actor attribution.",
+        "disposition": "normative",
+        "review_id": "C49",
+        "research": "research/073_v35_c49.md"
+      },
+      {
+        "id": "CP.6.R04",
+        "requirement": "Distinguish advisory, laboratory demonstration, observed exploitation and sustained operational activity.",
+        "disposition": "normative",
+        "review_id": "C49",
+        "research": "research/073_v35_c49.md"
+      },
+      {
+        "id": "CP.6.R05",
+        "requirement": "Link relevant techniques to detection, prevention, containment and regression cases with exact deployment scope.",
+        "disposition": "normative",
+        "review_id": "C49",
+        "research": "research/073_v35_c49.md"
+      },
+      {
+        "id": "CP.6.R06",
+        "requirement": "Preserve event, discovery, disclosure and fix dates, revisions, contradictions and confidence.",
+        "disposition": "normative",
+        "review_id": "C49",
+        "research": "research/073_v35_c49.md"
+      },
+      {
+        "id": "CP.6.R07",
+        "requirement": "Use evidence-driven update triggers and publish changes in source confidence without manufacturing population incident rates.",
+        "disposition": "normative",
+        "review_id": "C49",
+        "research": "research/073_v35_c49.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.7",
+    "name": "Deception & Active Defense Layer",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Active Defense",
+    "risk_level": "High",
+    "is_gap_filler": false,
+    "description": "AI-specific active defense: canary documents in RAG corpora, honeypot tool endpoints, fake credential traps in agent memory. First deception-class control in any AI governance framework.",
+    "framework_version": "3.5.0",
+    "requirements": [],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.8",
+    "name": "Catastrophic Risk Threshold Controls",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Catastrophic Risk",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Behavioral indicators triggering emergency suspension regardless of business continuity impact: unauthorized compute acquisition, communication outside approved list, weaponizable capability. CRT documentation required for ACT-3/ACT-4 deployment approval.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.8.R01",
+        "requirement": "Inventory shared model, provider, route, identity, policy, dataset and evaluator dependencies across deployments.",
+        "disposition": "normative",
+        "review_id": "C43",
+        "research": "research/067_v35_c43.md"
+      },
+      {
+        "id": "CP.8.R02",
+        "requirement": "Assess correlated loss or defect scenarios and bound cumulative exposure.",
+        "disposition": "normative",
+        "review_id": "C43",
+        "research": "research/067_v35_c43.md"
+      },
+      {
+        "id": "CP.8.R03",
+        "requirement": "Exercise an approved alternative and document dependencies shared with the primary path.",
+        "disposition": "normative",
+        "review_id": "C43",
+        "research": "research/067_v35_c43.md"
+      },
+      {
+        "id": "CP.8.R04",
+        "requirement": "Review concentration after material acquisitions, migrations and new deployments.",
+        "disposition": "normative",
+        "review_id": "C43",
+        "research": "research/067_v35_c43.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.9",
+    "name": "Agent Replication Governance (ARG)",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Replication Governance",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "First governance standard for agent replication. Requires: replication authority in deployment manifests enforced at gateway; ephemeral credentials with scope narrowing per delegation hop; cryptographic lineage tokens; ACT-3 max 2 hops, ACT-4 max 3 hops; 500ms full delegation-tree severance on kill signal.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.9.R01",
+        "requirement": "Bind each descendant to the root task, verified principal, purpose, permitted resources, expiry and equal or narrower authority.",
+        "disposition": "normative",
+        "review_id": "C09",
+        "research": "research/033_v35_c09.md"
+      },
+      {
+        "id": "CP.9.R02",
+        "requirement": "Verify the delegation at the final resource; deny fallback from missing identity to shared operator authority.",
+        "disposition": "normative",
+        "review_id": "C09",
+        "research": "research/033_v35_c09.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.10",
+    "name": "HEAR Doctrine (Human Ethical Agent of Record)",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Human Authority",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Named individual with cryptographic signing key, real-time interrupt capability, and unilateral kill-switch authority for all ACT-3/ACT-4 deployments. Class-H actions require HEAR signature before execution. Fail-closed: no automatic approval path.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.10.R01",
+        "requirement": "Provide an authenticated stop and revocation path outside the acting agent and independent of swarm voting.",
+        "disposition": "normative",
+        "review_id": "C10",
+        "research": "research/034_v35_c10.md"
+      },
+      {
+        "id": "CP.10.R02",
+        "requirement": "Enumerate descendants, queued jobs, sessions and in-flight effects; verify cessation or isolate unresolved work and record residual effects.",
+        "disposition": "normative",
+        "review_id": "C10",
+        "research": "research/034_v35_c10.md"
+      },
+      {
+        "id": "CP.10.R03",
+        "requirement": "Test whether the reviewer receives material evidence, understands the proposed scope and can intervene under realistic time and accessibility constraints.",
+        "disposition": "normative",
+        "review_id": "C24",
+        "research": "research/048_v35_c24.md"
+      },
+      {
+        "id": "CP.10.R04",
+        "requirement": "Measure justified acceptance and rejection and retained capability separately from threat severity and override frequency.",
+        "disposition": "normative",
+        "review_id": "C24",
+        "research": "research/048_v35_c24.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.11",
+    "name": "Trust Lifecycle Governance",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Governance",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Establish separate trust decisions at discovery, installation, initial approval, material change, task admission, action commitment and revocation.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.11.R01",
+        "requirement": "Establish separate trust decisions at discovery, installation, initial approval, material change, task admission, action commitment and revocation.",
+        "disposition": "normative",
+        "review_id": "C01",
+        "research": "research/025_v35_c01.md"
+      },
+      {
+        "id": "CP.11.R02",
+        "requirement": "Bind each decision to the component version, owner, purpose, permitted effects and expiry; invalidate affected grants after a material change.",
+        "disposition": "normative",
+        "review_id": "C01",
+        "research": "research/025_v35_c01.md"
+      },
+      {
+        "id": "CP.11.R03",
+        "requirement": "Record the evidence and outcome of each gate and verify that retirement, offboarding and restore cannot reactivate stale authority.",
+        "disposition": "normative",
+        "review_id": "C01",
+        "research": "research/025_v35_c01.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.12",
+    "name": "Final-Effect Authorization",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Governance",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Immediately before committing a consequential effect, an enforcement point outside the acting model shall validate principal, delegation, action, resource, environment, recipient, purpose, time, limits and required approval.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.12.R01",
+        "requirement": "Immediately before committing a consequential effect, an enforcement point outside the acting model shall validate principal, delegation, action, resource, environment, recipient, purpose, time, limits and required approval.",
+        "disposition": "normative",
+        "review_id": "C03",
+        "research": "research/027_v35_c03.md"
+      },
+      {
+        "id": "CP.12.R02",
+        "requirement": "Bind approval to canonical action parameters and current policy/state versions; a changed material condition requires a new decision.",
+        "disposition": "normative",
+        "review_id": "C03",
+        "research": "research/027_v35_c03.md"
+      },
+      {
+        "id": "CP.12.R03",
+        "requirement": "Refuse missing, expired, conflicting or unverified mandatory conditions and protect the gate and credentials from the governed agent.",
+        "disposition": "normative",
+        "review_id": "C03",
+        "research": "research/027_v35_c03.md"
+      },
+      {
+        "id": "CP.12.R04",
+        "requirement": "Define atomic check/commit or destination-enforced version checks, replay resistance and the behavior for an unavailable authority service.",
+        "disposition": "normative",
+        "review_id": "C03",
+        "research": "research/027_v35_c03.md"
+      },
+      {
+        "id": "CP.12.R05",
+        "requirement": "Require explicit scoped authority for account creation, publication, external communication, submission and financial or other commitments.",
+        "disposition": "normative",
+        "review_id": "C11",
+        "research": "research/035_v35_c11.md"
+      },
+      {
+        "id": "CP.12.R06",
+        "requirement": "Record affected parties, intervention, takedown and recovery paths for public-facing effects.",
+        "disposition": "normative",
+        "review_id": "C11",
+        "research": "research/035_v35_c11.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.13",
+    "name": "Control Evidence Independence",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Governance",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Maintain authorization, observed action and external effect evidence through a collection boundary the acting agent cannot rewrite.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.13.R01",
+        "requirement": "Maintain authorization, observed action and external effect evidence through a collection boundary the acting agent cannot rewrite.",
+        "disposition": "normative",
+        "review_id": "C04",
+        "research": "research/028_v35_c04.md"
+      },
+      {
+        "id": "CP.13.R02",
+        "requirement": "Record evidence provenance, collector scope, independence, freshness, uncertainty and unavailable observations without claiming hidden reasoning access.",
+        "disposition": "normative",
+        "review_id": "C04",
+        "research": "research/028_v35_c04.md"
+      },
+      {
+        "id": "CP.13.R03",
+        "requirement": "Protect the evidence store and evaluator configuration; allow external incident and affected-party observations to challenge the recorded outcome.",
+        "disposition": "normative",
+        "review_id": "C04",
+        "research": "research/028_v35_c04.md"
+      },
+      {
+        "id": "CP.13.R04",
+        "requirement": "Record reviewer competence, tool scope, financial or organizational conflicts and access limits.",
+        "disposition": "normative",
+        "review_id": "C48",
+        "research": "research/072_v35_c48.md"
+      },
+      {
+        "id": "CP.13.R05",
+        "requirement": "Protect test selection, grader configuration and evidence custody from the evaluated agent.",
+        "disposition": "normative",
+        "review_id": "C48",
+        "research": "research/072_v35_c48.md"
+      },
+      {
+        "id": "CP.13.R06",
+        "requirement": "Preserve reviewer disagreement and its adjudication with traceable reasons.",
+        "disposition": "normative",
+        "review_id": "C48",
+        "research": "research/072_v35_c48.md"
+      },
+      {
+        "id": "CP.13.R07",
+        "requirement": "Retest after material changes to a benchmark, evaluator or assurance provider.",
+        "disposition": "normative",
+        "review_id": "C48",
+        "research": "research/072_v35_c48.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.14",
+    "name": "Organizational AI Management Governance",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Governance",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Define organizational AI scope, leadership responsibility, resources, applicable obligations and statement of applicability.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.14.R01",
+        "requirement": "Define organizational AI scope, leadership responsibility, resources, applicable obligations and statement of applicability.",
+        "disposition": "normative",
+        "review_id": "C06",
+        "research": "research/030_v35_c06.md"
+      },
+      {
+        "id": "CP.14.R02",
+        "requirement": "Maintain independently reviewable risk, impact, exception, audit and corrective-action records with named owners.",
+        "disposition": "normative",
+        "review_id": "C06",
+        "research": "research/030_v35_c06.md"
+      },
+      {
+        "id": "CP.14.R03",
+        "requirement": "Conduct management review, address findings and preserve the reason, evidence and approval for material deployment decisions.",
+        "disposition": "normative",
+        "review_id": "C06",
+        "research": "research/030_v35_c06.md"
+      },
+      {
+        "id": "CP.14.R04",
+        "requirement": "Compare AI use with a simpler deterministic or human process where consequences warrant the decision.",
+        "disposition": "normative",
+        "review_id": "C42",
+        "research": "research/066_v35_c42.md"
+      },
+      {
+        "id": "CP.14.R05",
+        "requirement": "Record expected benefit, material uncertainty, residual harms and conditions for withdrawing AI.",
+        "disposition": "normative",
+        "review_id": "C42",
+        "research": "research/066_v35_c42.md"
+      },
+      {
+        "id": "CP.14.R06",
+        "requirement": "Declare the deployment owner and criteria for reassessment when benefits fail to materialize.",
+        "disposition": "normative",
+        "review_id": "C42",
+        "research": "research/066_v35_c42.md"
+      },
+      {
+        "id": "CP.14.R07",
+        "requirement": "Register publisher, edition, status, mapping units, role, jurisdiction, source locator and licensing constraints.",
+        "disposition": "normative",
+        "review_id": "C51",
+        "research": "research/075_v35_c51.md"
+      },
+      {
+        "id": "CP.14.R08",
+        "requirement": "Give each relationship a stable ID, direction, type, rationale, exclusions, reviewer and review date.",
+        "disposition": "normative",
+        "review_id": "C51",
+        "research": "research/075_v35_c51.md"
+      },
+      {
+        "id": "CP.14.R09",
+        "requirement": "Record unmapped, partially addressed, out-of-scope, disputed and unassessed dispositions explicitly.",
+        "disposition": "normative",
+        "review_id": "C51",
+        "research": "research/075_v35_c51.md"
+      },
+      {
+        "id": "CP.14.R10",
+        "requirement": "Derive reciprocal human and machine views from the same records and invalidate stale relationships after source or control changes.",
+        "disposition": "normative",
+        "review_id": "C51",
+        "research": "research/075_v35_c51.md"
+      },
+      {
+        "id": "CP.14.R11",
+        "requirement": "Keep historical coverage assertions attributed to their original baseline and require denominators and reviewed relationships for current coverage.",
+        "disposition": "normative",
+        "review_id": "C51",
+        "research": "research/075_v35_c51.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
+  },
+  {
+    "id": "CP.15",
+    "name": "Design-Time Coordination Contract",
+    "pillar": "Cross-Pillar Governance",
+    "sub_topic": "Governance",
+    "risk_level": "Critical",
+    "is_gap_filler": false,
+    "description": "Declare role responsibilities, allowed interactions, authoritative shared resources and accountable owner before consequential deployment.",
+    "framework_version": "3.5.0",
+    "requirements": [
+      {
+        "id": "CP.15.R01",
+        "requirement": "Evaluate root-task consequences and accumulated authority across the composed workflow.",
+        "disposition": "normative",
+        "review_id": "C14",
+        "research": "research/038_v35_c14.md"
+      },
+      {
+        "id": "CP.15.R02",
+        "requirement": "Deny a prohibited effect when decomposed into individually permitted calls or skills.",
+        "disposition": "normative",
+        "review_id": "C14",
+        "research": "research/038_v35_c14.md"
+      },
+      {
+        "id": "CP.15.R03",
+        "requirement": "Declare role responsibilities, allowed interactions, authoritative shared resources and accountable owner before consequential deployment.",
+        "disposition": "normative",
+        "review_id": "C33",
+        "research": "research/057_v35_c33.md"
+      },
+      {
+        "id": "CP.15.R04",
+        "requirement": "Define completion, cancellation, termination and conflict-resolution conditions for the task graph.",
+        "disposition": "normative",
+        "review_id": "C33",
+        "research": "research/057_v35_c33.md"
+      },
+      {
+        "id": "CP.15.R05",
+        "requirement": "Validate handoffs, cyclic dependencies, abandoned locks and competing writers before promotion.",
+        "disposition": "normative",
+        "review_id": "C33",
+        "research": "research/057_v35_c33.md"
+      },
+      {
+        "id": "CP.15.R06",
+        "requirement": "Bind the approved coordination version to execution and revalidate changes in membership or role authority.",
+        "disposition": "normative",
+        "review_id": "C33",
+        "research": "research/057_v35_c33.md"
+      }
+    ],
+    "implementation_status": "requires-deployment-evidence"
   }
 ]

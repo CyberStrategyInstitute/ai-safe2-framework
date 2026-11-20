@@ -1,3 +1,5 @@
+> **v3.1 compatibility profile.** The manifest selects [the v3.5 profile](cp5_mcp_v35.md) for current candidate assessment.
+
 # CP.5.MCP: MCP Server Security Profile
 
 **AI SAFE² version:** 3.1

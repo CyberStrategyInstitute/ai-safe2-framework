@@ -75,7 +75,7 @@ python3 gateway.py --init-heartbeat
 bash start.sh
 ```
 
-See [`gateway/README.md`](./gateway/README.md) for full configuration reference, HITL flow, audit log format, and governance notes.
+See `gateway/README.md` (`./gateway/README.md`, reference unavailable in this checkout) for full configuration reference, HITL flow, audit log format, and governance notes.
 
 ## How It Works
 ```mermaid
@@ -191,7 +191,7 @@ If you are carrying a v2.1 `config.yaml` forward, add the `hitl_thresholds` bloc
 
 ## Troubleshooting
 
-See [../../troubleshooting.md](../../troubleshooting.md)
+See [../../troubleshooting.md](../troubleshooting.md)
 
 ## allow_high_risk_tools
 

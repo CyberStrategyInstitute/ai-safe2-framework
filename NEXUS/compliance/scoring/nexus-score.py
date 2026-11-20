@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 nexus-score.py
-NEXUS-A2A implementation self-check against AI SAFE2 v3.1 controls.
+NEXUS-A2A implementation self-check against AI SAFE2 v3.5 controls.
 
 This is an implementation checker, not independent framework validation or a
 conformance claim. Each v0.3 check exercises behavior (a hostile input must be
@@ -110,7 +110,7 @@ def check_environment() -> list[ControlCheck]:
 
 def score_aim(aim_path: str) -> dict:
     """
-    Score an AIM against AI SAFE2 v3.1 requirements.
+    Score an AIM against AI SAFE2 v3.5 requirements.
     Returns SAFE2 pillar scores and recommendations.
     """
     try:
@@ -277,7 +277,7 @@ def print_report(result: dict):
         return
 
     print(f"\n{'='*60}")
-    print(f"NEXUS-A2A / AI SAFE2 v3.1 Compliance Report")
+    print(f"NEXUS-A2A / AI SAFE2 v3.5 Compliance Report")
     print(f"{'='*60}")
     print(f"Agent DID:     {result['agent_did']}")
     print(f"Class:         {result['agent_class']}")
@@ -496,7 +496,7 @@ def print_v03_report(checks: list[ControlCheck]) -> int:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="NEXUS-A2A implementation self-check (AI SAFE2 v3.1)")
+    parser = argparse.ArgumentParser(description="NEXUS-A2A implementation self-check (AI SAFE2 v3.5)")
     parser.add_argument("--aim", help="Path to AIM JSON file to score")
     parser.add_argument("--check-env", action="store_true", help="Check local environment")
     parser.add_argument("--report", action="store_true", help="Run all checks")

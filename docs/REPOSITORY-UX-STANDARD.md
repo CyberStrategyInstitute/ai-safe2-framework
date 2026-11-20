@@ -1,6 +1,6 @@
 # AI SAFE² Repository UX Standard
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Standard](https://img.shields.io/badge/Docs-Repository_UX_Standard-820F1A?style=flat-square)](./REPOSITORY-UX-STANDARD.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
@@ -32,7 +32,7 @@ CLI operating guidance remains in `safe2/`; attributed research remains in `rese
 
 Every user-facing README, guide, implementation page, research index, example landing page, and major module page should feel like part of one AI SAFE² repository rather than an unrelated collection of projects.
 
-This standard defines the common visual and navigation grammar for AI SAFE² v3.1.
+This standard defines the common visual and navigation grammar for AI SAFE² v3.5.
 
 ## Canonical topic homes
 
@@ -156,7 +156,7 @@ Example:
 # Module Name
 ### Functional subtitle
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-Module-820F1A?style=flat-square)](./README.md)
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
@@ -216,7 +216,7 @@ Distinguish **current version** from **historical introduction**.
 
 Correct:
 
-- `AI SAFE² v3.1` when describing the current framework.
+- `AI SAFE² v3.5` when describing the current framework.
 - `Introduced in v3.0` when describing when CP.1-CP.10 or other controls entered the framework.
 - `v3.0 core taxonomy` when a v3.1 component intentionally reuses an unchanged v3.0 data artifact.
 
@@ -228,7 +228,7 @@ Incorrect:
 
 ## Control-count language
 
-AI SAFE² v3.1 retains the **161-control core framework taxonomy**.
+AI SAFE² v3.5 retains the **161-control core framework taxonomy**.
 
 CP.5.MCP contains **19 profile controls, MCP-1 through MCP-19**. Those profile controls do not increase the core framework total to 180.
 
@@ -253,7 +253,7 @@ Do not link to renamed or nonexistent paths. In particular:
 Major landing pages should close with a compact navigation block and:
 
 ```markdown
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
 ```
 
 Nested implementation pages may identify their own component version when that component version differs from the framework version.
@@ -283,4 +283,4 @@ A release is not documentation-complete merely because the canonical specificati
 
 [Framework Home](../README.md) | [Cross-Pillar Governance](../00-cross-pillar/README.md) | [AISM](../AISM/) | [NEXUS](../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

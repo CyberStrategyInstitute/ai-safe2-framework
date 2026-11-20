@@ -121,3 +121,17 @@ def test_catalog_hash_ignores_envelope_and_order():
     assert policy.catalog_hash(one) == policy.catalog_hash(two)
     changed = {"jsonrpc": "2.0", "id": 3, "result": {"tools": [{"name": "a", "description": "z"}]}}
     assert policy.catalog_hash(one) != policy.catalog_hash(changed)
+
+
+def test_oversized_input_stops_without_forwarding_partial_json(tmp_path):
+    server = tmp_path / "server.py"
+    server.write_text(SERVER)
+    audit = tmp_path / "audit.jsonl"
+    request = json.dumps(_req(1, "tools/call", name="get_time", arguments={"padding": "x" * (2 ** 20)})) + "\n"
+    proc = subprocess.run(
+        [sys.executable, "-m", "safe2", "mcp", "wrap-stdio", "--audit-log", str(audit),
+         "--", sys.executable, "-I", str(server)],
+        input=request, capture_output=True, text=True, timeout=30, check=False,
+    )
+    assert proc.returncode != 0
+    assert '"result"' not in proc.stdout

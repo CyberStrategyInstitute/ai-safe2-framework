@@ -1,4 +1,4 @@
-"""Validate AI SAFE2 v3.1 machine-discovery metadata and invariants."""
+"""Validate AI SAFE2 v3.5 machine-discovery metadata and invariants."""
 
 from __future__ import annotations
 
@@ -62,8 +62,8 @@ def main() -> int:
     discovery = manifest.get("discovery", {})
 
     expected = {
-        "framework.version": (framework.get("version"), "3.1.0"),
-        "framework.core_control_count": (framework.get("core_control_count"), 161),
+        "framework.version": (framework.get("version"), "3.5.0"),
+        "framework.core_control_count": (framework.get("core_control_count"), 173),
         "cp5_mcp.control_count": (profile.get("control_count"), 19),
         "cp5_mcp.specification": (profile.get("specification"), "MCP 2026-07-28"),
         "cp5_mcp.server_discover_required": (profile.get("server_discover_required"), False),
@@ -130,21 +130,21 @@ def main() -> int:
     dashboard = load_json(dashboard_path)
     uas = load_json(ROOT / uas_profile["machine_readable_data"])
 
-    if core.get("metadata", {}).get("total_controls") != 161:
-        errors.append("core dataset metadata must declare exactly 161 controls")
+    if core.get("metadata", {}).get("total_controls") != 173:
+        errors.append("core dataset metadata must declare exactly 173 controls")
     pillar_records = core.get("pillar_controls", [])
     cross_pillar_records = core.get("cross_pillar_controls", [])
     core_ids = [item.get("id") for item in [*pillar_records, *cross_pillar_records]]
-    if len(pillar_records) != 151 or len(cross_pillar_records) != 10:
-        errors.append("core dataset must contain 151 pillar and 10 Cross-Pillar controls")
-    if len(core_ids) != 161 or len(set(core_ids)) != 161 or any(not item for item in core_ids):
-        errors.append("core dataset must contain exactly 161 unique, non-empty control IDs")
+    if len(pillar_records) != 158 or len(cross_pillar_records) != 15:
+        errors.append("core dataset must contain 158 pillar and 15 Cross-Pillar controls")
+    if len(core_ids) != 173 or len(set(core_ids)) != 173 or any(not item for item in core_ids):
+        errors.append("core dataset must contain exactly 173 unique, non-empty control IDs")
     if {item.get("id") for item in cross_pillar_records} != {
-        f"CP.{number}" for number in range(1, 11)
+        f"CP.{number}" for number in range(1, 16)
     }:
-        errors.append("core Cross-Pillar IDs must be CP.1 through CP.10")
-    if mcp.get("metadata", {}).get("framework_controls_total") != 161:
-        errors.append("MCP profile must preserve the 161-control framework total")
+        errors.append("core Cross-Pillar IDs must be CP.1 through CP.15")
+    if mcp.get("metadata", {}).get("framework_controls_total") != 173:
+        errors.append("MCP profile must preserve the 173-control framework total")
     if mcp.get("metadata", {}).get("profile_controls") != 19:
         errors.append("MCP profile metadata must declare 19 profile controls")
     if mcp.get("metadata", {}).get("mcp_spec_version") != "2026-07-28":
@@ -171,10 +171,10 @@ def main() -> int:
     for item in catalog:
         if not all(item.get(field) for field in ("requirement", "control_refs", "evidence_criteria")):
             errors.append(f"UAS catalog entry is incomplete: {item.get('id')!r}")
-    if uas.get("profile", {}).get("core_control_count_remains") != 161:
-        errors.append("UAS regulatory profile must preserve the 161-control core")
-    if uas.get("profile", {}).get("cross_pillar_range_remains") != "CP.1-CP.10":
-        errors.append("UAS regulatory profile must preserve CP.1 through CP.10")
+    if uas.get("profile", {}).get("core_control_count_remains") != 173:
+        errors.append("UAS regulatory profile must preserve the 173-control core")
+    if uas.get("profile", {}).get("cross_pillar_range_remains") != "CP.1-CP.15":
+        errors.append("UAS regulatory profile must preserve CP.1 through CP.15")
 
     wanted_scopes = ["request", "handle_scoped", "durable", "swarm_shared"]
     if persistence.get("canonical_scopes") != wanted_scopes:
@@ -189,7 +189,7 @@ def main() -> int:
     agent_text = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
     for token in (
         "ai-safe2.manifest.json",
-        "161-control",
+        "173-control",
         "MCP-1 through MCP-19",
         "handle_scoped",
         "server/discover",

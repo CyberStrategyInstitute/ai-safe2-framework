@@ -1,7 +1,7 @@
 # AI SAFE² Framework Dashboard
 ### Interactive explorer for the core framework and profile overlays
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Dashboard-820F1A?style=flat-square)](./README.md)
 [![Core](https://img.shields.io/badge/Core-161_controls-808080?style=flat-square)](./public/data/controls.json)
 
@@ -25,7 +25,7 @@ badge. Existing generated control/profile data remains unchanged.
 
 The dashboard visualizes the **161-control AI SAFE² core taxonomy** across five operational pillars and the core Cross-Pillar Governance layer.
 
-AI SAFE² v3.1 also includes **CP.5.MCP profile controls MCP-1 through MCP-19**. Those are profile controls, not 19 additional core controls. Dashboard data should therefore keep the core taxonomy and profile overlays separate rather than silently changing the framework count.
+AI SAFE² v3.5 also includes **CP.5.MCP profile controls MCP-1 through MCP-19**. Those are profile controls, not 19 additional core controls. Dashboard data should therefore keep the core taxonomy and profile overlays separate rather than silently changing the framework count.
 
 ```text
 dashboard/public/data/controls.json          161-control core taxonomy
@@ -144,4 +144,4 @@ Profile overlays should remain separately identifiable in both source and UI so 
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

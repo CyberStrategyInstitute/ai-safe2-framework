@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.1 Scanner — Pillar 2: Audit & Inventory Rules
+AI SAFE2 v3.5 Scanner — Pillar 2: Audit & Inventory Rules
 Covers: P2.T3.x (Audit), P2.T4.x (Inventory), A2.3-A2.6 (v3.0 new controls)
 """
 

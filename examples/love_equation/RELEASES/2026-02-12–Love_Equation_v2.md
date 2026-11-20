@@ -285,10 +285,10 @@ python example_integration.py
 ## 📚 Documentation
 
 ### New Documentation
-- [README.md](./README.md) - Complete implementation guide
-- [example_integration.py](./example_integration.py) - Working integration example
-- [drift_tests/](./drift_tests/) - Test suite specifications
-- [manifests/](./manifests/) - Production configuration templates
+- README.md (`./README.md`, reference unavailable in this checkout) - Complete implementation guide
+- [example_integration.py](../example_integration.py) - Working integration example
+- [drift_tests/](../drift_tests) - Test suite specifications
+- [manifests/](../manifests) - Production configuration templates
 
 ### Existing Documentation (Preserved)
 - EXECUTION_STRATEGY.md - Strategic implementation guide
@@ -424,8 +424,8 @@ python example_integration.py
 
 ---
 
-**Ready to deploy?** Start with the [README.md](./README.md) for complete implementation guidance.
+**Ready to deploy?** Start with the README.md (`./README.md`, reference unavailable in this checkout) for complete implementation guidance.
 
 **Questions?** Open an [issue](https://github.com/CyberStrategyInstitute/ai-safe2-framework/issues) or join the [discussion](https://github.com/CyberStrategyInstitute/ai-safe2-framework/discussions).
 
-**Full changelog:** See [CHANGELOG.md](./CHANGELOG.md) for detailed version history.
+**Full changelog:** See CHANGELOG.md (`./CHANGELOG.md`, reference unavailable in this checkout) for detailed version history.

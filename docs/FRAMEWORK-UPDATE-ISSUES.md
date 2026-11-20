@@ -2,6 +2,8 @@
 
 Review baseline November 19, 2026. Default branch 3dd7ecc8bc0f19a0c737f01a91b9bde68d0a20d3. This plan integrates all 11 open issues with the evidence-based framework update. One draft PR owns the update and receives subsequent implementation commits. Each issue keeps an individual acceptance record. Closure follows evidence or an explicit decision to decline or supersede its original mechanism.
 
+Current implementation and remaining issue acceptance are recorded in the [v3.5 verification record](assessments/2026-11-19-v35-update/README.md). The tables below preserve the dated planning baseline.
+
 ## Dependency order and issue dispositions
 
 | Order | Issue | Recommendation and trade-off | Work, research and acceptance |

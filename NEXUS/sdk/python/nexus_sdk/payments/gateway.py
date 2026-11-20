@@ -179,7 +179,7 @@ class GatewayMetrics:
 class PaymentIntegrityGateway:
     """In-path enforcement for the agent-to-payment plane."""
 
-    FRAMEWORK_VERSION = "AI SAFE2 v3.1"
+    FRAMEWORK_VERSION = "AI SAFE2 v3.5"
     PROFILE_VERSION = "CP.5.APAY/0.4"
 
     def __init__(self, graph: AuthorityGraph, *,

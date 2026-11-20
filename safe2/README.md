@@ -1,8 +1,8 @@
 # AI SAFE² CLI
-### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.1
+### Agent-facing assessment, evidence, decision support, and enforcement for AI SAFE² v3.5
 
 [![CLI](https://img.shields.io/badge/CLI-1.1.0-F6921E?style=flat-square)](../README.md)
-[![Framework](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-820F1A?style=flat-square)](../README.md)
+[![Framework](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-820F1A?style=flat-square)](../README.md)
 
 The CLI badge identifies source version **1.1.0**, not a PyPI publication.
 Published CLI: **1.0.1**, verified 2026-10-16. Guided start requires the source
@@ -152,7 +152,7 @@ Static, MCP, skill, and gateway scores retain their native meanings.
 | [`examples/aism-decision-card/`](../examples/aism-decision-card/) | Runnable reference assessment and human acceptance example |
 
 This is a repository and packaging boundary, not a new framework pillar. AI
-SAFE² remains 161 core controls with CP.1 through CP.10. UAS is a separate
+SAFE² remains 161 core controls with CP.1 through CP.15. UAS is a separate
 27-requirement regulatory profile extension.
 
 ## Install
@@ -222,7 +222,7 @@ pytest tests/ scanner/tests/
 | `safe2 config validate FILE` | Validate bounded `safe2.config.v1` TOML | Rejects unknown keys, unsafe paths, symlinks, and malformed values |
 | `safe2 assess PATH [--scan-content] [--inspect-config]` | Produce one sealed environment and project assessment bundle | Missing or unrequested evidence remains explicit; no deployment authorization or conformance claim |
 | `safe2 adapter validate/conformance ...` | Validate attributed external evidence adapters and specimens | Contract evidence only; never executes or endorses a provider |
-| `safe2 scan project PATH` | Informational 161-control project scan | Reports findings; does not gate |
+| `safe2 scan project PATH` | Informational 173-control project scan | Reports findings; does not gate |
 | `safe2 score project PATH` | Compact project score | Reports score only |
 | `safe2 gate project PATH` | CI/CD project decision | Enforces tier or `--fail-under` threshold |
 | `safe2 gate skill PATH --strict` | Skill trust decision | Approve, reject, or hold for review |
@@ -661,4 +661,8 @@ by the CLI.
 
 ---
 
-*AI SAFE² v3.1 · Cyber Strategy Institute*
+*AI SAFE² v3.5 · Cyber Strategy Institute*
+
+## v3.5 framework contracts
+
+Use `safe2 framework query --control CP.12`, `safe2 framework query --source NIST_AI_RMF`, `safe2 framework audit`, and `safe2 framework readiness evidence.json`. The [current contracts](../docs/CONTROLS-V3.5.md) define 173 controls and their child clauses. The commands expose recorded scope and evidence limits.

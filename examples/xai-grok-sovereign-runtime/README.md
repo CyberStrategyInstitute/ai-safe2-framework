@@ -1,11 +1,11 @@
 <!-- AI-SAFE2-UX:START -->
-[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface: Example](https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square)](../README.md)
 [![Context: v3.1 Current](https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square)](../../docs/REPOSITORY-UX-STANDARD.md)
 
 [Framework Home](../../README.md) | [Examples Index](../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.1. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
+> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
 <!-- AI-SAFE2-UX:END -->
 
 <!-- stack: xAI Grok -->
@@ -14,9 +14,9 @@
 <div align="center">
 
 # xAI/Grok Sovereign Runtime
-### AI SAFE2 v3.1 Defense Package for xAI Grok CLI + API + Multi-Agent
+### AI SAFE2 v3.5 Defense Package for xAI Grok CLI + API + Multi-Agent
 
-**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.1
+**Cyber Strategy Institute** · MIT License · Framework: AI SAFE² v3.5
 
 </div>
 
@@ -34,7 +34,7 @@
 
 Every other runtime in this series addresses one or two novel attack surfaces.
 Grok ships six — simultaneously. The table below maps each surface to the
-specific xAI capability that creates it and the AI SAFE2 v3.1 control that blocks it.
+specific xAI capability that creates it and the AI SAFE2 v3.5 control that blocks it.
 
 | Surface | xAI/Grok-Specific Threat | AI SAFE2 Control | Method |
 |---|---|---|---|
@@ -300,7 +300,7 @@ These surfaces exist but are not yet enforced by this package (documented for tr
 > *"The scanner blocked the stack from being declared compliant until config was corrected. That is HEAR Doctrine in practice: named authority before autonomous tool execution."*
 > — Daniel J. Comp, Carbon Steward
 
-[Full report → `field-reports/2026-07-08-grok-usb-memory-sync.md`](./field-reports/2026-07-08-grok-usb-memory-sync.md)
+Full report → `field-reports/2026-07-08-grok-usb-memory-sync.md` (`./field-reports/2026-07-08-grok-usb-memory-sync.md`, reference unavailable in this checkout)
 
 ---
 
@@ -308,7 +308,7 @@ These surfaces exist but are not yet enforced by this package (documented for tr
 
 | Resource | Link |
 |---|---|
-| AI SAFE2 v3.1 Framework | [github.com/CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework) |
+| AI SAFE2 v3.5 Framework | [github.com/CyberStrategyInstitute/ai-safe2-framework](https://github.com/CyberStrategyInstitute/ai-safe2-framework) |
 | All Sovereign Runtimes | [cyberstrategyinstitute.com/ai-safe2/deployments](https://cyberstrategyinstitute.com/ai-safe2/deployments/) |
 | NEXUS Dashboard | [cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/) |
 | Implementation Toolkit | [cyberstrategyinstitute.com/ai-safe2](https://cyberstrategyinstitute.com/ai-safe2/) |
@@ -325,5 +325,5 @@ These surfaces exist but are not yet enforced by this package (documented for tr
 
 [Examples Index](../README.md) | [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [NEXUS](../../NEXUS/) | [Scanner](../../scanner/README.md) | [MCP Profile](../../00-cross-pillar/cp5_mcp_server_security.md)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+*AI SAFE² v3.5 | Cyber Strategy Institute*
 <!-- AI-SAFE2-UX-FOOTER:END -->

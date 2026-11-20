@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.1 Scanner rule base types.
+AI SAFE2 v3.5 Scanner rule base types.
 Shared dataclasses and utilities used by all rule modules.
 """
 

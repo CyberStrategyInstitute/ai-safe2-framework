@@ -1,7 +1,7 @@
 # Pillar 2: Audit & Inventory (P2)
 ### 👁️ The Ledger of Truth
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Layer](https://img.shields.io/badge/Layer-Pillar_2-820F1A?style=flat-square)](./README.md)
 [![Status](https://img.shields.io/badge/Status-Current-808080?style=flat-square)](../EVOLUTION.md)
 
@@ -71,7 +71,7 @@ required; hashes alone do not establish truth or independent validation.
 
 ### ⚡ v3.0 New Controls
 
-> These controls were introduced in v3.0 and remain part of the current [AI SAFE² v3.1 framework](../README.md). Current implementation resources are available through the [AI SAFE² toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
+> These controls were introduced in v3.0 and remain part of the current [AI SAFE² v3.5 framework](../README.md). Current implementation resources are available through the [AI SAFE² toolkit](https://cyberstrategyinstitute.com/ai-safe2/).
 
 | Control | Name | Priority | What It Solves |
 | :--- | :--- | :--- | :--- |
@@ -141,4 +141,8 @@ required; hashes alone do not establish truth or independent validation.
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## v3.5 normative detail
+
+The [control contracts](../docs/CONTROLS-V3.5.md) define the current candidate core IDs and child requirements, with [research decisions](../research/README.md), enforcement/evidence expectations, failure responses and acceptance cases. Implementation and deployment evidence must be scoped to the actual path.

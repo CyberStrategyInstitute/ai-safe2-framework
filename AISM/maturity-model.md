@@ -10,7 +10,7 @@ See the [assessment guide](./ASSESSMENT-GUIDE.md) for the three instruments,
 Technology Card workflow, and worked example. Original methodology dates below
 identify their baseline; this update does not change scoring formulas.
 
-**Framework:** AI SAFE2 v3.1
+**Framework:** AI SAFE2 v3.5
 **Organization:** Cyber Strategy Institute
 **Version:** March 2026
 
@@ -69,7 +69,7 @@ L4 --> L5
 
 ## Level 1: Chaos (Ad Hoc Probabilistic)
 
-**NIST Tier Equivalent:** Partial
+**NIST Tier (informative comparison):** Partial
 
 ### What It Looks Like
 
@@ -99,7 +99,7 @@ The highest-impact first step for a Level 1 organization is an AI system invento
 
 ## Level 2: Visibility (Observable and Contained)
 
-**NIST Tier Equivalent:** Risk Informed
+**NIST Tier (informative comparison):** Risk Informed
 
 ### What It Looks Like
 
@@ -129,7 +129,7 @@ The highest-impact step for a Level 2 organization is formalizing governance pol
 
 ## Level 3: Governance (Defined Semantic Governance)
 
-**NIST Tier Equivalent:** Repeatable
+**NIST Tier (informative comparison):** Repeatable
 
 ### What It Looks Like
 
@@ -159,7 +159,7 @@ The most impactful advancement for a Level 3 organization is moving from documen
 
 ## Level 4: Control (Quantitatively Managed Runtime)
 
-**NIST Tier Equivalent:** Adaptive
+**NIST Tier (informative comparison):** Adaptive
 
 ### What It Looks Like
 
@@ -189,7 +189,7 @@ The path to Level 5 is continuous improvement integration: building the feedback
 
 ## Level 5: Sovereignty (Autonomous Governance)
 
-**NIST Tier Equivalent:** Optimizing
+**NIST Tier (informative comparison):** Optimizing
 
 ### What It Looks Like
 
@@ -247,3 +247,7 @@ Level 5 is not a destination. It is a continuous operational state. Organization
 ---
 
 *© 2026 Cyber Strategy Institute. Licensed under CC BY 4.0.*
+
+## v3.5 scoped deployment evidence
+
+Use [deployment readiness and threat profiles](DEPLOYMENT-READINESS-V35.md) for the separate readiness result, five distinct assessment outputs and three deeper threat profiles. Organizational scoring formulas retain their baseline meanings. External tiers are informative comparisons. A maturity-derived CVSS multiplier is a CSI heuristic pending scoped calibration.

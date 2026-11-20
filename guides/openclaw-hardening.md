@@ -334,7 +334,7 @@ tail -100 ~/.openclaw/logs/audit.log | grep -E "BLOCK|CRITICAL|injection"
    - Deploy enterprise control gateway
    - Integrate with SIEM
    - Get SOC 2 / ISO 42001 compliance
-   - [Enterprise Guide](./openclaw-enterprise.md)
+   - Enterprise Guide (`./openclaw-enterprise.md`, reference unavailable in this checkout)
 
 ---
 
@@ -470,7 +470,7 @@ openclaw gateway --bind 127.0.0.1
 
 **Tools:**
 - [Security Scanner](../examples/openclaw/scanner.py)
-- [Memory Protocol](../examples/openclaw/openclaw_memory.md)
+- [Memory Protocol](../examples/openclaw/core/openclaw_memory.md)
 - [Troubleshooting Guide](../examples/openclaw/troubleshooting.md)
 
 **Community:**

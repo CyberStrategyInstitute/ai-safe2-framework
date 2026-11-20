@@ -1,7 +1,7 @@
 # AI SAFE² Core Gateway v3.0
-### North-south runtime enforcement for the AI SAFE² v3.1 framework
+### North-south runtime enforcement for the AI SAFE² v3.5 framework
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Component](https://img.shields.io/badge/Gateway-v3.0-820F1A?style=flat-square)](./main.py)
 [![Plane](https://img.shields.io/badge/Plane-North--South-808080?style=flat-square)](../00-cross-pillar/README.md)
 
@@ -23,7 +23,7 @@ claiming runtime effectiveness.
 
 ## Version and Conformance Boundary
 
-The current gateway implementation is **Gateway v3.0**. AI SAFE² v3.1 did not silently rename this component.
+The current gateway implementation is **Gateway v3.0**. AI SAFE² v3.5 did not silently rename this component.
 
 “Core Gateway” is the north-south provider proxy. “NEXUS Sovereign Gateway” is
 the separate NEXUS component's gateway scaffold and follows the NEXUS source
@@ -34,7 +34,7 @@ The gateway remains a compatible reference component for the **north-south enfor
 
 This distinction is intentional:
 
-- **AI SAFE² v3.1** is the current framework.
+- **AI SAFE² v3.5** is the current framework.
 - **Gateway v3.0** is the current gateway component.
 - **NEXUS v0.6** is the current NEXUS component (v0.6.0).
 - Component versions should not be rewritten merely for visual consistency.
@@ -176,7 +176,7 @@ The safety path remains outside ordinary model authority.
 
 ## Framework References
 
-- [AI SAFE² v3.1 Framework](../README.md)
+- [AI SAFE² v3.5 Framework](../README.md)
 - [Cross-Pillar Governance](../00-cross-pillar/README.md)
 - [AISM](../AISM/)
 - [NEXUS](../NEXUS/)
@@ -191,4 +191,4 @@ The safety path remains outside ordinary model authority.
 
 ---
 
-*AI SAFE² v3.1 framework · Gateway v3.0 component · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 framework · Gateway v3.0 component · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

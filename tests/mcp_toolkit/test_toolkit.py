@@ -385,7 +385,7 @@ class TestBadgeEligibility:
         )
         data = json.loads(template)
         assert data["mcp_security_version"] == "1.0"
-        assert data["framework"] == "AI SAFE2 v3.1 CP.5.MCP"
+        assert data["framework"] == "AI SAFE2 v3.5 CP.5.MCP"
         assert data["aisafe2_score"] == 85
 
     def test_badge_section_for_eligible(self):
@@ -527,7 +527,7 @@ class TestReportSerialization:
         report = self._make_full_report()
         html = to_html(report)
         assert "<!DOCTYPE html>" in html
-        assert "AI SAFE2 v3.1 CP.5.MCP" in html
+        assert "AI SAFE2 v3.5 CP.5.MCP" in html
         assert "75" in html
         assert "Acceptable" in html
         assert "test.example" in html

@@ -401,4 +401,4 @@ NEXUS/sdk/python/tests/test_apay_opa_contract.py  policy/builder drift guard
 
 ---
 
-*AI SAFE² v3.1 · CP.5.APAY/0.4 draft profile · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*
+*AI SAFE² v3.5 · CP.5.APAY/0.4 draft profile · NEXUS v0.6.0 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com)*

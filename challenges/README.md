@@ -1,7 +1,7 @@
 # AI SAFE² Challenge Lab
 ### Falsification before claims
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Challenge_Lab-820F1A?style=flat-square)](./README.md)
 [![Method](https://img.shields.io/badge/Method-Falsification--First-808080?style=flat-square)](./README.md)
 
@@ -75,7 +75,7 @@ Challenge maturity is separate from framework/profile conformance. A well-design
 
 ## v3.1 Enforcement-Plane Scoping
 
-AI SAFE² v3.1 distinguishes:
+AI SAFE² v3.5 distinguishes:
 
 - **north-south** agent-to-model/provider enforcement;
 - **east-west** agent-to-agent enforcement;
@@ -146,4 +146,8 @@ The most important contribution is evidence that changes what the framework can 
 
 AI SAFE² principle: **If governance is not enforced at runtime, it is not governance.**
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## v3.5 commit-boundary study
+
+[Challenge 002 prospective preregistration](002-v35-commit-boundary/README.md) defines episode-level exposure and separate safety/utility outcomes. Engineering fixtures do not establish confirmatory study results.

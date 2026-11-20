@@ -34,6 +34,7 @@ from safe2.commands.evidence import evidence
 from safe2.commands.example import example
 from safe2.commands.feedback import feedback
 from safe2.commands.gate import gate
+from safe2.commands.framework import framework
 from safe2.commands.mcp import mcp
 from safe2.commands.report import report
 from safe2.commands.scan import scan
@@ -46,10 +47,10 @@ from safe2.commands.start import start
 @click.group()
 @click.version_option(__version__, prog_name="safe2")
 def cli():
-    """AI SAFE2 v3.1 - agent-facing governance and evidence CLI.
+    """AI SAFE2 v3.5 - agent-facing governance and evidence CLI.
 
     \b
-    safe2 scan project .            161-control static audit, findings only
+    safe2 scan project .            173-control static audit, findings only
     safe2 init .                    secure-default project configuration
     safe2 start .                   preview a guided local first assessment
     safe2 assess .                  bounded project assessment bundle
@@ -88,6 +89,7 @@ def cli():
     """
 
 
+cli.add_command(framework)
 cli.add_command(scan)
 cli.add_command(adapter)
 cli.add_command(acceptance)

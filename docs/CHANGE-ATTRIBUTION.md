@@ -1,6 +1,6 @@
 # Change Attribution
 
-[CLI guide](../safe2/README.md) | [Assessment scope](./ASSESSMENT-SCOPE.md) | [System identity](./SYSTEM-IDENTITY.md)
+[CLI guide](../safe2/README.md) | [Assessment scope](./ASSESSMENT-SCOPE.md) | [System identity](../safe2/docs/SYSTEM-IDENTITY.md)
 
 `safe2 evidence attribute` compares findings from an explicitly trusted baseline
 with findings from a proposed revision. It separates inherited, introduced,

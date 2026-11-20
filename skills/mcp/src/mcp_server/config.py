@@ -14,15 +14,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 ROOT_DIR = Path(__file__).parent.parent.parent
-DATA_DIR = ROOT_DIR / "data"
+PACKAGED_DATA_DIR = Path(__file__).parent / "data"
+DATA_DIR = PACKAGED_DATA_DIR if PACKAGED_DATA_DIR.is_dir() else ROOT_DIR / "data"
 
-# v3.1 does not add six new top-level framework controls. The 161-control core
-# taxonomy is retained and the CP.5.MCP profile is layered on top explicitly.
-# This avoids duplicating the full core dataset while making MCP-1 through
-# MCP-19 queryable as profile controls.
-CONTROLS_JSON = DATA_DIR / "ai-safe2-controls-v3.0.json"
-MCP_PROFILE_JSON = DATA_DIR / "mcp-profile-v3.1.json"
-FRAMEWORK_VERSION = "3.1.0"
+# Core controls and profile requirements have separate versioned catalogs.
+CONTROLS_JSON = DATA_DIR / "ai-safe2-controls-v3.5.json"
+MCP_PROFILE_JSON = DATA_DIR / "mcp-profile-v3.5.json"
+FRAMEWORK_VERSION = "3.5.0"
 MCP_SPEC_VERSION = "2026-07-28"
 
 TRANSPORT: Literal["stdio", "streamable-http"] = os.getenv("MCP_TRANSPORT", "stdio")  # type: ignore[assignment]
@@ -85,7 +83,7 @@ LOG_FORMAT = os.getenv("LOG_FORMAT", "json")
 SERVER_NAME = "ai-safe2-mcp"
 SERVER_VERSION = FRAMEWORK_VERSION
 SERVER_DESCRIPTION = (
-    "AI SAFE2 v3.1 MCP Server: 161-control agentic AI governance toolkit with "
+    "AI SAFE2 v3.5 MCP Server: 173-control agentic AI governance toolkit with "
     "a CP.5.MCP profile aligned to MCP 2026-07-28. Provides control lookup, risk "
     "scoring, compliance mapping, code review, and agent classification tools. "
     "Legacy opaque bearer tokens remain supported for entitlement compatibility but "

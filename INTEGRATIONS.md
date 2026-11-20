@@ -1,7 +1,7 @@
 # AI SAFE² Integrations
 ### One governance model across design-time, CI, runtime, agent-to-agent, and agent-to-tool surfaces
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](README.md)
 [![Surface](https://img.shields.io/badge/Surface-Integrations-820F1A?style=flat-square)](INTEGRATIONS.md)
 [![Model](https://img.shields.io/badge/Model-3_Enforcement_Planes-808080?style=flat-square)](00-cross-pillar/README.md)
 
@@ -30,7 +30,7 @@ Component versions are independent from the framework version. AI SAFE² is curr
 ## v3.1 Architecture
 
 ```text
-                          AI SAFE2 v3.1
+                          AI SAFE2 v3.5
                     governance + evidence model
                               |
           +-------------------+-------------------+
@@ -68,7 +68,7 @@ skills/mcp/data/ai-safe2-controls-v3.0.json  stable 161-control core taxonomy
 skills/mcp/data/mcp-profile-v3.1.json       CP.5.MCP v3.1 profile overlay
 ```
 
-The v3.0 filename on the core taxonomy is historical provenance. AI SAFE² v3.1 did not add new core controls.
+The v3.0 filename on the core taxonomy is historical provenance. AI SAFE² v3.5 did not add new core controls.
 
 Current counts:
 
@@ -97,7 +97,7 @@ The MCP server can query the 161-control core taxonomy and the separate 19-contr
 
 The [AI SAFE² Scanner](scanner/README.md) provides pre-commit/CI analysis.
 
-AI SAFE² v3.1 adds 12 grouped MCP static-analysis rules to the existing scanner, bringing the expected rule registry to **52 rules**.
+AI SAFE² v3.5 adds 12 grouped MCP static-analysis rules to the existing scanner, bringing the expected rule registry to **52 rules**.
 
 Important boundaries:
 
@@ -135,7 +135,7 @@ Older NEXUS `SESSION`, `CROSS_SESSION`, and `PERMANENT` values remain compatibil
 
 ## MCP `2026-07-28`
 
-AI SAFE² v3.1 updates the MCP security model for the current profile binding.
+AI SAFE² v3.5 updates the MCP security model for the current profile binding.
 
 Key additions include:
 
@@ -188,4 +188,4 @@ For any integration, record:
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

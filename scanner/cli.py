@@ -1,5 +1,5 @@
 """
-AI SAFE² v3.1 Scanner CLI
+AI SAFE² v3.5 Scanner CLI
 Usage: python -m scanner.cli scan <path> [OPTIONS]
 """
 
@@ -30,9 +30,9 @@ def _color(text: str, severity: str) -> str:
 
 @click.group()
 def cli() -> None:
-    """AI SAFE² v3.1 Static Analysis Scanner\n
-    Scans code and configs against 161 AI SAFE² v3.1 controls across
-    5 pillars and the Cross-Pillar Governance layer (CP.1-CP.10).
+    """AI SAFE² v3.5 Static Analysis Scanner\n
+    Scans code and configs against 173 AI SAFE² v3.5 controls across
+    5 pillars and the Cross-Pillar Governance layer (CP.1-CP.15).
     """
 
 
@@ -83,7 +83,7 @@ def scan(
     show_passes: bool,
     max_findings: int,
 ) -> None:
-    """Scan a project path against AI SAFE² v3.1 controls.
+    """Scan a project path against AI SAFE² v3.5 controls.
 
     \b
     Examples:
@@ -93,7 +93,7 @@ def scan(
       python -m scanner.cli scan . --tier Tier3 --quiet --report json --output report.json
     """
     if not quiet:
-        click.echo(f"\n{BOLD}AI SAFE² v3.1 Scanner{RESET}")
+        click.echo(f"\n{BOLD}AI SAFE² v3.5 Scanner{RESET}")
         click.echo(f"Target: {path}")
         click.echo("─" * 60)
 
@@ -245,7 +245,7 @@ def show(report_path: str) -> None:
     with open(report_path, encoding="utf-8") as f:
         data = json.load(f)
 
-    click.echo(f"\n{BOLD}AI SAFE² v3.1 Compliance Report{RESET}")
+    click.echo(f"\n{BOLD}AI SAFE² v3.5 Compliance Report{RESET}")
     click.echo(f"Target:    {data.get('target', 'unknown')}")
     click.echo(f"Generated: {data.get('generated_at', 'unknown')}")
     click.echo(f"Score:     {data.get('summary', {}).get('score', '?')}/100")

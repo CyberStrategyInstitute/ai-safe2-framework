@@ -4,7 +4,7 @@
 
 ### Replayable evidence and human-owned decisions for software delivery
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Developer Workflow](https://img.shields.io/badge/Developer_Workflow-v0.1.0-820F1A?style=flat-square)](docs/RELEASE-PLAN.md)
 [![Minimum CLI](https://img.shields.io/badge/Minimum_CLI-1.0.1-808080?style=flat-square)](../safe2/README.md)
 

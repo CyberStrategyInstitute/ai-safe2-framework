@@ -1,6 +1,6 @@
 # Agentic AI security brief: CLI implementation triage
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Decision](https://img.shields.io/badge/Decision-Evidence_adoption_first-820F1A?style=flat-square)](./TASK-RECEIPTS.md)
 
 [Framework Home](../../README.md) | [CLI](../README.md) | [Task Receipts](./TASK-RECEIPTS.md) | [Challenge Lab](./CHALLENGE-CLI.md)
@@ -37,7 +37,7 @@ Their machine schema, integrations, and new live experiments remain outside the
 active release path under the constraints below.
 
 The following require separate proposals and version review. They must not delay
-harness evidence adoption or silently enter AI SAFE² v3.1:
+harness evidence adoption or silently enter AI SAFE² v3.5:
 
 - A new Challenge 002 or changes to frozen Challenge 001.
 - New or amended framework controls and control totals.

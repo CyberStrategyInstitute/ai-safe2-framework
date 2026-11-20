@@ -225,3 +225,11 @@ subprocess/call shapes, not actual LLM API usage. This is an existing
 characteristic of `scanner/rules/`'s heuristics, unchanged by this
 consolidation — worth a follow-up pass on the P4/P5 rule precision, flagged
 here rather than silently left for someone to rediscover.
+
+## v3.1 to v3.5 candidate
+
+The current manifest selects the new v3.5 catalog and MCP overlay. The v3.0 core-data file and v3.1 MCP overlay remain frozen compatibility inputs. Core IDs CP.1-CP.10 and all existing pillar IDs retain their identity. New IDs are CP.11-CP.15, S1.8, F3.6-F3.7, A2.7-A2.9 and E5.5. A historical draft CP.11 referred to UAS or coordination; those draft names are not global aliases. Resolve them through the dated review ID. CP.11 now means Trust Lifecycle Governance.
+
+The 154 child clauses are separately indexed. Profile child clauses do not increase the 173-control total. UAS v2 retains 27 IDs while changing human/fairness evidence interpretation, so v1 reports must keep their original profile identity. Reassess against v2 instead of relabeling old reports. Organizational AISM v1 scoring remains unchanged; deployment readiness is a separate result. Component versions, published packages, live deployments and protocol identities retain their own verification boundaries.
+
+Static scanner coverage remains rule-dependent. A new catalog record does not create a scanner detector or runtime enforcement. Existing consumers that require the old dataset may continue loading its explicit versioned path. New source installations query the current catalog. No historical result is automatically promoted to v3.5 conformance.

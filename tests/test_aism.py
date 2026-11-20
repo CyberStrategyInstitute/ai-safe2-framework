@@ -22,9 +22,9 @@ def test_model_preserves_aism_weights_and_approved_uas_status():
     model = load_model()
     assert sum(pillar["weight"] for pillar in model["pillars"]) == 1
     assert sum(dimension["weight"] for dimension in model["dimensions"]) == 1
-    assert model["framework"]["core_control_count"] == 161
-    assert model["framework"]["cross_pillar_controls"] == "CP.1-CP.10"
-    assert model["framework"]["regulatory_profiles"] == ["UAS-1.0"]
+    assert model["framework"]["core_control_count"] == 173
+    assert model["framework"]["cross_pillar_controls"] == "CP.1-CP.15"
+    assert model["framework"]["regulatory_profiles"] == ["UAS-2.0"]
 
 
 def test_example_holds_on_critical_conflict_and_renders_card():

@@ -1,0 +1,64 @@
+{
+  "framework_version": "3.5.0",
+  "parent_families_retained": 11,
+  "profiles": [
+    {
+      "id": "AISM-P01",
+      "name": "Assurance and oversight compromise",
+      "families": [
+        "T2",
+        "T10"
+      ],
+      "mechanism": "Forged completion, altered grader/monitor, selective omission or misleading process evidence.",
+      "controls": [
+        "CP.13",
+        "A2.8",
+        "A2.9",
+        "E5.1"
+      ],
+      "test": "Compare reported success to protected observation; include contaminated grading and a legitimate result."
+    },
+    {
+      "id": "AISM-P02",
+      "name": "Unsafe authorized execution",
+      "families": [
+        "T6",
+        "T10"
+      ],
+      "mechanism": "Valid identity and scope with stale conditions, wrong target, repeated commitment or unmet postcondition.",
+      "controls": [
+        "CP.12",
+        "F3.7",
+        "A2.7",
+        "A2.8"
+      ],
+      "test": "Change environment, state or target after approval and exercise timeout-after-commit."
+    },
+    {
+      "id": "AISM-P03",
+      "name": "Human-agent trust exploitation",
+      "families": [
+        "T1",
+        "T2",
+        "T11"
+      ],
+      "mechanism": "Manipulation of evidence, framing, consent, apparent consensus or relational trust leading to an unintended approval.",
+      "controls": [
+        "CP.10",
+        "CP.13",
+        "S1.5",
+        "P4.T7.10"
+      ],
+      "test": "Present correlated evidence and an expanded action under realistic decision conditions; observe comprehension and intervention."
+    }
+  ],
+  "dimensions": [
+    "actor_origin",
+    "surface",
+    "authority",
+    "persistence",
+    "effect",
+    "enforcement_point",
+    "recovery"
+  ]
+}

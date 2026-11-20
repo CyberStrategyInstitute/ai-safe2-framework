@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.1 Scanner — Pillar 4: Engage & Monitor Rules
+AI SAFE2 v3.5 Scanner — Pillar 4: Engage & Monitor Rules
 Covers: P4.T7.x (Engage/HITL), P4.T8.x (Monitor), M4.4-M4.8 (v3.0 new controls)
 """
 

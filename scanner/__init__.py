@@ -1,1 +1,1 @@
-"""AI SAFE2 v3.1 Scanner"""
+"""AI SAFE2 v3.5 Scanner"""

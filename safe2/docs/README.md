@@ -22,3 +22,7 @@ evidence operations, validation records, and product guidance.
 
 Historical release records live in the repository [release archive](../../releases/README.md).
 Shared framework assurance and review methods remain in [shared documentation](../../docs/README.md).
+
+## v3.5 control and evidence operations
+
+[Control contracts](../../docs/CONTROLS-V3.5.md) | [Rosetta Stone query and audit](../../docs/ROSETTA-STONE-V35.md) | [Readiness evidence](../../AISM/DEPLOYMENT-READINESS-V35.md) | [Authority example](../../examples/v35-authority/README.md)

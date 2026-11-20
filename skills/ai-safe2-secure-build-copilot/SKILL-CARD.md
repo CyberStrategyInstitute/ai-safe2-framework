@@ -8,7 +8,7 @@
 - **Credential Access:** None required by the skill document; secrets must remain outside model context and follow applicable AI SAFE² controls.
 - **Execution Capability:** Advisory instructions only; runtime actions depend on separately authorized client, MCP, scanner, or gateway capabilities.
 - **Data Persistence:** No persistence is created by the skill document itself; deployments must govern persistence using v3.1 request, handle_scoped, and durable semantics.
-- **Review Status:** Maintainer reviewed for AI SAFE² v3.1 release consistency.
+- **Review Status:** Maintainer reviewed for AI SAFE² v3.5 release consistency.
 
 ## Trust boundaries
 

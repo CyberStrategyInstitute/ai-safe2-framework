@@ -1,11 +1,11 @@
 <!-- AI-SAFE2-UX:START -->
-[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface: Example](https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square)](../README.md)
 [![Context: CLI 0.8](https://img.shields.io/badge/CLI-0.8-808080?style=flat-square)](../../safe2/docs/AISM-REMEDIATION.md)
 
 [Framework Home](../../README.md) | [Cross-Pillar Controls](../../00-cross-pillar/) | [Examples Index](../README.md) | [AISM](../../AISM/) | [CLI](../../safe2/README.md)
 
-> **Current framework context:** AI SAFE² v3.1. This example validates remediation decision support. It does not authorize work or establish organizational conformance.
+> **Current framework context:** AI SAFE² v3.5. This example validates remediation decision support. It does not authorize work or establish organizational conformance.
 <!-- AI-SAFE2-UX:END -->
 
 <!-- stack: AISM Remediation Decision Support -->
@@ -42,5 +42,5 @@ fixture with evidence from the exact system and deployment scope under review.
 
 [Examples Index](../README.md) | [Framework Home](../../README.md) | [AISM](../../AISM/) | [CLI](../../safe2/README.md)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+*AI SAFE² v3.5 | Cyber Strategy Institute*
 <!-- AI-SAFE2-UX-FOOTER:END -->

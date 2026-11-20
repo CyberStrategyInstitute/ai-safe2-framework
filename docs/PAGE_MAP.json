@@ -1,0 +1,2773 @@
+{
+  "framework_version": "3.5.0",
+  "paths": [
+    {
+      "path": ".ai-safe2/component-versions.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/decision-evals/critical-ci-missing-evidence.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/decision-evals/docs-only.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/decision-evals/restricted-authz.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/development-evals/bounded-medium-code.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/development-evals/critical-architecture-missing-decisions.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/development-evals/high-documentation-approved.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/development-evals/spike-reusable-conflict.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/development-policy.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/pr-agent-preflight-policy.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/review-policy.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".ai-safe2/version-label-allowlist.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "kind": "document"
+    },
+    {
+      "path": ".github/RELEASE_TEMPLATE.md",
+      "kind": "document"
+    },
+    {
+      "path": ".gitleaks-baseline.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "00-cross-pillar/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/cp5_cua_v35.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/cp5_eval_v35.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/cp5_fin_v35.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/cp5_gateway_v35.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/cp5_harness_v35.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/cp5_mcp_server_security.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/cp5_mcp_v35.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/cp5_physical_v35.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/STANDARD-V2.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/STANDARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/compliance/due-diligence-attestation.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/compliance/gsar-552-239-7001-mapping.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/controls/uas-controls-crossdomain.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/controls/uas-controls-human.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/controls/uas-controls-system.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/examples/vendor-attestation-sample.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/proposals/uas-s15-jurisdictional-grounding.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/taxonomy/bias-taxonomy.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/testing/bias-test-protocol.md",
+      "kind": "document"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/uas-profile-v1.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "00-cross-pillar/unbiased-ai/uas-profile-v2.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "01-sanitize-isolate/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "02-audit-inventory/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "03-fail-safe-recovery/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "04-engage-monitor/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "05-evolve-educate/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "ADVANCED_AGENT_THREATS.md",
+      "kind": "document"
+    },
+    {
+      "path": "AGENTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/AISM-Compliance-Crosswalk.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/AISM-Scoring-Matrix-Methodology.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/AISM-Self-Assessment-Tool.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/ASSESSMENT-GUIDE.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/DEPLOYMENT-READINESS-V35.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/EVIDENCE-ASSURANCE.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/INCIDENT-EVIDENCE.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/TECHNOLOGY-CONTRIBUTION-PROFILE.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/TECHNOLOGY-EVIDENCE-REQUEST.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/TECHNOLOGY-PROFILE-REPO-REVIEW.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/TECHNOLOGY-VALIDATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/agent-threat-control-matrix.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/control-stack.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/maturity-model.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/operational-loop.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/sovereignty-matrix.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/strategic-architecture.md",
+      "kind": "document"
+    },
+    {
+      "path": "AISM/templates/TECHNOLOGY-CARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "kind": "document"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "kind": "document"
+    },
+    {
+      "path": "CSF-COMPANION.md",
+      "kind": "document"
+    },
+    {
+      "path": "EVOLUTION.md",
+      "kind": "document"
+    },
+    {
+      "path": "FORGE-Act/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "INTEGRATIONS.md",
+      "kind": "document"
+    },
+    {
+      "path": "MAINTAINERS.md",
+      "kind": "document"
+    },
+    {
+      "path": "MIGRATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/AGENTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/CHANGELOG.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/CODE_OF_CONDUCT.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/CONTRIBUTING.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/DOCUMENTATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/RELEASE-NOTES-v0.5.0.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/RELEASE-NOTES-v0.6.0.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/SECURITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/adapters/mcp/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/governance/GOVERNANCE.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/governance/ietf-draft-nexus-l1-l2.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/integrations/legacy-sovereign-runtimes/NEXUS-mesh.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/integrations/legacy-sovereign-runtimes/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/integrations/legacy-sovereign-runtimes/cursor-love-equation.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/integrations/legacy-sovereign-runtimes/langflow-love-equation.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/integrations/legacy-sovereign-runtimes/lovable-love-equation.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/integrations/legacy-sovereign-runtimes/make-love-equation.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/integrations/legacy-sovereign-runtimes/xai-grok-love-equation.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/nexus-docs.manifest.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "NEXUS/payments/ADAPTER-GUIDE.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/CHALLENGE-LAB.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/CONTROLS.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/DEPLOYMENT-READINESS.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/HARDENING-AND-EXTENSION.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/POLICY-PARITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/RECOVERY.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/SANDBOX-READINESS.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/SOVEREIGN-GATEWAY.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/payments/THREAT-MODEL.md",
+      "kind": "document"
+    },
+    {
+      "path": "NEXUS/schemas/agbom-v0.3.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "NEXUS/schemas/aim-v0.2.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "NEXUS/schemas/aim-v0.3.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "NEXUS/schemas/apay-authority-grant-v0.4.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "NEXUS/schemas/apay-ptr-v0.4.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "NEXUS/schemas/guardian-v0.3.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "NEXUS/schemas/nor-v0.3.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "NEXUS/sdk/python/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "QUICKSTART_5_MIN.md",
+      "kind": "document"
+    },
+    {
+      "path": "README.md",
+      "kind": "document"
+    },
+    {
+      "path": "SECURITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "SUPPORT.md",
+      "kind": "document"
+    },
+    {
+      "path": "VANGUARD_PROGRAM.md",
+      "kind": "document"
+    },
+    {
+      "path": "ai-safe2.manifest.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/ANNOUNCEMENT.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/CHARTER.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/CONTROL_CLAIMS.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/EVIDENCE.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/REPLICATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/ROE.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/THREAT_MODEL.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/analysis/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/controls/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/controls/ai-safe2/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/controls/conventional/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/controls/nexus/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/fixtures/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/fixtures/known-fail/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/fixtures/known-pass/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/graders/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/harness/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/manifests/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/preregistration/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/replication/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/results/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/001-anthropic-multi-agent-turf-war/scenarios/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/002-v35-commit-boundary/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "challenges/002-v35-commit-boundary/preregistration.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "challenges/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "dashboard/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "dashboard/public/data/controls.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "dashboard/public/data/legacy-controls-v3.1.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "dashboard/public/data/mcp-profile-v3.1.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "dashboard/public/data/mcp-profile-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/CHANGELOG.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/MANIFEST.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/RELEASE-CHECKLIST.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/adapters/manifests.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/adapters/registry.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/docs/ADOPTION-GUIDE.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/ARCHITECTURE.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/CI-EXECUTION-EVIDENCE.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/CONTRACTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/CURRENT-STATE-AND-GAPS.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/GAME-DEVELOPER-QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/RELEASE-PLAN.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/TOOL-SETUP-GUIDE.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/UPSTREAM-UPDATES.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/USER-GROUPS.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/integrations/AGENCY-CHECK.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/docs/integrations/MCP-PRO.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/profiles/game.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/repository-template/.ai-safe2/profiles/game.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/repository-template/.ai-safe2/schemas/ci-execution-receipt-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/repository-template/.ai-safe2/schemas/decision-record-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/repository-template/.ai-safe2/workflow.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/repository-template/.github/PULL_REQUEST_TEMPLATE.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/repository-template/AGENTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/repository-template/CLAUDE.md",
+      "kind": "document"
+    },
+    {
+      "path": "developer-workflow/schemas/adapter-manifest-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/schemas/ci-execution-receipt-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/schemas/decision-record-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/schemas/evidence-envelope-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "developer-workflow/upstreams.lock.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/ASSESSMENT-SCOPE.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/CHANGE-ATTRIBUTION.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/COMPONENT-VERSIONS.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/CONTROLS-V3.5.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/FRAMEWORK-EVIDENCE-EXPANSION.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/FRAMEWORK-UPDATE-ISSUES.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/LICENSING.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/REPOSITORY-UX-STANDARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/ROSETTA-STONE-V35.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/advisories/2026-09-09-skill-gate-executable-scope.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/advisories/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/LEDGER.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/PR_DESCRIPTION.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/RUNBOOK.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/STATE.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/development-plan.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/development-receipt.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/THREAT-MODEL.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/battery-after-branch.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/battery-before-main.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/battery-delta.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/contract-tests.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/design-specification.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/development-plan.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/gates.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/hosted-ci.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/implementation-runbook.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/least-privilege.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/pinned-actions.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/evidence/red-green.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/plan-source.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/receipt/receipt-source.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-21a8333/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-21a8333/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-21a8333/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-21a8333/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-21a8333/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-21a8333/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-225f45b/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-225f45b/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-225f45b/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-225f45b/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-225f45b/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-225f45b/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-98598ed/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-98598ed/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-98598ed/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-98598ed/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-98598ed/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-98598ed/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-bfe324b/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-bfe324b/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-bfe324b/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-bfe324b/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-bfe324b/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-bfe324b/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-e0637f7/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-e0637f7/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-e0637f7/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-e0637f7/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-e0637f7/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/after-e0637f7/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-98598ed/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-98598ed/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-98598ed/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-98598ed/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-98598ed/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-98598ed/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-bfe324b/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-bfe324b/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-bfe324b/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-bfe324b/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-bfe324b/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-bfe324b/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-e0637f7/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-e0637f7/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-e0637f7/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-e0637f7/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-e0637f7/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8-harness-e0637f7/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8/MATRIX.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8/cli.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8/mcp.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8/nexus.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8/skill.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8/summary.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/assessments/2026-10-07-version-consistency/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-11-19-v35-update/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/data/local-reference-dispositions-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "docs/engineering/ADR-DECISION-FIREWALL-ARCHITECTURE.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/engineering/AI-SAFE2-DEVELOPMENT-METHOD.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/engineering/PR-DECISION-EVIDENCE-WORKFLOW.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/engineering/REVIEW-AND-SECURITY-STACK.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/aism-decision-card/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/aism-decision-card/assessment.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/aism-decision-card/safe2-example.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/aism-remediation/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/aism-remediation/safe2-example.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/.agent/rules/governance-identity-tools.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/.agent/rules/governance-memory-context.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/.agent/rules/governance-soul.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/.markdownlint.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/INTEGRATION-GUIDE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/config/governance-system-prompt.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/core/GOVERNANCE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/core/IDENTITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/core/MEMORY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/core/SOUL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/core/TOOLS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/core/USER.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/enforcement/ai_safe2_compliance_report.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/plugins/governance-enforcer/plugin.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/plugins/governance-enforcer/prompts/system-governance.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/plugins/governance-enforcer/skills/governance/SKILL-CARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/anti-gravity-sovereign-runtime/plugins/governance-enforcer/skills/governance/SKILL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/autogen-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/autogen-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/autogen-sovereign-runtime/SECURITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/autogen-sovereign-runtime/core/IDENTITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/autogen-sovereign-runtime/core/MEMORY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/autogen-sovereign-runtime/core/SOUL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/autogen-sovereign-runtime/core/TOOLS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/autogen-sovereign-runtime/integrations/code-executor-safety.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/challenge-controlled-executor/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/challenge-controlled-executor/safe2-example.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/ARTICLE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/CLAUDE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/ci-cd/devcontainer.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/integrations/IDE-HARDENING.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/integrations/MCP-HARDENING.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/managed-settings/linux-policy.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/managed-settings/macos-policy.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/managed-settings/settings.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/claude-code-sovereign-runtime/managed-settings/windows-policy.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/codex-sovereign-runtime/AGENTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/codex-sovereign-runtime/ARTICLE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/codex-sovereign-runtime/EVALUATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/codex-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/codex-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/codex-sovereign-runtime/integrations/mcp-allowlist.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/crewai-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/crewai-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/crewai-sovereign-runtime/SECURITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/crewai-sovereign-runtime/core/IDENTITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/crewai-sovereign-runtime/core/MEMORY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/crewai-sovereign-runtime/core/SOUL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/crewai-sovereign-runtime/core/TOOLS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/crewai-sovereign-runtime/integrations/crewai-flows.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/cursor-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/cursor-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/cursor-sovereign-runtime/cursor-skill/ai-safe2-cursor.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/cursor-sovereign-runtime/integrations/nomshub-defense.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/environment-decision-card/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/environment-decision-card/safe2-example.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/SECURITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/core/HEARTBEAT.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/core/IDENTITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/core/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/core/SOUL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/core/SUBAGENT-POLICY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/core/hermes_memory_vaccine.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/docs/ARCHITECTURE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/docs/COMPLIANCE-MAPPING.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/docs/INCIDENT-RESPONSE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/docs/MIGRATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/docs/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/docs/THREAT-MODEL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/gateway/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/monitoring/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/scripts/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/skills-registry/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/supervisor/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/hermes-sovereign-runtime/validation/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/ishi/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/ishi/USE_CASE_IMPLEMENTATION_GUIDE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/ishi/ishi-openclaw-integration.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/ishi/ishi_memory.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/ishi/ishi_troubleshooting_guide.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langchain-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langchain-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langchain-sovereign-runtime/SECURITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langchain-sovereign-runtime/core/IDENTITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langchain-sovereign-runtime/core/MEMORY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langchain-sovereign-runtime/core/SOUL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langchain-sovereign-runtime/core/TOOLS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langchain-sovereign-runtime/integrations/langsmith-integration.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langflow-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langflow-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langflow-sovereign-runtime/integrations/langsmith-integration.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langflow-sovereign-runtime/integrations/mcp-security.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langgraph-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langgraph-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langgraph-sovereign-runtime/SECURITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langgraph-sovereign-runtime/core/IDENTITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langgraph-sovereign-runtime/core/MEMORY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langgraph-sovereign-runtime/core/SOUL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langgraph-sovereign-runtime/core/TOOLS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/langgraph-sovereign-runtime/integrations/langgraph-studio.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/lovable-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/lovable-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/lovable-sovereign-runtime/integrations/mcp-server-security.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/lovable-sovereign-runtime/lovable-skill/ai-safe2-lovable.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/lovable-sovereign-runtime/workspace-knowledge/ai-safe2-workspace-knowledge.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/love_equation/EXECUTION_STRATEGY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/love_equation/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/love_equation/RELEASES/2026-02-12–Love_Equation_v2.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/love_equation/integration-architecture.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/love_equation/love-equation-event.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/love_equation/model-enhanced.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/love_equation/training-data-curation.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/make-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/make-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/make-sovereign-runtime/integrations/make-mcp-security.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/make-sovereign-runtime/make-skill/ai-safe2-make.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/mcp-security-toolkit/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/AGENTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/HEARTBEAT.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/IDENTITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/MODEL-ROUTER.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/OPENCLAW-AGENT-TEMPLATE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/OPENCLAW-WORKSPACE-POLICY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/RELEASE-NOTES.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/SOCIAL-POSTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/SOUL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/SUBAGENT-POLICY.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/TOOLS.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/USER.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/core/openclaw_memory.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/gateway/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/openclaw/gateway/schemas/tool_plan.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "examples/openclaw/troubleshooting.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/slowmist-overlay/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/slowmist-overlay/control-mapping-table.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/slowmist-overlay/deployment-checklist.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/slowmist-overlay/red-team-schedule-and-resources.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/slowmist-overlay/safe2-for-slowmist-overlay.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/slowmist-overlay/threat-model.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/v35-authority/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/xai-grok-sovereign-runtime/.grok/skills/ai-safe2/SKILL-CARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/xai-grok-sovereign-runtime/.grok/skills/ai-safe2/SKILL.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/xai-grok-sovereign-runtime/QUICKSTART.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/xai-grok-sovereign-runtime/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/xai-grok-sovereign-runtime/field-reports/2026-07-08-grok-usb-memory-sync.md.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/xai-grok-sovereign-runtime/field-reports/TEMPLATE.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/xai-grok-sovereign-runtime/integrations/memory-governance-patterns.md",
+      "kind": "document"
+    },
+    {
+      "path": "examples/xai-grok-sovereign-runtime/integrations/mtls-enterprise.md",
+      "kind": "document"
+    },
+    {
+      "path": "gateway/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/DEVELOPER_IMPLEMENTATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/NO_CODE_AUTOMATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/TROUBLESHOOTING.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/ishi_hardening.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/openclaw-hardening.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/openclaw-integration-guide.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/v3-release-overview.md",
+      "kind": "document"
+    },
+    {
+      "path": "guides/v3.1-release-overview.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/AI-SAFE2-v3.1.0.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/AI-SAFE2-v3.5.0.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/CLI-0.9.9-RELEASE-CANDIDATE.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/RELEASE-NOTES-CLI-0.2.0.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/RELEASE-NOTES-CLI-0.6.0.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/RELEASE-NOTES-CLI-1.0.1.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/SAFE2-CLI-0.3.0-ANNOUNCEMENT.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/SAFE2-CLI-0.3.0-PR.md",
+      "kind": "document"
+    },
+    {
+      "path": "releases/SAFE2-CLI-0.3.0.md",
+      "kind": "document"
+    },
+    {
+      "path": "repository-topics.manifest.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "research/001_rag_poisoning.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/002_nhi_secret_sprawl.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/003_swarm_consensus_failure.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/004_supply_chain_model_signing.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/005_memory_injection_minja.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/006_runtime_isolation_gvisor.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/007_jit_privilege_access.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/008_grc_framework_comparison.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/009_web_grounding_risk.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/010_governing_agent_types.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/011_the_kill_switch.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/012_the_engineered_liability_stack.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/013_the_7_layer_stack.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/014_compensating_controls_spec.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/015_hear_doctrine_human_ethical_agent_of_record.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/016_agent_replication_governance.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/017_nhi_orchestration_board_and_regulator_view.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/018_agentic_bias_as_operational_risk.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/019_protocol_layer_supply_chain_risks.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/020_agentic_ransomware_and_malicious_operators.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/021_temporal_attack_profiles.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/022_cognitive_surface_and_memory_drift.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/023_mcp-server-security-profile.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/024_mcp_consumer_protection.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/025_v35_c01.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/026_v35_c02.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/027_v35_c03.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/028_v35_c04.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/029_v35_c05.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/030_v35_c06.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/031_v35_c07.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/032_v35_c08.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/033_v35_c09.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/034_v35_c10.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/035_v35_c11.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/036_v35_c12.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/037_v35_c13.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/038_v35_c14.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/039_v35_c15.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/040_v35_c16.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/041_v35_c17.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/042_v35_c18.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/043_v35_c19.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/044_v35_c20.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/045_v35_c21.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/046_v35_c22.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/047_v35_c23.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/048_v35_c24.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/049_v35_c25.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/050_v35_c26.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/051_v35_c27.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/052_v35_c28.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/053_v35_c29.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/054_v35_c30.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/055_v35_c31.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/056_v35_c32.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/057_v35_c33.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/058_v35_c34.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/059_v35_c35.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/060_v35_c36.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/061_v35_c37.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/062_v35_c38.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/063_v35_c39.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/064_v35_c40.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/065_v35_c41.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/066_v35_c42.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/067_v35_c43.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/068_v35_c44.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/069_v35_c45.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/070_v35_c46.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/071_v35_c47.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/072_v35_c48.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/073_v35_c49.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/074_v35_c50.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/075_v35_c51.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/076_v35_c52.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "research/technology-contribution-examples.md",
+      "kind": "document"
+    },
+    {
+      "path": "resources/NIST_AI_Agent_Standards_Initiative_RFI_Submission.md",
+      "kind": "document"
+    },
+    {
+      "path": "resources/openclaw_security_resource_map.md",
+      "kind": "document"
+    },
+    {
+      "path": "resources/pillar1_checklist_lite.md",
+      "kind": "document"
+    },
+    {
+      "path": "resources/readme.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/AGENTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/challenge/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/data/acceptance-report-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/adapter-conformance-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/adapter-descriptor-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/adapter-evidence-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/ai-safe2-controls-v3.0.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/ai-safe2-controls-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/aism-assessment-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/aism-model-v1.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/aism-remediation-plan-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/aism-remediation-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/assessment-scope-manifest-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/assessment-scope-source-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/assessment-scope-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/challenge-bundle-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/challenge-comparison-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/challenge-execution-plan-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/challenge-execution-receipt-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/challenge-run-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/challenge-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/challenge_001_protocol.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/change-attribution-manifest-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/change-attribution-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/change-monitor-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/claim-audit-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/claim-audit-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/cli-0.6-assessment-scope-source.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/cli-0.6-system-identity-source.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/control-alias-review-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/decision-request-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/decision-result-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/decision-routing-policy-v1.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/decision-routing-policy-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/deployment-readiness-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/development-plan-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/development-plan-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/development-policy-v1.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/development-policy-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/development-receipt-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/development-receipt-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/discovery-drift-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/discovery-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/environment-policy-decision-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/environment-policy-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/environment-posture-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/failure-diagnosis-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/failure-source-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/failure-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/framework-requirements-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/friction-event-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/friction-summary-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/harness-evidence-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/harness-source-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/harness-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/installation-check-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/mcp-profile-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/nexus-evidence-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/onboarding-plan-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/onboarding-result-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/operational-truth-manifest-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/operational-truth-source-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/operational-truth-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/project-assessment-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/project-scan-evidence-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/pytest-capture-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/release-readiness-manifest-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/release-readiness-source-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/release-readiness-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/report-attestation-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/review-policy-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/rosetta-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/run-manifest-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/skillspector-evidence-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/system-identity-manifest-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/system-identity-source-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/system-identity-source-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/task-receipt-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/task-receipt-input-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/task-receipt-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/task-test-receipt-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/task-tool-receipt-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/test-result-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/test-result-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/threat-observations-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/threat-profiles-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/tool-result-demo.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/tool-result-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/data/usage-summary-v1.schema.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "safe2/docs/ADAPTER-SDK.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/AISM-REMEDIATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CHALLENGE-CLI-VALIDATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CHALLENGE-CLI.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CHALLENGE-HARNESS-DESIGN.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CHALLENGE-PROVIDER-FEEDBACK.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CLAIM-AUDIT.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CLI-1.0-RELEASE-QUALIFICATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CLI-1.0-WORKFLOW.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CLI-CONFIGURATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CLI-POST-1.0-PRIORITIES.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CLI-ROADMAP-TO-1.0.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CLI-STABILITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CODEX-JSONL-ADAPTER.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/CONTINUOUS-EVIDENCE.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/FAILURE-LOCALIZATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/GUIDED-START.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/INSTALLATION-CHECK.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/OPENTELEMETRY-ADAPTER.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/OPERATIONAL-TRUTH.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/PYTHON-COMPATIBILITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/RELEASE-READINESS.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/SECURITY-BRIEF-2026-09-13-TRIAGE.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/SKILL-GATE-HARDENING-VALIDATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/SKILL-SCREENING-DEMO.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/SKILL-SCREENING-SECOND-PASS.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/SKILLSPECTOR-LIVE-VALIDATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/STRANGER-ACCEPTANCE.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/STRANGER-READY-CLI-REVIEW.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/SYSTEM-IDENTITY.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/TASK-RECEIPTS.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/docs/UNIFIED-ASSESSMENT.md",
+      "kind": "document"
+    },
+    {
+      "path": "safe2/safe2-docs.manifest.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "scanner/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "skill.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/ai-safe2-secure-build-copilot/SKILL-CARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/ai-safe2-secure-build-copilot/SKILL.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/chatgpt/gpt-instructions.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-development-method/SKILL-CARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-development-method/SKILL.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-development-method/references/evaluation.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-development-method/references/method.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-secure-build-copilot/SKILL-CARD.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-secure-build-copilot/SKILL.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-secure-build-copilot/references/evals.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-secure-build-copilot/references/governance-core.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/codex/ai-safe2-secure-build-copilot/references/review-and-mapping.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/evals.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/gemini/gem-instructions.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/mcp/MCP-V2-MIGRATION.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/mcp/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/mcp/client-config/claude-code-config.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/mcp/client-config/local-stdio-example.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "skills/mcp/data/ai-safe2-controls-v3.0.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "skills/mcp/data/ai-safe2-controls-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "skills/mcp/data/mcp-profile-v3.1.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "skills/mcp/data/mcp-profile-v3.5.json",
+      "kind": "machine-data"
+    },
+    {
+      "path": "skills/perplexity/system-instructions.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/skill-spec.md",
+      "kind": "document"
+    },
+    {
+      "path": "skills/skill_md_root_redirect.md",
+      "kind": "document"
+    },
+    {
+      "path": "tests/fixtures/hostile/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "tests/fixtures/skillspector-live/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "tests/fixtures/skillspector-live/clean/SKILL.md",
+      "kind": "document"
+    },
+    {
+      "path": "tests/fixtures/skillspector-live/hostile/SKILL.md",
+      "kind": "document"
+    }
+  ]
+}

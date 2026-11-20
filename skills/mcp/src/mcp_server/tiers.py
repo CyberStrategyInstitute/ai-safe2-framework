@@ -3,7 +3,7 @@ AI SAFE2 MCP Server — Tier Enforcement
 Defines what each tier can access and applies limits.
 
 free tier  — email registration, rate-limited, limited control/framework access
-pro tier   — Toolkit purchaser, full 161 controls, all 32 frameworks
+pro tier   — Toolkit purchaser, full 173 controls, all 32 frameworks
 
 Tiers are enforced per tool call. The tool functions call check_tier() to
 gate access and apply limits before returning results.
@@ -63,7 +63,7 @@ TIER_POLICIES: dict[str, TierPolicy] = {
         can_use_get_resource=True,
         can_use_full_aaf=True,
         can_access_all_frameworks=True,
-        description="Full access: 161 controls, 32 frameworks, AAF scoring, code review.",
+        description="Full access: 173 controls, 32 frameworks, AAF scoring, code review.",
     ),
 }
 

@@ -1,7 +1,7 @@
 # Challenge 001: Anthropic Multi-Agent Turf War
 ### What if the agents had been governed?
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Challenge_Lab-820F1A?style=flat-square)](../README.md)
 [![Status](https://img.shields.io/badge/Status-Pre--registration-808080?style=flat-square)](./preregistration/)
 
@@ -17,7 +17,7 @@
 
 **Status:** Design and pre-registration  
 **Validation claims:** None yet  
-**Framework under test:** AI SAFE² v3.1 and AISM  
+**Framework under test:** AI SAFE² v3.5 and AISM  
 **Reference implementation under test:** NEXUS-A2A v0.3, Guardian, VCC, NOR, Memory Vaccine, Gateway, and only those adapters explicitly pinned in the preregistration
 
 **The framework is the subject of the test, not the source of its own proof.**
@@ -310,4 +310,4 @@ Use the repository's Challenge Finding issue template. Security-sensitive findin
 
 **Challenge principle:** We are not asking you to trust the framework. We are publishing the conditions under which it should fail.
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

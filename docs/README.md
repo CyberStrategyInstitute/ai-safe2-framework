@@ -29,3 +29,9 @@ evaluation, and Evidence Assurance methods are in [AISM](../AISM/README.md).
 
 The canonical ownership registry is
 [`repository-topics.manifest.json`](../repository-topics.manifest.json).
+
+## v3.5 candidate framework
+
+[173 control contracts](CONTROLS-V3.5.md) | [Rosetta Stone](ROSETTA-STONE-V35.md) | [Deployment readiness](../AISM/DEPLOYMENT-READINESS-V35.md) | [Research](../research/README.md)
+
+[Complete repository page map](../PAGE_MAP.md) | [Machine page map](PAGE_MAP.json)

@@ -30,7 +30,7 @@ def _unique_ids(items: list[dict[str, Any]], label: str) -> set[str]:
 
 
 def _control_ids() -> set[str]:
-    document = json.loads(files("safe2.data").joinpath("ai-safe2-controls-v3.0.json").read_text())
+    document = json.loads(files("safe2.data").joinpath("ai-safe2-controls-v3.5.json").read_text())
     controls = document["pillar_controls"] + document["cross_pillar_controls"]
     return {str(item["id"]) for item in controls}
 

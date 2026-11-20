@@ -1,7 +1,7 @@
 # AI SAFE² Challenge CLI
 ### Run fixtures or authorized evaluators, preserve receipts, and compare without overclaiming
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Challenge Lab](https://img.shields.io/badge/Module-Challenge_Lab-820F1A?style=flat-square)](../../challenges/README.md)
 [![Scope](https://img.shields.io/badge/Scope-Bounded_process_evidence-808080?style=flat-square)](./CHALLENGE-HARNESS-DESIGN.md)
 
@@ -320,4 +320,4 @@ an AISM maturity rating or deployment approval.
 
 [CLI Home](../README.md) | [Challenge Lab](../../challenges/README.md) | [Framework Home](../../README.md)
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

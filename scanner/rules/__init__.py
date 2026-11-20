@@ -1,4 +1,4 @@
-"""AI SAFE2 v3.1 Scanner rule modules."""
+"""AI SAFE2 v3.5 Scanner rule modules."""
 
 from .cross_pillar import CP_RULES
 from .mcp_profile import MCP_RULES

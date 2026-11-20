@@ -10,3 +10,7 @@ records. Current operating guidance remains in each component's own directory.
 
 Use the repository [release template](../.github/RELEASE_TEMPLATE.md) for new
 release announcements and verify links in GitHub preview before publication.
+
+## Candidate under review
+
+[AI SAFE2 v3.5.0 candidate](AI-SAFE2-v3.5.0.md) records source changes under PR #433. A merged release, tag and package publication require their own confirmation.

@@ -15,12 +15,12 @@
 - [ ] Bug fix
 - [ ] New feature (non-breaking)
 - [ ] Breaking change (requires changelog and migration note)
-- [ ] Protocol or platform-profile change (requires AI SAFE² v3.1 mapping)
+- [ ] Protocol or platform-profile change (requires AI SAFE² v3.5 mapping)
 - [ ] Constitutional amendment (AISM invariant or HEAR Doctrine; requires applicable governance review)
 - [ ] Documentation or governance
 - [ ] Dependency update
 
-## AI SAFE² v3.1 Mapping
+## AI SAFE² v3.5 Mapping
 
 <!-- Which framework controls or platform-profile controls does this change affect or enable? -->
 <!-- For MCP changes, include the applicable MCP-1 through MCP-19 profile controls and protocol version. -->
@@ -31,7 +31,7 @@
 
 ### Protocol/Profile Metadata
 
-- AI SAFE² version: `3.1`
+- AI SAFE² version: `3.5`
 - Protocol/profile version, if applicable: <!-- e.g., MCP 2026-07-28 -->
 - Enforcement plane: <!-- north-south / east-west / agent-to-tool / n/a -->
 
@@ -54,7 +54,7 @@ tests/integrations separately from executed or released behavior. -->
 - [ ] Existing applicable tests pass
 - [ ] New tests added for new behavior
 - [ ] Fail-closed behavior is preserved for incomplete enforcement paths
-- [ ] Framework control total remains 161 unless a separately approved framework-level change is intended
+- [ ] Framework control total matches the canonical catalog (173 for v3.5); count changes have an explicit framework-level decision
 - [ ] Platform-profile controls are not double-counted as top-level framework controls
 - [ ] MCP changes do not require optional `server/discover`
 - [ ] Governance is not bound solely to protocol-owned session or lifecycle constructs

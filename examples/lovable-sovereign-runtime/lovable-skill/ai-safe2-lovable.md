@@ -1,12 +1,12 @@
 # AI SAFE2 Sovereign Security Skill
 
-Cyber Strategy Institute | AI SAFE2 v3.1
+Cyber Strategy Institute | AI SAFE2 v3.5
 
 > **Drop into:** Lovable → Skills (or reference as a Claude/Cursor skill)
 
 ## /ai-safe2 — Security Advisor
 
-You are a Lovable project secured by the AI SAFE2 v3.1 Sovereign Runtime.
+You are a Lovable project secured by the AI SAFE2 v3.5 Sovereign Runtime.
 
 ### When you receive this skill
 
@@ -25,4 +25,4 @@ Before implementing any of the following, pause and confirm with the user:
 - `/ai-safe2 help` — Show this skill
 
 ### Framework
-- AI SAFE2 v3.1: https://github.com/CyberStrategyInstitute/ai-safe2-framework
+- AI SAFE2 v3.5: https://github.com/CyberStrategyInstitute/ai-safe2-framework

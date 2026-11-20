@@ -1,7 +1,7 @@
 # AI SAFE² Scanner
 ### Pre-commit and CI analysis for agentic AI codebases
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Scanner-820F1A?style=flat-square)](./README.md)
 [![Rules](https://img.shields.io/badge/Rules-64-808080?style=flat-square)](./rules/)
 
@@ -35,7 +35,7 @@ The scanner evaluates code and configuration against AI SAFE² patterns. It is a
 
 ## v3.1 Rule Model
 
-AI SAFE² v3.1 keeps the **161-control core framework taxonomy** and adds a machine-readable **CP.5.MCP profile with MCP-1 through MCP-19**.
+AI SAFE² v3.5 keeps the **161-control core framework taxonomy** and adds a machine-readable **CP.5.MCP profile with MCP-1 through MCP-19**.
 
 The scanner currently exposes **64 detection rules**:
 
@@ -148,7 +148,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r scanner/requirements.txt
-      - name: AI SAFE2 v3.1 scan
+      - name: AI SAFE2 v3.5 scan
         run: |
           python -m scanner.cli scan . \
             --tier Tier2 \
@@ -206,4 +206,4 @@ scanner/
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

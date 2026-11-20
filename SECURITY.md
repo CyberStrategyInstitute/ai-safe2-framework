@@ -3,7 +3,7 @@
 ## Supported Versions
 
 Framework, CLI and component versions are independent. The current framework is
-AI SAFE² v3.1. The `ai-safe2` CLI source candidate is **1.1.0**; the latest
+AI SAFE² v3.5. The `ai-safe2` CLI source candidate is **1.1.0**; the latest
 published PyPI CLI is **1.0.1** (verified 2026-10-16). NEXUS source is **0.6.0**;
 the published SDK is **0.5.0**. Source versions are not publication receipts.
 The release workflow verifies uploads by installing them. 1.0.0 was a

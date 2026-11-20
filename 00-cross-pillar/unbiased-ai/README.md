@@ -1,3 +1,5 @@
+> **v1 baseline reference.** The v3.5 candidate uses [UAS v2](STANDARD-V2.md) through the framework manifest. Retain the original profile identity when interpreting the methods below.
+
 # Unbiased AI Standard (UAS) Regulatory Profile
 ### Cross-pillar compliance overlay for truthfulness, neutrality, and continuous improvement
 
@@ -174,3 +176,7 @@ AI SAFE² governs the system and its authority. CSF addresses the human operator
 ---
 
 *AI SAFE² v3.1 · UAS 1.0 regulatory profile extension · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+
+## Current v3.5 candidate
+
+[UAS v2 requirements and acceptance](STANDARD-V2.md) | [v2 machine catalog](uas-profile-v2.json) | [CSF companion](../../CSF-COMPANION.md)

@@ -2,18 +2,19 @@
   "schema_version": "1.0",
   "framework": {
     "name": "AI SAFE2",
-    "display_name": "AI SAFE²",
-    "version": "3.1.0",
+    "display_name": "AI SAFEÂ²",
+    "version": "3.5.0",
     "publisher": "Cyber Strategy Institute",
-    "core_control_count": 161,
-    "cross_pillar_controls": "CP.1-CP.10",
+    "core_control_count": 173,
+    "cross_pillar_controls": "CP.1-CP.15",
     "normative_entrypoint": "README.md",
-    "cross_pillar_entrypoint": "00-cross-pillar/README.md"
+    "cross_pillar_entrypoint": "00-cross-pillar/README.md",
+    "release_status": "candidate"
   },
   "machine_readable": {
-    "core_controls": "skills/mcp/data/ai-safe2-controls-v3.0.json",
-    "mcp_profile": "skills/mcp/data/mcp-profile-v3.1.json",
-    "dashboard_mcp_profile_mirror": "dashboard/public/data/mcp-profile-v3.1.json",
+    "core_controls": "skills/mcp/data/ai-safe2-controls-v3.5.json",
+    "mcp_profile": "skills/mcp/data/mcp-profile-v3.5.json",
+    "dashboard_mcp_profile_mirror": "dashboard/public/data/mcp-profile-v3.5.json",
     "aism_model": "safe2/data/aism-model-v1.json",
     "aism_assessment_schema": "safe2/data/aism-assessment-v1.schema.json",
     "challenge_run_schema": "safe2/data/challenge-run-v1.schema.json",
@@ -41,9 +42,12 @@
     "development_receipt_schema": "safe2/data/development-receipt-v1.schema.json",
     "review_policy_schema": "safe2/data/review-policy-v1.schema.json",
     "challenge_001_fixture_protocol": "safe2/data/challenge_001_protocol.json",
-    "uas_regulatory_profile": "00-cross-pillar/unbiased-ai/uas-profile-v1.json",
+    "uas_regulatory_profile": "00-cross-pillar/unbiased-ai/uas-profile-v2.json",
     "nexus_schemas": "NEXUS/schemas/",
-    "scanner_rules": "scanner/rules/"
+    "scanner_rules": "scanner/rules/",
+    "framework_requirements": "safe2/data/framework-requirements-v3.5.json",
+    "rosetta_registry": "safe2/data/rosetta-v3.5.json",
+    "deployment_readiness_schema": "safe2/data/deployment-readiness-v1.schema.json"
   },
   "profiles": {
     "cp5_mcp": {
@@ -51,19 +55,23 @@
       "control_range": "MCP-1-MCP-19",
       "specification": "MCP 2026-07-28",
       "legacy_compatibility_specification": "MCP 2025-11-25",
-      "normative_document": "00-cross-pillar/cp5_mcp_server_security.md",
-      "machine_readable_data": "skills/mcp/data/mcp-profile-v3.1.json",
+      "normative_document": "00-cross-pillar/cp5_mcp_v35.md",
+      "machine_readable_data": "skills/mcp/data/mcp-profile-v3.5.json",
       "server_discover_required": false,
       "legacy_session_id_is_identity": false
     },
     "uas_regulatory": {
-      "id": "UAS-1.0",
+      "id": "UAS-2.0",
       "name": "Unbiased AI Standard Regulatory Profile",
       "type": "regulatory_profile_extension",
       "requirement_count": 27,
-      "requirement_ranges": ["UAS-S1-UAS-S14", "UAS-H1-UAS-H8", "UAS-X1-UAS-X5"],
-      "normative_document": "00-cross-pillar/unbiased-ai/STANDARD.md",
-      "machine_readable_data": "00-cross-pillar/unbiased-ai/uas-profile-v1.json",
+      "requirement_ranges": [
+        "UAS-S1-UAS-S14",
+        "UAS-H1-UAS-H8",
+        "UAS-X1-UAS-X5"
+      ],
+      "normative_document": "00-cross-pillar/unbiased-ai/STANDARD-V2.md",
+      "machine_readable_data": "00-cross-pillar/unbiased-ai/uas-profile-v2.json",
       "adds_to_core_control_count": false,
       "adds_cross_pillar_control": false,
       "status": "profile extension",
@@ -75,21 +83,41 @@
     {
       "id": "north-south",
       "traffic": "agent-to-model-provider",
-      "primary_concerns": ["content", "policy", "consumption", "spend"]
+      "primary_concerns": [
+        "content",
+        "policy",
+        "consumption",
+        "spend"
+      ]
     },
     {
       "id": "east-west",
       "traffic": "agent-to-agent",
-      "primary_concerns": ["identity", "delegation", "lineage", "authority"]
+      "primary_concerns": [
+        "identity",
+        "delegation",
+        "lineage",
+        "authority"
+      ]
     },
     {
       "id": "agent-to-tool",
       "traffic": "agent-to-MCP-server-or-tool",
-      "primary_concerns": ["authorization", "provenance", "tool-reachability", "returned-content-trust"]
+      "primary_concerns": [
+        "authorization",
+        "provenance",
+        "tool-reachability",
+        "returned-content-trust"
+      ]
     }
   ],
   "persistence": {
-    "canonical_scopes": ["request", "handle_scoped", "durable", "swarm_shared"],
+    "canonical_scopes": [
+      "request",
+      "handle_scoped",
+      "durable",
+      "swarm_shared"
+    ],
     "legacy_aliases": {
       "SESSION": "request",
       "CROSS_SESSION": "handle_scoped",

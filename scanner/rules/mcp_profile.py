@@ -1,5 +1,5 @@
 """
-AI SAFE2 v3.1 Scanner - CP.5.MCP profile rules.
+AI SAFE2 v3.5 Scanner - CP.5.MCP profile rules.
 
 These rules target the agent-to-tool enforcement plane for MCP deployments.
 They intentionally do not require server/discover to exist. MCP 2026-07-28

@@ -1,11 +1,11 @@
 <!-- AI-SAFE2-UX:START -->
-[![AI SAFE² v3.1](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE² v3.5](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface: Example](https://img.shields.io/badge/Surface-Example-820F1A?style=flat-square)](../README.md)
 [![Context: v3.1 Current](https://img.shields.io/badge/Context-v3.1_Current-808080?style=flat-square)](../../docs/REPOSITORY-UX-STANDARD.md)
 
 [Framework Home](../../README.md) | [Examples Index](../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [AISM](../../AISM/) | [NEXUS](../../NEXUS/) | [Dashboard](https://cyberstrategyinstitute.github.io/ai-safe2-framework/dashboard/)
 
-> **Current framework context:** AI SAFE² v3.1. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
+> **Current framework context:** AI SAFE² v3.5. This example may preserve historical component versions or earlier framework references where they describe when the implementation was created. For current conformance, use the v3.1 framework and applicable profile requirements.
 <!-- AI-SAFE2-UX:END -->
 
 <!-- stack: OpenAI Codex -->
@@ -178,12 +178,12 @@ These are platform constraints, not design omissions. The mitigation is to tight
 
 Inspired by the OpenClaw v2.0 approach, this package now includes a minimal Codex core-file standard:
 
-- [IDENTITY.md](./IDENTITY.md): short identity anchor
-- [SOUL.md](./SOUL.md): operating constitution
+- IDENTITY.md (`./IDENTITY.md`, reference unavailable in this checkout): short identity anchor
+- SOUL.md (`./SOUL.md`, reference unavailable in this checkout): operating constitution
 - [AGENTS.md](./AGENTS.md): primary operating manual
-- [USER.md](./USER.md): data classification and trust handling
-- [TOOLS.md](./TOOLS.md): environment and approved tool surface
-- [SUBAGENT-POLICY.md](./SUBAGENT-POLICY.md): delegation rules for ACT-4 usage
+- USER.md (`./USER.md`, reference unavailable in this checkout): data classification and trust handling
+- TOOLS.md (`./TOOLS.md`, reference unavailable in this checkout): environment and approved tool surface
+- SUBAGENT-POLICY.md (`./SUBAGENT-POLICY.md`, reference unavailable in this checkout): delegation rules for ACT-4 usage
 - [EVALUATION.md](./EVALUATION.md): verification, drift checks, and known platform caveats
 
 This is deliberately smaller than the OpenClaw 11-file standard because Codex does not expose the same runtime surfaces. The goal is not file count parity. The goal is a tighter governance surface with real operational effect.
@@ -199,5 +199,5 @@ This is deliberately smaller than the OpenClaw 11-file standard because Codex do
 
 [Examples Index](../README.md) | [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [NEXUS](../../NEXUS/) | [Scanner](../../scanner/README.md) | [MCP Profile](../../00-cross-pillar/cp5_mcp_server_security.md)
 
-*AI SAFE² v3.1 | Cyber Strategy Institute*
+*AI SAFE² v3.5 | Cyber Strategy Institute*
 <!-- AI-SAFE2-UX-FOOTER:END -->

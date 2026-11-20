@@ -1,7 +1,7 @@
-# AI SAFE² v3.1 MCP Server
+# AI SAFE² v3.5 MCP Server
 ### Live framework and CP.5.MCP profile access at the agent-to-tool boundary
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
 [![Surface](https://img.shields.io/badge/Surface-MCP_Server-820F1A?style=flat-square)](./README.md)
 [![Profile](https://img.shields.io/badge/CP.5.MCP-19_controls-808080?style=flat-square)](../../00-cross-pillar/cp5_mcp_server_security.md)
 
@@ -26,16 +26,16 @@ no new MCP assessment tool or schema is exposed by this update.
 
 The AI SAFE² MCP server exposes the framework taxonomy and MCP security profile to MCP-compatible clients such as Claude Code, Codex, Cursor, and other agent runtimes.
 
-AI SAFE² v3.1 separates two counts deliberately:
+AI SAFE² v3.5 separates two counts deliberately:
 
-- **161 framework controls:** the five pillars plus the core Cross-Pillar Governance Layer.
-- **19 CP.5.MCP profile controls:** MCP-specific requirements under CP.5. These are profile controls and are not added to the 161 framework total.
+- **173 framework controls:** the five pillars plus the core Cross-Pillar Governance Layer.
+- **19 CP.5.MCP profile controls:** MCP-specific requirements under CP.5. These are profile controls and are not added to the 173 framework total.
 
-The server loads the stable 161-control core taxonomy and overlays the v3.1 MCP profile so MCP-1 through MCP-19 are directly queryable.
+The server loads the stable 173-control core taxonomy and overlays the v3.1 MCP profile so MCP-1 through MCP-19 are directly queryable.
 
 ## v3.1 Security Model
 
-AI SAFE² v3.1 is aligned to MCP `2026-07-28` and does not use protocol-owned session state as the governance identity or authorization boundary.
+AI SAFE² v3.5 is aligned to MCP `2026-07-28` and does not use protocol-owned session state as the governance identity or authorization boundary.
 
 Governance instead binds to:
 
@@ -79,7 +79,7 @@ The current MCP profile contains 19 controls:
 
 Canonical profile: [`../../00-cross-pillar/cp5_mcp_server_security.md`](../../00-cross-pillar/cp5_mcp_server_security.md)
 
-Machine-readable profile: [`data/mcp-profile-v3.1.json`](data/mcp-profile-v3.1.json)
+Machine-readable profile: [`data/mcp-profile-v3.5.json`](data/mcp-profile-v3.5.json)
 
 ## MCP-19 and Authentication
 
@@ -188,8 +188,8 @@ MCP `2025-11-25` is retained as a legacy compatibility binding for twelve months
 The MCP server intentionally uses a layered data model:
 
 ```text
-data/ai-safe2-controls-v3.0.json  -> stable 161-control core taxonomy
-data/mcp-profile-v3.1.json       -> CP.5.MCP 19-control protocol profile
+data/ai-safe2-controls-v3.5.json  -> stable 173-control core taxonomy
+data/mcp-profile-v3.5.json       -> CP.5.MCP 19-control protocol profile
 ```
 
 The release version is v3.1 even though the unchanged core taxonomy source remains v3.0. This prevents duplicated control databases and makes profile-level expansion explicit.
@@ -201,7 +201,7 @@ Before a v3.1 release or MCP security change is considered complete, verify at m
 - the server starts and completes an MCP handshake over stdio and authenticated streamable HTTP (`tests/test_transport_e2e.py`);
 - the server loads the core taxonomy and v3.1 MCP profile;
 - `MCP-14` through `MCP-19` resolve through the controls database;
-- the framework total remains 161;
+- the framework total remains 173;
 - the profile total is 19;
 - optional `server/discover` is not required;
 - incomplete enforcement remains fail-closed;
@@ -216,4 +216,4 @@ Before a v3.1 release or MCP security change is considered complete, verify at m
 
 ---
 
-*AI SAFE² v3.1 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.5 · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*

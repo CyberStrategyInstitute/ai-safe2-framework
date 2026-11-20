@@ -95,7 +95,7 @@ def test_stale_claims_and_unpublished_install_pins_fail(repository, text):
         ("safe2/__init__.py", '"1.1.0"', '"0.8.0"'),
         ("NEXUS/docker/gateway/gateway.py", '"0.6.0"', '"0.3.0"'),
         ("NEXUS/docker/otel/collector-config.yaml", '"0.6.0"', '"0.3.0"'),
-        ("skills/mcp/src/mcp_server/config.py", '"3.1.0"', '"3.0.0"'),
+        ("skills/mcp/src/mcp_server/config.py", '"3.5.0"', '"3.0.0"'),
         (
             "SECURITY.md",
             "| NEXUS reference implementation | 0.6.x |",

@@ -1,4 +1,4 @@
-"""Project (161-control) scan engine.
+"""Project (173-control) scan engine.
 
 Thin re-export of the existing scanner/ package (StaticScanner, ScanResult,
 ISO42001Report) plus the tier-fail policy logic that used to live inline in
@@ -13,13 +13,13 @@ from pathlib import Path
 from scanner.report import ISO42001Report  # noqa: F401
 from scanner.scanner import ScanResult, StaticScanner
 
-DEFAULT_CONTROLS_JSON = Path(__file__).resolve().parent.parent / "data" / "ai-safe2-controls-v3.0.json"
+DEFAULT_CONTROLS_JSON = Path(__file__).resolve().parent.parent / "data" / "ai-safe2-controls-v3.5.json"
 
 
 def run_scan(
     path: str, controls_json: str | None = None, max_files: int = 10_000
 ) -> ScanResult:
-    """Run the 161-control static audit against a project path.
+    """Run the 173-control static audit against a project path.
 
     Falls back to the controls JSON bundled with the safe2 package if the
     caller didn't supply one and StaticScanner's own relative-path lookup

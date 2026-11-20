@@ -151,3 +151,7 @@ Version 2.0 expanded AI SAFE² to 99 controls with enterprise governance and NIS
 **Released:** June 2025
 
 Version 1.0 established the original ten-topic foundation that later evolved into the five-pillar model.
+
+## v3.5 candidate
+
+Twelve added controls yield 173 core controls, with 154 explicit child clauses, twelve MCP child clauses, six deployment profiles, and 52 source-derived research notes. The Rosetta Stone preserves 1,202 recovered relationship records as historical/unreviewed, with sixteen audit-rule classes and a scoped readiness evidence evaluator. The revision is under review in PR #433. No release or deployment is asserted.

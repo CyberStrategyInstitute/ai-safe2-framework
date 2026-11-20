@@ -5,7 +5,7 @@ authors:
     given-names: "Vincent"
     affiliation: "Cyber Strategy Institute"
 title: "AI SAFE² Framework: Agentic AI Governance and Runtime Enforcement"
-version: 3.1.0
+version: 3.5.0
 date-released: 2026-08-29
 url: "https://github.com/CyberStrategyInstitute/ai-safe2-framework"
 preferred-citation:
