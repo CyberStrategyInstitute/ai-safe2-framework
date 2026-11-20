@@ -80,6 +80,7 @@ docs/README.md,readme,current-topic-surface,Current routes and explicit componen
 docs/advisories/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
 docs/assessments/2026-10-07-version-consistency/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
 docs/assessments/2026-11-19-v35-update/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
+docs/assessments/2026-11-20-v35-release/README.md,readme,historical-or-frozen,Retain evidence/component/protocol identity; discover through current indexes.
 examples/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
 examples/aism-decision-card/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.
 examples/aism-remediation/README.md,readme,current-topic-surface,Current routes and explicit component/evidence boundaries; implementation claims remain scoped.

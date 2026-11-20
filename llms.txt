@@ -56,3 +56,5 @@ Source ownership: `repository-topics.manifest.json`. Complete paths: `PAGE_MAP.m
 Preserve unknown, partial, blocked, not tested, stale and unavailable states. Bind evidence to exact system, revision, scope and observer. Check status before claiming release or deployment. A source candidate, mapping, receipt, model agreement or passing fixture cannot authorize an effect or establish organizational maturity.
 
 [Mapping validation by source family](docs/ROSETTA-SOURCE-INDEX.md) | [Rosetta explorer source](dashboard/rosetta.html)
+
+[Dedicated component updates after v3.5](docs/POST-V35-COMPONENT-UPDATES.md) | [Release qualification](docs/assessments/2026-11-20-v35-release/README.md)

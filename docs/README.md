@@ -44,3 +44,5 @@ The canonical ownership registry is
 [173 control contracts](CONTROLS-V3.5.md) | [Rosetta Stone](ROSETTA-STONE-V35.md) | [Deployment readiness](../AISM/DEPLOYMENT-READINESS-V35.md) | [Research](../research/README.md)
 
 [Complete repository page map](../PAGE_MAP.md) | [Machine page map](PAGE_MAP.json)
+
+[Dedicated component updates after v3.5](POST-V35-COMPONENT-UPDATES.md) | [Release qualification](assessments/2026-11-20-v35-release/README.md)

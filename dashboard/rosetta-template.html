@@ -19,7 +19,7 @@ const $=id=>document.getElementById(id);
 function node(tag,text,parent){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(parent)parent.append(e);return e;}
 function link(text,url,parent){const e=node('a',text,parent);e.href=url;return e;}
 function safeURL(value){try{const u=new URL(value);return ['https:','http:'].includes(u.protocol)?u.href:null;}catch{return null;}}
-function controlLink(id,parent){return link(id+' '+(byId[id]?.name||'unresolved control'),'../docs/CONTROLS-V3.5.md#'+id.toLowerCase().replace(/[^a-z0-9]+/g,'-'),parent);}
+function controlLink(id,parent){return link(id+' '+(byId[id]?.name||'unresolved control'),'../docs/CONTROLS-V3.5.md#'+data.control_anchors[id],parent);}
 for(const source of data.registry.sources){const o=node('option',source.id+' | '+source.title,$('source'));o.value=source.id;}
 for(const c of data.controls){const o=node('option',c.id+' | '+c.name,$('control'));o.value=c.id;}
 for(const status of [...new Set(data.registry.relationships.map(r=>r.status))].sort()){const o=node('option',status,$('status'));o.value=status;}

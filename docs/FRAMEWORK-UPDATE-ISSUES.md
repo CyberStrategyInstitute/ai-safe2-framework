@@ -4,6 +4,12 @@ Review baseline November 19, 2026. Default branch 3dd7ecc8bc0f19a0c737f01a91b9bd
 
 Current implementation and remaining issue acceptance are recorded in the [v3.5 verification record](assessments/2026-11-19-v35-update/README.md). The tables below preserve the dated planning baseline.
 
+## v3.5 final issue handling
+
+PR #433 closes #416 and #390 on merge. The optional hosted-demo link (#287) is declined in favor of maintained local setup. Mandatory unvalidated psychological telemetry (#249) is declined as an enforcement requirement; the oversight concern is retained in #442 and research. #234, #235, #245, #250, #251, #273 and #308 retain implementation or study acceptance work. All receive explicit issue updates; unfinished runtime work is not declared implemented.
+
+Nine dedicated component issues (#434-#442) are documented in [post-v3.5 updates](POST-V35-COMPONENT-UPDATES.md). The table below preserves the planning baseline.
+
 ## Dependency order and issue dispositions
 
 | Order | Issue | Recommendation and trade-off | Work, research and acceptance |
@@ -50,3 +56,11 @@ The review package must contain a source-to-decision ledger, individually drafte
 The first commit starts #416 and publishes this issue plan in the same draft PR. Container startup validation runs in hosted CI because Docker is unavailable in the local environment. No issue is auto-closed by the initial commit. Additional commits stay on this branch through the full update. Each issue closes only after its applicable tests and disposition are reviewable. Preserve unverified source states, observed failures and deviations from original proposals in the acceptance record.
 
 [Shared documentation](README.md) · [Framework home](../README.md)
+
+## Final v3.5 issue handling
+
+PR #433 closes #416 and #390 on merge. The container repair has build/startup evidence; source-rights observations now have three explicit P2.T4.4 requirements and research note 077 (C53).
+
+The optional hosted demonstration in #287 is declined in favor of maintained local routes. The mandatory psychological telemetry and consensus mechanism in #249 is declined as a validated runtime gate; the oversight concern continues in #442. These two proposals receive explicit not-planned dispositions.
+
+#234, #235, #245, #250, #251, #273 and #308 remain open for their actual acceptance work. Framework requirements do not substitute for implementation, authenticated integration, interoperability or preregistered results. Dedicated component work is tracked in [the post-v3.5 update register](POST-V35-COMPONENT-UPDATES.md), issues #434 through #442.

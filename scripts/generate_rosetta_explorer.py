@@ -13,7 +13,7 @@ from safe2.framework import audit_registry, controls, data
 
 def outputs():
     registry=data('rosetta-v3.5.json')
-    payload={'registry':registry,'controls':list(controls().values()),'audit':audit_registry(registry)}
+    payload={'registry':registry,'controls':list(controls().values()),'control_anchors':{cid:cid.lower().replace('.','-') for cid in controls()},'audit':audit_registry(registry)}
     serialized=json.dumps(payload,ensure_ascii=False,separators=(',',':')).replace('<',chr(92)+'u003c')
     html=(ROOT/'dashboard/rosetta-template.html').read_text(encoding='utf-8').replace('__DATA__',serialized)
     rows=['# Rosetta Stone source-family index','','[Framework home](../README.md) | [Mapping guide](ROSETTA-STONE-V35.md) | [Offline explorer source](../dashboard/rosetta.html) | [Canonical registry](../safe2/data/rosetta-v3.5.json)','','Choose your source family below. Open the explorer locally through `python -m http.server 8765 --bind 127.0.0.1` from a reviewed checkout, then visit `http://127.0.0.1:8765/dashboard/rosetta.html`. GitHub displays HTML source; Pages can render this explorer only after the relevant branch is deployed.','','Recorded relationships are historical/unreviewed until their source, applicability and evidence are validated. An empty result remains an explicit gap.','','| Source family | Recorded relationships | Status counts | Source verification |','| --- | --- | --- | --- |']

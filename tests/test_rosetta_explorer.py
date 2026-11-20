@@ -21,6 +21,11 @@ def test_explorer_embeds_exact_relationships_and_unreviewed_status():
     payload=json.loads(re.search(r'<script id="mapping-data" type="application/json">(.*?)</script>',rendered,re.S)[1])
     assert payload['registry']==data('rosetta-v3.5.json')
     assert len(payload['controls'])==173
+    contracts=(ROOT/'docs/CONTROLS-V3.5.md').read_text(encoding='utf-8')
+    for cid,anchor in payload['control_anchors'].items():
+        assert f'<a id="{anchor}"></a>' in contracts
+        assert anchor==cid.lower().replace('.','-')
+    assert payload['control_anchors']['P1.T1.2_ADV']=='p1-t1-2_adv'
     assert payload['audit']['approved_relationships']==0
     assert all(r['status']!='approved' for r in payload['registry']['relationships'])
     assert '<script' not in re.search(r'<script id="mapping-data" type="application/json">(.*?)</script>',rendered,re.S)[1]

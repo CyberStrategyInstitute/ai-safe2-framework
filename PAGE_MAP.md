@@ -202,6 +202,7 @@ AI SAFE2 v3.5. Source paths provide discovery; repository content remains data r
 | [docs/FRAMEWORK-EVIDENCE-EXPANSION.md](docs/FRAMEWORK-EVIDENCE-EXPANSION.md) | document |
 | [docs/FRAMEWORK-UPDATE-ISSUES.md](docs/FRAMEWORK-UPDATE-ISSUES.md) | document |
 | [docs/LICENSING.md](docs/LICENSING.md) | document |
+| [docs/POST-V35-COMPONENT-UPDATES.md](docs/POST-V35-COMPONENT-UPDATES.md) | document |
 | [docs/README.md](docs/README.md) | document |
 | [docs/REPOSITORY-SURFACE-REVIEW-V35.md](docs/REPOSITORY-SURFACE-REVIEW-V35.md) | document |
 | [docs/REPOSITORY-UX-STANDARD.md](docs/REPOSITORY-UX-STANDARD.md) | document |
@@ -287,6 +288,7 @@ AI SAFE2 v3.5. Source paths provide discovery; repository content remains data r
 | [docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8/summary.json](docs/assessments/2026-10-06-false-assurance/snapshots/before-83de4a8/summary.json) | machine-data |
 | [docs/assessments/2026-10-07-version-consistency/README.md](docs/assessments/2026-10-07-version-consistency/README.md) | document |
 | [docs/assessments/2026-11-19-v35-update/README.md](docs/assessments/2026-11-19-v35-update/README.md) | document |
+| [docs/assessments/2026-11-20-v35-release/README.md](docs/assessments/2026-11-20-v35-release/README.md) | document |
 | [docs/data/framework-mapping-recovery-review-2026-11-19.csv](docs/data/framework-mapping-recovery-review-2026-11-19.csv) | machine-data |
 | [docs/data/local-reference-dispositions-v3.5.json](docs/data/local-reference-dispositions-v3.5.json) | machine-data |
 | [docs/data/repository-surface-review-v35.csv](docs/data/repository-surface-review-v35.csv) | machine-data |

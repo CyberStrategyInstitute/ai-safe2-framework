@@ -241,3 +241,5 @@ Use [CITATION.cff](CITATION.cff) for citation metadata. Cite the exact framework
 [Back to start](#use-ai-safe-with-an-agent) · [All documentation](PAGE_MAP.md) · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/)
 
 [Mapping validation by source family](docs/ROSETTA-SOURCE-INDEX.md) | [Rosetta explorer source](dashboard/rosetta.html)
+
+[Dedicated component updates after v3.5](docs/POST-V35-COMPONENT-UPDATES.md) | [Release qualification](docs/assessments/2026-11-20-v35-release/README.md)

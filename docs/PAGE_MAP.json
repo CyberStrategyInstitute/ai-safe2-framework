@@ -794,6 +794,10 @@
       "kind": "document"
     },
     {
+      "path": "docs/POST-V35-COMPONENT-UPDATES.md",
+      "kind": "document"
+    },
+    {
       "path": "docs/README.md",
       "kind": "document"
     },
@@ -1131,6 +1135,10 @@
     },
     {
       "path": "docs/assessments/2026-11-19-v35-update/README.md",
+      "kind": "document"
+    },
+    {
+      "path": "docs/assessments/2026-11-20-v35-release/README.md",
       "kind": "document"
     },
     {
