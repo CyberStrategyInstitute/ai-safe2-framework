@@ -16,7 +16,7 @@ Canonical mirrors, generated documents, source maps, navigation, current README 
 
 Review considered exact-action binding, replay, current conditions, inherited authority, concurrent ancestor budgets, idempotency, postconditions and evidence independence in the bounded SQLite fixture. CLI readiness remains a declared-evidence check and cannot authorize deployment. Rosetta source review and applicability are not manufactured from tags. The review found a link bug for `_ADV` control IDs; the explorer now consumes canonical generated anchors, and a regression checks every control anchor.
 
-Hosted CodeQL flagged dynamic DOM element construction in the explorer. The helper now creates only explicitly permitted literal element names, rejects unsupported names and keeps source text in textContent. The generated page and regression test are synchronized. Two issue-reference Markdown formatting errors were also corrected.
+Hosted CodeQL flagged DOM-derived link targets in the explorer. Link assignment now validates the resolved protocol, allowing HTTP/HTTPS and relative local-file navigation. The element helper also permits only literal element names and keeps source text in textContent. The generated page and regression test are synchronized. Two issue-reference Markdown formatting errors were also corrected.
 
 The formal Codex Security diff service could not attach to this Windows Git worktree and returned: `Review changes requires a non-bare Git worktree with a resolvable HEAD.` The local HEAD resolves. No completed formal diff scan is claimed. Hosted CodeQL, repository guardrails, secret and dependency checks are recorded separately in the PR for the final revision.
 
