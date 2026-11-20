@@ -49,3 +49,6 @@ def test_explorer_uses_only_literal_element_names():
     assert 'document.createElement(tag)' not in template
     assert "default:throw new Error('Unsupported element')" in template
     assert 'e.textContent=text' in template
+    assert "target.protocol==='https:'" in template
+    assert "target.protocol==='http:'" in template
+    assert "target.protocol==='file:'&&url.startsWith('../')" in template
