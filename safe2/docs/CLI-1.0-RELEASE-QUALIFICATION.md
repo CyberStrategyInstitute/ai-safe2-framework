@@ -4,7 +4,7 @@
 
 - Package: `ai-safe2`
 - Candidate version: `1.0.0`
-- Framework interpreted: AI SAFE² v3.5; the framework remains 161 controls
+- Framework interpreted: AI SAFE² v3.1.0; the framework remains 161 controls
   and CP.1 through CP.10.
 - Qualification scope: packaging, clean installation, public command surfaces,
   packaged contracts/examples, offline stranger acceptance, uninstall behavior,

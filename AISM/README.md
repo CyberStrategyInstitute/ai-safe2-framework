@@ -24,7 +24,7 @@ identify their baseline; this update does not change scoring formulas.
 **Tagline:** *"The Operating System for Safe Autonomous AI"*  
 **Core Principle:** *Probabilistic intelligence requires deterministic control.*  
 **Organization:** Cyber Strategy Institute  
-**Framework:** AI SAFE² v3.5  
+**Framework:** AI SAFE² v3.5
 **Framework release context:** August 2026; assessment-method documentation updated October 2026
 
 ---

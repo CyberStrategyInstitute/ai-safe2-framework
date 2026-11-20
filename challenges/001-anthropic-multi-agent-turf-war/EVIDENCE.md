@@ -1,7 +1,7 @@
 # Challenge 001 Evidence Requirements
 ### Reconstructable evidence for falsification-first testing
 
-[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.5-F6921E?style=flat-square)](../../README.md)
+[![AI SAFE²](https://img.shields.io/badge/AI_SAFE%C2%B2-v3.1-F6921E?style=flat-square)](../../README.md)
 [![Surface](https://img.shields.io/badge/Surface-Challenge_Evidence-820F1A?style=flat-square)](./README.md)
 
 [Challenge Home](./README.md) | [Framework Home](../../README.md) | [Cross-Pillar Governance](../../00-cross-pillar/README.md) | [NEXUS](../../NEXUS/) | [Replication](./REPLICATION.md)
@@ -127,4 +127,4 @@ A prevention claim requires all of the following:
 
 ---
 
-*AI SAFE² v3.5 Challenge Lab · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
+*AI SAFE² v3.1 Challenge Lab · [Cyber Strategy Institute](https://cyberstrategyinstitute.com/ai-safe2/)*
